@@ -199,7 +199,7 @@ def fetch_content(url: str, retries: int = RETRY_ATTEMPTS, cache_data: dict = No
                 logging.warning(f"  {url} 请求超时 (尝试 {attempt + 1}/{retries})。")
                 status_reason = "FETCH_FAILED_TIMEOUT"
             except httpx.HTTPStatusError as e:
-                logging.warning(f"  {url} HTTP错误 ({e.response.status_code} {e.response.reason}) (尝试 {attempt + 1}/{retries})。")
+                logging.warning(f"  {url} HTTP错误 ({e.response.status_code} {e.response.reason_phrase}) (尝试 {attempt + 1}/{retries})。")
                 status_reason = f"FETCH_FAILED_HTTP_{e.response.status_code}"
             except httpx.ConnectError as e:
                 logging.warning(f"  {url} 连接错误 ({e}) (尝试 {attempt + 1}/{retries})。")
