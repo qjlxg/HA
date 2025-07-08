@@ -1,54 +1,62 @@
-name: Ultimate Proxy Node Extractor
+name: Fetch and Update Proxy Nodes
 
 on:
-  schedule:
-    - cron: '0 */6 * * *' # 每6小时运行一次 (UTC时间)
   workflow_dispatch: # 允许手动触发
-
-  push: # 新增：当代码被推送到指定分支时触发
-    branches:
-      - main # 替换成你的主分支名称，比如 master 或 main
-    paths: # 只有当这些路径下的文件发生变化时才触发
-      - 'ultimate_node_extractor.py' # 你的Python脚本文件
-      - 'sources.list' # 你的源列表文件
-      - '.github/workflows/main.yml' # 工作流文件本身
-      # 如果你的 data 目录下的文件也需要触发工作流，可以添加
-      # - 'data/**' # data目录下任何文件变动都会触发
+  schedule:
+    - cron: '0 0 * * *' # 每天 UTC 时间 00:00 运行
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest # 使用最新的 Ubuntu 操作系统
 
     steps:
-    - name: Checkout Repository
+    - name: Checkout repository # 步骤 1: 检出代码
       uses: actions/checkout@v4
 
-    - name: Set up Python
+    - name: Set up Python # 步骤 2: 设置 Python 环境
       uses: actions/setup-python@v5
       with:
-        python-version: '3.x'
+        python-version: '3.x' # 使用最新的 Python 3 版本
 
-    - name: Install Dependencies
+    - name: Install dependencies # 步骤 3: 安装所需的 Python 库
       run: |
         python -m pip install --upgrade pip
         pip install httpx PyYAML beautifulsoup4
-        pip install requests beautifulsoup4 PyYAML
 
-    - name: Run Node Extraction Script
+    - name: Run Node Extractor Script # 步骤 4: 运行节点提取脚本
       run: |
-        mkdir -p data
+        mkdir -p data # 确保数据目录存在
+        # 如果 sources.list 或 data 目录下的缓存文件不存在，可能需要手动创建或处理
+        # 例如，可以从另一个分支获取历史数据和sources.list
+        # - name: Restore data directory (optional, if you have historical data)
+        #   uses: actions/checkout@v4
+        #   with:
+        #     ref: your-data-branch # 例如 'data-branch'
+        #     path: data_temp
+        # - run: mv data_temp/data/* data/ || true # 移动历史数据，如果存在
+        # - run: rm -rf data_temp # 清理临时目录
+        
+        # 确保 sources.list 文件存在，这是脚本运行的基础
+        # 如果 sources.list 不在仓库根目录，请调整路径
+        if [ ! -f "sources.list" ]; then
+          echo "https://raw.githubusercontent.com/example/sub1/main/sub.txt" > sources.list
+          echo "https://example.com/sub2" >> sources.list
+          echo "# 请在此处添加你的订阅源URL" >> sources.list
+        fi
+
         python ultimate_node_extractor.py
 
-    - name: Commit Results
+    - name: Commit and Push changes # 步骤 5: 提交并推送更改
       run: |
-        git config user.name "GitHub Actions Bot"
-        git config user.email "actions@github.com"
-        
-        git rm -rf data/proxy_nodes_*.txt || true
-        
-        git add data/proxy_nodes_*.txt data/node_counts.csv data/url_cache.json
-        
-        git diff --cached --exit-code || git commit -m "Auto: Update proxy node list (sliced)"
+        git config --global user.name 'GitHub Actions'
+        git config --global user.email 'actions@github.com'
+        git add data/proxy_nodes_*.txt data/node_counts.csv data/url_cache.json data/failed_urls.log
+        git commit -m "Update proxy nodes and logs" || echo "No changes to commit" # 如果没有更改，不报错
         git push
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Upload artifacts # 步骤 6: 上传生成的文件作为工作流产物
+      uses: actions/upload-artifact@v4
+      with:
+        name: proxy-nodes-data
+        path: data/
+        retention-days: 7 # 产物保留7天
