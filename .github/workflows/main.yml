@@ -5,9 +5,19 @@ on:
     - cron: '0 */6 * * *' # 每6小时运行一次 (UTC时间)
   workflow_dispatch: # 允许手动触发
 
+  push: # 新增：当代码被推送到指定分支时触发
+    branches:
+      - main # 替换成你的主分支名称，比如 master 或 main
+    paths: # 只有当这些路径下的文件发生变化时才触发
+      - 'ultimate_node_extractor.py' # 你的Python脚本文件
+      - 'sources.list' # 你的源列表文件
+      - '.github/workflows/main.yml' # 工作流文件本身
+      # 如果你的 data 目录下的文件也需要触发工作流，可以添加
+      # - 'data/**' # data目录下任何文件变动都会触发
+
 jobs:
   build:
-    runs-on: ubuntu-latest # 使用最新的 Ubuntu 虚拟机
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout Repository
@@ -21,26 +31,22 @@ jobs:
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install requests beautifulsoup4 PyYAML # 确保安装了所有必要的库
+        pip install requests beautifulsoup4 PyYAML
 
     - name: Run Node Extraction Script
       run: |
         mkdir -p data
-        python ultimate_node_extractor.py # **这里已修改为固定名称**
+        python ultimate_node_extractor.py
 
-    - name: Commit Results # 提交更改回仓库
+    - name: Commit Results
       run: |
         git config user.name "GitHub Actions Bot"
         git config user.email "actions@github.com"
         
-        # 删除所有旧的代理节点切片文件，以防文件数量减少
-        # 这一步非常重要，确保仓库中只保留当前次运行生成的切片
-        git rm -rf data/proxy_nodes_*.txt || true # '|| true' 防止没有文件可删时报错
+        git rm -rf data/proxy_nodes_*.txt || true
         
-        # 添加所有新生成的切片文件、统计文件和缓存文件
         git add data/proxy_nodes_*.txt data/node_counts.csv data/url_cache.json
         
-        # 检查是否有实际改动，没有改动则不提交
         git diff --cached --exit-code || git commit -m "Auto: Update proxy node list (sliced)"
         git push
       env:
