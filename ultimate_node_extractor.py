@@ -13,7 +13,6 @@ from bs4 import BeautifulSoup
 # --- 配置部分 ---
 DATA_DIR = "data"
 SOURCES_FILE = "sources.list"
-# ALL_NODES_FINAL_FILE = os.path.join(DATA_DIR, "all_nodes_final.txt") # 不再使用单一总文件
 NODE_OUTPUT_PREFIX = os.path.join(DATA_DIR, "proxy_nodes_") # 切片文件的文件名前缀
 MAX_NODES_PER_SLICE = 2000 # 每个切片文件最大包含的节点数量，您可以根据需要调整
 
@@ -24,6 +23,7 @@ CACHE_FILE = os.path.join(DATA_DIR, "url_cache.json")
 os.makedirs(DATA_DIR, exist_ok=True)
 
 # 定义支持的节点协议正则表达式
+# 这是核心配置之一，必须在所有使用它的函数（如 is_valid_node, extract_and_validate_nodes）之前定义
 NODE_PATTERNS = {
     "hysteria2": re.compile(r"hysteria2://[a-zA-Z0-9\-\._~:/?#\[\]@!$&'()*+,;%=]+", re.IGNORECASE),
     "vmess": re.compile(r"vmess://[a-zA-Z0-9\-\._~:/?#\[\]@!$&'()*+,;%=]+", re.IGNORECASE),
@@ -170,7 +170,7 @@ def is_valid_node(node_url):
     
     # 检查是否有识别的协议头
     found_protocol = False
-    for proto in NODE_PATTERNS.keys():
+    for proto in NODE_PATTERNS.keys(): # 依赖 NODE_PATTERNS
         if node_url.lower().startswith(f"{proto}://"):
             found_protocol = True
             break
@@ -207,7 +207,7 @@ def parse_content(content):
     decoded_content = decode_base64(content)
     if decoded_content:
         # 再次检查解码后的内容是否包含节点模式，防止误判
-        if any(pattern.search(decoded_content) for pattern in NODE_PATTERNS.values()):
+        if any(pattern.search(decoded_content) for pattern in NODE_PATTERNS.values()): # 依赖 NODE_PATTERNS
             print("内容被识别为 Base64 编码，已解码。")
             return decoded_content
 
@@ -258,7 +258,7 @@ def parse_content(content):
         if soup.body:
             body_text = soup.body.get_text(separator="\n", strip=True)
             # 仅在body_text足够长或包含可能节点时添加，避免添加大量无关内容
-            if len(body_text) > 100 or any(pattern.search(body_text) for pattern in NODE_PATTERNS.values()):
+            if len(body_text) > 100 or any(pattern.search(body_text) for pattern in NODE_PATTERNS.values()): # 依赖 NODE_PATTERNS
                 extracted_text.append(body_text)
             
         return "\n".join(extracted_text)
@@ -276,7 +276,7 @@ def extract_and_validate_nodes(content):
     
     found_nodes = set()
     
-    for pattern_name, pattern_regex in NODE_PATTERMS.items():
+    for pattern_name, pattern_regex in NODE_PATTERNS.items(): # 依赖 NODE_PATTERNS
         matches = pattern_regex.findall(content)
         for match in matches:
             decoded_match = unquote(match).strip()
@@ -326,8 +326,7 @@ def save_nodes_to_sliced_files(output_prefix, nodes, max_nodes_per_slice):
         
         with open(slice_file_name, 'w', encoding='utf-8') as f:
             for j, node in enumerate(slice_nodes):
-                # 命名方式保持全局升序 (Proxy-001, Proxy-002...)
-                # 即使是切片，也根据在总列表中的顺序来命名
+                # 命名方式保持全局升序 (Proxy-00001, Proxy-00002...)
                 global_index = start_index + j
                 f.write(f"Proxy-{global_index+1:05d} = {node}\n") # 调整为5位数字，适应更多节点
         print(f"已保存切片文件: {slice_file_name} (包含 {len(slice_nodes)} 个节点)")
@@ -406,9 +405,8 @@ def main():
     final_nodes_list = sorted(list(all_new_and_existing_nodes)) 
     print(f"总共收集到 {len(final_nodes_list)} 个去重后的节点 (含原有节点)。")
 
-    # --- 关键改变：切片保存节点 ---
+    # 切片保存节点
     save_nodes_to_sliced_files(NODE_OUTPUT_PREFIX, final_nodes_list, MAX_NODES_PER_SLICE)
-    # ---
 
     save_node_counts_to_csv(NODE_COUNTS_FILE, url_node_counts)
     save_cache(CACHE_FILE, url_cache)
