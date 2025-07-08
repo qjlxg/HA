@@ -36,15 +36,6 @@ jobs:
       env:
         PIP_NO_CACHE_DIR: true # 禁用 pip 缓存，减少存储占用
 
-    - name: Initialize sources.list # 步骤 4: 确保 sources.list 存在
-      run: |
-        mkdir -p data
-        if [ ! -f "data/sources.list" ]; then
-          echo "https://raw.githubusercontent.com/example/sub1/main/sub.txt" > data/sources.list
-          echo "https://example.com/sub2" >> data/sources.list
-          echo "# 请在此处添加你的订阅源URL" >> data/sources.list
-          echo "Created default data/sources.list"
-        fi
 
     - name: Run Node Extractor Script # 步骤 5: 运行节点提取脚本
       run: |
