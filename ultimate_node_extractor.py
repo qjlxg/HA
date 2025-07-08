@@ -178,8 +178,9 @@ def fetch_content(url: str, retries: int = RETRY_ATTEMPTS, cache_data: dict = No
     for attempt in range(retries):
         for current_url_to_test in test_urls:
             try:
-                with httpx.Client(verify=False, timeout=REQUEST_TIMEOUT, http2=True) as client:
-                    response = client.get(current_url_to_test, headers=current_headers, follow_redirects=True, proxies=PROXIES)
+                # Pass proxies to httpx.Client constructor instead of get method
+                with httpx.Client(verify=False, timeout=REQUEST_TIMEOUT, http2=True, proxies=PROXIES) as client:
+                    response = client.get(current_url_to_test, headers=current_headers, follow_redirects=True)
                 
                 if response.status_code == 304:
                     logging.info(f"  {url} 内容未修改 (304)。")
@@ -693,7 +694,7 @@ def save_nodes_to_sliced_files(output_prefix: str, nodes: list[str], max_nodes_p
             logging.info(f"已保存切片文件: {slice_file_name} (包含 {len(slice_nodes)} 个节点)")
             saved_files_count += 1
         except IOError as e:
-            logging.error(f"保存切片文件失败 ({slice_file_name}): {e}")
+            logging.error(f"保存切片文件失败 ({slice_file_name): {e}")
 
     logging.info(f"最终节点列表已切片保存到 {saved_files_count} 个文件。")
 
