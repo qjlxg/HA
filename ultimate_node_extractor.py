@@ -34,8 +34,8 @@ FAILED_URLS_FILE = os.path.join(DATA_DIR, "failed_urls.log")
 
 MAX_WORKERS = 25  # 并发量
 REQUEST_TIMEOUT = 15  # 单次请求超时时间，单位秒
-RETRY_ATTEMPTS = 5  # 请求重试次数
-CACHE_SAVE_INTERVAL = 20  # 每处理 N 个 URL 保存一次缓存
+RETRY_ATTEMPTS = 1  # 请求重试次数
+CACHE_SAVE_INTERVAL = 50  # 每处理 N 个 URL 保存一次缓存
 
 # 代理配置 (已移除，设置为 None)
 PROXIES = None
