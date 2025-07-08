@@ -26,16 +26,16 @@ warnings.filterwarnings("ignore", category=urllib3.exceptions.InsecureRequestWar
 DATA_DIR = "data"
 SOURCES_FILE = "sources.list"
 NODE_OUTPUT_PREFIX = os.path.join(DATA_DIR, "proxy_nodes_")
-MAX_NODES_PER_SLICE = 2000
+MAX_NODES_PER_SLICE = 5000
 
 NODE_COUNTS_FILE = os.path.join(DATA_DIR, "node_counts.csv")
 CACHE_FILE = os.path.join(DATA_DIR, "url_cache.json")
 FAILED_URLS_FILE = os.path.join(DATA_DIR, "failed_urls.log")
 
 MAX_WORKERS = 25  # 并发量
-REQUEST_TIMEOUT = 15  # 单次请求超时时间，单位秒
+REQUEST_TIMEOUT = 5  # 单次请求超时时间，单位秒
 RETRY_ATTEMPTS = 1  # 请求重试次数
-CACHE_SAVE_INTERVAL = 50  # 每处理 N 个 URL 保存一次缓存
+CACHE_SAVE_INTERVAL = 150  # 每处理 N 个 URL 保存一次缓存
 
 # 代理配置 (已移除，设置为 None)
 PROXIES = None
