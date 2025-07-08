@@ -1,4 +1,4 @@
-name: Ultimate Proxy Node Extractor V3
+name: Ultimate Proxy Node Extractor
 
 on:
   schedule:
@@ -21,12 +21,12 @@ jobs:
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install requests beautifulsoup4 PyYAML
+        pip install requests beautifulsoup4 PyYAML # 确保安装了所有必要的库
 
     - name: Run Node Extraction Script
       run: |
         mkdir -p data
-        python ultimate_node_extractor_v3.py # 运行您的 Python 脚本
+        python ultimate_node_extractor.py # **这里已修改为固定名称**
 
     - name: Commit Results # 提交更改回仓库
       run: |
@@ -41,7 +41,7 @@ jobs:
         git add data/proxy_nodes_*.txt data/node_counts.csv data/url_cache.json
         
         # 检查是否有实际改动，没有改动则不提交
-        git diff --cached --exit-code || git commit -m "Auto: Update proxy node list (v3 sliced)"
+        git diff --cached --exit-code || git commit -m "Auto: Update proxy node list (sliced)"
         git push
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
