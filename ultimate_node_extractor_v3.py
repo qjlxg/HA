@@ -8,11 +8,15 @@ import json
 import hashlib
 import random
 from urllib.parse import unquote, urlparse
+from bs4 import BeautifulSoup
 
 # --- 配置部分 ---
 DATA_DIR = "data"
 SOURCES_FILE = "sources.list"
-ALL_NODES_FINAL_FILE = os.path.join(DATA_DIR, "all_nodes_final.txt")
+# ALL_NODES_FINAL_FILE = os.path.join(DATA_DIR, "all_nodes_final.txt") # 不再使用单一总文件
+NODE_OUTPUT_PREFIX = os.path.join(DATA_DIR, "proxy_nodes_") # 切片文件的文件名前缀
+MAX_NODES_PER_SLICE = 2000 # 每个切片文件最大包含的节点数量，您可以根据需要调整
+
 NODE_COUNTS_FILE = os.path.join(DATA_DIR, "node_counts.csv")
 CACHE_FILE = os.path.join(DATA_DIR, "url_cache.json")
 
@@ -95,10 +99,8 @@ def fetch_content(url, retries=3, cache_data=None):
     if cache_data and url in cache_data:
         if 'etag' in cache_data[url]:
             current_headers['If-None-Match'] = cache_data[url]['etag']
-            # print(f"  使用 If-None-Match: {cache_data[url]['etag']}") # 调试信息
         if 'last_modified' in cache_data[url]:
             current_headers['If-Modified-Since'] = cache_data[url]['last_modified']
-            # print(f"  使用 If-Modified-Since: {cache_data[url]['last_modified']}") # 调试信息
     
     # 确定要尝试的URL列表
     test_urls = []
@@ -237,7 +239,6 @@ def parse_content(content):
                             print(f"  警告: 解析 YAML 代理条目失败 ({proxy.get('type')}): {e}")
             
             # 将解析出的 YAML 节点与原始内容合并，以便后续正则表达式提取
-            # 这样可以确保如果YAML文件中同时有原生节点字符串和结构化代理配置，都能被捕获
             return content + "\n" + "\n".join(nodes_from_yaml_structure)
     except yaml.YAMLError:
         pass # 不是有效的 YAML
@@ -275,7 +276,7 @@ def extract_and_validate_nodes(content):
     
     found_nodes = set()
     
-    for pattern_name, pattern_regex in NODE_PATTERNS.items():
+    for pattern_name, pattern_regex in NODE_PATTERMS.items():
         matches = pattern_regex.findall(content)
         for match in matches:
             decoded_match = unquote(match).strip()
@@ -284,27 +285,55 @@ def extract_and_validate_nodes(content):
 
     return list(found_nodes)
 
-def load_existing_nodes(file_path):
-    """加载已存在的节点列表，用于增量更新"""
+def load_existing_nodes_from_slices(directory, prefix):
+    """从多个切片文件中加载已存在的节点列表，用于增量更新"""
     existing_nodes = set()
-    if os.path.exists(file_path):
-        try:
-            with open(file_path, 'r', encoding='utf-8') as f:
-                for line in f:
-                    parts = line.strip().split(' = ', 1)
-                    if len(parts) == 2:
-                        existing_nodes.add(parts[1])
-            print(f"已加载 {len(existing_nodes)} 个现有节点。")
-        except Exception as e:
-            print(f"警告: 加载现有节点文件失败 ({file_path}): {e}，将从头开始。")
+    loaded_count = 0
+    # 遍历data目录下所有以 NODE_OUTPUT_PREFIX 开头的文件
+    for filename in os.listdir(directory):
+        if filename.startswith(os.path.basename(prefix)) and filename.endswith('.txt'):
+            file_path = os.path.join(directory, filename)
+            try:
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    for line in f:
+                        parts = line.strip().split(' = ', 1)
+                        if len(parts) == 2:
+                            existing_nodes.add(parts[1])
+                            loaded_count += 1
+            except Exception as e:
+                print(f"警告: 加载现有节点文件失败 ({file_path}): {e}")
+    print(f"已从 {len(os.listdir(directory))} 个切片文件中加载 {loaded_count} 个现有节点。")
     return existing_nodes
 
-def save_nodes_to_file(file_path, nodes):
-    """将处理后的节点保存到文本文件，并进行升序自定义命名"""
-    with open(file_path, 'w', encoding='utf-8') as f:
-        for i, node in enumerate(nodes):
-            f.write(f"Proxy-{i+1:03d} = {node}\n")
-    print(f"最终节点列表已保存到 {file_path}")
+def save_nodes_to_sliced_files(output_prefix, nodes, max_nodes_per_slice):
+    """将处理后的节点切片保存到多个文本文件，并进行升序自定义命名"""
+    total_nodes = len(nodes)
+    num_slices = (total_nodes + max_nodes_per_slice - 1) // max_nodes_per_slice # 计算切片数量
+    
+    # 清理旧的切片文件
+    for filename in os.listdir(DATA_DIR):
+        if filename.startswith(os.path.basename(output_prefix)) and filename.endswith('.txt'):
+            os.remove(os.path.join(DATA_DIR, filename))
+            print(f"已删除旧切片文件: {filename}")
+
+    saved_files_count = 0
+    for i in range(num_slices):
+        start_index = i * max_nodes_per_slice
+        end_index = min((i + 1) * max_nodes_per_slice, total_nodes)
+        
+        slice_nodes = nodes[start_index:end_index]
+        slice_file_name = f"{output_prefix}{i+1:03d}.txt" # 例如: proxy_nodes_001.txt
+        
+        with open(slice_file_name, 'w', encoding='utf-8') as f:
+            for j, node in enumerate(slice_nodes):
+                # 命名方式保持全局升序 (Proxy-001, Proxy-002...)
+                # 即使是切片，也根据在总列表中的顺序来命名
+                global_index = start_index + j
+                f.write(f"Proxy-{global_index+1:05d} = {node}\n") # 调整为5位数字，适应更多节点
+        print(f"已保存切片文件: {slice_file_name} (包含 {len(slice_nodes)} 个节点)")
+        saved_files_count += 1
+    
+    print(f"最终节点列表已切片保存到 {saved_files_count} 个文件。")
 
 def save_node_counts_to_csv(file_path, counts_data):
     """将每个 URL 的节点数量统计保存到 CSV 文件。"""
@@ -324,7 +353,8 @@ def main():
         return
 
     url_cache = load_cache(CACHE_FILE)
-    existing_nodes = load_existing_nodes(ALL_NODES_FINAL_FILE)
+    # 从所有切片文件中加载现有节点
+    existing_nodes = load_existing_nodes_from_slices(DATA_DIR, NODE_OUTPUT_PREFIX)
     
     all_new_and_existing_nodes = set(existing_nodes)
     url_node_counts = {}
@@ -333,18 +363,14 @@ def main():
     skipped_urls_count = 0
 
     for url in source_urls:
-        # 获取内容并更新缓存元数据
         content, new_cache_meta = fetch_content(url, cache_data=url_cache)
 
-        # 如果内容未更新（304）或获取失败
         if content is None and new_cache_meta is None:
             print(f"  {url}: 内容未更新或获取失败，跳过处理。")
-            # 沿用上次缓存的节点数量，或设为0如果无缓存
             url_node_counts[url] = url_cache.get(url, {}).get('node_count', 0) 
             skipped_urls_count += 1
             continue
         
-        # 即使获取到内容，也要再次检查哈希值，防止ETag/Last-Modified失效但内容未变
         last_content_hash = url_cache.get(url, {}).get('content_hash')
         current_content_hash = new_cache_meta['content_hash'] if new_cache_meta else None
 
@@ -356,41 +382,36 @@ def main():
             
         processed_urls_count += 1
         
-        # 解析内容 (包含 Base64, YAML, HTML 处理)
         parsed_content = parse_content(content)
-        
-        # 提取并验证节点
         nodes_from_url = extract_and_validate_nodes(parsed_content)
         
         print(f"从 {url} 提取到 {len(nodes_from_url)} 个有效节点。")
         url_node_counts[url] = len(nodes_from_url)
-        all_new_and_existing_nodes.update(nodes_from_url) # 将新提取的节点加入总集合
+        all_new_and_existing_nodes.update(nodes_from_url)
 
-        # 更新缓存信息
         if new_cache_meta:
             url_cache[url] = {
                 'etag': new_cache_meta.get('etag'),
                 'last_modified': new_cache_meta.get('last_modified'),
                 'content_hash': current_content_hash,
-                'node_count': len(nodes_from_url) # 缓存本次提取到的节点数量
+                'node_count': len(nodes_from_url)
             }
-        else: # 如果内容获取失败，也更新缓存以避免下次再次尝试下载（如果失败是持续的）
-             url_cache[url] = url_cache.get(url, {}) # 保持旧的缓存，如果新的没有成功获取
-             url_cache[url]['node_count'] = 0 # 设为0，表示上次获取失败
+        else:
+             url_cache[url] = url_cache.get(url, {})
+             url_cache[url]['node_count'] = 0
         
-        # 每处理一个URL就保存一次缓存，防止中断丢失
         save_cache(CACHE_FILE, url_cache)
 
     print(f"\n处理完成。共处理 {processed_urls_count} 个URL，跳过 {skipped_urls_count} 个URL。")
-    print(f"总共收集到 {len(all_new_and_existing_nodes)} 个去重后的节点 (含原有节点)。")
-
-    # 对所有收集到的节点进行最终排序
     final_nodes_list = sorted(list(all_new_and_existing_nodes)) 
+    print(f"总共收集到 {len(final_nodes_list)} 个去重后的节点 (含原有节点)。")
 
-    # 保存最终节点列表和统计数据
-    save_nodes_to_file(ALL_NODES_FINAL_FILE, final_nodes_list)
+    # --- 关键改变：切片保存节点 ---
+    save_nodes_to_sliced_files(NODE_OUTPUT_PREFIX, final_nodes_list, MAX_NODES_PER_SLICE)
+    # ---
+
     save_node_counts_to_csv(NODE_COUNTS_FILE, url_node_counts)
-    save_cache(CACHE_FILE, url_cache) # 最终保存一次缓存
+    save_cache(CACHE_FILE, url_cache)
 
 if __name__ == "__main__":
     main()
