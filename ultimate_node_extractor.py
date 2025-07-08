@@ -190,8 +190,10 @@ def fetch_content(url: str, retries: int = RETRY_ATTEMPTS, cache_data: dict = No
     for attempt in range(retries):
         for current_url_to_test in test_urls:
             try:
-                with httpx.Client(proxies=PROXIES, verify=False, timeout=REQUEST_TIMEOUT, http2=True) as client:
-                    response = client.get(current_url_to_test, headers=current_headers, follow_redirects=True)
+                # 修复 httpx.Client 中 proxies 参数的问题
+                # httpx.Client 不再接受 proxies 参数，而是在请求方法中传递
+                with httpx.Client(verify=False, timeout=REQUEST_TIMEOUT, http2=True) as client:
+                    response = client.get(current_url_to_test, headers=current_headers, follow_redirects=True, proxies=PROXIES)
 
                 if response.status_code == 304:
                     logging.info(f"  {url} 内容未修改 (304)。")
@@ -539,7 +541,7 @@ def parse_content(content: str, content_type_hint: str = "unknown") -> str:
     combined_text_for_regex.append(content)
 
     # 从所有收集到的文本中，用正则匹配潜在的 Base64 块并解码
-    all_text_to_scan = "\n".join(combined_text_for_regex) # 聚合所有文本
+    all_text_to_scan = "\n".join(list(set(combined_text_for_regex))) # 聚合所有文本并去重
     potential_base64_matches = BASE64_REGEX.findall(all_text_to_scan)
     for b64_match in potential_base64_matches:
         if len(b64_match) > 30 and '=' in b64_match: # 避免解码太短的随机字符串和非Base64字符串
