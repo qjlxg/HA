@@ -10,7 +10,6 @@ import logging
 import asyncio
 import aiohttp
 import socket
-import time
 import warnings
 from urllib.parse import unquote, urlparse, urlencode, parse_qs
 from bs4 import BeautifulSoup, SoupStrainer
@@ -230,8 +229,6 @@ class ProtocolHandler:
             if params:
                 sorted_params = sorted([(k, v) for k, values in params.items() for v in (values if isinstance(values, list) else [values])])
                 vless_link += "?" + urlencode(sorted_params, doseq=True)
-            if name and not params:
-                vless_link += f"#{name}"
             return vless_link
         elif node_type == 'trojan':
             if not password:
@@ -250,43 +247,27 @@ class ProtocolHandler:
             if params:
                 sorted_params = sorted([(k, v) for k, values in params.items() for v in (values if isinstance(values, list) else [values])])
                 trojan_link += "?" + urlencode(sorted_params, doseq=True)
-            if name and not params:
-                trojan_link += f"#{name}"
             return trojan_link
         elif node_type == 'ss':
             if not password or not node_dict.get('cipher'):
                 return None
             method_pwd = f"{node_dict['cipher']}:{password}"
-            encoded_method_pwd = base64.b64encode(method_pwd.encode('utf-8')).decode('utf-8').rstrip('=')
+            encoded_method_pwd = base64.b64encode(method_pwd.encode('utf-8')).decode('utf-8')
             ss_link = f"ss://{encoded_method_pwd}@{server}:{port}"
             if name:
                 ss_link += f"#{name}"
             return ss_link
-        elif node_type == 'ssr':
-            if not password or not node_dict.get('cipher') or not node_dict.get('obfs') or not node_dict.get('protocol'):
-                return None
-            ssr_data = f"{server}:{port}:{node_dict['protocol']}:{node_dict['cipher']}:{node_dict['obfs']}:{base64.b64encode(password.encode('utf-8')).decode('utf-8').rstrip('=')}"
-            encoded = base64.b64encode(ssr_data.encode('utf-8')).decode('utf-8').rstrip('=')
-            ssr_link = f"ssr://{encoded}"
-            params = {}
-            for key in ['obfs-param', 'protoparam', 'remarks', 'group']:
-                if node_dict.get(key):
-                    params[key] = base64.b64encode(str(node_dict[key]).encode('utf-8')).decode('utf-8').rstrip('=')
-            if params:
-                sorted_params = sorted([(k.replace('obfs-param', 'obfsparam').replace('protoparam', 'protoparam'), v) for k, v in params.items()])
-                ssr_link += "?" + urlencode(sorted_params, doseq=True)
-            return ssr_link
         elif node_type == 'hysteria2':
             if not password:
                 return None
             params = {'password': password}
-            for key in ['obfs', 'obfs-password', 'up', 'down', 'alpn', 'sni']:
+            for key in ['obfs', 'obfs-password', 'up', 'down', 'alpn', 'peer']:
                 if node_dict.get(key):
                     params[key.replace('_', '-')] = node_dict[key]
             if name:
                 params['remarks'] = name
             query_string = urlencode(sorted(params.items()), doseq=True)
-            return f"hysteria2://{server}:{port}?{query_string}"
+            return f"hysteria2://{server}:{port}?{query_string}#{name}"
         elif node_type == 'tuic':
             if not uuid or not password:
                 return None
@@ -302,8 +283,6 @@ class ProtocolHandler:
             if params:
                 sorted_params = sorted([(k, v) for k, values in params.items() for v in (values if isinstance(values, list) else [values])])
                 tuic_link += "?" + urlencode(sorted_params, doseq=True)
-            if name and not params:
-                tuic_link += f"#{name}"
             return tuic_link
         elif node_type == 'wireguard':
             if not node_dict.get('private_key') or not node_dict.get('public_key'):
@@ -524,10 +503,10 @@ class ContentParser:
         def search_b64(obj):
             if isinstance(obj, dict):
                 for v in obj.values():
-                    search_b64(v)
+                    search_b4(v)
             elif isinstance(obj, list):
                 for item in obj:
-                    search_b64(item)
+                    search_b4(item)
             elif isinstance(obj, str):
                 decoded = ProtocolHandler.decode_base64_recursive(obj)
                 if decoded and decoded != obj:
