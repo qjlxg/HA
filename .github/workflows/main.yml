@@ -1,51 +1,47 @@
-name: Ultimate Proxy Node Extractor V2 # 工作流名称
+name: Ultimate Proxy Node Extractor V3
 
 on:
   schedule:
-    - cron: '0 */6 * * *' # 定义定时任务：每6小时运行一次 (UTC时间)
-  workflow_dispatch: # 允许在 GitHub 界面手动触发此工作流
+    - cron: '0 */6 * * *' # 每6小时运行一次 (UTC时间)
+  workflow_dispatch: # 允许手动触发
 
 jobs:
   build:
-    runs-on: ubuntu-latest # 指定运行环境为最新的 Ubuntu Linux 虚拟机
+    runs-on: ubuntu-latest # 使用最新的 Ubuntu 虚拟机
 
     steps:
-    - name: Checkout Repository # 步骤1: 检出（下载）您的代码仓库
-      uses: actions/checkout@v4 # 使用 actions/checkout@v4 官方 Action
+    - name: Checkout Repository
+      uses: actions/checkout@v4
 
-    - name: Set up Python # 步骤2: 设置 Python 环境
-      uses: actions/setup-python@v5 # 使用 actions/setup-python@v5 官方 Action
+    - name: Set up Python
+      uses: actions/setup-python@v5
       with:
-        python-version: '3.x' # 指定使用最新的 Python 3 版本
+        python-version: '3.x'
 
-    - name: Install Dependencies # 步骤3: 安装 Python 脚本所需的依赖库
+    - name: Install Dependencies
       run: |
-        python -m pip install --upgrade pip # 升级 pip
-        # 安装 requests 用于网络请求
-        # 安装 beautifulsoup4 用于 HTML 解析
-        # 安装 PyYAML 用于 YAML 文件解析
+        python -m pip install --upgrade pip
         pip install requests beautifulsoup4 PyYAML
 
-    - name: Run Node Extraction Script # 步骤4: 执行您的 Python 脚本
+    - name: Run Node Extraction Script
       run: |
-        # 确保 'data' 目录存在，如果不存在则创建
         mkdir -p data
-        # 运行您的主 Python 脚本
-        python ultimate_node_extractor_v2.py
+        python ultimate_node_extractor_v3.py # 运行您的 Python 脚本
 
-    - name: Commit Results # 步骤5: 将生成或更新的文件提交回您的代码仓库
-      # 只有当 'data/' 目录下的文件有实际变化时才执行提交
+    - name: Commit Results # 提交更改回仓库
       run: |
-        git config user.name "GitHub Actions Bot" # 配置 Git 用户名
-        git config user.email "actions@github.com" # 配置 Git 用户邮箱
-        # 添加所有在 'data' 目录下生成或更新的 .txt, .csv, .json 文件到 Git 暂存区
-        git add data/all_nodes_final.txt data/node_counts.csv data/url_cache.json
-        # 检查 Git 暂存区是否有实际改动 (exit-code 0 表示无改动，非0表示有改动)
-        # 如果有改动 (非0)，则执行 git commit 命令
-        git diff --cached --exit-code || git commit -m "Auto: Update proxy node list (v2 enhanced)"
-        # 推送所有新的提交到远程仓库
+        git config user.name "GitHub Actions Bot"
+        git config user.email "actions@github.com"
+        
+        # 删除所有旧的代理节点切片文件，以防文件数量减少
+        # 这一步非常重要，确保仓库中只保留当前次运行生成的切片
+        git rm -rf data/proxy_nodes_*.txt || true # '|| true' 防止没有文件可删时报错
+        
+        # 添加所有新生成的切片文件、统计文件和缓存文件
+        git add data/proxy_nodes_*.txt data/node_counts.csv data/url_cache.json
+        
+        # 检查是否有实际改动，没有改动则不提交
+        git diff --cached --exit-code || git commit -m "Auto: Update proxy node list (v3 sliced)"
         git push
       env:
-        # GITHUB_TOKEN 是 GitHub 自动为每个工作流运行提供的令牌，
-        # 它具有在当前仓库中进行操作（如推送代码）的权限。
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
