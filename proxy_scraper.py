@@ -36,6 +36,7 @@ CONCURRENT_REQUESTS_LIMIT = 30 # 建议降低并发量以提高稳定性
 REQUEST_TIMEOUT = 15 # 增加超时时间
 RETRY_ATTEMPTS = 2
 CACHE_SAVE_INTERVAL = 100
+MAX_RECURSION_DEPTH = 2 # 最大递归抓取深度，0表示只抓取sources.list中的URL，1表示抓取sources.list和它们直接指向的URL，以此类推
 
 PROXIES = None #
 
@@ -53,7 +54,7 @@ NODE_PATTERNS = {
 }
 
 # 匹配 Base64 字符串的正则表达式
-BASE64_REGEX = re.compile(r'[A-Za-z0-9+/=]{20,}', re.IGNORECASE)
+BASE64_REGEX = re.compile(r'[A-Za-z0-9+/=]{20,}', re.IGNORECASE) # 至少20个字符，减少误判
 
 # 随机 User-Agent 池
 USER_AGENTS = [
@@ -124,9 +125,12 @@ def decode_base64_recursive(data: str) -> str | None:
             temp_decoded = decoded_bytes.decode('utf-8', errors='ignore')
             if not temp_decoded or temp_decoded == current_decoded_str:
                 break
-            current_decoded_str = temp_decoded
-            if not BASE64_REGEX.fullmatch(current_decoded_str): # 如果解码后不再是Base64格式，停止
+            # 检查解码后的字符串是否仍然是 Base64 格式，如果是则继续解码
+            # 否则，停止递归，认为已经到达最终内容
+            if not BASE64_REGEX.fullmatch(temp_decoded.strip()):
+                current_decoded_str = temp_decoded
                 break
+            current_decoded_str = temp_decoded
         except (base64.binascii.Error, UnicodeDecodeError):
             try:
                 # 尝试标准 Base64 解码
@@ -134,9 +138,10 @@ def decode_base64_recursive(data: str) -> str | None:
                 temp_decoded = decoded_bytes.decode('utf-8', errors='ignore')
                 if not temp_decoded or temp_decoded == current_decoded_str:
                     break
-                current_decoded_str = temp_decoded
-                if not BASE64_REGEX.fullmatch(current_decoded_str):
+                if not BASE64_REGEX.fullmatch(temp_decoded.strip()):
+                    current_decoded_str = temp_decoded
                     break
+                current_decoded_str = temp_decoded
             except (base64.binascii.Error, UnicodeDecodeError):
                 break
         except Exception as e:
@@ -223,6 +228,7 @@ async def fetch_content(url: str, client: httpx.AsyncClient, retries: int = RETR
 def standardize_node_url(node_url: str) -> str:
     """
     标准化节点链接的查询参数和部分结构，以便更精确地去重。
+    并确保返回的 URL 不包含内部换行符。
     """
     if not isinstance(node_url, str):
         return ""
@@ -231,7 +237,8 @@ def standardize_node_url(node_url: str) -> str:
         parsed = urlparse(node_url)
     except ValueError as e:
         logging.warning(f"标准化节点URL时遇到无效格式错误: {e} - URL: {node_url}")
-        return node_url # 返回原始URL，不进行标准化
+        # 尝试清理，但返回原始URL，不进行标准化
+        return node_url.replace('\n', '').replace('\r', '')
 
     if parsed.query:
         query_params = parse_qs(parsed.query, keep_blank_values=True)
@@ -248,12 +255,17 @@ def standardize_node_url(node_url: str) -> str:
                 # 对 VMess 字段进行排序，保证一致性，同时考虑不同键的类型（字符串化）
                 sorted_vmess_json = dict(sorted(vmess_json.items(), key=lambda item: str(item[0])))
                 normalized_b64 = base64.b64encode(json.dumps(sorted_vmess_json, separators=(',', ':')).encode('utf-8')).decode('utf-8')
+                # 确保 base64 内容不包含换行符
+                normalized_b64 = normalized_b64.replace('\n', '').replace('\r', '')
                 return f"vmess://{normalized_b64}"
         except Exception as e:
             logging.debug(f"标准化 VMess URL 失败: {e}, url: {node_url}")
-            return node_url
+            return node_url.replace('\n', '').replace('\r', '') # 失败时也清理
 
-    return parsed.geturl()
+    final_url = parsed.geturl()
+    # 显式地从最终的 URL 字符串中移除任何换行符
+    final_url = final_url.replace('\n', '').replace('\r', '')
+    return final_url
 
 def is_valid_hysteria2_node(node_link: str) -> bool:
     """
@@ -383,7 +395,8 @@ def convert_dict_to_node_link(node_dict: dict) -> str | None:
         vmess_obj = {k: v for k, v in vmess_obj.items() if v not in ['', 0, 'none', None]}
         try:
             sorted_vmess_obj = dict(sorted(vmess_obj.items()))
-            return f"vmess://{base64.b64encode(json.dumps(sorted_vmess_obj, separators=(',', ':')).encode('utf-8')).decode('utf-8')}"
+            b64_encoded = base64.b64encode(json.dumps(sorted_vmess_obj, separators=(',', ':')).encode('utf-8')).decode('utf-8')
+            return b64_encoded.replace('\n', '').replace('\r', '') # 确保不含换行符
         except Exception as e:
             logging.debug(f"转换 VMess 字典失败: {e}, dict: {node_dict}")
             return None
@@ -426,7 +439,7 @@ def convert_dict_to_node_link(node_dict: dict) -> str | None:
         if params:
             sorted_params = sorted([(k, v) for k, values in params.items() for v in (values if isinstance(values, list) else [values])])
             vless_link += "?" + urlencode(sorted_params, doseq=True)
-        return vless_link
+        return vless_link.replace('\n', '').replace('\r', '') # 确保不含换行符
 
     elif node_type == 'trojan':
         if not password:
@@ -458,7 +471,7 @@ def convert_dict_to_node_link(node_dict: dict) -> str | None:
         if params:
             sorted_params = sorted([(k, v) for k, values in params.items() for v in (values if isinstance(values, list) else [values])])
             trojan_link += "?" + urlencode(sorted_params, doseq=True)
-        return trojan_link
+        return trojan_link.replace('\n', '').replace('\r', '') # 确保不含换行符
 
     elif node_type == 'ss':
         if not password or not node_dict.get('cipher'):
@@ -468,7 +481,7 @@ def convert_dict_to_node_link(node_dict: dict) -> str | None:
         ss_link = f"ss://{encoded_method_pwd}@{server}:{port}"
         if name:
             ss_link += f"#{name}"
-        return ss_link
+        return ss_link.replace('\n', '').replace('\r', '') # 确保不含换行符
 
     elif node_type == 'hysteria2':
         # Hysteria2 协议认证信息在 host 部分
@@ -505,20 +518,157 @@ def convert_dict_to_node_link(node_dict: dict) -> str | None:
             # 节点名称通常在 # 之后，且可能需要 URL 编码
             final_link += f"#{urlparse(name).path.replace(' ', '%20')}"
             
-        return final_link
+        return final_link.replace('\n', '').replace('\r', '') # 确保不含换行符
 
     return None
 
+def extract_nodes_from_json(parsed_json: dict | list) -> list[str]:
+    """从解析后的JSON数据中提取节点链接。"""
+    nodes = set()
+    if isinstance(parsed_json, dict):
+        if 'proxies' in parsed_json and isinstance(parsed_json['proxies'], list):
+            for proxy_obj in parsed_json['proxies']:
+                if isinstance(proxy_obj, dict):
+                    node_link = convert_dict_to_node_link(proxy_obj)
+                    if node_link and is_valid_node(node_link):
+                        nodes.add(node_link)
+        # 兼容其他可能包含节点列表的 JSON 结构
+        for key, value in parsed_json.items():
+            if isinstance(value, str):
+                extracted_from_str = extract_and_validate_nodes(value)
+                nodes.update(extracted_from_str)
+            elif isinstance(value, (dict, list)):
+                nodes.update(extract_nodes_from_json(value)) # 递归查找
+    elif isinstance(parsed_json, list):
+        for item in parsed_json:
+            if isinstance(item, str):
+                extracted_from_str = extract_and_validate_nodes(item)
+                nodes.update(extracted_from_str)
+            elif isinstance(item, (dict, list)):
+                nodes.update(extract_nodes_from_json(item)) # 递归查找
+    return list(nodes)
 
-def parse_content(content: str, content_type_hint: str = "unknown") -> str:
+def extract_nodes_from_yaml(parsed_yaml: dict | list) -> list[str]:
+    """从解析后的YAML数据中提取节点链接。"""
+    nodes = set()
+    if isinstance(parsed_yaml, dict):
+        if 'proxies' in parsed_yaml and isinstance(parsed_yaml['proxies'], list):
+            for proxy_obj in parsed_yaml['proxies']:
+                if isinstance(proxy_obj, dict):
+                    node_link = convert_dict_to_node_link(proxy_obj)
+                    if node_link and is_valid_node(node_link):
+                        nodes.add(node_link)
+        # 兼容其他可能包含节点列表的 YAML 结构
+        for key, value in parsed_yaml.items():
+            if isinstance(value, str):
+                extracted_from_str = extract_and_validate_nodes(value)
+                nodes.update(extracted_from_str)
+            elif isinstance(value, (dict, list)):
+                nodes.update(extract_nodes_from_yaml(value)) # 递归查找
+    elif isinstance(parsed_yaml, list):
+        for item in parsed_yaml:
+            if isinstance(item, str):
+                extracted_from_str = extract_and_validate_nodes(item)
+                nodes.update(extracted_from_str)
+            elif isinstance(item, (dict, list)):
+                nodes.update(extract_nodes_from_yaml(item)) # 递归查找
+    return list(nodes)
+
+def extract_nodes_from_html(html_content: str, base_url: str) -> tuple[list[str], list[str]]:
+    """
+    从HTML内容中提取节点链接，并识别可能指向其他订阅源的URL。
+    返回 (extracted_node_links, potential_subscription_urls)
+    """
+    soup = BeautifulSoup(html_content, 'html.parser')
+    extracted_nodes_from_html_set = set()
+    potential_subscription_urls_set = set()
+
+    # 1. 查找所有链接
+    for a_tag in soup.find_all('a', href=True):
+        href = a_tag['href'].strip()
+        
+        # 将相对路径转换为绝对路径
+        absolute_href = urljoin(base_url, href)
+        
+        # 尝试将href作为节点链接处理
+        standardized_href = standardize_node_url(unquote(absolute_href).strip())
+        if is_valid_node(standardized_href):
+            extracted_nodes_from_html_set.add(standardized_href)
+        else:
+            # 如果不是直接节点，检查是否为订阅链接
+            # 过滤掉常见的图片、JS、CSS、邮件等链接，只关注可能的订阅链接
+            if (absolute_href.startswith(('http://', 'https://')) and
+                not absolute_href.endswith(('.png', '.jpg', '.jpeg', '.gif', '.svg', '.css', '.js', '.ico')) and
+                not absolute_href.startswith('mailto:') and
+                (absolute_href.endswith(('.txt', '.yaml', '.yml', '.json')) or
+                 'sub' in absolute_href.lower() or 'subscribe' in absolute_href.lower() or
+                 'clash' in absolute_href.lower() or 'singbox' in absolute_href.lower() or
+                 'v2ray' in absolute_href.lower() or 'trojan' in absolute_href.lower() or
+                 'ss' in absolute_href.lower() or 'ssr' in absolute_href.lower() or
+                 'hysteria' in absolute_href.lower())):
+                potential_subscription_urls_set.add(absolute_href)
+
+    # 2. 查找 <pre>, <code>, <textarea> 中的文本内容，这些可能包含原始节点列表或Base64编码
+    for tag in soup.find_all(['pre', 'code', 'textarea']):
+        text_content = tag.get_text().strip()
+        if text_content:
+            # 尝试直接解析其中的节点
+            nodes_from_text = extract_and_validate_nodes(text_content)
+            extracted_nodes_from_html_set.update(nodes_from_text)
+            # 尝试 Base64 解码并提取节点
+            decoded_b64 = decode_base64_recursive(text_content)
+            if decoded_b64 and decoded_b64 != text_content:
+                nodes_from_decoded_b64 = extract_and_validate_nodes(decoded_b64)
+                extracted_nodes_from_html_set.update(nodes_from_decoded_b64)
+
+    # 3. 查找 <script> 标签中的内容，可能包含 JSON 或 Base64 编码的节点
+    for script_tag in soup.find_all('script'):
+        script_content = script_tag.string
+        if script_content:
+            # 尝试解析 JSON
+            if script_content.strip().startswith(('{', '[')):
+                try:
+                    js_data = json.loads(script_content)
+                    # 递归从JS数据中提取节点
+                    extracted_from_json_in_script = extract_nodes_from_json(js_data)
+                    extracted_nodes_from_html_set.update(extracted_from_json_in_script)
+                except json.JSONDecodeError:
+                    pass
+            
+            # 提取脚本内容中的所有类似 Base64 的字符串并尝试解码
+            potential_base64_matches = BASE64_REGEX.findall(script_content)
+            for b64_match in potential_base64_matches:
+                if len(b64_match) > 30 and '=' in b64_match: # 简单过滤短的或非Base64的匹配
+                    decoded_b64_in_script = decode_base64_recursive(b64_match)
+                    if decoded_b64_in_script and decoded_b64_in_script != b64_match:
+                        # 从解码后的内容中提取节点
+                        nodes_from_decoded_b64 = extract_and_validate_nodes(decoded_b64_in_script)
+                        extracted_nodes_from_html_set.update(nodes_from_decoded_b64)
+
+    return list(extracted_nodes_from_html_set), list(potential_subscription_urls_set)
+
+def urljoin(base: str, url: str) -> str:
+    """
+    一个更健壮的URL拼接函数，处理相对路径。
+    """
+    if urlparse(url).scheme: # 如果是绝对URL，直接返回
+        return url
+    
+    parsed_base = urlparse(base)
+    # 对于相对URL，处理好路径，避免 /a/b + ../c 变成 /a/../c
+    if not parsed_base.path.endswith('/'):
+        base = base.rsplit('/', 1)[0] + '/'
+    
+    return urlparse(base)._replace(path=os.path.normpath(os.path.join(parsed_base.path, urlparse(url).path))).geturl()
+
+
+def parse_content(content: str, base_url: str, content_type_hint: str = "unknown") -> tuple[list[str], list[str]]:
     """
     智能解析内容，尝试通过 Content-Type 提示，然后回退到内容嗅探。
-    增加对各种潜在文本的解析尝试。
+    返回 (extracted_node_links, new_urls_to_follow)
     """
-    if not content:
-        return ""
-
-    combined_text_for_regex = []
+    extracted_nodes = set()
+    new_urls_to_follow = set()
 
     # 1. 尝试 JSON 解析 (基于 Content-Type 或内容前缀)
     if "json" in content_type_hint or content.strip().startswith(("{", "[")):
@@ -526,25 +676,27 @@ def parse_content(content: str, content_type_hint: str = "unknown") -> str:
             parsed_json = json.loads(content)
             logging.info("内容被识别为 JSON 格式。")
             nodes_from_json = extract_nodes_from_json(parsed_json)
-            if nodes_from_json:
-                combined_text_for_regex.extend(nodes_from_json)
-            combined_text_for_regex.append(content) # 也保留原始内容以供后续正则匹配
-            return "\n".join(list(set(combined_text_for_regex)))
+            extracted_nodes.update(nodes_from_json)
+            # JSON 内容中可能也直接包含 Base64 编码的节点列表
+            nodes_from_text = extract_and_validate_nodes(content)
+            extracted_nodes.update(nodes_from_text)
+            return list(extracted_nodes), list(new_urls_to_follow)
         except json.JSONDecodeError:
             logging.debug("内容尝试 JSON 解析失败。")
             pass
 
     # 2. 尝试 YAML 解析 (基于 Content-Type 或内容前缀)
-    if "yaml" in content_type_hint or content.strip().startswith(("---", "- ", "proxies:")):
+    if "yaml" in content_type_hint or content.strip().startswith(("---", "- ", "proxies:", "outbounds:")):
         try:
             parsed_yaml = yaml.safe_load(content)
             if isinstance(parsed_yaml, dict) and ('proxies' in parsed_yaml or 'proxy-groups' in parsed_yaml or 'outbounds' in parsed_yaml):
                 logging.info("内容被识别为 YAML 格式。")
                 nodes_from_yaml = extract_nodes_from_yaml(parsed_yaml)
-                if nodes_from_yaml:
-                    combined_text_for_regex.extend(nodes_from_yaml)
-                combined_text_for_regex.append(content) # 也保留原始内容以供后续正则匹配
-                return "\n".join(list(set(combined_text_for_regex)))
+                extracted_nodes.update(nodes_from_yaml)
+                # YAML 内容中可能也直接包含 Base64 编码的节点列表
+                nodes_from_text = extract_and_validate_nodes(content)
+                extracted_nodes.update(nodes_from_text)
+                return list(extracted_nodes), list(new_urls_to_follow)
         except yaml.YAMLError:
             logging.debug("内容尝试 YAML 解析失败。")
             pass
@@ -552,175 +704,43 @@ def parse_content(content: str, content_type_hint: str = "unknown") -> str:
     # 3. 尝试 HTML 解析 (基于 Content-Type 或内容前缀)
     if "html" in content_type_hint or '<html' in content.lower() or '<body' in content.lower() or '<!doctype html>' in content.lower():
         logging.info("内容被识别为 HTML 格式。")
-        nodes_from_html = extract_nodes_from_html(content)
-        if nodes_from_html:
-            combined_text_for_regex.extend(nodes_from_html)
-            # HTML 内容中可能直接包含 Base64 编码的订阅链接，需要进一步处理
-            text_from_html = "\n".join(list(set(combined_text_for_regex)))
-            decoded_html_base64 = decode_base64_recursive(text_from_html)
-            if decoded_html_base64 and decoded_html_base64 != text_from_html:
-                combined_text_for_regex.append(decoded_html_base64)
-            # 在提取的文本中再次查找 Base64
-            potential_base64_matches = BASE64_REGEX.findall(text_from_html)
-            for b64_match in potential_base64_matches:
-                if len(b64_match) > 30 and '=' in b64_match:
-                    decoded_b64_in_text = decode_base64_recursive(b64_match)
-                    if decoded_b64_in_text and decoded_b64_in_text != b64_match:
-                        combined_text_for_regex.append(decoded_b64_in_text)
-
-            return "\n".join(list(set(combined_text_for_regex)))
-
+        nodes_from_html, urls_from_html = extract_nodes_from_html(content, base_url)
+        extracted_nodes.update(nodes_from_html)
+        new_urls_to_follow.update(urls_from_html)
+        
+        # HTML 页面中的文本部分也可能直接包含 Base64 编码的节点列表
+        nodes_from_text = extract_and_validate_nodes(content)
+        extracted_nodes.update(nodes_from_text)
+        
+        return list(extracted_nodes), list(new_urls_to_follow)
 
     # 4. 尝试纯文本/Base64 嗅探 (作为最后的回退)
     logging.info("内容尝试纯文本/Base64 嗅探。")
     decoded_base64_full = decode_base64_recursive(content)
+    
+    content_to_scan = content # 默认扫描原始内容
     if decoded_base64_full and decoded_base64_full != content:
         logging.info("内容被识别为 Base64 编码，已递归解码。")
-        combined_text_for_regex.append(decoded_base64_full)
+        content_to_scan = decoded_base64_full # 如果成功解码，则扫描解码后的内容
+
         # 解码后尝试再次进行 JSON/YAML 解析
         try:
-            temp_parsed_json = json.loads(decoded_base64_full)
-            combined_text_for_regex.extend(extract_nodes_from_json(temp_parsed_json))
+            temp_parsed_json = json.loads(content_to_scan)
+            extracted_nodes.update(extract_nodes_from_json(temp_parsed_json))
         except json.JSONDecodeError:
             pass
         try:
-            temp_parsed_yaml = yaml.safe_load(decoded_base64_full)
+            temp_parsed_yaml = yaml.safe_load(content_to_scan)
             if isinstance(temp_parsed_yaml, dict) and ('proxies' in temp_parsed_yaml or 'proxy-groups' in temp_parsed_yaml or 'outbounds' in temp_parsed_yaml):
-                combined_text_for_regex.extend(extract_nodes_from_yaml(temp_parsed_yaml))
+                extracted_nodes.update(extract_nodes_from_yaml(temp_parsed_yaml))
         except yaml.YAMLError:
             pass
+    
+    # 最后，对所有潜在文本片段进行通用正则匹配提取
+    nodes_from_final_scan = extract_and_validate_nodes(content_to_scan)
+    extracted_nodes.update(nodes_from_final_scan)
 
-    # 遍历所有可能的文本片段，查找 Base64 编码的节点信息
-    combined_text_for_regex.append(content)
-    all_text_to_scan = "\n".join(list(set(combined_text_for_regex)))
-    potential_base64_matches = BASE64_REGEX.findall(all_text_to_scan)
-    for b64_match in potential_base64_matches:
-        # 增加对 Base64 长度和 `=` 结束符的判断，减少误判
-        if len(b64_match) > 30 and '=' in b64_match:
-            decoded_b64_in_text = decode_base64_recursive(b64_match)
-            if decoded_b64_in_text and decoded_b64_in_text != b64_match:
-                combined_text_for_regex.append(decoded_b64_in_text)
-
-    return "\n".join(list(set(combined_text_for_regex)))
-
-def extract_nodes_from_json(parsed_json: dict | list) -> list[str]:
-    """从已解析的 JSON 对象中提取节点链接。"""
-    nodes = []
-    if isinstance(parsed_json, list):
-        for item in parsed_json:
-            if isinstance(item, str):
-                nodes.append(item)
-            elif isinstance(item, dict):
-                node_link = convert_dict_to_node_link(item)
-                if node_link:
-                    nodes.append(node_link)
-    elif isinstance(parsed_json, dict):
-        if 'proxies' in parsed_json and isinstance(parsed_json['proxies'], list):
-            for proxy in parsed_json['proxies']:
-                if isinstance(proxy, dict):
-                    node_link = convert_dict_to_node_link(proxy)
-                    if node_link:
-                        nodes.append(node_link)
-        if 'outbounds' in parsed_json and isinstance(parsed_json['outbounds'], list):
-            for outbound in parsed_json['outbounds']:
-                if isinstance(outbound, dict):
-                    node_link = convert_dict_to_node_link(outbound)
-                    if node_link:
-                        nodes.append(node_link)
-        # 递归查找所有字符串值，尝试解码 Base64
-        for key, value in parsed_json.items():
-            if isinstance(value, str):
-                nodes.append(value)
-                decoded_value = decode_base64_recursive(value)
-                if decoded_value and decoded_value != value:
-                    nodes.append(decoded_value)
-            elif isinstance(value, list):
-                for list_item in value:
-                    if isinstance(list_item, str):
-                        nodes.append(list_item)
-                        decoded_list_item = decode_base64_recursive(list_item)
-                        if decoded_list_item and decoded_list_item != list_item:
-                            nodes.append(decoded_list_item)
-                    elif isinstance(list_item, dict):
-                        node_link = convert_dict_to_node_link(list_item)
-                        if node_link:
-                            nodes.append(node_link)
-            elif isinstance(value, dict): # 递归处理嵌套字典
-                nodes.extend(extract_nodes_from_json(value))
-    return nodes
-
-def extract_nodes_from_yaml(parsed_yaml: dict) -> list[str]:
-    """从已解析的 YAML 对象中提取节点链接。"""
-    nodes = []
-    if 'proxies' in parsed_yaml and isinstance(parsed_yaml['proxies'], list):
-        for proxy in parsed_yaml['proxies']:
-            if isinstance(proxy, dict) and 'type' in proxy:
-                node_link = convert_dict_to_node_link(proxy)
-                if node_link:
-                    nodes.append(node_link)
-    if 'outbounds' in parsed_yaml and isinstance(parsed_yaml['outbounds'], list):
-        for outbound in parsed_yaml['outbounds']:
-            if isinstance(outbound, dict) and 'type' in outbound:
-                node_link = convert_dict_to_node_link(outbound)
-                if node_link:
-                    nodes.append(node_link)
-
-    # 递归查找所有字符串值，尝试解码 Base64
-    def search_for_b64_in_yaml_values(obj):
-        if isinstance(obj, dict):
-            for k, v in obj.items():
-                if isinstance(v, str):
-                    decoded_value = decode_base64_recursive(v)
-                    if decoded_value and decoded_value != v:
-                        nodes.append(decoded_value)
-                elif isinstance(v, (dict, list)):
-                    search_for_b64_in_yaml_values(v)
-        elif isinstance(obj, list):
-            for item in obj:
-                if isinstance(item, str):
-                    decoded_value = decode_base64_recursive(item)
-                    if decoded_value and decoded_value != item:
-                        nodes.append(decoded_value)
-                elif isinstance(item, (dict, list)):
-                    search_for_b64_in_yaml_values(item)
-    search_for_b64_in_yaml_values(parsed_yaml)
-
-    return nodes
-
-def extract_nodes_from_html(html_content: str) -> list[str]:
-    """从 HTML 内容中提取节点链接。"""
-    nodes = []
-    soup = BeautifulSoup(html_content, 'html.parser')
-
-    # 查找可能包含节点信息的特定标签
-    potential_node_containers = soup.find_all(['pre', 'code', 'textarea', 'script', 'style'])
-    for tag in potential_node_containers:
-        extracted_text = tag.get_text(separator="\n", strip=True)
-        if extracted_text:
-            nodes.append(extracted_text)
-            # 对这些标签内的文本也尝试进行 Base64 解码
-            if tag.name in ['script', 'style', 'textarea', 'pre', 'code']:
-                potential_base64_matches = BASE64_REGEX.findall(extracted_text)
-                for b64_match in potential_base64_matches:
-                    if len(b64_match) > 30 and '=' in b64_match:
-                        decoded_b64_in_text = decode_base64_recursive(b64_match)
-                        if decoded_b64_in_text and decoded_b64_in_text != b64_match:
-                            nodes.append(decoded_b64_in_text)
-
-    # 也检查 body 中的直接文本内容，特别是当页面没有明确的容器标签时
-    if soup.body:
-        body_text = soup.body.get_text(separator="\n", strip=True)
-        # 只有当body文本长度较大或包含已知协议模式时才处理，避免无关的短文本
-        if len(body_text) > 100 or any(pattern.search(body_text) for pattern in NODE_PATTERNS.values()):
-            if body_text:
-                nodes.append(body_text)
-                potential_base64_matches = BASE64_REGEX.findall(body_text)
-                for b64_match in potential_base64_matches:
-                    if len(b64_match) > 30 and '=' in b64_match:
-                        decoded_b64_in_text = decode_base64_recursive(b64_match)
-                        if decoded_b64_in_text and decoded_b64_in_text != b64_match:
-                            nodes.append(decoded_b64_in_text)
-    return nodes
+    return list(extracted_nodes), list(new_urls_to_follow)
 
 def extract_and_validate_nodes(content: str) -> list[str]:
     """
@@ -734,7 +754,7 @@ def extract_and_validate_nodes(content: str) -> list[str]:
         matches = pattern_regex.findall(content)
         for match in matches:
             decoded_match = unquote(match).strip()
-            normalized_node = standardize_node_url(decoded_match)
+            normalized_node = standardize_node_url(decoded_match) # standardize_node_url 内部会处理换行符
             # 这里统一调用 is_valid_node，它内部会判断 Hysteria2 的有效性
             if is_valid_node(normalized_node):
                 found_nodes.add(normalized_node)
@@ -754,7 +774,7 @@ def load_existing_nodes_from_slices(directory: str, prefix: str) -> set[str]:
                         # 适应旧格式（Proxy-0000X = 链接）和新格式（纯链接）
                         parts = line.strip().split(' = ', 1)
                         node_url = parts[1].strip() if len(parts) == 2 else line.strip()
-                        standardized_node = standardize_node_url(node_url)
+                        standardized_node = standardize_node_url(node_url) # 加载时也确保移除换行符
                         existing_nodes.add(standardized_node)
                         loaded_count += 1
             except Exception as e:
@@ -787,7 +807,8 @@ def save_nodes_to_sliced_files(output_prefix: str, nodes: list[str], max_nodes_p
         try:
             with open(slice_file_name, 'w', encoding='utf-8') as f:
                 for node in slice_nodes: # 直接写入节点，不带前缀
-                    f.write(f"{node}\n")
+                    # 再次确保写入的每个节点都是单行，避免任何意外的换行符
+                    f.write(f"{node.replace('\n', '').replace('\r', '')}\n")
             logging.info(f"已保存切片文件: {slice_file_name} (包含 {len(slice_nodes)} 个节点)")
             saved_files_count += 1
         except IOError as e:
@@ -810,14 +831,17 @@ def save_node_counts_to_csv(file_path: str, counts_data: dict) -> None:
 
 # --- 主逻辑 ---
 
-async def process_single_url(url: str, url_cache_data: dict, client: httpx.AsyncClient) -> tuple[str, int, dict, list[str], str]:
+async def process_single_url(url: str, current_depth: int, url_cache_data: dict, client: httpx.AsyncClient) -> tuple[str, int, dict, list[str], str, list[str]]:
     """处理单个URL的异步逻辑"""
-    logging.info(f"开始处理 URL: {url}")
+    logging.info(f"开始处理 URL: {url} (深度: {current_depth})")
     
     # Get previous cache data for comparison
     previous_cache_meta = url_cache_data.get(url, {}).copy()
     
     content, new_cache_meta, fetch_status = await fetch_content(url, client, cache_data=previous_cache_meta)
+
+    extracted_nodes_list = []
+    new_urls_to_follow = []
 
     # If new_cache_meta is None, it means fetching failed
     if new_cache_meta is None:
@@ -831,38 +855,35 @@ async def process_single_url(url: str, url_cache_data: dict, client: httpx.Async
             'last_modified': None, 
             'content_type': 'unknown',
             'last_updated_timestamp': previous_cache_meta.get('last_updated_timestamp', 'N/A')
-        }, [], fetch_status 
+        }, extracted_nodes_list, fetch_status, new_urls_to_follow
 
     # Determine if content was effectively updated based on fetch_status or content_hash comparison
     content_was_updated = (fetch_status == "FETCH_SUCCESS")
     if not content_was_updated and previous_cache_meta.get('content_hash') != new_cache_meta.get('content_hash'):
-        # This case should ideally be covered by FETCH_SUCCESS, but as a safeguard
-        # if the fetch was SKIPPED_UNCHANGED but hashes somehow differ (e.g., manual cache edit),
-        # treat as updated.
         content_was_updated = True
         logging.warning(f"  {url} 即使状态为 {fetch_status}，但内容哈希仍不同，将其视为已更新。")
 
 
     if content_was_updated:
-        parsed_content_text = parse_content(content, new_cache_meta.get('content_type', 'unknown'))
-        nodes_from_url = extract_and_validate_nodes(parsed_content_text)
-        logging.info(f"从 {url} 提取到 {len(nodes_from_url)} 个有效节点。")
+        # Pass the original URL as base_url for relative link resolution in HTML parsing
+        extracted_nodes_list, new_urls_to_follow = parse_content(content, url, new_cache_meta.get('content_type', 'unknown'))
+        logging.info(f"从 {url} 提取到 {len(extracted_nodes_list)} 个有效节点，发现 {len(new_urls_to_follow)} 个新URL。")
         
         # Update node count and status based on current parsing
-        new_cache_meta['node_count'] = len(nodes_from_url)
-        new_cache_meta['status'] = "PARSE_NO_NODES" if len(nodes_from_url) == 0 else "PARSE_SUCCESS"
+        new_cache_meta['node_count'] = len(extracted_nodes_list)
+        new_cache_meta['status'] = "PARSE_NO_NODES" if len(extracted_nodes_list) == 0 else "PARSE_SUCCESS"
         # Update last_updated_timestamp only if content actually changed or it's a new entry
         new_cache_meta['last_updated_timestamp'] = time.strftime("%Y-%m-%d %H:%M:%S UTC", time.gmtime())
         logging.info(f"  {url} 内容已更新，上次更新时间: {new_cache_meta['last_updated_timestamp']}")
     else: # Content was skipped as unchanged
         # Preserve previous node count and status if unchanged, or initialize if new
-        nodes_from_url = [] # No new nodes to add from this run if skipped
+        # nodes_from_url will be empty if skipped, so we don't add to all_new_and_existing_nodes
         new_cache_meta['node_count'] = previous_cache_meta.get('node_count', 0)
         new_cache_meta['status'] = fetch_status # Use SKIPPED_UNCHANGED status
         new_cache_meta['last_updated_timestamp'] = previous_cache_meta.get('last_updated_timestamp', 'N/A')
         logging.info(f"  {url} 内容未更新。") # Log explicitly that it was unchanged.
 
-    return url, new_cache_meta.get('node_count', 0), new_cache_meta, nodes_from_url, new_cache_meta['status']
+    return url, new_cache_meta.get('node_count', 0), new_cache_meta, extracted_nodes_list, new_cache_meta['status'], new_urls_to_follow
 
 
 async def main():
@@ -889,19 +910,30 @@ async def main():
     url_processing_summary = defaultdict(int)
 
     semaphore = asyncio.Semaphore(CONCURRENT_REQUESTS_LIMIT)
+    url_queue = asyncio.Queue()
+    visited_urls = set() # Keep track of all URLs that have been added to the queue or processed
 
-    async def throttled_process_url(url, cache, client):
-        async with semaphore:
-            return await process_single_url(url, cache, client)
+    # Initialize queue with source URLs
+    for url in source_urls:
+        if url not in visited_urls:
+            await url_queue.put((url, 0)) # (url, depth)
+            visited_urls.add(url)
+
 
     async with httpx.AsyncClient(verify=False, timeout=REQUEST_TIMEOUT, http2=True) as client:
-        tasks = [throttled_process_url(url, url_cache, client) for url in source_urls]
-        
-        # 使用 asyncio.gather 来并发执行所有任务
-        for i, future in enumerate(asyncio.as_completed(tasks)):
-            processed_url = "Unknown URL" # Default value in case exception occurs before assignment
+        processed_tasks_count = 0
+        while not url_queue.empty():
+            current_url, current_depth = await url_queue.get()
+
+            # Skip if already processed in this run (can happen if added multiple times from different sources)
+            # This check is less critical now due to `visited_urls` but good for robustness
+            if current_url in url_processing_detailed_info: # If already processed in this main run
+                 logging.debug(f"跳过已在当前运行中处理的URL: {current_url}")
+                 continue
+
             try:
-                processed_url, node_count, updated_cache_meta, extracted_nodes_list, status = await future
+                processed_url, node_count, updated_cache_meta, extracted_nodes_list, status, new_urls_to_follow = \
+                    await process_single_url(current_url, current_depth, url_cache, client)
                 
                 # Update url_cache with the meta-data returned, even if fetch failed or skipped
                 if updated_cache_meta:
@@ -927,42 +959,51 @@ async def main():
                         'last_updated_timestamp': url_cache.get(processed_url, {}).get('last_updated_timestamp', 'N/A')
                     }
 
-
                 url_processing_summary[status] += 1
 
                 if extracted_nodes_list:
                     all_new_and_existing_nodes.update(extracted_nodes_list)
 
-                if (i + 1) % CACHE_SAVE_INTERVAL == 0:
+                # Add new URLs found to the queue for further processing if within depth limit
+                if new_urls_to_follow and current_depth < MAX_RECURSION_DEPTH:
+                    for new_url in new_urls_to_follow:
+                        if new_url not in visited_urls:
+                            await url_queue.put((new_url, current_depth + 1))
+                            visited_urls.add(new_url) # Mark as visited/queued
+                            logging.info(f"发现新URL加入队列: {new_url} (深度: {current_depth + 1})")
+
+                processed_tasks_count += 1
+                if processed_tasks_count % CACHE_SAVE_INTERVAL == 0:
                     save_cache(CACHE_FILE, url_cache)
-                    logging.info(f"已处理 {i + 1} 个URL，阶段性保存缓存。")
+                    logging.info(f"已处理 {processed_tasks_count} 个URL，阶段性保存缓存。")
 
             except Exception as exc: # 捕获单个任务中的所有意外异常
-                logging.error(f'处理 {processed_url} 时发生意外异常 (主循环): {exc}', exc_info=True)
+                logging.error(f'处理 {current_url} 时发生意外异常 (主循环): {exc}', exc_info=True)
                 # 即使发生异常，也尝试更新或记录该URL的状态
-                url_cache[processed_url] = { # 更新缓存，标记为异常状态
-                    'node_count': url_cache.get(processed_url, {}).get('node_count', 0), # 保持之前的节点数量
+                url_cache[current_url] = { # 更新缓存，标记为异常状态
+                    'node_count': url_cache.get(current_url, {}).get('node_count', 0), # 保持之前的节点数量
                     'status': "UNEXPECTED_MAIN_ERROR",
-                    'content_hash': url_cache.get(processed_url, {}).get('content_hash'),
-                    'etag': url_cache.get(processed_url, {}).get('etag'),
-                    'last_modified': url_cache.get(processed_url, {}).get('last_modified'),
-                    'content_type': url_cache.get(processed_url, {}).get('content_type', 'unknown'),
-                    'last_updated_timestamp': url_cache.get(processed_url, {}).get('last_updated_timestamp', 'N/A')
+                    'content_hash': url_cache.get(current_url, {}).get('content_hash'),
+                    'etag': url_cache.get(current_url, {}).get('etag'),
+                    'last_modified': url_cache.get(current_url, {}).get('last_modified'),
+                    'content_type': url_cache.get(current_url, {}).get('content_type', 'unknown'),
+                    'last_updated_timestamp': url_cache.get(current_url, {}).get('last_updated_timestamp', 'N/A')
                 }
-                url_processing_detailed_info[processed_url] = {
-                    'count': url_cache.get(processed_url, {}).get('node_count', 0), 
+                url_processing_detailed_info[current_url] = {
+                    'count': url_cache.get(current_url, {}).get('node_count', 0), 
                     'status': "UNEXPECTED_MAIN_ERROR",
-                    'last_updated_timestamp': url_cache.get(processed_url, {}).get('last_updated_timestamp', 'N/A')
+                    'last_updated_timestamp': url_cache.get(current_url, {}).get('last_updated_timestamp', 'N/A')
                 }
                 url_processing_summary["UNEXPECTED_MAIN_ERROR"] += 1
-                log_failed_url(processed_url, f"意外主循环异常: {exc}")
-                save_cache(CACHE_FILE, url_cache) # 在每次异常后也尝试保存缓存
+                log_failed_url(current_url, f"意外主循环异常: {exc}")
+                # Save cache immediately on error for robustness
+                save_cache(CACHE_FILE, url_cache) 
 
     # 脚本结束时，保存最终缓存和统计信息
     save_cache(CACHE_FILE, url_cache) # 确保所有任务完成后保存一次缓存
 
     logging.info("\n--- 处理完成报告 ---")
-    logging.info(f"总共尝试处理 {len(source_urls)} 个源URL。")
+    logging.info(f"总共尝试处理 {processed_tasks_count} 个URL (包含递归抓取)。")
     logging.info(f"状态统计:")
     for status, count in sorted(url_processing_summary.items()):
         logging.info(f"  {status}: {count} 个")
