@@ -1,40 +1,44 @@
-name: Fetch and Process Nodes
+name: Fetch and Process Nodes # 工作流名称
 
 on:
   schedule:
     - cron: '0 0 * * *'  # 每天UTC时间0点运行
   push:
-    branches: [ main ]
-  workflow_dispatch:
+    branches: [ main ] # 当代码推送到main分支时触发
+  workflow_dispatch: # 允许手动触发工作流
 
 jobs:
   fetch-nodes:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest # 在最新的 Ubuntu 运行器上执行作业
     
     steps:
-    - name: Checkout repository
+    - name: Checkout repository # 步骤1: 检出代码
       uses: actions/checkout@v4
-    
-    - name: Set up Python
+      with:
+        fetch-depth: 0 # 确保获取完整的历史记录，以便后续的git commit和push操作
+
+    - name: Set up Python # 步骤2: 设置 Python 环境
       uses: actions/setup-python@v5
       with:
-        python-version: '3.11'
-    
-    - name: Install dependencies
+        python-version: '3.11' # 使用 Python 3.11 版本
+
+    - name: Install dependencies # 步骤3: 安装项目依赖
       run: |
         python -m pip install --upgrade pip
-        pip install aiohttp beautifulsoup4 pyyaml playwright
-        playwright install --with-deps chromium
+        # 确保安装所有需要的库，包括Playwright和其浏览器驱动
+        pip install beautifulsoup4 pyyaml playwright # 移除了aiohttp，因为优化后的代码不再直接使用它进行fetch
+        playwright install --with-deps chromium # 安装Chromium浏览器及其依赖
+      
+    - name: Run fetch nodes script # 步骤4: 运行获取节点的主脚本
+      run: python fetch_nodes.py # 假设你的主脚本名为 fetch_nodes.py
+      # 如果你的脚本有特殊参数或需要传入环境变量，可以在这里添加
     
-    - name: Run fetch nodes script
-      run: python fetch_nodes.py
-    
-    - name: Commit and push results
+    - name: Commit and push results # 步骤5: 提交并推送结果
       run: |
-        git config --local user.email "github-actions[bot]@users.noreply.github.com"
-        git config --local user.name "github-actions[bot]"
-        git add data/*
-        git commit -m "Update node data $(date -u +%Y-%m-%d)" || echo "No changes to commit"
-        git push
+        git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com" # 使用 GitHub Actions bot 的官方邮箱
+        git config --local user.name "github-actions[bot]" # 使用 GitHub Actions bot 的官方名称
+        
+        # 检查是否有文件变更，避免空提交
+        git diff --exit-code --quiet || (git add data/* && git commit -m "Update node data $(date -u +%Y-%m-%d)" && git push) || echo "No changes to commit or failed to push"
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # 自动提供的 GITHUB_TOKEN，用于推送到仓库
