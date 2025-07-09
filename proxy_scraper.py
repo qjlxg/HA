@@ -32,8 +32,8 @@ NODE_COUNTS_FILE = os.path.join(DATA_DIR, "node_counts.csv")
 CACHE_FILE = os.path.join(DATA_DIR, "url_cache.json")
 FAILED_URLS_FILE = os.path.join(DATA_DIR, "failed_urls.log")
 
-CONCURRENT_REQUESTS_LIMIT = 50
-REQUEST_TIMEOUT = 10
+CONCURRENT_REQUESTS_LIMIT = 30 # 建议降低并发量以提高稳定性
+REQUEST_TIMEOUT = 15 # 增加超时时间
 RETRY_ATTEMPTS = 2
 CACHE_SAVE_INTERVAL = 100
 
@@ -165,8 +165,8 @@ async def fetch_content(url: str, client: httpx.AsyncClient, retries: int = RETR
             current_headers['If-Modified-Since'] = cache_data['last_modified']
 
     test_urls = []
-    parsed_url = urlparse(url)
-    if not parsed_url.scheme:
+    parsed_url_scheme = urlparse(url).scheme
+    if not parsed_url_scheme:
         test_urls.append(f"http://{url}")
         test_urls.append(f"https://{url}")
     else:
@@ -186,7 +186,7 @@ async def fetch_content(url: str, client: httpx.AsyncClient, retries: int = RETR
                 if cache_data and cache_data.get('content_hash') == content_hash:
                     logging.info(f"  {url} 内容哈希未修改，跳过解析。")
                     # Update cache meta with latest headers even if content didn't change
-                    return None, {'etag': new_etag, 'last_modified': new_last_modified, 'content_hash': content_hash, 'content_type': content_type, 'last_updated_timestamp': cache_data.get('last_updated_timestamp')}, "SKIPPED_UNCHANGED"
+                    return None, {'etag': new_etag, 'last_modified': new_last_modified, 'content_hash': content_hash, 'content_type': content_type, 'last_updated_timestamp': cache_data.get('last_updated_timestamp', 'N/A')}, "SKIPPED_UNCHANGED"
 
                 response.raise_for_status()
 
@@ -224,7 +224,12 @@ def standardize_node_url(node_url: str) -> str:
     if not isinstance(node_url, str):
         return ""
 
-    parsed = urlparse(node_url)
+    try:
+        parsed = urlparse(node_url)
+    except ValueError as e:
+        logging.warning(f"标准化节点URL时遇到无效格式错误: {e} - URL: {node_url}")
+        return node_url # 返回原始URL，不进行标准化
+
     if parsed.query:
         query_params = parse_qs(parsed.query, keep_blank_values=True)
         sorted_params = sorted([(k, v) for k, values in query_params.items() for v in values])
@@ -637,6 +642,8 @@ def extract_nodes_from_json(parsed_json: dict | list) -> list[str]:
                         node_link = convert_dict_to_node_link(list_item)
                         if node_link:
                             nodes.append(node_link)
+            elif isinstance(value, dict): # 递归处理嵌套字典
+                nodes.extend(extract_nodes_from_json(value))
     return nodes
 
 def extract_nodes_from_yaml(parsed_yaml: dict) -> list[str]:
@@ -781,7 +788,7 @@ def save_nodes_to_sliced_files(output_prefix: str, nodes: list[str], max_nodes_p
             logging.info(f"已保存切片文件: {slice_file_name} (包含 {len(slice_nodes)} 个节点)")
             saved_files_count += 1
         except IOError as e:
-            logging.error(f"保存切片文件失败 ({slice_file_name} {e})")
+                logging.error(f"保存切片文件失败 ({slice_file_name} {e})")
 
     logging.info(f"最终节点列表已切片保存到 {saved_files_count} 个文件。")
 
@@ -812,7 +819,16 @@ async def process_single_url(url: str, url_cache_data: dict, client: httpx.Async
     # If new_cache_meta is None, it means fetching failed
     if new_cache_meta is None:
         logging.error(f"无法获取或处理 {url} 的内容。")
-        return url, 0, None, [], fetch_status # Return None for cache meta on fetch failure
+        # Return a placeholder cache meta to avoid None issues downstream
+        return url, 0, {
+            'node_count': 0, 
+            'status': fetch_status, 
+            'content_hash': None, 
+            'etag': None, 
+            'last_modified': None, 
+            'content_type': 'unknown',
+            'last_updated_timestamp': previous_cache_meta.get('last_updated_timestamp', 'N/A')
+        }, [], fetch_status 
 
     # Determine if content was effectively updated based on fetch_status or content_hash comparison
     content_was_updated = (fetch_status == "FETCH_SUCCESS")
@@ -880,41 +896,64 @@ async def main():
         
         # 使用 asyncio.gather 来并发执行所有任务
         for i, future in enumerate(asyncio.as_completed(tasks)):
-            processed_url, node_count, updated_cache_meta, extracted_nodes_list, status = await future
-            
-            # Update url_cache with the meta-data returned, even if fetch failed or skipped
-            if updated_cache_meta:
-                url_cache[processed_url] = updated_cache_meta
-                url_processing_detailed_info[processed_url] = {
-                    'count': node_count, 
-                    'status': status, 
-                    'last_updated_timestamp': updated_cache_meta.get('last_updated_timestamp', 'N/A')
-                }
-            else: # Fallback for cases where updated_cache_meta is None (e.g., fetch failed completely)
-                url_cache[processed_url] = {
-                    'node_count': 0, 
-                    'status': status, 
-                    'content_hash': None, 
-                    'etag': None, 
-                    'last_modified': None, 
-                    'content_type': 'unknown',
-                    'last_updated_timestamp': url_cache.get(processed_url, {}).get('last_updated_timestamp', 'N/A') # Keep previous timestamp if available
-                }
-                url_processing_detailed_info[processed_url] = {
-                    'count': 0, 
-                    'status': status, 
+            processed_url = "Unknown URL" # Default value in case exception occurs before assignment
+            try:
+                processed_url, node_count, updated_cache_meta, extracted_nodes_list, status = await future
+                
+                # Update url_cache with the meta-data returned, even if fetch failed or skipped
+                if updated_cache_meta:
+                    url_cache[processed_url] = updated_cache_meta
+                    url_processing_detailed_info[processed_url] = {
+                        'count': node_count, 
+                        'status': status, 
+                        'last_updated_timestamp': updated_cache_meta.get('last_updated_timestamp', 'N/A')
+                    }
+                else: # Fallback for cases where updated_cache_meta is None (e.g., fetch failed completely)
+                    url_cache[processed_url] = {
+                        'node_count': 0, 
+                        'status': status, 
+                        'content_hash': None, 
+                        'etag': None, 
+                        'last_modified': None, 
+                        'content_type': 'unknown',
+                        'last_updated_timestamp': url_cache.get(processed_url, {}).get('last_updated_timestamp', 'N/A') # Keep previous timestamp if available
+                    }
+                    url_processing_detailed_info[processed_url] = {
+                        'count': 0, 
+                        'status': status, 
+                        'last_updated_timestamp': url_cache.get(processed_url, {}).get('last_updated_timestamp', 'N/A')
+                    }
+
+
+                url_processing_summary[status] += 1
+
+                if extracted_nodes_list:
+                    all_new_and_existing_nodes.update(extracted_nodes_list)
+
+                if (i + 1) % CACHE_SAVE_INTERVAL == 0:
+                    save_cache(CACHE_FILE, url_cache)
+                    logging.info(f"已处理 {i + 1} 个URL，阶段性保存缓存。")
+
+            except Exception as exc: # 捕获单个任务中的所有意外异常
+                logging.error(f'处理 {processed_url} 时发生意外异常 (主循环): {exc}', exc_info=True)
+                # 即使发生异常，也尝试更新或记录该URL的状态
+                url_cache[processed_url] = { # 更新缓存，标记为异常状态
+                    'node_count': url_cache.get(processed_url, {}).get('node_count', 0), # 保持之前的节点数量
+                    'status': "UNEXPECTED_MAIN_ERROR",
+                    'content_hash': url_cache.get(processed_url, {}).get('content_hash'),
+                    'etag': url_cache.get(processed_url, {}).get('etag'),
+                    'last_modified': url_cache.get(processed_url, {}).get('last_modified'),
+                    'content_type': url_cache.get(processed_url, {}).get('content_type', 'unknown'),
                     'last_updated_timestamp': url_cache.get(processed_url, {}).get('last_updated_timestamp', 'N/A')
                 }
-
-
-            url_processing_summary[status] += 1
-
-            if extracted_nodes_list:
-                all_new_and_existing_nodes.update(extracted_nodes_list)
-
-            if (i + 1) % CACHE_SAVE_INTERVAL == 0:
-                save_cache(CACHE_FILE, url_cache)
-                logging.info(f"已处理 {i + 1} 个URL，阶段性保存缓存。")
+                url_processing_detailed_info[processed_url] = {
+                    'count': url_cache.get(processed_url, {}).get('node_count', 0), 
+                    'status': "UNEXPECTED_MAIN_ERROR",
+                    'last_updated_timestamp': url_cache.get(processed_url, {}).get('last_updated_timestamp', 'N/A')
+                }
+                url_processing_summary["UNEXPECTED_MAIN_ERROR"] += 1
+                log_failed_url(processed_url, f"意外主循环异常: {exc}")
+                save_cache(CACHE_FILE, url_cache) # 在每次异常后也尝试保存缓存
 
     # 脚本结束时，保存最终缓存和统计信息
     save_cache(CACHE_FILE, url_cache) # 确保所有任务完成后保存一次缓存
