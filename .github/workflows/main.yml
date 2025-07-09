@@ -1,4 +1,4 @@
-name: Fetch and Update Proxy Nodes
+name: main
 
 on:
   workflow_dispatch: # 允许手动触发
