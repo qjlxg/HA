@@ -21,11 +21,11 @@ NODE_PROTOCOLS = [
     r'ss://', r'ssr://', r'vless://'
 ]
 
-# 节点格式正则表达式
+# 节点格式正则表达式，移除后向断言
 NODE_PATTERN = re.compile(
     r'(hysteria2|vmess|trojan|ss|ssr|vless)://[^\s]+|' +
     r'(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?|' +
-    r'(?<=^|\n)[^\s:]+:[^\s:]+@[^\s:]+:[0-9]+(?:\?[^\s]*)?(?:#[^\s]*)?$'
+    r'[^\s:]+:[^\s:]+@[^\s:]+:[0-9]+(?:\?[^\s]*)?(?:#[^\s]*)?'
 )
 
 async def fetch_url(session, url, max_retries=3):
@@ -107,13 +107,13 @@ async def parse_content(content):
     
     # 尝试直接提取节点
     found_nodes = re.findall(NODE_PATTERN, content)
-    nodes.extend([node for node in found_nodes if is_valid_node(node)])
+    nodes.extend([node[0] or node[1] or node[2] for node in found_nodes if any(node)])
     
     # 尝试解析为HTML
     soup = BeautifulSoup(content, 'html.parser')
     text = soup.get_text()
     found_nodes = re.findall(NODE_PATTERN, text)
-    nodes.extend([node for node in found_nodes if is_valid_node(node)])
+    nodes.extend([node[0] or node[1] or node[2] for node in found_nodes if any(node)])
     
     # 尝试解析YAML
     nodes.extend(parse_yaml(content))
