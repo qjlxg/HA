@@ -165,11 +165,14 @@ async def fetch_content(url: str, client: httpx.AsyncClient, retries: int = RETR
             current_headers['If-Modified-Since'] = cache_data['last_modified']
 
     test_urls = []
-    parsed_url_scheme = urlparse(url).scheme
-    if not parsed_url_scheme:
-        test_urls.append(f"http://{url}")
+    # 确保 URL 总是带上协议头，避免 httpx 内部解析问题
+    parsed_input_url = urlparse(url)
+    if not parsed_input_url.scheme:
+        # 如果原始URL没有协议头，尝试 HTTPS 和 HTTP
         test_urls.append(f"https://{url}")
+        test_urls.append(f"http://{url}")
     else:
+        # 如果原始URL已有协议头，直接使用
         test_urls.append(url)
 
     for attempt in range(retries):
