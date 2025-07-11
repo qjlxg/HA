@@ -1,0 +1,28 @@
+# config.yaml
+data_dir: data
+sources_file: sources.list
+node_counts_file: data/node_counts.csv
+cache_file: data/url_cache.json
+failed_urls_file: data/failed_urls.log
+concurrent_requests_limit: 20
+request_timeout: 20.0
+retry_attempts: 3
+cache_save_interval: 50
+max_recursion_depth: 2
+# 如果需要使用代理，在这里配置，例如：
+# proxies:
+#   http://: http://your_http_proxy:port
+#   https://: http://your_https_proxy:port
+proxies: null
+user_agents:
+  - 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36'
+  - 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:127.0) Gecko/20100101 Firefox/127.0'
+  - 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Safari/605.1.15'
+
+# 节点测试配置 (示例，实际测试逻辑需要额外实现)
+node_test:
+  enable: false # 是否启用节点测试
+  concurrency: 10 # 并发测试节点数量
+  timeout: 5 # 测试超时时间
+  # 可以添加更多测试相关的参数，如：
+  # test_urls: ["http://www.google.com/generate_204", "http://cp.cloudflare.com/generate_204"]
