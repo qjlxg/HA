@@ -1,28 +1,51 @@
-# config.yaml
+# data_dir: 数据文件存放目录
 data_dir: data
+# sources_file: 包含源URL列表的文件
 sources_file: sources.list
+# node_counts_file: 节点统计CSV文件路径
 node_counts_file: data/node_counts.csv
+# cache_file: URL缓存文件路径
 cache_file: data/url_cache.json
+# failed_urls_file: 失败URL日志文件路径
 failed_urls_file: data/failed_urls.log
+# concurrent_requests_limit: 并发请求URL的数量限制
 concurrent_requests_limit: 20
+# request_timeout: HTTP请求超时时间（秒）
 request_timeout: 20.0
+# retry_attempts: HTTP请求失败后的重试次数
 retry_attempts: 3
+# cache_save_interval: 每处理多少个URL保存一次缓存
 cache_save_interval: 50
+# max_recursion_depth: 最大递归抓取深度（0表示只抓取sources.list中的URL）
 max_recursion_depth: 2
-# 如果需要使用代理，在这里配置，例如：
+# proxies: HTTP/HTTPS代理配置 (可选)
+# 如果需要使用代理，请取消注释并配置，例如：
 # proxies:
 #   http://: http://your_http_proxy:port
 #   https://: http://your_https_proxy:port
+# 如果不需要代理，保持为 null
 proxies: null
+# user_agents: 用于HTTP请求的用户代理列表，每次请求随机选择一个
 user_agents:
   - 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36'
   - 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:127.0) Gecko/20100101 Firefox/127.0'
   - 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Safari/605.1.15'
 
-# 节点测试配置 (示例，实际测试逻辑需要额外实现)
+# node_test: 节点活跃度测试配置 (此功能目前仅为框架，需要额外实现测试逻辑)
 node_test:
-  enable: false # 是否启用节点测试
+  enable: false # 是否启用节点测试 (true/false)
   concurrency: 10 # 并发测试节点数量
-  timeout: 5 # 测试超时时间
-  # 可以添加更多测试相关的参数，如：
-  # test_urls: ["http://www.google.com/generate_204", "http://cp.cloudflare.com/generate_204"]
+  timeout: 5 # 测试超时时间（秒）
+  # test_urls: # 可以添加用于测试的URL列表
+  #   - "http://www.google.com/generate_204"
+  #   - "http://cp.cloudflare.com/generate_204"
+
+# geoip: GeoIP 和节点命名配置
+geoip:
+  enable_geo_rename: true # 是否启用基于地理位置的重命名 (true/false)
+  # database_path: GeoLite2-Country.mmdb 文件的路径
+  # 请确保您已下载该文件并放置在指定路径。
+  # 下载地址: https://dev.maxmind.com/geoip/geoip2/geolite2/
+  database_path: data/GeoLite2-Country.mmdb
+  # default_country: 无法查询到国家时的默认国家代码
+  default_country: UNKNOWN
