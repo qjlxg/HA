@@ -69,8 +69,6 @@ class CrawlerConfig:
         os.makedirs(self.data_dir, exist_ok=True)
         
         # 确保路径基于 data_dir，如果它们不是绝对路径或已经正确设置
-        # 注意：field(default_factory=...) 已经处理了默认值在运行时生成的问题
-        # 如果从yaml加载，这些值会被覆盖，所以这里是再次确保路径完整性
         if not os.path.isabs(self.node_counts_file) and not self.node_counts_file.startswith(self.data_dir):
             self.node_counts_file = os.path.join(self.data_dir, os.path.basename(self.node_counts_file))
         if not os.path.isabs(self.cache_file) and not self.cache_file.startswith(self.data_dir):
@@ -208,6 +206,27 @@ def decode_base64_recursive(data: str) -> Optional[str]:
             logger.debug(f"Base64 解码错误: {e}")
             break
     return current_decoded
+
+async def resolve_hostname_async(hostname: str) -> Optional[str]:
+    """异步解析域名到 IP 地址"""
+    if re.match(r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$", hostname): # 已经是IP地址
+        return hostname
+    
+    try:
+        resolver = aiodns.resolver.Resolver()
+        # 尝试 A 记录 (IPv4)
+        result = await resolver.query(hostname, 'A')
+        if result:
+            return result[0].host
+        # 也可以尝试 AAAA 记录 (IPv6)
+        # result_ipv6 = await resolver.query(hostname, 'AAAA')
+        # if result_ipv6:
+        #     return result_ipv6[0].host
+    except aiodns.error.DNSError as e:
+        logger.debug(f"DNS 解析失败 {hostname}: {e}")
+    except Exception as e:
+        logger.debug(f"解析 {hostname} 时发生意外错误: {e}")
+    return None
 
 async def fetch_content(url: str, client: httpx.AsyncClient, config: CrawlerConfig, cache_data: Dict = None) -> Tuple[Optional[str], Optional[Dict], str]:
     """
@@ -350,63 +369,133 @@ def is_valid_hysteria2_node(node_link: str) -> bool:
         netloc = parsed.netloc
 
         if '@' not in netloc:
+            logger.debug(f"Hysteria2 节点缺少认证信息: {node_link}")
             return False # 缺少认证信息
 
         auth_info, addr_port = netloc.split('@', 1)
         if not auth_info.strip(): # 认证信息为空
+            logger.debug(f"Hysteria2 节点认证信息为空: {node_link}")
             return False
 
         if ':' not in addr_port:
+            logger.debug(f"Hysteria2 节点缺少端口: {node_link}")
             return False # 缺少端口
 
         server, port_str = addr_port.rsplit(':', 1)
-        if not server or not port_str.isdigit() or not (1 <= int(port_str) <= 65535):
-            return False # 服务器地址为空或端口不是有效的数字
+        if not server:
+            logger.debug(f"Hysteria2 节点服务器地址为空: {node_link}")
+            return False
+        if not port_str.isdigit() or not (1 <= int(port_str) <= 65535):
+            logger.debug(f"Hysteria2 节点端口无效: {node_link}")
+            return False # 端口不是有效的数字或不在范围内
 
         return True
     except ValueError:
+        logger.debug(f"Hysteria2 链接格式不正确: {node_link}")
         return False # 链接格式不正确
 
 def is_valid_node(node_url: str) -> bool:
     """
-    检查节点 URL 的基本有效性。
+    检查节点 URL 的基本有效性并根据协议进行严格校验。
     """
     if not isinstance(node_url, str) or len(node_url) < 10:
-        return False
-
-    # 检查是否以任何支持的协议开头
-    if not any(node_url.lower().startswith(f"{proto}://") for proto in NODE_PATTERNS):
+        logger.debug(f"节点URL太短或不是字符串: {node_url}")
         return False
 
     parsed = urlparse(node_url)
+    scheme = parsed.scheme.lower()
 
-    # 特殊处理 Hysteria2 链接的校验
-    if parsed.scheme.lower() == "hysteria2":
-        return is_valid_hysteria2_node(node_url)
+    if scheme not in NODE_PATTERNS:
+        logger.debug(f"不支持的节点协议: {scheme} - {node_url}")
+        return False # 不支持的协议
 
-    # 其他协议的现有校验逻辑
-    # 对于 SS/SSR/VMess，其 hostname 和 port 可能在 Base64 编码的内容中，这里只做基础判断
-    if parsed.scheme not in ["ss", "ssr", "vmess"]:
-        if not parsed.hostname:
+    # 尝试解析节点信息，这将帮助我们进行更细致的校验
+    node_info = parse_node_url_to_info(node_url)
+    if not node_info:
+        logger.debug(f"无法解析节点信息: {node_url}")
+        return False # 无法解析基本信息
+
+    server = node_info.get('server')
+    port = node_info.get('port')
+    name = node_info.get('name')
+
+    # 基本服务器和端口校验（适用于大多数协议）
+    if not server:
+        logger.debug(f"{scheme} 节点缺少服务器地址: {node_url}")
+        return False
+    if port is None or not isinstance(port, int) or not (1 <= port <= 65535):
+        logger.debug(f"{scheme} 节点端口无效: {port} - {node_url}")
+        return False
+
+    if scheme == "hysteria2":
+        return is_valid_hysteria2_node(node_url) # 调用专门的Hysteria2校验
+
+    elif scheme == "vmess":
+        # VMess 校验：确保有 UUID (id)
+        if not node_info.get('id'):
+            logger.debug(f"VMess 节点缺少 UUID: {node_url}")
             return False
-        if parsed.port and not (1 <= parsed.port <= 65535):
-                return False
-    elif parsed.scheme == "vmess":
+        # 可以进一步校验UUID格式，但通常不是强制的
+        return True
+
+    elif scheme == "trojan":
+        # Trojan 校验：确保有密码 (password)
+        if not node_info.get('password'):
+            logger.debug(f"Trojan 节点缺少密码: {node_url}")
+            return False
+        return True
+
+    elif scheme == "ss":
+        # SS 校验：确保有加密方法 (cipher) 和密码 (password)
+        if not (node_info.get('cipher') and node_info.get('password')):
+            logger.debug(f"SS 节点缺少加密方法或密码: {node_url}")
+            return False
+        return True
+
+    elif scheme == "ssr":
+        # SSR 校验：SSR 结构复杂，通常需要解析其内部参数
+        # 这里进行一个基础校验：确保 Base64 解码后能得到一些关键信息
+        # SSR 链接通常是 ssr://<base64_encoded_params>
+        # 编码内容通常是 server:port:protocol:method:obfs:base64_password/?params#name
         try:
-            b64_content = parsed.netloc
-            decoded = decode_base64_recursive(b64_content)
-            if not decoded:
+            decoded_ssr_content = decode_base64_recursive(parsed.netloc)
+            if not decoded_ssr_content:
+                logger.debug(f"SSR 节点 Base64 解码失败或为空: {node_url}")
                 return False
-            vmess_obj = json.loads(decoded)
-            # 检查 VMess 必须包含的字段
-            if not ('add' in vmess_obj and 'port' in vmess_obj and 'id' in vmess_obj):
+            
+            # 尝试解析 SSR 内部结构
+            parts = decoded_ssr_content.split(':')
+            if len(parts) < 6: # 至少包含 server, port, protocol, method, obfs, password_base64
+                logger.debug(f"SSR 节点内部结构不完整: {node_url}")
                 return False
-            if not (1 <= int(vmess_obj['port']) <= 65535):
+            
+            # 进一步校验端口
+            if not parts[1].isdigit() or not (1 <= int(parts[1]) <= 65535):
+                logger.debug(f"SSR 节点内部端口无效: {node_url}")
                 return False
-        except Exception:
+            
+            # 校验密码部分是否可解码 (如果存在)
+            # password_base64 = parts[5].split('/?')[0].split('/#')[0]
+            # try:
+            #     base64.urlsafe_b64decode(password_base64 + '==')
+            # except (base64.binascii.Error, UnicodeDecodeError):
+            #     logger.debug(f"SSR 节点密码 Base64 解码失败: {node_url}")
+            #     return False
+
+            return True
+        except Exception as e:
+            logger.debug(f"SSR 节点解析异常: {e} - {node_url}")
             return False
 
-    return True
+    elif scheme == "vless":
+        # Vless 校验：确保有 UUID
+        if not node_info.get('id'): # Vless 的 UUID 在 parse_node_url_to_info 中被映射到 'id'
+            logger.debug(f"Vless 节点缺少 UUID: {node_url}")
+            return False
+        # 可以进一步校验UUID格式，但通常不是强制的
+        return True
+
+    return True # 如果通过了所有检查，则认为是有效节点
 
 def convert_dict_to_node_link(node_dict: Dict) -> Optional[str]:
     """
@@ -431,10 +520,12 @@ def convert_dict_to_node_link(node_dict: Dict) -> Optional[str]:
         logger.debug(f"端口号非整数: {port} for node {name}")
         return None
 
-    if not (server and port):
+    if not server: # 服务器地址是必须的
         return None
 
     if node_type == 'vmess':
+        if not (uuid and port): # VMess 必须有 UUID 和端口
+            return None
         vmess_obj = {
             "v": node_dict.get('v', '2'),
             "ps": name, # 备注
@@ -456,14 +547,14 @@ def convert_dict_to_node_link(node_dict: Dict) -> Optional[str]:
         try:
             sorted_vmess = dict(sorted(vmess_obj.items())) # 排序确保一致性
             b64_encoded = base64.b64encode(json.dumps(sorted_vmess, separators=(',', ':')).encode('utf-8')).decode('utf-8')
-            return f"vmess://{b64_encoded.replace('\n', '').replace('\r', '')}" # 确保不含换行符
+            return f"vmess://{normalized_b64.replace('\n', '').replace('\r', '')}" # 确保不含换行符
         except Exception as e:
             logger.debug(f"转换 VMess 字典失败: {e}, dict: {node_dict}")
             return None
 
     elif node_type in ['vless', 'trojan']:
         auth = uuid if node_type == 'vless' else password
-        if not auth:
+        if not (auth and port): # Vless 必须有 UUID 和端口；Trojan 必须有密码和端口
             return None
         link = f"{node_type}://{auth}@{server}:{port}"
         params = {}
@@ -481,7 +572,7 @@ def convert_dict_to_node_link(node_dict: Dict) -> Optional[str]:
         return link.replace('\n', '').replace('\r', '')
 
     elif node_type == 'ss':
-        if not (password and node_dict.get('cipher')):
+        if not (password and node_dict.get('cipher') and port): # SS 必须有密码、加密方法和端口
             return None
         method_pwd = f"{node_dict['cipher']}:{password}"
         encoded = base64.b64encode(method_pwd.encode('utf-8')).decode('utf-8')
@@ -490,9 +581,55 @@ def convert_dict_to_node_link(node_dict: Dict) -> Optional[str]:
             link += f"#{name}" # SS的备注通常在#之后
         return link.replace('\n', '').replace('\r', '')
 
+    elif node_type == 'ssr':
+        # SSR 转换需要所有关键字段
+        if not all(k in node_dict for k in ['server', 'port', 'protocol', 'method', 'obfs', 'password']):
+            logger.debug(f"SSR 节点缺少关键字段: {node_dict}")
+            return None
+        
+        # SSR 协议参数编码
+        # server:port:protocol:method:obfs:base64_password/?params#name
+        # protocol, method, obfs 字段直接使用
+        # password 需要 base64 编码
+        # params (如 obfsparam, protoparam) 需要在 ? 后面
+        
+        ssr_password_b64 = base64.urlsafe_b64encode(node_dict['password'].encode()).decode().rstrip('=')
+        
+        # 构建核心部分
+        core_parts = [
+            str(server),
+            str(port),
+            node_dict.get('protocol', 'origin'), # 默认协议
+            node_dict.get('method', 'none'), # 默认加密方法
+            node_dict.get('obfs', 'plain'), # 默认混淆
+            ssr_password_b64
+        ]
+        
+        ssr_link_base = ":".join(core_parts)
+        
+        params = {}
+        if node_dict.get('obfsparam'):
+            params['obfsparam'] = base64.urlsafe_b64encode(node_dict['obfsparam'].encode()).decode().rstrip('=')
+        if node_dict.get('protoparam'):
+            params['protoparam'] = base64.urlsafe_b64encode(node_dict['protoparam'].encode()).decode().rstrip('=')
+        
+        query_string = urlencode(sorted(params.items()), doseq=True)
+        
+        if query_string:
+            ssr_link_base += f"/?{query_string}"
+        
+        # 最终 Base64 编码整个 ssr_link_base
+        encoded_full_ssr = base64.urlsafe_b64encode(ssr_link_base.encode()).decode().rstrip('=')
+        
+        final_link = f"ssr://{encoded_full_ssr}"
+        if name:
+            final_link += f"#{name}"
+        
+        return final_link.replace('\n', '').replace('\r', '')
+
     elif node_type == 'hysteria2':
         auth = uuid or password
-        if not auth:
+        if not (auth and port): # Hysteria2 必须有认证信息和端口
             return None
         link = f"hysteria2://{auth}@{server}:{port}"
         params = {}
@@ -562,6 +699,37 @@ def parse_node_url_to_info(node_url: str) -> Optional[Dict]:
                     logger.debug(f"解码 SS 认证信息失败: {e}")
             elif scheme == "hysteria2": # 提取 Hysteria2 的认证字符串
                 node_info["auth_str"] = auth_info
+            elif scheme == "ssr":
+                # SSR 内部结构解析 (简化版，实际可能更复杂)
+                try:
+                    decoded_ssr_content = decode_base64_recursive(parsed.netloc)
+                    if decoded_ssr_content:
+                        parts = decoded_ssr_content.split(':')
+                        if len(parts) >= 6: # server:port:protocol:method:obfs:base64_password
+                            node_info["server"] = parts[0]
+                            node_info["port"] = int(parts[1]) if parts[1].isdigit() else None
+                            node_info["protocol"] = parts[2]
+                            node_info["method"] = parts[3]
+                            node_info["obfs"] = parts[4]
+                            # password is base64 encoded in parts[5]
+                            try:
+                                password_b64 = parts[5].split('/?')[0].split('/#')[0]
+                                node_info["password"] = base64.urlsafe_b64decode(password_b64 + '==').decode('utf-8', errors='ignore')
+                            except Exception as e:
+                                logger.debug(f"SSR 密码解码失败: {e}")
+                        # 处理 obfsparam 和 protoparam
+                        if '/?' in decoded_ssr_content:
+                            query_str = decoded_ssr_content.split('/?', 1)[1].split('/#')[0]
+                            query_params = parse_qs(query_str)
+                            if 'obfsparam' in query_params and query_params['obfsparam']:
+                                node_info['obfsparam'] = base64.urlsafe_b64decode(query_params['obfsparam'][0] + '==').decode('utf-8', errors='ignore')
+                            if 'protoparam' in query_params and query_params['protoparam']:
+                                node_info['protoparam'] = base64.urlsafe_b64decode(query_params['protoparam'][0] + '==').decode('utf-8', errors='ignore')
+                except Exception as e:
+                    logger.debug(f"SSR 内部解析失败: {e}")
+            elif scheme == "vless":
+                # Vless 的 UUID 就是 netloc 的用户部分
+                node_info["id"] = auth_info # 映射到 'id' 字段以便统一处理
         
         # 解析查询参数以获取更多信息
         if parsed.query:
@@ -709,6 +877,8 @@ async def rename_and_deduplicate_by_geo(nodes: Set[str], config: CrawlerConfig) 
             auth_id = detail['info'].get('password', '')
         elif detail['info']['protocol'] == 'ss':
             auth_id = detail['info'].get('password', '') + detail['info'].get('cipher', '')
+        elif detail['info']['protocol'] == 'ssr': # SSR 认证信息可能在内部
+            auth_id = detail['info'].get('password', '') + detail['info'].get('method', '') + detail['info'].get('obfs', '')
 
         if auth_id:
             unique_key_parts.append(hashlib.sha256(auth_id.encode()).hexdigest()[:8]) # 用哈希的短前缀
@@ -921,8 +1091,6 @@ def parse_content(content: str, base_url: str, content_type: str) -> Tuple[List[
             nodes.update(extract_nodes_from_yaml(parsed))
     except yaml.YAMLError:
         pass
-
-    # 最后，对所有潜在文本片段进行通用正则匹配提取
     nodes.update(extract_and_validate_nodes(content_to_scan))
     return list(nodes), list(new_urls)
 
@@ -934,7 +1102,7 @@ def extract_and_validate_nodes(content: str) -> List[str]:
     for name, pattern in NODE_PATTERNS.items():
         for match in pattern.findall(content):
             normalized = standardize_node_url(unquote(match).strip())
-            if is_valid_node(normalized):
+            if is_valid_node(normalized): # 使用增强后的 is_valid_node
                 nodes.add(normalized)
     return list(nodes)
 
@@ -1016,7 +1184,6 @@ async def process_url(url: str, client: httpx.AsyncClient, semaphore: asyncio.Se
         nodes, new_urls = parse_content(content, url, content_type)
         
         # 更新缓存，包含提取的节点和新 URL
-        # 移除了冗余的 url_cache[url] = url_cache.get(url, {})，直接更新
         url_cache[url].update({
             'extracted_nodes': nodes,
             'new_urls_found': new_urls,
