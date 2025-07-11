@@ -15,7 +15,7 @@ import logging
 import httpx
 import urllib3
 from collections import defaultdict, deque
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import List, Dict, Tuple, Optional, Set
 from dataclasses import dataclass, field
 import aiofiles
@@ -35,48 +35,47 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 warnings.filterwarnings("ignore", category=urllib3.exceptions.InsecureRequestWarning)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 # --- 数据类定义 ---
 @dataclass
 class CrawlerConfig:
     """爬虫配置类"""
-    data_dir: str = "data"  # 数据文件存放目录
-    sources_file: str = "sources.list"  # 包含源URL列表的文件
-    node_counts_file: str = field(default_factory=lambda: os.path.join("data", "node_counts.csv"))  # 节点统计文件路径
-    cache_file: str = field(default_factory=lambda: os.path.join("data", "url_cache.json"))  # URL缓存文件路径
-    failed_urls_file: str = field(default_factory=lambda: os.path.join("data", "failed_urls.log"))  # 失败URL日志文件路径
-    concurrent_requests_limit: int = 20  # 并发请求URL的数量限制
-    request_timeout: float = 10.0  # HTTP请求超时时间（秒）
-    retry_attempts: int = 1  # HTTP请求失败后的重试次数
-    cache_save_interval: int = 50  # 每处理多少个URL保存一次缓存
-    max_recursion_depth: int = 1  # 最大递归抓取深度
-    max_crawl_depth_per_site: int = 2  # 在一个网站内部爬行的最大页面深度
-    proxies: Optional[Dict] = None  # HTTP/HTTPS代理配置字典
-    user_agents: List[str] = field(default_factory=list)  # 用于HTTP请求的用户代理列表
-    node_test: Dict = field(default_factory=dict)  # 节点测试配置
-    geoip: Dict = field(default_factory=dict)  # GeoIP和节点命名配置
+    data_dir: str = "data"
+    sources_file: str = "sources.list"
+    node_counts_file: str = field(default_factory=lambda: os.path.join("data", "node_counts.csv"))
+    cache_file: str = field(default_factory=lambda: os.path.join("data", "url_cache.json"))
+    failed_urls_file: str = field(default_factory=lambda: os.path.join("data", "failed_urls.log"))
+    duplicate_nodes_file: str = field(default_factory=lambda: os.path.join("data", "duplicate_nodes.log"))  # 新增：重复节点日志
+    concurrent_requests_limit: int = 20
+    request_timeout: float = 20.0
+    retry_attempts: int = 1
+    cache_save_interval: int = 50
+    max_recursion_depth: int = 50
+    max_crawl_depth_per_site: int = 50
+    proxies: Optional[Dict] = None
+    user_agents: List[str] = field(default_factory=list)
+    node_test: Dict = field(default_factory=dict)
+    geoip: Dict = field(default_factory=dict)
 
     def __post_init__(self):
-        """初始化后处理，确保目录存在和路径正确"""
         os.makedirs(self.data_dir, exist_ok=True)
-        if not os.path.isabs(self.node_counts_file) and not self.node_counts_file.startswith(self.data_dir):
-            self.node_counts_file = os.path.join(self.data_dir, os.path.basename(self.node_counts_file))
-        if not os.path.isabs(self.cache_file) and not self.cache_file.startswith(self.data_dir):
-            self.cache_file = os.path.join(self.data_dir, os.path.basename(self.cache_file))
-        if not os.path.isabs(self.failed_urls_file) and not self.failed_urls_file.startswith(self.data_dir):
-            self.failed_urls_file = os.path.join(self.data_dir, os.path.basename(self.failed_urls_file))
+        for file_attr in ['node_counts_file', 'cache_file', 'failed_urls_file', 'duplicate_nodes_file']:
+            file_path = getattr(self, file_attr)
+            if not os.path.isabs(file_path) and not file_path.startswith(self.data_dir):
+                setattr(self, file_attr, os.path.join(self.data_dir, os.path.basename(file_path)))
         if not self.user_agents:
             self.user_agents = [
                 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
                 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:127.0) Gecko/20100101 Firefox/127.0',
                 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Safari/605.1.15',
             ]
-        self.geoip.setdefault('enable_geo_rename', False)  # 是否启用地理位置重命名和去重
-        self.geoip.setdefault('database_path', os.path.join(self.data_dir, 'GeoLite2-Country.mmdb'))  # GeoIP数据库文件路径
-        self.geoip.setdefault('default_country', 'UNKNOWN')  # 默认国家代码
-        self.geoip.setdefault('dns_timeout', 5.0)  # DNS解析超时时间（秒）
-        self.geoip.setdefault('dns_servers', ['8.8.8.8', '1.1.1.1'])  # DNS服务器列表
-        self.geoip.setdefault('cache_size', 10000)  # DNS解析缓存大小
+        self.geoip.setdefault('enable_geo_rename', False)
+        self.geoip.setdefault('database_path', os.path.join(self.data_dir, 'GeoLite2-Country.mmdb'))
+        self.geoip.setdefault('default_country', 'UNKNOWN')
+        self.geoip.setdefault('dns_timeout', 5.0)
+        self.geoip.setdefault('dns_servers', ['8.8.8.8', '1.1.1.1', '8.8.4.4', '1.0.0.1'])  # 增加 DNS 服务器
+        self.geoip.setdefault('cache_size', 10000)
 
 # --- 节点协议正则表达式 ---
 NODE_PATTERNS = {
@@ -147,13 +146,23 @@ async def save_cache(cache_file: str, cache_data: Dict) -> None:
 
 async def log_failed_url(url: str, reason: str, config: CrawlerConfig) -> None:
     """异步记录失败的 URL 及其原因到文件"""
-    timestamp = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
+    timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
     try:
         os.makedirs(os.path.dirname(config.failed_urls_file), exist_ok=True)
         async with aiofiles.open(config.failed_urls_file, mode='a', encoding='utf-8') as f:
             await f.write(f"[{timestamp}] {url}: {reason}\n")
     except Exception as e:
         logger.error(f"记录失败 URL 失败 '{config.failed_urls_file}': {e}。")
+
+async def log_duplicate_node(node1: str, node2: str, unique_key: str, config: CrawlerConfig) -> None:
+    """异步记录重复节点到文件"""
+    timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
+    try:
+        os.makedirs(os.path.dirname(config.duplicate_nodes_file), exist_ok=True)
+        async with aiofiles.open(config.duplicate_nodes_file, mode='a', encoding='utf-8') as f:
+            await f.write(f"[{timestamp}] 重复节点: {node1[:50]}... 与 {node2[:50]}... (唯一键: {unique_key})\n")
+    except Exception as e:
+        logger.error(f"记录重复节点失败 '{config.duplicate_nodes_file}': {e}。")
 
 def decode_base64_recursive(data: str) -> Optional[str]:
     """尝试递归解码 Base64 字符串"""
@@ -189,22 +198,25 @@ def decode_base64_recursive(data: str) -> Optional[str]:
 
 @lru_cache(maxsize=None)
 async def resolve_hostname_async(hostname: str) -> Optional[str]:
-    """异步解析域名到 IP 地址，带缓存"""
+    """异步解析域名到 IP 地址，带缓存和多服务器重试"""
     if re.match(r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$", hostname):
         return hostname
-    try:
-        resolver = aiodns.Resolver(timeout=5.0, nameservers=['8.8.8.8', '1.1.1.1'])
-        result = await resolver.query(hostname, 'A')
-        return result[0].host if result else None
-    except aiodns.error.DNSError:
+    resolver = aiodns.Resolver(timeout=5.0, nameservers=['8.8.8.8', '1.1.1.1', '8.8.4.4', '1.0.0.1'])
+    for attempt in range(2):  # 重试 2 次
         try:
-            return socket.gethostbyname(hostname)
-        except socket.gaierror:
-            logger.debug(f"同步 DNS 解析失败 {hostname}")
-            return None
-    except Exception as e:
-        logger.debug(f"解析 {hostname} 时发生意外错误: {e}")
-        return None
+            result = await resolver.query(hostname, 'A')
+            return result[0].host if result else None
+        except aiodns.error.DNSError:
+            if attempt == 1:
+                try:
+                    return socket.gethostbyname(hostname)
+                except socket.gaierror:
+                    logger.debug(f"同步 DNS 解析失败 {hostname}")
+                    return None
+        except Exception as e:
+            logger.debug(f"解析 {hostname} 时发生意外错误 (尝试 {attempt + 1}/2): {e}")
+            await asyncio.sleep(0.5)
+    return None
 
 async def fetch_content(url: str, client: httpx.AsyncClient, config: CrawlerConfig, cache_data: Dict = None) -> Tuple[Optional[str], Optional[Dict], str]:
     """异步获取 URL 内容，包含重试机制"""
@@ -235,6 +247,7 @@ async def fetch_content(url: str, client: httpx.AsyncClient, config: CrawlerConf
         for test_url in test_urls:
             try:
                 response = await client.get(test_url, headers=headers, follow_redirects=True)
+                logger.info(f"HTTP Request: GET {test_url} \"HTTP/1.1 {response.status_code}\"")
                 new_etag = response.headers.get('ETag')
                 new_last_modified = response.headers.get('Last-Modified')
                 content_type = response.headers.get('Content-Type', '').lower()
@@ -249,7 +262,7 @@ async def fetch_content(url: str, client: httpx.AsyncClient, config: CrawlerConf
                         'last_updated_timestamp': cache_data.get('last_updated_timestamp', 'N/A')
                     }, "SKIPPED_UNCHANGED"
                 response.raise_for_status()
-                current_time = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
+                current_time = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
                 return response.text, {
                     'etag': new_etag,
                     'last_modified': new_last_modified,
@@ -297,6 +310,26 @@ def standardize_node_url(node_url: str) -> str:
                     return f"vmess://{normalized_b64.replace('\n', '').replace('\r', '')}"
             except Exception as e:
                 logger.debug(f"标准化 VMess URL 失败: {e}, url: {node_url}")
+        elif node_url.lower().startswith("ssr://"):
+            try:
+                decoded_ssr = decode_base64_recursive(parsed.netloc)
+                if decoded_ssr:
+                    parts = decoded_ssr.split(':')
+                    if len(parts) >= 6:
+                        password_b64 = parts[5].split('/?')[0].split('/#')[0]
+                        base64.urlsafe_b64decode(password_b64 + '==')  # 验证密码
+                        query_str = decoded_ssr.split('/?', 1)[1].split('/#')[0] if '/?' in decoded_ssr else ''
+                        query_params = parse_qs(query_str)
+                        sorted_params = sorted([(k, v[0]) for k, v in query_params.items() if v], key=lambda x: x[0])
+                        encoded_query = urlencode(sorted_params)
+                        core_parts = parts[:5] + [password_b64]
+                        ssr_base = ':'.join(core_parts)
+                        if encoded_query:
+                            ssr_base += f"/?{encoded_query}"
+                        normalized_b64 = base64.urlsafe_b64encode(ssr_base.encode()).decode().rstrip('=')
+                        return f"ssr://{normalized_b64.replace('\n', '').replace('\r', '')}" + (f"#{parsed.fragment}" if parsed.fragment else "")
+            except Exception as e:
+                logger.debug(f"标准化 SSR URL 失败: {e}, url: {node_url}")
         return parsed.geturl().replace('\n', '').replace('\r', '')
     except ValueError as e:
         logger.warning(f"标准化节点URL时遇到无效格式错误: {e} - URL: {node_url}")
@@ -534,8 +567,9 @@ def parse_node_url_to_info(node_url: str) -> Optional[Dict]:
                 vmess_obj = json.loads(decoded)
                 node_info.update(vmess_obj)
                 node_info["server"] = vmess_obj.get("add")
-                node_info["port"] = vmess_obj.get("port")
+                node_info["port"] = int(vmess_obj.get("port")) if vmess_obj.get("port") else None
                 node_info["name"] = vmess_obj.get("ps", "")
+                node_info["id"] = vmess_obj.get("id", "").lower()  # 统一 UUID 为小写
         elif scheme in ["vless", "trojan", "ss", "ssr", "hysteria2"]:
             netloc_parts = parsed.netloc.split('@', 1)
             if len(netloc_parts) == 2:
@@ -545,10 +579,10 @@ def parse_node_url_to_info(node_url: str) -> Optional[Dict]:
                 addr_port_str = netloc_parts[0] if netloc_parts else ""
             if ':' in addr_port_str:
                 server, port_str = addr_port_str.rsplit(':', 1)
-                node_info["server"] = server
+                node_info["server"] = server.lower()  # 统一服务器地址为小写
                 node_info["port"] = int(port_str) if port_str.isdigit() else None
             else:
-                node_info["server"] = addr_port_str
+                node_info["server"] = addr_port_str.lower()
                 node_info["port"] = None
             if parsed.fragment:
                 node_info["name"] = unquote(parsed.fragment)
@@ -556,42 +590,52 @@ def parse_node_url_to_info(node_url: str) -> Optional[Dict]:
                 node_info["name"] = node_info.get("server", "")
             if scheme == "ss":
                 try:
-                    decoded_auth = base64.b64decode(auth_info).decode('utf-8', errors='ignore')
+                    decoded_auth = base64.b64decode(auth_info + '==').decode('utf-8', errors='ignore')
                     if ':' in decoded_auth:
                         cipher, password = decoded_auth.split(':', 1)
                         node_info["cipher"] = cipher
                         node_info["password"] = password
+                    else:
+                        logger.debug(f"SS 认证信息格式错误: {node_url}")
+                        return None
                 except Exception as e:
-                    logger.debug(f"解码 SS 认证信息失败: {e}")
+                    logger.debug(f"解码 SS 认证信息失败: {e} - {node_url}")
+                    return None
             elif scheme == "hysteria2":
                 node_info["auth_str"] = auth_info
             elif scheme == "ssr":
                 try:
                     decoded_ssr_content = decode_base64_recursive(parsed.netloc)
-                    if decoded_ssr_content:
-                        parts = decoded_ssr_content.split(':')
-                        if len(parts) >= 6:
-                            node_info["server"] = parts[0]
-                            node_info["port"] = int(parts[1]) if parts[1].isdigit() else None
-                            node_info["protocol"] = parts[2]
-                            node_info["method"] = parts[3]
-                            node_info["obfs"] = parts[4]
-                            try:
-                                password_b64 = parts[5].split('/?')[0].split('/#')[0]
-                                node_info["password"] = base64.urlsafe_b64decode(password_b64 + '==').decode('utf-8', errors='ignore')
-                            except Exception as e:
-                                logger.debug(f"SSR 密码解码失败: {e}")
-                        if '/?' in decoded_ssr_content:
-                            query_str = decoded_ssr_content.split('/?', 1)[1].split('/#')[0]
-                            query_params = parse_qs(query_str)
-                            if 'obfsparam' in query_params and query_params['obfsparam']:
-                                node_info['obfsparam'] = base64.urlsafe_b64decode(query_params['obfsparam'][0] + '==').decode('utf-8', errors='ignore')
-                            if 'protoparam' in query_params and query_params['protoparam']:
-                                node_info['protoparam'] = base64.urlsafe_b64decode(query_params['protoparam'][0] + '==').decode('utf-8', errors='ignore')
+                    if not decoded_ssr_content:
+                        logger.debug(f"SSR 节点 Base64 解码失败: {node_url}")
+                        return None
+                    parts = decoded_ssr_content.split(':')
+                    if len(parts) < 6:
+                        logger.debug(f"SSR 节点内部结构不完整: {node_url}")
+                        return None
+                    node_info["server"] = parts[0].lower()
+                    node_info["port"] = int(parts[1]) if parts[1].isdigit() else None
+                    node_info["protocol"] = parts[2]
+                    node_info["method"] = parts[3]
+                    node_info["obfs"] = parts[4]
+                    try:
+                        password_b64 = parts[5].split('/?')[0].split('/#')[0]
+                        node_info["password"] = base64.urlsafe_b64decode(password_b64 + '==').decode('utf-8', errors='ignore')
+                    except Exception as e:
+                        logger.debug(f"SSR 密码解码失败: {e} - {node_url}")
+                        return None
+                    if '/?' in decoded_ssr_content:
+                        query_str = decoded_ssr_content.split('/?', 1)[1].split('/#')[0]
+                        query_params = parse_qs(query_str)
+                        if 'obfsparam' in query_params and query_params['obfsparam']:
+                            node_info['obfsparam'] = base64.urlsafe_b64decode(query_params['obfsparam'][0] + '==').decode('utf-8', errors='ignore')
+                        if 'protoparam' in query_params and query_params['protoparam']:
+                            node_info['protoparam'] = base64.urlsafe_b64decode(query_params['protoparam'][0] + '==').decode('utf-8', errors='ignore')
                 except Exception as e:
-                    logger.debug(f"SSR 内部解析失败: {e}")
+                    logger.debug(f"SSR 内部解析失败: {e} - {node_url}")
+                    return None
             elif scheme == "vless":
-                node_info["id"] = auth_info
+                node_info["id"] = auth_info.lower()  # 统一 UUID 为小写
         if parsed.query:
             query_params = parse_qs(parsed.query)
             for k, v in query_params.items():
@@ -616,7 +660,7 @@ def update_node_remark(node_url: str, new_remark: str) -> str:
                 normalized_b64 = base64.b64encode(json.dumps(sorted_vmess, separators=(',', ':')).encode('utf-8')).decode('utf-8')
                 return f"vmess://{normalized_b64.replace('\n', '').replace('\r', '')}"
         except Exception as e:
-            logger.debug(f"更新 VMess 备注失败: {e}")
+            logger.debug(f"更新 VMess 备注失败: {e} - {node_url}")
             return node_url
     elif scheme in ["vless", "trojan", "ss", "ssr", "hysteria2"]:
         new_parsed = parsed._replace(fragment=new_remark)
@@ -670,7 +714,7 @@ async def rename_and_deduplicate_by_geo(nodes: Set[str], config: CrawlerConfig) 
             node_details.append({'original_url': node_url, 'info': info, 'ip': None, 'country': config.geoip['default_country']})
             ip_lookup_tasks.append(resolve_hostname_async(info['server']))
         else:
-            logger.debug(f"无法解析节点服务器信息: {node_url}")
+            logger.debug(f"无法解析节点服务器信息: {node_url[:50]}...")
             node_details.append({'original_url': node_url, 'info': info, 'ip': None, 'country': config.geoip['default_country']})
     logger.info(f"开始并发解析 {len(ip_lookup_tasks)} 个域名/IP。")
     resolved_ips = await asyncio.gather(*ip_lookup_tasks, return_exceptions=True)
@@ -698,19 +742,21 @@ async def rename_and_deduplicate_by_geo(nodes: Set[str], config: CrawlerConfig) 
         if not info:
             continue
         protocol = info.get('protocol', '')
-        server = detail['ip'] or info.get('server', '')  # 优先使用解析后的 IP
+        server = info.get('server', '')  # 优先使用原始 server（域名或 IP）
+        ip = detail['ip']
         port = str(info.get('port', ''))
         auth_id = ''
         if protocol == 'vmess' or protocol == 'vless':
-            auth_id = info.get('id', '')
+            auth_id = info.get('id', '').lower()
         elif protocol == 'trojan':
-            auth_id = info.get('password', '')
+            auth_id = info.get('password', '').lower()
         elif protocol == 'ss':
-            auth_id = f"{info.get('cipher', '')}:{info.get('password', '')}"
+            auth_id = f"{info.get('cipher', '')}:{info.get('password', '').lower()}"
         elif protocol == 'ssr':
-            auth_id = f"{info.get('method', '')}:{info.get('protocol', '')}:{info.get('obfs', '')}:{info.get('password', '')}"
+            auth_id = f"{info.get('method', '')}:{info.get('protocol', '')}:{info.get('obfs', '')}:{info.get('password', '').lower()}"
         elif protocol == 'hysteria2':
-            auth_id = info.get('auth_str', info.get('password', ''))
+            auth_id = info.get('auth_str', info.get('password', '')).lower()
+        # 优先使用原始 server 进行去重，IP 仅用于命名
         unique_key = f"{protocol}:{server}:{port}:{auth_id}"
         unique_identifier = hashlib.sha256(unique_key.encode('utf-8')).hexdigest()
         detail['unique_identifier'] = unique_identifier
@@ -722,12 +768,17 @@ async def rename_and_deduplicate_by_geo(nodes: Set[str], config: CrawlerConfig) 
         for detail in details_list:
             if detail['unique_identifier'] not in seen_unique_identifiers:
                 counter += 1
-                new_remark = f"{country_code}_{counter:02d}"
+                new_remark = f"{country_code}_{counter:03d}"  # 使用三位编号
                 updated_node_url = update_node_remark(detail['original_url'], new_remark)
                 final_renamed_nodes.add(updated_node_url)
                 seen_unique_identifiers.add(detail['unique_identifier'])
             else:
-                logger.debug(f"发现功能性重复节点，跳过: {detail['original_url']}")
+                # 查找原始节点
+                for orig_detail in [d for group in grouped_nodes.values() for d in group]:
+                    if orig_detail['unique_identifier'] == detail['unique_identifier'] and orig_detail['original_url'] != detail['original_url']:
+                        await log_duplicate_node(detail['original_url'], orig_detail['original_url'], detail['unique_identifier'], config)
+                        break
+                logger.debug(f"发现功能性重复节点，跳过: {detail['original_url'][:50]}...")
     logger.info(f"GeoIP 命名和去重完成，得到 {len(final_renamed_nodes)} 个唯一节点。")
     return final_renamed_nodes
 
@@ -881,6 +932,8 @@ def extract_and_validate_nodes(content: str) -> List[str]:
             normalized = standardize_node_url(unquote(match).strip())
             if is_valid_node(normalized):
                 nodes.add(normalized)
+            else:
+                logger.debug(f"无效节点: {normalized[:50]}...")
     return list(nodes)
 
 async def save_node_counts_to_csv(file_path: str, counts_data: Dict) -> None:
@@ -994,7 +1047,7 @@ async def process_url(url: str, client: httpx.AsyncClient, semaphore: asyncio.Se
             'extracted_nodes': nodes,
             'new_urls_found': new_urls,
             'parse_status': "PARSE_SUCCESS",
-            'last_updated_timestamp': cache_meta.get('last_updated_timestamp', datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC"))
+            'last_updated_timestamp': cache_meta.get('last_updated_timestamp', datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC"))
         })
         if nodes:
             filename = os.path.join(config.data_dir, sanitize_filename(url))
@@ -1119,39 +1172,55 @@ async def save_nodes_as_clash_config(file_path: str, nodes: Set[str]) -> None:
     except Exception as e:
         logger.error(f"保存 Clash 配置失败: {e}。", exc_info=True)
 
-async def debug_duplicate_nodes(nodes: Set[str]) -> None:
-    """调试重复节点"""
-    node_info_list = [parse_node_url_to_info(node) for node in nodes]
-    unique_keys = {}
-    duplicates = []
-    for node, info in zip(nodes, node_info_list):
+async def debug_duplicate_nodes(nodes: Set[str], config: CrawlerConfig) -> None:
+    """调试重复节点，记录所有节点的唯一键"""
+    node_info_list = []
+    for node in nodes:
+        info = parse_node_url_to_info(node)
         if not info:
+            logger.debug(f"无法解析节点: {node[:50]}...")
             continue
         protocol = info.get('protocol', '')
         server = info.get('server', '')
         port = str(info.get('port', ''))
         auth_id = ''
         if protocol == 'vmess' or protocol == 'vless':
-            auth_id = info.get('id', '')
+            auth_id = info.get('id', '').lower()
         elif protocol == 'trojan':
-            auth_id = info.get('password', '')
+            auth_id = info.get('password', '').lower()
         elif protocol == 'ss':
-            auth_id = f"{info.get('cipher', '')}:{info.get('password', '')}"
+            auth_id = f"{info.get('cipher', '')}:{info.get('password', '').lower()}"
         elif protocol == 'ssr':
-            auth_id = f"{info.get('method', '')}:{info.get('protocol', '')}:{info.get('obfs', '')}:{info.get('password', '')}"
+            auth_id = f"{info.get('method', '')}:{info.get('protocol', '')}:{info.get('obfs', '')}:{info.get('password', '').lower()}"
         elif protocol == 'hysteria2':
-            auth_id = info.get('auth_str', info.get('password', ''))
+            auth_id = info.get('auth_str', info.get('password', '')).lower()
         key = (protocol, server, port, auth_id)
+        unique_key = hashlib.sha256(f"{protocol}:{server}:{port}:{auth_id}".encode('utf-8')).hexdigest()
+        node_info_list.append((node, key, unique_key))
+    
+    unique_keys = {}
+    duplicates = []
+    for node, key, unique_key in node_info_list:
         if key in unique_keys:
-            duplicates.append((node, unique_keys[key]))
+            duplicates.append((node, unique_keys[key], unique_key))
         else:
             unique_keys[key] = node
     if duplicates:
         logger.info(f"发现 {len(duplicates)} 个重复节点：")
-        for dup_node, orig_node in duplicates[:10]:
-            logger.info(f"重复: {dup_node} 与 {orig_node}")
+        async with aiofiles.open(config.duplicate_nodes_file, mode='w', encoding='utf-8') as f:
+            timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
+            await f.write(f"[{timestamp}] 重复节点分析：\n")
+            for dup_node, orig_node, unique_key in duplicates[:50]:  # 限制输出前50个避免日志过长
+                await f.write(f"重复: {dup_node[:50]}... 与 {orig_node[:50]}... (唯一键: {unique_key})\n")
+                logger.info(f"重复: {dup_node[:50]}... 与 {orig_node[:50]}... (唯一键: {unique_key})")
     else:
         logger.info("未发现重复节点。")
+    # 输出所有节点的唯一键到日志文件，便于分析
+    async with aiofiles.open(os.path.join(config.data_dir, "node_keys.log"), mode='w', encoding='utf-8') as f:
+        timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
+        await f.write(f"[{timestamp}] 所有节点唯一键：\n")
+        for node, key, unique_key in node_info_list:
+            await f.write(f"节点: {node[:50]}... 协议: {key[0]}, 服务器: {key[1]}, 端口: {key[2]}, 认证: {key[3][:20]}... (唯一键: {unique_key})\n")
 
 async def main():
     """主函数"""
@@ -1232,7 +1301,7 @@ async def main():
                 await save_cache(config.cache_file, url_cache)
     if config.geoip.get('enable_geo_rename', False):
         unique_nodes = await rename_and_deduplicate_by_geo(unique_nodes, config)
-    await debug_duplicate_nodes(unique_nodes)
+    await debug_duplicate_nodes(unique_nodes, config)
     if config.node_test.get('enable', False):
         unique_nodes = await test_and_filter_nodes(unique_nodes, config)
     total_nodes_file = os.path.join(config.data_dir, "all_nodes.txt")
