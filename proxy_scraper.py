@@ -46,11 +46,11 @@ class CrawlerConfig:
     cache_file: str = field(default_factory=lambda: os.path.join("data", "url_cache.json"))  # URL缓存文件路径
     failed_urls_file: str = field(default_factory=lambda: os.path.join("data", "failed_urls.log"))  # 失败URL日志文件路径
     concurrent_requests_limit: int = 20  # 并发请求URL的数量限制
-    request_timeout: float = 20.0  # HTTP请求超时时间（秒）
+    request_timeout: float = 10.0  # HTTP请求超时时间（秒）
     retry_attempts: int = 1  # HTTP请求失败后的重试次数
     cache_save_interval: int = 50  # 每处理多少个URL保存一次缓存
-    max_recursion_depth: int = 50  # 最大递归抓取深度
-    max_crawl_depth_per_site: int = 50  # 在一个网站内部爬行的最大页面深度
+    max_recursion_depth: int = 1  # 最大递归抓取深度
+    max_crawl_depth_per_site: int = 2  # 在一个网站内部爬行的最大页面深度
     proxies: Optional[Dict] = None  # HTTP/HTTPS代理配置字典
     user_agents: List[str] = field(default_factory=list)  # 用于HTTP请求的用户代理列表
     node_test: Dict = field(default_factory=dict)  # 节点测试配置
