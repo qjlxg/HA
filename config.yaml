@@ -47,6 +47,7 @@ node_test:
   timeout: 5
 
 # --- GeoIP 和节点命名配置 ---
+#https://github.com/P3TERX/GeoLite.mmdb/releases
 geoip:
   # 是否启用地理位置重命名和去重
   enable_geo_rename: true
