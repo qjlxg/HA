@@ -9,7 +9,7 @@ sources_file: sources.list
 concurrent_requests_limit: 20
 
 # HTTP请求超时时间（秒）
-request_timeout: 20.0
+request_timeout: 10.0
 
 # HTTP请求失败后的重试次数
 retry_attempts: 1
@@ -19,11 +19,11 @@ cache_save_interval: 50
 
 # 最大递归抓取深度（0表示只抓取sources.list中的URL）
 # 此深度应用于订阅源链接的递归发现
-max_recursion_depth: 50
+max_recursion_depth: 1
 
 # 在一个网站内部爬行的最大页面深度
 # 0 表示只抓取初始页面，1 表示抓取初始页面及其直接链接的页面，以此类推
-max_crawl_depth_per_site: 50
+max_crawl_depth_per_site: 2
 
 # HTTP/HTTPS代理配置字典 (例如: {"http://": "http://user:pass@host:port"})
 # 如果不需要代理，可以留空或注释掉
