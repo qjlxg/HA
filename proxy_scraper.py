@@ -246,10 +246,12 @@ async def fetch_content(url: str, client: httpx.AsyncClient, config: CrawlerConf
 
     if cache_data:
         # 添加缓存相关的HTTP头，实现条件请求
-        if 'etag' in cache_data:
-            headers['If-None-Match'] = cache_data['etag']
-        if 'last_modified' in cache_data:
-            headers['If-Modified-Since'] = cache_data['last_modified']
+        etag = cache_data.get('etag')
+        if etag is not None: # 确保 etag 不为 None
+            headers['If-None-Match'] = etag
+        last_modified = cache_data.get('last_modified')
+        if last_modified is not None: # 确保 last_modified 不为 None
+            headers['If-Modified-Since'] = last_modified
 
     test_urls = []
     # 确保 URL 总是带上协议头，避免 httpx 内部解析问题
@@ -559,7 +561,7 @@ def convert_dict_to_node_link(node_dict: Dict) -> Optional[str]:
         try:
             sorted_vmess = dict(sorted(vmess_obj.items())) # 排序确保一致性
             b64_encoded = base64.b64encode(json.dumps(sorted_vmess, separators=(',', ':')).encode('utf-8')).decode('utf-8')
-            return f"vmess://{b64_encoded.replace('\n', '').replace('\r', '')}" # 确保不含换行符
+            return f"vmess://{normalized_b64.replace('\n', '').replace('\r', '')}" # 确保不含换行符
         except Exception as e:
             logger.debug(f"转换 VMess 字典失败: {e}, dict: {node_dict}")
             return None
@@ -603,7 +605,6 @@ def convert_dict_to_node_link(node_dict: Dict) -> Optional[str]:
         # server:port:protocol:method:obfs:base64_password/?params#name
         # protocol, method, obfs 字段直接使用
         # password 需要 base64 编码
-        # params (如 obfsparam, protoparam) 需要在 ? 后面
         
         ssr_password_b64 = base64.urlsafe_b64encode(node_dict['password'].encode()).decode().rstrip('=')
         
@@ -777,7 +778,7 @@ def update_node_remark(node_url: str, new_remark: str) -> str:
             logger.debug(f"更新 VMess 备注失败: {e}")
             return node_url
     elif scheme in ["vless", "trojan", "ss", "ssr", "hysteria2"]:
-        # 对于这些协议，备注通常在 URL 的 fragment 部分 (# 之后)
+        # 对于这些协议，备注通常在 URL 的 fragment 部分 (# 后面的部分)
         new_parsed = parsed._replace(fragment=new_remark)
         return new_parsed.geturl().replace('\n', '').replace('\r', '')
     
@@ -1071,7 +1072,7 @@ def parse_content(content: str, base_url: str, content_type: str) -> Tuple[List[
                 nodes.update(extract_and_validate_nodes(content))
                 return list(nodes), list(new_urls)
         except yaml.YAMLError:
-            logger.debug("YAML 解析失败。")
+            logger.debug("内容尝试 YAML 解析失败。")
             pass
 
     # 3. 尝试 HTML 解析 (基于 Content-Type 或内容前缀)
@@ -1507,7 +1508,6 @@ async def main():
                     # 如果当前深度允许进一步递归，则将新发现的订阅URL添加到主队列
                     if current_overall_depth + 1 <= config.max_recursion_depth:
                         for new_sub_url in new_urls:
-                            # 确保新URL未被处理过且未在队列中
                             # 这里的 new_urls 应该是 parse_content 返回的所有链接，需要过滤掉内部链接
                             # 只有外部的、可能是订阅源的链接才加入主队列
                             if not is_same_domain(current_url, new_sub_url) and \
