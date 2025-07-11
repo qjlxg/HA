@@ -884,7 +884,7 @@ async def main():
     
     processed_tasks_count = 0
 
-    async with httpx.AsyncClient(timeout=REQUEST_TIMEOUT, proxies=PROXIES, verify=False) as client:
+    async with httpx.AsyncClient(timeout=REQUEST_TIMEOUT, verify=False) as client:
         # Use asyncio.Semaphore to limit concurrent requests
         semaphore = asyncio.Semaphore(CONCURRENT_REQUESTS_LIMIT)
         
