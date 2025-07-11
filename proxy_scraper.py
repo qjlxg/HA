@@ -15,7 +15,7 @@ import logging
 import httpx
 import urllib3
 from collections import defaultdict, deque
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import List, Dict, Tuple, Optional, Set
 from dataclasses import dataclass, field
 import aiofiles
@@ -40,21 +40,21 @@ warnings.filterwarnings("ignore", category=urllib3.exceptions.InsecureRequestWar
 @dataclass
 class CrawlerConfig:
     """爬虫配置类"""
-    data_dir: str = "data"
-    sources_file: str = "sources.list"
-    node_counts_file: str = field(default_factory=lambda: os.path.join("data", "node_counts.csv"))
-    cache_file: str = field(default_factory=lambda: os.path.join("data", "url_cache.json"))
-    failed_urls_file: str = field(default_factory=lambda: os.path.join("data", "failed_urls.log"))
-    concurrent_requests_limit: int = 20
-    request_timeout: float = 20.0
-    retry_attempts: int = 3
-    cache_save_interval: int = 50
-    max_recursion_depth: int = 2
-    max_crawl_depth_per_site: int = 1
-    proxies: Optional[Dict] = None
-    user_agents: List[str] = field(default_factory=list)
-    node_test: Dict = field(default_factory=dict)
-    geoip: Dict = field(default_factory=dict)
+    data_dir: str = "data"  # 数据文件存放目录
+    sources_file: str = "sources.list"  # 包含源URL列表的文件
+    node_counts_file: str = field(default_factory=lambda: os.path.join("data", "node_counts.csv"))  # 节点统计文件路径
+    cache_file: str = field(default_factory=lambda: os.path.join("data", "url_cache.json"))  # URL缓存文件路径
+    failed_urls_file: str = field(default_factory=lambda: os.path.join("data", "failed_urls.log"))  # 失败URL日志文件路径
+    concurrent_requests_limit: int = 20  # 并发请求URL的数量限制
+    request_timeout: float = 20.0  # HTTP请求超时时间（秒）
+    retry_attempts: int = 1  # HTTP请求失败后的重试次数
+    cache_save_interval: int = 50  # 每处理多少个URL保存一次缓存
+    max_recursion_depth: int = 50  # 最大递归抓取深度
+    max_crawl_depth_per_site: int = 50  # 在一个网站内部爬行的最大页面深度
+    proxies: Optional[Dict] = None  # HTTP/HTTPS代理配置字典
+    user_agents: List[str] = field(default_factory=list)  # 用于HTTP请求的用户代理列表
+    node_test: Dict = field(default_factory=dict)  # 节点测试配置
+    geoip: Dict = field(default_factory=dict)  # GeoIP和节点命名配置
 
     def __post_init__(self):
         """初始化后处理，确保目录存在和路径正确"""
@@ -71,14 +71,12 @@ class CrawlerConfig:
                 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:127.0) Gecko/20100101 Firefox/127.0',
                 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Safari/605.1.15',
             ]
-        self.geoip.setdefault('enable_geo_rename', False)
-        self.geoip.setdefault('database_path', os.path.join(self.data_dir, 'GeoLite2-Country.mmdb'))
-        self.geoip.setdefault('default_country', 'UNKNOWN')
-        self.geoip.setdefault('dns_timeout', 5.0)
-        self.geoip.setdefault('dns_servers', ['8.8.8.8', '1.1.1.1'])
-        self.geoip.setdefault('cache_size', 10000)
-        self.geoip.setdefault('max_age_days', 30)
-        self.geoip.setdefault('license_key', None)
+        self.geoip.setdefault('enable_geo_rename', False)  # 是否启用地理位置重命名和去重
+        self.geoip.setdefault('database_path', os.path.join(self.data_dir, 'GeoLite2-Country.mmdb'))  # GeoIP数据库文件路径
+        self.geoip.setdefault('default_country', 'UNKNOWN')  # 默认国家代码
+        self.geoip.setdefault('dns_timeout', 5.0)  # DNS解析超时时间（秒）
+        self.geoip.setdefault('dns_servers', ['8.8.8.8', '1.1.1.1'])  # DNS服务器列表
+        self.geoip.setdefault('cache_size', 10000)  # DNS解析缓存大小
 
 # --- 节点协议正则表达式 ---
 NODE_PATTERNS = {
@@ -628,10 +626,9 @@ def update_node_remark(node_url: str, new_remark: str) -> str:
 _geoip_reader = None
 
 def initialize_geoip_reader(geoip_db_path: str) -> Optional[geoip2.database.Reader]:
-    """初始化 GeoIP Reader 并验证数据库"""
+    """初始化 GeoIP Reader"""
     try:
         reader = geoip2.database.Reader(geoip_db_path)
-        reader.country('8.8.8.8')
         logger.info(f"GeoIP 数据库加载成功: {geoip_db_path}")
         return reader
     except Exception as e:
@@ -654,29 +651,6 @@ def get_country_code_from_ip(ip: str, geoip_db_path: str) -> str:
     except Exception as e:
         logger.debug(f"查询 GeoIP 失败 {ip}: {e}")
         return "ERR"
-
-async def check_and_update_geoip_db(config: CrawlerConfig) -> None:
-    """检查并更新 GeoIP 数据库"""
-    db_path = config.geoip.get('database_path')
-    max_age_days = config.geoip.get('max_age_days', 30)
-    license_key = config.geoip.get('license_key', None)
-    if not os.path.exists(db_path):
-        logger.error(f"GeoIP 数据库不存在: {db_path}")
-        return
-    last_modified = datetime.fromtimestamp(os.path.getmtime(db_path))
-    if datetime.now() - last_modified > timedelta(days=max_age_days):
-        logger.warning(f"GeoIP 数据库已过期 (最后修改: {last_modified})")
-        if license_key:
-            logger.info("尝试下载最新的 GeoLite2-Country.mmdb")
-            try:
-                async with aiohttp.ClientSession() as session:
-                    url = f"https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-Country&license_key={license_key}&suffix=tar.gz"
-                    async with session.get(url) as response:
-                        response.raise_for_status()
-                        # 这里需要额外实现解压和保存逻辑
-                        logger.info(f"成功下载 GeoIP 数据库到 {db_path}")
-            except Exception as e:
-                logger.error(f"更新 GeoIP 数据库失败: {e}")
 
 async def rename_and_deduplicate_by_geo(nodes: Set[str], config: CrawlerConfig) -> Set[str]:
     """根据地理位置重命名和去重节点，基于核心字段"""
@@ -724,7 +698,7 @@ async def rename_and_deduplicate_by_geo(nodes: Set[str], config: CrawlerConfig) 
         if not info:
             continue
         protocol = info.get('protocol', '')
-        server = detail['ip'] or info.get('server', '')
+        server = detail['ip'] or info.get('server', '')  # 优先使用解析后的 IP
         port = str(info.get('port', ''))
         auth_id = ''
         if protocol == 'vmess' or protocol == 'vless':
@@ -1183,8 +1157,6 @@ async def main():
     """主函数"""
     start_time = time.time()
     config = await load_config("config.yaml")
-    if config.geoip.get('enable_geo_rename', False):
-        await check_and_update_geoip_db(config)
     sources_urls = await read_sources(config.sources_file)
     if not sources_urls:
         logger.error("无有效源 URL，退出程序。")
