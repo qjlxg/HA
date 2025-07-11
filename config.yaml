@@ -12,7 +12,7 @@ concurrent_requests_limit: 20
 request_timeout: 20.0
 
 # HTTP请求失败后的重试次数
-retry_attempts: 3
+retry_attempts: 1
 
 # 每处理多少个URL保存一次缓存
 cache_save_interval: 50
