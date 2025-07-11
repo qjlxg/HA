@@ -1,0 +1,2 @@
+vless://49172c3a-5f76-4a87-89ae-54245f1f5f39@ora.naivecn.com:41680?amp%3Bflow=&amp%3Bfp=chrome&amp%3Bpbk=PeUfAL9wk_pHcbzmMMjctCbVq-VNog-yZ2KrOPyTSzA&amp%3Bsecurity=reality&amp%3Bsid=a8575d51&amp%3Bsni=www.yahoo.com&type=tcp#ORA-reality
+vless://29bcf2de-1a8e-41d9-dd6d-2729c39c09f5@ora.naivecn.com:41538?amp%3Balpn=http%2F1.1%2Ch2&amp%3Bfp=&amp%3Bpath=%2Fdownloads&amp%3Bsecurity=tls&type=ws#ORA-vless

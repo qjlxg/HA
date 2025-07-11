@@ -1,0 +1,2 @@
+vless://7e13f17e-c762-407d-9b0d-1fa25e4fe835@recarga-api.vivo.com.br:80?encryption=none&host=br.clickhost.xyz&path=%2Fws%2F&security=none&type=ws#V2RayHTTP
+vless://7e13f17e-c762-407d-9b0d-1fa25e4fe835@recarga-api.vivo.com.br:443?alpn=&encryption=none&fp=random&host=br.clickhost.xyz&path=%2Fws%2F&security=tls&sni=recarga-api.vivo.com.br&type=ws#V2RaySSL
