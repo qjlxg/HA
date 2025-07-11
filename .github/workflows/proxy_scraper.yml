@@ -33,6 +33,6 @@ jobs:
         git config --global user.email 'actions@github.com'
         git pull origin main --rebase || echo "No changes to pull or rebase"
         # 更新此处的文件模式以包含所有 .txt 文件
-        git add data/*.txt data/node_counts.csv data/url_cache.json data/failed_urls.log data/clash_config.yaml data/all_nodes.txt
+        git add data/ # 添加 data 目录下所有文件和子目录，更健壮
         git commit -m "Update proxy nodes and logs" || echo "No changes to commit"
         git push
