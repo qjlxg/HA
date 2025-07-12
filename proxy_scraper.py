@@ -11,6 +11,7 @@ import datetime
 import hashlib
 from bs4 import BeautifulSoup
 import logging
+import aiofiles.base # 导入 aiofiles.base 以正确进行类型提示
 
 # 配置日志
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -251,7 +252,7 @@ def extract_nodes_from_text(text: str) -> list[str]:
     return processed_nodes
 
 
-async def process_url(url: str, all_nodes_writer: aiofiles.thread.AsyncTextIOWrapper) -> tuple[str, int]:
+async def process_url(url: str, all_nodes_writer: aiofiles.base.AsyncTextIOWrapper) -> tuple[str, int]:
     """
     处理单个 URL，获取内容，提取节点，并写入文件。
     返回 URL 和提取到的节点数量。
