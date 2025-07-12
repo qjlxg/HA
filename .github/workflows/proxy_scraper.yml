@@ -66,6 +66,7 @@ jobs:
         with:
           commit_message: "自动更新代理节点和日志 $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
           file_pattern: 'data/*.txt data/*.csv' # 提交 data 目录下所有 .txt 和 .csv 文件
+          force_push: true # <--- 在这里添加这一行
           # 再次强调：data/cache 目录不会被提交到 Git 仓库，它由 actions/cache 管理
 
       - name: Notify on failure
