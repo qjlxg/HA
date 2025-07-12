@@ -76,6 +76,8 @@ class CrawlerConfig:
         'test_timeout': 5,
         'test_concurrency': 50
     })
+    # 新增：是否验证 SSL 证书
+    verify_ssl: bool = True 
 
 # --- 全局变量 ---
 url_cache: Dict[str, Dict] = {} # 存储 URL 内容和上次抓取时间
@@ -131,26 +133,31 @@ async def fetch_url_content(client: httpx.AsyncClient, url: str, config: Crawler
     headers = {'User-Agent': random.choice(config.user_agents)}
     for attempt in range(config.retries):
         try:
-            response = await client.get(url, headers=headers, timeout=config.timeout, follow_redirects=True)
+            response = await client.get(url, headers=headers, timeout=config.timeout, follow_redirects=True, verify=config.verify_ssl)
             response.raise_for_status() # 检查 HTTP 错误
             logger.info(f"HTTP Request: GET {url} \"HTTP/1.1 {response.status_code} {response.reason}\"")
             return response.text, response.headers.get('Content-Type', '').lower()
         except httpx.RequestError as e:
-            logger.warning(f"{url} 连接错误 ({type(e).__name__}: {e}) (尝试 {attempt + 1}/{config.retries})。")
-            if isinstance(e, httpx.RequestError) and "SSLError" in str(e):
-                if url.startswith("https://") and attempt == 0: # 只在第一次尝试失败时尝试 HTTP
-                    http_url = "http://" + url[len("https://"):]
-                    logger.info(f"SSL 错误，尝试 HTTP 连接: {http_url}")
-                    try:
-                        response = await client.get(http_url, headers=headers, timeout=config.timeout, follow_redirects=True)
-                        response.raise_for_status()
-                        logger.info(f"HTTP Request: GET {http_url} \"HTTP/1.1 {response.status_code} {response.reason}\"")
-                        return response.text, response.headers.get('Content-Type', '').lower()
-                    except httpx.RequestError as e_http:
-                        logger.error(f"获取 URL 失败 {http_url}: {e_http}")
+            # 捕获 ConnectError 和 ConnectTimeout
+            error_type = type(e).__name__
+            logger.warning(f"{url} 连接错误 ({error_type}: {e}) (尝试 {attempt + 1}/{config.retries})。")
+            
+            # 如果是 SSL 错误，并且是 HTTPS 链接，且不是最后一次尝试，则尝试 HTTP
+            if isinstance(e, httpx.ConnectError) and "CERTIFICATE_VERIFY_FAILED" in str(e) and url.startswith("https://") and attempt < config.retries - 1:
+                http_url = "http://" + url[len("https://"):]
+                logger.info(f"SSL 证书验证失败，尝试 HTTP 连接: {http_url}")
+                try:
+                    # 尝试 HTTP 连接，不进行 SSL 验证
+                    response = await client.get(http_url, headers=headers, timeout=config.timeout, follow_redirects=True, verify=False)
+                    response.raise_for_status()
+                    logger.info(f"HTTP Request: GET {http_url} \"HTTP/1.1 {response.status_code} {response.reason}\"")
+                    return response.text, response.headers.get('Content-Type', '').lower()
+                except httpx.RequestError as e_http:
+                    logger.error(f"获取 URL 失败 {http_url}: {e_http}")
+            
             await asyncio.sleep(1) # 短暂等待后重试
         except Exception as e:
-            logger.error(f"获取 URL 失败 {url}: {e}")
+            logger.error(f"获取 URL 失败 {url}: {e}", exc_info=True)
             break # 非网络错误，直接退出重试
     failed_urls_list.append(url)
     return None, None
@@ -424,7 +431,8 @@ async def main():
     # 这样可以兼容不同版本的 httpx
     client_args = {
         'timeout': current_config.timeout,
-        'http2': True
+        'http2': True,
+        'verify': current_config.verify_ssl # 使用配置中的 SSL 验证设置
     }
     if current_config.proxy_crawl:
         client_args['proxies'] = {'all://': current_config.proxy_crawl}
