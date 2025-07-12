@@ -552,7 +552,7 @@ async def extract_nodes_from_content(url: str, content: str) -> list[str]:
 
     return list(unique_nodes)
 
-async def process_url(url: str, all_nodes_writer: aiofiles.threadpool.text.TextIOWrapper, semaphore: asyncio.Semaphore):
+async def process_url(url: str, all_nodes_writer: aiofiles.threadpool.text.AsyncTextIOWrapper, semaphore: asyncio.Semaphore):
     """
     处理单个 URL，获取内容，提取节点并写入文件。
     
