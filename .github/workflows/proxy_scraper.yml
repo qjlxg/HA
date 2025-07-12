@@ -23,16 +23,15 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt # 从 requirements.txt 安装依赖
 
-    - name: Run Node Extractor Script # 步骤 4: 运行节点提取脚本
+    - name: Run Proxy Scraper Script # 步骤 4: 运行代理爬虫脚本
       run: |
-        python proxy_scraper.py # <-- 请确保此处的脚本名称与您实际保存的脚本文件一致
+        python proxy_scraper.py # 运行主脚本，调用 deduplicate.py 进行去重
 
     - name: Commit and Push changes # 步骤 5: 提交并推送更改
       run: |
         git config --global user.name 'GitHub Actions'
         git config --global user.email 'actions@github.com'
         git pull origin main --rebase || echo "No changes to pull or rebase"
-        # 更新此处的文件模式以包含所有 .txt 文件
-        git add data/ # 添加 data 目录下所有文件和子目录，更健壮
+        git add data/ # 添加 data 目录下所有文件（包括 all_nodes.txt, clash_config.yaml, node_counts.csv, 去重日志等）
         git commit -m "Update proxy nodes and logs" || echo "No changes to commit"
         git push
