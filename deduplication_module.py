@@ -214,7 +214,7 @@ async def generate_node_key_async(node_info: dict, resolver: aiodns.DNSResolver)
 async def deduplicate_and_rename_nodes(
     nodes_urls: list[str],
     resolver: aiodns.DNSResolver,
-    geoip_db_path: str # 传递数据库路径
+    geoip_db_path: str
 ) -> list[dict]:
     """
     主要的去重和 GeoIP 命名函数。
@@ -238,16 +238,24 @@ async def deduplicate_and_rename_nodes(
             # 存储原始 URL 和解析结果，方便后续通过原始 URL 找到对应的解析结果
             parsed_node_map[node_url] = node_info 
             tasks.append(generate_node_key_async(node_info, resolver))
-        else:
-            tasks.append(None) # 对于无法解析的 URL，仍然在 tasks 中占位
-
+    
     # 并发执行所有键生成任务 (包括 DNS 查询)
-    node_keys_results = await asyncio.gather(*tasks)
+    if not tasks:
+        _logger.info("没有可用的节点信息需要处理")
+        return unique_node_infos
+
+    node_keys_results = await asyncio.gather(*tasks, return_exceptions=True)
 
     # 遍历原始 URL 列表，结合其解析结果和生成的键进行去重和命名
     for i, node_url in enumerate(nodes_urls):
-        node_key = node_keys_results[i] # 获取对应的键
+        if node_url not in parsed_node_map:
+            continue  # 跳过无法解析的 URL
+        node_key = node_keys_results[i] if i < len(node_keys_results) else None
         node_info = parsed_node_map.get(node_url) # 获取对应的解析信息
+
+        if isinstance(node_key, Exception):
+            _logger.error(f"生成节点键失败 for {node_url}: {node_key}")
+            continue
 
         if node_info and node_key:
             if node_key not in seen_keys:
