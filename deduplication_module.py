@@ -171,8 +171,6 @@ def parse_node_url_to_dict(node_url: str) -> dict | None:
             # 对于明文 HTTP/SOCKS5 代理，直接从 URL 解析
             node_info['username'] = parsed_url.username or ''
             node_info['password'] = parsed_url.password or ''
-        # TODO: 添加对其他协议的解析逻辑
-        # ...
 
         # 确保 remark 字段存在且解码
         if 'remark' in node_info and node_info['remark']:
