@@ -30,7 +30,7 @@ os.makedirs(DATA_DIR, exist_ok=True)
 os.makedirs(CACHE_DIR, exist_ok=True)
 
 # 定义支持的节点协议及其对应的正则表达式
-NODE_PATTERNS = { # 修正: 这里应该是 NODE_PATTERNS
+NODE_PATTERNS = {
     "hysteria2": r"hysteria2:\/\/.*",
     "vmess": r"vmess:\/\/.*",
     "trojan": r"trojan:\/\/.*",
@@ -231,7 +231,7 @@ def extract_nodes_from_text(text: str, current_depth: int = 0, max_depth: int = 
         logging.debug(f"HTML 解析失败: {e}") # 记录调试信息，不影响主流程
 
     # 提取所有已知协议的节点（明文形式）
-    for protocol, pattern in NODE_PATTERNS.items(): # 修正: 这里应该是 NODE_PATTERNS
+    for protocol, pattern in NODE_PATTERNS.items():
         nodes.extend(re.findall(pattern, text, re.IGNORECASE))
 
     # 提取可能的 base64 编码的链接或原始文本
@@ -242,7 +242,7 @@ def extract_nodes_from_text(text: str, current_depth: int = 0, max_depth: int = 
         if len(match) > 10 and len(match) % 4 == 0:
             decoded = decode_content(match)
             # 如果解码后发现节点协议，则加入，并递归解析解码内容
-            for protocol, pattern in NODE_PATTERNS.items(): # 修正: 这里应该是 NODE_PATTERNS
+            for protocol, pattern in NODE_PATTERNS.items():
                 if re.search(pattern, decoded, re.IGNORECASE):
                     nodes.append(decoded)
                     nodes.extend(extract_nodes_from_text(decoded, current_depth + 1, max_depth)) # 递归解析
@@ -319,15 +319,16 @@ async def process_url(url: str) -> tuple[str, int, list[str]]: # 返回节点列
 
     unique_nodes = list(set(nodes)) # 对提取到的节点进行简单去重
 
-    # 将每个 URL 获取到的内容单独保存到一个文件中
-    # 将 URL 中的非字母数字字符替换为 '_'，以创建安全的文件名
+    # 将每个 URL 获取到的内容一次性写入单独的文件
     safe_url_name = re.sub(r'[^a-zA-Z0-9_\-.]', '_', url)
     url_output_file = os.path.join(DATA_DIR, f"{safe_url_name}.txt")
+    
+    # 优化点：将所有节点拼接成一个字符串，然后一次性写入
+    nodes_content = "\n".join(unique_nodes) + "\n" if unique_nodes else ""
     async with aiofiles.open(url_output_file, 'w', encoding='utf-8') as f:
-        for node in unique_nodes:
-            await f.write(f"{node}\n")
-    logging.info(f"URL: {url} 的节点已保存到 {url_output_file}")
+        await f.write(nodes_content) # 一次性写入
 
+    logging.info(f"URL: {url} 的节点已保存到 {url_output_file}")
     logging.info(f"URL: {url} 成功提取到 {len(unique_nodes)} 个节点。")
     return url, len(unique_nodes), unique_nodes # 返回节点列表
 
@@ -349,7 +350,6 @@ async def main():
     all_extracted_nodes = [] # 用于收集所有 URL 提取到的节点
 
     # 为每个 URL 创建一个异步任务
-    # process_url 不再接收 all_nodes_writer 参数
     tasks = [process_url(url) for url in urls]
     # 并行执行所有任务
     results = await asyncio.gather(*tasks)
