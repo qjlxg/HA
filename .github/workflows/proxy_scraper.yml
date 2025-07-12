@@ -1,37 +1,51 @@
 name: proxy_scraper
 
 on:
-  workflow_dispatch: # 允许手动触发
+  workflow_dispatch: # 支持手动触发
   schedule:
-    - cron: '0 0 * * *' # 每天 UTC 时间 00:00 运行
+    - cron: '0 0 * * *' # 每天 UTC 00:00 自动运行（北京时间 08:00）
 
 jobs:
   build:
-    runs-on: ubuntu-latest # 使用最新的 Ubuntu 操作系统
+    runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository # 步骤 1: 检出代码
+    - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Set up Python # 步骤 2: 设置 Python 环境
+    - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.x' # 使用最新的 Python 3 版本
+        python-version: '3.11' # 明确指定 Python 版本
 
-    - name: Install dependencies # 步骤 3: 安装所需的 Python 库
+    - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt # 从 requirements.txt 安装依赖
+        pip install -r requirements.txt
+      continue-on-error: false
 
-    - name: Run Proxy Scraper Script # 步骤 4: 运行代理爬虫脚本
+    - name: Run Proxy Scraper Script
       run: |
-        python proxy_scraper.py # 运行主脚本，调用 deduplicate.py 进行去重
+        python -m project.proxy_scraper  # 以模块方式运行
+      continue-on-error: false
+      env:
+        PYTHONPATH: ${{ github.workspace }}  # 将项目根目录添加到 PYTHONPATH
 
-    - name: Commit and Push changes # 步骤 5: 提交并推送更改
+    - name: Commit and Push changes
       run: |
         git config --global user.name 'GitHub Actions'
         git config --global user.email 'actions@github.com'
-        git pull origin main --rebase || echo "No changes to pull or rebase"
-        git add data/ # 添加 data 目录下所有文件（包括 all_nodes.txt, clash_config.yaml, node_counts.csv, 去重日志等）
-        git commit -m "Update proxy nodes and logs" || echo "No changes to commit"
+        git pull origin main --rebase || echo "无更改需要拉取或变基"
+        git add data/
+        git commit -m "自动更新代理节点和日志 $(date -u +'%Y-%m-%d %H:%M:%S UTC')" || echo "无更改需要提交"
         git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Notify on failure
+      if: failure()
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const { context } = require('@actions/github');
+          console.log(`工作流失败: ${context.job}。请检查日志。`);
