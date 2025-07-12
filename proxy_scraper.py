@@ -412,13 +412,18 @@ async def main():
     url_queue = asyncio.Queue()
     processed_results_queue = asyncio.Queue()
 
-    # 初始化 httpx 客户端的 proxies 参数
-    proxies_dict = None
+    # 初始化 httpx 客户端
+    # 优先使用 transports 参数来配置代理，以确保兼容性
+    client_args = {
+        'timeout': current_config.timeout,
+        'http2': True
+    }
     if current_config.proxy_crawl:
-        # 'all://' 会将代理应用于所有方案 (http, https)
-        proxies_dict = {'all://': current_config.proxy_crawl}
+        # 创建 ProxyTransport 实例，并将其传递给 transports 参数
+        # ProxyTransport 接受单个代理URL，并处理所有方案
+        client_args['transport'] = httpx.ProxyTransport(current_config.proxy_crawl)
 
-    async with httpx.AsyncClient(timeout=current_config.timeout, http2=True, proxies=proxies_dict) as client:
+    async with httpx.AsyncClient(**client_args) as client:
         resolver = aiodns.DNSResolver(loop=asyncio.get_event_loop())
 
         for url in source_urls:
