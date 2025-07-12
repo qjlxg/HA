@@ -708,7 +708,7 @@ async def rename_and_deduplicate_by_geo(nodes: Set[str], config: CrawlerConfig) 
     for node_url in nodes:
         info = parse_node_url_to_info(node_url, config)
         if info and info.get('server'):
-            server = info['path_ip'] or info['server']
+            server = info['path_ip'] or info['server']  # 优先使用 path 中的 IP
             node_details.append({'original_url': node_url, 'info': info, 'ip': None, 'country': config.geoip['default_country']})
             ip_lookup_tasks.append(resolve_hostname_async(server, config))
         else:
@@ -749,9 +749,7 @@ async def rename_and_deduplicate_by_geo(nodes: Set[str], config: CrawlerConfig) 
         server = info.get('path_ip') or info.get('server', '')  # 优先使用 path 中的 IP
         port = str(info.get('path_port') or info.get('port', ''))
         auth_id = ''
-        if config.geoip['strict_dedup']:
-            auth_id = ''  # 严格去重时忽略 auth_id
-        else:
+        if not config.geoip['strict_dedup']:  # 严格去重时忽略 auth_id
             if protocol == 'vmess' or protocol == 'vless':
                 auth_id = info.get('id', '').lower()
             elif protocol == 'trojan':
@@ -1082,14 +1080,12 @@ async def fetch_content(url: str, client: httpx.AsyncClient, config: CrawlerConf
         last_modified = cache_data.get('last_modified')
         if last_modified is not None:
             headers['If-Modified-Since'] = last_modified
-
     test_urls = []
     parsed = urlparse(url)
     if not parsed.scheme:
         test_urls.extend([f"https://{url}", f"http://{url}"])
     else:
         test_urls.append(url)
-
     for attempt in range(config.retry_attempts):
         for test_url in test_urls:
             try:
@@ -1358,6 +1354,20 @@ async def main():
                     url_summary[status] += 1
                     if current_overall_depth + 1 <= config.max_recursion_depth:
                         for new_sub_url in new_urls:
-                            if not is_same_domain(current_url, new_sub_url) and \
-                               new_sub_url not in urls_in_main_queue and new_sub_url not in url_details:
+                            if not is_same_domain(current_url, new_sub_url) and new_sub_url not in urls_in_main_queue and new_sub_url not in url_details:
                                 main_queue.append((new_sub_url, current_overall_depth + 1))
+                                urls_in_main_queue.add(new_sub_url)
+                                logger.info(f"    发现新的订阅URL，加入主队列: {new_sub_url} (总深度: {current_overall_depth + 1})")
+                if processed_count % config.cache_save_interval == 0:
+                    await save_cache(config.cache_file, url_cache)
+                    logger.info(f"已处理 {processed_count} 个URL，保存缓存到 {config.cache_file}。")
+            except Exception as e:
+                logger.error(f"处理 {current_url} 时发生未预期错误: {e}", exc_info=True)
+                url_details[current_url] = {
+                    'status': "UNEXPECTED_MAIN_ERROR",
+                    'extracted_nodes_count': 0,
+                    'new_urls_found_count': 0,
+                    'last_updated_timestamp': datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
+                }
+                url_summary["UNEXPECTED_MAIN_ERROR"] += 1
+                await log_failed_url(current_url, f"UNEXPECTED_MAIN_ERROR: {str(e)}
