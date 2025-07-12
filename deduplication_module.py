@@ -66,16 +66,20 @@ def extract_host_from_node(node: str) -> str | None:
     logging.debug(f"未能从节点中提取主机: {node}")
     return None # 如果无法提取主机，则返回 None
 
-def resolve_ip(host: str) -> str:
+async def resolve_ip_async(host: str) -> str:
     """
-    尝试将域名解析为 IP 地址，否则返回原主机名。
-    注意：此处使用同步的 socket.gethostbyname，在大量解析时可能会阻塞异步事件循环。
-    更好的做法是使用异步 DNS 库 (如 aiodns) 或在线程池中执行此操作。
-    但考虑到 GeoLite2 是离线的，通常不会成为主要瓶颈。
+    异步将域名解析为 IP 地址，否则返回原主机名。
+    使用 loop.run_in_executor 在线程池中执行同步 DNS 解析。
     """
+    # 检查是否已经是 IP 地址
+    if re.match(r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$", host):
+        return host
+
+    loop = asyncio.get_running_loop()
     try:
-        # 使用 socket 库进行同步 DNS 解析
-        return socket.gethostbyname(host)
+        # 在默认的线程池执行器中运行同步的 socket.gethostbyname
+        ip = await loop.run_in_executor(None, socket.gethostbyname, host)
+        return ip
     except socket.gaierror:
         logging.debug(f"DNS 解析失败：{host}，返回原主机名。")
         return host # 解析失败，返回原主机名
@@ -112,7 +116,7 @@ async def process_node(node: str, reader: geoip2.database.Reader) -> tuple[str, 
     """
     host = extract_host_from_node(node)
     if host:
-        ip = resolve_ip(host)
+        ip = await resolve_ip_async(host) # <--- 调用异步解析函数
         # 对于私有 IP 或无效 IP，直接标记为未知地区
         if ip.startswith(('10.', '172.16.', '192.168.', '127.', '0.', '169.254.')):
             return node, "私有地址"
