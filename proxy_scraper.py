@@ -52,7 +52,7 @@ class CrawlerConfig:
     duplicate_nodes_file: str = field(default_factory=lambda: os.path.join("data", "duplicate_nodes.txt"))
     concurrency_limit: int = 10
     timeout: int = 15
-    retries: int = 3
+    retries: int = 1 # 修改：重试次数设置为1，即不重试
     user_agents: List[str] = field(default_factory=lambda: [
         'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.88 Safari/537.36',
         'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.88 Safari/537.36',
@@ -77,7 +77,7 @@ class CrawlerConfig:
         'test_concurrency': 50
     })
     # 新增：是否验证 SSL 证书
-    verify_ssl: bool = True 
+    verify_ssl: bool = False # 修改：默认不验证 SSL 证书，以解决 CERTIFICATE_VERIFY_FAILED 错误
 
 # --- 全局变量 ---
 url_cache: Dict[str, Dict] = {} # 存储 URL 内容和上次抓取时间
@@ -131,31 +131,35 @@ async def read_sources(sources_file: str) -> List[str]:
 async def fetch_url_content(client: httpx.AsyncClient, url: str, config: CrawlerConfig) -> Tuple[Optional[str], Optional[str]]:
     """安全地异步获取 URL 内容，处理重试和SSL错误。"""
     headers = {'User-Agent': random.choice(config.user_agents)}
+    # 修改：重试次数直接使用 config.retries (现在设置为 1)
     for attempt in range(config.retries):
         try:
-            response = await client.get(url, headers=headers, timeout=config.timeout, follow_redirects=True, verify=config.verify_ssl)
+            # 移除 get 方法中的 verify 参数，因为 AsyncClient 初始化时已经设置
+            response = await client.get(url, headers=headers, timeout=config.timeout, follow_redirects=True)
             response.raise_for_status() # 检查 HTTP 错误
             logger.info(f"HTTP Request: GET {url} \"HTTP/1.1 {response.status_code} {response.reason}\"")
             return response.text, response.headers.get('Content-Type', '').lower()
         except httpx.RequestError as e:
-            # 捕获 ConnectError 和 ConnectTimeout
             error_type = type(e).__name__
             logger.warning(f"{url} 连接错误 ({error_type}: {e}) (尝试 {attempt + 1}/{config.retries})。")
             
             # 如果是 SSL 错误，并且是 HTTPS 链接，且不是最后一次尝试，则尝试 HTTP
+            # 注意：由于 config.retries 现在是 1，这里只会执行一次尝试
             if isinstance(e, httpx.ConnectError) and "CERTIFICATE_VERIFY_FAILED" in str(e) and url.startswith("https://") and attempt < config.retries - 1:
                 http_url = "http://" + url[len("https://"):]
                 logger.info(f"SSL 证书验证失败，尝试 HTTP 连接: {http_url}")
                 try:
-                    # 尝试 HTTP 连接，不进行 SSL 验证
-                    response = await client.get(http_url, headers=headers, timeout=config.timeout, follow_redirects=True, verify=False)
+                    # 尝试 HTTP 连接，这里 client 已经配置了 verify=False
+                    response = await client.get(http_url, headers=headers, timeout=config.timeout, follow_redirects=True)
                     response.raise_for_status()
                     logger.info(f"HTTP Request: GET {http_url} \"HTTP/1.1 {response.status_code} {response.reason}\"")
                     return response.text, response.headers.get('Content-Type', '').lower()
                 except httpx.RequestError as e_http:
                     logger.error(f"获取 URL 失败 {http_url}: {e_http}")
             
-            await asyncio.sleep(1) # 短暂等待后重试
+            # 只有在允许重试时才等待
+            if config.retries > 1 and attempt < config.retries - 1:
+                await asyncio.sleep(1) # 短暂等待后重试
         except Exception as e:
             logger.error(f"获取 URL 失败 {url}: {e}", exc_info=True)
             break # 非网络错误，直接退出重试
@@ -427,12 +431,11 @@ async def main():
     processed_results_queue = asyncio.Queue()
 
     # 初始化 httpx 客户端
-    # 使用 httpx.Client() 的 proxies 参数，它接受一个字典
-    # 这样可以兼容不同版本的 httpx
+    # 将 verify 参数直接传递给 AsyncClient 构造函数
     client_args = {
         'timeout': current_config.timeout,
         'http2': True,
-        'verify': current_config.verify_ssl # 使用配置中的 SSL 验证设置
+        'verify': current_config.verify_ssl # 将 verify 参数移到这里
     }
     if current_config.proxy_crawl:
         client_args['proxies'] = {'all://': current_config.proxy_crawl}
