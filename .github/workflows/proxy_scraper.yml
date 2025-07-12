@@ -1,4 +1,4 @@
-name: proxy_scraper
+name: Proxy Scraper and Deduplication
 
 on:
   push: # 在代码推送到仓库时触发
@@ -13,41 +13,60 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.11'
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11' # 使用您指定的 Python 版本
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-      continue-on-error: false
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+        # continue-on-error: false # 这是默认行为，可以省略，但保留也无妨
 
-    - name: Run Proxy Scraper Script
-      run: |
-        python proxy_scraper.py # 直接运行脚本
-      continue-on-error: false
-      env:
-        PYTHONPATH: ${{ github.workspace }} # 确保项目根目录在 PYTHONPATH 中
+      # - name: Download GeoLite2-Country.mmdb
+      #   run: |
+      #     mkdir -p data
+      #     # 从 MaxMind 官方下载 GeoLite2-Country.mmdb
+      #     # 您需要注册一个免费账号来获取下载链接和 License Key
+      #     # 建议将 License Key 作为 GitHub Secrets 存储
+      #     # 这里使用一个公开的镜像作为示例，但在生产环境中建议使用官方渠道或自行托管
+      #     GEOLITE_URL="https://github.com/P3TERX/GeoLite.mmdb/raw/main/GeoLite2-Country.mmdb"
+      #     wget -q -O data/GeoLite2-Country.mmdb "$GEOLITE_URL"
+      #     if [ $? -ne 0 ]; then
+      #       echo "Failed to download GeoLite2-Country.mmdb from $GEOLITE_URL"
+      #       echo "Please ensure the URL is correct or provide your own download mechanism."
+      #       exit 1
+      #     fi
 
-    - name: Commit and Push changes
-      run: |
-        git config --global user.name 'GitHub Actions'
-        git config --global user.global user.email 'actions@github.com'
-        git pull origin main --rebase || echo "无更改需要拉取或变基"
-        git add data/
-        git commit -m "自动更新代理节点和日志 $(date -u +'%Y-%m-%d %H:%M:%S UTC')" || echo "无更改需要提交"
-        git push
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Run Proxy Scraper Script
+        run: |
+          python proxy_scraper.py # 直接运行脚本
+        # continue-on-error: false # 这是默认行为，可以省略，但保留也无妨
+        env:
+          PYTHONPATH: ${{ github.workspace }} # 确保项目根目录在 PYTHONPATH 中
 
-    - name: Notify on failure
-      if: failure()
-      uses: actions/github-script@v7
-      with:
-        script: |
-          console.log(`工作流失败: ${process.env.GITHUB_JOB}。请检查日志: ${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`);
+      - name: Run Deduplication Module
+        run: |
+          python deduplication_module.py # 运行去重模块
+        # continue-on-error: false
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+
+      - name: Commit and Push changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "自动更新代理节点和日志 $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
+          file_pattern: 'data/*.txt data/*.csv' # 提交 data 目录下所有 .txt 和 .csv 文件
+          # 如果希望也上传 cache 目录，可以修改 file_pattern 为 'data/*'
+          # 但通常不建议提交 cache 目录到 Git 仓库，因为它可能很大且频繁变动
+
+      - name: Notify on failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            console.log(`工作流失败: ${{ github.job }}. 请检查日志: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}`);
