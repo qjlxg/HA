@@ -25,34 +25,39 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-        # continue-on-error: false # 这是默认行为，可以省略，但保留也无妨
 
-      # - name: Download GeoLite2-Country.mmdb
-      #   run: |
-      #     mkdir -p data
-      #     # 从 MaxMind 官方下载 GeoLite2-Country.mmdb
-      #     # 您需要注册一个免费账号来获取下载链接和 License Key
-      #     # 建议将 License Key 作为 GitHub Secrets 存储
-      #     # 这里使用一个公开的镜像作为示例，但在生产环境中建议使用官方渠道或自行托管
-      #     GEOLITE_URL="https://github.com/P3TERX/GeoLite.mmdb/raw/main/GeoLite2-Country.mmdb"
-      #     wget -q -O data/GeoLite2-Country.mmdb "$GEOLITE_URL"
-      #     if [ $? -ne 0 ]; then
-      #       echo "Failed to download GeoLite2-Country.mmdb from $GEOLITE_URL"
-      #       echo "Please ensure the URL is correct or provide your own download mechanism."
-      #       exit 1
-      #     fi
+      # 新增步骤：恢复 data/cache 目录
+      # 在运行代理抓取脚本之前，尝试恢复上次运行保存的缓存
+      - name: Restore data/cache
+        uses: actions/cache@v4
+        with:
+          path: data/cache # 指定要缓存的目录
+          # cache key 应该包含操作系统和 sources.list 文件的哈希，
+          # 这样当 sources.list 变化时，缓存会失效，确保重新抓取
+          key: ${{ runner.os }}-proxy-scraper-cache-${{ hashFiles('sources.list') }}
+          # restore-keys 允许在精确匹配失败时尝试更通用的键
+          restore-keys: |
+            ${{ runner.os }}-proxy-scraper-cache-
 
       - name: Run Proxy Scraper Script
         run: |
           python proxy_scraper.py # 直接运行脚本
-        # continue-on-error: false # 这是默认行为，可以省略，但保留也无妨
         env:
           PYTHONPATH: ${{ github.workspace }} # 确保项目根目录在 PYTHONPATH 中
+
+      # 新增步骤：保存 data/cache 目录
+      # 在代理抓取脚本运行结束后，保存更新后的缓存，即使脚本失败也尝试保存
+      - name: Save data/cache
+        uses: actions/cache/save@v4 # 注意这里是 actions/cache/save@v4
+        if: always() # 确保即使前面的步骤失败，这个步骤也会运行，以保存部分缓存
+        with:
+          path: data/cache # 指定要保存的目录
+          # 保存时的 key 必须与恢复时的 key 完全一致
+          key: ${{ runner.os }}-proxy-scraper-cache-${{ hashFiles('sources.list') }}
 
       - name: Run Deduplication Module
         run: |
           python deduplication_module.py # 运行去重模块
-        # continue-on-error: false
         env:
           PYTHONPATH: ${{ github.workspace }}
 
@@ -61,8 +66,7 @@ jobs:
         with:
           commit_message: "自动更新代理节点和日志 $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
           file_pattern: 'data/*.txt data/*.csv' # 提交 data 目录下所有 .txt 和 .csv 文件
-          # 如果希望也上传 cache 目录，可以修改 file_pattern 为 'data/*'
-          # 但通常不建议提交 cache 目录到 Git 仓库，因为它可能很大且频繁变动
+          # 再次强调：data/cache 目录不会被提交到 Git 仓库，它由 actions/cache 管理
 
       - name: Notify on failure
         if: failure()
