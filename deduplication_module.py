@@ -21,7 +21,7 @@ GEOLITE_DB_PATH = os.path.join(DATA_DIR, "GeoLite2-Country.mmdb")
 os.makedirs(DATA_DIR, exist_ok=True)
 
 # 定义需要解析 IP 的协议（通常是那些包含 IP/域名 的协议）
-IP_EXTRACT_PATTERNS = {
+IP_EXTRACT_PATTERNS = { # 正确的变量名
     # 捕获 Vmess JSON 中的 "add" 或 "addr" 字段 (或 host, sni)
     "vmess": r"(?:\"add\"|\"addr\"|\"host\"|\"sni\")\s*:\s*\"([^\"]+)\"",
     # 捕获 Vless URL 中的 domain/ip
@@ -134,7 +134,7 @@ def extract_host_from_node(node: str) -> str | None:
 
     # 4. 遍历通用正则表达式提取主机
     if not extracted_host: # 只有当以上方法未提取到主机时才尝试通用模式
-        for protocol, pattern in IP_EXTRACT_PATTERENS.items():
+        for protocol, pattern in IP_EXTRACT_PATTERNS.items(): # <--- 修正后的变量名
             match = re.search(pattern, node)
             if match:
                 # 对于 Vmess/Vless/Trojan/Hysteria2/SSR，通常第一个非空的捕获组是主机
