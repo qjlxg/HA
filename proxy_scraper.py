@@ -218,6 +218,77 @@ def extract_links(html_content: str, base_url: str) -> List[str]:
             links.add(full_url)
     return list(links)
 
+async def process_url(client: httpx.AsyncClient, url_queue: asyncio.Queue, processed_results_queue: asyncio.Queue, config: CrawlerConfig):
+    """异步处理单个 URL，抓取代理并发现新链接。"""
+    while True:
+        try:
+            url_info = await url_queue.get()
+            url = url_info['url']
+            current_depth = url_info['depth']
+            original_url_base = url_info['original_url_base'] # 跟踪原始 URL 用于文件命名
+
+            logger.info(f"正在处理 URL: {url} (深度: {current_depth})。")
+
+            current_time = time.time()
+            if url in url_cache:
+                last_processed_time = url_cache[url].get('timestamp', 0)
+                cached_content = url_cache[url].get('content')
+                if (current_time - last_processed_time) < config.cache_ttl and cached_content:
+                    logger.info(f"{url} 内容未变更，使用缓存数据。")
+                    proxies = extract_proxies_from_text(cached_content)
+                    new_links = extract_links(cached_content, url) if current_depth < config.max_depth else []
+                    logger.info(f"{url} 内容未变更，使用缓存数据。提取节点数: {len(proxies)}, 发现新URL数: {len(new_links)}。")
+                    await processed_results_queue.put({'url': url, 'status': 'SKIPPED_UNCHANGED'})
+                    async with nodes_lock:
+                        all_nodes_global.extend(proxies)
+                    for link in new_links:
+                        # 检查链接是否已在缓存中或队列中，避免重复添加
+                        if link not in url_cache and link not in [item['url'] for item in url_queue._queue]:
+                            await url_queue.put({'url': link, 'depth': current_depth + 1, 'original_url_base': original_url_base})
+                    url_queue.task_done()
+                    continue
+                else:
+                    logger.info(f"{url} 缓存已过期，重新抓取。")
+
+            content, content_type = await fetch_url_content(client, url, config)
+            if content:
+                # Update cache
+                url_cache[url] = {'content': content, 'timestamp': time.time()}
+
+                proxies = extract_proxies_from_text(content)
+                new_links = []
+                if "html" in content_type:
+                    logger.info(f"内容被识别为 HTML 格式。")
+                    if current_depth < config.max_depth:
+                        new_links = extract_links(content, url)
+                        for link in new_links:
+                            # 检查链接是否已在缓存中或队列中，避免重复添加
+                            if link not in url_cache and link not in [item['url'] for item in url_queue._queue]:
+                                await url_queue.put({'url': link, 'depth': current_depth + 1, 'original_url_base': original_url_base})
+                else:
+                    logger.info(f"内容被识别为纯文本格式。")
+
+                async with nodes_lock:
+                    all_nodes_global.extend(proxies)
+
+                await processed_results_queue.put({'url': url, 'status': 'PROCESSED_SUCCESS'})
+
+                # 为每个原始 URL 保存一个单独的节点文件 (此功能将在去重后统一处理)
+                # domain_name = urlparse(original_url_base).netloc.replace('.', '_').replace('-', '_')
+                # safe_filename_prefix = f"link_{domain_name}_{hash(original_url_base) % 10000000000:x}"
+                # 此处不再保存，而是统一在 deduplicate_and_rename_nodes 之后处理
+            else:
+                logger.error(f"无法获取或处理 URL: {url}。")
+                await processed_results_queue.put({'url': url, 'status': 'FAILED'})
+                failed_urls_list.append(url)
+
+            url_queue.task_done()
+        except asyncio.CancelledError:
+            break
+        except Exception as e:
+            logger.error(f"处理 URL 时发生未预期错误: {e}", exc_info=True)
+            url_queue.task_done()
+
 async def save_raw_nodes_to_file(nodes_list: List[str], filename: str, config: CrawlerConfig):
     """异步将原始抓取到的节点 URL 保存到文件。"""
     filepath = os.path.join(config.data_dir, filename)
