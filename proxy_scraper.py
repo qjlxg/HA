@@ -19,7 +19,7 @@ from datetime import datetime, timezone
 from typing import List, Dict, Tuple, Optional, Set
 from dataclasses import dataclass, field
 import aiofiles
-from .deduplicate import rename_and_deduplicate_by_geo
+from deduplicate import rename_and_deduplicate_by_geo
 
 # --- 日志配置 ---
 logging.basicConfig(
