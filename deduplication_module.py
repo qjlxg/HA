@@ -7,6 +7,7 @@ import json
 import base64
 import collections
 import logging
+import socket # 新增导入 socket 模块
 
 # 配置日志
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -133,7 +134,7 @@ def extract_host_from_node(node: str) -> str | None:
 
     # 4. 遍历通用正则表达式提取主机
     if not extracted_host: # 只有当以上方法未提取到主机时才尝试通用模式
-        for protocol, pattern in IP_EXTRACT_PATTERNS.items():
+        for protocol, pattern in IP_EXTRACT_PATTERENS.items():
             match = re.search(pattern, node)
             if match:
                 # 对于 Vmess/Vless/Trojan/Hysteria2/SSR，通常第一个非空的捕获组是主机
@@ -317,20 +318,40 @@ async def process_and_deduplicate_nodes():
                 logging.warning(f"无法从节点中提取有效主机，已抛弃: {original_node[:80]}...")
                 continue # 无法提取有效主机，直接跳过此节点
 
+            target_ip = None
+            if is_valid_ip(host):
+                target_ip = host
+            elif is_valid_domain(host):
+                try:
+                    # 异步解析域名到 IP
+                    # 使用 asyncio.to_thread 包装同步的 DNS 解析，避免阻塞事件循环
+                    target_ip = await asyncio.to_thread(socket.gethostbyname, host)
+                    logging.info(f"成功解析域名 {host} 为 IP: {target_ip}")
+                except socket.gaierror as e:
+                    logging.error(f"无法解析域名 {host} 到 IP 地址，已抛弃节点: '{original_node[:80]}...'. 错误: {e}")
+                    continue # 无法解析域名，跳过此节点
+                except Exception as e:
+                    logging.error(f"解析域名 {host} 时发生未知错误，已抛弃节点: '{original_node[:80]}...'. 错误: {e}")
+                    continue # 其他解析错误，跳过此节点
+            else:
+                logging.warning(f"提取的主机 '{host}' 既不是有效IP也不是有效域名，已抛弃节点: '{original_node[:80]}...'")
+                continue # 既不是IP也不是域名，跳过
+
             protocol_match = re.match(r"^([a-zA-Z0-9]+):\/\/", original_node)
             protocol = protocol_match.group(1) if protocol_match else "未知协议"
 
             location = "未知地区" # 默认值
 
-            try:
-                # 尝试获取国家信息
-                location = get_country_from_ip(host, reader)
-            except ValueError:
-                logging.error(f"解析 IP 地址 {host} 时发生错误，已抛弃节点: '{original_node[:80]}...'")
-                continue # IP 地址格式不正确，直接跳过此节点
-            except Exception as e:
-                logging.warning(f"GeoIP 查询失败，标记为未知地区: {e}, 主机: {host}")
-                # 如果是其他 GeoIP 错误，保留为未知地区，但不抛弃
+            if target_ip: # 只有找到 IP 后才进行 GeoIP 查询
+                try:
+                    # 尝试获取国家信息
+                    location = get_country_from_ip(target_ip, reader)
+                except ValueError: # 此处捕获 GeoIP 内部的 IP 格式错误 (理论上 is_valid_ip 已过滤)
+                    logging.error(f"GeoIP 查询: IP地址格式不正确，已抛弃节点: '{original_node[:80]}...'")
+                    continue
+                except Exception as e:
+                    logging.warning(f"GeoIP 查询失败，标记为未知地区: {e}, 主机: {target_ip}")
+                    # 如果是其他 GeoIP 错误，保留为未知地区，但不抛弃
             
             processed_nodes_with_location.append((original_node, location, protocol))
 
