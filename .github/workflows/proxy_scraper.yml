@@ -1,77 +1,61 @@
-name: Proxy Scraper and Deduplication
+name: Auto Update Data
 
 on:
-  push: # 在代码推送到仓库时触发
+  push:
     branches:
-      - main # 或者您希望监控的其他分支，例如 'master'
-  workflow_dispatch: # 支持手动触发
+      - main
   schedule:
-    - cron: '0 0 * * *' # 每天 UTC 00:00 自动运行（北京时间 08:00）
+    - cron: '0 */6 * * *' # 每6小时运行一次
+  workflow_dispatch: # 允许手动触发
 
 jobs:
-  build:
+  update-data:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout repository # 步骤1: 检出仓库代码
         uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
         with:
-          python-version: '3.11' # 使用您指定的 Python 版本
+          # 这通常是默认行为，但明确指定拉取历史是好的实践
+          fetch-depth: 0 # 获取所有历史，以便rebase操作顺利进行
 
-      - name: Install dependencies
+      - name: Configure Git # 步骤2: 配置 Git 用户信息 (重要!)
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      # 新增步骤：恢复 data/cache 目录
-      # 在运行代理抓取脚本之前，尝试恢复上次运行保存的缓存
-      - name: Restore data/cache
-        uses: actions/cache@v4
-        with:
-          path: data/cache # 指定要缓存的目录
-          # cache key 应该包含操作系统和 sources.list 文件的哈希，
-          # 这样当 sources.list 变化时，缓存会失效，确保重新抓取
-          key: ${{ runner.os }}-proxy-scraper-cache-${{ hashFiles('sources.list') }}
-          # restore-keys 允许在精确匹配失败时尝试更通用的键
-          restore-keys: |
-            ${{ runner.os }}-proxy-scraper-cache-
-
-      - name: Run Proxy Scraper Script
+      - name: Pull latest changes with rebase # 步骤3: 拉取远程最新更改并变基
         run: |
-          python proxy_scraper.py # 直接运行脚本
-        env:
-          PYTHONPATH: ${{ github.workspace }} # 确保项目根目录在 PYTHONPATH 中
+          # 尝试拉取远程main分支的最新内容，并将您的本地提交rebase到其之上。
+          # 如果远程分支被强制更新，rebase可以帮助您调整本地历史。
+          git pull --rebase origin main
 
-      # 新增步骤：保存 data/cache 目录
-      # 在代理抓取脚本运行结束后，保存更新后的缓存，即使脚本失败也尝试保存
-      - name: Save data/cache
-        uses: actions/cache/save@v4 # 注意这里是 actions/cache/save@v4
-        if: always() # 确保即使前面的步骤失败，这个步骤也会运行，以保存部分缓存
-        with:
-          path: data/cache # 指定要保存的目录
-          # 保存时的 key 必须与恢复时的 key 完全一致
-          key: ${{ runner.os }}-proxy-scraper-cache-${{ hashFiles('sources.list') }}
+          # 可选：如果rebase失败（例如有冲突），您可能需要手动处理或选择 abort
+          # 对于自动化流程，通常希望rebase成功或直接失败
+          # 如果这里经常遇到冲突，您可能需要重新考虑数据生成逻辑或是否需要更复杂的合并策略。
 
-      - name: Run Deduplication Module
+      - name: Run your data update script # 步骤4: 运行您的数据更新脚本
+        # 请替换为实际生成或修改 data/*.txt 和 data/*.csv 文件的命令
+        # 例如：
         run: |
-          python deduplication_module.py # 运行去重模块
-        env:
-          PYTHONPATH: ${{ github.workspace }}
+          echo "Simulating data update..."
+          # 假设您有一个脚本来更新这些文件
+          # 例如：node generate-data.js 或 python update_proxy.py
+          # touch data/new_data_$(date +%s).txt # 示例：创建一个新文件来模拟更改
+          # echo "Hello World" > data/test.txt # 示例：修改一个现有文件
+          # rm -f data/some_old_file.txt # 示例：删除文件
+          # 这里应该放置您实际的代理节点和日志更新逻辑
+          echo "实际数据更新逻辑在这里执行，它会修改 data/*.txt 和 data/*.csv"
 
-      - name: Commit and Push changes
+
+      - name: Auto commit and push # 步骤5: 自动提交并推送更改
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "自动更新代理节点和日志 $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
-          file_pattern: 'data/*.txt data/*.csv' # 提交 data 目录下所有 .txt 和 .csv 文件
-          force_push: true # <--- 在这里添加这一行
-          # 再次强调：data/cache 目录不会被提交到 Git 仓库，它由 actions/cache 管理
-
-      - name: Notify on failure
-        if: failure()
-        uses: actions/github-script@v7
-        with:
-          script: |
-            console.log(`工作流失败: ${{ github.job }}. 请检查日志: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}`);
+          # 只选择 data/ 目录下的 .txt 和 .csv 文件进行提交
+          file_pattern: data/*.txt data/*.csv
+          # 提交信息，包含 UTC 时间戳
+          commit_message: 自动更新代理节点和日志 $(date -u +'%Y-%m-%d %H:%M:%S UTC')
+          # 提交的作者信息，与您之前的日志一致
+          commit_author: qjlxg <12179157+qjlxg@users.noreply.github.com>
+          # 确保没有指定 --force，因为我们已经通过 rebase 解决了分歧
+          # push_options: "--force" # 请勿取消注释此行，除非您明确需要强制推送！
