@@ -113,12 +113,52 @@ def parse_node_url_to_dict(node_url: str) -> dict | None:
                 # urlparse 会将 AES-256-GCM:password 放入 username:password 字段
                 node_info['method'] = parsed_url.username or ''
                 node_info['password'] = parsed_url.password or ''
+        elif protocol == 'ssr':
+            # SSR URL 结构: ssr://base64(server:port:protocol:method:obfs:password_base64/?params)#remark_base64
+            try:
+                b64_config = parsed_url.netloc
+                decoded_part = _decode_base64_urlsafe(b64_config)
+                parts = decoded_part.split(':')
+                if len(parts) >= 6:
+                    node_info['server'] = parts[0]
+                    node_info['port'] = int(parts[1])
+                    node_info['protocol_ssr'] = parts[2] # SSR 协议
+                    node_info['method'] = parts[3]
+                    node_info['obfs'] = parts[4]
+                    node_info['password'] = _decode_base64_urlsafe(parts[5].split('/?')[0]) # 密码
+                    
+                    # 解析参数
+                    query_params_str = parts[5].split('/?')[1] if '/?' in parts[5] else ''
+                    query_params = parse_qs(query_params_str)
+                    node_info['obfsparam'] = _decode_base64_urlsafe(query_params.get('obfsparam', [''])[0])
+                    node_info['protoparam'] = _decode_base64_urlsafe(query_params.get('protoparam', [''])[0])
+                    
+                    # SSR 备注通常在 fragment 中，但有时也在 query 中
+                    if parsed_url.fragment:
+                        node_info['remark'] = _decode_base64_urlsafe(parsed_url.fragment)
+                else:
+                    _logger.warning(f"SSR 节点格式不完整: {node_url}")
+                    return None
+            except Exception as e:
+                _logger.warning(f"解析 SSR 节点失败: {node_url}, 错误: {e}")
+                return None
         elif protocol == 'trojan':
             # Trojan URL 结构: trojan://password@server:port?param=value#remark
             node_info['password'] = parsed_url.username or '' # username 是密码
             query_params = parse_qs(parsed_url.query)
             node_info['tls'] = 'sni' in query_params or 'allowInsecure' in query_params or 'fingerprint' in query_params # 简单判断是否启用 TLS
             node_info['sni'] = query_params.get('sni', [node_info['server']])[0]
+        elif protocol == 'vless':
+            # VLESS URL 结构: vless://uuid@server:port?params#remark
+            node_info['uuid'] = parsed_url.username or '' # username 是 UUID
+            query_params = parse_qs(parsed_url.query)
+            node_info['network'] = query_params.get('type', ['tcp'])[0]
+            node_info['tls'] = query_params.get('security', [''])[0] == 'tls'
+            node_info['flow'] = query_params.get('flow', [''])[0]
+            node_info['sni'] = query_params.get('sni', [''])[0]
+            node_info['path'] = query_params.get('path', [''])[0]
+            node_info['host'] = query_params.get('host', [''])[0]
+            # ... 其他 VLESS 参数
         elif protocol == 'hysteria2':
             # Hysteria2 URL: hysteria2://password@server:port?param=value#remark
             node_info['password'] = parsed_url.username or '' # username 是密码
@@ -127,7 +167,11 @@ def parse_node_url_to_dict(node_url: str) -> dict | None:
             node_info['obfs_param'] = query_params.get('obfs-password', [''])[0]
             node_info['tls'] = True # Hysteria2 总是使用 TLS
             node_info['sni'] = query_params.get('sni', [node_info['server']])[0]
-        # TODO: 添加对 VLESS, SSR, HTTP, SOCKS5 等其他协议的解析逻辑
+        elif protocol in ['http', 'socks5']:
+            # 对于明文 HTTP/SOCKS5 代理，直接从 URL 解析
+            node_info['username'] = parsed_url.username or ''
+            node_info['password'] = parsed_url.password or ''
+        # TODO: 添加对其他协议的解析逻辑
         # ...
 
         # 确保 remark 字段存在且解码
@@ -196,17 +240,33 @@ async def generate_node_key_async(node_info: dict, resolver: aiodns.DNSResolver)
     elif protocol == 'ss':
         key_components.append(node_info.get('password'))
         key_components.append(node_info.get('method'))
-        # SSR 参数可能需要单独处理，这里仅以 SS 为例
+    elif protocol == 'ssr':
+        key_components.append(node_info.get('password'))
+        key_components.append(node_info.get('method'))
+        key_components.append(node_info.get('protocol_ssr'))
+        key_components.append(node_info.get('obfs'))
+        key_components.append(node_info.get('obfsparam'))
+        key_components.append(node_info.get('protoparam'))
     elif protocol == 'trojan':
         key_components.append(node_info.get('password'))
         key_components.append(node_info.get('tls'))
         key_components.append(node_info.get('sni'))
+    elif protocol == 'vless':
+        key_components.append(node_info.get('uuid'))
+        key_components.append(node_info.get('network'))
+        key_components.append(node_info.get('tls'))
+        key_components.append(node_info.get('flow'))
+        key_components.append(node_info.get('sni'))
+        key_components.append(node_info.get('path'))
+        key_components.append(node_info.get('host'))
     elif protocol == 'hysteria2':
         key_components.append(node_info.get('password'))
         key_components.append(node_info.get('obfs'))
         key_components.append(node_info.get('obfs_param'))
         key_components.append(node_info.get('sni'))
-    # TODO: 添加 VLESS, SSR, HTTP, SOCKS5 等其他协议的关键参数
+    elif protocol in ['http', 'socks5']:
+        key_components.append(node_info.get('username'))
+        key_components.append(node_info.get('password'))
 
     # 将列表转换为元组，以便作为 set 元素
     return tuple(key_components)
@@ -214,7 +274,7 @@ async def generate_node_key_async(node_info: dict, resolver: aiodns.DNSResolver)
 async def deduplicate_and_rename_nodes(
     nodes_urls: list[str],
     resolver: aiodns.DNSResolver,
-    geoip_db_path: str
+    geoip_db_path: str # 传递数据库路径
 ) -> list[dict]:
     """
     主要的去重和 GeoIP 命名函数。
@@ -238,24 +298,16 @@ async def deduplicate_and_rename_nodes(
             # 存储原始 URL 和解析结果，方便后续通过原始 URL 找到对应的解析结果
             parsed_node_map[node_url] = node_info 
             tasks.append(generate_node_key_async(node_info, resolver))
-    
-    # 并发执行所有键生成任务 (包括 DNS 查询)
-    if not tasks:
-        _logger.info("没有可用的节点信息需要处理")
-        return unique_node_infos
+        else:
+            tasks.append(None) # 对于无法解析的 URL，仍然在 tasks 中占位
 
-    node_keys_results = await asyncio.gather(*tasks, return_exceptions=True)
+    # 并发执行所有键生成任务 (包括 DNS 查询)
+    node_keys_results = await asyncio.gather(*tasks)
 
     # 遍历原始 URL 列表，结合其解析结果和生成的键进行去重和命名
     for i, node_url in enumerate(nodes_urls):
-        if node_url not in parsed_node_map:
-            continue  # 跳过无法解析的 URL
-        node_key = node_keys_results[i] if i < len(node_keys_results) else None
+        node_key = node_keys_results[i] # 获取对应的键
         node_info = parsed_node_map.get(node_url) # 获取对应的解析信息
-
-        if isinstance(node_key, Exception):
-            _logger.error(f"生成节点键失败 for {node_url}: {node_key}")
-            continue
 
         if node_info and node_key:
             if node_key not in seen_keys:
@@ -264,9 +316,11 @@ async def deduplicate_and_rename_nodes(
                 server_ip_for_geo = node_key[1] # 键的第二个元素是解析后的 IP
                 country = get_country_name(server_ip_for_geo) # 获取国家名称
 
-                # 更新节点的备注，添加国家信息
+                # 更新节点的备注，添加国家信息并截断前5位
                 original_remark = node_info.get('remark', '')
-                new_remark = f"{country}-{original_remark}" if original_remark else country
+                # 只保留原节点名称前5位，多余的全部删除
+                truncated_remark = original_remark[:5] if original_remark else ''
+                new_remark = f"{country}-{truncated_remark}" if truncated_remark else country
                 node_info['remark'] = new_remark
                 
                 unique_node_infos.append(node_info) # 添加去重并命名的节点信息字典
@@ -278,3 +332,4 @@ async def deduplicate_and_rename_nodes(
     
     # 返回的是处理后的节点信息字典列表
     return unique_node_infos
+
