@@ -12,377 +12,330 @@ import hashlib
 from bs4 import BeautifulSoup
 import logging
 import typing
-import random
 
 # 配置日志
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-# 定义数据和缓存目录的路径
 DATA_DIR = "data"
 ALL_NODES_FILE = os.path.join(DATA_DIR, "all.txt")
 NODE_COUNT_CSV = os.path.join(DATA_DIR, "node_counts.csv")
 CACHE_DIR = os.path.join(DATA_DIR, "cache")
-CACHE_EXPIRATION_HOURS = 48 # 缓存过期时间设置为 48 小时
+# 继续保留 CACHE_EXPIRATION_HOURS 作为时间兜底机制，防止某些服务器不提供有效的 ETag/Last-Modified
+CACHE_EXPIRATION_HOURS = 48
 
-# 确保数据目录和缓存目录存在，如果不存在则创建
+# 确保数据目录和缓存目录存在
 os.makedirs(DATA_DIR, exist_ok=True)
 os.makedirs(CACHE_DIR, exist_ok=True)
 
-# 定义支持的节点协议及其对应的正则表达式
+# 定义支持的节点协议正则
 NODE_PATTERNS = {
-    "hysteria2": r"hysteria2:\/\/.*",
-    "vmess": r"vmess:\/\/.*",
-    "trojan": r"trojan:\/\/.*",
-    "ss": r"ss:\/\/.*",
-    "ssr": r"ssr:\/\/.*",
-    "vless": r"vless:\/\/.*",
+    "hysteria2": r"hysteria2:\\/\\/.*",
+    "vmess": r"vmess:\\/\\/.*",
+    "trojan": r"trojan:\\/\\/.*",
+    "ss": r"ss:\\/\\/.*",
+    "ssr": r"ssr:\\/\\/.*",
+    "vless": r"vless:\\/\\/.*",
 }
 
-# 定义多种 User-Agent 字符串
-USER_AGENTS = [
-    # 桌面端 (Windows, macOS, Linux)
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:127.0) Gecko/20100101 Firefox/127.0",
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:127.0) Gecko/20100101 Firefox/127.0",
-    
-    # 手机端 (Android, iPhone)
-    "Mozilla/5.0 (Linux; Android 14; Pixel 8 Pro) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Mobile Safari/537.36",
-    "Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5.1 Mobile/15E148 Safari/604.1",
-    "Mozilla/5.0 (Linux; Android 12; SM-G998B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Mobile Safari/537.36",
-
-    # iPad
-    "Mozilla/5.0 (iPad; CPU OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1",
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/126.0.6478.114 Mobile/15E148 Safari/604.1", # iPad with Chrome user agent
-
-    # 鸿蒙 (HarmonyOS)
-    "Mozilla/5.0 (Linux; Android 10; HUAWEIMatePad) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36 (HarmonyOS)",
-    "Mozilla/5.0 (Linux; HarmonyOS; NOH-AN00) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.78 Mobile Safari/537.36",
-]
-
+async def _fetch_url_with_retry(client: httpx.AsyncClient, url: str, headers: dict, original_protocol_url: str) -> httpx.Response | None:
+    """
+    辅助函数：尝试从 URL 获取内容，并支持 HTTP 到 HTTPS 的回退。
+    original_protocol_url 用于判断是否是初始请求，避免 HTTPS 到 HTTPS 的无限回退。
+    """
+    try:
+        logging.info(f"尝试从 {url.split('://')[0].upper()} 获取内容: {url} (User-Agent: {headers.get('User-Agent', 'N/A')})")
+        response = await client.get(url, headers=headers)
+        response.raise_for_status() # 对 4xx/5xx 响应抛出 HTTPStatusError
+        return response
+    except httpx.HTTPStatusError as e:
+        logging.error(f"获取 {url} 时发生 HTTP 状态错误: {e}")
+        # 如果是 HTTP 请求且是初始协议（非重试后的 HTTPS），则尝试 HTTPS 回退
+        if url.startswith("http://") and original_protocol_url.startswith("http://"):
+            https_url = url.replace("http://", "https://")
+            logging.info(f"尝试从 HTTPS 回退获取内容: {https_url}")
+            try:
+                # 回退时移除条件请求头，因为 ETag/Last-Modified 可能只对原协议有效
+                fallback_headers = dict(headers)
+                fallback_headers.pop('If-None-Match', None)
+                fallback_headers.pop('If-Modified-Since', None)
+                response_https = await client.get(https_url, headers=fallback_headers)
+                response_https.raise_for_status()
+                return response_https
+            except httpx.HTTPStatusError as e_https:
+                logging.error(f"获取 {https_url} 时发生 HTTPS 状态错误: {e_https}")
+            except httpx.RequestError as e_https:
+                logging.error(f"获取 {https_url} 时发生 HTTPS 网络请求错误: {e_https}")
+            except Exception as e_https:
+                logging.error(f"获取 {https_url} 时发生 HTTPS 未知错误: {e_https}")
+        return None
+    except httpx.RequestError as e:
+        logging.error(f"获取 {url} 时发生网络请求错误: {e}")
+        # 如果是 HTTP 请求且是初始协议，则尝试 HTTPS 回退
+        if url.startswith("http://") and original_protocol_url.startswith("http://"):
+            https_url = url.replace("http://", "https://")
+            logging.info(f"尝试从 HTTPS 回退获取内容: {https_url}")
+            try:
+                fallback_headers = dict(headers)
+                fallback_headers.pop('If-None-Match', None)
+                fallback_headers.pop('If-Modified-Since', None)
+                response_https = await client.get(https_url, headers=fallback_headers)
+                response_https.raise_for_status()
+                return response_https
+            except httpx.HTTPStatusError as e_https:
+                logging.error(f"获取 {https_url} 时发生 HTTPS 状态错误: {e_https}")
+            except httpx.RequestError as e_https:
+                logging.error(f"获取 {https_url} 时发生 HTTPS 网络请求错误: {e_https}")
+            except Exception as e_https:
+                logging.error(f"获取 {https_url} 时发生 HTTPS 未知错误: {e_https}")
+        return None
+    except Exception as e:
+        logging.error(f"获取 {url} 时发生未知错误: {e}")
+        return None
 
 async def get_url_content(url: str, use_cache: bool = True) -> str | None:
-    """
-    安全地异步获取 URL 内容，优先尝试 HTTP，失败后尝试 HTTPS。
-    支持缓存机制，避免重复下载。
-    """
-    # 使用 URL 的 MD5 哈希值作为缓存文件的键
-    cache_key = hashlib.md5(url.encode()).hexdigest()
-    cache_file_path = os.path.join(CACHE_DIR, cache_key)
-
-    # 检查缓存是否可用且未过期
-    if use_cache and os.path.exists(cache_file_path):
-        mtime = datetime.datetime.fromtimestamp(os.path.getmtime(cache_file_path))
-        if datetime.datetime.now() - mtime < datetime.timedelta(hours=CACHE_EXPIRATION_HOURS):
-            logging.info(f"从缓存读取内容: {url}")
-            async with aiofiles.open(cache_file_path, 'r', encoding='utf-8') as f:
-                return await f.read()
-
-    # 构建完整的 HTTP 和 HTTPS URL
-    full_url_http = f"http://{url}"
-    full_url_https = f"https://{url}"
-
-    # 随机选择一个 User-Agent
-    random_user_agent = random.choice(USER_AGENTS)
-
-    # 定义请求头，模拟浏览器行为
-    headers = {
-        "User-Agent": random_user_agent, # 使用随机选择的 User-Agent
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
-        "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
-    }
-
-    # 使用 httpx.AsyncClient 进行异步 HTTP 请求
-    async with httpx.AsyncClient(verify=False, timeout=15) as client:
-        for current_url in [full_url_http, full_url_https]: # 尝试 HTTP 和 HTTPS
-            try:
-                logging.info(f"尝试从 {current_url.split('://')[0].upper()} 获取内容: {current_url} (User-Agent: {random_user_agent[:30]}...)") # 记录 User-Agent 部分信息
-                response = await client.get(current_url, headers=headers)
-                response.raise_for_status() # 检查 HTTP 状态码，非 2xx 则抛出异常
-                content = response.text
-                # 将获取到的内容写入缓存文件
-                async with aiofiles.open(cache_file_path, 'w', encoding='utf-8') as f:
-                    await f.write(content)
-                return content
-            except httpx.RequestError as exc:
-                # 记录请求失败信息
-                logging.warning(f"请求失败 {current_url}: {exc}")
-            except Exception as e:
-                # 记录其他未知错误
-                logging.error(f"获取 {current_url} 时发生未知错误: {e}")
-        return None # 两次尝试都失败则返回 None
-
-def decode_content(content: str) -> str:
-    """尝试解码 base64 编码的内容，并处理 URL 安全编码"""
-    content = content.strip()
-    try:
-        # 尝试标准 base64 解码
-        # 填充 '=' 使其成为 4 的倍数
-        if len(content) % 4 != 0:
-            content += '=' * (4 - len(content) % 4)
-        return base64.b64decode(content).decode('utf-8')
-    except Exception:
-        pass # 如果标准解码失败，尝试 URL 安全解码
+    """从 URL 获取内容，并支持基于 HTTP 头部的缓存验证。"""
+    cache_entry_path = os.path.join(CACHE_DIR, hashlib.md5(url.encode()).hexdigest() + ".json")
     
-    try:
-        # 尝试 URL 安全 base64 解码
-        # 替换 '-' 为 '+'，'_' 为 '/'，并填充 '='
-        content = content.replace('-', '+').replace('_', '/')
-        if len(content) % 4 != 0:
-            content += '=' * (4 - len(content) % 4)
-        return base64.urlsafe_b64decode(content).decode('utf-8')
-    except Exception:
-        return content # 解码失败则返回原始内容
-
-def extract_nodes_from_text(text: str, current_depth: int = 0, max_depth: int = 5) -> list[str]:
-    """
-    从文本中递归提取各种格式的节点。
-    支持明文节点、YAML、JSON、HTML 等多层解析。
-    引入递归深度限制以避免 RecursionError。
-    """
-    if current_depth > max_depth:
-        logging.warning(f"达到最大递归深度 ({max_depth})，停止进一步解析。")
-        return []
-
-    nodes = []
-
-    # 尝试解析 JSON 格式的节点
-    try:
-        data = json.loads(text)
-        if isinstance(data, list):
-            for item in data:
-                if isinstance(item, str):
-                    nodes.append(item)
-                elif isinstance(item, dict):
-                    # 尝试从字典中提取 URL 或其他节点信息
-                    if 'url' in item and isinstance(item['url'], str):
-                        nodes.append(item['url'])
-                    elif 'add' in item and 'port' in item and 'v' in item: # 可能是 VMess JSON
-                        nodes.append(f"vmess://{base64.b64encode(json.dumps(item).encode()).decode()}")
-                    else:
-                        # 对于无法直接识别的字典，尝试将其转换为字符串后递归解析
-                        nodes.extend(extract_nodes_from_text(json.dumps(item), current_depth + 1, max_depth))
-        elif isinstance(data, dict):
-            # 遍历字典的值，进行递归解析
-            for key, value in data.items():
-                if isinstance(value, list) or isinstance(value, dict):
-                    nodes.extend(extract_nodes_from_text(json.dumps(value), current_depth + 1, max_depth))
-                elif isinstance(value, str):
-                    nodes.append(value)
-    except json.JSONDecodeError:
-        pass # 非 JSON 格式，继续尝试其他解析方式
-
-    # 尝试解析 YAML 格式的节点
-    try:
-        data = yaml.safe_load(text)
-        if isinstance(data, dict):
-            # 处理 Clash 配置文件中的 proxies 字段
-            if 'proxies' in data and isinstance(data['proxies'], list):
-                for proxy in data['proxies']:
-                    if isinstance(proxy, str):
-                        nodes.append(proxy)
-                    elif isinstance(proxy, dict):
-                        # 根据代理类型构建节点链接
-                        if proxy.get('type') == 'vmess' and 'uuid' in proxy:
-                            nodes.append(f"vmess://{base64.b64encode(json.dumps(proxy).encode()).decode()}")
-                        elif proxy.get('type') == 'trojan' and 'password' in proxy:
-                            nodes.append(f"trojan://{proxy.get('password')}@{proxy.get('server')}:{proxy.get('port')}")
-                        elif proxy.get('type') == 'ss' and 'password' in proxy:
-                            method_pass = f"{proxy.get('cipher')}:{proxy.get('password')}"
-                            nodes.append(f"ss://{base64.urlsafe_b64encode(method_pass.encode()).decode().rstrip('=')}@{proxy.get('server')}:{proxy.get('port')}")
-                        elif proxy.get('type') == 'vless' and 'uuid' in proxy:
-                            nodes.append(f"vless://{proxy['uuid']}@{proxy['server']}:{proxy['port']}")
-                        elif proxy.get('type') == 'hysteria2':
-                            nodes.append(f"hysteria2://{proxy['password']}@{proxy['server']}:{proxy['port']}")
-                        else:
-                            nodes.append(str(proxy)) # 对于未知类型的字典，保留为字符串
-            # 处理其他可能的 YAML 结构
-            elif 'profiles' in data and isinstance(data['profiles'], dict):
-                for profile_name, profile_content in data['profiles'].items():
-                    if isinstance(profile_content, str):
-                        nodes.append(profile_content)
-                    elif isinstance(profile_content, (dict, list)):
-                        nodes.extend(extract_nodes_from_text(yaml.dump(profile_content), current_depth + 1, max_depth))
-            else:
-                # 递归解析 YAML 字典中的所有值
-                for key, value in data.items():
-                    if isinstance(value, (dict, list)):
-                        nodes.extend(extract_nodes_from_text(yaml.dump(value), current_depth + 1, max_depth))
-                    elif isinstance(value, str):
-                        nodes.append(value)
-    except yaml.YAMLError:
-        pass # 非 YAML 格式，继续尝试其他解析方式
-
-    # 尝试从 HTML 文本中提取内容
-    try:
-        soup = BeautifulSoup(text, 'html.parser')
-        # 查找 <pre>, <code>, <textarea> 标签中的文本内容
-        for tag_name in ['pre', 'code', 'textarea']:
-            for tag in soup.find_all(tag_name):
-                # 递归解析这些标签内的文本内容
-                nodes.extend(extract_nodes_from_text(tag.get_text(), current_depth + 1, max_depth))
-        # 查找包含已知协议的 <a> 标签的 href 属性
-        for a_tag in soup.find_all('a', href=True):
-            if any(proto in a_tag['href'] for proto in NODE_PATTERNS.keys()):
-                nodes.append(a_tag['href'])
-    except Exception as e:
-        logging.debug(f"HTML 解析失败: {e}") # 记录调试信息，不影响主流程
-
-    # 提取所有已知协议的节点（明文形式）
-    for protocol, pattern in NODE_PATTERNS.items():
-        nodes.extend(re.findall(pattern, text, re.IGNORECASE))
-
-    # 提取可能的 base64 编码的链接或原始文本
-    # 匹配可能的 base64 字符串，要求长度大于10且是4的倍数，以减少误判
-    base64_re = r'(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?'
-    matches = re.findall(base64_re, text)
-    for match in matches:
-        if len(match) > 10 and len(match) % 4 == 0:
-            decoded = decode_content(match)
-            # 如果解码后发现节点协议，则加入，并递归解析解码内容
-            for protocol, pattern in NODE_PATTERNS.items():
-                if re.search(pattern, decoded, re.IGNORECASE):
-                    nodes.append(decoded)
-                    nodes.extend(extract_nodes_from_text(decoded, current_depth + 1, max_depth)) # 递归解析
-                    break
-    
-    # 尝试从文本中直接寻找看起来像节点的内容 (例如：IP:Port)
-    ip_port_pattern = r'\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d{1,5}\b'
-    nodes.extend(re.findall(ip_port_pattern, text))
-
-    # 对提取到的节点进行初步处理，保留原始名称的前5位（如果存在）
-    processed_nodes = []
-    for node in nodes:
-        # 对 vmess, ss, ssr 进行特殊处理，因为其名称通常在 base64 解码后
-        if node.startswith("vmess://"):
-            try:
-                decoded_vmess = base64.b64decode(node[len("vmess://"):].encode()).decode('utf-8')
-                vmess_json = json.loads(decoded_vmess)
-                name = vmess_json.get('ps', 'vmess_node') # 获取 'ps'字段作为名称
-                processed_nodes.append(f"{node}#{name[:5]}") # 将名称附加到节点URL后
-            except Exception:
-                processed_nodes.append(node) # 无法解码则保留原样
-        elif node.startswith("ss://"):
-            try:
-                # SS 协议通常是 base64(method:password@server:port)#name
-                parts = node[len("ss://"):].split('#', 1)
-                encoded_part = parts[0]
-                # URL 安全解码，并处理可能的填充
-                decoded_ss = base64.urlsafe_b64decode(encoded_part + '==').decode('utf-8')
-                name = parts[1] if len(parts) > 1 else "ss_node"
-                processed_nodes.append(f"{node}#{name[:5]}")
-            except Exception:
-                processed_nodes.append(node)
-        elif node.startswith("ssr://"):
-            try:
-                # SSR 协议也是 base64 编码
-                parts = node[len("ssr://"):].split('#', 1)
-                encoded_part = parts[0]
-                decoded_ssr = base64.urlsafe_b64decode(encoded_part + '==').decode('utf-8')
-                name = parts[1] if len(parts) > 1 else "ssr_node"
-                processed_nodes.append(f"{node}#{name[:5]}")
-            except Exception:
-                processed_nodes.append(node)
-        else:
-            # 对于其他协议，简单提取名称前5位（如果节点有名称）
-            match = re.search(r'#([^&\s]+)', node) # 查找 # 后面的名称
-            if match:
-                name = match.group(1)
-                # 只保留 # 之前的部分和处理后的名称
-                processed_nodes.append(f"{node.split('#')[0]}#{name[:5]}")
-            else:
-                processed_nodes.append(node)
-    return processed_nodes
-
-async def process_url(url: str, semaphore: asyncio.Semaphore) -> tuple[str, int, list[str]]: # 返回节点列表
-    """
-    处理单个 URL，获取内容，提取节点，并将提取到的节点写入单独的 URL 文件。
-    返回 URL、提取到的节点数量以及提取到的唯一节点列表。
-    使用 semaphore 限制并发。
-    """
-    async with semaphore: # 获取信号量，限制并发
-        logging.info(f"开始处理 URL: {url}")
-        content = await get_url_content(url)
-        if not content:
-            logging.warning(f"无法获取 {url} 的内容，跳过该 URL 的节点提取。")
-            return url, 0, [] # 返回空列表
-
-        loop = asyncio.get_running_loop()
+    cached_data = None
+    if use_cache and os.path.exists(cache_entry_path):
         try:
-            # 在线程池中执行 CPU 密集型的 extract_nodes_from_text
-            logging.info(f"开始解析 {url} 的内容...")
-            nodes = await loop.run_in_executor(None, extract_nodes_from_text, content, 0, 5)
-            logging.info(f"完成解析 {url} 的内容。")
+            async with aiofiles.open(cache_entry_path, 'r', encoding='utf-8') as f:
+                cached_data = json.loads(await f.read())
+            
+            # 首先检查时间过期（作为兜底，以防服务器不提供或不严格遵循 ETag/Last-Modified）
+            cache_timestamp_str = cached_data.get('timestamp', datetime.datetime.min.isoformat())
+            cache_timestamp = datetime.datetime.fromisoformat(cache_timestamp_str)
+            if (datetime.datetime.now() - cache_timestamp).total_seconds() / 3600 >= CACHE_EXPIRATION_HOURS:
+                logging.info(f"缓存 {url} 已过期（超过 {CACHE_EXPIRATION_HOURS} 小时），将重新检查更新。")
+                cached_data = None # 标记为过期，强制进行完整请求以获取最新状态
+
         except Exception as e:
-            logging.error(f"解析 {url} 的内容时发生错误: {e}")
-            nodes = [] # 解析失败，节点列表为空
+            logging.warning(f"读取或解析缓存文件 {cache_entry_path} 失败: {e}，将重新获取。")
+            cached_data = None # 缓存文件损坏，强制重新获取
 
-        unique_nodes = list(set(nodes)) # 对提取到的节点进行简单去重
+    client = httpx.AsyncClient(timeout=10, verify=False, follow_redirects=True)
+    response = None
+    content_to_return = None
 
-        # 将每个 URL 获取到的内容一次性写入单独的文件
-        safe_url_name = re.sub(r'[^a-zA-Z0-9_\-.]', '_', url)
-        url_output_file = os.path.join(DATA_DIR, f"{safe_url_name}.txt")
+    try:
+        headers_for_request = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        }
+
+        # 如果有缓存数据，则添加条件请求头
+        if cached_data:
+            if cached_data.get('etag'):
+                headers_for_request['If-None-Match'] = cached_data['etag']
+            if cached_data.get('last-modified'):
+                headers_for_request['If-Modified-Since'] = cached_data['last-modified']
+
+        # 调用辅助函数进行 URL 获取和重试
+        response = await _fetch_url_with_retry(client, url, headers_for_request, url)
+
+        if response:
+            if response.status_code == 304 and cached_data and cached_data.get('content'):
+                logging.info(f"URL: {url} 内容未更新 (304 Not Modified)，从缓存读取。")
+                content_to_return = base64.b64decode(cached_data['content']).decode('utf-8', errors='ignore')
+            else:
+                # 内容已更新（200 OK）或首次获取
+                content = response.text
+                
+                # 准备新的缓存数据
+                new_cached_data = {
+                    "content": base64.b64encode(content.encode('utf-8')).decode('ascii'), # base64编码以避免JSON编码问题
+                    "timestamp": datetime.datetime.now().isoformat() # 记录最新缓存时间
+                }
+                if 'etag' in response.headers:
+                    new_cached_data['etag'] = response.headers['etag']
+                if 'last-modified' in response.headers:
+                    new_cached_data['last-modified'] = response.headers['last-modified']
+
+                async with aiofiles.open(cache_entry_path, 'w', encoding='utf-8') as f:
+                    await f.write(json.dumps(new_cached_data))
+                logging.info(f"URL: {url} 内容已更新，已写入缓存。")
+                content_to_return = content
+        else: # response 为 None，表示所有尝试均失败
+            logging.error(f"无法获取 URL: {url} 的内容，跳过该 URL 的节点提取。")
+            content_to_return = None
+
+    finally:
+        await client.aclose() # 确保 httpx 客户端在请求完成后关闭
+
+    return content_to_return
+
+async def extract_nodes_from_content(url: str, content: str) -> list[str]:
+    """
+    从文本内容中提取符合 Vmess, Trojan, SS, SSR, Vless, Hysteria2 格式的节点。
+    """
+    unique_nodes = set()
+    
+    # 尝试解析为 Base64 解码后的 JSON 或 YAML (通常用于Vmess订阅链接)
+    try:
+        # 尝试 Base64 解码，然后判断是否为 JSON 或 YAML
+        decoded_content = base64.b64decode(content.strip()).decode('utf-8', errors='ignore')
         
-        # 优化点：将所有节点拼接成一个字符串，然后一次性写入
-        nodes_content = "\n".join(unique_nodes) + "\n" if unique_nodes else ""
-        async with aiofiles.open(url_output_file, 'w', encoding='utf-8') as f:
-            await f.write(nodes_content) # 一次性写入
+        # 尝试作为 JSON 处理 (Vmess订阅)
+        try:
+            json_data = json.loads(decoded_content)
+            if isinstance(json_data, list): # Vmess 订阅通常是节点列表
+                for item in json_data:
+                    if isinstance(item, dict) and 'ps' in item and 'add' in item: # 简单判断为 Vmess 节点
+                        # 重新编码为 Vmess URL
+                        unique_nodes.add("vmess://" + base64.b64encode(json.dumps(item, separators=(',', ':')).encode()).decode())
+            elif isinstance(json_data, dict) and 'outbounds' in json_data: # Clash 配置的可能
+                for outbound in json_data.get('outbounds', []):
+                    # 简单判断，并尝试重构为标准链接
+                    if outbound.get('type') == 'vmess':
+                        # 从 Clash 配置重建 vmess:// 链接
+                        vmess_node = {
+                            "v": "2", # 假设 Vmess 版本
+                            "ps": outbound.get('name', 'node'),
+                            "add": outbound.get('server'),
+                            "port": outbound.get('port'),
+                            "id": outbound.get('uuid'),
+                            "aid": outbound.get('alterId', '0'),
+                            "net": outbound.get('network', 'tcp'),
+                            "type": outbound.get('tls-enable', False), # 这个需要进一步判断
+                            "host": outbound.get('servername', ''), # sni
+                            "path": outbound.get('ws-path', ''), # ws path
+                            "tls": "tls" if outbound.get('tls', False) else "" # tls
+                        }
+                        # 清理空值
+                        vmess_node = {k: v for k, v in vmess_node.items() if v is not None and v != ''}
+                        unique_nodes.add("vmess://" + base64.b64encode(json.dumps(vmess_node, separators=(',', ':')).encode()).decode())
+                    # 可以添加其他协议的解析，如 trojan, ss 等
+            
+        except json.JSONDecodeError:
+            pass # 不是 JSON，继续
 
-        logging.info(f"URL: {url} 的节点已保存到 {url_output_file}")
-        logging.info(f"URL: {url} 成功提取到 {len(unique_nodes)} 个节点。")
-        return url, len(unique_nodes), unique_nodes # 返回节点列表
+        # 尝试作为 YAML 处理 (Clash/Surge配置)
+        try:
+            yaml_data = yaml.safe_load(decoded_content)
+            if isinstance(yaml_data, dict) and 'proxies' in yaml_data: # Clash 配置
+                for proxy in yaml_data.get('proxies', []):
+                    # 尝试从 Clash 代理配置中提取节点
+                    # 例如，Vmess
+                    if proxy.get('type') == 'vmess':
+                        vmess_node = {
+                            "v": "2",
+                            "ps": proxy.get('name', 'node'),
+                            "add": proxy.get('server'),
+                            "port": proxy.get('port'),
+                            "id": proxy.get('uuid'),
+                            "aid": proxy.get('alterId', '0'),
+                            "net": proxy.get('network', 'tcp'),
+                            "type": "", # vmess type
+                            "host": proxy.get('ws-headers', {}).get('Host', ''), # ws host
+                            "path": proxy.get('ws-path', ''), # ws path
+                            "tls": "tls" if proxy.get('tls', False) else "" # tls
+                        }
+                        vmess_node = {k: v for k, v in vmess_node.items() if v is not None and v != ''}
+                        unique_nodes.add("vmess://" + base64.b64encode(json.dumps(vmess_node, separators=(',', ':')).encode()).decode())
+                    # 例如，Trojan
+                    elif proxy.get('type') == 'trojan':
+                        trojan_node = f"trojan://{proxy.get('password')}@{proxy.get('server')}:{proxy.get('port')}"
+                        # 可以在这里添加其他参数，如 sni, allowInsecure, skipCertVerify
+                        if proxy.get('sni'):
+                             trojan_node += f"?sni={proxy['sni']}"
+                        unique_nodes.add(trojan_node)
+                    # 可以在这里添加其他协议的解析
+        except yaml.YAMLError:
+            pass # 不是 YAML，继续
+        
+    except Exception:
+        pass # 不是有效的 Base64 编码，或者解码后不是 JSON/YAML，继续按纯文本处理
+
+    # 尝试从原始内容或 Base64 解码后的内容中匹配各种节点模式
+    for protocol, pattern in NODE_PATTERNS.items():
+        # 在原始内容中查找
+        for match in re.finditer(pattern, content):
+            unique_nodes.add(match.group(0))
+        # 在解码后的内容中查找 (如果存在且有效)
+        if 'decoded_content' in locals() and decoded_content:
+            for match in re.finditer(pattern, decoded_content):
+                unique_nodes.add(match.group(0))
+
+    # 进一步处理可能嵌入在HTML中的节点链接
+    if "<html" in content.lower() or "<!doctype html>" in content.lower():
+        soup = BeautifulSoup(content, 'html.parser')
+        # 查找所有文本内容
+        for text_element in soup.find_all(string=True):
+            text = str(text_element)
+            for protocol, pattern in NODE_PATTERNS.items():
+                for match in re.finditer(pattern, text):
+                    unique_nodes.add(match.group(0))
+            # 尝试解码可能隐藏在文本中的base64
+            for word in re.findall(r'\b[A-Za-z0-9+/=_]{20,}\b', text): # 匹配看起来像base64的字符串
+                try:
+                    decoded_text = base64.b64decode(word + "===").decode('utf-8', errors='ignore') # 尝试填充
+                    for protocol, pattern in NODE_PATTERNS.items():
+                        for match in re.finditer(pattern, decoded_text):
+                            unique_nodes.add(match.group(0))
+                except Exception:
+                    pass
+
+    return list(unique_nodes)
+
+async def process_url(url: str, all_nodes_writer: aiofiles.threadpool.binary.AsyncTextIOWrapper):
+    """处理单个 URL，获取内容，提取节点并写入文件。"""
+    logging.info(f"开始处理 URL: {url}")
+    content = await get_url_content(url)
+
+    if not content:
+        logging.warning(f"无法获取 {url} 的内容，跳过该 URL 的节点提取。")
+        return url, 0
+
+    logging.info(f"开始解析 {url} 的内容...")
+    unique_nodes = await extract_nodes_from_content(url, content)
+    logging.info(f"完成解析 {url} 的内容。")
+
+    # 对节点再次进行一次去重，确保最终写入的节点是唯一的
+    unique_nodes = list(set(unique_nodes))
+
+    # 将当前 URL 提取的节点保存到单独的文件
+    safe_url_name = re.sub(r'[^a-zA-Z0-9.\-_]', '_', url) # 清理URL用于文件名
+    url_output_file = os.path.join(DATA_DIR, f"{safe_url_name}.txt")
+    async with aiofiles.open(url_output_file, 'w', encoding='utf-8') as f:
+        for node in unique_nodes:
+            await f.write(f"{node}\n")
+
+    # 将所有节点写入总文件
+    for node in unique_nodes:
+        await all_nodes_writer.write(f"{node}\n")
+
+    logging.info(f"URL: {url} 的节点已保存到 {url_output_file}")
+    logging.info(f"URL: {url} 成功提取到 {len(unique_nodes)} 个节点。")
+    return url, len(unique_nodes)
 
 async def main():
     """主函数，读取 sources.list 并并行处理 URL。"""
     if not os.path.exists('sources.list'):
-        logging.error("sources.list 文件不存在，请创建并添加要抓取的 URL。")
+        logging.error("sources.list 文件不存在，请创建并添加 URL。")
         return
 
-    # 从 sources.list 文件中读取 URL 列表，跳过空行和注释行
     with open('sources.list', 'r', encoding='utf-8') as f:
         urls = [line.strip() for line in f if line.strip() and not line.startswith('#')]
 
     if not urls:
-        logging.warning("sources.list 中没有找到有效的 URL，程序将退出。")
+        logging.warning("sources.list 中没有找到有效的 URL。")
         return
 
-    node_counts = defaultdict(int) # 用于存储每个 URL 提取到的节点数量
-    all_extracted_nodes = [] # 用于收集所有 URL 提取到的节点
+    node_counts = defaultdict(int)
 
-    # 定义并发限制，例如，同时处理 15 个 URL
-    # 您可以根据您的网络带宽和 CPU 性能调整这个数字
-    semaphore = asyncio.Semaphore(15) 
+    async with aiofiles.open(ALL_NODES_FILE, 'w', encoding='utf-8') as all_nodes_writer:
+        tasks = [process_url(url, all_nodes_writer) for url in urls]
+        results = await asyncio.gather(*tasks)
 
-    # 为每个 URL 创建一个异步任务，并传入信号量
-    tasks = [process_url(url, semaphore) for url in urls]
-    # 并行执行所有任务
-    results = await asyncio.gather(*tasks)
-
-    # 收集每个 URL 的节点数量和所有提取到的节点
-    for url, count, nodes_list in results:
-        node_counts[url] = count
-        all_extracted_nodes.extend(nodes_list) # 将所有节点的列表添加到总列表中
-
-    # 对所有收集到的节点进行全局去重
-    global_unique_nodes = list(set(all_extracted_nodes))
-
-    # 将所有全局去重后的节点一次性写入总文件
-    logging.info(f"正在将所有 {len(global_unique_nodes)} 个去重后的节点写入 {ALL_NODES_FILE}...")
-    async with aiofiles.open(ALL_NODES_FILE, 'w', encoding='utf-8') as f:
-        for node in global_unique_nodes:
-            await f.write(f"{node}\n")
-    logging.info(f"所有去重后的节点已合并保存到 {ALL_NODES_FILE}")
-
-    # 将节点数量统计保存为 CSV 文件
+        for url, count in results:
+            node_counts[url] = count
+    
+    # 将每个 URL 的节点数量写入 CSV 文件
     async with aiofiles.open(NODE_COUNT_CSV, 'w', encoding='utf-8') as f:
         await f.write("URL,NodeCount\n")
         for url, count in node_counts.items():
             await f.write(f"{url},{count}\n")
-    
-    logging.info(f"所有 URL 处理完成，节点统计已保存到 {NODE_COUNT_CSV}")
 
+    logging.info("所有 URL 处理完成。")
 
-if __name__ == '__main__':
-    # 运行主异步函数
+if __name__ == "__main__":
     asyncio.run(main())
