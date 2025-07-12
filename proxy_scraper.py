@@ -14,6 +14,7 @@ from bs4 import BeautifulSoup
 import logging
 import typing
 import uuid
+import time # Added: Required for time.sleep() in retry logic
 
 # 配置日志，同时输出到控制台和文件
 logging.basicConfig(
@@ -236,74 +237,65 @@ async def clean_old_cache_files(cleanup_threshold_hours: int):
     except Exception as e:
         logging.error(f"清理缓存时发生错误: {e}")
 
-async def _fetch_url_with_retry(client: httpx.AsyncClient, url: str, headers: dict, original_protocol_url: str) -> httpx.Response | None:
+async def _fetch_url_with_retry(client: httpx.AsyncClient, url: str, headers: dict, original_url_for_logging: str, retries: int = 3, retry_delay: int = 2) -> httpx.Response | None:
     """
-    尝试从 URL 获取内容，并支持 HTTP 到 HTTPS 的回退。
+    带重试机制的 URL 内容获取函数。
+    此函数仅负责尝试给定的URL，不进行协议回退。
     
     Args:
         client (httpx.AsyncClient): HTTP 客户端。
         url (str): 要获取的 URL。
         headers (dict): HTTP 请求头。
-        original_protocol_url (str): 初始请求的 URL，用于避免无限回退。
+        original_url_for_logging (str): 原始的、未修改的URL，用于日志记录。
+        retries (int): 最大重试次数。
+        retry_delay (int): 每次重试的等待时间（秒）。
         
     Returns:
         httpx.Response | None: HTTP 响应对象，如果失败则返回 None。
     """
+    if retries == 0:
+        logging.error(f"URL: {original_url_for_logging} (尝试 {url}) 达到最大重试次数，放弃获取。")
+        return None
+
     try:
-        logging.info(f"尝试从 {url.split('://')[0].upper()} 获取内容: {url} (User-Agent: {headers.get('User-Agent', 'N/A')})")
+        logging.info(f"尝试从 {url.split('://')[0].upper() if '://' in url else 'UNKNOWN'} 获取内容: {url} (User-Agent: {headers.get('User-Agent', 'N/A')})")
         response = await client.get(url, headers=headers)
-        response.raise_for_status()
+        response.raise_for_status() # 检查 HTTP 状态码
         return response
     except httpx.SSLError as e:
-        logging.warning(f"SSL 验证失败，尝试禁用 SSL 验证: {url}")
-        async with httpx.AsyncClient(timeout=10, verify=False, follow_redirects=True) as retry_client:
+        # 如果是SSL错误，尝试禁用SSL验证后重试（仅一次）
+        logging.warning(f"URL: {original_url_for_logging} (尝试 {url}) SSL 验证失败: {e}, 尝试禁用 SSL 验证...")
+        async with httpx.AsyncClient(timeout=client.timeout, verify=False, http2=client.http2, follow_redirects=client.follow_redirects) as retry_client_no_verify:
             try:
-                response = await retry_client.get(url, headers=headers)
+                response = await retry_client_no_verify.get(url, headers=headers)
                 response.raise_for_status()
+                logging.info(f"URL: {original_url_for_logging} (尝试 {url}) 禁用 SSL 验证后成功获取。")
                 return response
-            except httpx.HTTPStatusError as e:
-                logging.error(f"获取 {url} 时发生 HTTP 状态错误: {e}")
-            except httpx.RequestError as e:
-                logging.error(f"获取 {url} 时发生网络请求错误: {e}")
+            except httpx.HTTPStatusError as e_inner:
+                logging.error(f"URL: {original_url_for_logging} (尝试 {url}) 禁用 SSL 验证后 HTTP 状态错误: {e_inner}")
+            except httpx.RequestError as e_inner:
+                logging.error(f"URL: {original_url_for_logging} (尝试 {url}) 禁用 SSL 验证后网络请求错误: {e_inner}")
+        return None # Return None if retry with no verify also fails
+    except (httpx.ConnectError, httpx.TimeoutException) as e:
+        logging.warning(f"URL: {original_url_for_logging} (尝试 {url}) 连接或超时错误: {e}, 重试中...")
+        await asyncio.sleep(retry_delay)
+        return await _fetch_url_with_retry(client, url, headers, original_url_for_logging, retries - 1, retry_delay * 2)
     except httpx.HTTPStatusError as e:
-        logging.error(f"获取 {url} 时发生 HTTP 状态错误: {e}")
-        if url.startswith("http://") and original_protocol_url.startswith("http://"):
-            https_url = url.replace("http://", "https://")
-            logging.info(f"尝试从 HTTPS 回退获取内容: {https_url}")
-            try:
-                fallback_headers = dict(headers)
-                fallback_headers.pop('If-None-Match', None)
-                fallback_headers.pop('If-Modified-Since', None)
-                response_https = await client.get(https_url, headers=fallback_headers)
-                response_https.raise_for_status()
-                return response_https
-            except httpx.HTTPStatusError as e_https:
-                logging.error(f"获取 {https_url} 时发生 HTTPS 状态错误: {e_https}")
-            except httpx.RequestError as e_https:
-                logging.error(f"获取 {https_url} 时发生 HTTPS 网络请求错误: {e_https}")
-    except httpx.RequestError as e:
-        logging.error(f"获取 {url} 时发生网络请求错误: {e}")
-        if url.startswith("http://") and original_protocol_url.startswith("http://"):
-            https_url = url.replace("http://", "https://")
-            logging.info(f"尝试从 HTTPS 回退获取内容: {https_url}")
-            try:
-                fallback_headers = dict(headers)
-                fallback_headers.pop('If-None-Match', None)
-                fallback_headers.pop('If-Modified-Since', None)
-                response_https = await client.get(https_url, headers=fallback_headers)
-                response_https.raise_for_status()
-                return response_https
-            except httpx.HTTPStatusError as e_https:
-                logging.error(f"获取 {https_url} 时发生 HTTPS 状态错误: {e_https}")
-            except httpx.RequestError as e_https:
-                logging.error(f"获取 {https_url} 时发生 HTTPS 网络请求错误: {e_https}")
+        logging.error(f"URL: {original_url_for_logging} (尝试 {url}) HTTP 状态错误: {e}")
+        # 对于HTTP状态错误，不进行重试，直接返回None，让上层决定是否尝试其他协议
+        return None
+    except httpx.RequestError as e: # Catch other httpx errors, including UnsupportedProtocol
+        logging.warning(f"URL: {original_url_for_logging} (尝试 {url}) 请求错误: {e}, 重试中...")
+        await asyncio.sleep(retry_delay)
+        return await _fetch_url_with_retry(client, url, headers, original_url_for_logging, retries - 1, retry_delay * 2)
     except Exception as e:
-        logging.error(f"获取 {url} 时发生未知错误: {e}")
-    return None
+        logging.error(f"URL: {original_url_for_logging} (尝试 {url}) 未知错误: {e}, 重试中...")
+        await asyncio.sleep(retry_delay)
+        return await _fetch_url_with_retry(client, url, headers, original_url_for_logging, retries - 1, retry_delay * 2)
 
 async def get_url_content(url: str, use_cache: bool = True) -> str | None:
     """
-    从 URL 获取内容，并支持基于 HTTP 头部的缓存验证。
+    从 URL 获取内容，并支持基于 HTTP 头部的缓存验证以及协议自动回退（HTTPS -> HTTP）。
     
     Args:
         url (str): 要获取的 URL。
@@ -329,45 +321,58 @@ async def get_url_content(url: str, use_cache: bool = True) -> str | None:
             logging.warning(f"读取或解析缓存文件 {cache_entry_path} 失败: {e}，将重新获取。")
             cached_data = None
 
-    async with httpx.AsyncClient(timeout=10, verify=True, follow_redirects=True) as client:
-        headers_for_request = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-        }
+    headers_for_request = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    }
 
-        if cached_data:
-            if cached_data.get('etag'):
-                headers_for_request['If-None-Match'] = cached_data['etag']
-            if cached_data.get('last-modified'):
-                headers_for_request['If-Modified-Since'] = cached_data['last-modified']
+    if cached_data:
+        if cached_data.get('etag'):
+            headers_for_request['If-None-Match'] = cached_data['etag']
+        if cached_data.get('last-modified'):
+            headers_for_request['If-Modified-Since'] = cached_data['last-modified']
 
-        response = await _fetch_url_with_retry(client, url, headers_for_request, url)
+    # Determine URLs to try based on scheme presence
+    urls_to_attempt = []
+    parsed_url = httpx.URL(url)
+    if not parsed_url.scheme:
+        # If no scheme, try HTTPS first, then HTTP
+        urls_to_attempt.append(f"https://{url}")
+        urls_to_attempt.append(f"http://{url}")
+    else:
+        # If scheme is present, just use the provided URL
+        urls_to_attempt.append(url)
 
-        if response:
-            if response.status_code == 304 and cached_data and cached_data.get('content'):
-                logging.info(f"URL: {url} 内容未更新 (304 Not Modified)，从缓存读取。")
-                return base64.b64decode(cached_data['content']).decode('utf-8', errors='ignore')
-            else:
-                content = response.text
-                new_cached_data = {
-                    "content": base64.b64encode(content.encode('utf-8')).decode('ascii'),
-                    "timestamp": datetime.datetime.now().isoformat()
-                }
-                if 'etag' in response.headers:
-                    new_cached_data['etag'] = response.headers['etag']
-                if 'last-modified' in response.headers:
-                    new_cached_data['last-modified'] = response.headers['last-modified']
+    async with httpx.AsyncClient(timeout=10, http2=True, follow_redirects=True) as client:
+        for current_attempt_url in urls_to_attempt:
+            response = await _fetch_url_with_retry(client, current_attempt_url, headers_for_request, url) # Pass original for logging
+            
+            if response:
+                if response.status_code == 304 and cached_data and cached_data.get('content'):
+                    logging.info(f"URL: {url} 内容未更新 (304 Not Modified)，从缓存读取。")
+                    return base64.b64decode(cached_data['content']).decode('utf-8', errors='ignore')
+                else:
+                    content = response.text
+                    new_cached_data = {
+                        "content": base64.b64encode(content.encode('utf-8')).decode('ascii'),
+                        "timestamp": datetime.datetime.now().isoformat()
+                    }
+                    if 'etag' in response.headers:
+                        new_cached_data['etag'] = response.headers['etag']
+                    if 'last-modified' in response.headers:
+                        new_cached_data['last-modified'] = response.headers['last-modified']
 
-                try:
-                    async with aiofiles.open(cache_entry_path, 'w', encoding='utf-8') as f:
-                        await f.write(json.dumps(new_cached_data, ensure_ascii=False))
-                    logging.info(f"URL: {url} 内容已更新，已写入缓存。")
-                except (IOError, json.JSONEncodeError) as e:
-                    logging.error(f"写入缓存文件 {cache_entry_path} 失败: {e}")
-                
-                return content
-        else:
-            logging.warning(f"无法获取 URL: {url} 的内容，跳过该 URL 的节点提取。")
-            return None
+                    try:
+                        async with aiofiles.open(cache_entry_path, 'w', encoding='utf-8') as f:
+                            await f.write(json.dumps(new_cached_data, ensure_ascii=False))
+                        logging.info(f"URL: {url} 内容已更新，已写入缓存。")
+                    except (IOError, json.JSONEncodeError) as e:
+                        logging.error(f"写入缓存文件 {cache_entry_path} 失败: {e}")
+                    
+                    return content # Return content if successful
+            # If response is None, this loop iteration failed, try the next URL in urls_to_attempt
+
+    logging.warning(f"无法获取 URL: {url} 的内容，跳过该 URL 的节点提取。")
+    return None
 
 async def extract_nodes_from_content(url: str, content: str) -> list[str]:
     """
@@ -552,7 +557,7 @@ async def extract_nodes_from_content(url: str, content: str) -> list[str]:
 
     return list(unique_nodes)
 
-async def process_url(url: str, all_nodes_writer: aiofiles.threadpool.text.AsyncTextIOWrapper, semaphore: asyncio.Semaphore):
+async def process_url(url: str, all_nodes_writer: aiofiles.threadpool.text.AsyncTextIOWrapper, semaphore: asyncio.Semaphore): # Corrected type hint
     """
     处理单个 URL，获取内容，提取节点并写入文件。
     
@@ -587,7 +592,7 @@ async def process_url(url: str, all_nodes_writer: aiofiles.threadpool.text.Async
             logging.info(f"URL: {url} 的节点已保存到 {url_output_file}")
         except IOError as e:
             logging.error(f"写入 URL 节点文件 {url_output_file} 失败: {e}")
-        
+            
         try:
             for node in unique_nodes:
                 await all_nodes_writer.write(f"{node}\n")
