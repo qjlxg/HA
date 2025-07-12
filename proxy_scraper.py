@@ -12,10 +12,9 @@ import hashlib
 from bs4 import BeautifulSoup
 import logging
 import typing
-import random # 导入 random 模块
+import random
 
 # 配置日志
-# 记录级别设置为 INFO，格式包含时间、级别、消息
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # 定义数据和缓存目录的路径
@@ -296,41 +295,43 @@ def extract_nodes_from_text(text: str, current_depth: int = 0, max_depth: int = 
                 processed_nodes.append(node)
     return processed_nodes
 
-async def process_url(url: str) -> tuple[str, int, list[str]]: # 返回节点列表
+async def process_url(url: str, semaphore: asyncio.Semaphore) -> tuple[str, int, list[str]]: # 返回节点列表
     """
     处理单个 URL，获取内容，提取节点，并将提取到的节点写入单独的 URL 文件。
     返回 URL、提取到的节点数量以及提取到的唯一节点列表。
+    使用 semaphore 限制并发。
     """
-    logging.info(f"开始处理 URL: {url}")
-    content = await get_url_content(url)
-    if not content:
-        logging.warning(f"无法获取 {url} 的内容，跳过该 URL 的节点提取。")
-        return url, 0, [] # 返回空列表
+    async with semaphore: # 获取信号量，限制并发
+        logging.info(f"开始处理 URL: {url}")
+        content = await get_url_content(url)
+        if not content:
+            logging.warning(f"无法获取 {url} 的内容，跳过该 URL 的节点提取。")
+            return url, 0, [] # 返回空列表
 
-    loop = asyncio.get_running_loop()
-    try:
-        # 在线程池中执行 CPU 密集型的 extract_nodes_from_text
-        logging.info(f"开始解析 {url} 的内容...")
-        nodes = await loop.run_in_executor(None, extract_nodes_from_text, content, 0, 5)
-        logging.info(f"完成解析 {url} 的内容。")
-    except Exception as e:
-        logging.error(f"解析 {url} 的内容时发生错误: {e}")
-        nodes = [] # 解析失败，节点列表为空
+        loop = asyncio.get_running_loop()
+        try:
+            # 在线程池中执行 CPU 密集型的 extract_nodes_from_text
+            logging.info(f"开始解析 {url} 的内容...")
+            nodes = await loop.run_in_executor(None, extract_nodes_from_text, content, 0, 5)
+            logging.info(f"完成解析 {url} 的内容。")
+        except Exception as e:
+            logging.error(f"解析 {url} 的内容时发生错误: {e}")
+            nodes = [] # 解析失败，节点列表为空
 
-    unique_nodes = list(set(nodes)) # 对提取到的节点进行简单去重
+        unique_nodes = list(set(nodes)) # 对提取到的节点进行简单去重
 
-    # 将每个 URL 获取到的内容一次性写入单独的文件
-    safe_url_name = re.sub(r'[^a-zA-Z0-9_\-.]', '_', url)
-    url_output_file = os.path.join(DATA_DIR, f"{safe_url_name}.txt")
-    
-    # 优化点：将所有节点拼接成一个字符串，然后一次性写入
-    nodes_content = "\n".join(unique_nodes) + "\n" if unique_nodes else ""
-    async with aiofiles.open(url_output_file, 'w', encoding='utf-8') as f:
-        await f.write(nodes_content) # 一次性写入
+        # 将每个 URL 获取到的内容一次性写入单独的文件
+        safe_url_name = re.sub(r'[^a-zA-Z0-9_\-.]', '_', url)
+        url_output_file = os.path.join(DATA_DIR, f"{safe_url_name}.txt")
+        
+        # 优化点：将所有节点拼接成一个字符串，然后一次性写入
+        nodes_content = "\n".join(unique_nodes) + "\n" if unique_nodes else ""
+        async with aiofiles.open(url_output_file, 'w', encoding='utf-8') as f:
+            await f.write(nodes_content) # 一次性写入
 
-    logging.info(f"URL: {url} 的节点已保存到 {url_output_file}")
-    logging.info(f"URL: {url} 成功提取到 {len(unique_nodes)} 个节点。")
-    return url, len(unique_nodes), unique_nodes # 返回节点列表
+        logging.info(f"URL: {url} 的节点已保存到 {url_output_file}")
+        logging.info(f"URL: {url} 成功提取到 {len(unique_nodes)} 个节点。")
+        return url, len(unique_nodes), unique_nodes # 返回节点列表
 
 async def main():
     """主函数，读取 sources.list 并并行处理 URL。"""
@@ -349,8 +350,12 @@ async def main():
     node_counts = defaultdict(int) # 用于存储每个 URL 提取到的节点数量
     all_extracted_nodes = [] # 用于收集所有 URL 提取到的节点
 
-    # 为每个 URL 创建一个异步任务
-    tasks = [process_url(url) for url in urls]
+    # 定义并发限制，例如，同时处理 15 个 URL
+    # 您可以根据您的网络带宽和 CPU 性能调整这个数字
+    semaphore = asyncio.Semaphore(15) 
+
+    # 为每个 URL 创建一个异步任务，并传入信号量
+    tasks = [process_url(url, semaphore) for url in urls]
     # 并行执行所有任务
     results = await asyncio.gather(*tasks)
 
