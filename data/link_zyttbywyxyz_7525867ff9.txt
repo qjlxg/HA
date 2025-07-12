@@ -1,2 +1,0 @@
-vless://39d164af-a672-4ef9-8764-09cbaf30cb96@vljp.zyttbywy.xyz:443?network=ws&remarks=JP&security=tls&sni=vljp.zyttbywy.xyz
-vless://5bc7038e-c2bd-4c96-81d5-db76e3007fdc@vless.zyttbywy.xyz:443?network=ws&remarks=US&security=tls&sni=vless.zyttbywy.xyz
