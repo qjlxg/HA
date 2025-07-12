@@ -98,7 +98,7 @@ def decode_content(content: str) -> str:
     except Exception:
         return content
 
-def extract_nodes_from_text(text: str, current_depth: int = 0, max_depth: int = 5) -> list[str]:
+def extract_nodes_from_text(text: str, current_depth: int = 0, max_depth: int = 10) -> list[str]: # 增加 max_depth
     """
     从文本中提取各种格式的节点。
     支持明文节点、YAML、JSON 等多层解析。
@@ -196,15 +196,59 @@ def extract_nodes_from_text(text: str, current_depth: int = 0, max_depth: int = 
                 if re.search(pattern, decoded, re.IGNORECASE):
                     nodes.append(decoded)
                     break
-            # 如果解码后是 JSON 或 YAML, 继续解析 (增加深度)
+            # 如果解码后是 JSON 或 YAML, 直接处理而非递归调用 extract_nodes_from_text
             try:
-                json.loads(decoded)
-                nodes.extend(extract_nodes_from_text(decoded, current_depth + 1, max_depth))
+                data = json.loads(decoded)
+                if isinstance(data, list):
+                    for item in data:
+                        if isinstance(item, str):
+                            nodes.append(item)
+                        elif isinstance(item, dict):
+                            if 'url' in item and isinstance(item['url'], str):
+                                nodes.append(item['url'])
+                            elif 'add' in item and 'port' in item:
+                                nodes.append(json.dumps(item))
+                elif isinstance(data, dict):
+                    for key, value in data.items():
+                        if isinstance(value, list):
+                            for item in value:
+                                if isinstance(item, str):
+                                    nodes.append(item)
+                                elif isinstance(item, dict):
+                                    if 'url' in item and isinstance(item['url'], str):
+                                        nodes.append(item['url'])
+                                    elif 'add' in item and 'port' in item:
+                                        nodes.append(json.dumps(item))
+                        elif isinstance(value, str):
+                            nodes.append(value)
             except json.JSONDecodeError:
                 pass
             try:
-                yaml.safe_load(decoded)
-                nodes.extend(extract_nodes_from_text(decoded, current_depth + 1, max_depth))
+                data = yaml.safe_load(decoded)
+                if isinstance(data, dict):
+                    if 'proxies' in data and isinstance(data['proxies'], list):
+                        for proxy in data['proxies']:
+                            if isinstance(proxy, str):
+                                nodes.append(proxy)
+                            elif isinstance(proxy, dict):
+                                if 'type' in proxy:
+                                    if proxy['type'] == 'vmess' and 'uuid' in proxy:
+                                        nodes.append(f"vmess://{base64.b64encode(json.dumps(proxy).encode()).decode()}")
+                                    elif proxy['type'] == 'trojan' and 'password' in proxy:
+                                        nodes.append(f"trojan://{proxy.get('password')}@{proxy.get('server')}:{proxy.get('port')}")
+                                    elif proxy['type'] == 'ss' and 'password' in proxy:
+                                        method_pass = f"{proxy.get('cipher')}:{proxy.get('password')}"
+                                        nodes.append(f"ss://{base64.urlsafe_b64encode(method_pass.encode()).decode().rstrip('=')}@{proxy.get('server')}:{proxy.get('port')}")
+                                    elif proxy['type'] == 'vless' and 'uuid' in proxy:
+                                        nodes.append(f"vless://{proxy['uuid']}@{proxy['server']}:{proxy['port']}")
+                                    elif proxy['type'] == 'hysteria2':
+                                        nodes.append(f"hysteria2://{proxy['password']}@{proxy['server']}:{proxy['port']}")
+                                    else:
+                                        nodes.append(str(proxy))
+                    elif 'profiles' in data and isinstance(data['profiles'], dict):
+                        for profile_name, profile_content in data['profiles'].items():
+                            if isinstance(profile_content, str):
+                                nodes.append(profile_content)
             except yaml.YAMLError:
                 pass
 
