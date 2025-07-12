@@ -629,7 +629,7 @@ async def main():
         async with aiofiles.open(NODE_COUNT_CSV, 'w', encoding='utf-8', newline='') as f:
             await f.write("URL,NodeCount\n")
             for url, count in node_counts.items():
-                escaped_url = f'"{url.replace("\"", "\"\"")}"'
+                escaped_url = f'"{url.replace('"', '""')}"'
                 await f.write(f"{escaped_url},{count}\n")
     except IOError as e:
         logging.error(f"写入节点计数 CSV 文件 {NODE_COUNT_CSV} 失败: {e}")
