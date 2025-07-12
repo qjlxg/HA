@@ -6,207 +6,344 @@ import aiofiles
 import json
 import base64
 import collections
-import socket # 用于同步 DNS 解析
-import logging # 导入 logging 模块
+import logging
 
 # 配置日志
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-# 定义数据目录和文件路径
 DATA_DIR = "data"
 ALL_NODES_FILE = os.path.join(DATA_DIR, "all.txt")
 DEDUP_NODES_FILE = os.path.join(DATA_DIR, "deduplicated_nodes.txt")
 GEOLITE_DB_PATH = os.path.join(DATA_DIR, "GeoLite2-Country.mmdb")
 
-# 确保数据目录存在，如果不存在则创建
+# 确保数据目录存在
 os.makedirs(DATA_DIR, exist_ok=True)
 
-# 定义需要解析 IP 的协议及其正则表达式（通常是那些包含 IP/域名 的协议）
+# 定义需要解析 IP 的协议（通常是那些包含 IP/域名 的协议）
 IP_EXTRACT_PATTERNS = {
-    "vmess": r"\"add\":\"([^\"]+)\"|\"addr\":\"([^\"]+)\"", # 用于基于 JSON 的 VMess
-    "vless": r"vless:\/\/([a-zA-Z0-9\-]+)@([^\:]+)", # 捕获 UUID 和域名/IP
-    "trojan": r"trojan:\/\/.*@([^\:]+)",
-    "ss": r"ss:\/\/.*@([^\:]+)",
-    "ssr": r"ssr:\/\/.*@([^\:]+)",
-    "hysteria2": r"hysteria2:\/\/.*@([^\:]+)",
+    # 捕获 Vmess JSON 中的 "add" 或 "addr" 字段 (或 host, sni)
+    "vmess": r"(?:\"add\"|\"addr\"|\"host\"|\"sni\")\s*:\s*\"([^\"]+)\"",
+    # 捕获 Vless URL 中的 domain/ip
+    "vless": r"vless:\/\/[a-zA-Z0-9\-]+@([^:]+)",
+    # 捕获 Trojan URL 中的 domain/ip
+    "trojan": r"trojan:\/\/.*@([^:]+)",
+    # 捕获 SS URL 中的 domain/ip (假设是 method:password@host:port 格式)
+    "ss": r"ss:\/\/([a-zA-Z0-9+/=_-]+)@([^:]+)",
+    # 捕获 SSR URL 中的 domain/ip
+    "ssr": r"ssr:\/\/([a-zA-Z0-9+/=_-]+)@([^:]+)",
+    # 捕获 Hysteria2 URL 中的 domain/ip
+    "hysteria2": r"hysteria2:\/\/.*@([^:]+)",
 }
 
-def extract_host_from_node(node: str) -> str | None:
-    """
-    从节点字符串中提取主机名或 IP 地址。
-    支持 VMess 的 JSON 解码和各种协议的正则匹配。
-    """
-    if node.startswith("vmess://"):
+def is_valid_ip(ip_str: str) -> bool:
+    """Checks if the string is a valid IPv4 or IPv6 address."""
+    # IPv4 regex
+    ipv4_pattern = re.compile(r"^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$")
+    # Simplified IPv6 regex (more robust validation would be complex without ipaddress module)
+    # This is a basic check to distinguish from UUIDs and common invalid formats
+    ipv6_pattern = re.compile(
+        r"^([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$|^([0-9a-fA-F]{1,4}:){1,7}:|"
+        r"^:((:[0-9a-fA-F]{1,4}){1,7}|:)$|^[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6}|:)$|"
+        r"^(?:[0-9a-fA-F]{1,4}:){2}((:[0-9a-fA-F]{1,4}){1,5}|:)$|"
+        r"^(?:[0-9a-fA-F]{1,4}:){3}((:[0-9a-fA-F]{1,4}){1,4}|:)$|"
+        r"^(?:[0-9a-fA-F]{1,4}:){4}((:[0-9a-fA-F]{1,4}){1,3}|:)$|"
+        r"^(?:[0-9a-fA-F]{1,4}:){5}((:[0-9a-fA-F]{1,4}){1,2}|:)$|"
+        r"^(?:[0-9a-fA-F]{1,4}:){6}:[0-9a-fA-F]{1,4}$"
+    )
+
+    return bool(ipv4_pattern.match(ip_str) or ipv6_pattern.match(ip_str))
+
+def is_valid_domain(domain_str: str) -> bool:
+    """Checks if the string is a plausible domain name."""
+    # A simple regex for domain name (not exhaustive, but good enough to filter UUIDs)
+    # Allows letters, numbers, hyphens, and dots. Must not start/end with hyphen.
+    # Must have at least one dot and a TLD of 2-63 characters.
+    domain_pattern = re.compile(
+        r"^(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,63}$"
+    )
+    return bool(domain_pattern.match(domain_str))
+
+def is_valid_host(host_str: str) -> bool:
+    """Checks if the string is a valid IP address or a plausible domain name."""
+    return is_valid_ip(host_str) or is_valid_domain(host_str)
+
+
+def decode_base64_safe(data: str) -> str:
+    """尝试进行URL安全和标准base64解码，并处理填充"""
+    data = data.strip().replace('<br />', '') # 移除 HTML <br /> 标签
+    # 确保是 base64 字符集
+    if not re.fullmatch(r'[A-Za-z0-9+/=_]+', data):
+        return "" # 包含非base64字符，直接返回空
+
+    for _ in range(4): # 尝试不同填充
         try:
-            # VMess 节点需要 base64 解码后解析 JSON
-            # 移除 'vmess://' 前缀，并进行 base64 解码
-            decoded = base64.b64decode(node[len("vmess://"):].encode()).decode('utf-8')
-            data = json.loads(decoded)
-            return data.get('add') or data.get('addr') # 优先 'add' 字段，其次 'addr'
+            return base64.urlsafe_b64decode(data).decode('utf-8', errors='ignore')
+        except Exception:
+            data += '='
+    return ""
+
+
+def extract_host_from_node(node: str) -> str | None:
+    """从节点字符串中提取主机名或IP地址"""
+    node = node.strip()
+
+    # 1. 过滤掉明显不是节点的行（如注释、不完整的名称）
+    if not node or node.startswith('#') or len(node) < 10: # 简单判断长度，避免处理过短的字符串
+        return None
+
+    extracted_host = None
+
+    # 2. 尝试处理 SS 协议 (ss://base64_encoded_info)
+    if node.startswith("ss://"):
+        try:
+            # SS 链接可能是 base64(method:password@host:port)
+            # 或者 base64(vmess_json) 用于 Vmess over SS
+            encoded_part = node[len("ss://"):].split('#')[0] # 移除 # 后面的名称
+            decoded_ss = decode_base64_safe(encoded_part)
+            
+            # 尝试解析为 JSON (vmess over ss)
+            try:
+                ss_json = json.loads(decoded_ss)
+                if isinstance(ss_json, dict):
+                    # 优先 'add', 然后 'addr', 最后 'host'/'sni'
+                    extracted_host = ss_json.get('add') or ss_json.get('addr') or ss_json.get('host') or ss_json.get('sni')
+            except json.JSONDecodeError:
+                pass # 不是 JSON，继续按普通 SS 处理
+
+            if not extracted_host: # 如果不是 JSON 或 JSON中没找到，尝试从 method:password@host:port 格式中提取 host
+                match = re.search(r"@([^:]+)", decoded_ss)
+                if match:
+                    extracted_host = match.group(1)
         except Exception as e:
-            logging.debug(f"VMess 节点解码或解析失败: {node} - {e}")
-            return None
-    
-    # 遍历预定义的协议模式进行匹配
-    for protocol, pattern in IP_EXTRACT_PATTERNS.items():
-        if node.startswith(f"{protocol}://"):
+            logging.debug(f"SS节点主机提取失败: {e}, 节点: {node[:50]}...")
+            pass # 继续尝试其他方式或返回 None
+
+    # 3. 尝试处理 Vmess 协议 (vmess://base64_encoded_json)
+    elif node.startswith("vmess://"):
+        try:
+            encoded_part = node[len("vmess://"):].split('#')[0]
+            decoded_vmess = decode_base64_safe(encoded_part)
+            vmess_json = json.loads(decoded_vmess)
+            if isinstance(vmess_json, dict):
+                # 优先 'add', 然后 'addr', 最后 'host'/'sni'
+                extracted_host = vmess_json.get('add') or vmess_json.get('addr') or vmess_json.get('host') or vmess_json.get('sni')
+        except Exception as e:
+            logging.debug(f"VMess节点主机提取失败: {e}, 节点: {node[:50]}...")
+            pass
+
+    # 4. 遍历通用正则表达式提取主机
+    if not extracted_host: # 只有当以上方法未提取到主机时才尝试通用模式
+        for protocol, pattern in IP_EXTRACT_PATTERNS.items():
             match = re.search(pattern, node)
             if match:
-                # 对于 vless, vmess, ss, ssr, trojan, hysteria2，捕获组可能不同
-                # 简单地取第一个非空的捕获组作为主机
+                # 对于 Vmess/Vless/Trojan/Hysteria2/SSR，通常第一个非空的捕获组是主机
                 for group in match.groups():
                     if group:
-                        return group
+                        extracted_host = group.strip()
+                        break # 找到第一个就停止
+            if extracted_host:
+                break # 找到主机就停止遍历
+
+    # 5. 最后尝试直接匹配 IP:Port 格式（作为兜底）
+    if not extracted_host:
+        ip_port_match = re.search(r'\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d{1,5}\b', node)
+        if ip_port_match:
+            extracted_host = ip_port_match.group(0).split(':')[0] # 只返回IP部分
+
+    # 6. 对提取到的主机进行最终校验
+    if extracted_host and is_valid_host(extracted_host):
+        return extracted_host
     
-    # 尝试匹配简单的 IP:Port 格式
-    ip_port_match = re.search(r'\b(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}):\d{1,5}\b', node)
-    if ip_port_match:
-        return ip_port_match.group(1) # 返回匹配到的 IP 地址
+    return None # 无法提取有效主机
 
-    logging.debug(f"未能从节点中提取主机: {node}")
-    return None # 如果无法提取主机，则返回 None
-
-async def resolve_ip_async(host: str) -> str:
-    """
-    异步将域名解析为 IP 地址，否则返回原主机名。
-    使用 loop.run_in_executor 在线程池中执行同步 DNS 解析。
-    """
-    # 检查是否已经是 IP 地址
-    if re.match(r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$", host):
-        return host
-
-    loop = asyncio.get_running_loop()
+def get_country_from_ip(ip_address: str, reader) -> str:
+    """使用 GeoLite2 数据库获取 IP 对应的国家名称，处理无效 IP"""
     try:
-        # 在默认的线程池执行器中运行同步的 socket.gethostbyname
-        ip = await loop.run_in_executor(None, socket.gethostbyname, host)
-        return ip
-    except socket.gaierror:
-        logging.debug(f"DNS 解析失败：{host}，返回原主机名。")
-        return host # 解析失败，返回原主机名
-    except Exception as e:
-        logging.error(f"解析主机名 {host} 时发生未知错误: {e}")
-        return host
-
-async def get_location_from_ip(ip_address: str, reader: geoip2.database.Reader) -> str:
-    """
-    根据 IP 地址获取国家信息。
-    GeoLite2-Country.mmdb 必须存在于 data 目录中。
-    reader 参数现在由调用方传入，避免重复创建 Reader 实例。
-    """
-    if not os.path.exists(GEOLITE_DB_PATH):
-        logging.error(f"错误：GeoLite2-Country.mmdb 文件不存在于 {GEOLITE_DB_PATH}。请下载并放置。")
-        return "未知地区"
-    
-    try:
-        # 使用传入的 reader 实例进行 IP 查询
+        # geoip2.database.Reader 内部会验证IP地址格式
         response = reader.country(ip_address)
-        # 优先使用中文国家名，如果没有则使用英文国家名，再没有则为“未知国家”
-        return response.country.names.get('zh-CN', response.country.name or "未知国家")
+        return response.country.names['zh-CN'] # 返回中文国家名
     except geoip2.errors.AddressNotFoundError:
-        logging.debug(f"IP 地址 {ip_address} 未找到地理信息。")
-        return "未知地区"
-    except Exception as e:
+        # IP 地址未在数据库中找到，可能是私有 IP 或非常用 IP
+        logging.debug(f"GeoIP 未找到地址: {ip_address}")
+        return "未知/私有IP"
+    except ValueError as e:
+        # IP 地址格式不正确
         logging.error(f"解析 IP 地址 {ip_address} 时发生错误: {e}")
-        return "未知地区"
-
-async def process_node(node: str, reader: geoip2.database.Reader) -> tuple[str, str]:
-    """
-    处理单个节点，提取 IP 并获取地理位置。
-    这个函数现在接收一个 GeoIP reader 实例。
-    """
-    host = extract_host_from_node(node)
-    if host:
-        ip = await resolve_ip_async(host) # <--- 调用异步解析函数
-        # 对于私有 IP 或无效 IP，直接标记为未知地区
-        if ip.startswith(('10.', '172.16.', '192.168.', '127.', '0.', '169.254.')):
-            return node, "私有地址"
-        location = await get_location_from_ip(ip, reader)
-        return node, location
-    logging.warning(f"无法从节点中提取主机，标记为未知地区: {node}")
-    return node, "未知地区" # 如果无法提取主机，则标记为未知地区
+        raise # 抛出，让上层处理决定是否抛弃节点
+    except Exception as e:
+        # 其他 GeoIP 错误
+        logging.error(f"GeoIP 查询失败 {ip_address}: {e}")
+        return "未知错误"
 
 def simplify_node(node: str) -> str:
-    """
-    简化节点字符串，去除多余信息（如名称），只保留协议和必要内容。
-    例如，将 vmess://...#名称 去除 #名称 部分。
-    """
-    if node.startswith("vmess://"):
-        try:
-            # VMess 节点可能包含 ps (名称) 字段，这里只保留编码部分
-            # 但为了统一，如果带了 # 符号，也直接去除
-            parts = node.split('#', 1)
-            return parts[0]
-        except Exception:
-            return node # 无法解析则返回原样
-    elif node.startswith("ss://") or node.startswith("ssr://") or \
-         node.startswith("trojan://") or node.startswith("vless://") or \
-         node.startswith("hysteria2://"):
-        # 对于这些协议，通常 # 后面的部分是名称，直接去除
-        parts = node.split('#', 1)
-        return parts[0]
-    return node # 对于不匹配的节点，返回原样
+    """简化节点字符串，移除不必要的参数，只保留协议和核心信息"""
+    # 移除 # 后的名称
+    node_without_name = node.split('#')[0]
 
-async def main():
+    if node_without_name.startswith("ss://"):
+        try:
+            # SS 协议：method:password@server:port
+            # 或 base64(json)
+            encoded_part = node_without_name[len("ss://"):]
+            decoded_ss = decode_base64_safe(encoded_part)
+
+            try: # 尝试作为 JSON 处理
+                ss_json = json.loads(decoded_ss)
+                # 假设我们只想保留 v, ps, add, port, id, net, type, tls, sni, host, path
+                # 其他字段如 aid, scy, alpn, fp 等可能需要清理
+                clean_json = {}
+                for key in ["v", "ps", "add", "port", "id", "net", "type", "tls", "sni", "host", "path"]:
+                    if key in ss_json:
+                        clean_json[key] = ss_json[key]
+                return f"ss://{base64.b64encode(json.dumps(clean_json, separators=(',', ':')).encode()).decode().rstrip('=')}"
+            except json.JSONDecodeError:
+                pass # 不是 JSON，按普通 SS 处理
+
+            # 尝试从 method:password@host:port 格式中提取
+            match = re.search(r"([^@]+)@([^:]+):(\d+)", decoded_ss)
+            if match:
+                method_pass = match.group(1)
+                host = match.group(2)
+                port = match.group(3)
+                # 重新编码以确保格式一致
+                return f"ss://{base64.b64encode(f'{method_pass}@{host}:{port}'.encode()).decode().rstrip('=')}"
+            else:
+                return node_without_name # 无法解析，保留原样
+        except Exception:
+            return node_without_name # 解码失败，保留原样
+
+    elif node_without_name.startswith("vmess://"):
+        try:
+            encoded_part = node_without_name[len("vmess://"):]
+            decoded_vmess = decode_base64_safe(encoded_part)
+            vmess_json = json.loads(decoded_vmess)
+            
+            # 假设我们只想保留 v, ps, add, port, id, net, type, tls, sni, host, path
+            clean_json = {}
+            for key in ["v", "ps", "add", "port", "id", "net", "type", "tls", "sni", "host", "path"]:
+                if key in vmess_json:
+                    clean_json[key] = vmess_json[key]
+            return f"vmess://{base64.b64encode(json.dumps(clean_json, separators=(',', ':')).encode()).decode()}"
+        except Exception:
+            return node_without_name # 解码或解析失败，保留原样
+
+    elif node_without_name.startswith("trojan://"):
+        # 移除 # 后的参数和名称
+        # trojan://password@server:port?params#name
+        match = re.match(r"trojan:\/\/([^@]+)@([^:]+):(\d+)(.*)", node_without_name)
+        if match:
+            password = match.group(1)
+            server = match.group(2)
+            port = match.group(3)
+            # 仅保留核心信息
+            return f"trojan://{password}@{server}:{port}"
+        return node_without_name # 无法解析，保留原样
+    
+    elif node_without_name.startswith("vless://"):
+        # vless://uuid@server:port?params#name
+        match = re.match(r"vless:\/\/([a-zA-Z0-9\-]+)@([^:]+):(\d+)(.*)", node_without_name)
+        if match:
+            uuid = match.group(1)
+            server = match.group(2)
+            port = match.group(3)
+            # 仅保留核心信息
+            return f"vless://{uuid}@{server}:{port}"
+        return node_without_name # 无法解析，保留原样
+
+    elif node_without_name.startswith("hysteria2://"):
+        # hysteria2://password@server:port?params#name
+        match = re.match(r"hysteria2:\/\/([^@]+)@([^:]+):(\d+)(.*)", node_without_name)
+        if match:
+            password = match.group(1)
+            server = match.group(2)
+            port = match.group(3)
+            # 仅保留核心信息
+            return f"hysteria2://{password}@{server}:{port}"
+        return node_without_name # 无法解析，保留原样
+    
+    elif node_without_name.startswith("ssr://"):
+        try:
+            # SSR 协议：base64(server:port:protocol:method:obfs:password_base64/?obfsparam_base64&protoparam_base64#remarks_base64)
+            # 我们只简化，不彻底去除所有参数，只确保是标准的 base64 编码
+            encoded_part = node_without_name[len("ssr://"):]
+            decoded_ssr = decode_base64_safe(encoded_part) # 尝试解码但不进一步解析内部结构
+            if decoded_ssr: # 如果成功解码，重新编码回去，确保格式一致
+                return f"ssr://{base64.urlsafe_b64encode(decoded_ssr.encode()).decode().rstrip('=')}"
+            else:
+                return node_without_name
+        except Exception:
+            return node_without_name
+
+    return node_without_name
+
+async def process_and_deduplicate_nodes():
     """
-    主函数，读取 all.txt 中的节点，进行去重、解析 IP、获取地理位置，
-    统一命名，并保存到 deduplicated_nodes.txt。
+    读取 all.txt 中的所有节点，去重，进行 GeoIP 查询并重命名，
+    最后将处理后的节点写入 deduplicated_nodes.txt。
     """
     if not os.path.exists(ALL_NODES_FILE):
-        logging.error(f"错误：{ALL_NODES_FILE} 文件不存在。请先运行 proxy_scraper.py 生成节点列表。")
+        logging.error(f"错误：{ALL_NODES_FILE} 文件不存在。请先运行 proxy_scraper.py。")
         return
-    
+
     if not os.path.exists(GEOLITE_DB_PATH):
-        logging.error(f"错误：GeoLite2-Country.mmdb 文件不存在于 {GEOLITE_DB_PATH}。请下载并放置。")
-        logging.info("下载链接：https://dev.maxmind.com/geoip/geolite2-free-geolocation-data?lang=en (需要注册)")
+        logging.error(f"错误：无法找到 GeoLite2-Country.mmdb 文件于 {GEOLITE_DB_PATH}。请确保已下载并放置。")
+        logging.info("下载地址：https://dev.maxmind.com/geoip/downloads/geo2/country/?lang=zh-Hans")
+        logging.info("请下载 GeoLite2-Country.mmdb 并将其放置在 'data' 文件夹中。")
         return
 
-    # 读取所有节点
-    logging.info(f"正在从 {ALL_NODES_FILE} 读取所有节点...")
+    all_nodes = set()
     async with aiofiles.open(ALL_NODES_FILE, 'r', encoding='utf-8') as f:
-        # 读取每一行并去除首尾空白，过滤掉空行
-        all_nodes = [line.strip() for line in await f.readlines() if line.strip()]
-
-    # 对节点进行初步简化（去除名称等），方便后续去重
-    simplified_nodes = [simplify_node(node) for node in all_nodes]
-    # 使用 collections.OrderedDict.fromkeys 保持原始顺序并去重
-    unique_simplified_nodes = list(collections.OrderedDict.fromkeys(simplified_nodes))
+        async for line in f:
+            all_nodes.add(line.strip())
 
     logging.info(f"原始节点数量: {len(all_nodes)}")
-    logging.info(f"去重后（简化后）节点数量: {len(unique_simplified_nodes)}")
 
-    processed_nodes_with_location = []
-    reader = None # 初始化 GeoIP reader
+    simplified_to_original = {} # 简化后的节点: 原始节点
+    for node in all_nodes:
+        simplified_node = simplify_node(node)
+        if simplified_node:
+            simplified_to_original[simplified_node] = node
+    
+    logging.info(f"去重后（简化后）节点数量: {len(simplified_to_original)}")
+
+    processed_nodes_with_location = [] # (original_node, location, protocol)
 
     try:
-        # 在 try 块中创建 GeoIP Reader 实例，确保在 finally 块中关闭
         reader = geoip2.database.Reader(GEOLITE_DB_PATH)
-        
-        # 创建异步任务列表，每个任务处理一个独特的简化节点
-        tasks = [process_node(node, reader) for node in unique_simplified_nodes]
-        # 并行执行所有任务，获取节点及其地理位置
-        results = await asyncio.gather(*tasks)
+        for simplified_node, original_node in simplified_to_original.items():
+            host = extract_host_from_node(original_node) # 从原始节点提取主机
 
-        # 收集处理结果，包含原始节点（去重后）、地理位置和协议
-        for node, location in results:
-            # 尝试从节点 URL 中提取协议名称
-            protocol_match = re.match(r"(vmess|vless|trojan|ss|ssr|hysteria2)://", node)
-            protocol = protocol_match.group(1) if protocol_match else "unknown"
-            processed_nodes_with_location.append((node, location, protocol))
+            if not host:
+                logging.warning(f"无法从节点中提取有效主机，已抛弃: {original_node[:80]}...")
+                continue # 无法提取有效主机，直接跳过此节点
+
+            protocol_match = re.match(r"^([a-zA-Z0-9]+):\/\/", original_node)
+            protocol = protocol_match.group(1) if protocol_match else "未知协议"
+
+            location = "未知地区" # 默认值
+
+            try:
+                # 尝试获取国家信息
+                location = get_country_from_ip(host, reader)
+            except ValueError:
+                logging.error(f"解析 IP 地址 {host} 时发生错误，已抛弃节点: '{original_node[:80]}...'")
+                continue # IP 地址格式不正确，直接跳过此节点
+            except Exception as e:
+                logging.warning(f"GeoIP 查询失败，标记为未知地区: {e}, 主机: {host}")
+                # 如果是其他 GeoIP 错误，保留为未知地区，但不抛弃
+            
+            processed_nodes_with_location.append((original_node, location, protocol))
 
         # 按 location 和 protocol 分组，并按序号命名
         named_nodes = []
-        # 使用 defaultdict 方便按 (location, protocol) 组合分组节点
-        node_groups = collections.defaultdict(list) # 格式: {(location, protocol): [node1, node2, ...]}
+        node_groups = collections.defaultdict(list) # {(location, protocol): [node1, node2, ...]}
         for node, location, protocol in processed_nodes_with_location:
             node_groups[(location, protocol)].append(node)
         
-        # 遍历每个分组，为其中的节点分配顺序名称
         for (location, protocol), nodes_list in node_groups.items():
             for i, node in enumerate(nodes_list):
-                # 构建新的节点名称，格式为：地区_协议_序号
                 new_name = f"{location}_{protocol}_{i+1}"
-                # 将节点统一改名，并只保留协议的必须内容，然后追加新名称
-                # 假设 simplify_node 已经处理了大部分冗余，这里只需追加新名称
+                # 确保节点链接是原始链接，并添加新名称
                 named_node = f"{node}#{new_name}"
                 named_nodes.append(named_node)
 
@@ -214,22 +351,18 @@ async def main():
         logging.error(f"错误：无法找到 GeoLite2-Country.mmdb 文件于 {GEOLITE_DB_PATH}。请确保已下载并放置。")
         return
     except Exception as e:
-        logging.exception(f"处理节点时发生错误: {e}") # 记录详细错误堆栈信息
+        logging.error(f"处理节点时发生错误: {e}")
         return
     finally:
-        # 确保在任何情况下 GeoIP reader 都能被关闭，释放资源
-        if reader:
+        if 'reader' in locals() and reader:
             reader.close()
-            logging.info("GeoIP 数据库连接已关闭。")
 
-    # 保存去重并命名后的节点到文件
-    logging.info(f"正在保存去重并命名后的节点到 {DEDUP_NODES_FILE}...")
+    # 将最终的去重并命名后的节点写入文件
     async with aiofiles.open(DEDUP_NODES_FILE, 'w', encoding='utf-8') as f:
         for node in named_nodes:
             await f.write(f"{node}\n")
 
-    logging.info(f"去重并命名后的节点已成功保存到 {DEDUP_NODES_FILE}，总计 {len(named_nodes)} 个。")
+    logging.info(f"处理完成，去重并命名后的节点已写入 {DEDUP_NODES_FILE}，共 {len(named_nodes)} 个。")
 
-if __name__ == '__main__':
-    # 运行主异步函数
-    asyncio.run(main())
+if __name__ == "__main__":
+    asyncio.run(process_and_deduplicate_nodes())
