@@ -106,14 +106,21 @@ async def save_cache(cache_file: str, cache_data: Dict[str, Dict]):
 
 # --- 辅助函数 ---
 async def read_sources(sources_file: str) -> List[str]:
-    """异步读取源 URL 列表。"""
+    """异步读取源 URL 列表，并确保每个 URL 都有协议头。"""
     if not os.path.exists(sources_file):
         logger.error(f"源文件未找到: {sources_file}")
         return []
+    urls = []
     try:
         async with aiofiles.open(sources_file, mode='r', encoding='utf-8') as f:
-            content = await f.read()
-            urls = [line.strip() for line in content.splitlines() if line.strip() and not line.strip().startswith('#')]
+            async for line in f: # 使用 async for 逐行读取
+                stripped_line = line.strip()
+                if stripped_line and not stripped_line.startswith('#'):
+                    # 检查是否包含协议头
+                    if not re.match(r'^[a-zA-Z]+://', stripped_line):
+                        logger.warning(f"URL '{stripped_line}' 缺少协议头，默认添加 'https://'。")
+                        stripped_line = 'https://' + stripped_line
+                    urls.append(stripped_line)
             return urls
     except Exception as e:
         logger.error(f"读取源文件失败 {sources_file}: {e}")
@@ -413,15 +420,14 @@ async def main():
     processed_results_queue = asyncio.Queue()
 
     # 初始化 httpx 客户端
-    # 优先使用 transports 参数来配置代理，以确保兼容性
+    # 使用 httpx.Client() 的 proxies 参数，它接受一个字典
+    # 这样可以兼容不同版本的 httpx
     client_args = {
         'timeout': current_config.timeout,
         'http2': True
     }
     if current_config.proxy_crawl:
-        # 创建 ProxyTransport 实例，并将其传递给 transports 参数
-        # ProxyTransport 接受单个代理URL，并处理所有方案
-        client_args['transport'] = httpx.ProxyTransport(current_config.proxy_crawl)
+        client_args['proxies'] = {'all://': current_config.proxy_crawl}
 
     async with httpx.AsyncClient(**client_args) as client:
         resolver = aiodns.DNSResolver(loop=asyncio.get_event_loop())
