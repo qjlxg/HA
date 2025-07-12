@@ -16,7 +16,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.11' # 明确指定 Python 版本
+        python-version: '3.11'
 
     - name: Install dependencies
       run: |
@@ -26,10 +26,10 @@ jobs:
 
     - name: Run Proxy Scraper Script
       run: |
-        python -m project.proxy_scraper  # 以模块方式运行
+        python proxy_scraper.py  # 直接运行脚本
       continue-on-error: false
       env:
-        PYTHONPATH: ${{ github.workspace }}  # 将项目根目录添加到 PYTHONPATH
+        PYTHONPATH: ${{ github.workspace }}  # 确保项目根目录在 PYTHONPATH 中
 
     - name: Commit and Push changes
       run: |
@@ -47,5 +47,4 @@ jobs:
       uses: actions/github-script@v7
       with:
         script: |
-          const { context } = require('@actions/github');
-          console.log(`工作流失败: ${context.job}。请检查日志。`);
+          console.log(`工作流失败: ${process.env.GITHUB_JOB}。请检查日志: ${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`);
