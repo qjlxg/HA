@@ -12,6 +12,7 @@ import hashlib
 from bs4 import BeautifulSoup
 import logging
 import typing
+import random # 导入 random 模块
 
 # 配置日志
 # 记录级别设置为 INFO，格式包含时间、级别、消息
@@ -38,6 +39,30 @@ NODE_PATTERNS = {
     "vless": r"vless:\/\/.*",
 }
 
+# 定义多种 User-Agent 字符串
+USER_AGENTS = [
+    # 桌面端 (Windows, macOS, Linux)
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:127.0) Gecko/20100101 Firefox/127.0",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:127.0) Gecko/20100101 Firefox/127.0",
+    
+    # 手机端 (Android, iPhone)
+    "Mozilla/5.0 (Linux; Android 14; Pixel 8 Pro) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Mobile Safari/537.36",
+    "Mozilla/5.0 (iPhone; CPU iPhone OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5.1 Mobile/15E148 Safari/604.1",
+    "Mozilla/5.0 (Linux; Android 12; SM-G998B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Mobile Safari/537.36",
+
+    # iPad
+    "Mozilla/5.0 (iPad; CPU OS 17_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/126.0.6478.114 Mobile/15E148 Safari/604.1", # iPad with Chrome user agent
+
+    # 鸿蒙 (HarmonyOS)
+    "Mozilla/5.0 (Linux; Android 10; HUAWEIMatePad) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36 (HarmonyOS)",
+    "Mozilla/5.0 (Linux; HarmonyOS; NOH-AN00) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.78 Mobile Safari/537.36",
+]
+
+
 async def get_url_content(url: str, use_cache: bool = True) -> str | None:
     """
     安全地异步获取 URL 内容，优先尝试 HTTP，失败后尝试 HTTPS。
@@ -59,9 +84,12 @@ async def get_url_content(url: str, use_cache: bool = True) -> str | None:
     full_url_http = f"http://{url}"
     full_url_https = f"https://{url}"
 
+    # 随机选择一个 User-Agent
+    random_user_agent = random.choice(USER_AGENTS)
+
     # 定义请求头，模拟浏览器行为
     headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+        "User-Agent": random_user_agent, # 使用随机选择的 User-Agent
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
         "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
     }
@@ -70,7 +98,7 @@ async def get_url_content(url: str, use_cache: bool = True) -> str | None:
     async with httpx.AsyncClient(verify=False, timeout=15) as client:
         for current_url in [full_url_http, full_url_https]: # 尝试 HTTP 和 HTTPS
             try:
-                logging.info(f"尝试从 {current_url.split('://')[0].upper()} 获取内容: {current_url}")
+                logging.info(f"尝试从 {current_url.split('://')[0].upper()} 获取内容: {current_url} (User-Agent: {random_user_agent[:30]}...)") # 记录 User-Agent 部分信息
                 response = await client.get(current_url, headers=headers)
                 response.raise_for_status() # 检查 HTTP 状态码，非 2xx 则抛出异常
                 content = response.text
@@ -232,7 +260,7 @@ def extract_nodes_from_text(text: str, current_depth: int = 0, max_depth: int = 
             try:
                 decoded_vmess = base64.b64decode(node[len("vmess://"):].encode()).decode('utf-8')
                 vmess_json = json.loads(decoded_vmess)
-                name = vmess_json.get('ps', 'vmess_node') # 获取 'ps' 字段作为名称
+                name = vmess_json.get('ps', 'vmess_node') # 获取 'ps'字段作为名称
                 processed_nodes.append(f"{node}#{name[:5]}") # 将名称附加到节点URL后
             except Exception:
                 processed_nodes.append(node) # 无法解码则保留原样
