@@ -214,7 +214,7 @@ def extract_nodes_from_text(text: str, current_depth: int = 0, max_depth: int = 
         if len(match) > 10 and len(match) % 4 == 0:
             decoded = decode_content(match)
             # 如果解码后发现节点协议，则加入，并递归解析解码内容
-            for protocol, pattern in NODE_PATTERNS.items(): # <-- 修正了这里的拼写错误
+            for protocol, pattern in NODE_PATTERNS.items():
                 if re.search(pattern, decoded, re.IGNORECASE):
                     nodes.append(decoded)
                     nodes.extend(extract_nodes_from_text(decoded, current_depth + 1, max_depth)) # 递归解析
@@ -279,8 +279,16 @@ async def process_url(url: str, all_nodes_writer: typing.TextIO) -> tuple[str, i
         logging.warning(f"无法获取 {url} 的内容，跳过该 URL 的节点提取。")
         return url, 0
 
-    # 初始调用 extract_nodes_from_text，深度为 0
-    nodes = extract_nodes_from_text(content, current_depth=0)
+    loop = asyncio.get_running_loop()
+    try:
+        # 在线程池中执行 CPU 密集型的 extract_nodes_from_text
+        logging.info(f"开始解析 {url} 的内容...")
+        nodes = await loop.run_in_executor(None, extract_nodes_from_text, content, 0, 5)
+        logging.info(f"完成解析 {url} 的内容。")
+    except Exception as e:
+        logging.error(f"解析 {url} 的内容时发生错误: {e}")
+        nodes = [] # 解析失败，节点列表为空
+
     unique_nodes = list(set(nodes)) # 对提取到的节点进行简单去重
 
     # 将每个 URL 获取到的内容单独保存到一个文件中
