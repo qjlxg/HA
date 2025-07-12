@@ -214,7 +214,7 @@ def extract_nodes_from_text(text: str, current_depth: int = 0, max_depth: int = 
         if len(match) > 10 and len(match) % 4 == 0:
             decoded = decode_content(match)
             # 如果解码后发现节点协议，则加入，并递归解析解码内容
-            for protocol, pattern in NODE_PATTERS.items():
+            for protocol, pattern in NODE_PATTERNS.items(): # <-- 修正了这里的拼写错误
                 if re.search(pattern, decoded, re.IGNORECASE):
                     nodes.append(decoded)
                     nodes.extend(extract_nodes_from_text(decoded, current_depth + 1, max_depth)) # 递归解析
