@@ -1,4 +1,4 @@
-name: Process and Deduplicate Nodes
+name: Nodes
 
 # 定义触发事件
 on:
@@ -37,7 +37,7 @@ jobs:
 
       # 运行 Python 脚本
       - name: Run node processing script
-        run: python process_and_deduplicate_nodes.py
+        run: python deduplication_module.py
 
       # 检查输出文件并提交更改
       - name: Commit processed nodes
