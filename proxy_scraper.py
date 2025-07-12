@@ -19,10 +19,7 @@ from datetime import datetime, timezone
 from typing import List, Dict, Tuple, Optional, Set
 from dataclasses import dataclass, field
 import aiofiles
-import geoip2.database
-import socket
-import aiodns
-from functools import lru_cache
+from .deduplicate import rename_and_deduplicate_by_geo
 
 # --- 日志配置 ---
 logging.basicConfig(
@@ -49,6 +46,7 @@ class CrawlerConfig:
     duplicate_nodes_file: str = field(default_factory=lambda: os.path.join("data", "duplicate_nodes.log"))
     node_details_file: str = field(default_factory=lambda: os.path.join("data", "node_details.log"))
     dns_cache_file: str = field(default_factory=lambda: os.path.join("data", "dns_cache.json"))
+    dns_failed_log: str = field(default_factory=lambda: os.path.join("data", "dns_failed.log"))
     geoip_cache_file: str = field(default_factory=lambda: os.path.join("data", "geoip_cache.json"))
     concurrent_requests_limit: int = 20
     request_timeout: float = 20.0
@@ -58,12 +56,12 @@ class CrawlerConfig:
     max_crawl_depth_per_site: int = 50
     proxies: Optional[Dict] = None
     user_agents: List[str] = field(default_factory=list)
-    node_test: Dict = field(default_factory=dict)
+    node_test: Dict = field(default_factory=lambda: {"enable": False, "concurrency": 10, "test_url": "http://www.google.com", "latency_threshold": 500})
     geoip: Dict = field(default_factory=dict)
 
     def __post_init__(self):
         os.makedirs(self.data_dir, exist_ok=True)
-        for file_attr in ['node_counts_file', 'cache_file', 'failed_urls_file', 'duplicate_nodes_file', 'node_details_file', 'dns_cache_file', 'geoip_cache_file']:
+        for file_attr in ['node_counts_file', 'cache_file', 'failed_urls_file', 'duplicate_nodes_file', 'node_details_file', 'dns_cache_file', 'dns_failed_log', 'geoip_cache_file']:
             file_path = getattr(self, file_attr)
             if not os.path.isabs(file_path) and not file_path.startswith(self.data_dir):
                 setattr(self, file_attr, os.path.join(self.data_dir, os.path.basename(file_path)))
@@ -79,7 +77,7 @@ class CrawlerConfig:
         self.geoip.setdefault('dns_timeout', 5.0)
         self.geoip.setdefault('dns_servers', ['8.8.8.8', '1.1.1.1', '8.8.4.4', '1.0.0.1'])
         self.geoip.setdefault('cache_size', 10000)
-        self.geoip.setdefault('strict_dedup', True)  # 新增：严格去重选项
+        self.geoip.setdefault('strict_dedup', True)
 
 # --- 节点协议正则表达式 ---
 NODE_PATTERNS = {
@@ -88,7 +86,8 @@ NODE_PATTERNS = {
     "trojan": re.compile(r"trojan://[a-zA-Z0-9\-\._~:/?#\[\]@!$&'()*+,;%=]+", re.IGNORECASE),
     "ss": re.compile(r"ss://[a-zA-Z0-9\-\._~:/?#\[\]@!$&'()*+,;%=]+", re.IGNORECASE),
     "ssr": re.compile(r"ssr://[a-zA-Z0-9\-\._~:/?#\[\]@!$&'()*+,;%=]+", re.IGNORECASE),
-    "vless": re.compile(r"vless://[a-zA-Z0-9\-\._~:/?#\[\]@!$&'()*+,;%=]+", re.IGNORECASE)
+    "vless": re.compile(r"vless://[a-zA-Z0-9\-\._~:/?#\[\]@!$&'()*+,;%=]+", re.IGNORECASE),
+    "tuic": re.compile(r"tuic://[a-zA-Z0-9\-\._~:/?#\[\]@!$&'()*+,;%=]+", re.IGNORECASE)
 }
 
 BASE64_REGEX = re.compile(r'[A-Za-z0-9+/=]{20,}', re.IGNORECASE)
@@ -147,44 +146,6 @@ async def save_cache(cache_file: str, cache_data: Dict) -> None:
     except Exception as e:
         logger.error(f"保存缓存失败 '{cache_file}': {e}。")
 
-async def load_dns_cache(config: CrawlerConfig) -> Dict[str, str]:
-    """加载 DNS 缓存"""
-    try:
-        async with aiofiles.open(config.dns_cache_file, 'r', encoding='utf-8') as f:
-            return json.loads(await f.read())
-    except FileNotFoundError:
-        return {}
-    except Exception as e:
-        logger.error(f"加载 DNS 缓存失败 '{config.dns_cache_file}': {e}")
-        return {}
-
-async def save_dns_cache(config: CrawlerConfig, cache: Dict[str, str]) -> None:
-    """保存 DNS 缓存"""
-    try:
-        async with aiofiles.open(config.dns_cache_file, 'w', encoding='utf-8') as f:
-            await f.write(json.dumps(cache, indent=2, ensure_ascii=False))
-    except Exception as e:
-        logger.error(f"保存 DNS 缓存失败 '{config.dns_cache_file}': {e}")
-
-async def load_geoip_cache(config: CrawlerConfig) -> Dict[str, str]:
-    """加载 GeoIP 缓存"""
-    try:
-        async with aiofiles.open(config.geoip_cache_file, 'r', encoding='utf-8') as f:
-            return json.loads(await f.read())
-    except FileNotFoundError:
-        return {}
-    except Exception as e:
-        logger.error(f"加载 GeoIP 缓存失败 '{config.geoip_cache_file}': {e}")
-        return {}
-
-async def save_geoip_cache(config: CrawlerConfig, cache: Dict[str, str]) -> None:
-    """保存 GeoIP 缓存"""
-    try:
-        async with aiofiles.open(config.geoip_cache_file, 'w', encoding='utf-8') as f:
-            await f.write(json.dumps(cache, indent=2, ensure_ascii=False))
-    except Exception as e:
-        logger.error(f"保存 GeoIP 缓存失败 '{config.geoip_cache_file}': {e}")
-
 async def log_failed_url(url: str, reason: str, config: CrawlerConfig) -> None:
     """异步记录失败的 URL 及其原因到文件"""
     timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
@@ -194,16 +155,6 @@ async def log_failed_url(url: str, reason: str, config: CrawlerConfig) -> None:
             await f.write(f"[{timestamp}] {url}: {reason}\n")
     except Exception as e:
         logger.error(f"记录失败 URL 失败 '{config.failed_urls_file}': {e}。")
-
-async def log_duplicate_node(node1: str, node2: str, unique_key: str, config: CrawlerConfig) -> None:
-    """异步记录重复节点到文件"""
-    timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
-    try:
-        os.makedirs(os.path.dirname(config.duplicate_nodes_file), exist_ok=True)
-        async with aiofiles.open(config.duplicate_nodes_file, mode='a', encoding='utf-8') as f:
-            await f.write(f"[{timestamp}] 重复节点: {node1[:50]}... 与 {node2[:50]}... (唯一键: {unique_key})\n")
-    except Exception as e:
-        logger.error(f"记录重复节点失败 '{config.duplicate_nodes_file}': {e}。")
 
 def decode_base64_recursive(data: str) -> Optional[str]:
     """尝试递归解码 Base64 字符串"""
@@ -237,62 +188,17 @@ def decode_base64_recursive(data: str) -> Optional[str]:
             break
     return current_decoded
 
-@lru_cache(maxsize=None)
-async def resolve_hostname_async(hostname: str, config: CrawlerConfig) -> Optional[str]:
-    """异步解析域名到 IP 地址，带缓存和多服务器重试"""
-    dns_cache = await load_dns_cache(config)
-    if hostname in dns_cache:
-        return dns_cache[hostname]
-    if re.match(r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$", hostname):
-        dns_cache[hostname] = hostname
-        await save_dns_cache(config, dns_cache)
-        return hostname
-    resolver = aiodns.DNSResolver(timeout=config.geoip['dns_timeout'], nameservers=config.geoip['dns_servers'])
-    for attempt in range(2):
-        try:
-            result = await resolver.query(hostname, 'A')
-            ip = result[0].host if result else None
-            if ip:
-                dns_cache[hostname] = ip
-                await save_dns_cache(config, dns_cache)
-            return ip
-        except aiodns.error.DNSError:
-            if attempt == 1:
-                try:
-                    ip = socket.gethostbyname(hostname)
-                    dns_cache[hostname] = ip
-                    await save_dns_cache(config, dns_cache)
-                    return ip
-                except socket.gaierror:
-                    logger.debug(f"同步 DNS 解析失败 {hostname}")
-                    return None
-        except Exception as e:
-            logger.debug(f"解析 {hostname} 时发生意外错误 (尝试 {attempt + 1}/2): {e}")
-            await asyncio.sleep(0.5)
-    return None
-
-@lru_cache(maxsize=None)
-async def get_country_code_from_ip(ip: str, config: CrawlerConfig) -> str:
-    """从 IP 地址获取国家代码，带缓存"""
-    geoip_cache = await load_geoip_cache(config)
-    if ip in geoip_cache:
-        return geoip_cache[ip]
+async def test_node_latency(node_url: str, config: CrawlerConfig) -> float:
+    """测试节点延迟"""
     try:
-        with geoip2.database.Reader(config.geoip['database_path']) as reader:
-            response = reader.country(ip)
-            country_code = response.country.iso_code or config.geoip['default_country']
-            geoip_cache[ip] = country_code
-            await save_geoip_cache(config, geoip_cache)
-            return country_code
-    except geoip2.errors.AddressNotFoundError:
-        geoip_cache[ip] = config.geoip['default_country']
-        await save_geoip_cache(config, geoip_cache)
-        return config.geoip['default_country']
+        async with httpx.AsyncClient(timeout=5.0, verify=False) as client:
+            start_time = asyncio.get_event_loop().time()
+            response = await client.get(config.node_test['test_url'], headers={"User-Agent": random.choice(config.user_agents)})
+            latency = (asyncio.get_event_loop().time() - start_time) * 1000  # ms
+            return latency if response.status_code == 200 else float('inf')
     except Exception as e:
-        logger.debug(f"查询 GeoIP 失败 {ip}: {e}")
-        geoip_cache[ip] = config.geoip['default_country']
-        await save_geoip_cache(config, geoip_cache)
-        return config.geoip['default_country']
+        logger.debug(f"节点 {node_url[:50]}... 延迟测试失败: {e}")
+        return float('inf')
 
 def parse_node_url_to_info(node_url: str, config: CrawlerConfig) -> Optional[Dict]:
     """解析节点 URL，提取关键信息，优化 path 处理"""
@@ -324,7 +230,7 @@ def parse_node_url_to_info(node_url: str, config: CrawlerConfig) -> Optional[Dic
                 node_info["port"] = path_port or int(vmess_obj.get("port")) if vmess_obj.get("port") else None
                 node_info["name"] = vmess_obj.get("ps", "")
                 node_info["id"] = vmess_obj.get("id", "").lower()
-        elif scheme in ["vless", "trojan", "ss", "ssr", "hysteria2"]:
+        elif scheme in ["vless", "trojan", "hysteria2", "tuic"]:
             netloc_parts = parsed.netloc.split('@', 1)
             if len(netloc_parts) == 2:
                 auth_info, addr_port_str = netloc_parts
@@ -344,56 +250,70 @@ def parse_node_url_to_info(node_url: str, config: CrawlerConfig) -> Optional[Dic
                 node_info["name"] = unquote(parsed.fragment)
             else:
                 node_info["name"] = node_info.get("server", "")
-            if scheme == "ss":
-                try:
-                    decoded_auth = base64.b64decode(auth_info + '==').decode('utf-8', errors='ignore')
-                    if ':' in decoded_auth:
-                        cipher, password = decoded_auth.split(':', 1)
-                        node_info["cipher"] = cipher
-                        node_info["password"] = password
-                    else:
-                        logger.debug(f"SS 认证信息格式错误: {node_url}")
-                        return None
-                except Exception as e:
-                    logger.debug(f"解码 SS 认证信息失败: {e} - {node_url}")
-                    return None
+            if scheme == "tuic":
+                node_info["uuid"] = auth_info
+                node_info["congestion_control"] = parse_qs(parsed.query).get("congestion_control", ["bbr"])[0]
+                node_info["udp_relay_mode"] = parse_qs(parsed.query).get("udp_relay_mode", ["native"])[0]
             elif scheme == "hysteria2":
                 node_info["auth_str"] = auth_info
-            elif scheme == "ssr":
-                try:
-                    decoded_ssr_content = decode_base64_recursive(parsed.netloc)
-                    if not decoded_ssr_content:
-                        logger.debug(f"SSR 节点 Base64 解码失败: {node_url}")
-                        return None
-                    parts = decoded_ssr_content.split(':')
-                    if len(parts) < 6:
-                        logger.debug(f"SSR 节点内部结构不完整: {node_url}")
-                        return None
-                    node_info["server"] = path_ip or parts[0].lower()
-                    node_info["port"] = path_port or (int(parts[1]) if parts[1].isdigit() else None)
-                    node_info["original_hostname"] = parts[0].lower()
-                    node_info["original_port"] = int(parts[1]) if parts[1].isdigit() else None
-                    node_info["protocol"] = parts[2]
-                    node_info["method"] = parts[3]
-                    node_info["obfs"] = parts[4]
-                    try:
-                        password_b64 = parts[5].split('/?')[0].split('/#')[0]
-                        node_info["password"] = base64.urlsafe_b64decode(password_b64 + '==').decode('utf-8', errors='ignore')
-                    except Exception as e:
-                        logger.debug(f"SSR 密码解码失败: {e} - {node_url}")
-                        return None
-                    if '/?' in decoded_ssr_content:
-                        query_str = decoded_ssr_content.split('/?', 1)[1].split('/#')[0]
-                        query_params = parse_qs(query_str)
-                        if 'obfsparam' in query_params and query_params['obfsparam']:
-                            node_info['obfsparam'] = base64.urlsafe_b64decode(query_params['obfsparam'][0] + '==').decode('utf-8', errors='ignore')
-                        if 'protoparam' in query_params and query_params['protoparam']:
-                            node_info['protoparam'] = base64.urlsafe_b64decode(query_params['protoparam'][0] + '==').decode('utf-8', errors='ignore')
-                except Exception as e:
-                    logger.debug(f"SSR 内部解析失败: {e} - {node_url}")
-                    return None
             elif scheme == "vless":
                 node_info["id"] = auth_info.lower()
+            elif scheme == "trojan":
+                node_info["password"] = auth_info
+        elif scheme == "ss":
+            try:
+                decoded_auth = base64.b64decode(parsed.netloc.split('@')[0] + '==').decode('utf-8', errors='ignore')
+                if ':' in decoded_auth:
+                    cipher, password = decoded_auth.split(':', 1)
+                    addr_port = parsed.netloc.split('@')[1] if '@' in parsed.netloc else parsed.netloc
+                    server, port_str = addr_port.rsplit(':', 1)
+                    node_info["server"] = path_ip or server.lower()
+                    node_info["port"] = path_port or (int(port_str) if port_str.isdigit() else None)
+                    node_info["cipher"] = cipher
+                    node_info["password"] = password
+                    node_info["original_hostname"] = server.lower()
+                    node_info["original_port"] = int(port_str) if port_str.isdigit() else None
+                    node_info["name"] = unquote(parsed.fragment) if parsed.fragment else node_info.get("server", "")
+                else:
+                    logger.debug(f"SS 认证信息格式错误: {node_url}")
+                    return None
+            except Exception as e:
+                logger.debug(f"解码 SS 认证信息失败: {e} - {node_url}")
+                return None
+        elif scheme == "ssr":
+            try:
+                decoded_ssr_content = decode_base64_recursive(parsed.netloc)
+                if not decoded_ssr_content:
+                    logger.debug(f"SSR 节点 Base64 解码失败: {node_url}")
+                    return None
+                parts = decoded_ssr_content.split(':')
+                if len(parts) < 6:
+                    logger.debug(f"SSR 节点内部结构不完整: {node_url}")
+                    return None
+                node_info["server"] = path_ip or parts[0].lower()
+                node_info["port"] = path_port or (int(parts[1]) if parts[1].isdigit() else None)
+                node_info["original_hostname"] = parts[0].lower()
+                node_info["original_port"] = int(parts[1]) if parts[1].isdigit() else None
+                node_info["protocol"] = parts[2]
+                node_info["method"] = parts[3]
+                node_info["obfs"] = parts[4]
+                try:
+                    password_b64 = parts[5].split('/?')[0].split('/#')[0]
+                    node_info["password"] = base64.urlsafe_b64decode(password_b64 + '==').decode('utf-8', errors='ignore')
+                except Exception as e:
+                    logger.debug(f"SSR 密码解码失败: {e} - {node_url}")
+                    return None
+                if '/?' in decoded_ssr_content:
+                    query_str = decoded_ssr_content.split('/?', 1)[1].split('/#')[0]
+                    query_params = parse_qs(query_str)
+                    if 'obfsparam' in query_params and query_params['obfsparam']:
+                        node_info['obfsparam'] = base64.urlsafe_b64decode(query_params['obfsparam'][0] + '==').decode('utf-8', errors='ignore')
+                    if 'protoparam' in query_params and query_params['protoparam']:
+                        node_info['protoparam'] = base64.urlsafe_b64decode(query_params['protoparam'][0] + '==').decode('utf-8', errors='ignore')
+                node_info["name"] = unquote(parsed.fragment) if parsed.fragment else node_info.get("server", "")
+            except Exception as e:
+                logger.debug(f"SSR 内部解析失败: {e} - {node_url}")
+                return None
         if parsed.query:
             query_params = parse_qs(parsed.query)
             for k, v in query_params.items():
@@ -445,6 +365,15 @@ def standardize_node_url(node_url: str) -> str:
                         return f"ssr://{normalized_b64.replace('\n', '').replace('\r', '')}" + (f"#{parsed.fragment}" if parsed.fragment else "")
             except Exception as e:
                 logger.debug(f"标准化 SSR URL 失败: {e}, url: {node_url}")
+        elif node_url.lower().startswith("tuic://"):
+            try:
+                query_params = parse_qs(parsed.query)
+                sorted_params = sorted([(k, v[0]) for k, v in query_params.items() if v], key=lambda x: x[0])
+                encoded_query = urlencode(sorted_params)
+                new_url = parsed._replace(query=encoded_query).geturl()
+                return new_url.replace('\n', '').replace('\r', '')
+            except Exception as e:
+                logger.debug(f"标准化 TUIC URL 失败: {e}, url: {node_url}")
         return parsed.geturl().replace('\n', '').replace('\r', '')
     except ValueError as e:
         logger.warning(f"标准化节点URL时遇到无效格式错误: {e} - URL: {node_url}")
@@ -479,6 +408,39 @@ def is_valid_hysteria2_node(node_link: str) -> bool:
         logger.debug(f"Hysteria2 链接格式不正确: {node_link}")
         return False
 
+def is_valid_tuic_node(node_link: str) -> bool:
+    """校验 TUIC 链接有效性"""
+    if not node_link.lower().startswith("tuic://"):
+        return False
+    try:
+        parsed = urlparse(node_link)
+        netloc = parsed.netloc
+        if '@' not in netloc:
+            logger.debug(f"TUIC 节点缺少认证信息: {node_link}")
+            return False
+        uuid, addr_port = netloc.split('@', 1)
+        if not uuid.strip():
+            logger.debug(f"TUIC 节点 UUID 为空: {node_link}")
+            return False
+        if ':' not in addr_port:
+            logger.debug(f"TUIC 节点缺少端口: {node_link}")
+            return False
+        server, port_str = addr_port.rsplit(':', 1)
+        if not server:
+            logger.debug(f"TUIC 节点服务器地址为空: {node_link}")
+            return False
+        if not port_str.isdigit() or not (1 <= int(port_str) <= 65535):
+            logger.debug(f"TUIC 节点端口无效: {node_link}")
+            return False
+        query_params = parse_qs(parsed.query)
+        if 'congestion_control' not in query_params:
+            logger.debug(f"TUIC 节点缺少 congestion_control 参数: {node_link}")
+            return False
+        return True
+    except ValueError:
+        logger.debug(f"TUIC 链接格式不正确: {node_link}")
+        return False
+
 def is_valid_node(node_url: str) -> bool:
     """检查节点 URL 的有效性"""
     if not isinstance(node_url, str) or len(node_url) < 10:
@@ -503,6 +465,8 @@ def is_valid_node(node_url: str) -> bool:
         return False
     if scheme == "hysteria2":
         return is_valid_hysteria2_node(node_url)
+    elif scheme == "tuic":
+        return is_valid_tuic_node(node_url)
     elif scheme == "vmess":
         if not node_info.get('id'):
             logger.debug(f"VMess 节点缺少 UUID: {node_url}")
@@ -598,15 +562,15 @@ def convert_dict_to_node_link(node_dict: Dict) -> Optional[str]:
         except Exception as e:
             logger.debug(f"转换 VMess 字典失败: {e}, dict: {node_dict}")
             return None
-    elif node_type in ['vless', 'trojan']:
-        auth = uuid if node_type == 'vless' else password
+    elif node_type in ['vless', 'trojan', 'tuic']:
+        auth = uuid if node_type in ['vless', 'tuic'] else password
         if not (auth and port):
             return None
         link = f"{node_type}://{auth}@{server}:{port}"
         params = {}
         if node_dict.get('security') or node_dict.get('tls'):
             params['security'] = node_dict.get('security', 'tls')
-        for key in ['flow', 'network', 'path', 'host', 'servername', 'alpn', 'fingerprint']:
+        for key in ['flow', 'network', 'path', 'host', 'servername', 'alpn', 'fingerprint', 'congestion_control', 'udp_relay_mode']:
             if node_dict.get(key):
                 params[key if key != 'servername' else 'sni'] = node_dict[key]
         if name:
@@ -687,102 +651,10 @@ def update_node_remark(node_url: str, new_remark: str) -> str:
         except Exception as e:
             logger.debug(f"更新 VMess 备注失败: {e} - {node_url}")
             return node_url
-    elif scheme in ["vless", "trojan", "ss", "ssr", "hysteria2"]:
+    elif scheme in ["vless", "trojan", "ss", "ssr", "hysteria2", "tuic"]:
         new_parsed = parsed._replace(fragment=new_remark)
         return new_parsed.geturl().replace('\n', '').replace('\r', '')
     return node_url
-
-async def rename_and_deduplicate_by_geo(nodes: Set[str], config: CrawlerConfig) -> Set[str]:
-    """根据地理位置重命名和去重节点，优化 path 中的 IP 处理"""
-    if not config.geoip.get('enable_geo_rename', False):
-        logger.info("GeoIP 命名和去重功能未启用。")
-        return nodes
-    geoip_db_path = config.geoip.get('database_path')
-    if not os.path.exists(geoip_db_path):
-        logger.error(f"GeoIP 数据库文件 '{geoip_db_path}' 不存在，无法进行地理位置命名。")
-        return nodes
-    logger.info(f"开始 GeoIP 命名和去重，使用数据库: {geoip_db_path}")
-    node_details = []
-    ip_lookup_tasks = []
-    dns_failed = 0
-    for node_url in nodes:
-        info = parse_node_url_to_info(node_url, config)
-        if info and info.get('server'):
-            server = info['path_ip'] or info['server']  # 优先使用 path 中的 IP
-            node_details.append({'original_url': node_url, 'info': info, 'ip': None, 'country': config.geoip['default_country']})
-            ip_lookup_tasks.append(resolve_hostname_async(server, config))
-        else:
-            logger.debug(f"无法解析节点服务器信息: {node_url[:50]}...")
-            node_details.append({'original_url': node_url, 'info': info, 'ip': None, 'country': config.geoip['default_country']})
-    logger.info(f"开始并发解析 {len(ip_lookup_tasks)} 个域名/IP。")
-    resolved_ips = await asyncio.gather(*ip_lookup_tasks, return_exceptions=True)
-    for i, ip_result in enumerate(resolved_ips):
-        if not isinstance(ip_result, Exception) and ip_result:
-            node_details[i]['ip'] = ip_result
-        else:
-            dns_failed += 1
-            logger.debug(f"解析 {node_details[i]['info'].get('server', 'N/A')} 失败: {ip_result}")
-    geoip_tasks = []
-    for detail in node_details:
-        if detail['ip']:
-            geoip_tasks.append(get_country_code_from_ip(detail['ip'], config))
-        else:
-            geoip_tasks.append(asyncio.sleep(0, result=config.geoip['default_country']))
-    logger.info(f"开始并发查询 {len(geoip_tasks)} 个IP的地理位置。")
-    country_codes = await asyncio.gather(*geoip_tasks)
-    geoip_failed = 0
-    for i, country_code in enumerate(country_codes):
-        if country_code == config.geoip['default_country']:
-            geoip_failed += 1
-        node_details[i]['country'] = country_code
-        async with aiofiles.open(config.node_details_file, mode='a', encoding='utf-8') as f:
-            await f.write(f"Node: {node_details[i]['original_url']}\n")
-            await f.write(f"Protocol: {node_details[i]['info'].get('protocol', 'N/A')}, Server: {node_details[i]['info'].get('server', 'N/A')}, Port: {node_details[i]['info'].get('port', 'N/A')}\n")
-            await f.write(f"Path: {node_details[i]['info'].get('path_ip', 'N/A')}={node_details[i]['info'].get('path_port', 'N/A')}, Resolved IP: {node_details[i]['ip'] or 'N/A'}, GeoIP: {country_code}\n\n")
-    grouped_nodes: Dict[str, List[Dict]] = defaultdict(list)
-    seen_unique_identifiers = set()
-    for detail in node_details:
-        info = detail['info']
-        if not info:
-            continue
-        protocol = info.get('protocol', '')
-        server = info.get('path_ip') or info.get('server', '')  # 优先使用 path 中的 IP
-        port = str(info.get('path_port') or info.get('port', ''))
-        auth_id = ''
-        if not config.geoip['strict_dedup']:  # 严格去重时忽略 auth_id
-            if protocol == 'vmess' or protocol == 'vless':
-                auth_id = info.get('id', '').lower()
-            elif protocol == 'trojan':
-                auth_id = info.get('password', '').lower()
-            elif protocol == 'ss':
-                auth_id = f"{info.get('cipher', '')}:{info.get('password', '').lower()}"
-            elif protocol == 'ssr':
-                auth_id = f"{info.get('method', '')}:{info.get('protocol', '')}:{info.get('obfs', '')}:{info.get('password', '').lower()}"
-            elif protocol == 'hysteria2':
-                auth_id = info.get('auth_str', info.get('password', '')).lower()
-        unique_key = f"{protocol}:{server}:{port}:{auth_id}"
-        unique_identifier = hashlib.sha256(unique_key.encode('utf-8')).hexdigest()
-        detail['unique_identifier'] = unique_identifier
-        grouped_nodes[detail['country']].append(detail)
-    final_renamed_nodes = set()
-    for country_code, details_list in sorted(grouped_nodes.items()):
-        details_list.sort(key=lambda x: hashlib.sha256(x['original_url'].encode()).hexdigest())
-        counter = 0
-        for detail in details_list:
-            if detail['unique_identifier'] not in seen_unique_identifiers:
-                counter += 1
-                new_remark = f"{country_code}_{counter:03d}"
-                updated_node_url = update_node_remark(detail['original_url'], new_remark)
-                final_renamed_nodes.add(updated_node_url)
-                seen_unique_identifiers.add(detail['unique_identifier'])
-            else:
-                for orig_detail in [d for group in grouped_nodes.values() for d in group]:
-                    if orig_detail['unique_identifier'] == detail['unique_identifier'] and orig_detail['original_url'] != detail['original_url']:
-                        await log_duplicate_node(detail['original_url'], orig_detail['original_url'], detail['unique_identifier'], config)
-                        break
-                logger.debug(f"发现功能性重复节点，跳过: {detail['original_url'][:50]}...")
-    logger.info(f"GeoIP 命名和去重完成，得到 {len(final_renamed_nodes)} 个唯一节点，DNS 解析失败 {dns_failed} 次，GeoIP 查询失败 {geoip_failed} 次")
-    return final_renamed_nodes
 
 def extract_nodes_from_json(parsed_json: Dict | List) -> List[str]:
     """从 JSON 数据中提取节点链接"""
@@ -850,7 +722,7 @@ def extract_nodes_from_html(html_content: str, base_url: str) -> Tuple[List[str]
                  'clash' in absolute_href.lower() or 'singbox' in absolute_href.lower() or
                  'v2ray' in absolute_href.lower() or 'trojan' in absolute_href.lower() or
                  'ss' in absolute_href.lower() or 'ssr' in absolute_href.lower() or
-                 'hysteria' in absolute_href.lower())):
+                 'hysteria' in absolute_href.lower() or 'tuic' in absolute_href.lower())):
                 new_urls.add(absolute_href)
     for tag in soup.find_all(['pre', 'code', 'textarea']):
         text = tag.get_text().strip()
@@ -874,6 +746,21 @@ def extract_nodes_from_html(html_content: str, base_url: str) -> Tuple[List[str]
                     if decoded and decoded != b64:
                         nodes.update(extract_and_validate_nodes(decoded))
     return list(nodes), list(new_urls)
+
+def extract_and_validate_nodes(text: str) -> Set[str]:
+    """从文本中提取并验证节点链接"""
+    nodes = set()
+    if not text:
+        return nodes
+    for protocol, pattern in NODE_PATTERNS.items():
+        for match in pattern.finditer(text):
+            node_url = match.group(0)
+            standardized = standardize_node_url(node_url)
+            if is_valid_node(standardized):
+                nodes.add(standardized)
+            else:
+                logger.debug(f"节点 {standardized[:50]}... 验证失败，跳过")
+    return nodes
 
 def parse_content(content: str, base_url: str, content_type: str) -> Tuple[List[str], List[str]]:
     """智能解析内容，提取节点和潜在订阅 URL"""
@@ -923,20 +810,6 @@ def parse_content(content: str, base_url: str, content_type: str) -> Tuple[List[
         pass
     nodes.update(extract_and_validate_nodes(content_to_scan))
     return list(nodes), list(new_urls)
-
-def extract_and_validate_nodes(content: str) -> List[str]:
-    """提取并验证节点 URL"""
-    if not content:
-        return []
-    nodes = set()
-    for name, pattern in NODE_PATTERNS.items():
-        for match in pattern.findall(content):
-            normalized = standardize_node_url(unquote(match).strip())
-            if is_valid_node(normalized):
-                nodes.add(normalized)
-            else:
-                logger.debug(f"无效节点: {normalized[:50]}...")
-    return list(nodes)
 
 async def save_node_counts_to_csv(file_path: str, counts_data: Dict) -> None:
     """保存节点统计到 CSV 文件"""
@@ -1132,7 +1005,7 @@ async def fetch_content(url: str, client: httpx.AsyncClient, config: CrawlerConf
     return None, None, status
 
 async def test_and_filter_nodes(nodes: Set[str], config: CrawlerConfig) -> Set[str]:
-    """测试节点活跃度（模拟框架）"""
+    """测试节点活跃度"""
     if not config.node_test.get('enable', False):
         logger.info("节点活跃度测试未启用，跳过。")
         return nodes
@@ -1141,15 +1014,11 @@ async def test_and_filter_nodes(nodes: Set[str], config: CrawlerConfig) -> Set[s
     semaphore = asyncio.Semaphore(config.node_test.get('concurrency', 10))
     async def _test_single_node(node: str) -> Optional[str]:
         async with semaphore:
-            try:
-                await asyncio.sleep(0.1)  # 模拟测试时间
-                if random.random() > 0.1:  # 模拟90%成功率
-                    return node
-                else:
-                    logger.debug(f"节点 {node[:30]}... 测试失败。")
-                    return None
-            except Exception as e:
-                logger.debug(f"节点 {node[:30]}... 测试过程中出现错误: {e}")
+            latency = await test_node_latency(node, config)
+            if latency <= config.node_test['latency_threshold']:
+                return node
+            else:
+                logger.debug(f"节点 {node[:30]}... 延迟 {latency:.2f}ms 超出阈值 {config.node_test['latency_threshold']}ms")
                 return None
     tasks = [_test_single_node(node) for node in nodes]
     results = await asyncio.gather(*tasks)
@@ -1188,13 +1057,14 @@ async def save_nodes_as_clash_config(file_path: str, nodes: Set[str]) -> None:
                 "flow": node_info.get("flow", ""),
                 "tls": bool(node_info.get("tls")),
                 "network": node_info.get("network", "tcp"),
-                "sni": node_info.get("sni", ""),
+                "ws-path": node_info.get("path", ""),
+                "ws-headers": {"Host": node_info.get("host", "")} if node_info.get("host") else {},
             })
         elif node_info["protocol"] == "trojan":
             proxy.update({
                 "password": node_info.get("password"),
-                "sni": node_info.get("sni", ""),
-                "tls": True,
+                "tls": bool(node_info.get("tls", True)),
+                "sni": node_info.get("sni", node_info.get("servername", "")),
             })
         elif node_info["protocol"] == "ss":
             proxy.update({
@@ -1212,162 +1082,109 @@ async def save_nodes_as_clash_config(file_path: str, nodes: Set[str]) -> None:
             })
         elif node_info["protocol"] == "hysteria2":
             proxy.update({
-                "password": node_info.get("auth_str", node_info.get("password", "")),
-                "obfs": node_info.get("obfs", ""),
-                "obfs-password": node_info.get("obfs-password", ""),
+                "password": node_info.get("auth_str", ""),
+                "obfs": node_info.get("obfs"),
+                "obfs-password": node_info.get("obfs-password"),
                 "sni": node_info.get("sni", ""),
                 "up": node_info.get("up", ""),
                 "down": node_info.get("down", ""),
+                "insecure": bool(node_info.get("insecure", False)),
             })
-        clash_proxies.append({k: v for k, v in proxy.items() if v is not None})
+        elif node_info["protocol"] == "tuic":
+            proxy.update({
+                "uuid": node_info.get("uuid"),
+                "congestion-control": node_info.get("congestion_control", "bbr"),
+                "udp-relay-mode": node_info.get("udp_relay_mode", "native"),
+                "tls": True,
+                "sni": node_info.get("sni", ""),
+            })
+        clash_proxies.append(proxy)
     clash_config = {
-        "port": 7890,
-        "socks-port": 7891,
-        "allow-lan": False,
-        "mode": "rule",
-        "log-level": "info",
-        "external-controller": "127.0.0.1:9090",
         "proxies": clash_proxies,
         "proxy-groups": [
-            {"name": "Proxy", "type": "select", "proxies": [p["name"] for p in clash_proxies]},
-            {"name": "DIRECT", "type": "direct"},
+            {
+                "name": "Proxy",
+                "type": "select",
+                "proxies": [proxy["name"] for proxy in clash_proxies],
+            },
+            {
+                "name": "Auto",
+                "type": "url-test",
+                "proxies": [proxy["name"] for proxy in clash_proxies],
+                "url": "http://www.google.com/generate_204",
+                "interval": 300,
+            },
         ],
-        "rules": ["MATCH,Proxy"],
+        "rules": [
+            "GEOIP,CN,DIRECT",
+            "MATCH,Proxy",
+        ],
     }
     try:
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
         async with aiofiles.open(file_path, mode='w', encoding='utf-8') as f:
-            await f.write(yaml.dump(clash_config, indent=2, allow_unicode=True, sort_keys=False))
-        logger.info(f"已将 Clash 配置保存到 {file_path}。")
+            await f.write(yaml.safe_dump(clash_config, allow_unicode=True, sort_keys=False))
+        logger.info(f"Clash 配置文件已保存到 {file_path}，包含 {len(clash_proxies)} 个节点。")
     except Exception as e:
-        logger.error(f"保存 Clash 配置失败: {e}。", exc_info=True)
-
-async def debug_duplicate_nodes(nodes: Set[str], config: CrawlerConfig) -> Set[str]:
-    """调试重复节点，记录所有节点的唯一键并去重"""
-    node_info_list = []
-    for node in nodes:
-        info = parse_node_url_to_info(node, config)
-        if not info:
-            logger.debug(f"无法解析节点: {node[:50]}...")
-            continue
-        protocol = info.get('protocol', '')
-        server = info.get('path_ip') or info.get('server', '')
-        port = str(info.get('path_port') or info.get('port', ''))
-        auth_id = ''
-        if not config.geoip['strict_dedup']:
-            if protocol == 'vmess' or protocol == 'vless':
-                auth_id = info.get('id', '').lower()
-            elif protocol == 'trojan':
-                auth_id = info.get('password', '').lower()
-            elif protocol == 'ss':
-                auth_id = f"{info.get('cipher', '')}:{info.get('password', '').lower()}"
-            elif protocol == 'ssr':
-                auth_id = f"{info.get('method', '')}:{info.get('protocol', '')}:{info.get('obfs', '')}:{info.get('password', '').lower()}"
-            elif protocol == 'hysteria2':
-                auth_id = info.get('auth_str', info.get('password', '')).lower()
-        key = (protocol, server, port, auth_id)
-        unique_key = hashlib.sha256(f"{protocol}:{server}:{port}:{auth_id}".encode('utf-8')).hexdigest()
-        node_info_list.append((node, key, unique_key))
-    
-    unique_keys = {}
-    duplicates = []
-    deduped_nodes = set()
-    for node, key, unique_key in node_info_list:
-        if key not in unique_keys:
-            unique_keys[key] = node
-            deduped_nodes.add(node)
-        else:
-            duplicates.append((node, unique_keys[key], unique_key))
-    if duplicates:
-        logger.info(f"发现 {len(duplicates)} 个重复节点：")
-        async with aiofiles.open(config.duplicate_nodes_file, mode='w', encoding='utf-8') as f:
-            timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
-            await f.write(f"[{timestamp}] 重复节点分析：\n")
-            for dup_node, orig_node, unique_key in duplicates[:50]:
-                await f.write(f"重复: {dup_node[:50]}... 与 {orig_node[:50]}... (唯一键: {unique_key})\n")
-                logger.info(f"重复: {dup_node[:50]}... 与 {orig_node[:50]}... (唯一键: {unique_key})")
-    else:
-        logger.info("未发现重复节点。")
-    async with aiofiles.open(os.path.join(config.data_dir, "node_keys.log"), mode='w', encoding='utf-8') as f:
-        timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
-        await f.write(f"[{timestamp}] 所有节点唯一键：\n")
-        for node, key, unique_key in node_info_list:
-            await f.write(f"节点: {node[:50]}... 协议: {key[0]}, 服务器: {key[1]}, 端口: {key[2]}, 认证: {key[3][:20]}... (唯一键: {unique_key})\n")
-    return deduped_nodes
+        logger.error(f"保存 Clash 配置文件失败 '{file_path}': {e}。", exc_info=True)
 
 async def main():
-    """主函数"""
+    """主函数：执行爬虫和节点处理"""
     start_time = time.time()
-    config = await load_config("config.yaml")
-    sources_urls = await read_sources(config.sources_file)
-    if not sources_urls:
-        logger.error("无有效源 URL，退出程序。")
+    config_file = "config.yaml"
+    config = await load_config(config_file)
+    sources = await read_sources(config.sources_file)
+    if not sources:
+        logger.error("没有可用的源 URL，退出程序。")
         return
     url_cache = await load_cache(config.cache_file)
-    url_summary = defaultdict(int)
-    url_details = {}
-    processed_count = 0
-    unique_nodes = set()
-    async with httpx.AsyncClient(timeout=config.request_timeout, verify=False) as client:
+    all_nodes = set()
+    queue = deque([(url, 0) for url in sources])
+    visited_urls = set(sources)
+    async with httpx.AsyncClient(timeout=config.request_timeout, verify=False, proxies=config.proxies) as client:
         semaphore = asyncio.Semaphore(config.concurrent_requests_limit)
-        main_queue = deque([(url, 0) for url in sources_urls])
-        urls_in_main_queue = set(sources_urls)
-        while main_queue:
-            current_url, current_overall_depth = main_queue.popleft()
-            if current_url in url_details and url_details[current_url].get('status') not in ["FETCH_FAILED_UNEXPECTED_ERROR", "UNEXPECTED_MAIN_ERROR"]:
-                logger.debug(f"URL {current_url} 已处理或在处理中，跳过。")
+        cache_save_counter = 0
+        while queue:
+            current_url, depth = queue.popleft()
+            if depth > config.max_recursion_depth:
+                logger.info(f"达到最大递归深度，跳过: {current_url}")
                 continue
-            processed_count += 1
-            logger.info(f"正在处理第 {processed_count} 个URL (总队列中): {current_url} (总深度: {current_overall_depth})。")
-            try:
-                parsed_url = urlparse(current_url)
-                is_website = (not parsed_url.path.split('/')[-1].count('.') or 
-                              parsed_url.path.endswith('/') or 
-                              any(ext in parsed_url.path.lower() for ext in ['.html', '.htm', '.php', '.asp', '.aspx']))
-                if is_website and current_overall_depth < config.max_recursion_depth:
-                    site_nodes, site_new_subscription_urls = await crawl_website(
-                        current_url, client, semaphore, url_cache, config, current_overall_depth
-                    )
-                    unique_nodes.update(site_nodes)
-                    if current_overall_depth + 1 <= config.max_recursion_depth:
-                        for new_sub_url in site_new_subscription_urls:
-                            if new_sub_url not in urls_in_main_queue and new_sub_url not in url_details:
-                                main_queue.append((new_sub_url, current_overall_depth + 1))
-                                urls_in_main_queue.add(new_sub_url)
-                                logger.info(f"    发现新的订阅URL，加入主队列: {new_sub_url} (总深度: {current_overall_depth + 1})")
-                    url_details[current_url] = {
-                        'status': "WEBSITE_CRAWLED_SUCCESS",
-                        'extracted_nodes_count': len(site_nodes),
-                        'new_urls_found_count': len(site_new_subscription_urls),
-                        'last_updated_timestamp': url_cache.get(current_url, {}).get('last_updated_timestamp', 'N/A')
-                    }
-                    url_summary["WEBSITE_CRAWLED_SUCCESS"] += 1
-                else:
-                    status, nodes, new_urls = await process_url(current_url, client, semaphore, url_cache, config, current_overall_depth)
-                    unique_nodes.update(nodes)
-                    url_details[current_url] = {
-                        'status': status,
-                        'extracted_nodes_count': len(nodes),
-                        'new_urls_found_count': len(new_urls),
-                        'last_updated_timestamp': url_cache.get(current_url, {}).get('last_updated_timestamp', 'N/A')
-                    }
-                    url_summary[status] += 1
-                    if current_overall_depth + 1 <= config.max_recursion_depth:
-                        for new_sub_url in new_urls:
-                            if not is_same_domain(current_url, new_sub_url) and new_sub_url not in urls_in_main_queue and new_sub_url not in url_details:
-                                main_queue.append((new_sub_url, current_overall_depth + 1))
-                                urls_in_main_queue.add(new_sub_url)
-                                logger.info(f"    发现新的订阅URL，加入主队列: {new_sub_url} (总深度: {current_overall_depth + 1})")
-                if processed_count % config.cache_save_interval == 0:
-                    await save_cache(config.cache_file, url_cache)
-                    logger.info(f"已处理 {processed_count} 个URL，保存缓存到 {config.cache_file}。")
-            except Exception as e:
-                logger.error(f"处理 {current_url} 时发生未预期错误: {e}", exc_info=True)
-                url_details[current_url] = {
-                    'status': "UNEXPECTED_MAIN_ERROR",
-                    'extracted_nodes_count': 0,
-                    'new_urls_found_count': 0,
-                    'last_updated_timestamp': datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
-                }
-                url_summary["UNEXPECTED_MAIN_ERROR"] += 1
-                await log_failed_url(current_url, f"UNEXPECTED_MAIN_ERROR: {str(e)}
+            status, extracted_nodes, new_urls = await process_url(current_url, client, semaphore, url_cache, config, depth)
+            all_nodes.update(extracted_nodes)
+            url_cache[current_url].update({
+                'status': status,
+                'extracted_nodes_count': len(extracted_nodes),
+                'new_urls_found_count': len(new_urls),
+            })
+            for new_url in new_urls:
+                if new_url not in visited_urls:
+                    visited_urls.add(new_url)
+                    queue.append((new_url, depth + 1))
+                    logger.debug(f"发现新订阅URL: {new_url} (深度: {depth + 1})")
+            cache_save_counter += 1
+            if cache_save_counter >= config.cache_save_interval:
+                await save_cache(config.cache_file, url_cache)
+                cache_save_counter = 0
+        await save_cache(config.cache_file, url_cache)
+    logger.info(f"初始节点收集完成，共发现 {len(all_nodes)} 个节点。")
+    all_nodes = await test_and_filter_nodes(all_nodes, config)
+    logger.info(f"节点活跃度测试后，剩余 {len(all_nodes)} 个节点。")
+    all_nodes = await rename_and_deduplicate_by_geo(all_nodes, config)
+    logger.info(f"去重和地理位置命名后，剩余 {len(all_nodes)} 个唯一节点。")
+    all_nodes_file = os.path.join(config.data_dir, 'all_nodes.txt')
+    try:
+        os.makedirs(os.path.dirname(all_nodes_file), exist_ok=True)
+        async with aiofiles.open(all_nodes_file, mode='w', encoding='utf-8') as f:
+            for node in sorted(all_nodes):
+                await f.write(f"{node}\n")
+        logger.info(f"所有节点已保存到 {all_nodes_file}，共 {len(all_nodes)} 个节点。")
+    except Exception as e:
+        logger.error(f"保存所有节点失败 '{all_nodes_file}': {e}。", exc_info=True)
+    clash_config_file = os.path.join(config.data_dir, 'clash_config.yaml')
+    await save_nodes_as_clash_config(clash_config_file, all_nodes)
+    await save_node_counts_to_csv(config.node_counts_file, url_cache)
+    end_time = time.time()
+    logger.info(f"爬虫任务完成，总耗时: {end_time - start_time:.2f} 秒。")
+
+if __name__ == "__main__":
+    asyncio.run(main())
