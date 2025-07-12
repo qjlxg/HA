@@ -242,7 +242,7 @@ def extract_nodes_from_text(text: str, current_depth: int = 0, max_depth: int = 
         if len(match) > 10 and len(match) % 4 == 0:
             decoded = decode_content(match)
             # 如果解码后发现节点协议，则加入，并递归解析解码内容
-            for protocol, pattern in NODE_PATTERNS.items():
+            for protocol, pattern in NODE_PATTERns.items():
                 if re.search(pattern, decoded, re.IGNORECASE):
                     nodes.append(decoded)
                     nodes.extend(extract_nodes_from_text(decoded, current_depth + 1, max_depth)) # 递归解析
@@ -296,16 +296,16 @@ def extract_nodes_from_text(text: str, current_depth: int = 0, max_depth: int = 
                 processed_nodes.append(node)
     return processed_nodes
 
-async def process_url(url: str, all_nodes_writer: typing.TextIO) -> tuple[str, int]:
+async def process_url(url: str) -> tuple[str, int, list[str]]: # 返回节点列表
     """
-    处理单个 URL，获取内容，提取节点，并将提取到的节点写入总文件和单独的 URL 文件。
-    返回 URL 和提取到的节点数量。
+    处理单个 URL，获取内容，提取节点，并将提取到的节点写入单独的 URL 文件。
+    返回 URL、提取到的节点数量以及提取到的唯一节点列表。
     """
     logging.info(f"开始处理 URL: {url}")
     content = await get_url_content(url)
     if not content:
         logging.warning(f"无法获取 {url} 的内容，跳过该 URL 的节点提取。")
-        return url, 0
+        return url, 0, [] # 返回空列表
 
     loop = asyncio.get_running_loop()
     try:
@@ -328,12 +328,8 @@ async def process_url(url: str, all_nodes_writer: typing.TextIO) -> tuple[str, i
             await f.write(f"{node}\n")
     logging.info(f"URL: {url} 的节点已保存到 {url_output_file}")
 
-    # 将所有节点写入总文件
-    for node in unique_nodes:
-        await all_nodes_writer.write(f"{node}\n")
-
     logging.info(f"URL: {url} 成功提取到 {len(unique_nodes)} 个节点。")
-    return url, len(unique_nodes)
+    return url, len(unique_nodes), unique_nodes # 返回节点列表
 
 async def main():
     """主函数，读取 sources.list 并并行处理 URL。"""
@@ -350,17 +346,28 @@ async def main():
         return
 
     node_counts = defaultdict(int) # 用于存储每个 URL 提取到的节点数量
+    all_extracted_nodes = [] # 用于收集所有 URL 提取到的节点
 
-    # 使用 aiofiles 异步写入所有节点到 ALL_NODES_FILE
-    async with aiofiles.open(ALL_NODES_FILE, 'w', encoding='utf-8') as all_nodes_writer:
-        # 为每个 URL 创建一个异步任务
-        tasks = [process_url(url, all_nodes_writer) for url in urls]
-        # 并行执行所有任务
-        results = await asyncio.gather(*tasks)
+    # 为每个 URL 创建一个异步任务
+    # process_url 不再接收 all_nodes_writer 参数
+    tasks = [process_url(url) for url in urls]
+    # 并行执行所有任务
+    results = await asyncio.gather(*tasks)
 
-        # 收集每个 URL 的节点数量
-        for url, count in results:
-            node_counts[url] = count
+    # 收集每个 URL 的节点数量和所有提取到的节点
+    for url, count, nodes_list in results:
+        node_counts[url] = count
+        all_extracted_nodes.extend(nodes_list) # 将所有节点的列表添加到总列表中
+
+    # 对所有收集到的节点进行全局去重
+    global_unique_nodes = list(set(all_extracted_nodes))
+
+    # 将所有全局去重后的节点一次性写入总文件
+    logging.info(f"正在将所有 {len(global_unique_nodes)} 个去重后的节点写入 {ALL_NODES_FILE}...")
+    async with aiofiles.open(ALL_NODES_FILE, 'w', encoding='utf-8') as f:
+        for node in global_unique_nodes:
+            await f.write(f"{node}\n")
+    logging.info(f"所有去重后的节点已合并保存到 {ALL_NODES_FILE}")
 
     # 将节点数量统计保存为 CSV 文件
     async with aiofiles.open(NODE_COUNT_CSV, 'w', encoding='utf-8') as f:
@@ -369,7 +376,7 @@ async def main():
             await f.write(f"{url},{count}\n")
     
     logging.info(f"所有 URL 处理完成，节点统计已保存到 {NODE_COUNT_CSV}")
-    logging.info(f"所有提取到的节点已合并保存到 {ALL_NODES_FILE}")
+
 
 if __name__ == '__main__':
     # 运行主异步函数
