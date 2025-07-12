@@ -79,7 +79,6 @@ def is_valid_host(host: str) -> bool:
     """验证主机是否为有效的域名或 IP 地址（包括 IPv6）。"""
     if not host:
         return False
-    # 简单验证域名或 IP（包括 IPv6）
     return bool(re.match(r'^(?:\[[0-9a-fA-F:\.]+\]|[a-zA-Z0-9\.\-]+)$', host))
 
 def validate_node(node: str, protocol: str) -> tuple[bool, str]:
@@ -629,7 +628,7 @@ async def main():
         async with aiofiles.open(NODE_COUNT_CSV, 'w', encoding='utf-8', newline='') as f:
             await f.write("URL,NodeCount\n")
             for url, count in node_counts.items():
-                escaped_url = f'"{url.replace('"', '""')}"'
+                escaped_url = '"{}"'.format(url.replace('"', '""'))
                 await f.write(f"{escaped_url},{count}\n")
     except IOError as e:
         logging.error(f"写入节点计数 CSV 文件 {NODE_COUNT_CSV} 失败: {e}")
