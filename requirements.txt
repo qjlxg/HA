@@ -1,7 +1,7 @@
-httpx[http2]
-PyYAML
+httpx
 beautifulsoup4
-urllib3
+pyyaml
 aiofiles
-geoip2
+cachetools
 aiodns
+geoip2
