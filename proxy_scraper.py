@@ -137,7 +137,8 @@ async def fetch_url_content(client: httpx.AsyncClient, url: str, config: Crawler
             # 移除 get 方法中的 verify 参数，因为 AsyncClient 初始化时已经设置
             response = await client.get(url, headers=headers, timeout=config.timeout, follow_redirects=True)
             response.raise_for_status() # 检查 HTTP 错误
-            logger.info(f"HTTP Request: GET {url} \"HTTP/1.1 {response.status_code} {response.reason}\"")
+            # 修改：移除对 response.reason 的引用
+            logger.info(f"HTTP Request: GET {url} \"HTTP/1.1 {response.status_code}\"")
             return response.text, response.headers.get('Content-Type', '').lower()
         except httpx.RequestError as e:
             error_type = type(e).__name__
@@ -152,7 +153,8 @@ async def fetch_url_content(client: httpx.AsyncClient, url: str, config: Crawler
                     # 尝试 HTTP 连接，这里 client 已经配置了 verify=False
                     response = await client.get(http_url, headers=headers, timeout=config.timeout, follow_redirects=True)
                     response.raise_for_status()
-                    logger.info(f"HTTP Request: GET {http_url} \"HTTP/1.1 {response.status_code} {response.reason}\"")
+                    # 修改：移除对 response.reason 的引用
+                    logger.info(f"HTTP Request: GET {http_url} \"HTTP/1.1 {response.status_code}\"")
                     return response.text, response.headers.get('Content-Type', '').lower()
                 except httpx.RequestError as e_http:
                     logger.error(f"获取 URL 失败 {http_url}: {e_http}")
