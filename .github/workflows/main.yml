@@ -1,38 +1,51 @@
-name: main
+name: Process and Deduplicate Nodes
 
+# 定义触发事件
 on:
-  workflow_dispatch: # 允许手动触发
+  push:
+    branches:
+      - main  # 当推送到 main 分支时触发
   schedule:
-    - cron: '0 0 * * *' # 每天 UTC 时间 00:00 运行
+    - cron: '0 0 * * *'  # 每天 UTC 00:00 运行
+  workflow_dispatch:  # 支持手动触发
+
+# 定义环境变量
+env:
+  PYTHON_VERSION: '3.10'  # 指定 Python 版本
+  DATA_DIR: 'data'  # 数据目录
 
 jobs:
-  build:
-    runs-on: ubuntu-latest # 使用最新的 Ubuntu 操作系统
+  process-nodes:
+    runs-on: ubuntu-latest  # 使用 GitHub 提供的最新 Ubuntu 运行器
 
     steps:
-    - name: Checkout repository # 步骤 1: 检出代码
-      uses: actions/checkout@v4
+      # 检出代码
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Set up Python # 步骤 2: 设置 Python 环境
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.x' # 使用最新的 Python 3 版本
+      # 设置 Python 环境
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
 
-    - name: Install dependencies # 步骤 3: 安装所需的 Python 库
-      run: |
-        python -m pip install --upgrade pip
-        pip install requests httpx[http2] PyYAML beautifulsoup4
+      # 安装依赖
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install geoip2 aiofiles
 
-    - name: Run Node Extractor Script # 步骤 4: 运行节点提取脚本
-      run: |
-        python ultimate_node_extractor.py
+      # 运行 Python 脚本
+      - name: Run node processing script
+        run: python process_and_deduplicate_nodes.py
 
-    - name: Commit and Push changes # 步骤 5: 提交并推送更改
-      run: |
-        git config --global user.name 'GitHub Actions'
-        git config --global user.email 'actions@github.com'
-        git pull origin main --rebase || echo "No changes to pull or rebase" 
-        git add data/proxy_nodes_*.txt data/node_counts.csv data/url_cache.json data/failed_urls.log
-        git commit -m "Update proxy nodes and logs" || echo "No changes to commit" 
-        git push
-
+      # 检查输出文件并提交更改
+      - name: Commit processed nodes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add ${{ env.DATA_DIR }}/deduplicated_nodes.txt
+          git diff-index --quiet HEAD || git commit -m "Update deduplicated nodes"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
