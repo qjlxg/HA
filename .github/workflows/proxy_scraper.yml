@@ -3,7 +3,8 @@ name: Auto Update Data # 工作流名称
 on:
   push: # 在每次推送到 main 分支时触发
     branches:
-      - main
+      - 'proxy_scraper.py'
+      - '.github/workflows/proxy_scraper.yml'
   schedule: # 定时任务，每6小时运行一次
     - cron: '0 */6 * * *'
   workflow_dispatch: # 允许手动触发工作流
