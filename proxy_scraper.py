@@ -8,13 +8,13 @@ import os
 import csv
 import random
 import datetime
+import hashlib
 from urllib.parse import urlparse, urlunparse
 from collections import Counter
 from bs4 import BeautifulSoup
 import aiofiles
 import logging
 import aiodns
-import geoip2.database
 from tenacity import retry, stop_after_attempt, wait_exponential
 from pathlib import Path
 
@@ -23,24 +23,22 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger(__name__)
 
 # 数据保存路径
-DATA_DIR = Path("data")
+DATA_DIR = Path(os.getenv("DATA_DIR", "data"))
+DATA_DIR.mkdir(exist_ok=True)
 ALL_NODES_FILE = DATA_DIR / "all.txt"
 NODE_COUNTS_CSV = DATA_DIR / "node_counts.csv"
 PROTOCOL_STATS_CSV = DATA_DIR / "protocol_stats.csv"
 RAW_FETCHED_NODES_TEMP_FILE = DATA_DIR / "raw_fetched_nodes_temp.txt"
 CACHE_FILE = DATA_DIR / "cache.json"
-GEOIP_DB = DATA_DIR / "GeoLite2-City.mmdb"
+DNS_CACHE_FILE = DATA_DIR / "dns_cache.json"
 
-# 确保数据目录存在
-DATA_DIR.mkdir(exist_ok=True)
+# 缓存有效期（小时）
+CACHE_EXPIRY_HOURS = 24
 
-# 缓存机制：存储已处理的 URL 及其内容哈希和时间戳
-PROCESSED_URLS_CACHE = {}  # {url: {"hash": content_hash, "timestamp": float}}
+# 并发限制
+CONCURRENCY_LIMIT = int(os.getenv("CONCURRENCY_LIMIT", 50))
 
-# 不可信国家代码（示例，可根据需求调整）
-UNTRUSTED_COUNTRIES = {'XX', 'YY'}  # 替换为实际不可信国家代码
-
-# 预定义的请求头
+# 用户代理
 USER_AGENTS = {
     "desktop": [
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36",
@@ -58,6 +56,10 @@ USER_AGENTS = {
     ]
 }
 
+# 缓存
+PROCESSED_URLS_CACHE = {}  # {url: {"hash": content_hash, "timestamp": float}}
+DNS_CACHE = {}  # {hostname: {"ips": [ip_address], "timestamp": float, "ttl": int}}
+
 def get_random_headers():
     """随机获取一个请求头"""
     category = random.choice(list(USER_AGENTS.keys()))
@@ -72,26 +74,49 @@ def get_random_headers():
     }
 
 async def load_cache():
-    """加载缓存并清理过期记录"""
+    """加载 URL 和 DNS 缓存并清理过期记录"""
     try:
+        now = datetime.datetime.now().timestamp()
+        # 加载 URL 缓存
         if CACHE_FILE.exists():
             async with aiofiles.open(CACHE_FILE, 'r', encoding='utf-8') as f:
-                cache = json.loads(await f.read())
-            now = datetime.datetime.now().timestamp()
-            PROCESSED_URLS_CACHE.update({
-                k: v for k, v in cache.items()
-                if (now - v["timestamp"]) < 24 * 3600  # 缓存有效期 24 小时
-            })
-            logger.info(f"加载了 {len(PROCESSED_URLS_CACHE)} 个缓存记录")
+                content = await f.read()
+                if content:
+                    cache = json.loads(content)
+                    PROCESSED_URLS_CACHE.update({
+                        k: v for k, v in cache.items()
+                        if (now - v["timestamp"]) < CACHE_EXPIRY_HOURS * 3600
+                    })
+                    logger.info(f"加载了 {len(PROCESSED_URLS_CACHE)} 个 URL 缓存记录")
+        # 加载 DNS 缓存
+        if DNS_CACHE_FILE.exists():
+            async with aiofiles.open(DNS_CACHE_FILE, 'r', encoding='utf-8') as f:
+                content = await f.read()
+                if content:
+                    cache = json.loads(content)
+                    DNS_CACHE.update({
+                        k: v for k, v in cache.items()
+                        if (now - v["timestamp"]) < CACHE_EXPIRY_HOURS * 3600
+                    })
+                    logger.info(f"加载了 {len(DNS_CACHE)} 个 DNS 缓存记录")
     except Exception as e:
         logger.error(f"加载缓存失败: {e}")
 
 async def save_cache():
-    """保存缓存"""
+    """保存 URL 和 DNS 缓存（原子性写入）"""
     try:
-        async with aiofiles.open(CACHE_FILE, 'w', encoding='utf-8') as f:
+        # 保存 URL 缓存
+        temp_file = CACHE_FILE.with_suffix('.tmp')
+        async with aiofiles.open(temp_file, 'w', encoding='utf-8') as f:
             await f.write(json.dumps(PROCESSED_URLS_CACHE))
-        logger.info(f"缓存已保存到 {CACHE_FILE}")
+        temp_file.rename(CACHE_FILE)
+        logger.info(f"URL 缓存已保存到 {CACHE_FILE}")
+        # 保存 DNS 缓存
+        temp_dns_file = DNS_CACHE_FILE.with_suffix('.tmp')
+        async with aiofiles.open(temp_dns_file, 'w', encoding='utf-8') as f:
+            await f.write(json.dumps(DNS_CACHE))
+        temp_dns_file.rename(DNS_CACHE_FILE)
+        logger.info(f"DNS 缓存已保存到 {DNS_CACHE_FILE}")
     except Exception as e:
         logger.error(f"保存缓存失败: {e}")
 
@@ -130,12 +155,12 @@ def parse_nodes_from_content(content):
         return nodes
 
     node_patterns = {
-        "hysteria2": r"hysteria2:\/\/[^\s]+",
-        "vmess": r"vmess:\/\/[^\s]+",
-        "trojan": r"trojan:\/\/[^\s]+",
-        "ss": r"ss:\/\/[^\s]+",
-        "ssr": r"ssr:\/\/[^\s]+",
-        "vless": r"vless:\/\/[^\s]+",
+        "hysteria2": r"hysteria2:\/\/[\w\-\.]+:\d+[^ \t\n\r]*",
+        "vmess": r"vmess:\/\/[a-zA-Z0-9=+/]+",
+        "trojan": r"trojan:\/\/[^@]+@[\w\.-]+:\d+[^ \t\n\r]*",
+        "ss": r"ss:\/\/[a-zA-Z0-9=+/]+",
+        "ssr": r"ssr:\/\/[a-zA-Z0-9=+/]+",
+        "vless": r"vless:\/\/([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})@[\w\.-]+:\d+[^ \t\n\r]*",
     }
 
     # 直接正则匹配
@@ -205,78 +230,100 @@ def parse_nodes_from_content(content):
 
     return list(set(nodes))
 
-async def validate_node(node, resolver):
-    """验证节点格式、DNS 和 GeoIP"""
-    if not node:
+async def validate_hysteria2(node):
+    """验证 Hysteria2 节点"""
+    return bool(re.match(r"hysteria2:\/\/[\w\-\.]+:\d+[^ \t\n\r]*", node))
+
+async def validate_vmess(node):
+    """验证 VMess 节点"""
+    try:
+        encoded_part = node[len("vmess://"):]
+        decoded_json_str = decode_base64(encoded_part)
+        if not decoded_json_str:
+            return False
+        vmess_config = json.loads(decoded_json_str)
+        return all(k in vmess_config for k in ["add", "port", "id", "aid", "net", "type"])
+    except Exception:
         return False
 
+async def validate_trojan(node):
+    """验证 Trojan 节点"""
+    return bool(re.match(r"trojan:\/\/[^@]+@[\w\.-]+:\d+[^ \t\n\r]*", node))
+
+async def validate_ss(node):
+    """验证 Shadowsocks 节点"""
+    try:
+        encoded_part = node[len("ss://"):]
+        decoded_str = decode_base64(encoded_part)
+        return decoded_str and '@' in decoded_str and ':' in decoded_str
+    except Exception:
+        return False
+
+async def validate_ssr(node):
+    """验证 ShadowsocksR 节点"""
+    try:
+        encoded_part = node[len("ssr://"):]
+        decoded_str = decode_base64(encoded_part)
+        return decoded_str and len(decoded_str.split(':')) >= 6
+    except Exception:
+        return False
+
+async def validate_vless(node):
+    """验证 VLESS 节点"""
+    return bool(re.match(r"vless:\/\/([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})@[\w\.-]+:\d+[^ \t\n\r]*", node))
+
+async def validate_node(node, resolver):
+    """验证节点格式和 DNS 可达性"""
+    if not node:
+        return False
     try:
         node_type = node.split('://')[0].lower()
         parsed = urlparse(node)
         hostname = parsed.hostname
         port = parsed.port
-
         if not (hostname and port):
             logger.debug(f"节点缺少主机或端口: {node}")
             return False
+
+        # DNS 缓存检查
+        now = datetime.datetime.now().timestamp()
+        if hostname in DNS_CACHE and (now - DNS_CACHE[hostname]["timestamp"]) < CACHE_EXPIRY_HOURS * 3600:
+            logger.debug(f"DNS 缓存命中: {hostname} -> {DNS_CACHE[hostname]['ips']}")
+            return bool(DNS_CACHE[hostname]["ips"])
 
         # DNS 解析
         try:
             result = await resolver.query(hostname, 'A')
             if not result:
-                logger.debug(f"DNS 解析失败: {node}")
+                logger.debug(f"DNS 解析失败 for {hostname} in node {node}")
                 return False
+            ips = [r.host for r in result]
+            DNS_CACHE[hostname] = {
+                "ips": ips,
+                "timestamp": now,
+                "ttl": result[0].ttl if result else 3600
+            }
+            logger.debug(f"DNS 解析成功: {hostname} -> {ips}")
         except Exception as e:
-            logger.debug(f"DNS 解析失败: {e}")
+            logger.debug(f"DNS 解析失败 for {hostname} in node {node}: {e}")
             return False
 
-        # GeoIP 验证
-        if GEOIP_DB.exists():
-            try:
-                with geoip2.database.Reader(GEOIP_DB) as reader:
-                    response = reader.city(hostname)
-                    if response.country.iso_code in UNTRUSTED_COUNTRIES:
-                        logger.debug(f"节点位于不可信区域 {response.country.iso_code}: {node}")
-                        return False
-            except geoip2.errors.AddressNotFoundError:
-                logger.debug(f"GeoIP 数据库未找到 {hostname} 的记录")
-            except Exception as e:
-                logger.error(f"GeoIP 验证失败: {e}")
-
-        # 协议特定验证
-        if node_type == "hysteria2":
-            if not re.match(r"hysteria2:\/\/[^\/:]+:\d+", node):
-                return False
-        elif node_type == "vmess":
-            encoded_part = node[len("vmess://"):]
-            decoded_json_str = decode_base64(encoded_part)
-            if not decoded_json_str:
-                return False
-            vmess_config = json.loads(decoded_json_str)
-            if not all(k in vmess_config for k in ["add", "port", "id", "aid", "net", "type"]):
-                return False
-        elif node_type == "trojan":
-            if not re.match(r"trojan:\/\/[^@]+@[\w\.-]+:\d+", node):
-                return False
-        elif node_type == "ss":
-            encoded_part = node[len("ss://"):]
-            decoded_str = decode_base64(encoded_part)
-            if not decoded_str or '@' not in decoded_str or ':' not in decoded_str:
-                return False
-        elif node_type == "ssr":
-            encoded_part = node[len("ssr://"):]
-            decoded_str = decode_base64(encoded_part)
-            if not decoded_str or len(decoded_str.split(':')) < 6:
-                return False
-        elif node_type == "vless":
-            if not re.match(r"vless:\/\/([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})@[\w\.-]+:\d+", node):
-                return False
-        else:
+        # 协议验证
+        validators = {
+            "hysteria2": validate_hysteria2,
+            "vmess": validate_vmess,
+            "trojan": validate_trojan,
+            "ss": validate_ss,
+            "ssr": validate_ssr,
+            "vless": validate_vless,
+        }
+        validator = validators.get(node_type)
+        if not validator:
+            logger.debug(f"不支持的协议: {node_type} in node {node}")
             return False
-
-        return True
+        return await validator(node)
     except Exception as e:
-        logger.debug(f"节点验证失败: {e}")
+        logger.debug(f"节点验证失败 for {node}: {e}")
         return False
 
 def rename_node(node):
@@ -305,7 +352,7 @@ async def fetch_url_content(client, url):
     """安全地异步获取 URL 内容"""
     if url in PROCESSED_URLS_CACHE:
         cache_entry = PROCESSED_URLS_CACHE[url]
-        if (datetime.datetime.now().timestamp() - cache_entry["timestamp"]) < 24 * 3600:
+        if (datetime.datetime.now().timestamp() - cache_entry["timestamp"]) < CACHE_EXPIRY_HOURS * 3600:
             logger.info(f"URL {url} 在缓存中，跳过抓取")
             return None
 
@@ -320,7 +367,10 @@ async def fetch_url_content(client, url):
         response = await client.get(url_to_fetch, headers=headers, timeout=10)
         response.raise_for_status()
         content = response.text
-        PROCESSED_URLS_CACHE[url] = {"hash": hash(content), "timestamp": datetime.datetime.now().timestamp()}
+        PROCESSED_URLS_CACHE[url] = {
+            "hash": hashlib.sha256(content.encode('utf-8')).hexdigest(),
+            "timestamp": datetime.datetime.now().timestamp()
+        }
         return content
     except httpx.RequestError:
         if url_to_fetch.startswith("http://"):
@@ -328,7 +378,10 @@ async def fetch_url_content(client, url):
             response = await client.get(https_url, headers=headers, timeout=10)
             response.raise_for_status()
             content = response.text
-            PROCESSED_URLS_CACHE[url] = {"hash": hash(content), "timestamp": datetime.datetime.now().timestamp()}
+            PROCESSED_URLS_CACHE[url] = {
+                "hash": hashlib.sha256(content.encode('utf-8')).hexdigest(),
+                "timestamp": datetime.datetime.now().timestamp()
+            }
             return content
         raise
 
@@ -348,9 +401,9 @@ async def process_url(client, url, semaphore, resolver):
 
         # 解析节点
         raw_nodes = parse_nodes_from_content(content)
-        async with aiofiles.open(RAW_FETCHED_NODES_TEMP_FILE, 'a', encoding='utf-8') as f:
-            for node in raw_nodes:
-                await f.write(node + '\n')
+        if raw_nodes:
+            async with aiofiles.open(RAW_FETCHED_NODES_TEMP_FILE, 'a', encoding='utf-8') as f:
+                await f.write('\n'.join(raw_nodes) + '\n')
 
         return url, len(raw_nodes), []
 
@@ -358,6 +411,7 @@ async def validate_and_save_nodes(resolver):
     """从临时文件读取并验证节点，保存协议统计"""
     validated_nodes = []
     protocol_counts = Counter()
+    valid_protocol_counts = Counter()
 
     if not RAW_FETCHED_NODES_TEMP_FILE.exists():
         logger.warning(f"临时节点文件 {RAW_FETCHED_NODES_TEMP_FILE} 不存在，跳过验证")
@@ -370,6 +424,7 @@ async def validate_and_save_nodes(resolver):
             protocol_counts[protocol] += 1
             if await validate_node(node, resolver):
                 validated_nodes.append(rename_node(node))
+                valid_protocol_counts[protocol] += 1
 
     unique_nodes = list(set(validated_nodes))
 
@@ -381,9 +436,9 @@ async def validate_and_save_nodes(resolver):
     # 保存协议统计
     with open(PROTOCOL_STATS_CSV, 'w', newline='', encoding='utf-8') as csvfile:
         writer = csv.writer(csvfile)
-        writer.writerow(['Protocol', 'Count'])
-        for proto, count in protocol_counts.items():
-            writer.writerow([proto, count])
+        writer.writerow(['Protocol', 'Total Count', 'Valid Count'])
+        for proto in protocol_counts:
+            writer.writerow([proto, protocol_counts[proto], valid_protocol_counts.get(proto, 0)])
     logger.info(f"协议统计已保存到 {PROTOCOL_STATS_CSV}")
 
     return unique_nodes
@@ -391,7 +446,6 @@ async def validate_and_save_nodes(resolver):
 async def main():
     logger.info("开始执行代理抓取任务")
     await load_cache()
-
     urls = await read_urls_from_file('sources.list')
     if not urls:
         logger.warning("未找到任何 URL，程序退出")
@@ -404,8 +458,8 @@ async def main():
         RAW_FETCHED_NODES_TEMP_FILE.unlink()
 
     node_counts_data = []
-    resolver = aiodns.DNSResolver()
-    semaphore = asyncio.Semaphore(50)
+    resolver = aiodns.DNSResolver(timeout=5, nameservers=['8.8.8.8', '1.1.1.1'])
+    semaphore = asyncio.Semaphore(CONCURRENCY_LIMIT)
 
     async with httpx.AsyncClient(http2=True, follow_redirects=True) as client:
         tasks = [process_url(client, url, semaphore, resolver) for url in urls]
