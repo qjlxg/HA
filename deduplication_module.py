@@ -26,7 +26,7 @@ os.makedirs(INPUT_DATA_DIR, exist_ok=True)
 os.makedirs(OUTPUT_SUB_DIR, exist_ok=True)
 
 # 定义需要解析 IP 的协议
-IP_EXTRACT_PATTERNS = {
+IP_EXTRACT_PATTERNS = { # 注意：这里是正确的变量名
     "vmess": r"(?:\"add\"|\"addr\"|\"host\"|\"sni\")\s*:\s*\"([^\"]+)\"",
     "vless": r"vless:\/\/[a-zA-Z0-9\-]+@([^:]+)",
     "trojan": r"trojan:\/\/.*@([^:]+)",
@@ -120,7 +120,8 @@ def extract_host_from_node(node: str) -> str | None:
             pass
 
     if not extracted_host:
-        for pattern_name, pattern in IP_EXTRACT_PATTERterns.items():
+        # 修正了拼写错误：IP_EXTRACT_PATTERNS
+        for pattern_name, pattern in IP_EXTRACT_PATTERNS.items(): 
             match = re.search(pattern, node)
             if match:
                 for group in match.groups():
