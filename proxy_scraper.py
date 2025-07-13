@@ -7,13 +7,14 @@ import json
 import os
 import csv
 import random
-import datetime # 导入 datetime 模块
-from urllib.parse import urlparse, urlunparse # 导入 urlunparse
-from collections import defaultdict
+import datetime
+from urllib.parse import urlparse, urlunparse
+from collections import Counter
 from bs4 import BeautifulSoup
 import aiofiles
 import logging
 import aiodns
+import geoip2.database
 from tenacity import retry, stop_after_attempt, wait_exponential
 from pathlib import Path
 
@@ -25,27 +26,29 @@ logger = logging.getLogger(__name__)
 DATA_DIR = Path("data")
 ALL_NODES_FILE = DATA_DIR / "all.txt"
 NODE_COUNTS_CSV = DATA_DIR / "node_counts.csv"
+PROTOCOL_STATS_CSV = DATA_DIR / "protocol_stats.csv"
 RAW_FETCHED_NODES_TEMP_FILE = DATA_DIR / "raw_fetched_nodes_temp.txt"
 CACHE_FILE = DATA_DIR / "cache.json"
+GEOIP_DB = DATA_DIR / "GeoLite2-City.mmdb"
 
 # 确保数据目录存在
 DATA_DIR.mkdir(exist_ok=True)
 
 # 缓存机制：存储已处理的 URL 及其内容哈希和时间戳
-PROCESSED_URLS_CACHE = {} # {url: {"hash": content_hash, "timestamp": datetime}}
+PROCESSED_URLS_CACHE = {}  # {url: {"hash": content_hash, "timestamp": float}}
+
+# 不可信国家代码（示例，可根据需求调整）
+UNTRUSTED_COUNTRIES = {'XX', 'YY'}  # 替换为实际不可信国家代码
 
 # 预定义的请求头
 USER_AGENTS = {
     "desktop": [
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36",
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36",
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36",
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Safari/605.1.15",
     ],
     "mobile": [
         "Mozilla/5.0 (Linux; Android 10) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Mobile Safari/537.36",
         "Mozilla/5.0 (iPhone; CPU iPhone OS 16_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1",
-        "Mozilla/5.0 (Linux; Android 11; Pixel 4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Mobile Safari/537.36",
     ],
     "pad": [
         "Mozilla/5.0 (iPad; CPU OS 16_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1",
@@ -69,11 +72,17 @@ def get_random_headers():
     }
 
 async def load_cache():
-    """加载缓存"""
+    """加载缓存并清理过期记录"""
     try:
         if CACHE_FILE.exists():
             async with aiofiles.open(CACHE_FILE, 'r', encoding='utf-8') as f:
-                PROCESSED_URLS_CACHE.update(json.loads(await f.read()))
+                cache = json.loads(await f.read())
+            now = datetime.datetime.now().timestamp()
+            PROCESSED_URLS_CACHE.update({
+                k: v for k, v in cache.items()
+                if (now - v["timestamp"]) < 24 * 3600  # 缓存有效期 24 小时
+            })
+            logger.info(f"加载了 {len(PROCESSED_URLS_CACHE)} 个缓存记录")
     except Exception as e:
         logger.error(f"加载缓存失败: {e}")
 
@@ -82,6 +91,7 @@ async def save_cache():
     try:
         async with aiofiles.open(CACHE_FILE, 'w', encoding='utf-8') as f:
             await f.write(json.dumps(PROCESSED_URLS_CACHE))
+        logger.info(f"缓存已保存到 {CACHE_FILE}")
     except Exception as e:
         logger.error(f"保存缓存失败: {e}")
 
@@ -97,7 +107,7 @@ async def read_urls_from_file(file_path):
                         urls.append(f'http://{line}')
                     else:
                         urls.append(line)
-        logger.info(f"从 {file_path} 读取了 {len(urls)} 个 URL。")
+        logger.info(f"从 {file_path} 读取了 {len(urls)} 个 URL")
     except FileNotFoundError:
         logger.error(f"文件未找到: {file_path}")
     return urls
@@ -154,7 +164,7 @@ def parse_nodes_from_content(content):
                                 if re.match(pattern, v, re.IGNORECASE):
                                     nodes.append(v)
     except yaml.YAMLError:
-        logger.debug("内容不是有效的 YAML 格式。")
+        logger.debug("内容不是有效的 YAML 格式")
 
     # JSON 解析
     try:
@@ -180,7 +190,7 @@ def parse_nodes_from_content(content):
             return found_nodes
         nodes.extend(find_nodes_in_json(parsed_json))
     except json.JSONDecodeError:
-        logger.debug("内容不是有效的 JSON 格式。")
+        logger.debug("内容不是有效的 JSON 格式")
 
     # HTML 解析
     if any(tag in content.lower() for tag in ['<html', '<body', '<!doctype html']):
@@ -188,7 +198,7 @@ def parse_nodes_from_content(content):
         text_content = soup.get_text()
         for proto, pattern in node_patterns.items():
             nodes.extend(re.findall(pattern, text_content, re.IGNORECASE))
-        for tag in soup.find_all(['pre', 'code', 'textarea', 'div', 'p']): # 增加更多标签以全面解析
+        for tag in soup.find_all(['pre', 'code', 'textarea', 'div', 'p']):
             block_content = tag.get_text()
             for proto, pattern in node_patterns.items():
                 nodes.extend(re.findall(pattern, block_content, re.IGNORECASE))
@@ -196,7 +206,7 @@ def parse_nodes_from_content(content):
     return list(set(nodes))
 
 async def validate_node(node, resolver):
-    """验证节点格式和连通性"""
+    """验证节点格式、DNS 和 GeoIP"""
     if not node:
         return False
 
@@ -219,6 +229,19 @@ async def validate_node(node, resolver):
         except Exception as e:
             logger.debug(f"DNS 解析失败: {e}")
             return False
+
+        # GeoIP 验证
+        if GEOIP_DB.exists():
+            try:
+                with geoip2.database.Reader(GEOIP_DB) as reader:
+                    response = reader.city(hostname)
+                    if response.country.iso_code in UNTRUSTED_COUNTRIES:
+                        logger.debug(f"节点位于不可信区域 {response.country.iso_code}: {node}")
+                        return False
+            except geoip2.errors.AddressNotFoundError:
+                logger.debug(f"GeoIP 数据库未找到 {hostname} 的记录")
+            except Exception as e:
+                logger.error(f"GeoIP 验证失败: {e}")
 
         # 协议特定验证
         if node_type == "hysteria2":
@@ -243,7 +266,7 @@ async def validate_node(node, resolver):
         elif node_type == "ssr":
             encoded_part = node[len("ssr://"):]
             decoded_str = decode_base64(encoded_part)
-            if not decoded_str or len(decoded_str.split(':')) < 6: # 简化判断，实际应更严格
+            if not decoded_str or len(decoded_str.split(':')) < 6:
                 return False
         elif node_type == "vless":
             if not re.match(r"vless:\/\/([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})@[\w\.-]+:\d+", node):
@@ -271,7 +294,7 @@ def rename_node(node):
                     new_encoded = base64.b64encode(json.dumps(vmess_config).encode()).decode()
                     return f"vmess://{new_encoded}"
         except:
-            pass # 忽略解析错误，返回原始节点
+            pass
     elif parsed_url.fragment and len(parsed_url.fragment) > 5:
         new_parsed_url = parsed_url._replace(fragment=parsed_url.fragment[:5])
         return urlunparse(new_parsed_url)
@@ -282,9 +305,8 @@ async def fetch_url_content(client, url):
     """安全地异步获取 URL 内容"""
     if url in PROCESSED_URLS_CACHE:
         cache_entry = PROCESSED_URLS_CACHE[url]
-        # 缓存有效期 24 小时
         if (datetime.datetime.now().timestamp() - cache_entry["timestamp"]) < 24 * 3600:
-            logger.info(f"URL {url} 在缓存中，跳过抓取。")
+            logger.info(f"URL {url} 在缓存中，跳过抓取")
             return None
 
     parsed_url = urlparse(url)
@@ -308,7 +330,7 @@ async def fetch_url_content(client, url):
             content = response.text
             PROCESSED_URLS_CACHE[url] = {"hash": hash(content), "timestamp": datetime.datetime.now().timestamp()}
             return content
-        raise # 如果不是http错误，或者https也失败，则再次抛出
+        raise
 
 async def process_url(client, url, semaphore, resolver):
     """处理单个 URL"""
@@ -333,31 +355,46 @@ async def process_url(client, url, semaphore, resolver):
         return url, len(raw_nodes), []
 
 async def validate_and_save_nodes(resolver):
-    """从临时文件读取并验证节点"""
+    """从临时文件读取并验证节点，保存协议统计"""
     validated_nodes = []
+    protocol_counts = Counter()
+
     if not RAW_FETCHED_NODES_TEMP_FILE.exists():
-        logger.warning(f"临时节点文件 {RAW_FETCHED_NODES_TEMP_FILE} 不存在，跳过验证。")
+        logger.warning(f"临时节点文件 {RAW_FETCHED_NODES_TEMP_FILE} 不存在，跳过验证")
         return []
 
     async with aiofiles.open(RAW_FETCHED_NODES_TEMP_FILE, 'r', encoding='utf-8') as f:
-        async for node_line in f: # 将变量名改为 node_line 避免与函数参数 node 混淆
+        async for node_line in f:
             node = node_line.strip()
+            protocol = node.split('://')[0].lower() if '://' in node else 'unknown'
+            protocol_counts[protocol] += 1
             if await validate_node(node, resolver):
                 validated_nodes.append(rename_node(node))
 
     unique_nodes = list(set(validated_nodes))
+
+    # 保存节点
     async with aiofiles.open(ALL_NODES_FILE, 'w', encoding='utf-8') as f:
         for node in unique_nodes:
             await f.write(node + '\n')
+
+    # 保存协议统计
+    with open(PROTOCOL_STATS_CSV, 'w', newline='', encoding='utf-8') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow(['Protocol', 'Count'])
+        for proto, count in protocol_counts.items():
+            writer.writerow([proto, count])
+    logger.info(f"协议统计已保存到 {PROTOCOL_STATS_CSV}")
+
     return unique_nodes
 
 async def main():
-    logger.info("开始执行代理抓取任务。")
+    logger.info("开始执行代理抓取任务")
     await load_cache()
 
     urls = await read_urls_from_file('sources.list')
     if not urls:
-        logger.warning("未找到任何 URL，程序退出。")
+        logger.warning("未找到任何 URL，程序退出")
         return
 
     # 清空之前的 all.txt 和 temp 文件
@@ -368,7 +405,7 @@ async def main():
 
     node_counts_data = []
     resolver = aiodns.DNSResolver()
-    semaphore = asyncio.Semaphore(50) # 限制并发数量
+    semaphore = asyncio.Semaphore(50)
 
     async with httpx.AsyncClient(http2=True, follow_redirects=True) as client:
         tasks = [process_url(client, url, semaphore, resolver) for url in urls]
@@ -376,7 +413,7 @@ async def main():
 
         for result in results:
             if isinstance(result, tuple):
-                url, node_count, _ = result # 忽略第三个元素，因为它在 process_url 中已经没有意义了
+                url, node_count, _ = result
                 node_counts_data.append({"url": url, "node_count": node_count})
             else:
                 logger.error(f"处理 URL 时发生异常: {result}")
@@ -392,7 +429,7 @@ async def main():
     logger.info(f"节点统计已保存到 {NODE_COUNTS_CSV}")
 
     await save_cache()
-    logger.info("代理抓取任务完成。")
+    logger.info("代理抓取任务完成")
 
 if __name__ == "__main__":
     asyncio.run(main())
