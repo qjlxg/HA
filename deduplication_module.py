@@ -77,9 +77,13 @@ def decode_base64_safe(data: str) -> str:
     return ""
 
 def _clean_json_node(json_data: dict) -> dict:
-    """内部辅助函数，用于清理 JSON 节点中的不必要字段"""
+    """
+    内部辅助函数，用于清理 JSON 节点中的不必要字段。
+    ⭐ 关键修改：去除了 'ps' (名称/备注) 字段，使其不影响去重判断。
+    """
     clean_json = {}
-    keys_to_keep = ["v", "ps", "add", "port", "id", "net", "type", "tls", "sni", "host", "path"]
+    # 移除 'ps' (名称/备注) 字段，因为它不影响节点的实际配置，但会影响去重
+    keys_to_keep = ["v", "add", "port", "id", "net", "type", "tls", "sni", "host", "path"]
     for key in keys_to_keep:
         if key in json_data:
             clean_json[key] = json_data[key]
@@ -116,7 +120,7 @@ def extract_host_from_node(node: str) -> str | None:
             pass
 
     if not extracted_host:
-        for pattern_name, pattern in IP_EXTRACT_PATTERNS.items():
+        for pattern_name, pattern in IP_EXTRACT_PATTERterns.items():
             match = re.search(pattern, node)
             if match:
                 for group in match.groups():
@@ -174,8 +178,8 @@ def simplify_node(node: str) -> str:
             pass
 
     elif node_without_name.startswith("trojan://") or \
-          node_without_name.startswith("vless://") or \
-          node_without_name.startswith("hysteria2://"):
+             node_without_name.startswith("vless://") or \
+             node_without_name.startswith("hysteria2://"):
         match = re.match(r"^(?P<protocol>[a-zA-Z0-9]+):\/\/(?P<id_pass>[^@]+)@(?P<server>[^:]+):(?P<port>\d+)(.*)", node_without_name)
         if match:
             proto = match.group('protocol')
