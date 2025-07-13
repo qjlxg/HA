@@ -25,7 +25,8 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install httpx aiofiles beautifulsoup4 pyyaml aiodns tenacity
+        # 修正：确保安装 httpx[http2] 以及 geoip2 和 maxminddb
+        pip install httpx[http2] aiofiles beautifulsoup4 pyyaml aiodns tenacity geoip2 maxminddb
       # 直接安装依赖，确保即使缺少 requirements.txt 也能运行
 
     - name: Run proxy scraper
