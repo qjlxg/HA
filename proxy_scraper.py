@@ -14,6 +14,7 @@ from bs4 import BeautifulSoup
 import logging
 import typing
 import uuid
+# import httpcore # 不再直接导入，因为其SSLError属性可能不存在
 
 # 配置日志，同时输出到控制台和文件
 logging.basicConfig(
@@ -280,7 +281,6 @@ async def _fetch_url_with_retry(client: httpx.AsyncClient, url: str, headers: di
         # 如果是 HTTPS 错误，尝试禁用 SSL 验证
         if isinstance(e, httpx.ConnectError) and "SSL" in str(e):
             logging.info(f"SSL 连接错误，尝试禁用 SSL 验证: {url}")
-            # Keep the original logic of creating a new client here for verify=False retry
             async with httpx.AsyncClient(timeout=10, verify=False, follow_redirects=True) as retry_client:
                 try:
                     response = await retry_client.get(url, headers=headers)
@@ -298,7 +298,7 @@ async def _fetch_url_with_retry(client: httpx.AsyncClient, url: str, headers: di
                 fallback_headers = dict(headers)
                 fallback_headers.pop('If-None-Match', None)
                 fallback_headers.pop('If-Modified-Since', None)
-                response_https = await client.get(https_url, headers=fallback_headers) # Use the passed client
+                response_https = await client.get(https_url, headers=fallback_headers)
                 response_https.raise_for_status()
                 return response_https
             except httpx.HTTPStatusError as e_https:
@@ -315,12 +315,11 @@ async def _fetch_url_with_retry(client: httpx.AsyncClient, url: str, headers: di
         logging.error(f"获取 {url} 时发生未知错误: {e}")
     return None
 
-async def get_url_content(client: httpx.AsyncClient, url: str, use_cache: bool = True) -> str | None:
+async def get_url_content(url: str, use_cache: bool = True) -> str | None:
     """
     从 URL 获取内容，并支持基于 HTTP 头部的缓存验证。
     
     Args:
-        client (httpx.AsyncClient): HTTP 客户端。
         url (str): 要获取的 URL。
         use_cache (bool): 是否使用缓存，默认 True。
         
@@ -346,44 +345,45 @@ async def get_url_content(client: httpx.AsyncClient, url: str, use_cache: bool =
             logging.warning(f"读取或解析缓存文件 {cache_entry_path} 失败: {e}，将重新获取。")
             cached_data = None
 
-    headers_for_request = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-    }
+    async with httpx.AsyncClient(timeout=10, verify=True, follow_redirects=True) as client:
+        headers_for_request = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        }
 
-    if cached_data:
-        if cached_data.get('etag'):
-            headers_for_request['If-None-Match'] = cached_data['etag']
-        if cached_data.get('last-modified'):
-            headers_for_request['If-Modified-Since'] = cached_data['last-modified']
+        if cached_data:
+            if cached_data.get('etag'):
+                headers_for_request['If-None-Match'] = cached_data['etag']
+            if cached_data.get('last-modified'):
+                headers_for_request['If-Modified-Since'] = cached_data['last-modified']
 
-    response = await _fetch_url_with_retry(client, url, headers_for_request, url)
+        response = await _fetch_url_with_retry(client, url, headers_for_request, url)
 
-    if response:
-        if response.status_code == 304 and cached_data and cached_data.get('content'):
-            logging.info(f"URL: {url} 内容未更新 (304 Not Modified)，从缓存读取。")
-            return base64.b64decode(cached_data['content']).decode('utf-8', errors='ignore')
+        if response:
+            if response.status_code == 304 and cached_data and cached_data.get('content'):
+                logging.info(f"URL: {url} 内容未更新 (304 Not Modified)，从缓存读取。")
+                return base64.b64decode(cached_data['content']).decode('utf-8', errors='ignore')
+            else:
+                content = response.text
+                new_cached_data = {
+                    "content": base64.b64encode(content.encode('utf-8')).decode('ascii'),
+                    "timestamp": datetime.datetime.now().isoformat()
+                }
+                if 'etag' in response.headers:
+                    new_cached_data['etag'] = response.headers['etag']
+                if 'last-modified' in response.headers:
+                    new_cached_data['last-modified'] = response.headers['last-modified']
+
+                try:
+                    async with aiofiles.open(cache_entry_path, 'w', encoding='utf-8') as f:
+                        await f.write(json.dumps(new_cached_data, ensure_ascii=False))
+                    logging.info(f"URL: {url} 内容已更新，已写入缓存。")
+                except (IOError, json.JSONEncodeError) as e:
+                    logging.error(f"写入缓存文件 {cache_entry_path} 失败: {e}")
+                
+                return content
         else:
-            content = response.text
-            new_cached_data = {
-                "content": base64.b64encode(content.encode('utf-8')).decode('ascii'),
-                "timestamp": datetime.datetime.now().isoformat()
-            }
-            if 'etag' in response.headers:
-                new_cached_data['etag'] = response.headers['etag']
-            if 'last-modified' in response.headers:
-                new_cached_data['last-modified'] = response.headers['last-modified']
-
-            try:
-                async with aiofiles.open(cache_entry_path, 'w', encoding='utf-8') as f:
-                    await f.write(json.dumps(new_cached_data, ensure_ascii=False))
-                logging.info(f"URL: {url} 内容已更新，已写入缓存。")
-            except (IOError, json.JSONEncodeError) as e:
-                logging.error(f"写入缓存文件 {cache_entry_path} 失败: {e}")
-        
-            return content
-    else:
-        logging.warning(f"无法获取 URL: {url} 的内容，跳过该 URL 的节点提取。")
-        return None
+            logging.warning(f"无法获取 URL: {url} 的内容，跳过该 URL 的节点提取。")
+            return None
 
 async def extract_nodes_from_content(url: str, content: str) -> list[str]:
     """
@@ -708,70 +708,92 @@ async def extract_nodes_from_content(url: str, content: str) -> list[str]:
                         unique_nodes.add(node)
                     else:
                         logging.debug(f"丢弃无效 {protocol} 节点 (URL: {url}, HTML 文本): {node}, 原因: {reason}")
+            # 在 HTML 文本中寻找可能的 Base64 编码的节点
+            for word_match in re.finditer(r'\b[A-Za-z0-9+/]{20,}=*\b', text): # 匹配可能包含Base64的单词
+                word = word_match.group(0)
+                padding_needed = len(word) % 4
+                if padding_needed != 0:
+                    word += '=' * (4 - padding_needed) # 添加填充
+                try:
+                    # 尝试 Base64 解码
+                    decoded_text = base64.b64decode(word).decode('utf-8', errors='ignore')
+                    # 对解码后的文本再次进行节点匹配
+                    for protocol, pattern in NODE_PATTERNS.items():
+                        for match in re.finditer(pattern, decoded_text):
+                            node = match.group(0)
+                            is_valid, reason = validate_node(node, protocol)
+                            if is_valid:
+                                unique_nodes.add(node)
+                            else:
+                                logging.debug(f"丢弃无效 {protocol} 节点 (URL: {url}, HTML Base64 解码): {node}, 原因: {reason}")
+                except (base64.binascii.Error, UnicodeDecodeError, ValueError) as e:
+                    logging.debug(f"HTML 内容中的 Base64 字符串解码失败或无效: {word}, 错误: {e}")
+                    pass # 不是有效的 Base64，忽略
 
     return list(unique_nodes)
 
-
-async def process_url(client: httpx.AsyncClient, url: str, all_nodes_writer: aiofiles.threadpool.text.AsyncTextIOWrapper, semaphore: asyncio.Semaphore):
+async def process_url(url: str, all_nodes_writer: aiofiles.threadpool.text.AsyncTextIOWrapper, semaphore: asyncio.Semaphore) -> tuple[str, int] | None:
     """
-    处理单个 URL，包括获取内容、提取节点、写入文件和更新计数。
+    处理单个 URL，获取内容，提取节点，并写入 all.txt。
     
     Args:
-        client (httpx.AsyncClient): HTTP 客户端实例。
         url (str): 要处理的 URL。
-        all_nodes_writer (aiofiles.threadpool.text.AsyncTextIOWrapper): 用于写入所有节点的异步文件对象。
+        all_nodes_writer (aiofiles.threadpool.text.AsyncTextIOWrapper): 用于写入 all.txt 的文件对象。
         semaphore (asyncio.Semaphore): 用于控制并发的信号量。
         
     Returns:
-        tuple[str, int]: 包含 URL 和提取到的节点数量的元组。
+        tuple[str, int] | None: 包含 URL 和提取节点数量的元组，如果处理失败则返回 None。
     """
-    nodes_count = 0
     async with semaphore:
         logging.info(f"开始处理 URL: {url}")
-        content = await get_url_content(client, url)
+        content = await get_url_content(url)
         if content:
             nodes = await extract_nodes_from_content(url, content)
             if nodes:
-                nodes_count = len(nodes)
-                for node in nodes:
-                    await all_nodes_writer.write(node + "\n")
-                logging.info(f"从 {url} 提取并写入了 {nodes_count} 个节点。")
+                nodes_str = "\n".join(nodes) + "\n"
+                await all_nodes_writer.write(nodes_str)
+                logging.info(f"URL: {url} 提取并写入了 {len(nodes)} 个节点。")
+                return url, len(nodes)
             else:
-                logging.info(f"从 {url} 未提取到有效节点。")
+                logging.info(f"URL: {url} 未提取到有效节点。")
         else:
-            logging.warning(f"跳过 URL: {url}，因为无法获取内容。")
-    return url, nodes_count
+            logging.warning(f"无法获取或处理 URL: {url} 的内容。")
+        return url, 0 # 返回 URL 和 0 节点，表示该 URL 处理完成但未提取到节点
 
 async def main():
-    logging.info("代理节点抓取程序启动。")
+    """主函数，读取 sources.list，并发处理 URL，并统计节点数量。"""
     
-    await clean_old_cache_files(CLEANUP_THRESHOLD_HOURS)
-
-    sources_file = os.path.join(DATA_DIR, "sources.list")
-    urls_to_process = []
-    if os.path.exists(sources_file):
-        try:
-            async with aiofiles.open(sources_file, 'r', encoding='utf-8') as f:
-                async for line in f:
-                    line = line.strip()
-                    if line and not line.startswith('#'): # 忽略空行和注释行
-                        urls_to_process.append(line)
-        except Exception as e:
-            logging.error(f"读取 sources.list 文件失败: {e}")
-            return
-    else:
-        logging.error(f"sources.list 文件不存在: {sources_file}")
+    # 将 sources.list 文件设置为在根目录下
+    sources_list_path = "sources.list" 
+    
+    if not os.path.exists(sources_list_path):
+        logging.error(f"错误：sources.list 文件不存在于 {sources_list_path}。请确保文件存在。")
         return
 
-    processed_urls = set() # Use a set for deduplication
-    for url in urls_to_process:
-        # 简单地判断是否缺少协议，并添加 HTTPS 协议
-        if not re.match(r"^[a-zA-Z]+://", url):
-            fixed_url = f"https://{url}"
-            logging.info(f"URL: {url} 缺少协议，已自动添加为 {fixed_url}")
-            processed_urls.add(fixed_url)
+    # 清理旧缓存文件
+    await clean_old_cache_files(CLEANUP_THRESHOLD_HOURS)
+
+    urls = []
+    try:
+        async with aiofiles.open(sources_list_path, 'r', encoding='utf-8') as f:
+            raw_urls = (await f.read()).splitlines()
+            # 过滤掉空行和注释行
+            urls = [url.strip() for url in raw_urls if url.strip() and not url.strip().startswith('#')]
+    except FileNotFoundError:
+        logging.error(f"sources.list 文件未找到: {sources_list_path}。请确保文件存在。")
+        return
+    except Exception as e:
+        logging.error(f"读取 sources.list 时发生错误: {e}")
+        return
+
+    processed_urls = []
+    for url in urls:
+        if not re.match(r"^[a-zA-Z]+:\/\/", url):
+            fixed_url = f"http://{url}"
+            logging.warning(f"URL 缺少协议，已自动添加为 {fixed_url}")
+            processed_urls.append(fixed_url)
         else:
-            processed_urls.add(url)
+            processed_urls.append(url)
 
     if not processed_urls:
         logging.warning("sources.list 中没有找到有效的 URL。")
@@ -785,29 +807,27 @@ async def main():
         await f.truncate(0) # 清空文件
 
     # 在这里打开一次 all_nodes_writer，并在所有任务中共享
-    # Create a single httpx.AsyncClient here and pass it down
-    async with httpx.AsyncClient(timeout=10, verify=True, follow_redirects=True) as client:
-        async with aiofiles.open(ALL_NODES_FILE, 'a', encoding='utf-8') as all_nodes_writer:
-            tasks = [process_url(client, url, all_nodes_writer, semaphore) for url in processed_urls] # Pass the client
-            results = await asyncio.gather(*tasks, return_exceptions=True)
+    async with aiofiles.open(ALL_NODES_FILE, 'a', encoding='utf-8') as all_nodes_writer:
+        tasks = [process_url(url, all_nodes_writer, semaphore) for url in processed_urls]
+        results = await asyncio.gather(*tasks, return_exceptions=True)
 
-            for result in results:
-                if isinstance(result, tuple):
-                    url, count = result
-                    node_counts[url] = count
-                else:
-                    logging.error(f"处理 URL 时发生异常: {result}")
+        for result in results:
+            if isinstance(result, tuple):
+                url, count = result
+                node_counts[url] = count
+            else:
+                logging.error(f"处理 URL 时发生异常: {result}")
 
     try:
         async with aiofiles.open(NODE_COUNT_CSV, 'w', encoding='utf-8', newline='') as f:
-            await f.write("URL,NodeCount\\n")
+            await f.write("URL,NodeCount\n")
             for url, count in node_counts.items():
                 await f.write(f"{url},{count}\n")
-        logging.info(f"节点统计信息已保存到 {NODE_COUNT_CSV}")
+        logging.info(f"节点统计已写入 {NODE_COUNT_CSV}")
     except Exception as e:
-        logging.error(f"保存节点统计信息到 CSV 文件失败: {e}")
+        logging.error(f"写入节点统计到 CSV 时发生错误: {e}")
 
-    logging.info("代理节点抓取程序完成。")
+    logging.info("所有 URL 处理完成。")
 
 if __name__ == "__main__":
     asyncio.run(main())
