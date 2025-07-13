@@ -1,9 +1,9 @@
 name: Proxy Scraper
 
 on:
-  workflow_dispatch: # 允许手动触发
+  workflow_dispatch:
   schedule:
-    - cron: '0 */6 * * *' # 每6小时运行一次，例如 UTC 时间 0:00, 6:00, 12:00, 18:00
+    - cron: '0 */6 * * *'
 
 jobs:
   scrape-proxies:
@@ -16,37 +16,56 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.9' # 推荐使用稳定的最新版本，如 3.9 或 3.10
+        python-version: '3.9'
 
     - name: Install dependencies
       run: |
+        echo "--- 开始安装 pip ---"
         python -m pip install --upgrade pip
-        # 直接安装所有脚本需要的依赖
+        echo "--- pip 安装完成 ---"
+        echo "--- 开始安装其他依赖 ---"
         pip install beautifulsoup4 PyYAML aiofiles aiodns tenacity geoip2 maxminddb
-        # 特别处理 httpx，因为它需要额外的 http2 支持，并且要确保版本是最新的
+        echo "--- 其他依赖安装完成 ---"
+        echo "--- 开始安装/升级 httpx[http2] ---"
         pip install --upgrade "httpx[http2]"
+        echo "--- httpx[http2] 安装/升级完成 ---"
         
-    - name: Verify httpx version # 添加此步骤以确认 httpx 版本是否正确
+    - name: Verify httpx version # 再次确认 httpx 版本
       run: |
+        echo "--- 验证 httpx 版本 ---"
         pip show httpx
         python -c "import httpx; print(f'Loaded httpx version: {httpx.__version__}')"
+        echo "--- httpx 版本验证完成 ---"
+
+    - name: Verify Python script existence and readability # 检查脚本文件
+      run: |
+        echo "--- 检查 proxy_scraper.py 文件 ---"
+        ls -l proxy_scraper.py
+        cat proxy_scraper.py | head -n 10 # 打印脚本前10行，确认内容
+
+    - name: Verify sources.list existence and content # 检查 sources.list 文件
+      run: |
+        echo "--- 检查 sources.list 文件 ---"
+        ls -l sources.list
+        cat sources.list # 打印 sources.list 内容
 
     - name: Ensure data and cache directories exist
       run: |
         mkdir -p data
         mkdir -p cache
-        # GitHub Actions 默认会清理工作区，所以每次运行都需要创建目录
 
     - name: Run Proxy Scraper
-      run: python proxy_scraper.py
+      run: |
+        echo "--- 准备运行 proxy_scraper.py ---"
+        python proxy_scraper.py
+        echo "--- proxy_scraper.py 运行结束 ---"
 
     - name: Commit and push changes
       env:
-        # 使用 GitHub Token 进行认证
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         git config user.name "GitHub Actions"
         git config user.email "actions@github.com"
         git add data/
-        git commit -m "Update proxy nodes [skip ci]" || true # || true 确保即使没有实际文件修改，提交命令也不会失败
+        git commit -m "Update proxy nodes [skip ci]" || true
         git push
