@@ -1,7 +1,8 @@
-httpx[http2]
-PyYAML
+httpx
 beautifulsoup4
-urllib3
+PyYAML
 aiofiles
-geoip2
 aiodns
+tenacity
+geoip2
+maxminddb-decode
