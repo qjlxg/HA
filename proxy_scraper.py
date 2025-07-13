@@ -51,10 +51,10 @@ class CrawlerConfig:
     # failed_urls_file: 失败URL日志文件路径
     failed_urls_file: str = field(default_factory=lambda: os.path.join("data", "failed_urls.log"))
     concurrent_requests_limit: int = 20 # 并发请求URL的数量限制
-    request_timeout: float = 20.0 # HTTP请求超时时间（秒）
-    retry_attempts: int = 3 # HTTP请求失败后的重试次数
-    cache_save_interval: int = 50 # 每处理多少个URL保存一次缓存
-    max_recursion_depth: int = 2 # 最大递归抓取深度（0表示只抓取sources.list中的URL）
+    request_timeout: float = 10.0 # HTTP请求超时时间（秒）
+    retry_attempts: int = 1 # HTTP请求失败后的重试次数
+    cache_save_interval: int = 500 # 每处理多少个URL保存一次缓存
+    max_recursion_depth: int = 0 # 最大递归抓取深度（0表示只抓取sources.list中的URL）
     proxies: Optional[Dict] = None # HTTP/HTTPS代理配置字典 (例如: {"http://": "http://user:pass@host:port"})
     # user_agents: 用于HTTP请求的用户代理列表，使用 field(default_factory=list) 确保可变默认值正确初始化
     user_agents: List[str] = field(default_factory=list)
