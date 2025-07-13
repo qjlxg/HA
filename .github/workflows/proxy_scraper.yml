@@ -2,12 +2,11 @@ name: Proxy Scraper
 
 on:
   schedule:
-    # 每天凌晨 0 点 UTC 运行
     - cron: '0 0 * * *'
-  workflow_dispatch: # 允许手动触发
+  workflow_dispatch:
 
 permissions:
-  contents: write # 仅授予写权限以推送更改
+  contents: write
 
 jobs:
   scrape-proxies:
@@ -16,59 +15,49 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+      with:
+        path: .
 
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.11' # 使用 Python 3.11 提升性能，兼容异步功能
+        python-version: '3.11'
 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        # 修正：确保安装 httpx[http2] 以及 geoip2 和 maxminddb
         pip install httpx[http2] aiofiles beautifulsoup4 pyyaml aiodns tenacity geoip2 maxminddb
-      # 直接安装依赖，确保即使缺少 requirements.txt 也能运行
+
+    - name: Create data directory
+      run: |
+        mkdir -p ./data
+        chmod -R 755 ./data
 
     - name: Run proxy scraper
       env:
-        DATA_DIR: ./data # 自定义数据目录
-        CONCURRENCY_LIMIT: 20 # 限制并发数，适合 GitHub Actions 环境
+        DATA_DIR: ./data
+        CONCURRENCY_LIMIT: 20
       run: |
+        pwd
         python proxy_scraper.py | tee scraper_output.log
         if [ $? -ne 0 ]; then
           echo "Proxy scraper failed, check scraper_output.log"
           cat scraper_output.log
           exit 1
         fi
-      # 保存脚本输出到日志文件，失败时显示日志
 
-    - name: Upload collected nodes and stats
-      uses: actions/upload-artifact@v4
-      with:
-        name: proxy-scraper-results
-        path: |
-          data/all.txt
-          data/node_counts.csv
-          data/protocol_stats.csv
-        retention-days: 7 # 设置 artifact 保留 7 天
-
-    - name: Upload individual URL contents
-      uses: actions/upload-artifact@v4
-      with:
-        name: url-contents
-        path: |
-          data/*.txt
-          !data/all.txt
-          !data/raw_fetched_nodes_temp.txt
-        retention-days: 7 # 排除 all.txt 和临时文件
+    - name: Check generated files
+      run: |
+        ls -la ./data || echo "Data directory is empty or does not exist"
 
     - name: Commit and push results
       run: |
         git config user.name "GitHub Actions"
         git config user.email "github-actions@github.com"
         git add data/all.txt data/node_counts.csv data/protocol_stats.csv data/*.txt
+        git status
         git commit -m "Update collected proxy nodes and stats" || echo "No changes to commit"
         git push || echo "No changes to push or push failed"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      continue-on-error: true # 推送失败不中断工作流
+      continue-on-error: true
