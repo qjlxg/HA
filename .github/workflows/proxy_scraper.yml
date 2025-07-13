@@ -1,9 +1,9 @@
 name: Proxy Scraper
 
 on:
-  workflow_dispatch: # 允许手动触发
+  workflow_dispatch: # Allows manual trigger
   schedule:
-    - cron: '0 */6 * * *' # 每6小时运行一次，例如 UTC 时间 0:00, 6:00, 12:00, 18:00
+    - cron: '0 */6 * * *' # Runs every 6 hours (at 0:00, 6:00, 12:00, 18:00 UTC)
 
 jobs:
   scrape-proxies:
@@ -16,32 +16,35 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.9' # 推荐使用稳定的最新版本，如 3.9 或 3.10
+        python-version: '3.9' # Recommended stable version. Consider 3.10 or 3.11 for newer features.
 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install --upgrade httpx
+        # Install all dependencies from requirements.txt first
         pip install -r requirements.txt
-    
+        # Then, explicitly upgrade httpx to ensure it's the latest version,
+        # overriding any potential older version specified in requirements.txt.
+        pip install --upgrade httpx
+
     - name: Ensure data and cache directories exist
       run: |
         mkdir -p data
         mkdir -p cache
-        # GitHub Actions 默认会清理工作区，所以每次运行都需要创建目录
+        # GitHub Actions typically cleans the workspace, so these directories need to be created each run.
 
     - name: Run Proxy Scraper
       run: python proxy_scraper.py
 
     - name: Commit and push changes
       env:
-        # 使用 GitHub Token 进行认证
+        # Use the GitHub Token for authentication
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         git config user.name "GitHub Actions"
         git config user.email "actions@github.com"
         git add data/
-        git commit -m "Update proxy nodes [skip ci]" || echo "No changes to commit"
-        # 使用 --allow-empty 确保即使没有实际文件修改，也创建一个空的提交（可选，根据需求）
-        # git commit -m "Update proxy nodes [skip ci]" --allow-empty || echo "No changes to commit"
+        # Use --allow-empty if you want to create a commit even when no files have changed.
+        # Otherwise, the '|| true' ensures the step doesn't fail if there are no changes.
+        git commit -m "Update proxy nodes [skip ci]" || true
         git push
