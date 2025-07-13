@@ -16,394 +16,779 @@ import typing
 import uuid
 
 # 配置日志，同时输出到控制台和文件
-# 设置日志级别为 INFO，格式包含时间、级别和消息
 logging.basicConfig(
-    level=logging.INFO,
+    level=logging.INFO, # 可以根据需要调整为 DEBUG, INFO, WARNING, ERROR
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
-        # 将日志输出到 data/proxy_scraper.log 文件
         logging.FileHandler(os.path.join('data', 'proxy_scraper.log')),
-        # 将日志输出到控制台
         logging.StreamHandler()
     ]
 )
 
-# 定义数据和缓存目录
 DATA_DIR = "data"
-ALL_NODES_FILE = os.path.join(DATA_DIR, "all.txt") # 所有提取到的节点将写入此文件
-NODE_COUNT_CSV = os.path.join(DATA_DIR, "node_counts.csv") # 统计每个源的节点数量
-CACHE_DIR = os.path.join(DATA_DIR, "cache") # 缓存目录，用于存储已抓取内容的哈希值
-CACHE_EXPIRATION_HOURS = 48  # 缓存过期时间（小时），超过此时间将重新抓取
-CLEANUP_THRESHOLD_HOURS = 72  # 缓存清理阈值（小时），超过此时间的文件将被删除
+ALL_NODES_FILE = os.path.join(DATA_DIR, "all.txt")
+NODE_COUNT_CSV = os.path.join(DATA_DIR, "node_counts.csv")
+CACHE_DIR = os.path.join(DATA_DIR, "cache")
+CACHE_EXPIRATION_HOURS = 48  # 缓存过期时间（小时）
+CLEANUP_THRESHOLD_HOURS = 72  # 缓存清理阈值（小时）
 
-# HTTPX 客户端的并发连接限制和超时设置
-CONCURRENCY_LIMIT = 50  # 同时进行的并发请求数量
-# 更细致的 httpx 超时设置：连接超时5秒，读取超时10秒
-HTTPX_TIMEOUT = httpx.Timeout(10.0, connect=5.0)
-
-# 确保数据目录和缓存目录存在，如果不存在则创建
+# 确保数据目录和缓存目录存在
 os.makedirs(DATA_DIR, exist_ok=True)
 os.makedirs(CACHE_DIR, exist_ok=True)
 
-# 定义支持的协议和正则表达式
-PROTOCOL_PATTERNS = {
-    # VLESS 协议匹配
-    "vless": r"(vless://[^\"'#\s]+)",
-    # Trojan 协议匹配
-    "trojan": r"(trojan://[^\"'#\s]+)",
-    # Shadowsocks 协议匹配
-    "ss": r"(ss://[^\"'#\s]+)",
-    # VMess 协议匹配 (base64 编码)
-    "vmess": r"(vmess://[a-zA-Z0-9+/=]+)",
-    # Clash 配置中的 proxy 节点匹配
-    "clash_proxies": r"(proxies:\s*-\s*(?:name:[^\n]+\s*type:[^\n]+\s*server:[^\n]+\s*port:[^\n]+(?:\s*uuid:[^\n]+)?(?:\s*password:[^\n]+)?(?:\s*cipher:[^\n]+)?(?:\s*tls:[^\n]+)?(?:\s*udp:[^\n]+)?(?:\s*skip-cert-verify:[^\n]+)?(?:\s*network:[^\n]+)?(?:\s*ws-opts:[^\n]+)?(?:\s*grpc-opts:[^\n]+)?\s*)*)"
+# 定义支持的节点协议正则
+NODE_PATTERNS = {
+    "hysteria2": re.compile(r"hysteria2:\/\/(?:[^:@\/]+(?::[^@\/]*)?@)?(?:\[[0-9a-fA-F:\.]+\]|[^:\/?#]+):\d+\/?(?:\?[^#]*)?(?:#.*)?"),
+    "vmess": re.compile(r"vmess:\/\/[a-zA-Z0-9\-_+=/]+"),
+    "trojan": re.compile(r"trojan:\/\/[^@]+@(?:\[[0-9a-fA-F:\.]+\]|[^:\/?#]+):\d+\/?(?:\?[^#]*)?(?:#.*)?"),
+    "ss": re.compile(r"ss:\/\/(?:[a-zA-Z0-9\-_]+:[^@\/]+@(?:\[[0-9a-fA-F:\.]+\]|[^:\/?#]+):\d+|[a-zA-Z0-9\-_+=/]+)(?:#.*)?"),
+    "ssr": re.compile(r"ssr:\/\/[a-zA-Z0-9\-_+=/]+"),
+    "vless": re.compile(r"vless:\/\/[0-9a-fA-F\-]+@(?:\[[0-9a-fA-F:\.]+\]|[^:\/?#]+):\d+\/?(?:\?[^#]*)?(?:#.*)?"),
 }
 
-# 忽略的 URL 关键词，用于过滤掉不相关的 URL
-IGNORE_URL_KEYWORDS = [
-    "example.com", "your-site.com", "cdn-cgi/trace",
-    "http://www.cloudflare.com/cdn-cgi/trace",
-    "http://test.com/v1/api",
-    "https://test.com/v1/api",
-    "127.0.0.1", "localhost", "0.0.0.0",
-    "http://ip.sb/json", # 特定IP查询服务，不包含代理节点
-    "http://ip-api.com/json", # 同上
-    "http://ipv4.icanhazip.com", # 同上
-    "http://myexternalip.com/raw", # 同上
-    "http://ipecho.net/plain", # 同上
-    "https://api.ipify.org?format=json" # 同上
-]
+# 并发限制
+CONCURRENCY_LIMIT = 10
 
-# 用于生成唯一 ID 的字典，避免重复的文件名
-uuid_map = {}
+# 支持的 Shadowsocks 加密方法
+SS_METHODS = {
+    "aes-256-gcm", "aes-128-gcm", "chacha20-ietf-poly1305", "chacha20-ietf",
+    "aes-256-cfb", "aes-128-cfb", "rc4-md5", "none"
+}
 
-# region 辅助函数
+# 支持的 ShadowsocksR 协议和混淆
+SSR_PROTOCOLS = {"origin", "auth_sha1_v4", "auth_aes128_md5", "auth_aes128_sha1"}
+SSR_OBFS = {"plain", "http_simple", "http_post", "tls1.2_ticket_auth"}
 
-def generate_unique_id(content):
-    """
-    根据内容生成一个唯一的哈希 ID。
-    用于文件名和缓存键。
-    """
-    # 使用 SHA256 算法计算内容的哈希值
-    hash_object = hashlib.sha256(content.encode('utf-8'))
-    unique_id = hash_object.hexdigest()
-    return unique_id
-
-def get_file_path(unique_id):
-    """
-    根据唯一 ID 获取缓存文件的完整路径。
-    """
-    return os.path.join(CACHE_DIR, f"{unique_id}.json")
-
-async def read_cache(unique_id):
-    """
-    从缓存文件中读取数据，如果缓存过期则返回 None。
-    """
-    file_path = get_file_path(unique_id)
-    if os.path.exists(file_path):
-        # 检查文件修改时间是否过期
-        mod_time = datetime.datetime.fromtimestamp(os.path.getmtime(file_path))
-        if datetime.datetime.now() - mod_time < datetime.timedelta(hours=CACHE_EXPIRATION_HOURS):
-            async with aiofiles.open(file_path, 'r', encoding='utf-8') as f:
-                content = await f.read()
-                return json.loads(content)
-    return None
-
-async def write_cache(unique_id, data):
-    """
-    将数据写入缓存文件。
-    """
-    file_path = get_file_path(unique_id)
-    async with aiofiles.open(file_path, 'w', encoding='utf-8') as f:
-        await f.write(json.dumps(data))
-
-def cleanup_old_cache_files():
-    """
-    清理过期的缓存文件。
-    """
-    logging.info("开始清理旧的缓存文件...")
-    now = datetime.datetime.now()
-    # 遍历缓存目录中的所有文件
-    for filename in os.listdir(CACHE_DIR):
-        file_path = os.path.join(CACHE_DIR, filename)
-        if os.path.isfile(file_path):
-            mod_time = datetime.datetime.fromtimestamp(os.path.getmtime(file_path))
-            # 如果文件修改时间超过清理阈值，则删除
-            if now - mod_time > datetime.timedelta(hours=CLEANUP_THRESHOLD_HOURS):
-                try:
-                    os.remove(file_path)
-                    logging.info(f"已清理旧的缓存文件: {filename}")
-                except OSError as e:
-                    logging.error(f"清理缓存文件失败 {filename}: {e}")
-    logging.info("旧的缓存文件清理完成。")
-
-# endregion
-
-# region 网络请求函数
-
-async def _fetch_url_with_retry(client: httpx.AsyncClient, url: str, original_protocol_url: typing.Optional[str] = None, attempt_ssl_verify_false: bool = False):
-    """
-    尝试抓取 URL，处理 SSL 错误并尝试 HTTP 到 HTTPS 的回退。
-    Args:
-        client: httpx.AsyncClient 实例，用于发送 HTTP 请求。
-        url: 当前要抓取的 URL。
-        original_protocol_url: 原始请求的 URL（用于 HTTP 到 HTTPS 回退的判断）。
-        attempt_ssl_verify_false: 是否尝试禁用 SSL 验证。
-    Returns:
-        httpx.Response 对象或 None。
-    """
+def is_valid_uuid(value: str) -> bool:
+    """验证字符串是否为有效的 UUID。"""
     try:
-        if attempt_ssl_verify_false:
-            logging.info(f"正在尝试禁用 SSL 验证获取: {url}")
-            return await client.get(url, follow_redirects=True, verify=False)
-        else:
-            return await client.get(url, follow_redirects=True)
-    except httpx.RequestError as e:
-        # 如果是 SSL 连接错误，且未尝试禁用 SSL 验证，则进行重试
-        if isinstance(e, httpx.ConnectError) and "SSL" in str(e):
-            if not attempt_ssl_verify_false:
-                logging.warning(f"SSL 连接错误，尝试禁用 SSL 验证: {url}")
-                return await _fetch_url_with_retry(client, url, original_protocol_url, attempt_ssl_verify_false=True)
-            else:
-                logging.error(f"禁用 SSL 验证后仍无法连接到 {url}: {type(e).__name__} - {e}")
-                return None
-        # 如果是 HTTP 请求失败，且原始请求也是 HTTP，则尝试 HTTPS
-        elif url.startswith("http://") and (original_protocol_url is None or original_protocol_url.startswith("http://")):
-            https_url = "https://" + url[len("http://"):]
-            logging.warning(f"HTTP 请求失败 ({url})，尝试 HTTPS: {https_url}")
-            # 递归调用，尝试 HTTPS，并保持原始 HTTP URL 作为原始协议URL
-            return await _fetch_url_with_retry(client, https_url, url)
-        else:
-            # 记录其他类型的请求失败
-            logging.error(f"请求 {url} 失败: {type(e).__name__} - {e}")
-            return None
+        uuid.UUID(value)
+        return True
+    except ValueError:
+        return False
 
-async def fetch_url_content(client: httpx.AsyncClient, url: str):
-    """
-    抓取 URL 内容，并处理一些常见的编码问题。
-    Args:
-        client: httpx.AsyncClient 实例。
-        url: 要抓取的 URL。
-    Returns:
-        抓取到的文本内容，如果失败则返回 None。
-    """
-    if any(keyword in url for keyword in IGNORE_URL_KEYWORDS):
-        logging.info(f"URL 包含忽略关键词，跳过: {url}")
-        return None
-
+def is_valid_port(port: str) -> bool:
+    """验证端口号是否有效（1-65535）。"""
     try:
-        response = await _fetch_url_with_retry(client, url)
-        if response and response.status_code == 200:
-            # 尝试根据响应头判断编码，否则使用 utf-8 或 latin-1
-            content_type = response.headers.get("Content-Type", "")
-            if "charset=" in content_type:
-                charset = content_type.split("charset=")[-1].strip()
-                try:
-                    return response.content.decode(charset)
-                except UnicodeDecodeError:
-                    logging.warning(f"使用 {charset} 解码失败，尝试 utf-8 或 latin-1: {url}")
+        port_num = int(port)
+        return 1 <= port_num <= 65535
+    except ValueError:
+        return False
+
+def is_valid_host(host: str) -> bool:
+    """验证主机是否为有效的域名或 IP 地址（包括 IPv6）。"""
+    if not host:
+        return False
+    # 稍微放宽对主机名的正则表达式，使其更通用
+    # 允许包含非标准DNS字符（例如下划线），这在某些情况下可能是允许的
+    return bool(re.match(r'^(?:\[[0-9a-fA-F:\.]+\]|[a-zA-Z0-9\.\-_]+)$', host))
+
+def validate_node(node: str, protocol: str) -> tuple[bool, str]:
+    """
+    验证节点是否符合其协议的官方格式要求。
+
+    Args:
+        node (str): 要验证的节点字符串。
+        protocol (str): 节点协议（hysteria2, vmess, trojan, ss, ssr, vless）。
+
+    Returns:
+        tuple[bool, str]: (是否有效, 错误原因)。
+    """
+    if protocol == "hysteria2":
+        match = re.match(r"hysteria2:\/\/([^@]+)@([^:]+):(\d+)(?:\/|\?|$)", node)
+        if not match:
+            return False, "格式不匹配，缺少 password、host 或 port"
+        password, host, port = match.groups()
+        if not password:
+            return False, "password 为空"
+        if not is_valid_host(host):
+            return False, f"无效的主机: {host}"
+        if not is_valid_port(port):
+            return False, f"无效的端口: {port}"
+        return True, ""
+
+    elif protocol == "vmess":
+        if not node.startswith("vmess://"):
+            return False, "缺少 vmess:// 前缀"
+        try:
+            # 尝试解码，忽略非 Base64 字符
+            decoded = base64.b64decode(node[8:].strip('=').encode('ascii', 'ignore')).decode('utf-8', errors='ignore')
+            data = json.loads(decoded)
+            required_fields = {'v', 'ps', 'add', 'port', 'id', 'aid', 'net'}
+            if not all(field in data for field in required_fields):
+                return False, f"缺少必要字段: {required_fields - set(data.keys())}"
+            if not is_valid_host(data['add']):
+                return False, f"无效的主机: {data['add']}"
+            if not is_valid_port(str(data['port'])):
+                return False, f"无效的端口: {data['port']}"
+            if not is_valid_uuid(data['id']):
+                return False, f"无效的 UUID: {data['id']}"
+            if not str(data['aid']).isdigit():
+                return False, f"无效的 alterId: {data['aid']}"
+            if data['net'] not in {'tcp', 'ws', 'h2', 'grpc', 'kcp'}: # 添加 kcp 等常见网络类型
+                return False, f"无效的网络类型: {data['net']}"
+            return True, ""
+        except (base64.binascii.Error, json.JSONDecodeError, UnicodeDecodeError, ValueError) as e:
+            return False, f"Base64 解码或 JSON 解析失败: {e}"
+
+    elif protocol == "trojan":
+        match = re.match(r"trojan:\/\/([^@]+)@([^:]+):(\d+)(?:\/|\?|$)", node)
+        if not match:
+            return False, "格式不匹配，缺少 password、host 或 port"
+        password, host, port = match.groups()
+        if not password:
+            return False, "password 为空"
+        if not is_valid_host(host):
+            return False, f"无效的主机: {host}"
+        if not is_valid_port(port):
+            return False, f"无效的端口: {port}"
+        return True, ""
+
+    elif protocol == "ss":
+        # 简化 SS 匹配，优先处理 Base64 解码后的格式
+        if node.startswith("ss://"):
+            try:
+                # 尝试解码 Base64 部分
+                encoded_part = node[5:].split('#')[0].strip('=')
+                # 确保只包含 Base64 安全字符，忽略其他
+                encoded_part_ascii = encoded_part.encode('ascii', 'ignore')
+                decoded = base64.b64decode(encoded_part_ascii).decode('utf-8', errors='ignore')
+
+                match = re.match(r"([a-zA-Z0-9\-_]+):([^@]+)@([^:]+):(\d+)", decoded)
+                if not match:
+                    return False, "Base64 解码后格式不匹配"
+                
+                method, password, host, port = match.groups()
+                if method not in SS_METHODS:
+                    return False, f"不支持的加密方法: {method}"
+                if not password:
+                    return False, "password 为空"
+                if not is_valid_host(host):
+                    return False, f"无效的主机: {host}"
+                if not is_valid_port(port):
+                    return False, f"无效的端口: {port}"
+                return True, ""
+            except (base64.binascii.Error, UnicodeDecodeError, ValueError) as e:
+                return False, f"Base64 解码失败或格式错误: {e}"
+        return False, "缺少 ss:// 前缀" # 如果没有 ss:// 前缀，则认为不是 SS 节点
+
+    elif protocol == "ssr":
+        if not node.startswith("ssr://"):
+            return False, "缺少 ssr:// 前缀"
+        try:
+            # 尝试解码，忽略非 Base64 字符
+            decoded = base64.b64decode(node[6:].strip('=').encode('ascii', 'ignore')).decode('utf-8', errors='ignore')
+            parts = decoded.split(':')
+            if len(parts) < 6:
+                return False, "格式不匹配，缺少必要字段"
+            
+            host, port, protocol_ssr, method, obfs, password_encoded = parts[:6] # 修改变量名以避免冲突
+            
+            if not is_valid_host(host):
+                return False, f"无效的主机: {host}"
+            if not is_valid_port(port):
+                return False, f"无效的端口: {port}"
+            if protocol_ssr not in SSR_PROTOCOLS:
+                return False, f"不支持的协议: {protocol_ssr}"
+            if method not in SS_METHODS:
+                return False, f"不支持的加密方法: {method}"
+            if obfs not in SSR_OBFS:
+                return False, f"不支持的混淆: {obfs}"
             
             try:
-                return response.content.decode('utf-8')
-            except UnicodeDecodeError:
+                # SSR 的密码部分本身可能是 Base64 编码的
+                decoded_password = base64.b64decode(password_encoded.encode('ascii', 'ignore')).decode('utf-8', errors='ignore')
+                if not decoded_password: # 密码为空也视为无效
+                    return False, "password 为空或解码后为空"
+            except (base64.binascii.Error, UnicodeDecodeError, ValueError):
+                # 如果密码部分不是 Base64 编码，或者解码失败，则直接使用原始密码部分
+                if not password_encoded:
+                    return False, "password 为空"
+            
+            return True, ""
+        except (base64.binascii.Error, UnicodeDecodeError, ValueError) as e:
+            return False, f"Base64 解码失败: {e}"
+
+    elif protocol == "vless":
+        match = re.match(r"vless:\/\/([0-9a-fA-F\-]+)@([^:]+):(\d+)(?:\/|\?|$)", node)
+        if not match:
+            return False, "格式不匹配，缺少 uuid、host 或 port"
+        uuid_str, host, port = match.groups()
+        if not is_valid_uuid(uuid_str):
+            return False, f"无效的 UUID: {uuid_str}"
+        if not is_valid_host(host):
+            return False, f"无效的主机: {host}"
+        if not is_valid_port(port):
+            return False, f"无效的端口: {port}"
+        return True, ""
+
+    return False, "未知协议"
+
+async def clean_old_cache_files(cleanup_threshold_hours: int):
+    """
+    清理 data/cache 目录中过期的或不再使用的缓存文件。
+    删除修改时间早于指定阈值的文件。
+    
+    Args:
+        cleanup_threshold_hours (int): 缓存文件清理的阈值（小时）。
+    """
+    now = datetime.datetime.now()
+    cutoff_time = now - datetime.timedelta(hours=cleanup_threshold_hours)
+    
+    logging.info(f"开始清理缓存目录: {CACHE_DIR}，将删除修改时间早于 {cutoff_time} 的文件。")
+    
+    deleted_count = 0
+    try:
+        for filename in os.listdir(CACHE_DIR):
+            file_path = os.path.join(CACHE_DIR, filename)
+            if os.path.isfile(file_path):
                 try:
-                    return response.content.decode('latin-1')
-                except UnicodeDecodeError:
-                    logging.error(f"无法解码 URL {url} 的内容。")
-                    return None
-        else:
-            status_code = response.status_code if response else '无响应'
-            logging.warning(f"无法获取 URL 内容 {url}: 状态码 {status_code}")
-            return None
+                    file_mtime = datetime.datetime.fromtimestamp(os.path.getmtime(file_path))
+                    if file_mtime < cutoff_time:
+                        os.remove(file_path)
+                        logging.debug(f"已删除过期缓存文件: {filename}")
+                        deleted_count += 1
+                except OSError as e:
+                    logging.warning(f"无法删除文件 {file_path}: {e}")
+        logging.info(f"缓存清理完成，共删除 {deleted_count} 个文件。")
+    except FileNotFoundError:
+        logging.info(f"缓存目录 {CACHE_DIR} 不存在，无需清理。")
     except Exception as e:
-        logging.error(f"抓取 URL {url} 时发生意外错误: {type(e).__name__} - {e}")
+        logging.error(f"清理缓存时发生错误: {e}")
+
+async def _fetch_url_with_retry(client: httpx.AsyncClient, url: str, headers: dict, original_protocol_url: str) -> httpx.Response | None:
+    """
+    尝试从 URL 获取内容，并支持 HTTP 到 HTTPS 的回退。
+    
+    Args:
+        client (httpx.AsyncClient): HTTP 客户端。
+        url (str): 要获取的 URL。
+        headers (dict): HTTP 请求头。
+        original_protocol_url (str): 初始请求的 URL，用于避免无限回退。
+        
+    Returns:
+        httpx.Response | None: HTTP 响应对象，如果失败则返回 None。
+    """
+    try:
+        logging.info(f"尝试从 {url.split('://')[0].upper()} 获取内容: {url} (User-Agent: {headers.get('User-Agent', 'N/A')})")
+        response = await client.get(url, headers=headers)
+        response.raise_for_status()
+        return response
+    # 捕获更通用的 httpx.RequestError
+    except httpx.RequestError as e:
+        logging.warning(f"请求 {url} 时发生网络或连接错误: {e}")
+        # 如果是 HTTPS 错误，尝试禁用 SSL 验证
+        if isinstance(e, httpx.ConnectError) and "SSL" in str(e):
+            logging.info(f"SSL 连接错误，尝试禁用 SSL 验证: {url}")
+            # Keep the original logic of creating a new client here for verify=False retry
+            async with httpx.AsyncClient(timeout=10, verify=False, follow_redirects=True) as retry_client:
+                try:
+                    response = await retry_client.get(url, headers=headers)
+                    response.raise_for_status()
+                    return response
+                except httpx.HTTPStatusError as e_retry:
+                    logging.error(f"禁用 SSL 验证后，获取 {url} 时发生 HTTP 状态错误: {e_retry}")
+                except httpx.RequestError as e_retry:
+                    logging.error(f"禁用 SSL 验证后，获取 {url} 时发生网络请求错误: {e_retry}")
+        # 如果是 HTTP 到 HTTPS 的回退（但仅在原始请求是 HTTP 时才尝试）
+        elif url.startswith("http://") and original_protocol_url.startswith("http://"):
+            https_url = url.replace("http://", "https://")
+            logging.info(f"尝试从 HTTPS 回退获取内容: {https_url}")
+            try:
+                fallback_headers = dict(headers)
+                fallback_headers.pop('If-None-Match', None)
+                fallback_headers.pop('If-Modified-Since', None)
+                response_https = await client.get(https_url, headers=fallback_headers) # Use the passed client
+                response_https.raise_for_status()
+                return response_https
+            except httpx.HTTPStatusError as e_https:
+                logging.error(f"获取 {https_url} 时发生 HTTPS 状态错误: {e_https}")
+            except httpx.RequestError as e_https:
+                logging.error(f"获取 {https_url} 时发生 HTTPS 网络请求错误: {e_https}")
+        else:
+            logging.error(f"获取 {url} 时发生未知网络错误: {e}")
+    except httpx.HTTPStatusError as e:
+        logging.error(f"获取 {url} 时发生 HTTP 状态错误: {e}")
+        # 这里移除 HTTP 到 HTTPS 的回退逻辑，因为它已经在 RequestError 中处理
+        # 避免重复尝试或逻辑混乱
+    except Exception as e:
+        logging.error(f"获取 {url} 时发生未知错误: {e}")
+    return None
+
+async def get_url_content(client: httpx.AsyncClient, url: str, use_cache: bool = True) -> str | None:
+    """
+    从 URL 获取内容，并支持基于 HTTP 头部的缓存验证。
+    
+    Args:
+        client (httpx.AsyncClient): HTTP 客户端。
+        url (str): 要获取的 URL。
+        use_cache (bool): 是否使用缓存，默认 True。
+        
+    Returns:
+        str | None: 获取的内容字符串，如果失败则返回 None。
+    """
+    cache_entry_path = os.path.join(CACHE_DIR, hashlib.md5(url.encode()).hexdigest() + ".json")
+    
+    cached_data = None
+    if use_cache and os.path.exists(cache_entry_path):
+        try:
+            async with aiofiles.open(cache_entry_path, 'r', encoding='utf-8') as f:
+                cached_data = json.loads(await f.read())
+            
+            cache_timestamp_str = cached_data.get('timestamp', datetime.datetime.min.isoformat())
+            cache_timestamp = datetime.datetime.fromisoformat(cache_timestamp_str)
+            if (datetime.datetime.now() - cache_timestamp).total_seconds() / 3600 >= CACHE_EXPIRATION_HOURS:
+                logging.info(f"缓存 {url} 已过期（超过 {CACHE_EXPIRATION_HOURS} 小时），将重新检查更新。")
+                cached_data = None
+            else:
+                logging.info(f"缓存 {url} 有效，尝试使用缓存进行条件请求。")
+        except (json.JSONDecodeError, KeyError, FileNotFoundError) as e:
+            logging.warning(f"读取或解析缓存文件 {cache_entry_path} 失败: {e}，将重新获取。")
+            cached_data = None
+
+    headers_for_request = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    }
+
+    if cached_data:
+        if cached_data.get('etag'):
+            headers_for_request['If-None-Match'] = cached_data['etag']
+        if cached_data.get('last-modified'):
+            headers_for_request['If-Modified-Since'] = cached_data['last-modified']
+
+    response = await _fetch_url_with_retry(client, url, headers_for_request, url)
+
+    if response:
+        if response.status_code == 304 and cached_data and cached_data.get('content'):
+            logging.info(f"URL: {url} 内容未更新 (304 Not Modified)，从缓存读取。")
+            return base64.b64decode(cached_data['content']).decode('utf-8', errors='ignore')
+        else:
+            content = response.text
+            new_cached_data = {
+                "content": base64.b64encode(content.encode('utf-8')).decode('ascii'),
+                "timestamp": datetime.datetime.now().isoformat()
+            }
+            if 'etag' in response.headers:
+                new_cached_data['etag'] = response.headers['etag']
+            if 'last-modified' in response.headers:
+                new_cached_data['last-modified'] = response.headers['last-modified']
+
+            try:
+                async with aiofiles.open(cache_entry_path, 'w', encoding='utf-8') as f:
+                    await f.write(json.dumps(new_cached_data, ensure_ascii=False))
+                logging.info(f"URL: {url} 内容已更新，已写入缓存。")
+            except (IOError, json.JSONEncodeError) as e:
+                logging.error(f"写入缓存文件 {cache_entry_path} 失败: {e}")
+        
+            return content
+    else:
+        logging.warning(f"无法获取 URL: {url} 的内容，跳过该 URL 的节点提取。")
         return None
 
-# endregion
-
-# region 节点解析函数
-
-def extract_nodes_from_content(content):
+async def extract_nodes_from_content(url: str, content: str) -> list[str]:
     """
-    从内容中提取各种协议的节点。
+    从文本内容中提取符合 Vmess, Trojan, SS, SSR, Vless, Hysteria2 格式的节点，并验证其有效性。
+    
     Args:
-        content: 抓取到的文本内容。
+        url (str): 源 URL，用于日志记录。
+        content (str): 要解析的内容。
+        
     Returns:
-        包含所有提取到的节点的列表。
+        list[str]: 提取的唯一有效节点列表。
     """
-    nodes = []
-    # 尝试解析为 YAML (Clash 配置)
-    try:
-        # 尝试使用 BeautifulSoup 解析 HTML，提取 pre 或 code 标签内的文本
-        soup = BeautifulSoup(content, 'html.parser')
-        # 查找 pre 或 code 标签内的文本
-        pre_tags = soup.find_all(['pre', 'code'])
-        if pre_tags:
-            content_from_html = '\n'.join([tag.get_text() for tag in pre_tags])
-            # 尝试再次解析这个提取出的文本
-            return extract_nodes_from_content(content_from_html)
+    unique_nodes = set()
+    
+    # 尝试 Base64 解码，但要确保输入是有效的 Base64 字符串
+    decoded_content_attempt = None
+    # 检查内容是否可能为 Base64，过滤掉非 Base64 字符
+    if re.fullmatch(r"^[a-zA-Z0-9\-_+=/\s]+$", content.strip()): # 允许空格，因为某些订阅链接可能是多行Base64
+        try:
+            # 移除所有空白字符并确保长度是4的倍数
+            clean_content = content.strip().replace(" ", "").replace("\n", "").replace("\r", "")
+            padding_needed = len(clean_content) % 4
+            if padding_needed != 0:
+                clean_content += '=' * (4 - padding_needed)
             
-        # 如果不是 HTML，尝试解析为 YAML
-        parsed_yaml = yaml.safe_load(content)
-        if isinstance(parsed_yaml, dict) and "proxies" in parsed_yaml:
-            for proxy in parsed_yaml["proxies"]:
-                # 将 Clash 代理字典转换为 JSON 字符串格式以便存储
-                nodes.append(f"clash_proxy://{json.dumps(proxy)}")
-            logging.info(f"从 Clash YAML 中提取了 {len(parsed_yaml['proxies'])} 个代理节点。")
-            return nodes
-    except yaml.YAMLError:
-        pass # 不是有效的 YAML，继续尝试其他解析方式
+            decoded_content_attempt = base64.b64decode(clean_content).decode('utf-8', errors='ignore')
+            logging.debug(f"成功 Base64 解码内容 (URL: {url})")
+        except (base64.binascii.Error, UnicodeDecodeError, ValueError) as e:
+            logging.debug(f"Base64 解码失败 (URL: {url}): {e}")
+            pass # 不是有效的 Base64，继续按原始文本处理
 
-    # 如果是 Base64 编码的内容，尝试解码
-    try:
-        decoded_content = base64.b64decode(content).decode('utf-8')
-        # 递归调用自身，处理解码后的内容
-        return extract_nodes_from_content(decoded_content)
-    except (base64.binascii.Error, UnicodeDecodeError):
-        pass # 不是有效的 Base64，继续
+    contents_to_search = [content]
+    if decoded_content_attempt and decoded_content_attempt != content: # 避免重复搜索
+        contents_to_search.append(decoded_content_attempt)
 
-    # 遍历所有已定义的协议模式进行匹配
-    for protocol, pattern in PROTOCOL_PATTERNS.items():
-        if protocol == "clash_proxies":
-            # 对于 clash_proxies，我们已经尝试通过 yaml.safe_load 处理了，
-            # 这里是备用方案，可能不完美，但可以捕获文本形式的 proxies 块
-            matches = re.findall(pattern, content, re.DOTALL)
-            for match in matches:
-                try:
-                    # 尝试再次解析提取出的 YAML 片段
-                    proxy_block = yaml.safe_load(match)
-                    if isinstance(proxy_block, dict) and "proxies" in proxy_block:
-                        for proxy in proxy_block["proxies"]:
-                            nodes.append(f"clash_proxy://{json.dumps(proxy)}")
-                    elif isinstance(proxy_block, list): # 有些可能是直接的代理列表
-                        for proxy in proxy_block:
-                            if isinstance(proxy, dict) and "name" in proxy: # 简单判断是否为代理节点
-                                nodes.append(f"clash_proxy://{json.dumps(proxy)}")
-                except yaml.YAMLError:
-                    pass # 非法 YAML 片段，跳过
-        else:
-            # 对于其他协议，直接使用正则表达式匹配
-            matches = re.findall(pattern, content)
-            nodes.extend(matches)
+    for text_content in contents_to_search:
+        # 尝试解析 JSON
+        try:
+            json_data = json.loads(text_content)
+            if isinstance(json_data, list):
+                for item in json_data:
+                    if isinstance(item, dict) and 'v' in item and 'ps' in item and 'add' in item:
+                        vmess_node = "vmess://" + base64.b64encode(json.dumps(item, separators=(',', ':')).encode()).decode()
+                        is_valid, reason = validate_node(vmess_node, "vmess")
+                        if is_valid:
+                            unique_nodes.add(vmess_node)
+                        else:
+                            logging.debug(f"丢弃无效 Vmess 节点 (URL: {url}, JSON 列表): {vmess_node}, 原因: {reason}")
+            elif isinstance(json_data, dict):
+                # 处理 V2RayN/Clash config 格式
+                if 'outbounds' in json_data and isinstance(json_data['outbounds'], list):
+                    for outbound in json_data['outbounds']:
+                        if outbound.get('protocol') == 'vmess' and outbound.get('settings', {}).get('vnext'):
+                            # Vmess 节点通常在 vnext[0].users[0]
+                            server_settings = outbound['settings']['vnext'][0]
+                            user_settings = server_settings['users'][0]
+                            vmess_config = {
+                                "v": "2",
+                                "ps": outbound.get('tag', 'node'), # 使用 tag 或默认名
+                                "add": server_settings.get('address'),
+                                "port": server_settings.get('port'),
+                                "id": user_settings.get('id'),
+                                "aid": user_settings.get('alterId', '0'),
+                                "net": outbound.get('streamSettings', {}).get('network', 'tcp'),
+                                "type": outbound.get('streamSettings', {}).get('type', ''),
+                                "host": outbound.get('streamSettings', {}).get('wsSettings', {}).get('headers', {}).get('Host', ''),
+                                "path": outbound.get('streamSettings', {}).get('wsSettings', {}).get('path', ''),
+                                "tls": "tls" if outbound.get('streamSettings', {}).get('security') == 'tls' else ""
+                            }
+                            vmess_config = {k: v for k, v in vmess_config.items() if v is not None and v != ''}
+                            vmess_str = "vmess://" + base64.b64encode(json.dumps(vmess_config, separators=(',', ':')).encode()).decode()
+                            is_valid, reason = validate_node(vmess_str, "vmess")
+                            if is_valid:
+                                unique_nodes.add(vmess_str)
+                            else:
+                                logging.debug(f"丢弃无效 Vmess 节点 (URL: {url}, V2Ray 配置): {vmess_str}, 原因: {reason}")
+                        elif outbound.get('protocol') == 'trojan' and outbound.get('settings', {}).get('servers'):
+                            server_settings = outbound['settings']['servers'][0]
+                            trojan_node = f"trojan://{server_settings.get('password')}@{server_settings.get('address')}:{server_settings.get('port')}"
+                            if outbound.get('streamSettings', {}).get('security') == 'tls':
+                                if server_settings.get('sni'):
+                                    trojan_node += f"?sni={server_settings['sni']}"
+                                elif outbound.get('streamSettings', {}).get('tlsSettings', {}).get('serverName'):
+                                    trojan_node += f"?sni={outbound['streamSettings']['tlsSettings']['serverName']}"
+                                # V2Ray config 中没有直接的 allowInsecure 对应，这里暂不处理
+                            is_valid, reason = validate_node(trojan_node, "trojan")
+                            if is_valid:
+                                unique_nodes.add(trojan_node)
+                            else:
+                                logging.debug(f"丢弃无效 Trojan 节点 (URL: {url}, V2Ray 配置): {trojan_node}, 原因: {reason}")
+                
+                # 处理 Clash/Sing-Box proxies 格式
+                elif 'proxies' in json_data and isinstance(json_data['proxies'], list):
+                    for proxy in json_data['proxies']:
+                        if proxy.get('type') == 'vmess':
+                            vmess_node = {
+                                "v": "2",
+                                "ps": proxy.get('name', 'node'),
+                                "add": proxy.get('server'),
+                                "port": proxy.get('port'),
+                                "id": proxy.get('uuid'),
+                                "aid": proxy.get('alterId', '0'),
+                                "net": proxy.get('network', 'tcp'),
+                                "type": "", # Clash 配置中可能没有直接的 type 字段
+                                "host": proxy.get('ws-headers', {}).get('Host', '') or proxy.get('tls-host', ''), # 兼容不同字段
+                                "path": proxy.get('ws-path', ''),
+                                "tls": "tls" if proxy.get('tls', False) else ""
+                            }
+                            vmess_node = {k: v for k, v in vmess_node.items() if v is not None and v != ''}
+                            vmess_str = "vmess://" + base64.b64encode(json.dumps(vmess_node, separators=(',', ':')).encode()).decode()
+                            is_valid, reason = validate_node(vmess_str, "vmess")
+                            if is_valid:
+                                unique_nodes.add(vmess_str)
+                            else:
+                                logging.debug(f"丢弃无效 Vmess 节点 (URL: {url}, Clash/Sing-Box JSON): {vmess_str}, 原因: {reason}")
+                        elif proxy.get('type') == 'trojan':
+                            trojan_node = f"trojan://{proxy.get('password')}@{proxy.get('server')}:{proxy.get('port')}"
+                            if proxy.get('sni'):
+                                trojan_node += f"?sni={proxy['sni']}"
+                            if proxy.get('skip-cert-verify', False): # Clash 的 skip-cert-verify
+                                trojan_node += "&allowInsecure=1"
+                            is_valid, reason = validate_node(trojan_node, "trojan")
+                            if is_valid:
+                                unique_nodes.add(trojan_node)
+                            else:
+                                logging.debug(f"丢弃无效 Trojan 节点 (URL: {url}, Clash/Sing-Box JSON): {trojan_node}, 原因: {reason}")
+                        elif proxy.get('type') == 'ss':
+                            # Clash ss 类型解析
+                            ss_node_parts = []
+                            method = proxy.get('cipher')
+                            password = proxy.get('password')
+                            server = proxy.get('server')
+                            port = proxy.get('port')
+                            if method and password and server and port:
+                                # 构建 ss://base64encoded_info 格式
+                                ss_info = f"{method}:{password}@{server}:{port}"
+                                encoded_ss_info = base64.b64encode(ss_info.encode()).decode()
+                                ss_node = f"ss://{encoded_ss_info}"
+                                if proxy.get('name'):
+                                    ss_node += f"#{proxy['name']}"
+                                
+                                is_valid, reason = validate_node(ss_node, "ss")
+                                if is_valid:
+                                    unique_nodes.add(ss_node)
+                                else:
+                                    logging.debug(f"丢弃无效 SS 节点 (URL: {url}, Clash JSON): {ss_node}, 原因: {reason}")
+                        elif proxy.get('type') == 'vless':
+                            # Clash/Sing-Box vless 类型解析
+                            vless_node_config = {
+                                "uuid": proxy.get('uuid'),
+                                "address": proxy.get('server'),
+                                "port": proxy.get('port'),
+                                "flow": proxy.get('flow'),
+                                "encryption": proxy.get('cipher', 'none'),
+                                "security": proxy.get('tls', False),
+                                "sni": proxy.get('sni'),
+                                "fingerprint": proxy.get('client-fingerprint'),
+                                "alpn": proxy.get('alpn'),
+                                "host": proxy.get('ws-headers', {}).get('Host', '') or proxy.get('xudp-header', {}).get('Host', ''),
+                                "path": proxy.get('ws-path', '') or proxy.get('grpc-path', ''),
+                                "mode": proxy.get('grpc-mode')
+                            }
+                            # 尝试构建 VLESS 链接
+                            if vless_node_config.get('uuid') and vless_node_config.get('address') and vless_node_config.get('port'):
+                                vless_uri = f"vless://{vless_node_config['uuid']}@{vless_node_config['address']}:{vless_node_config['port']}"
+                                params = []
+                                if vless_node_config.get('security'):
+                                    params.append("security=tls")
+                                if vless_node_config.get('sni'):
+                                    params.append(f"sni={vless_node_config['sni']}")
+                                if vless_node_config.get('flow'):
+                                    params.append(f"flow={vless_node_config['flow']}")
+                                if vless_node_config.get('alpn'):
+                                    params.append(f"alpn={','.join(vless_node_config['alpn'])}")
+                                if vless_node_config.get('fingerprint'):
+                                    params.append(f"fp={vless_node_config['fingerprint']}")
+                                if vless_node_config.get('host'):
+                                    params.append(f"host={vless_node_config['host']}")
+                                if vless_node_config.get('path'):
+                                    params.append(f"path={vless_node_config['path']}")
+                                if vless_node_config.get('mode'):
+                                    params.append(f"mode={vless_node_config['mode']}")
+                                if params:
+                                    vless_uri += "?" + "&".join(params)
+                                if proxy.get('name'):
+                                    vless_uri += f"#{proxy['name']}"
+                                is_valid, reason = validate_node(vless_uri, "vless")
+                                if is_valid:
+                                    unique_nodes.add(vless_uri)
+                                else:
+                                    logging.debug(f"丢弃无效 VLESS 节点 (URL: {url}, Clash/Sing-Box JSON): {vless_uri}, 原因: {reason}")
+        except json.JSONDecodeError:
+            pass # 不是 JSON 格式，忽略
+        except Exception as e:
+            logging.warning(f"JSON 解析或处理时发生错误 (URL: {url}): {e}")
 
-    return nodes
+        # 尝试解析 YAML
+        try:
+            yaml_data = yaml.safe_load(text_content)
+            if isinstance(yaml_data, dict) and 'proxies' in yaml_data and isinstance(yaml_data['proxies'], list):
+                for proxy in yaml_data['proxies']:
+                    if proxy.get('type') == 'vmess':
+                        vmess_node = {
+                            "v": "2",
+                            "ps": proxy.get('name', 'node'),
+                            "add": proxy.get('server'),
+                            "port": proxy.get('port'),
+                            "id": proxy.get('uuid'),
+                            "aid": proxy.get('alterId', '0'),
+                            "net": proxy.get('network', 'tcp'),
+                            "type": "",
+                            "host": proxy.get('ws-headers', {}).get('Host', '') or proxy.get('tls-host', ''),
+                            "path": proxy.get('ws-path', ''),
+                            "tls": "tls" if proxy.get('tls', False) else ""
+                        }
+                        vmess_node = {k: v for k, v in vmess_node.items() if v is not None and v != ''}
+                        vmess_str = "vmess://" + base64.b64encode(json.dumps(vmess_node, separators=(',', ':')).encode()).decode()
+                        is_valid, reason = validate_node(vmess_str, "vmess")
+                        if is_valid:
+                            unique_nodes.add(vmess_str)
+                        else:
+                            logging.debug(f"丢弃无效 Vmess 节点 (URL: {url}, YAML): {vmess_str}, 原因: {reason}")
+                    elif proxy.get('type') == 'trojan':
+                        trojan_node = f"trojan://{proxy.get('password')}@{proxy.get('server')}:{proxy.get('port')}"
+                        if proxy.get('sni'):
+                            trojan_node += f"?sni={proxy['sni']}"
+                        if proxy.get('skip-cert-verify', False):
+                            trojan_node += "&allowInsecure=1"
+                        is_valid, reason = validate_node(trojan_node, "trojan")
+                        if is_valid:
+                            unique_nodes.add(trojan_node)
+                        else:
+                            logging.debug(f"丢弃无效 Trojan 节点 (URL: {url}, YAML): {trojan_node}, 原因: {reason}")
+                    elif proxy.get('type') == 'ss':
+                        ss_node_parts = []
+                        method = proxy.get('cipher')
+                        password = proxy.get('password')
+                        server = proxy.get('server')
+                        port = proxy.get('port')
+                        if method and password and server and port:
+                            ss_info = f"{method}:{password}@{server}:{port}"
+                            encoded_ss_info = base64.b64encode(ss_info.encode()).decode()
+                            ss_node = f"ss://{encoded_ss_info}"
+                            if proxy.get('name'):
+                                ss_node += f"#{proxy['name']}"
+                            is_valid, reason = validate_node(ss_node, "ss")
+                            if is_valid:
+                                unique_nodes.add(ss_node)
+                            else:
+                                logging.debug(f"丢弃无效 SS 节点 (URL: {url}, Clash YAML): {ss_node}, 原因: {reason}")
+                    elif proxy.get('type') == 'vless':
+                        vless_node_config = {
+                            "uuid": proxy.get('uuid'),
+                            "address": proxy.get('server'),
+                            "port": proxy.get('port'),
+                            "flow": proxy.get('flow'),
+                            "encryption": proxy.get('cipher', 'none'),
+                            "security": proxy.get('tls', False),
+                            "sni": proxy.get('sni'),
+                            "fingerprint": proxy.get('client-fingerprint'),
+                            "alpn": proxy.get('alpn'),
+                            "host": proxy.get('ws-headers', {}).get('Host', '') or proxy.get('xudp-header', {}).get('Host', ''),
+                            "path": proxy.get('ws-path', '') or proxy.get('grpc-path', ''),
+                            "mode": proxy.get('grpc-mode')
+                        }
+                        # 尝试构建 VLESS 链接
+                        if vless_node_config.get('uuid') and vless_node_config.get('address') and vless_node_config.get('port'):
+                            vless_uri = f"vless://{vless_node_config['uuid']}@{vless_node_config['address']}:{vless_node_config['port']}"
+                            params = []
+                            if vless_node_config.get('security'):
+                                params.append("security=tls")
+                            if vless_node_config.get('sni'):
+                                params.append(f"sni={vless_node_config['sni']}")
+                            if vless_node_config.get('flow'):
+                                params.append(f"flow={vless_node_config['flow']}")
+                            if vless_node_config.get('alpn'):
+                                params.append(f"alpn={','.join(vless_node_config['alpn'])}")
+                            if vless_node_config.get('fingerprint'):
+                                params.append(f"fp={vless_node_config['fingerprint']}")
+                            if vless_node_config.get('host'):
+                                params.append(f"host={vless_node_config['host']}")
+                            if vless_node_config.get('path'):
+                                params.append(f"path={vless_node_config['path']}")
+                            if vless_node_config.get('mode'):
+                                params.append(f"mode={vless_node_config['mode']}")
+                            if params:
+                                vless_uri += "?" + "&".join(params)
+                            if proxy.get('name'):
+                                vless_uri += f"#{proxy['name']}"
+                            is_valid, reason = validate_node(vless_uri, "vless")
+                            if is_valid:
+                                unique_nodes.add(vless_uri)
+                            else:
+                                logging.debug(f"丢弃无效 VLESS 节点 (URL: {url}, Clash YAML): {vless_uri}, 原因: {reason}")
+        except yaml.YAMLError:
+            pass # 不是 YAML 格式，忽略
+        except Exception as e:
+            logging.warning(f"YAML 解析或处理时发生错误 (URL: {url}): {e}")
 
-# endregion
-
-# region 主要处理逻辑
-
-async def process_url(url: str, all_nodes_writer: aiofiles.threadpool.text.AsyncTextIOWrapper, semaphore: asyncio.Semaphore, client: httpx.AsyncClient):
-    """
-    处理单个 URL，包括缓存检查、内容抓取、节点提取和写入文件。
-    Args:
-        url: 待处理的 URL。
-        all_nodes_writer: 写入所有节点的异步文件对象。
-        semaphore: 信号量，用于控制并发。
-        client: httpx.AsyncClient 实例，用于发送请求。
-    Returns:
-        元组 (url, 节点数量) 或异常对象。
-    """
-    async with semaphore: # 获取信号量，控制并发
-        logging.info(f"正在处理 URL: {url}")
-        content_hash = generate_unique_id(url) # 根据 URL 生成哈希值作为缓存键
-        cached_data = await read_cache(content_hash) # 尝试从缓存读取数据
-
-        if cached_data:
-            logging.info(f"从缓存加载: {url}")
-            # 如果从缓存加载成功，直接写入节点并返回数量
-            nodes = cached_data.get("nodes", [])
-            for node in nodes:
-                await all_nodes_writer.write(node + '\n')
-            return (url, len(nodes))
-        else:
-            logging.info(f"缓存未命中或已过期，抓取: {url}")
-            # 抓取 URL 内容
-            content = await fetch_url_content(client, url)
-
-            if content:
-                # 提取节点
-                nodes = extract_nodes_from_content(content)
-                nodes_count = len(nodes)
-                logging.info(f"从 {url} 提取了 {nodes_count} 个节点。")
-
-                # 将提取到的节点写入缓存
-                await write_cache(content_hash, {"nodes": nodes})
-
-                # 将节点写入 all.txt 文件
-                for node in nodes:
-                    await all_nodes_writer.write(node + '\n')
-                return (url, nodes_count)
-            else:
-                return (url, 0) # 未抓取到内容或无节点
-
-async def load_sources_from_file(file_path):
-    """
-    从 sources.list.txt 文件加载 URL。
-    Args:
-        file_path: sources.list.txt 的路径。
-    Returns:
-        包含处理过的 URL 的列表。
-    """
-    logging.info(f"从 {file_path} 加载源...")
-    urls = []
-    # 使用 set 来自动处理 URL 去重
-    processed_urls_set = set()
-    try:
-        async with aiofiles.open(file_path, 'r', encoding='utf-8') as f:
-            async for line in f:
-                line = line.strip()
-                if not line or line.startswith('#'):
-                    continue # 跳过空行和注释行
-
-                url = line
-                # 检查 URL 是否包含协议，如果没有则尝试添加 http 和 https
-                if not re.match(r"^[a-zA-Z]+://", url):
-                    logging.info(f"URL '{url}' 没有指定协议，尝试添加 http:// 和 https://")
-                    processed_urls_set.add(f"http://{url}")
-                    processed_urls_set.add(f"https://{url}")
+        # 直接从文本内容中匹配所有协议
+        for protocol, pattern in NODE_PATTERNS.items():
+            for match in re.finditer(pattern, text_content):
+                node = match.group(0)
+                is_valid, reason = validate_node(node, protocol)
+                if is_valid:
+                    unique_nodes.add(node)
                 else:
-                    processed_urls_set.add(url)
-        logging.info(f"从 {file_path} 加载了 {len(processed_urls_set)} 个源 URL。")
-        return list(processed_urls_set) # 转换为列表以便后续迭代
+                    logging.debug(f"丢弃无效 {protocol} 节点 (URL: {url}, 直接匹配): {node}, 原因: {reason}")
+    
+    # 处理 HTML 内容
+    if "<html" in content.lower() or "<!doctype html>" in content.lower():
+        soup = BeautifulSoup(content, 'html.parser')
+        # 提取所有文本内容
+        for text_element in soup.find_all(string=True):
+            text = str(text_element)
+            # 在 HTML 文本中直接匹配节点
+            for protocol, pattern in NODE_PATTERNS.items():
+                for match in re.finditer(pattern, text):
+                    node = match.group(0)
+                    is_valid, reason = validate_node(node, protocol)
+                    if is_valid:
+                        unique_nodes.add(node)
+                    else:
+                        logging.debug(f"丢弃无效 {protocol} 节点 (URL: {url}, HTML 文本): {node}, 原因: {reason}")
 
-    except FileNotFoundError:
-        logging.error(f"错误: 找不到 sources.list 文件在 {file_path}")
-        return []
-    except Exception as e:
-        logging.error(f"加载 sources.list 文件时发生错误: {type(e).__name__} - {e}")
-        return []
+    return list(unique_nodes)
+
+
+async def process_url(client: httpx.AsyncClient, url: str, all_nodes_writer: aiofiles.threadpool.text.AsyncTextIOWrapper, semaphore: asyncio.Semaphore):
+    """
+    处理单个 URL，包括获取内容、提取节点、写入文件和更新计数。
+    
+    Args:
+        client (httpx.AsyncClient): HTTP 客户端实例。
+        url (str): 要处理的 URL。
+        all_nodes_writer (aiofiles.threadpool.text.AsyncTextIOWrapper): 用于写入所有节点的异步文件对象。
+        semaphore (asyncio.Semaphore): 用于控制并发的信号量。
+        
+    Returns:
+        tuple[str, int]: 包含 URL 和提取到的节点数量的元组。
+    """
+    nodes_count = 0
+    async with semaphore:
+        logging.info(f"开始处理 URL: {url}")
+        content = await get_url_content(client, url)
+        if content:
+            nodes = await extract_nodes_from_content(url, content)
+            if nodes:
+                nodes_count = len(nodes)
+                for node in nodes:
+                    await all_nodes_writer.write(node + "\n")
+                logging.info(f"从 {url} 提取并写入了 {nodes_count} 个节点。")
+            else:
+                logging.info(f"从 {url} 未提取到有效节点。")
+        else:
+            logging.warning(f"跳过 URL: {url}，因为无法获取内容。")
+    return url, nodes_count
 
 async def main():
-    """
-    主函数，协调整个抓取和处理流程。
-    """
-    logging.info("代理节点抓取脚本启动。")
+    logging.info("代理节点抓取程序启动。")
+    
+    await clean_old_cache_files(CLEANUP_THRESHOLD_HOURS)
 
-    # 清理旧的缓存文件
-    cleanup_old_cache_files()
-
-    # 从 sources.list.txt 加载 URL 列表
-    sources_file_path = "sources.list.txt"
-    processed_urls = await load_sources_from_file(sources_file_path)
-
-    if not processed_urls:
-        logging.warning("sources.list 中没有找到有效的 URL，脚本结束。")
+    sources_file = os.path.join(DATA_DIR, "sources.list")
+    urls_to_process = []
+    if os.path.exists(sources_file):
+        try:
+            async with aiofiles.open(sources_file, 'r', encoding='utf-8') as f:
+                async for line in f:
+                    line = line.strip()
+                    if line and not line.startswith('#'): # 忽略空行和注释行
+                        urls_to_process.append(line)
+        except Exception as e:
+            logging.error(f"读取 sources.list 文件失败: {e}")
+            return
+    else:
+        logging.error(f"sources.list 文件不存在: {sources_file}")
         return
 
-    node_counts = defaultdict(int) # 用于统计每个源抓取到的节点数量
-    semaphore = asyncio.Semaphore(CONCURRENCY_LIMIT) # 创建信号量，控制并发请求数量
+    processed_urls = set() # Use a set for deduplication
+    for url in urls_to_process:
+        # 简单地判断是否缺少协议，并添加 HTTPS 协议
+        if not re.match(r"^[a-zA-Z]+://", url):
+            fixed_url = f"https://{url}"
+            logging.info(f"URL: {url} 缺少协议，已自动添加为 {fixed_url}")
+            processed_urls.add(fixed_url)
+        else:
+            processed_urls.add(url)
 
-    # 确保 all.txt 在开始处理前是空的，如果文件存在则清空
+    if not processed_urls:
+        logging.warning("sources.list 中没有找到有效的 URL。")
+        return
+
+    node_counts = defaultdict(int)
+    semaphore = asyncio.Semaphore(CONCURRENCY_LIMIT)
+
+    # 确保 all.txt 在开始处理前是空的
     async with aiofiles.open(ALL_NODES_FILE, 'w', encoding='utf-8') as f:
-        await f.truncate(0) # 清空文件内容
+        await f.truncate(0) # 清空文件
 
-    # 在这里创建并复用 httpx.AsyncClient 实例，它将处理所有并发请求
-    async with httpx.AsyncClient(timeout=HTTPX_TIMEOUT) as client:
-        # 为每个 URL 创建异步任务
-        tasks = [process_url(url, all_nodes_writer, semaphore, client) for url in processed_urls]
-        # 使用 aiofiles.open 上下文管理器确保文件在所有任务完成后被正确关闭
+    # 在这里打开一次 all_nodes_writer，并在所有任务中共享
+    # Create a single httpx.AsyncClient here and pass it down
+    async with httpx.AsyncClient(timeout=10, verify=True, follow_redirects=True) as client:
         async with aiofiles.open(ALL_NODES_FILE, 'a', encoding='utf-8') as all_nodes_writer:
-            # 并发执行所有任务，并收集结果或异常
+            tasks = [process_url(client, url, all_nodes_writer, semaphore) for url in processed_urls] # Pass the client
             results = await asyncio.gather(*tasks, return_exceptions=True)
 
             for result in results:
@@ -411,21 +796,18 @@ async def main():
                     url, count = result
                     node_counts[url] = count
                 else:
-                    # 记录处理 URL 时发生的异常
-                    logging.error(f"处理 URL 任务时发生未知异常: {result}")
+                    logging.error(f"处理 URL 时发生异常: {result}")
 
     try:
-        # 将每个源抓取到的节点数量写入 CSV 文件
         async with aiofiles.open(NODE_COUNT_CSV, 'w', encoding='utf-8', newline='') as f:
-            await f.write("URL,NodeCount\n") # 写入 CSV 头
+            await f.write("URL,NodeCount\\n")
             for url, count in node_counts.items():
-                await f.write(f"{url},{count}\n") # 写入每行的 URL 和节点数量
-        logging.info(f"节点统计信息已写入 {NODE_COUNT_CSV}")
+                await f.write(f"{url},{count}\n")
+        logging.info(f"节点统计信息已保存到 {NODE_COUNT_CSV}")
     except Exception as e:
-        logging.error(f"写入节点统计 CSV 文件失败: {type(e).__name__} - {e}")
+        logging.error(f"保存节点统计信息到 CSV 文件失败: {e}")
 
-    logging.info("代理节点抓取脚本执行完毕。")
+    logging.info("代理节点抓取程序完成。")
 
 if __name__ == "__main__":
-    # 运行主异步函数
     asyncio.run(main())
