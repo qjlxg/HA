@@ -347,6 +347,7 @@ def parse_nodes(content):
                             if proxy.get('alpn'): params.append(f"alpn={','.join(proxy['alpn'])}")
                             if proxy.get('reality-publickey'): params.append(f"pbk={proxy['reality-publickey']}")
                             if proxy.get('reality-shortid'): params.append(f"sid={proxy['reality-shortid']}")
+                            
                             if proxy.get('network') == 'ws':
                                 if proxy.get('ws-path'): params.append(f"path={proxy['ws-path']}")
                                 if proxy.get('ws-headers', {}).get('Host'): params.append(f"host={proxy['ws-headers']['Host']}")
@@ -432,7 +433,7 @@ async def fetch_url(client, url, depth=0):
             response.raise_for_status() # 抛出 HTTPStatusError (4xx/5xx)
             content = response.text
             target_url = current_test_url
-            print(f"Successfully fetched: {target_test_url}")
+            print(f"Successfully fetched: {current_test_url}")
             break # 成功获取后跳出循环
         except httpx.RequestError as e:
             print(f"Request failed for {current_test_url}: {e}")
@@ -511,7 +512,20 @@ async def main():
             for line in f:
                 stripped_line = line.strip()
                 if stripped_line:
-                    urls.append(stripped_line)
+                    # ✅ 核心改动：在读取时就尝试规范化 URL
+                    # 如果 URL 不以 http:// 或 https:// 开头，则添加 https://
+                    # 这样做是为了确保 urlparse 能够正确解析，即使在 fetch_url 内部也有处理
+                    if not re.match(r"^(http|https)://", stripped_line):
+                        # 额外检查是否是注释行，或者无法作为域名处理的行
+                        if stripped_line.startswith('#') or '.' not in stripped_line:
+                            print(f"Skipping potentially invalid URL or comment: {stripped_line}")
+                            continue # 跳过无法处理的行
+                        normalized_url = f"https://{stripped_line}"
+                        print(f"Normalizing URL: {stripped_line} -> {normalized_url}")
+                    else:
+                        normalized_url = stripped_line
+                    
+                    urls.append(normalized_url)
     except FileNotFoundError:
         print(f"Error: {SOURCES_FILE} not found.")
         return
