@@ -1,9 +1,9 @@
 name: Proxy Scraper
 
 on:
-  workflow_dispatch: # Allows manual trigger
+  workflow_dispatch: # 允许手动触发
   schedule:
-    - cron: '0 */6 * * *' # Runs every 6 hours (at 0:00, 6:00, 12:00, 18:00 UTC)
+    - cron: '0 */6 * * *' # 每6小时运行一次，例如 UTC 时间 0:00, 6:00, 12:00, 18:00
 
 jobs:
   scrape-proxies:
@@ -16,35 +16,37 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.9' # Recommended stable version. Consider 3.10 or 3.11 for newer features.
+        python-version: '3.9' # 推荐使用稳定的最新版本，如 3.9 或 3.10
 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        # Install all dependencies from requirements.txt first
-        pip install -r requirements.txt
-        # Then, explicitly upgrade httpx to ensure it's the latest version,
-        # overriding any potential older version specified in requirements.txt.
-        pip install --upgrade httpx
+        # 直接安装所有脚本需要的依赖
+        pip install beautifulsoup4 PyYAML aiofiles aiodns tenacity geoip2 maxminddb
+        # 特别处理 httpx，因为它需要额外的 http2 支持，并且要确保版本是最新的
+        pip install --upgrade "httpx[http2]"
+        
+    - name: Verify httpx version # 添加此步骤以确认 httpx 版本是否正确
+      run: |
+        pip show httpx
+        python -c "import httpx; print(f'Loaded httpx version: {httpx.__version__}')"
 
     - name: Ensure data and cache directories exist
       run: |
         mkdir -p data
         mkdir -p cache
-        # GitHub Actions typically cleans the workspace, so these directories need to be created each run.
+        # GitHub Actions 默认会清理工作区，所以每次运行都需要创建目录
 
     - name: Run Proxy Scraper
       run: python proxy_scraper.py
 
     - name: Commit and push changes
       env:
-        # Use the GitHub Token for authentication
+        # 使用 GitHub Token 进行认证
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         git config user.name "GitHub Actions"
         git config user.email "actions@github.com"
         git add data/
-        # Use --allow-empty if you want to create a commit even when no files have changed.
-        # Otherwise, the '|| true' ensures the step doesn't fail if there are no changes.
-        git commit -m "Update proxy nodes [skip ci]" || true
+        git commit -m "Update proxy nodes [skip ci]" || true # || true 确保即使没有实际文件修改，提交命令也不会失败
         git push
