@@ -402,7 +402,8 @@ async def process_url(client, url):
 
 async def main():
     logger.info("开始执行代理抓取任务。")
-    urls = await read_urls_from_file('sources.list.txt')
+    # 修正文件名为 'sources.list'
+    urls = await read_urls_from_file('sources.list')
 
     if not urls:
         logger.warning("未找到任何 URL，程序退出。")
