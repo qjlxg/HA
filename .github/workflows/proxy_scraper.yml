@@ -24,6 +24,8 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
+    # 移除了 GeoLite2 数据库下载步骤，因为你已手动放置
+
     - name: Run proxy scraper
       run: python proxy_scraper.py
 
@@ -39,6 +41,12 @@ jobs:
         name: node-counts
         path: data/node_counts.csv
 
+    - name: Upload protocol stats CSV
+      uses: actions/upload-artifact@v4
+      with:
+        name: protocol-stats
+        path: data/protocol_stats.csv
+
     - name: Upload individual URL contents
       uses: actions/upload-artifact@v4
       with:
@@ -50,8 +58,8 @@ jobs:
       run: |
         git config user.name "GitHub Actions"
         git config user.email "github-actions@github.com"
-        git add data/all.txt data/node_counts.csv data/*.txt # 添加所有生成的文件，包括每个URL的内容
-        git commit -m "Update collected proxy nodes and stats" || echo "No changes to commit"
+        git add data/all.txt data/node_counts.csv data/protocol_stats.csv data/*.txt # 添加所有生成的文件
+        git commit -m "Update collected proxy nodes, stats, and protocol counts" || echo "No changes to commit"
         git push
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # GITHUB_TOKEN 是 GitHub 提供的默认 token，具有写入权限
