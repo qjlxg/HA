@@ -14,11 +14,11 @@ from bs4 import BeautifulSoup
 import logging
 import typing
 import uuid
-import httpcore
+# import httpcore # 不再直接导入，因为其SSLError属性可能不存在
 
 # 配置日志，同时输出到控制台和文件
 logging.basicConfig(
-    level=logging.INFO,
+    level=logging.INFO, # 可以根据需要调整为 DEBUG, INFO, WARNING, ERROR
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
         logging.FileHandler(os.path.join('data', 'proxy_scraper.log')),
@@ -80,7 +80,9 @@ def is_valid_host(host: str) -> bool:
     """验证主机是否为有效的域名或 IP 地址（包括 IPv6）。"""
     if not host:
         return False
-    return bool(re.match(r'^(?:\[[0-9a-fA-F:\.]+\]|[a-zA-Z0-9\.\-]+)$', host))
+    # 稍微放宽对主机名的正则表达式，使其更通用
+    # 允许包含非标准DNS字符（例如下划线），这在某些情况下可能是允许的
+    return bool(re.match(r'^(?:\[[0-9a-fA-F:\.]+\]|[a-zA-Z0-9\.\-_]+)$', host))
 
 def validate_node(node: str, protocol: str) -> tuple[bool, str]:
     """
@@ -110,7 +112,8 @@ def validate_node(node: str, protocol: str) -> tuple[bool, str]:
         if not node.startswith("vmess://"):
             return False, "缺少 vmess:// 前缀"
         try:
-            decoded = base64.b64decode(node[8:].strip('=')).decode('utf-8')
+            # 尝试解码，忽略非 Base64 字符
+            decoded = base64.b64decode(node[8:].strip('=').encode('ascii', 'ignore')).decode('utf-8', errors='ignore')
             data = json.loads(decoded)
             required_fields = {'v', 'ps', 'add', 'port', 'id', 'aid', 'net'}
             if not all(field in data for field in required_fields):
@@ -123,10 +126,10 @@ def validate_node(node: str, protocol: str) -> tuple[bool, str]:
                 return False, f"无效的 UUID: {data['id']}"
             if not str(data['aid']).isdigit():
                 return False, f"无效的 alterId: {data['aid']}"
-            if data['net'] not in {'tcp', 'ws', 'h2', 'grpc'}:
+            if data['net'] not in {'tcp', 'ws', 'h2', 'grpc', 'kcp'}: # 添加 kcp 等常见网络类型
                 return False, f"无效的网络类型: {data['net']}"
             return True, ""
-        except (base64.binascii.Error, json.JSONDecodeError, UnicodeDecodeError) as e:
+        except (base64.binascii.Error, json.JSONDecodeError, UnicodeDecodeError, ValueError) as e:
             return False, f"Base64 解码或 JSON 解析失败: {e}"
 
     elif protocol == "trojan":
@@ -143,55 +146,68 @@ def validate_node(node: str, protocol: str) -> tuple[bool, str]:
         return True, ""
 
     elif protocol == "ss":
-        if node.startswith("ss://["):
-            return False, "不支持 SIP002 格式的 SS 节点"
-        match = re.match(r"ss:\/\/([a-zA-Z0-9\-_]+):([^@]+)@([^:]+):(\d+)(?:#|$)", node)
-        if not match:
+        # 简化 SS 匹配，优先处理 Base64 解码后的格式
+        if node.startswith("ss://"):
             try:
-                decoded = base64.b64decode(node[5:].split('#')[0].strip('=')).decode('utf-8')
+                # 尝试解码 Base64 部分
+                encoded_part = node[5:].split('#')[0].strip('=')
+                # 确保只包含 Base64 安全字符，忽略其他
+                encoded_part_ascii = encoded_part.encode('ascii', 'ignore')
+                decoded = base64.b64decode(encoded_part_ascii).decode('utf-8', errors='ignore')
+
                 match = re.match(r"([a-zA-Z0-9\-_]+):([^@]+)@([^:]+):(\d+)", decoded)
                 if not match:
                     return False, "Base64 解码后格式不匹配"
-            except (base64.binascii.Error, UnicodeDecodeError) as e:
-                return False, f"Base64 解码失败: {e}"
-        method, password, host, port = match.groups()
-        if method not in SS_METHODS:
-            return False, f"不支持的加密方法: {method}"
-        if not password:
-            return False, "password 为空"
-        if not is_valid_host(host):
-            return False, f"无效的主机: {host}"
-        if not is_valid_port(port):
-            return False, f"无效的端口: {port}"
-        return True, ""
+                
+                method, password, host, port = match.groups()
+                if method not in SS_METHODS:
+                    return False, f"不支持的加密方法: {method}"
+                if not password:
+                    return False, "password 为空"
+                if not is_valid_host(host):
+                    return False, f"无效的主机: {host}"
+                if not is_valid_port(port):
+                    return False, f"无效的端口: {port}"
+                return True, ""
+            except (base64.binascii.Error, UnicodeDecodeError, ValueError) as e:
+                return False, f"Base64 解码失败或格式错误: {e}"
+        return False, "缺少 ss:// 前缀" # 如果没有 ss:// 前缀，则认为不是 SS 节点
 
     elif protocol == "ssr":
         if not node.startswith("ssr://"):
             return False, "缺少 ssr:// 前缀"
         try:
-            decoded = base64.b64decode(node[6:].strip('=')).decode('utf-8')
+            # 尝试解码，忽略非 Base64 字符
+            decoded = base64.b64decode(node[6:].strip('=').encode('ascii', 'ignore')).decode('utf-8', errors='ignore')
             parts = decoded.split(':')
             if len(parts) < 6:
                 return False, "格式不匹配，缺少必要字段"
-            host, port, protocol, method, obfs, password = parts[:6]
+            
+            host, port, protocol_ssr, method, obfs, password_encoded = parts[:6] # 修改变量名以避免冲突
+            
             if not is_valid_host(host):
                 return False, f"无效的主机: {host}"
             if not is_valid_port(port):
                 return False, f"无效的端口: {port}"
-            if protocol not in SSR_PROTOCOLS:
-                return False, f"不支持的协议: {protocol}"
+            if protocol_ssr not in SSR_PROTOCOLS:
+                return False, f"不支持的协议: {protocol_ssr}"
             if method not in SS_METHODS:
                 return False, f"不支持的加密方法: {method}"
             if obfs not in SSR_OBFS:
                 return False, f"不支持的混淆: {obfs}"
+            
             try:
-                decoded_password = base64.b64decode(password).decode('utf-8', errors='ignore')
-                if not decoded_password:
+                # SSR 的密码部分本身可能是 Base64 编码的
+                decoded_password = base64.b64decode(password_encoded.encode('ascii', 'ignore')).decode('utf-8', errors='ignore')
+                if not decoded_password: # 密码为空也视为无效
+                    return False, "password 为空或解码后为空"
+            except (base64.binascii.Error, UnicodeDecodeError, ValueError):
+                # 如果密码部分不是 Base64 编码，或者解码失败，则直接使用原始密码部分
+                if not password_encoded:
                     return False, "password 为空"
-            except (base64.binascii.Error, UnicodeDecodeError):
-                return False, "password 解码失败"
+            
             return True, ""
-        except (base64.binascii.Error, UnicodeDecodeError) as e:
+        except (base64.binascii.Error, UnicodeDecodeError, ValueError) as e:
             return False, f"Base64 解码失败: {e}"
 
     elif protocol == "vless":
@@ -259,52 +275,46 @@ async def _fetch_url_with_retry(client: httpx.AsyncClient, url: str, headers: di
         response = await client.get(url, headers=headers)
         response.raise_for_status()
         return response
-    except (httpcore.SSLError, httpx.RequestError) as e:
-        logging.warning(f"SSL 或网络错误，尝试禁用 SSL 验证: {url}, 错误: {e}")
-        async with httpx.AsyncClient(timeout=10, verify=False, follow_redirects=True) as retry_client:
+    # 捕获更通用的 httpx.RequestError
+    except httpx.RequestError as e:
+        logging.warning(f"请求 {url} 时发生网络或连接错误: {e}")
+        # 如果是 HTTPS 错误，尝试禁用 SSL 验证
+        if isinstance(e, httpx.ConnectError) and "SSL" in str(e):
+            logging.info(f"SSL 连接错误，尝试禁用 SSL 验证: {url}")
+            async with httpx.AsyncClient(timeout=10, verify=False, follow_redirects=True) as retry_client:
+                try:
+                    response = await retry_client.get(url, headers=headers)
+                    response.raise_for_status()
+                    return response
+                except httpx.HTTPStatusError as e_retry:
+                    logging.error(f"禁用 SSL 验证后，获取 {url} 时发生 HTTP 状态错误: {e_retry}")
+                except httpx.RequestError as e_retry:
+                    logging.error(f"禁用 SSL 验证后，获取 {url} 时发生网络请求错误: {e_retry}")
+        # 如果是 HTTP 到 HTTPS 的回退（但仅在原始请求是 HTTP 时才尝试）
+        elif url.startswith("http://") and original_protocol_url.startswith("http://"):
+            https_url = url.replace("http://", "https://")
+            logging.info(f"尝试从 HTTPS 回退获取内容: {https_url}")
             try:
-                response = await retry_client.get(url, headers=headers)
-                response.raise_for_status()
-                return response
-            except httpx.HTTPStatusError as e:
-                logging.error(f"获取 {url} 时发生 HTTP 状态错误: {e}")
-            except httpx.RequestError as e:
-                logging.error(f"获取 {url} 时发生网络请求错误: {e}")
+                fallback_headers = dict(headers)
+                fallback_headers.pop('If-None-Match', None)
+                fallback_headers.pop('If-Modified-Since', None)
+                response_https = await client.get(https_url, headers=fallback_headers)
+                response_https.raise_for_status()
+                return response_https
+            except httpx.HTTPStatusError as e_https:
+                logging.error(f"获取 {https_url} 时发生 HTTPS 状态错误: {e_https}")
+            except httpx.RequestError as e_https:
+                logging.error(f"获取 {https_url} 时发生 HTTPS 网络请求错误: {e_https}")
+        else:
+            logging.error(f"获取 {url} 时发生未知网络错误: {e}")
     except httpx.HTTPStatusError as e:
         logging.error(f"获取 {url} 时发生 HTTP 状态错误: {e}")
-        if url.startswith("http://") and original_protocol_url.startswith("http://"):
-            https_url = url.replace("http://", "https://")
-            logging.info(f"尝试从 HTTPS 回退获取内容: {https_url}")
-            try:
-                fallback_headers = dict(headers)
-                fallback_headers.pop('If-None-Match', None)
-                fallback_headers.pop('If-Modified-Since', None)
-                response_https = await client.get(https_url, headers=fallback_headers)
-                response_https.raise_for_status()
-                return response_https
-            except httpx.HTTPStatusError as e_https:
-                logging.error(f"获取 {https_url} 时发生 HTTPS 状态错误: {e_https}")
-            except httpx.RequestError as e_https:
-                logging.error(f"获取 {https_url} 时发生 HTTPS 网络请求错误: {e_https}")
-    except httpx.RequestError as e:
-        logging.error(f"获取 {url} 时发生网络请求错误: {e}")
-        if url.startswith("http://") and original_protocol_url.startswith("http://"):
-            https_url = url.replace("http://", "https://")
-            logging.info(f"尝试从 HTTPS 回退获取内容: {https_url}")
-            try:
-                fallback_headers = dict(headers)
-                fallback_headers.pop('If-None-Match', None)
-                fallback_headers.pop('If-Modified-Since', None)
-                response_https = await client.get(https_url, headers=fallback_headers)
-                response_https.raise_for_status()
-                return response_https
-            except httpx.HTTPStatusError as e_https:
-                logging.error(f"获取 {https_url} 时发生 HTTPS 状态错误: {e_https}")
-            except httpx.RequestError as e_https:
-                logging.error(f"获取 {https_url} 时发生 HTTPS 网络请求错误: {e_https}")
+        # 这里移除 HTTP 到 HTTPS 的回退逻辑，因为它已经在 RequestError 中处理
+        # 避免重复尝试或逻辑混乱
     except Exception as e:
         logging.error(f"获取 {url} 时发生未知错误: {e}")
     return None
+
 
 async def get_url_content(url: str, use_cache: bool = True) -> str | None:
     """
@@ -330,6 +340,8 @@ async def get_url_content(url: str, use_cache: bool = True) -> str | None:
             if (datetime.datetime.now() - cache_timestamp).total_seconds() / 3600 >= CACHE_EXPIRATION_HOURS:
                 logging.info(f"缓存 {url} 已过期（超过 {CACHE_EXPIRATION_HOURS} 小时），将重新检查更新。")
                 cached_data = None
+            else:
+                logging.info(f"缓存 {url} 有效，尝试使用缓存进行条件请求。")
         except (json.JSONDecodeError, KeyError, FileNotFoundError) as e:
             logging.warning(f"读取或解析缓存文件 {cache_entry_path} 失败: {e}，将重新获取。")
             cached_data = None
@@ -387,15 +399,31 @@ async def extract_nodes_from_content(url: str, content: str) -> list[str]:
     """
     unique_nodes = set()
     
+    # 尝试 Base64 解码，但要确保输入是有效的 Base64 字符串
     decoded_content_attempt = None
-    try:
-        decoded_content_attempt = base64.b64decode(content.strip()).decode('utf-8', errors='ignore')
-    except (base64.binascii.Error, UnicodeDecodeError):
-        pass
-
-    if decoded_content_attempt:
+    # 检查内容是否可能为 Base64，过滤掉非 Base64 字符
+    if re.fullmatch(r"^[a-zA-Z0-9\-_+=/\s]+$", content.strip()): # 允许空格，因为某些订阅链接可能是多行Base64
         try:
-            json_data = json.loads(decoded_content_attempt)
+            # 移除所有空白字符并确保长度是4的倍数
+            clean_content = content.strip().replace(" ", "").replace("\n", "").replace("\r", "")
+            padding_needed = len(clean_content) % 4
+            if padding_needed != 0:
+                clean_content += '=' * (4 - padding_needed)
+            
+            decoded_content_attempt = base64.b64decode(clean_content).decode('utf-8', errors='ignore')
+            logging.debug(f"成功 Base64 解码内容 (URL: {url})")
+        except (base64.binascii.Error, UnicodeDecodeError, ValueError) as e:
+            logging.debug(f"Base64 解码失败 (URL: {url}): {e}")
+            pass # 不是有效的 Base64，继续按原始文本处理
+
+    contents_to_search = [content]
+    if decoded_content_attempt and decoded_content_attempt != content: # 避免重复搜索
+        contents_to_search.append(decoded_content_attempt)
+
+    for text_content in contents_to_search:
+        # 尝试解析 JSON
+        try:
+            json_data = json.loads(text_content)
             if isinstance(json_data, list):
                 for item in json_data:
                     if isinstance(item, dict) and 'v' in item and 'ps' in item and 'add' in item:
@@ -404,31 +432,51 @@ async def extract_nodes_from_content(url: str, content: str) -> list[str]:
                         if is_valid:
                             unique_nodes.add(vmess_node)
                         else:
-                            logging.debug(f"丢弃无效 Vmess 节点 (URL: {url}): {vmess_node}, 原因: {reason}")
+                            logging.debug(f"丢弃无效 Vmess 节点 (URL: {url}, JSON 列表): {vmess_node}, 原因: {reason}")
             elif isinstance(json_data, dict):
+                # 处理 V2RayN/Clash config 格式
                 if 'outbounds' in json_data and isinstance(json_data['outbounds'], list):
                     for outbound in json_data['outbounds']:
-                        if outbound.get('type') == 'vmess' and outbound.get('server'):
-                            vmess_node = {
+                        if outbound.get('protocol') == 'vmess' and outbound.get('settings', {}).get('vnext'):
+                            # Vmess 节点通常在 vnext[0].users[0]
+                            server_settings = outbound['settings']['vnext'][0]
+                            user_settings = server_settings['users'][0]
+                            vmess_config = {
                                 "v": "2",
-                                "ps": outbound.get('tag', outbound.get('name', 'node')),
-                                "add": outbound.get('server'),
-                                "port": outbound.get('server_port'),
-                                "id": outbound.get('uuid'),
-                                "aid": outbound.get('alterId', '0'),
-                                "net": outbound.get('network', 'tcp'),
-                                "type": outbound.get('tls', {}).get('type', ''),
-                                "host": outbound.get('tls', {}).get('server_name', ''),
-                                "path": outbound.get('ws_path', ''),
-                                "tls": "tls" if outbound.get('tls', {}).get('enabled', False) else ""
+                                "ps": outbound.get('tag', 'node'), # 使用 tag 或默认名
+                                "add": server_settings.get('address'),
+                                "port": server_settings.get('port'),
+                                "id": user_settings.get('id'),
+                                "aid": user_settings.get('alterId', '0'),
+                                "net": outbound.get('streamSettings', {}).get('network', 'tcp'),
+                                "type": outbound.get('streamSettings', {}).get('type', ''),
+                                "host": outbound.get('streamSettings', {}).get('wsSettings', {}).get('headers', {}).get('Host', ''),
+                                "path": outbound.get('streamSettings', {}).get('wsSettings', {}).get('path', ''),
+                                "tls": "tls" if outbound.get('streamSettings', {}).get('security') == 'tls' else ""
                             }
-                            vmess_node = {k: v for k, v in vmess_node.items() if v is not None and v != ''}
-                            vmess_str = "vmess://" + base64.b64encode(json.dumps(vmess_node, separators=(',', ':')).encode()).decode()
+                            vmess_config = {k: v for k, v in vmess_config.items() if v is not None and v != ''}
+                            vmess_str = "vmess://" + base64.b64encode(json.dumps(vmess_config, separators=(',', ':')).encode()).decode()
                             is_valid, reason = validate_node(vmess_str, "vmess")
                             if is_valid:
                                 unique_nodes.add(vmess_str)
                             else:
-                                logging.debug(f"丢弃无效 Vmess 节点 (URL: {url}): {vmess_str}, 原因: {reason}")
+                                logging.debug(f"丢弃无效 Vmess 节点 (URL: {url}, V2Ray 配置): {vmess_str}, 原因: {reason}")
+                        elif outbound.get('protocol') == 'trojan' and outbound.get('settings', {}).get('servers'):
+                            server_settings = outbound['settings']['servers'][0]
+                            trojan_node = f"trojan://{server_settings.get('password')}@{server_settings.get('address')}:{server_settings.get('port')}"
+                            if outbound.get('streamSettings', {}).get('security') == 'tls':
+                                if server_settings.get('sni'):
+                                    trojan_node += f"?sni={server_settings['sni']}"
+                                elif outbound.get('streamSettings', {}).get('tlsSettings', {}).get('serverName'):
+                                    trojan_node += f"?sni={outbound['streamSettings']['tlsSettings']['serverName']}"
+                                # V2Ray config 中没有直接的 allowInsecure 对应，这里暂不处理
+                            is_valid, reason = validate_node(trojan_node, "trojan")
+                            if is_valid:
+                                unique_nodes.add(trojan_node)
+                            else:
+                                logging.debug(f"丢弃无效 Trojan 节点 (URL: {url}, V2Ray 配置): {trojan_node}, 原因: {reason}")
+                
+                # 处理 Clash/Sing-Box proxies 格式
                 elif 'proxies' in json_data and isinstance(json_data['proxies'], list):
                     for proxy in json_data['proxies']:
                         if proxy.get('type') == 'vmess':
@@ -440,8 +488,8 @@ async def extract_nodes_from_content(url: str, content: str) -> list[str]:
                                 "id": proxy.get('uuid'),
                                 "aid": proxy.get('alterId', '0'),
                                 "net": proxy.get('network', 'tcp'),
-                                "type": "",
-                                "host": proxy.get('ws-headers', {}).get('Host', ''),
+                                "type": "", # Clash 配置中可能没有直接的 type 字段
+                                "host": proxy.get('ws-headers', {}).get('Host', '') or proxy.get('tls-host', ''), # 兼容不同字段
                                 "path": proxy.get('ws-path', ''),
                                 "tls": "tls" if proxy.get('tls', False) else ""
                             }
@@ -451,25 +499,95 @@ async def extract_nodes_from_content(url: str, content: str) -> list[str]:
                             if is_valid:
                                 unique_nodes.add(vmess_str)
                             else:
-                                logging.debug(f"丢弃无效 Vmess 节点 (URL: {url}): {vmess_str}, 原因: {reason}")
+                                logging.debug(f"丢弃无效 Vmess 节点 (URL: {url}, Clash/Sing-Box JSON): {vmess_str}, 原因: {reason}")
                         elif proxy.get('type') == 'trojan':
                             trojan_node = f"trojan://{proxy.get('password')}@{proxy.get('server')}:{proxy.get('port')}"
                             if proxy.get('sni'):
                                 trojan_node += f"?sni={proxy['sni']}"
-                            if proxy.get('skip-cert-verify', False):
+                            if proxy.get('skip-cert-verify', False): # Clash 的 skip-cert-verify
                                 trojan_node += "&allowInsecure=1"
                             is_valid, reason = validate_node(trojan_node, "trojan")
                             if is_valid:
                                 unique_nodes.add(trojan_node)
                             else:
-                                logging.debug(f"丢弃无效 Trojan 节点 (URL: {url}): {trojan_node}, 原因: {reason}")
-        except json.JSONDecodeError:
-            pass
-        except Exception as e:
-            logging.debug(f"JSON 解析时发生错误: {e}")
+                                logging.debug(f"丢弃无效 Trojan 节点 (URL: {url}, Clash/Sing-Box JSON): {trojan_node}, 原因: {reason}")
+                        elif proxy.get('type') == 'ss':
+                            # Clash ss 类型解析
+                            ss_node_parts = []
+                            method = proxy.get('cipher')
+                            password = proxy.get('password')
+                            server = proxy.get('server')
+                            port = proxy.get('port')
+                            if method and password and server and port:
+                                # 构建 ss://base64encoded_info 格式
+                                ss_info = f"{method}:{password}@{server}:{port}"
+                                encoded_ss_info = base64.b64encode(ss_info.encode()).decode()
+                                ss_node = f"ss://{encoded_ss_info}"
+                                if proxy.get('name'):
+                                    ss_node += f"#{proxy['name']}"
+                                
+                                is_valid, reason = validate_node(ss_node, "ss")
+                                if is_valid:
+                                    unique_nodes.add(ss_node)
+                                else:
+                                    logging.debug(f"丢弃无效 SS 节点 (URL: {url}, Clash JSON): {ss_node}, 原因: {reason}")
+                        elif proxy.get('type') == 'vless':
+                             # Clash/Sing-Box vless 类型解析
+                            vless_node_config = {
+                                "uuid": proxy.get('uuid'),
+                                "address": proxy.get('server'),
+                                "port": proxy.get('port'),
+                                "flow": proxy.get('flow'),
+                                "encryption": proxy.get('cipher', 'none'),
+                                "security": proxy.get('tls', False),
+                                "sni": proxy.get('sni'),
+                                "fingerprint": proxy.get('client-fingerprint'),
+                                "alpn": proxy.get('alpn'),
+                                "host": proxy.get('ws-headers', {}).get('Host', '') or proxy.get('xudp-header', {}).get('Host', ''),
+                                "path": proxy.get('ws-path', '') or proxy.get('grpc-path', ''),
+                                "mode": proxy.get('grpc-mode')
+                            }
+                            # 尝试构建 VLESS 链接
+                            if vless_node_config.get('uuid') and vless_node_config.get('address') and vless_node_config.get('port'):
+                                vless_uri = f"vless://{vless_node_config['uuid']}@{vless_node_config['address']}:{vless_node_config['port']}"
+                                params = []
+                                if vless_node_config.get('security'):
+                                    params.append("security=tls")
+                                if vless_node_config.get('sni'):
+                                    params.append(f"sni={vless_node_config['sni']}")
+                                if vless_node_config.get('flow'):
+                                    params.append(f"flow={vless_node_config['flow']}")
+                                if vless_node_config.get('alpn'):
+                                    params.append(f"alpn={','.join(vless_node_config['alpn'])}")
+                                if vless_node_config.get('fingerprint'):
+                                    params.append(f"fp={vless_node_config['fingerprint']}")
+                                if vless_node_config.get('host'):
+                                    params.append(f"host={vless_node_config['host']}")
+                                if vless_node_config.get('path'):
+                                    params.append(f"path={vless_node_config['path']}")
+                                if vless_node_config.get('mode'):
+                                    params.append(f"mode={vless_node_config['mode']}")
 
+                                if params:
+                                    vless_uri += "?" + "&".join(params)
+                                
+                                if proxy.get('name'):
+                                    vless_uri += f"#{proxy['name']}"
+
+                                is_valid, reason = validate_node(vless_uri, "vless")
+                                if is_valid:
+                                    unique_nodes.add(vless_uri)
+                                else:
+                                    logging.debug(f"丢弃无效 VLESS 节点 (URL: {url}, Clash/Sing-Box JSON): {vless_uri}, 原因: {reason}")
+                                
+        except json.JSONDecodeError:
+            pass # 不是 JSON 格式，忽略
+        except Exception as e:
+            logging.warning(f"JSON 解析或处理时发生错误 (URL: {url}): {e}")
+
+        # 尝试解析 YAML
         try:
-            yaml_data = yaml.safe_load(decoded_content_attempt)
+            yaml_data = yaml.safe_load(text_content)
             if isinstance(yaml_data, dict) and 'proxies' in yaml_data and isinstance(yaml_data['proxies'], list):
                 for proxy in yaml_data['proxies']:
                     if proxy.get('type') == 'vmess':
@@ -482,7 +600,7 @@ async def extract_nodes_from_content(url: str, content: str) -> list[str]:
                             "aid": proxy.get('alterId', '0'),
                             "net": proxy.get('network', 'tcp'),
                             "type": "",
-                            "host": proxy.get('ws-headers', {}).get('Host', ''),
+                            "host": proxy.get('ws-headers', {}).get('Host', '') or proxy.get('tls-host', ''),
                             "path": proxy.get('ws-path', ''),
                             "tls": "tls" if proxy.get('tls', False) else ""
                         }
@@ -492,7 +610,7 @@ async def extract_nodes_from_content(url: str, content: str) -> list[str]:
                         if is_valid:
                             unique_nodes.add(vmess_str)
                         else:
-                            logging.debug(f"丢弃无效 Vmess 节点 (URL: {url}): {vmess_str}, 原因: {reason}")
+                            logging.debug(f"丢弃无效 Vmess 节点 (URL: {url}, YAML): {vmess_str}, 原因: {reason}")
                     elif proxy.get('type') == 'trojan':
                         trojan_node = f"trojan://{proxy.get('password')}@{proxy.get('server')}:{proxy.get('port')}"
                         if proxy.get('sni'):
@@ -503,17 +621,78 @@ async def extract_nodes_from_content(url: str, content: str) -> list[str]:
                         if is_valid:
                             unique_nodes.add(trojan_node)
                         else:
-                            logging.debug(f"丢弃无效 Trojan 节点 (URL: {url}): {trojan_node}, 原因: {reason}")
+                            logging.debug(f"丢弃无效 Trojan 节点 (URL: {url}, YAML): {trojan_node}, 原因: {reason}")
+                    elif proxy.get('type') == 'ss':
+                        ss_node_parts = []
+                        method = proxy.get('cipher')
+                        password = proxy.get('password')
+                        server = proxy.get('server')
+                        port = proxy.get('port')
+                        if method and password and server and port:
+                            ss_info = f"{method}:{password}@{server}:{port}"
+                            encoded_ss_info = base64.b64encode(ss_info.encode()).decode()
+                            ss_node = f"ss://{encoded_ss_info}"
+                            if proxy.get('name'):
+                                ss_node += f"#{proxy['name']}"
+                            
+                            is_valid, reason = validate_node(ss_node, "ss")
+                            if is_valid:
+                                unique_nodes.add(ss_node)
+                            else:
+                                logging.debug(f"丢弃无效 SS 节点 (URL: {url}, Clash YAML): {ss_node}, 原因: {reason}")
+                    elif proxy.get('type') == 'vless':
+                         vless_node_config = {
+                            "uuid": proxy.get('uuid'),
+                            "address": proxy.get('server'),
+                            "port": proxy.get('port'),
+                            "flow": proxy.get('flow'),
+                            "encryption": proxy.get('cipher', 'none'),
+                            "security": proxy.get('tls', False),
+                            "sni": proxy.get('sni'),
+                            "fingerprint": proxy.get('client-fingerprint'),
+                            "alpn": proxy.get('alpn'),
+                            "host": proxy.get('ws-headers', {}).get('Host', '') or proxy.get('xudp-header', {}).get('Host', ''),
+                            "path": proxy.get('ws-path', '') or proxy.get('grpc-path', ''),
+                            "mode": proxy.get('grpc-mode')
+                        }
+                        if vless_node_config.get('uuid') and vless_node_config.get('address') and vless_node_config.get('port'):
+                            vless_uri = f"vless://{vless_node_config['uuid']}@{vless_node_config['address']}:{vless_node_config['port']}"
+                            params = []
+                            if vless_node_config.get('security'):
+                                params.append("security=tls")
+                            if vless_node_config.get('sni'):
+                                params.append(f"sni={vless_node_config['sni']}")
+                            if vless_node_config.get('flow'):
+                                params.append(f"flow={vless_node_config['flow']}")
+                            if vless_node_config.get('alpn'):
+                                params.append(f"alpn={','.join(vless_node_config['alpn'])}")
+                            if vless_node_config.get('fingerprint'):
+                                params.append(f"fp={vless_node_config['fingerprint']}")
+                            if vless_node_config.get('host'):
+                                params.append(f"host={vless_node_config['host']}")
+                            if vless_node_config.get('path'):
+                                params.append(f"path={vless_node_config['path']}")
+                            if vless_node_config.get('mode'):
+                                params.append(f"mode={vless_node_config['mode']}")
+
+                            if params:
+                                vless_uri += "?" + "&".join(params)
+                            
+                            if proxy.get('name'):
+                                vless_uri += f"#{proxy['name']}"
+
+                            is_valid, reason = validate_node(vless_uri, "vless")
+                            if is_valid:
+                                unique_nodes.add(vless_uri)
+                            else:
+                                logging.debug(f"丢弃无效 VLESS 节点 (URL: {url}, Clash YAML): {vless_uri}, 原因: {reason}")
+
         except yaml.YAMLError:
-            pass
+            pass # 不是 YAML 格式，忽略
         except Exception as e:
-            logging.debug(f"YAML 解析时发生错误: {e}")
+            logging.warning(f"YAML 解析或处理时发生错误 (URL: {url}): {e}")
 
-    contents_to_search = [content]
-    if decoded_content_attempt:
-        contents_to_search.append(decoded_content_attempt)
-
-    for text_content in contents_to_search:
+        # 直接从文本内容中匹配所有协议
         for protocol, pattern in NODE_PATTERNS.items():
             for match in re.finditer(pattern, text_content):
                 node = match.group(0)
@@ -521,12 +700,15 @@ async def extract_nodes_from_content(url: str, content: str) -> list[str]:
                 if is_valid:
                     unique_nodes.add(node)
                 else:
-                    logging.debug(f"丢弃无效 {protocol} 节点 (URL: {url}): {node}, 原因: {reason}")
+                    logging.debug(f"丢弃无效 {protocol} 节点 (URL: {url}, 直接匹配): {node}, 原因: {reason}")
 
+    # 处理 HTML 内容
     if "<html" in content.lower() or "<!doctype html>" in content.lower():
         soup = BeautifulSoup(content, 'html.parser')
+        # 提取所有文本内容
         for text_element in soup.find_all(string=True):
             text = str(text_element)
+            # 在 HTML 文本中直接匹配节点
             for protocol, pattern in NODE_PATTERNS.items():
                 for match in re.finditer(pattern, text):
                     node = match.group(0)
@@ -534,16 +716,18 @@ async def extract_nodes_from_content(url: str, content: str) -> list[str]:
                     if is_valid:
                         unique_nodes.add(node)
                     else:
-                        logging.debug(f"丢弃无效 {protocol} 节点 (URL: {url}): {node}, 原因: {reason}")
+                        logging.debug(f"丢弃无效 {protocol} 节点 (URL: {url}, HTML 文本): {node}, 原因: {reason}")
             
-            for word_match in re.finditer(r'\b[A-Za-z0-9+/=]{20,}\b', text):
+            # 在 HTML 文本中寻找可能的 Base64 编码的节点
+            for word_match in re.finditer(r'\b[A-Za-z0-9+/]{20,}=*\b', text): # 匹配可能包含Base64的单词
                 word = word_match.group(0)
                 padding_needed = len(word) % 4
                 if padding_needed != 0:
-                    word += '=' * (4 - padding_needed)
-                
+                    word += '=' * (4 - padding_needed) # 添加填充
+
                 try:
-                    decoded_text = base64.b64decode(word).decode('utf-8', errors='ignore')
+                    # 尝试 Base64 解码
+                    decoded_text = base64.b64decode(word.encode('ascii', 'ignore')).decode('utf-8', errors='ignore')
                     for protocol, pattern in NODE_PATTERNS.items():
                         for match in re.finditer(pattern, decoded_text):
                             node = match.group(0)
@@ -551,11 +735,13 @@ async def extract_nodes_from_content(url: str, content: str) -> list[str]:
                             if is_valid:
                                 unique_nodes.add(node)
                             else:
-                                logging.debug(f"丢弃无效 {protocol} 节点 (URL: {url}): {node}, 原因: {reason}")
-                except (base64.binascii.Error, UnicodeDecodeError):
-                    pass
+                                logging.debug(f"丢弃无效 {protocol} 节点 (URL: {url}, HTML Base64): {node}, 原因: {reason}")
+                except (base64.binascii.Error, UnicodeDecodeError, ValueError) as e:
+                    logging.debug(f"HTML 内容中的 Base64 解码失败或无效: {word}, 错误: {e}")
+                    pass # 非 Base64 字符串，忽略
 
     return list(unique_nodes)
+
 
 async def process_url(url: str, all_nodes_writer: aiofiles.threadpool.text.AsyncTextIOWrapper, semaphore: asyncio.Semaphore):
     """
@@ -579,10 +765,9 @@ async def process_url(url: str, all_nodes_writer: aiofiles.threadpool.text.Async
 
         logging.info(f"开始解析 {url} 的内容...")
         unique_nodes = await extract_nodes_from_content(url, content)
-        logging.info(f"完成解析 {url} 的内容。")
+        logging.info(f"完成解析 {url} 的内容。提取到 {len(unique_nodes)} 个有效节点。")
 
-        unique_nodes = list(set(unique_nodes))
-
+        # 将提取到的节点写入以 URL MD5 命名的文件
         safe_url_name = hashlib.md5(url.encode()).hexdigest()
         url_output_file = os.path.join(DATA_DIR, f"{safe_url_name}.txt")
         try:
@@ -592,14 +777,16 @@ async def process_url(url: str, all_nodes_writer: aiofiles.threadpool.text.Async
             logging.info(f"URL: {url} 的节点已保存到 {url_output_file}")
         except IOError as e:
             logging.error(f"写入 URL 节点文件 {url_output_file} 失败: {e}")
-        
+            return url, 0 # 写入失败也返回 0 个节点
+
+        # 将提取到的节点也写入总节点文件
         try:
             for node in unique_nodes:
                 await all_nodes_writer.write(f"{node}\n")
         except IOError as e:
             logging.error(f"写入总节点文件 {ALL_NODES_FILE} 失败: {e}")
+            # 这里不返回 0，因为节点已经提取成功，只是写入all.txt失败
 
-        logging.info(f"URL: {url} 成功提取到 {len(unique_nodes)} 个节点。")
         return url, len(unique_nodes)
 
 async def main():
@@ -632,7 +819,12 @@ async def main():
     node_counts = defaultdict(int)
     semaphore = asyncio.Semaphore(CONCURRENCY_LIMIT)
 
-    async with aiofiles.open(ALL_NODES_FILE, 'w', encoding='utf-8') as all_nodes_writer:
+    # 确保 all.txt 在开始处理前是空的
+    async with aiofiles.open(ALL_NODES_FILE, 'w', encoding='utf-8') as f:
+        await f.truncate(0) # 清空文件
+
+    # 在这里打开一次 all_nodes_writer，并在所有任务中共享
+    async with aiofiles.open(ALL_NODES_FILE, 'a', encoding='utf-8') as all_nodes_writer:
         tasks = [process_url(url, all_nodes_writer, semaphore) for url in processed_urls]
         results = await asyncio.gather(*tasks, return_exceptions=True)
 
