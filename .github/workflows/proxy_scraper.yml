@@ -16,7 +16,8 @@ jobs:
       - name: Checkout repository # 步骤1: 检出仓库代码
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # 获取所有历史，以便rebase操作顺利进行
+          fetch-depth: 0 # 获取所有历史，这对于后续的 fetch 和 hard reset 是必需的。
+          # 默认会检出 main 分支，但为了明确，我们可以在下一步进行精确操作。
 
       - name: Configure Git # 步骤2: 配置 Git 用户信息 (重要!)
         run: |
@@ -29,24 +30,29 @@ jobs:
           python-version: '3.x' # 使用最新的 Python 3 版本，或者指定你的脚本需要的版本，例如 '3.9'
 
       - name: Install dependencies # 步骤4: 安装 Python 依赖 (如果 proxy_scraper.py 有依赖的话)
-        # 如果你的 proxy_scraper.py 脚本依赖于第三方库，比如 requests、bs4 等
-        # 你需要有一个 requirements.txt 文件在仓库的根目录
-        # 如果没有依赖，可以删除这一步
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then
             pip install -r requirements.txt
           fi
 
-      - name: Pull latest changes with rebase # 步骤5: 拉取远程最新更改并变基
+      - name: Fetch and Hard Reset to origin/main # 步骤5: 强制同步到远程主分支 ⚠️
         run: |
-          git pull --rebase origin main
+          echo "Fetching latest changes from origin..."
+          git fetch origin main # 从远程获取最新的 main 分支信息
+
+          echo "Resetting local main branch to origin/main (DANGEROUS if not intended to lose local changes)..."
+          # 强制将本地 main 分支重置到远程 origin/main 的状态
+          # 这会丢弃所有本地独有的提交，并使本地 HEAD 完全匹配远程 HEAD。
+          # 警告: 只有当你确定要丢弃本地未推送的，且与远程冲突的提交时才使用。
+          git reset --hard origin/main
+          echo "Local branch is now synced with origin/main."
 
       - name: Run proxy_scraper.py # 步骤6: 运行你的代理抓取脚本
         run: |
-          # 运行位于仓库根目录的 proxy_scraper.py 脚本
-          # 确保这个脚本会生成或修改 data/*.txt 和 data/*.csv 文件
+          echo "Running proxy_scraper.py..."
           python proxy_scraper.py
+          echo "proxy_scraper.py finished."
 
       - name: Auto commit and push # 步骤7: 自动提交并推送更改
         uses: stefanzweifel/git-auto-commit-action@v5
@@ -54,3 +60,5 @@ jobs:
           file_pattern: data/*.txt data/*.csv # 只提交 data/ 目录下的 .txt 和 .csv 文件
           commit_message: 自动更新代理节点和日志 $(date -u +'%Y-%m-%d %H:%M:%S UTC')
           commit_author: qjlxg <12179157+qjlxg@users.noreply.github.com>
+          # 在进行 hard reset 后，通常可以进行快进推送，所以这里不需要 --force
+          # push_options: "--force" # 请勿取消注释此行，除非您明确需要强制推送！
