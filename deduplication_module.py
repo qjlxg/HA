@@ -199,7 +199,16 @@ def get_country_from_ip(ip_address: str, reader) -> str:
     """使用 GeoLite2 数据库获取 IP 对应的国家名称，处理无效 IP"""
     try:
         response = reader.country(ip_address)
-        return response.country.names['zh-CN']
+        # 尝试获取中文名称
+        if 'zh-CN' in response.country.names:
+            return response.country.names['zh-CN']
+        # 如果没有中文名称，尝试获取英文名称作为备用
+        elif 'en' in response.country.names:
+            logging.warning(f"IP {ip_address} 无法获取 'zh-CN' 国家名称，使用 'en' 作为备用。")
+            return response.country.names['en']
+        else:
+            logging.warning(f"IP {ip_address} 无法获取 'zh-CN' 或 'en' 国家名称。")
+            return "未知地区" # 如果都没有，则返回未知地区
     except geoip2.errors.AddressNotFoundError:
         logging.debug(f"GeoIP 未找到地址: {ip_address}")
         return "未知/私有IP"
@@ -207,7 +216,8 @@ def get_country_from_ip(ip_address: str, reader) -> str:
         logging.error(f"解析 IP 地址 {ip_address} 时发生错误: {e}")
         return "无效IP格式"
     except Exception as e:
-        logging.error(f"GeoIP 查询失败 {ip_address}: {e}")
+        # 捕获其他未预期错误
+        logging.error(f"GeoIP 查询时发生意外错误，IP: {ip_address}. 错误: {e}", exc_info=True)
         return "未知错误"
 
 async def process_and_deduplicate_nodes():
