@@ -3,8 +3,7 @@ name: Auto Update Data # 工作流名称
 on:
   push: # 在每次推送到 main 分支时触发
     branches:
-      - 'proxy_scraper.py'
-      - '.github/workflows/proxy_scraper.yml'
+      - 'main' # 修正：这里应该是 'main' 分支，而不是脚本文件名或工作流文件路径
   schedule: # 定时任务，每6小时运行一次
     - cron: '0 */6 * * *'
   workflow_dispatch: # 允许手动触发工作流
@@ -36,11 +35,11 @@ jobs:
             pip install -r requirements.txt
           fi
 
-      - name: Fetch and Hard Reset to origin/main # 步骤5: 强制同步到远程主分支
-        # ⚠️ 警告: `git reset --hard` 会丢弃所有本地独有的提交，并使本地 HEAD 完全匹配远程 HEAD。
-        # 只有当你确定要丢弃本地未推送的，且与远程冲突的提交时才使用此步骤。
-        # 在此工作流中，由于 `stefanzweifel/git-auto-commit-action` 也带有 `pull_strategy`，
-        # 此步骤可以作为额外的安全措施，或者在某些复杂情况下用于确保仓库状态干净。
+      # 步骤5: 强制同步到远程主分支 (可选，但在并行执行时有助于避免冲突)
+      # ⚠️ 警告: `git reset --hard` 会丢弃所有本地独有的提交，并使本地 HEAD 完全匹配远程 HEAD。
+      # 在此工作流中，由于 `stefanzweifel/git-auto-commit-action` 也带有 `pull_strategy`，
+      # 此步骤可以作为额外的安全措施，或者在某些复杂情况下用于确保仓库状态干净。
+      - name: Fetch and Hard Reset to origin/main
         run: |
           echo "Fetching latest changes from origin..."
           git fetch origin main # 从远程获取最新的 main 分支信息
@@ -55,7 +54,17 @@ jobs:
           python proxy_scraper.py
           echo "proxy_scraper.py finished."
 
-      - name: Auto commit and push # 步骤7: 自动提交并推送更改
+      # --- 新增步骤：在自动提交前拉取并变基远程更改 ---
+      - name: Pull and Rebase before commit # 步骤7: 拉取并变基远程更改
+        run: |
+          echo "Pulling latest changes from origin/main with rebase strategy..."
+          git pull --rebase origin main
+          echo "Local branch is now rebased with origin/main."
+          # 注意：如果 rebase 过程中有冲突，这可能会导致工作流失败。
+          # 对于自动更新数据的场景，通常不会有冲突，因为数据文件是生成的。
+          # 但如果存在其他手动修改或并行工作流，则需要考虑冲突解决策略。
+
+      - name: Auto commit and push # 步骤8: 自动提交并推送更改
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           file_pattern: data/*.txt data/*.csv # 只提交 data/ 目录下的 .txt 和 .csv 文件
@@ -64,12 +73,6 @@ jobs:
           repository: .
           commit_user_name: github-actions[bot]
           commit_user_email: 41898282+github-actions[bot]@users.noreply.github.com
-          pull_strategy: "pull_rebase" # 新增: 在提交前拉取并变基远程更改
-          skip_dirty_check: false
-          skip_fetch: false
-          skip_checkout: false
-          disable_globbing: false
-          create_branch: false
-          create_git_tag_only: false
-          internal_git_binary: git
-          # push_options: "--force" # 通常不需要，因为 pull_rebase 会处理好冲突
+          # push_options: "--force" # 除非你非常清楚自己在做什么，否则不要使用 --force
+          # 移除无效的 pull_strategy 参数
+          # pull_strategy: "pull_rebase" # 这个参数是无效的，已移除
