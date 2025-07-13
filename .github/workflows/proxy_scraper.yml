@@ -39,6 +39,13 @@ jobs:
         name: node-counts
         path: data/node_counts.csv
 
+    - name: Upload individual URL contents
+      uses: actions/upload-artifact@v4
+      with:
+        name: url-contents
+        path: data/*.txt
+        # 如果 data 目录下有很多文件，或者文件名过长，需要注意 GitHub Actions 的文件/路径长度限制
+
     - name: Commit and push results (optional)
       run: |
         git config user.name "GitHub Actions"
