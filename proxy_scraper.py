@@ -399,6 +399,36 @@ async def fetch_url_content(client, url):
                 raise # Re-raise if both attempts fail
         raise # Re-raise if http fails and not an http URL
 
+async def process_url(client, url, semaphore, resolver):
+    """处理单个 URL：抓取内容，解析节点，并保存到临时文件"""
+    node_count = 0
+    error_message = None
+    async with semaphore:
+        try:
+            logger.info(f"开始处理 URL: {url}")
+            content = await fetch_url_content(client, url)
+            if content:
+                # Save content to a file named after the URL
+                safe_filename = re.sub(r'[^a-zA-Z0-9_\-.]', '_', url)
+                url_content_file = DATA_DIR / f"{safe_filename}.txt"
+                async with aiofiles.open(url_content_file, 'w', encoding='utf-8') as f:
+                    await f.write(content)
+                logger.info(f"URL {url} 的内容已保存到 {url_content_file}")
+
+                nodes = parse_nodes_from_content(content)
+                node_count = len(nodes)
+                if nodes:
+                    async with aiofiles.open(RAW_FETCHED_NODES_TEMP_FILE, 'a', encoding='utf-8') as f:
+                        for node in nodes:
+                            await f.write(node + '\n')
+                logger.info(f"URL {url} 解析到 {node_count} 个节点")
+            else:
+                logger.info(f"URL {url} 未返回内容或从缓存加载")
+        except Exception as e:
+            logger.error(f"处理 URL {url} 时发生错误: {e}")
+            error_message = str(e)
+    return url, node_count, error_message
+
 async def validate_and_save_nodes(resolver):
     """从临时文件读取并验证节点，保存协议统计"""
     raw_nodes_to_validate = []
