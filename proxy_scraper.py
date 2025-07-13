@@ -19,7 +19,7 @@ from pathlib import Path
 
 # --- 日志配置 ---
 # 配置日志输出，包括时间、级别、消息
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.ERROR, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 # --- 文件路径配置 ---
