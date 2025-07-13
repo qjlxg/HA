@@ -429,7 +429,7 @@ def rename_node(node):
 async def fetch_url_content(client, url):
     """
     安全地异步获取 URL 的内容。
-    包括缓存检查、HTTP/HTTPS 自动重试机制（仅一次，非 Tenacity 多次重试）。
+    包括缓存检查、HTTP/HTTPS 自动重试机制（仅一次）。
     """
     # 检查 URL 是否在缓存中且未过期
     if url in PROCESSED_URLS_CACHE:
@@ -448,7 +448,7 @@ async def fetch_url_content(client, url):
     headers = get_random_headers() # 获取随机请求头
     try:
         # 第一次请求
-        response = await client.get(url_to_fetch, headers=headers, timeout=7) # 设置超时
+        response = await client.get(url_to_fetch, headers=headers, timeout=15) # 设置超时为 15 秒
         response.raise_for_status() # 检查 HTTP 状态码，非 2xx 会抛出异常
         content = response.text
         # 将抓取到的内容及其哈希、时间戳存入缓存
@@ -464,7 +464,7 @@ async def fetch_url_content(client, url):
             https_url = url_to_fetch.replace("http://", "https://", 1)
             try:
                 logger.info(f"尝试使用 HTTPS 重试: {https_url}")
-                response = await client.get(https_url, headers=headers, timeout=7) # 设置超时
+                response = await client.get(https_url, headers=headers, timeout=15) # 设置超时为 15 秒
                 response.raise_for_status()
                 content = response.text
                 PROCESSED_URLS_CACHE[url] = {
@@ -479,7 +479,7 @@ async def fetch_url_content(client, url):
 
 async def process_url(client, url, semaphore, resolver):
     """
-    处理单个 URL 的完整流程：抓取内容，解析节点，并保存原始节点到临时文件。
+    处理单个 URL 的完整流程：抓取内容，解析节点，并保存解析到的节点到独立文件和临时文件。
     该函数在并发限制下运行。
     """
     node_count = 0
@@ -489,21 +489,30 @@ async def process_url(client, url, semaphore, resolver):
             logger.info(f"开始处理 URL: {url}")
             content = await fetch_url_content(client, url) # 抓取 URL 内容
             if content:
-                # 将每个 URL 抓取到的原始内容以 URL 命名单独保存
-                safe_filename = re.sub(r'[^a-zA-Z0-9_\-.]', '_', url) # 将 URL 转换为安全文件名
-                url_content_file = DATA_DIR / f"{safe_filename}.txt"
-                async with aiofiles.open(url_content_file, 'w', encoding='utf-8') as f:
-                    await f.write(content)
-                logger.info(f"URL {url} 的内容已保存到 {url_content_file}")
-
                 nodes = parse_nodes_from_content(content) # 从内容中解析节点
                 node_count = len(nodes)
+                
+                # 获取域名作为文件名
+                parsed_url = urlparse(url)
+                domain_name = parsed_url.hostname if parsed_url.hostname else re.sub(r'[^a-zA-Z0-9_\-.]', '_', url)
+                url_nodes_file = DATA_DIR / f"{domain_name}.txt"
+                
                 if nodes:
+                    async with aiofiles.open(url_nodes_file, 'w', encoding='utf-8') as f:
+                        for node in nodes:
+                            await f.write(node + '\n')
+                    logger.info(f"URL {url} 解析到的 {node_count} 个节点已保存到 {url_nodes_file}")
+                    
                     # 将解析到的原始节点追加写入临时文件，供后续统一验证
                     async with aiofiles.open(RAW_FETCHED_NODES_TEMP_FILE, 'a', encoding='utf-8') as f:
                         for node in nodes:
                             await f.write(node + '\n')
-                logger.info(f"URL {url} 解析到 {node_count} 个节点")
+                else:
+                    # 如果没有解析到节点，也创建空文件或删除旧文件，表示该URL无节点
+                    if url_nodes_file.exists():
+                        url_nodes_file.unlink()
+                    logger.info(f"URL {url} 未解析到任何节点，未创建/清空独立节点文件。")
+
             else:
                 logger.info(f"URL {url} 未返回内容或从缓存加载 (无需重新解析)")
         except Exception as e:
@@ -585,6 +594,8 @@ async def main():
         ALL_NODES_FILE.unlink()
     if RAW_FETCHED_NODES_TEMP_FILE.exists():
         RAW_FETCHED_NODES_TEMP_FILE.unlink()
+    # 注意：这里不再清空每个 URL 对应的 .txt 文件，因为它们现在包含的是处理后的节点而非原始网页内容。
+    # 如果需要完全清空，可以在这里增加删除 DATA_DIR 中所有 .txt 文件的逻辑，但请谨慎。
 
     node_counts_data = [] # 存储每个 URL 的节点抓取数量
     url_fetch_semaphore = asyncio.Semaphore(CONCURRENCY_LIMIT) # URL 抓取并发信号量
