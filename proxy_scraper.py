@@ -15,7 +15,7 @@ from bs4 import BeautifulSoup
 import aiofiles
 import logging
 import aiodns
-from tenacity import retry, stop_after_attempt, wait_exponential
+# from tenacity import retry, stop_after_attempt, wait_exponential # Removed tenacity import
 from pathlib import Path
 
 # 配置日志
@@ -37,6 +37,9 @@ CACHE_EXPIRY_HOURS = 24
 
 # 并发限制
 CONCURRENCY_LIMIT = int(os.getenv("CONCURRENCY_LIMIT", 50))
+# 新增：节点验证的并发限制，可以与 URL 抓取并发限制不同
+NODE_VALIDATION_CONCURRENCY_LIMIT = int(os.getenv("NODE_VALIDATION_CONCURRENCY_LIMIT", 100))
+
 
 # 用户代理
 USER_AGENTS = {
@@ -49,7 +52,7 @@ USER_AGENTS = {
         "Mozilla/5.0 (iPhone; CPU iPhone OS 16_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1",
     ],
     "pad": [
-        "Mozilla/5.0 (iPad; CPU OS 16_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1",
+        "Mozilla/5.0 (iPad; CPU iPhone OS 16_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1",
     ],
     "harmonyos": [
         "Mozilla/5.0 (Linux; HarmonyOS; HMA-AL00) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 HuaweiBrowser/12.0.0.301 Mobile Safari/537.36",
@@ -57,7 +60,7 @@ USER_AGENTS = {
 }
 
 # 缓存
-PROCESSED_URLS_CACHE = {}  # {url: {"hash": content_hash, "timestamp": float}}
+PROCESSED_URLS_CACHE = {}   # {url: {"hash": content_hash, "timestamp": float}}
 DNS_CACHE = {}  # {hostname: {"ips": [ip_address], "timestamp": float, "ttl": int}}
 
 def get_random_headers():
@@ -272,6 +275,11 @@ async def validate_vless(node):
     """验证 VLESS 节点"""
     return bool(re.match(r"vless:\/\/([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})@[\w\.-]+:\d+[^ \t\n\r]*", node))
 
+# Wrap validate_node for concurrent processing
+async def _validate_node_concurrent(node, resolver, semaphore):
+    async with semaphore:
+        return await validate_node(node, resolver)
+
 async def validate_node(node, resolver):
     """验证节点格式和 DNS 可达性"""
     if not node:
@@ -347,7 +355,7 @@ def rename_node(node):
         return urlunparse(new_parsed_url)
     return node
 
-@retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=10))
+# Removed @retry decorator
 async def fetch_url_content(client, url):
     """安全地异步获取 URL 内容"""
     if url in PROCESSED_URLS_CACHE:
@@ -364,7 +372,7 @@ async def fetch_url_content(client, url):
 
     headers = get_random_headers()
     try:
-        response = await client.get(url_to_fetch, headers=headers, timeout=10)
+        response = await client.get(url_to_fetch, headers=headers, timeout=7) # Modified timeout
         response.raise_for_status()
         content = response.text
         PROCESSED_URLS_CACHE[url] = {
@@ -372,61 +380,57 @@ async def fetch_url_content(client, url):
             "timestamp": datetime.datetime.now().timestamp()
         }
         return content
-    except httpx.RequestError:
+    except httpx.RequestError as e:
+        logger.warning(f"初次请求 URL 时发生错误: {url_to_fetch} - {e}")
         if url_to_fetch.startswith("http://"):
             https_url = url_to_fetch.replace("http://", "https://", 1)
-            response = await client.get(https_url, headers=headers, timeout=10)
-            response.raise_for_status()
-            content = response.text
-            PROCESSED_URLS_CACHE[url] = {
-                "hash": hashlib.sha256(content.encode('utf-8')).hexdigest(),
-                "timestamp": datetime.datetime.now().timestamp()
-            }
-            return content
-        raise
-
-async def process_url(client, url, semaphore, resolver):
-    """处理单个 URL"""
-    async with semaphore:
-        logger.info(f"开始处理 URL: {url}")
-        content = await fetch_url_content(client, url)
-        if content is None:
-            return url, 0, []
-
-        # 保存原始内容
-        safe_filename = re.sub(r'[^a-zA-Z0-9_\-.]', '_', url)
-        url_content_file = DATA_DIR / f"{safe_filename}.txt"
-        async with aiofiles.open(url_content_file, 'w', encoding='utf-8') as f:
-            await f.write(content)
-
-        # 解析节点
-        raw_nodes = parse_nodes_from_content(content)
-        if raw_nodes:
-            async with aiofiles.open(RAW_FETCHED_NODES_TEMP_FILE, 'a', encoding='utf-8') as f:
-                await f.write('\n'.join(raw_nodes) + '\n')
-
-        return url, len(raw_nodes), []
+            try:
+                logger.info(f"尝试使用 HTTPS 重试: {https_url}")
+                response = await client.get(https_url, headers=headers, timeout=7) # Modified timeout
+                response.raise_for_status()
+                content = response.text
+                PROCESSED_URLS_CACHE[url] = {
+                    "hash": hashlib.sha256(content.encode('utf-8')).hexdigest(),
+                    "timestamp": datetime.datetime.now().timestamp()
+                }
+                return content
+            except httpx.RequestError as https_e:
+                logger.error(f"HTTP 和 HTTPS 尝试 URL 时均发生错误: {url} - {https_e}")
+                raise # Re-raise if both attempts fail
+        raise # Re-raise if http fails and not an http URL
 
 async def validate_and_save_nodes(resolver):
     """从临时文件读取并验证节点，保存协议统计"""
-    validated_nodes = []
-    protocol_counts = Counter()
-    valid_protocol_counts = Counter()
-
+    raw_nodes_to_validate = []
     if not RAW_FETCHED_NODES_TEMP_FILE.exists():
         logger.warning(f"临时节点文件 {RAW_FETCHED_NODES_TEMP_FILE} 不存在，跳过验证")
         return []
 
     async with aiofiles.open(RAW_FETCHED_NODES_TEMP_FILE, 'r', encoding='utf-8') as f:
         async for node_line in f:
-            node = node_line.strip()
-            protocol = node.split('://')[0].lower() if '://' in node else 'unknown'
-            protocol_counts[protocol] += 1
-            if await validate_node(node, resolver):
-                validated_nodes.append(rename_node(node))
-                valid_protocol_counts[protocol] += 1
+            raw_nodes_to_validate.append(node_line.strip())
+    
+    # Parallelize node validation
+    validation_semaphore = asyncio.Semaphore(NODE_VALIDATION_CONCURRENCY_LIMIT)
+    validation_tasks = []
+    for node in raw_nodes_to_validate:
+        validation_tasks.append(_validate_node_concurrent(node, resolver, validation_semaphore))
+    
+    validated_results = await asyncio.gather(*validation_tasks)
 
-    unique_nodes = list(set(validated_nodes))
+    validated_nodes_with_protocols = []
+    protocol_counts = Counter()
+    valid_protocol_counts = Counter()
+
+    for i, is_valid in enumerate(validated_results):
+        node = raw_nodes_to_validate[i]
+        protocol = node.split('://')[0].lower() if '://' in node else 'unknown'
+        protocol_counts[protocol] += 1
+        if is_valid:
+            validated_nodes_with_protocols.append(rename_node(node))
+            valid_protocol_counts[protocol] += 1
+
+    unique_nodes = list(set(validated_nodes_with_protocols))
 
     # 保存节点
     async with aiofiles.open(ALL_NODES_FILE, 'w', encoding='utf-8') as f:
@@ -458,11 +462,12 @@ async def main():
         RAW_FETCHED_NODES_TEMP_FILE.unlink()
 
     node_counts_data = []
-    resolver = aiodns.DNSResolver(timeout=5, nameservers=['8.8.8.8', '1.1.1.1'])
-    semaphore = asyncio.Semaphore(CONCURRENCY_LIMIT)
+    url_fetch_semaphore = asyncio.Semaphore(CONCURRENCY_LIMIT) # Renamed for clarity
+
+    resolver = aiodns.DNSResolver(timeout=5, nameservers=['8.8.8.8', '1.1.1.1']) # Initialize resolver once
 
     async with httpx.AsyncClient(http2=True, follow_redirects=True) as client:
-        tasks = [process_url(client, url, semaphore, resolver) for url in urls]
+        tasks = [process_url(client, url, url_fetch_semaphore, resolver) for url in urls]
         results = await asyncio.gather(*tasks, return_exceptions=True)
 
         for result in results:
