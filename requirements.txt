@@ -5,4 +5,4 @@ aiofiles
 aiodns
 tenacity
 geoip2
-maxminddb-decode
+maxminddb
