@@ -532,7 +532,7 @@ async def fetch_url(client, url, depth=0):
     return content, found_urls
 
 async def process_url(client, url):
-    """处理单个原始 URL 及其递归抓取过程。"""
+    """处理单个原始 URL 及及其递归抓取过程。"""
     all_nodes_for_url = set()
     visited_urls = set()
     urls_to_visit = [(url, 0)] # (url, depth)
@@ -572,8 +572,10 @@ async def main():
     """主函数：读取 sources.list，并行抓取并保存结果。"""
     print("Proxy Scraper 脚本已启动！") # <-- 调试用，确保脚本启动
     urls = []
+    print(f"尝试打开文件: {SOURCES_FILE}") # <-- 调试用，指示文件读取尝试
     try:
         with open(SOURCES_FILE, 'r', encoding='utf-8') as f:
+            print(f"成功打开文件: {SOURCES_FILE}") # <-- 调试用，指示文件成功打开
             for line in f:
                 stripped_line = line.strip()
                 if not stripped_line or stripped_line.startswith('#'): # 忽略空行和注释行
@@ -591,6 +593,7 @@ async def main():
                         continue
                 
                 urls.append(normalized_url)
+        print(f"从 {SOURCES_FILE} 读取到 {len(urls)} 个URL。") # <-- 调试用，显示读取到的URL数量
     except FileNotFoundError:
         print(f"错误: {SOURCES_FILE} 文件未找到。请确保 {SOURCES_FILE} 存在于脚本同目录下。") # 更多提示
         return
@@ -608,9 +611,11 @@ async def main():
     limits = httpx.Limits(max_connections=50, max_keepalive_connections=20)
     timeout = httpx.Timeout(15.0, connect=10.0)
 
+    print("开始异步 HTTP 客户端会话...") # <-- 调试用，指示异步客户端启动
     async with httpx.AsyncClient(limits=limits, timeout=timeout) as client:
         tasks = [process_url(client, url) for url in urls]
         results = await asyncio.gather(*tasks)
+        print("所有URL处理任务完成。") # <-- 调试用，指示所有任务完成
 
         for original_url, nodes_collected in results:
             # 清理URL名称用于文件名，替换非法字符
@@ -670,6 +675,7 @@ async def main():
         print(f"保存节点统计信息到 {csv_filename} 失败: {e}")
     
     print(f"总共收集到的有效节点数量: {total_nodes_collected}")
+    print("Proxy Scraper 脚本执行完毕。") # <-- 调试用，指示脚本执行结束
 
 if __name__ == "__main__":
     asyncio.run(main())
