@@ -1,638 +1,582 @@
 import httpx
 import asyncio
 import re
-import base64
-import yaml
-import json
 import os
 import csv
-import random
-import datetime
 import hashlib
-from urllib.parse import urlparse, urlunparse
-from collections import Counter
+import time
+from urllib.parse import urlparse, urljoin, unquote, parse_qs
+import yaml
+import base64
+import json
 from bs4 import BeautifulSoup
-import aiofiles
-import logging
-import aiodns
-from pathlib import Path
+import random
 
-# --- 日志配置 ---
-# 配置日志输出，包括时间、级别、消息
-logging.basicConfig(level=logging.ERROR, format='%(asctime)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
+# --- 配置 ---
+SOURCES_FILE = 'sources.list'
+DATA_DIR = 'data'
+CACHE_DIR = 'cache'
+CACHE_EXPIRATION_TIME = 3600  # 缓存过期时间（秒），这里设置为1小时
+MAX_RECURSION_DEPTH = 3  # 最大递归抓取深度
+USER_AGENTS = [
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Safari/605.1.15",
+    "Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/90.0.4430.216 Mobile/15E148 Safari/604.1",
+    "Mozilla/5.0 (iPad; CPU OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/90.0.4430.216 Mobile/15E148 Safari/604.1",
+    "Mozilla/5.0 (Linux; Android 10; HarmonyOS) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.105 Mobile Safari/537.36",
+]
 
-# --- 文件路径配置 ---
-# 定义数据保存的主目录，默认是脚本同级的 'data' 文件夹
-DATA_DIR = Path(os.getenv("DATA_DIR", "data"))
-DATA_DIR.mkdir(exist_ok=True) # 如果目录不存在则创建
+# 确保目录存在
+os.makedirs(DATA_DIR, exist_ok=True)
+os.makedirs(CACHE_DIR, exist_ok=True)
 
-ALL_NODES_FILE = DATA_DIR / "all.txt" # 所有去重后的有效节点保存文件
-NODE_COUNTS_CSV = DATA_DIR / "node_counts.csv" # 每个 URL 抓取到的节点数量统计文件
-PROTOCOL_STATS_CSV = DATA_DIR / "protocol_stats.csv" # 各协议节点统计文件
-RAW_FETCHED_NODES_TEMP_FILE = DATA_DIR / "raw_fetched_nodes_temp.txt" # 临时保存所有抓取到的原始节点，待后续验证
-CACHE_FILE = DATA_DIR / "cache.json" # URL 内容的哈希和时间戳缓存文件
-DNS_CACHE_FILE = DATA_DIR / "dns_cache.json" # DNS 解析结果缓存文件
-
-# --- 全局配置 ---
-CACHE_EXPIRY_HOURS = 24 # 缓存有效期（小时），用于 URL 内容和 DNS 缓存的默认过期时间
-
-# 并发限制：同时处理的 URL 抓取任务数量
-CONCURRENCY_LIMIT = int(os.getenv("CONCURRENCY_LIMIT", 50))
-# 节点验证的并发限制：同时进行的 DNS 查询和节点格式验证任务数量
-NODE_VALIDATION_CONCURRENCY_LIMIT = int(os.getenv("NODE_VALIDATION_CONCURRENCY_LIMIT", 100))
-
-# 用户代理列表，用于模拟不同设备类型的浏览器访问
-USER_AGENTS = {
-    "desktop": [
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36",
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36",
-    ],
-    "mobile": [
-        "Mozilla/5.0 (Linux; Android 10) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Mobile Safari/537.36",
-        "Mozilla/5.0 (iPhone; CPU iPhone OS 16_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1",
-    ],
-    "pad": [
-        "Mozilla/5.0 (iPad; CPU iPhone OS 16_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1",
-    ],
-    "harmonyos": [
-        "Mozilla/5.0 (Linux; HarmonyOS; HMA-AL00) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 HuaweiBrowser/12.0.0.301 Mobile Safari/537.36",
-    ]
+# 节点匹配正则 (主要用于初步识别，详细验证在 validate_node 中进行)
+NODE_PATTERNS = {
+    "hysteria2": re.compile(r"hysteria2://[a-zA-Z0-9.\-_~:/?#\[\]@!$&'()*+,;%=]+"),
+    "vmess": re.compile(r"vmess://[a-zA-Z0-9+/=]+"),
+    "trojan": re.compile(r"trojan://[a-zA-Z0-9.\-_~:/?#\[\]@!$&'()*+,;%=]+"),
+    "ss": re.compile(r"ss://[a-zA-Z0-9+/=@:.]+"),
+    "ssr": re.compile(r"ssr://[a-zA-Z0-9+/=@:.]+"),
+    "vless": re.compile(r"vless://[a-zA-Z0-9.\-_~:/?#\[\]@!$&'()*+,;%=]+"),
 }
-
-# --- 缓存数据结构 ---
-# 存储已处理 URL 的缓存：{url: {"hash": 内容哈希值, "timestamp": 抓取时间戳}}
-PROCESSED_URLS_CACHE = {}
-# 存储 DNS 解析结果的缓存：{hostname: {"ips": [IP地址列表], "timestamp": 解析时间戳, "ttl": DNS记录的TTL}}
-DNS_CACHE = {}
 
 # --- 辅助函数 ---
 
-def get_random_headers():
-    """
-    随机获取一个请求头，用于模拟不同的浏览器访问，防止被目标网站识别为爬虫。
-    """
-    category = random.choice(list(USER_AGENTS.keys()))
-    user_agent = random.choice(USER_AGENTS[category])
-    return {
-        "User-Agent": user_agent,
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
-        "Accept-Language": "en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7",
-        "Connection": "keep-alive",
-        "Upgrade-Insecure-Requests": "1",
-        "Cache-Control": "max-age=0",
-    }
+def get_cache_filename(url):
+    """根据URL生成缓存文件名"""
+    return os.path.join(CACHE_DIR, hashlib.md5(url.encode()).hexdigest() + '.cache')
 
-async def load_cache():
-    """
-    加载 URL 内容缓存和 DNS 解析缓存，并清理过期记录。
-    确保在程序启动时加载现有缓存以提高效率。
-    """
-    try:
-        now = datetime.datetime.now().timestamp()
-        
-        # 加载 URL 缓存
-        if CACHE_FILE.exists():
-            async with aiofiles.open(CACHE_FILE, 'r', encoding='utf-8') as f:
-                content = await f.read()
-                if content:
-                    cache = json.loads(content)
-                    # 只加载未过期的缓存记录
-                    PROCESSED_URLS_CACHE.update({
-                        k: v for k, v in cache.items()
-                        if (now - v["timestamp"]) < CACHE_EXPIRY_HOURS * 3600
-                    })
-                    logger.info(f"加载了 {len(PROCESSED_URLS_CACHE)} 个 URL 缓存记录")
-        
-        # 加载 DNS 缓存
-        if DNS_CACHE_FILE.exists():
-            async with aiofiles.open(DNS_CACHE_FILE, 'r', encoding='utf-8') as f:
-                content = await f.read()
-                if content:
-                    cache = json.loads(content)
-                    # 只加载未过期的缓存记录（DNS 缓存使用默认过期时间或实际TTL）
-                    DNS_CACHE.update({
-                        k: v for k, v in cache.items()
-                        # 使用 min 函数确保DNS缓存至少在 CACHE_EXPIRY_HOURS 内有效，或者使用其更短的 TTL
-                        if (now - v["timestamp"]) < min(CACHE_EXPIRY_HOURS * 3600, v.get("ttl", CACHE_EXPIRY_HOURS * 3600))
-                    })
-                    logger.info(f"加载了 {len(DNS_CACHE)} 个 DNS 缓存记录")
-    except Exception as e:
-        logger.error(f"加载缓存失败: {e}")
-
-async def save_cache():
-    """
-    保存 URL 内容缓存和 DNS 解析缓存到文件（使用临时文件进行原子性写入，防止数据损坏）。
-    在程序结束时调用。
-    """
-    try:
-        # 保存 URL 缓存
-        temp_file = CACHE_FILE.with_suffix('.tmp')
-        async with aiofiles.open(temp_file, 'w', encoding='utf-8') as f:
-            await f.write(json.dumps(PROCESSED_URLS_CACHE))
-        temp_file.rename(CACHE_FILE) # 重命名临时文件，完成原子写入
-        logger.info(f"URL 缓存已保存到 {CACHE_FILE}")
-        
-        # 保存 DNS 缓存
-        temp_dns_file = DNS_CACHE_FILE.with_suffix('.tmp')
-        async with aiofiles.open(temp_dns_file, 'w', encoding='utf-8') as f:
-            await f.write(json.dumps(DNS_CACHE))
-        temp_dns_file.rename(DNS_CACHE_FILE) # 重命名临时文件，完成原子写入
-        logger.info(f"DNS 缓存已保存到 {DNS_CACHE_FILE}")
-    except Exception as e:
-        logger.error(f"保存缓存失败: {e}")
-
-async def read_urls_from_file(file_path):
-    """
-    从指定文件中读取 URL 列表，并对没有 http:// 或 https:// 前缀的 URL 自动补全 http://。
-    """
-    urls = []
-    try:
-        async with aiofiles.open(file_path, 'r', encoding='utf-8') as f:
-            async for line in f:
-                line = line.strip()
-                if line and not line.startswith('#'): # 忽略空行和注释行
-                    if not (line.startswith('http://') or line.startswith('https://')):
-                        urls.append(f'http://{line}') # 补全 http://
-                    else:
-                        urls.append(line)
-        logger.info(f"从 {file_path} 读取了 {len(urls)} 个 URL")
-    except FileNotFoundError:
-        logger.error(f"文件未找到: {file_path}")
-    return urls
-
-def decode_base64(data):
-    """
-    安全地进行 Base64 解码。
-    处理可能存在的填充问题和解码错误。
-    """
-    try:
-        # 补齐 Base64 字符串的填充字符 '='
-        missing_padding = len(data) % 4
-        if missing_padding:
-            data += '=' * (4 - missing_padding)
-        return base64.b64decode(data).decode('utf-8')
-    except Exception as e:
-        logger.warning(f"Base64 解码失败: {e}")
-        return None
-
-def parse_nodes_from_content(content):
-    """
-    从网页内容中解析各种代理节点链接（如 hysteria2, vmess, trojan, ss, ssr, vless）。
-    尝试从原始内容、Base64 解码后的内容、YAML、JSON 和 HTML 中提取。
-    """
-    nodes = []
-    if not content:
-        return nodes
-
-    # 定义各种代理协议的正则表达式模式
-    node_patterns = {
-        "hysteria2": r"hysteria2:\/\/[\w\-\.]+:\d+[^ \t\n\r]*",
-        "vmess": r"vmess:\/\/[a-zA-Z0-9=+/]+",
-        "trojan": r"trojan:\/\/[^@]+@[\w\.-]+:\d+[^ \t\n\r]*",
-        "ss": r"ss:\/\/[a-zA-Z0-9=+/]+",
-        "ssr": r"ssr:\/\/[a-zA-Z0-9=+/]+",
-        "vless": r"vless:\/\/([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})@[\w\.-]+:\d+[^ \t\n\r]*",
-    }
-
-    # 1. 直接从原始内容中查找节点
-    for proto, pattern in node_patterns.items():
-        nodes.extend(re.findall(pattern, content, re.IGNORECASE))
-
-    # 2. 尝试 Base64 解码后查找节点（常见于订阅链接的 Base64 编码）
-    decoded_content = decode_base64(content)
-    if decoded_content:
-        for proto, pattern in node_patterns.items():
-            nodes.extend(re.findall(pattern, decoded_content, re.IGNORECASE))
-
-    # 3. 尝试 YAML 解析（常见于 Clash 配置文件）
-    try:
-        parsed_yaml = yaml.safe_load(content)
-        if isinstance(parsed_yaml, dict) and "proxies" in parsed_yaml:
-            for proxy in parsed_yaml["proxies"]:
-                if isinstance(proxy, str): # 如果代理是字符串形式
-                    for proto, pattern in node_patterns.items():
-                        if re.match(pattern, proxy, re.IGNORECASE):
-                            nodes.append(proxy)
-                elif isinstance(proxy, dict) and "type" in proxy: # 如果代理是字典形式
-                    # 检查字典中所有字符串值，看是否有匹配的节点
-                    for k, v in proxy.items():
-                        if isinstance(v, str):
-                            for proto, pattern in node_patterns.items():
-                                if re.match(pattern, v, re.IGNORECASE):
-                                    nodes.append(v)
-    except yaml.YAMLError:
-        logger.debug("内容不是有效的 YAML 格式")
-
-    # 4. 尝试 JSON 解析
-    try:
-        parsed_json = json.loads(content)
-        # 递归查找 JSON 对象或数组中的所有字符串值
-        def find_nodes_in_json(obj):
-            found_nodes = []
-            if isinstance(obj, dict):
-                for k, v in obj.items():
-                    if isinstance(v, str):
-                        for proto, pattern in node_patterns.items():
-                            if re.match(pattern, v, re.IGNORECASE):
-                                found_nodes.append(v)
-                    elif isinstance(v, (dict, list)): # 递归处理嵌套结构
-                        found_nodes.extend(find_nodes_in_json(v))
-            elif isinstance(obj, list):
-                for item in obj:
-                    if isinstance(item, str):
-                        for proto, pattern in node_patterns.items():
-                            if re.match(pattern, item, re.IGNORECASE):
-                                found_nodes.append(item)
-                    elif isinstance(item, (dict, list)): # 递归处理嵌套结构
-                        found_nodes.extend(find_nodes_in_json(item))
-            return found_nodes
-        nodes.extend(find_nodes_in_json(parsed_json))
-    except json.JSONDecodeError:
-        logger.debug("内容不是有效的 JSON 格式")
-
-    # 5. 尝试 HTML 解析（从文本内容和特定标签中查找）
-    if any(tag in content.lower() for tag in ['<html', '<body', '<!doctype html']):
-        soup = BeautifulSoup(content, 'html.parser')
-        # 从整个文本内容中查找
-        text_content = soup.get_text()
-        for proto, pattern in node_patterns.items():
-            nodes.extend(re.findall(pattern, text_content, re.IGNORECASE))
-        # 从特定标签（如 <pre>, <code>, <textarea>）中查找，这些标签常用于存放代码或纯文本
-        for tag in soup.find_all(['pre', 'code', 'textarea', 'div', 'p']):
-            block_content = tag.get_text()
-            for proto, pattern in node_patterns.items():
-                nodes.extend(re.findall(pattern, block_content, re.IGNORECASE))
-
-    return list(set(nodes)) # 返回去重后的节点列表
-
-# --- 节点协议格式验证函数 ---
-# 这些函数仅检查节点字符串是否符合对应协议的基本格式要求。
-
-async def validate_hysteria2(node):
-    """验证 Hysteria2 节点格式。"""
-    return bool(re.match(r"hysteria2:\/\/[\w\-\.]+:\d+[^ \t\n\r]*", node))
-
-async def validate_vmess(node):
-    """验证 VMess 节点格式（包括 Base64 解码和 JSON 结构）。"""
-    try:
-        encoded_part = node[len("vmess://"):]
-        decoded_json_str = decode_base64(encoded_part)
-        if not decoded_json_str:
-            return False
-        vmess_config = json.loads(decoded_json_str)
-        # 检查 VMess 配置中必须存在的关键字段
-        return all(k in vmess_config for k in ["add", "port", "id", "aid", "net", "type"])
-    except Exception:
-        return False
-
-async def validate_trojan(node):
-    """验证 Trojan 节点格式。"""
-    return bool(re.match(r"trojan:\/\/[^@]+@[\w\.-]+:\d+[^ \t\n\r]*", node))
-
-async def validate_ss(node):
-    """验证 Shadowsocks (SS) 节点格式。"""
-    try:
-        encoded_part = node[len("ss://"):]
-        decoded_str = decode_base64(encoded_part)
-        # SS 节点通常是 base64(method:password@server:port) 或 base64(user:pass@server:port)
-        return decoded_str and '@' in decoded_str and ':' in decoded_str
-    except Exception:
-        return False
-
-async def validate_ssr(node):
-    """验证 ShadowsocksR (SSR) 节点格式。"""
-    try:
-        encoded_part = node[len("ssr://"):]
-        decoded_str = decode_base64(encoded_part)
-        # SSR 节点有多个字段，通常用冒号分隔
-        return decoded_str and len(decoded_str.split(':')) >= 6
-    except Exception:
-        return False
-
-async def validate_vless(node):
-    """验证 VLESS 节点格式（UUID 和地址部分）。"""
-    return bool(re.match(r"vless:\/\/([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})@[\w\.-]+:\d+[^ \t\n\r]*", node))
-
-# --- 节点验证和处理 ---
-
-async def _validate_node_concurrent(node, resolver, semaphore):
-    """
-    并发控制下的节点验证包装器，用于限制同时进行的验证任务。
-    """
-    async with semaphore: # 获取信号量，限制并发
-        return await validate_node(node, resolver)
-
-async def validate_node(node, resolver):
-    """
-    验证单个节点的有效性，包括格式检查和 DNS 可达性。
-    DNS 查询会使用缓存，并根据 TTL 或默认过期时间判断是否重新查询。
-    """
-    if not node:
-        return False
-    try:
-        # 提取协议类型、主机名和端口
-        node_type = node.split('://')[0].lower()
-        parsed = urlparse(node)
-        hostname = parsed.hostname
-        port = parsed.port
-        if not (hostname and port):
-            logger.debug(f"节点缺少主机或端口: {node}")
-            return False
-
-        # DNS 缓存检查
-        now = datetime.datetime.now().timestamp()
-        if hostname in DNS_CACHE:
-            # 计算缓存有效期（使用实际 TTL 或默认缓存时间，取最小值）
-            cached_ttl = DNS_CACHE[hostname].get("ttl", CACHE_EXPIRY_HOURS * 3600)
-            cache_expiry_threshold = DNS_CACHE[hostname]["timestamp"] + min(cached_ttl, CACHE_EXPIRY_HOURS * 3600)
-
-            if now < cache_expiry_threshold:
-                logger.debug(f"DNS 缓存命中: {hostname} -> {DNS_CACHE[hostname]['ips']} (有效期至: {datetime.datetime.fromtimestamp(cache_expiry_threshold)})")
-                return bool(DNS_CACHE[hostname]["ips"]) # 如果有IP地址，则认为可达
-
-        # DNS 解析（如果缓存未命中或已过期）
-        try:
-            # 使用 aiodns 进行异步 DNS A 记录查询
-            result = await resolver.query(hostname, 'A')
-            if not result:
-                logger.debug(f"DNS 解析失败 for {hostname} in node {node}")
-                # 即使解析失败，也缓存一个空结果，避免短时间内重复查询失败的主机
-                DNS_CACHE[hostname] = {
-                    "ips": [],
-                    "timestamp": now,
-                    "ttl": result[0].ttl if result else 300 # 失败记录给一个较短的TTL，以便尽快重试
-                }
-                return False
-            
-            ips = [r.host for r in result]
-            # 缓存 DNS 解析结果，包括时间戳和 TTL
-            DNS_CACHE[hostname] = {
-                "ips": ips,
-                "timestamp": now,
-                "ttl": result[0].ttl if result else 3600 # 默认给一个 TTL，如果DNS响应没有提供
-            }
-            logger.debug(f"DNS 解析成功: {hostname} -> {ips}")
-        except Exception as e:
-            logger.debug(f"DNS 解析失败 for {hostname} in node {node}: {e}")
-            # 记录 DNS 解析失败
-            DNS_CACHE[hostname] = {
-                "ips": [],
-                "timestamp": now,
-                "ttl": 300 # 失败记录给一个较短的TTL，以便尽快重试
-            }
-            return False
-
-        # 协议格式验证
-        validators = {
-            "hysteria2": validate_hysteria2,
-            "vmess": validate_vmess,
-            "trojan": validate_trojan,
-            "ss": validate_ss,
-            "ssr": validate_ssr,
-            "vless": validate_vless,
-        }
-        validator = validators.get(node_type)
-        if not validator:
-            logger.debug(f"不支持的协议: {node_type} in node {node}")
-            return False
-        return await validator(node) # 调用对应协议的验证函数
-    except Exception as e:
-        logger.debug(f"节点验证失败 for {node}: {e}")
-        return False
-
-def rename_node(node):
-    """
-    对节点名称进行简化，只保留前5个字符，以保护隐私或使名称更简洁。
-    目前主要针对 VMess 和 URL 片段（#后面的名称）进行处理。
-    """
-    parsed_url = urlparse(node)
-    if node.startswith("vmess://"):
-        try:
-            encoded_part = node[len("vmess://"):]
-            decoded_json_str = decode_base64(encoded_part)
-            if decoded_json_str:
-                vmess_config = json.loads(decoded_json_str)
-                name = vmess_config.get("ps", "") # 获取 VMess 的备注/名称
-                if len(name) > 5:
-                    vmess_config["ps"] = name[:5] # 截断名称
-                    new_encoded = base64.b64encode(json.dumps(vmess_config).encode()).decode()
-                    return f"vmess://{new_encoded}"
-        except:
-            pass # 解码或解析失败则不处理
-    elif parsed_url.fragment and len(parsed_url.fragment) > 5:
-        # 如果 URL 的片段部分（#号后的内容，常作为节点名称）长度超过5，则截断
-        new_parsed_url = parsed_url._replace(fragment=parsed_url.fragment[:5])
-        return urlunparse(new_parsed_url)
-    return node # 如果不符合上述条件，返回原节点
-
-async def fetch_url_content(client, url):
-    """
-    安全地异步获取 URL 的内容。
-    包括缓存检查、HTTP/HTTPS 自动重试机制（仅一次）。
-    """
-    # 检查 URL 是否在缓存中且未过期
-    if url in PROCESSED_URLS_CACHE:
-        cache_entry = PROCESSED_URLS_CACHE[url]
-        if (datetime.datetime.now().timestamp() - cache_entry["timestamp"]) < CACHE_EXPIRY_HOURS * 3600:
-            logger.info(f"URL {url} 在缓存中，跳过抓取")
-            return None # 从缓存中加载则不返回内容，表示无需重新处理
-
-    # 确保 URL 有协议头
-    parsed_url = urlparse(url)
-    if not parsed_url.scheme:
-        url_to_fetch = f"http://{url}"
-    else:
-        url_to_fetch = url
-
-    headers = get_random_headers() # 获取随机请求头
-    try:
-        # 第一次请求
-        response = await client.get(url_to_fetch, headers=headers, timeout=15) # 设置超时为 15 秒
-        response.raise_for_status() # 检查 HTTP 状态码，非 2xx 会抛出异常
-        content = response.text
-        # 将抓取到的内容及其哈希、时间戳存入缓存
-        PROCESSED_URLS_CACHE[url] = {
-            "hash": hashlib.sha256(content.encode('utf-8')).hexdigest(),
-            "timestamp": datetime.datetime.now().timestamp()
-        }
-        return content
-    except httpx.RequestError as e:
-        logger.warning(f"初次请求 URL 时发生错误: {url_to_fetch} - {e}")
-        # 如果是 HTTP 请求失败，尝试用 HTTPS 重试一次
-        if url_to_fetch.startswith("http://"):
-            https_url = url_to_fetch.replace("http://", "https://", 1)
-            try:
-                logger.info(f"尝试使用 HTTPS 重试: {https_url}")
-                response = await client.get(https_url, headers=headers, timeout=15) # 设置超时为 15 秒
-                response.raise_for_status()
-                content = response.text
-                PROCESSED_URLS_CACHE[url] = {
-                    "hash": hashlib.sha256(content.encode('utf-8')).hexdigest(),
-                    "timestamp": datetime.datetime.now().timestamp()
-                }
+def load_cache(url):
+    """加载缓存内容"""
+    cache_file = get_cache_filename(url)
+    if os.path.exists(cache_file):
+        with open(cache_file, 'r', encoding='utf-8') as f:
+            content, timestamp = f.read().split('\n', 1)
+            if time.time() - float(timestamp) < CACHE_EXPIRATION_TIME:
                 return content
-            except httpx.RequestError as https_e:
-                logger.error(f"HTTP 和 HTTPS 尝试 URL 时均发生错误: {url} - {https_e}")
-                raise # 两次尝试都失败，则向上抛出异常
-        raise # 如果不是 http URL 失败，或者 HTTPS 也失败，则抛出异常
+    return None
 
-async def process_url(client, url, semaphore, resolver):
-    """
-    处理单个 URL 的完整流程：抓取内容，解析节点，并保存解析到的节点到独立文件和临时文件。
-    该函数在并发限制下运行。
-    """
-    node_count = 0
-    error_message = None
-    async with semaphore: # 获取信号量，限制并发数
+def save_cache(url, content):
+    """保存内容到缓存"""
+    cache_file = get_cache_filename(url)
+    with open(cache_file, 'w', encoding='utf-8') as f:
+        f.write(f"{content}\n{time.time()}")
+
+# --- 节点验证函数 ---
+
+def validate_node(node_url):
+    """根据协议官方规范对节点URL进行严格验证。"""
+    try:
+        # VMess 协议验证 (基于 V2Ray/Xray 规范)
+        if node_url.startswith("vmess://"):
+            try:
+                decoded = base64.b64decode(node_url[8:] + '=' * (-len(node_url[8:]) % 4)).decode('utf-8') # 确保填充
+                config = json.loads(decoded)
+                
+                required_fields = ['v', 'ps', 'add', 'port', 'id', 'aid', 'net']
+                if not all(field in config for field in required_fields): return False
+                
+                if not (isinstance(config['v'], str) and config['v'].startswith('2')): return False
+                if not isinstance(config['ps'], str): return False
+                if not isinstance(config['add'], str) or not config['add']: return False
+                if not (isinstance(config['port'], (int, str)) and 0 < int(config['port']) < 65536): return False
+                if not (isinstance(config['id'], str) and re.fullmatch(r"[0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}", config['id'])): return False
+                if not (isinstance(config['aid'], (int, str)) and int(config['aid']) >= 0): return False
+                supported_nets = ['tcp', 'kcp', 'ws', 'http', 'quic', 'grpc', 'h2']
+                if not (isinstance(config['net'], str) and config['net'] in supported_nets): return False
+
+                if config['net'] == 'ws':
+                    if 'path' not in config or not isinstance(config['path'], str): return False
+                    if 'host' not in config or not isinstance(config['host'], str): return False
+                
+                if config['net'] == 'grpc':
+                    if 'serviceName' not in config or not isinstance(config['serviceName'], str) or not config['serviceName']: return False
+                    if 'mode' in config and not (isinstance(config['mode'], str) and config['mode'] in ['multi', 'gun']): return False
+
+                if config.get('tls') == 'tls':
+                    if 'sni' not in config or not isinstance(config['sni'], str) or not config['sni']: return False
+                    if 'fp' in config and not isinstance(config['fp'], str): return False
+                    if 'alpn' in config and not isinstance(config['alpn'], list): return False
+                
+                return True
+            except Exception:
+                return False
+
+        # Trojan 协议验证
+        elif node_url.startswith("trojan://"):
+            parsed_url = urlparse(node_url)
+            password = parsed_url.username
+            server = parsed_url.hostname
+            port = parsed_url.port
+            query_params = parse_qs(parsed_url.query)
+
+            if not (password and server and port and 0 < port < 65536): return False
+            
+            # Trojan 通常需要 SNI
+            if 'sni' not in query_params or not query_params['sni'][0]: return False
+            
+            if 'type' in query_params and query_params['type'][0] == 'ws':
+                if 'host' not in query_params or not query_params['host'][0]: return False
+                if 'path' not in query_params or not query_params['path'][0]: return False
+
+            return True
+
+        # Shadowsocks 协议验证
+        elif node_url.startswith("ss://"):
+            try:
+                decoded_part = node_url[5:]
+                decoded_part += '=' * (-len(decoded_part) % 4) # 确保填充
+                decoded_str = base64.urlsafe_b64decode(decoded_part).decode('utf-8')
+                
+                parts = re.match(r"([^:]+):([^@]+)@([^:]+):(\d+)(?:#(.+))?", decoded_str)
+                if not parts: return False # 不支持旧版或非标格式
+
+                method = parts.group(1)
+                password = parts.group(2)
+                server = parts.group(3)
+                port = int(parts.group(4))
+
+                if not (method and password and server and 0 < port < 65536): return False
+                
+                supported_ss_methods = [
+                    "aes-256-gcm", "aes-192-gcm", "aes-128-gcm",
+                    "chacha20-poly1305", "2022-blake3-aes-128-gcm", "2022-blake3-aes-256-gcm",
+                    "none" 
+                ]
+                if method.lower() not in supported_ss_methods: return False
+                
+                return True
+            except Exception:
+                return False
+
+        # ShadowsocksR 协议验证
+        elif node_url.startswith("ssr://"):
+            try:
+                decoded_part = node_url[6:]
+                decoded_part += '=' * (-len(decoded_part) % 4)
+                decoded_str = base64.urlsafe_b64decode(decoded_part).decode('utf-8')
+                
+                main_parts_match = re.match(r"([^:]+):(\d+):([^:]+):([^:]+):([^:]+):(.+)", decoded_str)
+                if not main_parts_match: return False
+                
+                server = main_parts_match.group(1)
+                port = int(main_parts_match.group(2))
+                protocol = main_parts_match.group(3)
+                method = main_parts_match.group(4)
+                obfs = main_parts_match.group(5)
+                password_b64_with_params = main_parts_match.group(6)
+
+                password_b64_parts = password_b64_with_params.split('/?')
+                password_b64 = password_b64_parts[0]
+                
+                if not (server and 0 < port < 65536 and protocol and method and obfs and password_b64): return False
+                
+                try:
+                    password = base64.urlsafe_b64decode(password_b64 + '=' * (-len(password_b64) % 4)).decode('utf-8')
+                except Exception: return False
+
+                supported_ssr_protocols = ["origin", "verify_sha1", "verify_sha1_v2", "auth_sha1_v4", "auth_sha1_v4_compatible", "auth_aes128_md5", "auth_aes128_sha1"]
+                supported_ssr_methods = ["aes-256-cfb", "aes-192-cfb", "aes-128-cfb", "chacha20", "rc4-md5"] # 常见
+                supported_ssr_obfs = ["plain", "http_simple", "http_post", "tls1.2_ticket_auth", "tls1.2_ticket_auth_compatible"]
+
+                if protocol.lower() not in supported_ssr_protocols: return False
+                if method.lower() not in supported_ssr_methods: return False
+                if obfs.lower() not in supported_ssr_obfs: return False
+
+                if len(password_b64_parts) > 1:
+                    params_str = password_b64_parts[1]
+                    parsed_params = parse_qs(params_str)
+                    if 'obfsparam' in parsed_params:
+                        obfs_param_b64 = parsed_params['obfsparam'][0]
+                        obfs_param_b64 += '=' * (-len(obfs_param_b64) % 4)
+                        obfs_param = base64.urlsafe_b64decode(obfs_param_b64).decode('utf-8')
+                        if obfs.lower().startswith('http') and not (re.match(r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$", obfs_param) or re.match(r"^(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,6}$", obfs_param)):
+                             return False
+
+                return True
+            except Exception:
+                return False
+
+        # VLESS 协议验证
+        elif node_url.startswith("vless://"):
+            parsed_url = urlparse(node_url)
+            uuid = parsed_url.username
+            server = parsed_url.hostname
+            port = parsed_url.port
+            query_params = parse_qs(parsed_url.query)
+
+            if not (uuid and server and port and 0 < port < 65536): return False
+            if not re.fullmatch(r"[0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}", uuid): return False
+            
+            if 'type' not in query_params or not query_params['type'][0]: return False
+            
+            transport_type = query_params['type'][0].lower()
+
+            if transport_type == 'ws':
+                if 'path' not in query_params or not query_params['path'][0]: return False
+                if 'host' not in query_params or not query_params['host'][0]: return False
+            elif transport_type == 'grpc':
+                if 'serviceName' not in query_params or not query_params['serviceName'][0]: return False
+                if 'mode' in query_params and query_params['mode'][0] not in ['multi', 'gun']: return False
+            
+            # TLS/XTLS/Reality 检查
+            security = query_params.get('security', [''])[0].lower()
+            if security in ['tls', 'xtls', 'reality']:
+                if 'sni' not in query_params or not query_params['sni'][0]: return False
+                if security in ['xtls', 'reality']: # Reality/XTLS 额外要求
+                    if 'pbk' not in query_params or not query_params['pbk'][0]: return False
+                    if 'fp' not in query_params or not query_params['fp'][0]: return False
+            
+            return True
+
+        # Hysteria2 协议验证
+        elif node_url.startswith("hysteria2://"):
+            parsed_url = urlparse(node_url)
+            server = parsed_url.hostname
+            port = parsed_url.port
+            query_params = parse_qs(parsed_url.query)
+
+            if not (server and port and 0 < port < 65536): return False
+            
+            # Hysteria2 必须有 auth 或证书验证方式
+            if 'auth' not in query_params and ('pin' not in query_params or not query_params['pin'][0]):
+                return False
+
+            if 'auth' in query_params and not query_params['auth'][0]: return False
+            if 'pin' in query_params and not query_params['pin'][0]: return False # certificate pin SHA256
+            if 'fastopen' in query_params and query_params['fastopen'][0].lower() not in ['true', 'false']: return False
+            if 'up_mbps' in query_params and not query_params['up_mbps'][0].isdigit(): return False
+            if 'down_mbps' in query_params and not query_params['down_mbps'][0].isdigit(): return False
+            if 'sni' in query_params and not query_params['sni'][0]: return False # 通常需要SNI
+
+            return True
+
+        return False # 不支持的协议类型或无法识别的链接
+    except Exception:
+        return False
+
+# --- 节点解析函数 ---
+
+def parse_nodes(content):
+    """从内容中解析并提取所有支持的节点类型。"""
+    nodes = set()
+
+    def _recursive_find_nodes(data):
+        """辅助函数：递归查找 JSON/YAML/字符串中的节点"""
+        if isinstance(data, str):
+            # 尝试 Base64 解码并递归
+            try:
+                # 尝试 Base64 解码，处理可能缺少的填充符
+                b64_decoded_data = data
+                if len(b64_decoded_data) % 4 != 0:
+                    b64_decoded_data += '=' * (4 - len(b64_decoded_data) % 4)
+                
+                decoded_str = base64.urlsafe_b64decode(b64_decoded_data).decode('utf-8')
+                if decoded_str and decoded_str != data: # 避免无限循环
+                    _recursive_find_nodes(decoded_str)
+            except Exception:
+                pass # 不是有效的Base64
+
+            # 直接匹配明文节点
+            for pattern_name, pattern_regex in NODE_PATTERNS.items():
+                for match in pattern_regex.finditer(data):
+                    node = match.group(0)
+                    if validate_node(node):
+                        nodes.add(node)
+
+            # 尝试 JSON/YAML 解析 (如果字符串本身就是 JSON/YAML)
+            try:
+                parsed_inner = json.loads(data)
+                _recursive_find_nodes(parsed_inner)
+            except json.JSONDecodeError:
+                try:
+                    parsed_inner = yaml.safe_load(data)
+                    _recursive_find_nodes(parsed_inner)
+                except yaml.YAMLError:
+                    pass
+
+        elif isinstance(data, dict):
+            # 尝试从 Clash/V2RayN 等配置结构中提取
+            if 'proxies' in data and isinstance(data['proxies'], list):
+                for proxy in data['proxies']:
+                    if isinstance(proxy, dict) and 'type' in proxy:
+                        node_url = None
+                        if proxy['type'].lower() == 'ss' and all(k in proxy for k in ['cipher', 'password', 'server', 'port']):
+                            ss_payload = f"{proxy['cipher']}:{proxy['password']}@{proxy['server']}:{proxy['port']}"
+                            encoded_ss = base64.urlsafe_b64encode(ss_payload.encode()).decode().rstrip('=')
+                            node_url = f"ss://{encoded_ss}"
+                            if 'name' in proxy and proxy['name']: node_url += f"#{proxy['name']}"
+                        elif proxy['type'].lower() == 'vmess' and all(k in proxy for k in ['uuid', 'server', 'port']):
+                            vmess_config = {
+                                'v': '2', 'ps': proxy.get('name', 'vmess_node'),
+                                'add': proxy['server'], 'port': proxy['port'],
+                                'id': proxy['uuid'], 'aid': proxy.get('alterId', 0),
+                                'net': proxy.get('network', 'tcp'),
+                                'type': proxy.get('type', ''),
+                                'host': proxy.get('servername', '') or proxy.get('ws-headers', {}).get('Host', ''),
+                                'path': proxy.get('ws-path', ''),
+                                'tls': 'tls' if proxy.get('tls', False) else '',
+                                'sni': proxy.get('servername', ''),
+                                'fp': proxy.get('fingerprint', ''),
+                                'alpn': proxy.get('alpn', []),
+                                'scy': proxy.get('cipher', ''),
+                                'grpcServiceName': proxy.get('grpc-service-name', ''),
+                                'flow': proxy.get('flow', ''),
+                            }
+                            vmess_config = {k: v for k, v in vmess_config.items() if v or k in ['aid']} # aid 可以为0
+                            encoded_vmess = base64.b64encode(json.dumps(vmess_config, separators=(',', ':')).encode()).decode().rstrip('=')
+                            node_url = f"vmess://{encoded_vmess}"
+                        elif proxy['type'].lower() == 'trojan' and all(k in proxy for k in ['password', 'server', 'port']):
+                            node_url = f"trojan://{proxy['password']}@{proxy['server']}:{proxy['port']}"
+                            params = []
+                            if 'sni' in proxy and proxy['sni']: params.append(f"sni={proxy['sni']}")
+                            if proxy.get('skip-cert-verify'): params.append("allowInsecure=1")
+                            if proxy.get('network') == 'ws':
+                                params.append("type=ws")
+                                if proxy.get('ws-path'): params.append(f"path={proxy['ws-path']}")
+                                if proxy.get('ws-headers', {}).get('Host'): params.append(f"host={proxy['ws-headers']['Host']}")
+                            if params: node_url += "?" + "&".join(params)
+                            if 'name' in proxy and proxy['name']: node_url += f"#{proxy['name']}"
+                        elif proxy['type'].lower() == 'vless' and all(k in proxy for k in ['uuid', 'server', 'port']):
+                            node_url = f"vless://{proxy['uuid']}@{proxy['server']}:{proxy['port']}"
+                            params = [f"type={proxy.get('network', 'tcp')}"]
+                            if proxy.get('tls'): params.append("security=tls")
+                            if proxy.get('servername'): params.append(f"sni={proxy['servername']}")
+                            if proxy.get('flow'): params.append(f"flow={proxy['flow']}")
+                            if proxy.get('fingerprint'): params.append(f"fp={proxy['fingerprint']}")
+                            if proxy.get('alpn'): params.append(f"alpn={','.join(proxy['alpn'])}")
+                            if proxy.get('reality-publickey'): params.append(f"pbk={proxy['reality-publickey']}")
+                            if proxy.get('reality-shortid'): params.append(f"sid={proxy['reality-shortid']}")
+                            if proxy.get('network') == 'ws':
+                                if proxy.get('ws-path'): params.append(f"path={proxy['ws-path']}")
+                                if proxy.get('ws-headers', {}).get('Host'): params.append(f"host={proxy['ws-headers']['Host']}")
+                            elif proxy.get('network') == 'grpc':
+                                if proxy.get('grpc-service-name'): params.append(f"serviceName={proxy['grpc-service-name']}")
+                                if proxy.get('grpc-mode'): params.append(f"mode={proxy['grpc-mode']}")
+                            if params: node_url += "?" + "&".join(params)
+                            if 'name' in proxy and proxy['name']: node_url += f"#{proxy['name']}"
+                        elif proxy['type'].lower() == 'hysteria2' and all(k in proxy for k in ['server', 'port']):
+                            node_url = f"hysteria2://{proxy['server']}:{proxy['port']}"
+                            params = []
+                            if proxy.get('password'): params.append(f"auth={proxy['password']}")
+                            if not proxy.get('tls', True): params.append("insecure=true")
+                            if proxy.get('tls-cert-pin'): params.append(f"pin={proxy['tls-cert-pin']}")
+                            if proxy.get('sni'): params.append(f"sni={proxy['sni']}")
+                            if proxy.get('fast-open'): params.append("fastopen=true")
+                            if proxy.get('up'): params.append(f"up_mbps={proxy['up']}")
+                            if proxy.get('down'): params.append(f"down_mbps={proxy['down']}")
+                            if params: node_url += "?" + "&".join(params)
+                            if 'name' in proxy and proxy['name']: node_url += f"#{proxy['name']}"
+
+                        if node_url and validate_node(node_url):
+                            nodes.add(node_url)
+            # 递归处理字典中的其他值
+            for value in data.values():
+                _recursive_find_nodes(value)
+        elif isinstance(data, list):
+            # 递归处理列表中的每个元素
+            for item in data:
+                _recursive_find_nodes(item)
+    
+    # 开始解析
+    _recursive_find_nodes(content) # 尝试直接作为字符串解析
+    
+    # 尝试解析为 JSON 或 YAML 结构
+    try:
+        parsed_data = json.loads(content)
+        _recursive_find_nodes(parsed_data)
+    except json.JSONDecodeError:
         try:
-            logger.info(f"开始处理 URL: {url}")
-            content = await fetch_url_content(client, url) # 抓取 URL 内容
-            if content:
-                nodes = parse_nodes_from_content(content) # 从内容中解析节点
-                node_count = len(nodes)
-                
-                # 获取域名作为文件名
-                parsed_url = urlparse(url)
-                domain_name = parsed_url.hostname if parsed_url.hostname else re.sub(r'[^a-zA-Z0-9_\-.]', '_', url)
-                url_nodes_file = DATA_DIR / f"{domain_name}.txt"
-                
-                if nodes:
-                    async with aiofiles.open(url_nodes_file, 'w', encoding='utf-8') as f:
-                        for node in nodes:
-                            await f.write(node + '\n')
-                    logger.info(f"URL {url} 解析到的 {node_count} 个节点已保存到 {url_nodes_file}")
-                    
-                    # 将解析到的原始节点追加写入临时文件，供后续统一验证
-                    async with aiofiles.open(RAW_FETCHED_NODES_TEMP_FILE, 'a', encoding='utf-8') as f:
-                        for node in nodes:
-                            await f.write(node + '\n')
-                else:
-                    # 如果没有解析到节点，也创建空文件或删除旧文件，表示该URL无节点
-                    if url_nodes_file.exists():
-                        url_nodes_file.unlink()
-                    logger.info(f"URL {url} 未解析到任何节点，未创建/清空独立节点文件。")
+            parsed_data = yaml.safe_load(content)
+            _recursive_find_nodes(parsed_data)
+        except yaml.YAMLError:
+            pass
+            
+    return list(nodes)
 
-            else:
-                logger.info(f"URL {url} 未返回内容或从缓存加载 (无需重新解析)")
-        except Exception as e:
-            logger.error(f"处理 URL {url} 时发生错误: {e}")
-            error_message = str(e)
-    return url, node_count, error_message # 返回 URL、节点数量和错误信息
+# --- 异步 HTTP 请求与递归抓取 ---
 
-async def validate_and_save_nodes(resolver):
+async def fetch_url(client, url, depth=0):
     """
-    从临时文件中读取所有原始节点，并行验证其有效性（格式和DNS可达性），
-    然后保存去重后的有效节点到最终文件，并统计各协议的节点数量。
+    异步获取 URL 内容，优先尝试 HTTP，失败后尝试 HTTPS。
+    同时解析页面中的其他链接。
     """
-    raw_nodes_to_validate = []
-    if not RAW_FETCHED_NODES_TEMP_FILE.exists():
-        logger.warning(f"临时节点文件 {RAW_FETCHED_NODES_TEMP_FILE} 不存在，跳过验证")
-        return []
+    if depth > MAX_RECURSION_DEPTH:
+        return "", []
 
-    # 从临时文件中读取所有待验证的原始节点
-    async with aiofiles.open(RAW_FETCHED_NODES_TEMP_FILE, 'r', encoding='utf-8') as f:
-        async for node_line in f:
-            raw_nodes_to_validate.append(node_line.strip())
+    print(f"Fetching: {url} (Depth: {depth})")
     
-    # 并行验证所有节点
-    validation_semaphore = asyncio.Semaphore(NODE_VALIDATION_CONCURRENCY_LIMIT) # 节点验证并发信号量
-    validation_tasks = []
-    for node in raw_nodes_to_validate:
-        # 为每个节点创建验证任务
-        validation_tasks.append(_validate_node_concurrent(node, resolver, validation_semaphore))
+    cached_content = load_cache(url)
+    if cached_content:
+        print(f"Loaded from cache: {url}")
+        return cached_content, []
+
+    headers = {'User-Agent': random.choice(USER_AGENTS)}
     
-    # 等待所有验证任务完成
-    validated_results = await asyncio.gather(*validation_tasks)
+    content = ""
+    target_url = url # 记录实际访问的 URL
 
-    validated_nodes_with_protocols = [] # 存储通过验证的节点（可能已重命名）
-    protocol_counts = Counter() # 统计所有原始节点的协议类型
-    valid_protocol_counts = Counter() # 统计有效节点的协议类型
+    # 规范化 URL：确保有协议头
+    if not url.startswith("http://") and not url.startswith("https://"):
+        test_urls = [f"http://{url}", f"https://{url}"]
+    else:
+        test_urls = [url]
+        if url.startswith("http://"):
+            test_urls.append(url.replace("http://", "https://"))
+        elif url.startswith("https://"):
+            test_urls.append(url.replace("https://", "http://"))
+    
+    for current_test_url in test_urls:
+        try:
+            response = await client.get(current_test_url, headers=headers, follow_redirects=True, timeout=10)
+            response.raise_for_status() # 抛出 HTTPStatusError (4xx/5xx)
+            content = response.text
+            target_url = current_test_url
+            print(f"Successfully fetched: {target_test_url}")
+            break # 成功获取后跳出循环
+        except httpx.RequestError as e:
+            print(f"Request failed for {current_test_url}: {e}")
+        except httpx.HTTPStatusError as e:
+            print(f"HTTP status error for {current_test_url}: {e.response.status_code}")
+    else: # 所有尝试都失败
+        print(f"All attempts failed for {url}. Skipping this URL.")
+        return "", []
 
-    # 遍历验证结果，进行统计和处理
-    for i, is_valid in enumerate(validated_results):
-        node = raw_nodes_to_validate[i]
-        protocol = node.split('://')[0].lower() if '://' in node else 'unknown'
-        protocol_counts[protocol] += 1 # 统计原始协议数量
-        if is_valid:
-            validated_nodes_with_protocols.append(rename_node(node)) # 如果有效，则重命名并添加
-            valid_protocol_counts[protocol] += 1 # 统计有效协议数量
+    save_cache(url, content) # 缓存使用原始 URL 作为键
 
-    unique_nodes = list(set(validated_nodes_with_protocols)) # 对有效节点进行最终去重
+    # 提取页面中的其他链接
+    soup = BeautifulSoup(content, 'html.parser')
+    found_urls = []
+    for link in soup.find_all('a', href=True):
+        href = link.get('href')
+        full_url = urljoin(target_url, href)
+        parsed_full_url = urlparse(full_url)
+        
+        # 过滤非 HTTP/HTTPS 链接
+        if parsed_full_url.scheme not in ['http', 'https']:
+            continue
 
-    # 保存最终的有效节点到 all.txt
-    async with aiofiles.open(ALL_NODES_FILE, 'w', encoding='utf-8') as f:
-        for node in unique_nodes:
-            await f.write(node + '\n')
+        original_parsed = urlparse(f"http://{url}" if not url.startswith("http") else url)
+        
+        # 过滤条件：
+        # 1. 链接与原始 URL 域名相同
+        # 2. 链接指向常见配置文件类型（即使域名不同）
+        if parsed_full_url.netloc == original_parsed.netloc or \
+           any(ext in parsed_full_url.path.lower() for ext in ['.txt', '.yaml', '.yml', '.json', '.conf', '.ini', '.sub']): # 增加了 .sub
+            found_urls.append(full_url)
+    
+    return content, found_urls
 
-    # 保存协议统计到 CSV 文件
-    with open(PROTOCOL_STATS_CSV, 'w', newline='', encoding='utf-8') as csvfile:
-        writer = csv.writer(csvfile)
-        writer.writerow(['Protocol', 'Total Count', 'Valid Count'])
-        for proto in protocol_counts:
-            writer.writerow([proto, protocol_counts[proto], valid_protocol_counts.get(proto, 0)])
-    logger.info(f"协议统计已保存到 {PROTOCOL_STATS_CSV}")
+async def process_url(client, url):
+    """处理单个原始 URL 及其递归抓取过程。"""
+    all_nodes_for_url = set()
+    visited_urls = set()
+    urls_to_visit = [(url, 0)] # (url, depth)
+    
+    original_domain_parsed = urlparse(f"http://{url}" if not url.startswith("http") else url)
+    original_domain = original_domain_parsed.netloc
 
-    return unique_nodes # 返回最终的有效节点列表
+    while urls_to_visit:
+        current_url, current_depth = urls_to_visit.pop(0)
+        
+        if current_url in visited_urls:
+            continue
+        
+        visited_urls.add(current_url)
+        
+        content, new_urls = await fetch_url(client, current_url, current_depth)
+        
+        if content:
+            nodes = parse_nodes(content)
+            for node in nodes:
+                all_nodes_for_url.add(node)
+            
+            for nu in new_urls:
+                new_domain = urlparse(nu).netloc
+                # 递归条件：深度允许 且 (同域名 或 配置文件类型) 且 未访问过
+                if current_depth + 1 <= MAX_RECURSION_DEPTH and \
+                   (new_domain == original_domain or any(ext in urlparse(nu).path.lower() for ext in ['.txt', '.yaml', '.yml', '.json', '.conf', '.ini', '.sub'])) \
+                   and nu not in visited_urls:
+                    urls_to_visit.append((nu, current_depth + 1))
 
-# --- 主执行函数 ---
+    return url, list(all_nodes_for_url)
+
+# --- 主程序 ---
 
 async def main():
-    """
-    脚本的主入口点， orchestrates 整个抓取和验证流程。
-    """
-    logger.info("开始执行代理抓取任务")
-    await load_cache() # 加载历史缓存数据
-
-    urls = await read_urls_from_file('sources.list') # 从 sources.list 读取所有待抓取 URL
-    if not urls:
-        logger.warning("未找到任何 URL，程序退出")
+    """主函数：读取 sources.list，并行抓取并保存结果。"""
+    urls = []
+    try:
+        with open(SOURCES_FILE, 'r', encoding='utf-8') as f:
+            for line in f:
+                stripped_line = line.strip()
+                if stripped_line:
+                    urls.append(stripped_line)
+    except FileNotFoundError:
+        print(f"Error: {SOURCES_FILE} not found.")
         return
 
-    # 清空之前的输出文件和临时文件，确保每次运行都是新的结果
-    if ALL_NODES_FILE.exists():
-        ALL_NODES_FILE.unlink()
-    if RAW_FETCHED_NODES_TEMP_FILE.exists():
-        RAW_FETCHED_NODES_TEMP_FILE.unlink()
-    # 注意：这里不再清空每个 URL 对应的 .txt 文件，因为它们现在包含的是处理后的节点而非原始网页内容。
-    # 如果需要完全清空，可以在这里增加删除 DATA_DIR 中所有 .txt 文件的逻辑，但请谨慎。
+    all_results = []
+    total_nodes_collected = 0
 
-    node_counts_data = [] # 存储每个 URL 的节点抓取数量
-    url_fetch_semaphore = asyncio.Semaphore(CONCURRENCY_LIMIT) # URL 抓取并发信号量
+    limits = httpx.Limits(max_connections=50, max_keepalive_connections=20)
+    timeout = httpx.Timeout(15.0, connect=10.0)
 
-    # 初始化 DNS 解析器，指定超时和公共 DNS 服务器
-    resolver = aiodns.DNSResolver(timeout=5, nameservers=['8.8.8.8', '1.1.1.1'])
+    async with httpx.AsyncClient(limits=limits, timeout=timeout) as client:
+        tasks = [process_url(client, url) for url in urls]
+        results = await asyncio.gather(*tasks)
 
-    # 使用 httpx.AsyncClient 创建异步 HTTP 客户端
-    async with httpx.AsyncClient(http2=True, follow_redirects=True) as client:
-        # 为每个 URL 创建处理任务
-        tasks = [process_url(client, url, url_fetch_semaphore, resolver) for url in urls]
-        # 并行运行所有 URL 处理任务，并捕获异常
-        results = await asyncio.gather(*tasks, return_exceptions=True)
+        for original_url, nodes_collected in results:
+            cleaned_url_name = re.sub(r'[^a-zA-Z0-9.\-_]', '_', original_url).replace('http___', '').replace('https___', '')
+            output_filename = os.path.join(DATA_DIR, f"{cleaned_url_name}.txt")
+            
+            valid_nodes_processed = []
+            for node in nodes_collected:
+                node_with_truncated_name = node
+                
+                # 尝试提取和截断备注名
+                # 1. `#` 后面的部分 (Trojan, VLESS, SS/SSR 的 tag)
+                if "#" in node:
+                    parts = node.split('#', 1)
+                    tag = unquote(parts[1]) # 解码 URL 编码的标签
+                    if len(tag) > 5:
+                        node_with_truncated_name = f"{parts[0]}#{tag[:5]}"
+                # 2. `ps=` 参数 (VMess)
+                elif "ps=" in node:
+                    # 使用正则表达式安全替换 ps 参数的值
+                    match_ps = re.search(r'(ps=)([^&]+)', node)
+                    if match_ps:
+                        param_value = match_ps.group(2)
+                        decoded_param_value = unquote(param_value) # 解码 URL 编码
+                        if len(decoded_param_value) > 5:
+                            truncated_value = decoded_param_value[:5]
+                            # 替换捕获组2的值
+                            node_with_truncated_name = re.sub(r'(ps=)[^&]+', r'\g<1>' + truncated_value, node, 1)
+                
+                valid_nodes_processed.append(node_with_truncated_name)
 
-        # 处理每个 URL 任务的结果
-        for result in results:
-            if isinstance(result, tuple):
-                url, node_count, _ = result
-                node_counts_data.append({"url": url, "node_count": node_count})
+            if valid_nodes_processed:
+                valid_nodes_sorted = sorted(list(set(valid_nodes_processed))) # 去重并排序
+                with open(output_filename, 'w', encoding='utf-8') as f:
+                    for node in valid_nodes_sorted:
+                        f.write(node + '\n')
+                print(f"Saved {len(valid_nodes_sorted)} valid nodes from {original_url} to {output_filename}")
+                all_results.append({'url': original_url, 'node_count': len(valid_nodes_sorted)})
+                total_nodes_collected += len(valid_nodes_sorted)
             else:
-                logger.error(f"处理 URL 时发生异常 (任务级别): {result}")
+                print(f"No valid nodes found for {original_url}")
+                all_results.append({'url': original_url, 'node_count': 0})
 
-    # 验证并保存所有抓取到的节点
-    unique_nodes = await validate_and_save_nodes(resolver)
-    logger.info(f"所有 {len(unique_nodes)} 个唯一有效节点已保存到 {ALL_NODES_FILE}")
-
-    # 将每个 URL 的节点数量统计保存到 CSV 文件
-    with open(NODE_COUNTS_CSV, 'w', newline='', encoding='utf-8') as csvfile:
+    # 生成 CSV 统计文件
+    csv_filename = os.path.join(DATA_DIR, 'node_counts.csv')
+    with open(csv_filename, 'w', newline='', encoding='utf-8') as csvfile:
         fieldnames = ['url', 'node_count']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        writer.writeheader() # 写入 CSV 头
-        writer.writerows(node_counts_data) # 写入数据行
-    logger.info(f"节点统计已保存到 {NODE_COUNTS_CSV}")
+        writer.writeheader()
+        writer.writerows(all_results)
+    
+    print(f"\nNode statistics saved to {csv_filename}")
+    print(f"Total valid nodes collected: {total_nodes_collected}")
 
-    await save_cache() # 保存所有缓存数据
-    logger.info("代理抓取任务完成")
-
-# --- 脚本入口点 ---
 if __name__ == "__main__":
-    asyncio.run(main()) # 运行主异步函数
+    asyncio.run(main())
