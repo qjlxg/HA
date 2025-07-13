@@ -16,7 +16,6 @@ jobs:
       - name: Checkout repository # 步骤1: 检出仓库代码
         uses: actions/checkout@v4
         with:
-          # 这通常是默认行为，但明确指定拉取历史是好的实践
           fetch-depth: 0 # 获取所有历史，以便rebase操作顺利进行
 
       - name: Configure Git # 步骤2: 配置 Git 用户信息 (重要!)
@@ -24,38 +23,34 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - name: Pull latest changes with rebase # 步骤3: 拉取远程最新更改并变基
+      - name: Set up Python # 步骤3: 设置 Python 环境
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x' # 使用最新的 Python 3 版本，或者指定你的脚本需要的版本，例如 '3.9'
+
+      - name: Install dependencies # 步骤4: 安装 Python 依赖 (如果 proxy_scraper.py 有依赖的话)
+        # 如果你的 proxy_scraper.py 脚本依赖于第三方库，比如 requests、bs4 等
+        # 你需要有一个 requirements.txt 文件在仓库的根目录
+        # 如果没有依赖，可以删除这一步
         run: |
-          # 尝试拉取远程main分支的最新内容，并将您的本地提交rebase到其之上。
-          # 如果远程分支被强制更新，rebase可以帮助您调整本地历史。
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          fi
+
+      - name: Pull latest changes with rebase # 步骤5: 拉取远程最新更改并变基
+        run: |
           git pull --rebase origin main
 
-          # 可选：如果rebase失败（例如有冲突），您可能需要手动处理或选择 abort
-          # 对于自动化流程，通常希望rebase成功或直接失败
-          # 如果这里经常遇到冲突，您可能需要重新考虑数据生成逻辑或是否需要更复杂的合并策略。
-
-      - name: Run your data update script # 步骤4: 运行您的数据更新脚本
-        # 请替换为实际生成或修改 data/*.txt 和 data/*.csv 文件的命令
-        # 例如：
+      - name: Run proxy_scraper.py # 步骤6: 运行你的代理抓取脚本
         run: |
-          echo "Simulating data update..."
-          # 假设您有一个脚本来更新这些文件
-          # 例如：node generate-data.js 或 python update_proxy.py
-          # touch data/new_data_$(date +%s).txt # 示例：创建一个新文件来模拟更改
-          # echo "Hello World" > data/test.txt # 示例：修改一个现有文件
-          # rm -f data/some_old_file.txt # 示例：删除文件
-          # 这里应该放置您实际的代理节点和日志更新逻辑
-          echo "实际数据更新逻辑在这里执行，它会修改 data/*.txt 和 data/*.csv"
+          # 运行位于仓库根目录的 proxy_scraper.py 脚本
+          # 确保这个脚本会生成或修改 data/*.txt 和 data/*.csv 文件
+          python proxy_scraper.py
 
-
-      - name: Auto commit and push # 步骤5: 自动提交并推送更改
+      - name: Auto commit and push # 步骤7: 自动提交并推送更改
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          # 只选择 data/ 目录下的 .txt 和 .csv 文件进行提交
-          file_pattern: data/*.txt data/*.csv
-          # 提交信息，包含 UTC 时间戳
+          file_pattern: data/*.txt data/*.csv # 只提交 data/ 目录下的 .txt 和 .csv 文件
           commit_message: 自动更新代理节点和日志 $(date -u +'%Y-%m-%d %H:%M:%S UTC')
-          # 提交的作者信息，与您之前的日志一致
           commit_author: qjlxg <12179157+qjlxg@users.noreply.github.com>
-          # 确保没有指定 --force，因为我们已经通过 rebase 解决了分歧
-          # push_options: "--force" # 请勿取消注释此行，除非您明确需要强制推送！
