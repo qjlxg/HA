@@ -8,13 +8,14 @@ import base64
 import collections
 import logging
 import socket
+from urllib.parse import urlparse, parse_qs, urlencode, unquote
 
 # 配置日志
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # 定义数据输入和输出目录
 INPUT_DATA_DIR = "data" # all.txt 和 GeoLite2-Country.mmdb 所在的目录
-OUTPUT_SUB_DIR = "sub"    # deduplicated_nodes.txt 所在的目录
+OUTPUT_SUB_DIR = "sub"  # deduplicated_nodes.txt 所在的目录
 
 ALL_NODES_FILE = os.path.join(INPUT_DATA_DIR, "all.txt")
 GEOLITE_DB_PATH = os.path.join(INPUT_DATA_DIR, "GeoLite2-Country.mmdb") # GeoLite2 数据库现在在 data 目录下
@@ -55,7 +56,7 @@ def is_valid_domain(domain_str: str) -> bool:
         return False
     if domain_str.endswith('.'): # strip trailing dot
         domain_str = domain_str[:-1]
-    
+        
     allowed = re.compile(r"^(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,63}$")
     return bool(allowed.match(domain_str))
 
@@ -89,115 +90,166 @@ def _clean_json_node(json_data: dict) -> dict:
             clean_json[key] = json_data[key]
     return clean_json
 
-def extract_host_from_node(node: str) -> str | None:
-    """从节点字符串中提取主机名或IP地址"""
-    node = node.strip()
-
-    if not node or node.startswith('#') or len(node) < 10:
-        return None
-
-    extracted_host = None
-
-    if node.startswith("ss://") or node.startswith("vmess://"):
-        try:
-            protocol_prefix = "ss://" if node.startswith("ss://") else "vmess://"
-            encoded_part = node[len(protocol_prefix):].split('#')[0]
-            decoded_content = decode_base64_safe(encoded_part)
-
-            try:
-                node_json = json.loads(decoded_content)
-                if isinstance(node_json, dict):
-                    extracted_host = node_json.get('add') or node_json.get('addr') or node_json.get('host') or node_json.get('sni')
-            except json.JSONDecodeError:
-                pass
-
-            if not extracted_host and protocol_prefix == "ss://":
-                match = re.search(r"@([^:]+)", decoded_content)
-                if match:
-                    extracted_host = match.group(1)
-        except Exception as e:
-            logging.debug(f"{protocol_prefix}节点主机提取失败: {e}, 节点: {node[:50]}...")
-            pass
-
-    if not extracted_host:
-        # 修正了拼写错误：IP_EXTRACT_PATTERNS
-        for pattern_name, pattern in IP_EXTRACT_PATTERNS.items(): 
-            match = re.search(pattern, node)
-            if match:
-                for group in match.groups():
-                    if group:
-                        extracted_host = group.strip()
-                        break
-            if extracted_host:
-                break
-
-    if not extracted_host:
-        # 尝试匹配 IP:Port 模式作为最后的尝试
-        ip_port_match = re.search(r'\[?((?:\d{1,3}\.){3}\d{1,3}|[0-9a-fA-F:]+)\]?:\d{1,5}', node)
-        if ip_port_match:
-            # For IPv6, the host part could be enclosed in brackets
-            extracted_host_with_port = ip_port_match.group(1)
-            # Remove brackets if it's an IPv6 address with brackets
-            if extracted_host_with_port.startswith('[') and extracted_host_with_port.endswith(']'):
-                extracted_host = extracted_host_with_port[1:-1]
-            else:
-                extracted_host = extracted_host_with_port
-
-    if extracted_host and is_valid_host(extracted_host):
-        return extracted_host
-        
-    return None
-
 def simplify_node(node: str) -> str:
-    """简化节点字符串，移除不必要的参数，只保留协议和核心信息"""
-    node_without_name = node.split('#')[0]
-
+    """
+    简化节点字符串，移除不必要的参数，只保留协议和核心信息，并标准化URL参数顺序。
+    此函数是去重的核心。
+    """
+    node_without_name = node.split('#')[0] # 总是移除名称部分
     if not node_without_name:
         return ""
 
-    if node_without_name.startswith("ss://") or node_without_name.startswith("vmess://"):
-        try:
+    try:
+        if node_without_name.startswith("ss://") or node_without_name.startswith("vmess://"):
             protocol_prefix = "ss://" if node_without_name.startswith("ss://") else "vmess://"
             encoded_part = node_without_name[len(protocol_prefix):]
             decoded_content = decode_base64_safe(encoded_part)
-            
-            try:
-                node_json = json.loads(decoded_content)
-                clean_json = _clean_json_node(node_json)
-                return f"{protocol_prefix}{base64.b64encode(json.dumps(clean_json, separators=(',', ':')).encode()).decode().rstrip('=')}"
-            except json.JSONDecodeError:
-                pass
 
-            if protocol_prefix == "ss://":
-                match = re.search(r"([^@]+)@([^:]+):(\d+)", decoded_content)
-                if match:
-                    method_pass = match.group(1)
-                    host = match.group(2)
-                    port = match.group(3)
-                    return f"ss://{base64.b64encode(f'{method_pass}@{host}:{port}'.encode()).decode().rstrip('=')}"
-        except Exception:
-            pass
+            if not decoded_content:
+                logging.debug(f"Base64解码失败，跳过: {node_without_name[:50]}...")
+                return ""
 
-    elif node_without_name.startswith("trojan://") or \
-             node_without_name.startswith("vless://") or \
-             node_without_name.startswith("hysteria2://"):
-        match = re.match(r"^(?P<protocol>[a-zA-Z0-9]+):\/\/(?P<id_pass>[^@]+)@(?P<server>[^:]+):(?P<port>\d+)(.*)", node_without_name)
-        if match:
-            proto = match.group('protocol')
-            id_pass = match.group('id_pass')
-            server = match.group('server')
-            port = match.group('port')
-            return f"{proto}://{id_pass}@{server}:{port}"
+            if protocol_prefix == "vmess://":
+                try:
+                    node_json = json.loads(decoded_content)
+                    if isinstance(node_json, dict):
+                        clean_json = _clean_json_node(node_json)
+                        # ensure_ascii=False 允许中文，separators=(',', ':') 移除空格减少大小
+                        return f"{protocol_prefix}{base64.b64encode(json.dumps(clean_json, separators=(',', ':')).encode()).decode().rstrip('=')}"
+                except json.JSONDecodeError:
+                    logging.debug(f"VMess JSON解码失败，原始内容: {decoded_content[:50]}...")
+                    # 如果不是标准JSON，VMess就无法处理，直接返回原始不带名称的部分
+                    pass
+            elif protocol_prefix == "ss://":
+                # Shadowsocks Base64解码后通常是 method:password@server:port 或 password@server:port
+                # 尝试标准化为 password@server:port (method有时在SS中是可选的或通过其他方式指定)
+                parts = decoded_content.split('@')
+                if len(parts) >= 2:
+                    # 尝试进一步解析 method:password 部分
+                    first_part = parts[0]
+                    server_port_part = parts[1]
+                    
+                    method_password_match = re.match(r"([^:]+):(.+)", first_part)
+                    if method_password_match:
+                        # 假设是 method:password@server:port
+                        method = method_password_match.group(1)
+                        password = method_password_match.group(2)
+                    else:
+                        # 假设是 password@server:port，method可能由外部定义或默认
+                        password = first_part
+                        method = "" # 留空或默认
+                    
+                    # 尝试解析 server:port
+                    server_match = re.match(r"([^:]+):(\d+)", server_port_part)
+                    if server_match:
+                        server = server_match.group(1)
+                        port = server_match.group(2)
+
+                        # 构建一个标准化字符串，忽略method的缺失或差异
+                        # 只用 server, port, password 进行去重，method可以作为额外的参数
+                        # 如果需要method参与去重，可以包含 method
+                        simplified_ss = f"{password}@{server}:{port}"
+                        if method: # 如果有方法，包含进去，但确保顺序
+                            simplified_ss = f"{method}:{simplified_ss}"
+                        
+                        return f"ss://{base64.b64encode(simplified_ss.encode()).decode().rstrip('=')}"
+                else:
+                    logging.debug(f"SS节点结构不匹配，原始内容: {decoded_content[:50]}...")
+                    pass
             
-    elif node_without_name.startswith("ssr://"):
-        try:
+            # 如果以上解析失败，作为回退返回原始不带名称的部分
+            return node_without_name
+
+        elif node_without_name.startswith(("vless://", "trojan://", "hysteria2://")):
+            parsed_url = urlparse(node_without_name)
+            
+            # 提取核心部分: 方案, 身份/密码, 服务器, 端口
+            protocol = parsed_url.scheme
+            userinfo = parsed_url.username # for vless/trojan id/password
+            server = parsed_url.hostname
+            port = parsed_url.port
+
+            if not (protocol and userinfo and server and port):
+                logging.debug(f"URL解析失败，核心信息不完整: {node_without_name[:80]}...")
+                return ""
+
+            # 解析并排序查询参数，确保去重时参数顺序不影响
+            query_params = parse_qs(parsed_url.query)
+            
+            # 将多值参数列表转换为单值（如果合适），或者保留为列表并转换为元组以便排序
+            # 为了去重，我们将所有参数值转换为字符串，并对键进行排序
+            sorted_params = []
+            for key in sorted(query_params.keys()):
+                values = query_params[key]
+                # 对于单个值，直接取第一个；对于多个值，排序并用逗号连接
+                normalized_value = ','.join(sorted([unquote(v) for v in values]))
+                sorted_params.append(f"{key}={normalized_value}")
+
+            # 重新构建查询字符串
+            new_query = "&".join(sorted_params)
+            
+            # 重新构建一个标准化的URL字符串
+            simplified_url = f"{protocol}://{userinfo}@{server}:{port}"
+            if new_query:
+                simplified_url += f"?{new_query}"
+            
+            return simplified_url
+
+        elif node_without_name.startswith("ssr://"):
             encoded_part = node_without_name[len("ssr://"):]
             decoded_ssr = decode_base64_safe(encoded_part)
-            if decoded_ssr:
-                return f"ssr://{base64.urlsafe_b64encode(decoded_ssr.encode()).decode().rstrip('=')}"
-        except Exception:
-            pass
 
+            if not decoded_ssr:
+                logging.debug(f"SSR Base64解码失败，跳过: {node_without_name[:50]}...")
+                return ""
+            
+            # SSR 格式通常是 server:port:protocol:method:obfsmode:password_base64/?params_base64
+            # 或 server:port:protocol:method:obfsmode:password_base64
+            parts = decoded_ssr.split(':')
+            if len(parts) < 6: # 最少需要 server:port:protocol:method:obfsmode:password
+                logging.debug(f"SSR节点解析失败，部分不足: {decoded_ssr[:50]}...")
+                return ""
+            
+            # 提取核心组件
+            server = parts[0]
+            port = parts[1]
+            protocol = parts[2]
+            method = parts[3]
+            obfs = parts[4]
+            
+            # 密码部分可能包含 ?params
+            password_and_params = parts[5]
+            password_match = re.match(r"([^/?]+)", password_and_params)
+            password = password_match.group(1) if password_match else ""
+
+            # 进一步解析并标准化参数 (如果有的话)
+            params_part = ""
+            if '?' in password_and_params:
+                params_part = password_and_params.split('?', 1)[1]
+            
+            query_params = parse_qs(params_part)
+            sorted_params = []
+            for key in sorted(query_params.keys()):
+                values = query_params[key]
+                normalized_value = ','.join(sorted([unquote(v) for v in values]))
+                sorted_params.append(f"{key}={normalized_value}")
+            
+            new_query = "&".join(sorted_params)
+
+            # 重新构建一个标准化形式的SSR字符串
+            # 确保顺序一致性
+            simplified_ssr = f"{server}:{port}:{protocol}:{method}:{obfs}:{password}"
+            if new_query:
+                simplified_ssr += f"?{new_query}"
+            
+            return f"ssr://{base64.urlsafe_b64encode(simplified_ssr.encode()).decode().rstrip('=')}"
+
+    except Exception as e:
+        logging.debug(f"简化节点时发生错误 '{e}'，节点: {node_without_name[:80]}...")
+        # 发生任何错误时，返回原始不带名称的部分作为回退，避免丢弃
+        return node_without_name
+
+    # 如果无法识别协议或处理，返回原始不带名称的部分
     return node_without_name
 
 def get_country_from_ip(ip_address: str, reader) -> str:
@@ -291,12 +343,9 @@ async def process_and_deduplicate_nodes():
                 else:
                     try:
                         # getaddrinfo 返回一个列表的元组，每个元组代表一个 socket 地址信息
-                        # (family, type, proto, canonname, sockaddr)
-                        # sockaddr 对于 IPv4 是 (address, port)，对于 IPv6 是 (address, port, flowinfo, scopeid)
                         addrinfo_list = await asyncio.to_thread(socket.getaddrinfo, host, None, socket.AF_UNSPEC, socket.SOCK_STREAM)
                         
                         # 从 addrinfo_list 中提取唯一的 IP 地址
-                        # 使用 set 来确保唯一性，并处理 IPv4 和 IPv6 地址
                         resolved_ips = set()
                         for info in addrinfo_list:
                             if info[0] == socket.AF_INET or info[0] == socket.AF_INET6:
@@ -360,7 +409,7 @@ async def process_and_deduplicate_nodes():
     finally:
         if reader:
             reader.close()
-        
+            
         # DNS 缓存保存
         try:
             async with aiofiles.open(DNS_CACHE_FILE, 'w', encoding='utf-8') as f:
