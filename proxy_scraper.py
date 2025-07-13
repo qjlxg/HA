@@ -462,8 +462,10 @@ async def fetch_url(client, url, depth=0):
     
     for current_test_url in test_urls:
         try:
-            # 增加 verify=False 以忽略 SSL 证书验证错误，但请注意这会降低安全性
-            response = await client.get(current_test_url, headers=headers, follow_redirects=True, timeout=15, verify=False) 
+            # --- 关键修改：移除 verify=False 参数 ---
+            # 移除了 verify=False 参数，因为较旧的httpx版本可能不支持它。
+            # 这意味着将使用默认的SSL证书验证行为。
+            response = await client.get(current_test_url, headers=headers, follow_redirects=True, timeout=15) 
             response.raise_for_status() # 抛出 HTTPStatusError (4xx/5xx)
             content = response.text
             target_url = current_test_url
