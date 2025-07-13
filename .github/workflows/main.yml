@@ -52,8 +52,8 @@ jobs:
       # 如果您不想将其提交到仓库，则需要在此处添加一个步骤来下载它（可能需要 MaxMind 账户凭据）。
 
       # 运行节点抓取脚本，生成 all.txt
-      - name: Run proxy scraper script
-        run: python proxy_scraper.py
+      - name: Run deduplication_module.py
+        run: python deduplication_module.py
 
       # 运行节点处理和去重脚本
       - name: Run node processing and deduplication script
