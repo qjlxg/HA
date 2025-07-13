@@ -1,12 +1,9 @@
 name: Proxy Scraper
 
 on:
+  workflow_dispatch: # 允许手动触发
   schedule:
-    - cron: '0 0 * * *'
-  workflow_dispatch:
-
-permissions:
-  contents: write
+    - cron: '0 */6 * * *' # 每6小时运行一次，例如 UTC 时间 0:00, 6:00, 12:00, 18:00
 
 jobs:
   scrape-proxies:
@@ -15,49 +12,35 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-      with:
-        path: .
 
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.11'
+        python-version: '3.9' # 推荐使用稳定的最新版本，如 3.9 或 3.10
 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install httpx[http2] aiofiles beautifulsoup4 pyyaml aiodns tenacity geoip2 maxminddb
-
-    - name: Create data directory
+        pip install -r requirements.txt
+    
+    - name: Ensure data and cache directories exist
       run: |
-        mkdir -p ./data
-        chmod -R 755 ./data
+        mkdir -p data
+        mkdir -p cache
+        # GitHub Actions 默认会清理工作区，所以每次运行都需要创建目录
 
-    - name: Run proxy scraper
+    - name: Run Proxy Scraper
+      run: python proxy_scraper.py
+
+    - name: Commit and push changes
       env:
-        DATA_DIR: ./data
-        CONCURRENCY_LIMIT: 20
-      run: |
-        pwd
-        python proxy_scraper.py | tee scraper_output.log
-        if [ $? -ne 0 ]; then
-          echo "Proxy scraper failed, check scraper_output.log"
-          cat scraper_output.log
-          exit 1
-        fi
-
-    - name: Check generated files
-      run: |
-        ls -la ./data || echo "Data directory is empty or does not exist"
-
-    - name: Commit and push results
+        # 使用 GitHub Token 进行认证
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         git config user.name "GitHub Actions"
-        git config user.email "github-actions@github.com"
-        git add data/all.txt data/node_counts.csv data/protocol_stats.csv data/*.txt
-        git status
-        git commit -m "Update collected proxy nodes and stats" || echo "No changes to commit"
-        git push || echo "No changes to push or push failed"
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      continue-on-error: true
+        git config user.email "actions@github.com"
+        git add data/
+        git commit -m "Update proxy nodes [skip ci]" || echo "No changes to commit"
+        # 使用 --allow-empty 确保即使没有实际文件修改，也创建一个空的提交（可选，根据需求）
+        # git commit -m "Update proxy nodes [skip ci]" --allow-empty || echo "No changes to commit"
+        git push
