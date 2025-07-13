@@ -279,8 +279,7 @@ def parse_nodes(content):
     # 增加一个通用Base64识别模式，用于可能包含Base64编码内容的URL
     # 识别长字符串（至少20个字符），且字符集符合Base64特征
     # [a-zA-Z0-9+/=] 匹配Base64字符，{20,} 匹配至少20个字符
-    # (?:={1,3})? 匹配可选的填充符
-    # \s* 可选的空白字符
+    # (?:={1,3})? 匹配可选的空白字符
     # 确保不匹配明显的URL或者其他协议头，避免重复处理
     # 过滤掉过短的（如Base64编码的3个字符）或看起来不像真实Base64的字符串
     base64_pattern = re.compile(r'\b[a-zA-Z0-9+/]{20,}={0,3}\b')
@@ -571,6 +570,7 @@ async def process_url(client, url):
 
 async def main():
     """主函数：读取 sources.list，并行抓取并保存结果。"""
+    print("Proxy Scraper 脚本已启动！") # <-- 调试用，确保脚本启动
     urls = []
     try:
         with open(SOURCES_FILE, 'r', encoding='utf-8') as f:
@@ -592,10 +592,14 @@ async def main():
                 
                 urls.append(normalized_url)
     except FileNotFoundError:
-        print(f"错误: {SOURCES_FILE} 文件未找到。")
+        print(f"错误: {SOURCES_FILE} 文件未找到。请确保 {SOURCES_FILE} 存在于脚本同目录下。") # 更多提示
         return
     except Exception as e:
         print(f"读取 {SOURCES_FILE} 文件时发生错误: {e}")
+        return
+    
+    if not urls: # 如果 sources.list 为空或无效
+        print(f"没有从 {SOURCES_FILE} 读取到任何有效URL，脚本将退出。")
         return
 
     all_results = []
