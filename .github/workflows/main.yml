@@ -7,13 +7,11 @@ on:
       - main  # 当推送到 main 分支时触发
     paths:    # 只有以下路径中的文件发生变动时才触发
       - '.github/workflows/nodes.yml'
-     
       - 'deduplication_module.py'
-     
       - 'data/GeoLite2-Country.mmdb' # 如果此文件也提交到仓库，并且其变动也应触发
   schedule:
     - cron: '0 0 * * *'  # 每天 UTC 00:00 运行
-  workflow_dispatch:  # 支持手动触发
+  workflow_dispatch:   # 支持手动触发
 
 # 定义环境变量
 env:
@@ -49,13 +47,10 @@ jobs:
       # 重要的 GeoLite2 数据库提醒：
       # 请确保 GeoLite2-Country.mmdb 文件已经放置在您的仓库的 'data/' 目录下，
       # 因为 GitHub Actions 运行器每次都会从头开始克隆仓库。
-      # 如果您不想将其提交到仓库，则需要在此处添加一个步骤来下载它（可能需要 MaxMind 账户凭据）。
-
-      # 运行节点抓取脚本，生成 all.txt
-      - name: Run deduplication_module.py
-        run: python deduplication_module.py
+      # 根据您的要求，这里不添加下载数据库的步骤。
 
       # 运行节点处理和去重脚本
+      # 已将原先重复的 deduplication_module.py 运行合并为一次。
       - name: Run node processing and deduplication script
         run: python deduplication_module.py
 
@@ -64,12 +59,20 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
+          
+          # 关键修复：在推送前拉取最新更改并rebase，以解决远程拒绝推送的问题
+          git pull --rebase origin main
+          
           # 添加 sub 目录下的去重节点文件
           git add sub/deduplicated_nodes.txt
           # 添加 data 目录下的 dns_cache.json 文件
           git add sub/dns_cache.json
+          
           # 检查是否有更改并提交
+          # 只有当有实际文件更改时才执行 commit
           git diff-index --quiet HEAD || git commit -m "Update processed nodes and DNS cache"
+          
+          # 推送到远程仓库
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
