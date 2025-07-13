@@ -28,15 +28,32 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
-      # 安装依赖
+      # 安装所有依赖
+      # 包括 geoip2, aiofiles (用于 deduplication_module.py)
+      # 以及 httpx, pyyaml, beautifulsoup4 (用于 proxy_scraper.py)
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install geoip2 aiofiles
+          pip install geoip2 aiofiles httpx pyyaml beautifulsoup4
 
-      # 运行 Python 脚本
-      # 假设您的节点处理脚本名为 deduplication_module.py
-      - name: Run node processing script
+      # 创建必要的目录（如果不存在）
+      # 虽然 Python 脚本也会创建，但提前确保目录存在是个好习惯
+      - name: Create data and sub directories
+        run: |
+          mkdir -p data
+          mkdir -p sub
+          
+      # 重要的 GeoLite2 数据库提醒：
+      # 请确保 GeoLite2-Country.mmdb 文件已经放置在您的仓库的 'data/' 目录下，
+      # 因为 GitHub Actions 运行器每次都会从头开始克隆仓库。
+      # 如果您不想将其提交到仓库，则需要在此处添加一个步骤来下载它（可能需要 MaxMind 账户凭据）。
+
+      # 运行节点抓取脚本，生成 all.txt
+      - name: Run proxy scraper script
+        run: python proxy_scraper.py
+
+      # 运行节点处理和去重脚本
+      - name: Run node processing and deduplication script
         run: python deduplication_module.py
 
       # 检查输出文件并提交更改
@@ -46,8 +63,10 @@ jobs:
           git config --local user.name "GitHub Action"
           # 添加 sub 目录下的去重节点文件
           git add sub/deduplicated_nodes.txt
+          # 添加 data 目录下的 dns_cache.json 文件
+          git add sub/dns_cache.json
           # 检查是否有更改并提交
-          git diff-index --quiet HEAD || git commit -m "Update deduplicated nodes"
+          git diff-index --quiet HEAD || git commit -m "Update processed nodes and DNS cache"
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
