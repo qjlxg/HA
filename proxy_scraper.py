@@ -13,7 +13,7 @@ import random
 import hashlib
 import ipaddress
 from playwright.async_api import async_playwright
-import logging # 引入 logging 模块
+import logging
 
 # --- 配置 ---
 DATA_DIR = "data"
@@ -28,8 +28,7 @@ logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(message)s',
     datefmt='%Y-%m-%d %H:%M:%S'
 )
-# 如果需要看详细的“丢弃节点”警告，可以改成 logging.DEBUG 或 logging.WARNING
-# logging.getLogger().setLevel(logging.WARNING) 
+# logging.getLogger().setLevel(logging.WARNING) # 如果需要看详细的“丢弃节点”警告，可以改成 logging.DEBUG 或 logging.WARNING
 
 USER_AGENTS = [
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36",
@@ -39,7 +38,7 @@ USER_AGENTS = [
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36",
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36 Edg/100.0.1185.39",
     "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36 Vivaldi/5.1.2567.49",
-    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36 OPR/86.0.4363.32",
+    "Mozilla/5.5 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36 OPR/86.0.4363.32",
     "Mozilla/5.0 (Linux; Android 10; SM-G960F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Mobile Safari/537.36",
 ]
 
@@ -117,14 +116,12 @@ async def fetch_url_content(url: str, semaphore: asyncio.Semaphore):
                         cache_data = json.load(f)
                         cached_timestamp = datetime.fromisoformat(cache_data['timestamp'])
                         if datetime.now() - cached_timestamp < timedelta(hours=CACHE_EXPIRY_HOURS):
-                            # logging.info(f"从缓存读取: {full_url}") # 进一步减少日志
                             return cache_data['content']
                     except (json.JSONDecodeError, KeyError) as e:
                         logging.warning(f"缓存文件 {cache_path} 损坏或格式错误: {e}. 删除并重新获取。")
                         os.remove(cache_path)
 
             try:
-                # logging.info(f"尝试使用 Playwright 获取: {full_url}") # 进一步减少日志
                 async with async_playwright() as p:
                     browser = await p.chromium.launch(headless=True)
                     context = await browser.new_context(user_agent=random.choice(USER_AGENTS))
@@ -143,10 +140,10 @@ async def fetch_url_content(url: str, semaphore: asyncio.Semaphore):
                     }
                     with open(cache_path, 'w') as f:
                         json.dump(cache_data, f)
-                    logging.info(f"成功获取: {full_url}") # 只在成功时打印 INFO
+                    logging.info(f"成功获取: {full_url}")
                     return content
             except Exception as e:
-                logging.error(f"获取 {full_url} 失败: {e}") # 失败时打印 ERROR
+                logging.error(f"获取 {full_url} 失败: {e}")
                 continue
         return None
 
@@ -303,7 +300,6 @@ async def process_url(url: str, processed_urls: set, all_collected_nodes: dict, 
         return
 
     processed_urls.add(url)
-    # logging.info(f"开始处理 URL: {url}") # 减少日志输出
     
     content = await fetch_url_content(url, semaphore)
 
@@ -325,9 +321,7 @@ async def process_url(url: str, processed_urls: set, all_collected_nodes: dict, 
             
             validated_nodes_for_url.append(processed_node)
         else:
-            # logging.warning(f"丢弃无效或不完整的节点: {node[:min(len(node), 100)]}...") # 调整为 DEBUG 级别，默认不显示
             logging.debug(f"丢弃无效或不完整的节点: {node[:min(len(node), 100)]}...") # 使用 debug 级别，默认不显示
-            pass # 不打印此警告
 
     if url not in all_collected_nodes:
         all_collected_nodes[url] = set()
@@ -343,26 +337,26 @@ async def process_url(url: str, processed_urls: set, all_collected_nodes: dict, 
 
 async def main():
     """主函数，协调抓取和保存过程。"""
-    logging.info("开始执行代理抓取任务") # 任务开始时打印
+    logging.info("开始执行代理抓取任务")
     source_urls = await read_sources_list()
     if not source_urls:
         logging.error("未找到任何要处理的 URL。请检查 sources.list 文件。")
         return
 
-    logging.info(f"从 sources.list 读取了 {len(source_urls)} 个 URL") # 打印读取数量
+    logging.info(f"从 sources.list 读取了 {len(source_urls)} 个 URL")
 
     all_collected_nodes_by_url = {} 
-    processed_urls = set()
+    # 修复此处：将 processed_nodes 改为 processed_urls
+    processed_urls = set() 
 
     semaphore = asyncio.Semaphore(CONCURRENT_REQUEST_LIMIT)
     
-    # 开始处理所有源 URL
     logging.info("开始处理 URLs...")
-    tasks = [process_url(url, processed_nodes, all_collected_nodes_by_url, semaphore) for url in source_urls]
+    # 修复此处：将 processed_nodes 改为 processed_urls
+    tasks = [process_url(url, processed_urls, all_collected_nodes_by_url, semaphore) for url in source_urls] 
     await asyncio.gather(*tasks)
     logging.info("所有 URL 处理完毕。")
 
-    # 保存每个原始 URL 获取到的所有节点（包括递归抓取到的）
     logging.info(f"开始保存节点到 {DATA_DIR}/ 目录...")
     for url, nodes_set in all_collected_nodes_by_url.items():
         if nodes_set:
@@ -372,12 +366,10 @@ async def main():
                 await f.write('\n'.join(sorted(list(nodes_set))))
             logging.info(f"已保存 {len(nodes_set)} 个节点，来源: {url}")
         else:
-            # logging.info(f"URL {url} 未解析到任何节点，未创建/清空独立节点文件。") # 调整为 DEBUG 级别，默认不显示
-            logging.debug(f"URL {url} 未解析到任何节点，未创建/清空独立节点文件。") # 使用 debug 级别，默认不显示
+            logging.debug(f"URL {url} 未解析到任何节点，未创建/清空独立节点文件。")
 
     logging.info("节点保存完成。")
 
-    # 统计节点数量并保存为 CSV
     csv_file_path = os.path.join(DATA_DIR, "node_counts.csv")
     async with aiofiles.open(csv_file_path, 'w', newline='') as f:
         writer = csv.writer(f)
