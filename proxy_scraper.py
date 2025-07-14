@@ -23,9 +23,9 @@ from urllib.parse import urlparse, urljoin
 class Config:
     DATA_DIR: str = "data"  # 数据存储目录
     CACHE_DIR: str = "cache"  # 缓存目录
-    CACHE_EXPIRY_HOURS: int = 108  # 缓存有效期（小时）
+    CACHE_EXPIRY_HOURS: int = 24  # 缓存有效期（小时）
     MAX_DEPTH: int = 1  # 最大递归深度
-    CONCURRENT_REQUEST_LIMIT: int = 2  # 并发请求限制
+    CONCURRENT_REQUEST_LIMIT: int = 1  # 并发请求限制
     REQUEST_TIMEOUT: int = 60000  # 请求超时时间（毫秒，60秒）
     USER_AGENTS: List[str] = field(default_factory=lambda: [
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36",
@@ -110,182 +110,16 @@ def get_safe_filename(url: str) -> str:
     """从URL提取域名作为文件名，清理特殊字符。"""
     parsed_url = urlparse(url if url.startswith(("http://", "https://")) else f"https://{url}")
     netloc = parsed_url.netloc or url
-    # 清理域名中的特殊字符，保留字母、数字、连字符和点号
     safe_netloc = re.sub(r'[^a-zA-Z0-9\-\.]', '_', netloc)
-    # 移除多余的点号和下划线
     safe_netloc = re.sub(r'\.+', '.', safe_netloc)
     safe_netloc = re.sub(r'_+', '_', safe_netloc).strip('_')
     return f"{safe_netloc}.txt"
 
-# --- 核心抓取和解析逻辑 ---
-async def fetch_url_content(url: str, semaphore: asyncio.Semaphore, config: Config) -> Optional[Tuple[str, str]]:
-    """使用Playwright异步获取URL内容，自动处理无协议头的URL，无重试。"""
-    if not url.startswith(("http://", "https://")):
-        https_url = f"https://{url}"
-        http_url = f"http://{url}"
-    else:
-        https_url = url
-        http_url = url.replace("https://", "http://") if url.startswith("https://") else url.replace("http://", "https://")
-
-    for full_url in [https_url, http_url]:
-        cache_path = get_cache_path(full_url, config)
-
-        if os.path.exists(cache_path):
-            try:
-                async with aiofiles.open(cache_path, 'r', encoding='utf-8') as f:
-                    cache_data = json.loads(await f.read())
-                    cached_timestamp = datetime.fromisoformat(cache_data['timestamp'])
-                    if datetime.now() - cached_timestamp < timedelta(hours=config.CACHE_EXPIRY_HOURS):
-                        logger.debug(f"使用缓存内容: {full_url}")
-                        return cache_data['content'], full_url
-            except (json.JSONDecodeError, KeyError, Exception) as e:
-                logger.warning(f"缓存文件 {cache_path} 损坏或格式错误: {e}，删除并重新获取")
-                os.remove(cache_path)
-
-        async with semaphore:
-            try:
-                await asyncio.sleep(random.uniform(0.5, 2.5))
-                async with async_playwright() as p:
-                    browser = await p.chromium.launch(headless=True)
-                    context = await browser.new_context(
-                        user_agent=random.choice(config.USER_AGENTS),
-                        ignore_https_errors=True
-                    )
-                    page = await context.new_page()
-                    try:
-                        await page.goto(full_url, wait_until='load', timeout=config.REQUEST_TIMEOUT)
-                        await page.wait_for_timeout(5000)
-                        content = await page.content()
-                        cache_data = {
-                            'timestamp': datetime.now().isoformat(),
-                            'content_hash': get_url_content_hash(content),
-                            'content': content
-                        }
-                        async with aiofiles.open(cache_path, 'w', encoding='utf-8') as f:
-                            await f.write(json.dumps(cache_data))
-                        logger.info(f"成功获取: {full_url}")
-                        return content, full_url
-                    except PlaywrightTimeoutError:
-                        logger.warning(f"获取 {full_url} 超时，尝试获取部分内容")
-                        content = await page.content()
-                        if content:
-                            logger.info(f"成功获取部分内容: {full_url}")
-                            cache_data = {
-                                'timestamp': datetime.now().isoformat(),
-                                'content_hash': get_url_content_hash(content),
-                                'content': content
-                            }
-                            async with aiofiles.open(cache_path, 'w', encoding='utf-8') as f:
-                                await f.write(json.dumps(cache_data))
-                            return content, full_url
-                        logger.warning(f"无法获取任何内容: {full_url}")
-                        continue
-                    except Exception as e:
-                        logger.error(f"获取 {full_url} 失败: {e}，尝试下一个协议")
-                        continue
-                    finally:
-                        await context.close()
-                        await browser.close()
-            except Exception as e:
-                logger.error(f"Playwright 环境或启动失败: {e}，尝试下一个协议")
-                continue
-    logger.error(f"所有协议尝试失败: {url}")
-    return None, url
-
-def extract_nodes_from_text(text: str, config: Config) -> Set[str]:
-    """从文本中提取代理节点。"""
-    nodes = set()
-    for protocol, pattern in config.NODE_PATTERNS.items():
-        matches = re.findall(pattern, text)
-        nodes.update(matches)
-        if matches:
-            logger.debug(f"从文本提取到 {len(matches)} 个 {protocol} 节点")
-    return nodes
-
-def parse_and_extract_nodes(content: str, current_depth: int, config: Config, base_url: str) -> Tuple[Set[str], Set[str]]:
-    """解析网页内容，提取节点和嵌套链接。"""
-    all_nodes = set()
-    new_urls = set()
-
-    soup = BeautifulSoup(content, 'html.parser', from_encoding='utf-8')
-    for style_tag in soup(["style"]):
-        style_tag.decompose()
-
-    for tag_name in config.CONTENT_TAGS:
-        for tag in soup.find_all(tag_name):
-            text = tag.get_text(separator='\n', strip=True)
-            all_nodes.update(extract_nodes_from_text(text, config))
-            base64_matches = re.findall(r'(?:[A-Za-z0-9+/]{4}){1,}(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?', text)
-            for b64_str in base64_matches:
-                decoded = decode_base64_content(b64_str)
-                if decoded:
-                    all_nodes.update(extract_nodes_from_text(decoded, config))
-                    new_urls.update(re.findall(r'(?:http|https)://[^\s"\']+', decoded))
-            for attr in config.CONTENT_ATTRIBUTES:
-                if attr in tag.attrs:
-                    attr_value = tag[attr]
-                    if isinstance(attr_value, list):
-                        attr_value = ' '.join(attr_value)
-                    all_nodes.update(extract_nodes_from_text(attr_value, config))
-                    base64_matches = re.findall(r'(?:[A-Za-z0-9+/]{4}){1,}(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?', attr_value)
-                    for b64_str in base64_matches:
-                        decoded = decode_base64_content(b64_str)
-                        if decoded:
-                            all_nodes.update(extract_nodes_from_text(decoded, config))
-                            new_urls.update(re.findall(r'(?:http|https)://[^\s"\']+', decoded))
-
-    for script_tag in soup.find_all('script'):
-        script_content = script_tag.get_text(strip=True)
-        try:
-            json_data = json.loads(script_content)
-            def walk_data(item):
-                if isinstance(item, str):
-                    all_nodes.update(extract_nodes_from_text(item, config))
-                    new_urls.update(re.findall(r'(?:http|https)://[^\s"\']+', item))
-                elif isinstance(item, (dict, list)):
-                    for sub_item in (item.values() if isinstance(item, dict) else item):
-                        walk_data(sub_item)
-            walk_data(json_data)
-        except json.JSONDecodeError:
-            all_nodes.update(extract_nodes_from_text(script_content, config))
-
-    try:
-        data = None
-        try:
-            data = yaml.safe_load(content)
-        except yaml.YAMLError:
-            try:
-                data = json.loads(content)
-            except json.JSONDecodeError:
-                pass
-        if isinstance(data, (dict, list)):
-            def walk_data(item):
-                if isinstance(item, str):
-                    all_nodes.update(extract_nodes_from_text(item, config))
-                    new_urls.update(re.findall(r'(?:http|https)://[^\s"\']+', item))
-                elif isinstance(item, (dict, list)):
-                    for sub_item in (item.values() if isinstance(item, dict) else item):
-                        walk_data(sub_item)
-            walk_data(data)
-    except Exception:
-        pass
-
-    if current_depth < config.MAX_DEPTH:
-        for a_tag in soup.find_all('a', href=True):
-            href = a_tag['href']
-            if href.startswith(('http://', 'https://')):
-                new_urls.add(href)
-            elif href.startswith('/'):
-                new_urls.add(urljoin(base_url, href))
-            elif not href.startswith(('#', 'javascript:', 'mailto:', 'tel:')):
-                new_urls.add(urljoin(base_url, f"https://{href}"))
-
-    logger.debug(f"从 {base_url} 提取到 {len(all_nodes)} 个潜在节点，{len(new_urls)} 个新链接")
-    return all_nodes, new_urls
-
-def clean_node(node: str) -> str:
-    """清洗节点字符串，移除多余字符。"""
-    node = clean_node(node)
+def validate_node(node: str) -> Optional[str]:
+    """验证节点，仅保留完整且符合协议格式的节点。"""
+    node = node.strip()
+    node = re.sub(r'\s+', '', node)
+    node = re.sub(r'[\n\r]+', '', node)
     if not node or len(node) < 10:
         logger.debug(f"节点过短或为空，已弃用: {node[:50]}...")
         return None
@@ -402,6 +236,175 @@ def clean_node(node: str) -> str:
         logger.debug(f"节点验证过程中出现异常，已弃用: {node[:50]}... 错误: {e}")
         return None
 
+# --- 核心抓取和解析逻辑 ---
+async def fetch_url_content(url: str, semaphore: asyncio.Semaphore, config: Config) -> Optional[Tuple[str, str]]:
+    """使用Playwright异步获取URL内容，自动处理无协议头的URL，无重试。"""
+    if is_valid_ip(url.split(':')[0]):
+        https_url = f"https://{url}"
+        http_url = f"http://{url}"
+    elif not url.startswith(("http://", "https://")):
+        https_url = f"https://{url}"
+        http_url = f"http://{url}"
+    else:
+        https_url = url
+        http_url = url.replace("https://", "http://") if url.startswith("https://") else url.replace("http://", "https://")
+
+    for full_url in [https_url, http_url]:
+        cache_path = get_cache_path(full_url, config)
+
+        if os.path.exists(cache_path):
+            try:
+                async with aiofiles.open(cache_path, 'r', encoding='utf-8') as f:
+                    cache_data = json.loads(await f.read())
+                    cached_timestamp = datetime.fromisoformat(cache_data['timestamp'])
+                    if datetime.now() - cached_timestamp < timedelta(hours=config.CACHE_EXPIRY_HOURS):
+                        logger.debug(f"使用缓存内容: {full_url}")
+                        return cache_data['content'], full_url
+            except (json.JSONDecodeError, KeyError, Exception) as e:
+                logger.warning(f"缓存文件 {cache_path} 损坏或格式错误: {e}，删除并重新获取")
+                os.remove(cache_path)
+
+        async with semaphore:
+            try:
+                await asyncio.sleep(random.uniform(0.5, 2.5))
+                async with async_playwright() as p:
+                    browser = await p.chromium.launch(headless=True)
+                    context = await browser.new_context(
+                        user_agent=random.choice(config.USER_AGENTS),
+                        ignore_https_errors=True
+                    )
+                    page = await context.new_page()
+                    try:
+                        await page.goto(full_url, wait_until='load', timeout=config.REQUEST_TIMEOUT)
+                        await page.wait_for_timeout(5000)
+                        content = await page.content()
+                        cache_data = {
+                            'timestamp': datetime.now().isoformat(),
+                            'content_hash': get_url_content_hash(content),
+                            'content': content
+                        }
+                        async with aiofiles.open(cache_path, 'w', encoding='utf-8') as f:
+                            await f.write(json.dumps(cache_data))
+                        logger.info(f"成功获取: {full_url}")
+                        return content, full_url
+                    except PlaywrightTimeoutError:
+                        logger.warning(f"获取 {full_url} 超时，尝试获取部分内容")
+                        content = await page.content()
+                        if content:
+                            logger.info(f"成功获取部分内容: {full_url}")
+                            cache_data = {
+                                'timestamp': datetime.now().isoformat(),
+                                'content_hash': get_url_content_hash(content),
+                                'content': content
+                            }
+                            async with aiofiles.open(cache_path, 'w', encoding='utf-8') as f:
+                                await f.write(json.dumps(cache_data))
+                            return content, full_url
+                        logger.warning(f"无法获取任何内容: {full_url}")
+                        continue
+                    except Exception as e:
+                        logger.error(f"获取 {full_url} 失败: {e}，尝试下一个协议")
+                        continue
+                    finally:
+                        await context.close()
+                        await browser.close()
+            except Exception as e:
+                logger.error(f"Playwright 环境或启动失败: {e}，尝试下一个协议")
+                continue
+    logger.error(f"所有协议尝试失败: {url}")
+    return None, url
+
+def extract_nodes_from_text(text: str, config: Config) -> Set[str]:
+    """从文本中提取代理节点。"""
+    nodes = set()
+    for protocol, pattern in config.NODE_PATTERNS.items():
+        matches = re.findall(pattern, text)
+        nodes.update(matches)
+        if matches:
+            logger.debug(f"从文本提取到 {len(matches)} 个 {protocol} 节点")
+    return nodes
+
+def parse_and_extract_nodes(content: str, current_depth: int, config: Config, base_url: str) -> Tuple[Set[str], Set[str]]:
+    """解析网页内容，提取节点和嵌套链接。"""
+    all_nodes = set()
+    new_urls = set()
+
+    soup = BeautifulSoup(content, 'html.parser')
+    for style_tag in soup(["style"]):
+        style_tag.decompose()
+
+    for tag_name in config.CONTENT_TAGS:
+        for tag in soup.find_all(tag_name):
+            text = tag.get_text(separator='\n', strip=True)
+            all_nodes.update(extract_nodes_from_text(text, config))
+            base64_matches = re.findall(r'(?:[A-Za-z0-9+/]{4}){1,}(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?', text)
+            for b64_str in base64_matches:
+                decoded = decode_base64_content(b64_str)
+                if decoded:
+                    all_nodes.update(extract_nodes_from_text(decoded, config))
+                    new_urls.update(re.findall(r'(?:http|https)://[^\s"\']+', decoded))
+            for attr in config.CONTENT_ATTRIBUTES:
+                if attr in tag.attrs:
+                    attr_value = tag[attr]
+                    if isinstance(attr_value, list):
+                        attr_value = ' '.join(attr_value)
+                    all_nodes.update(extract_nodes_from_text(attr_value, config))
+                    base64_matches = re.findall(r'(?:[A-Za-z0-9+/]{4}){1,}(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?', attr_value)
+                    for b64_str in base64_matches:
+                        decoded = decode_base64_content(b64_str)
+                        if decoded:
+                            all_nodes.update(extract_nodes_from_text(decoded, config))
+                            new_urls.update(re.findall(r'(?:http|https)://[^\s"\']+', decoded))
+
+    for script_tag in soup.find_all('script'):
+        script_content = script_tag.get_text(strip=True)
+        try:
+            json_data = json.loads(script_content)
+            def walk_data(item):
+                if isinstance(item, str):
+                    all_nodes.update(extract_nodes_from_text(item, config))
+                    new_urls.update(re.findall(r'(?:http|https)://[^\s"\']+', item))
+                elif isinstance(item, (dict, list)):
+                    for sub_item in (item.values() if isinstance(item, dict) else item):
+                        walk_data(sub_item)
+            walk_data(json_data)
+        except json.JSONDecodeError:
+            all_nodes.update(extract_nodes_from_text(script_content, config))
+
+    try:
+        data = None
+        try:
+            data = yaml.safe_load(content)
+        except yaml.YAMLError:
+            try:
+                data = json.loads(content)
+            except json.JSONDecodeError:
+                pass
+        if isinstance(data, (dict, list)):
+            def walk_data(item):
+                if isinstance(item, str):
+                    all_nodes.update(extract_nodes_from_text(item, config))
+                    new_urls.update(re.findall(r'(?:http|https)://[^\s"\']+', item))
+                elif isinstance(item, (dict, list)):
+                    for sub_item in (item.values() if isinstance(item, dict) else item):
+                        walk_data(sub_item)
+            walk_data(data)
+    except Exception:
+        pass
+
+    if current_depth < config.MAX_DEPTH:
+        for a_tag in soup.find_all('a', href=True):
+            href = a_tag['href']
+            if href.startswith(('http://', 'https://')):
+                new_urls.add(href)
+            elif href.startswith('/'):
+                new_urls.add(urljoin(base_url, href))
+            elif not href.startswith(('#', 'javascript:', 'mailto:', 'tel:')):
+                new_urls.add(urljoin(base_url, f"https://{href}"))
+
+    logger.debug(f"从 {base_url} 提取到 {len(all_nodes)} 个潜在节点，{len(new_urls)} 个新链接")
+    return all_nodes, new_urls
+
 async def process_url(url: str, processed_urls: Set[str], all_nodes: Dict[str, Set[str]], semaphore: asyncio.Semaphore, config: Config, depth: int = 0) -> None:
     """递归处理URL，提取和验证节点。"""
     base_url = url.split('#')[0].split('?')[0]
@@ -414,6 +417,8 @@ async def process_url(url: str, processed_urls: Set[str], all_nodes: Dict[str, S
     content, resolved_url = await fetch_url_content(url, semaphore, config)
     if not content:
         logger.warning(f"无法获取内容: {url}，跳过节点提取")
+        if resolved_url not in all_nodes:
+            all_nodes[resolved_url] = set()  # 记录失败的URL
         return
 
     nodes, new_urls = parse_and_extract_nodes(content, depth, config, resolved_url)
@@ -469,16 +474,17 @@ async def main():
         logger.error(f"主任务执行失败: {e}")
 
     logger.info("所有URL处理完毕，开始保存节点")
-    async with aiofiles.open(os.path.join(config.DATA_DIR, "node_counts.csv"), 'w', newline='', encoding='utf-8') as f:
+    with open(os.path.join(config.DATA_DIR, "node_counts.csv"), 'w', newline='', encoding='utf-8') as f:
         writer = csv.writer(f)
         writer.writerow(["URL", "Valid Nodes"])
         total_valid_nodes = 0
-        for url, nodes in all_nodes.items():
+        for url in set(list(all_nodes.keys()) + list(processed_urls)):
+            nodes = all_nodes.get(url, set())
             valid_count = len(nodes)
             if valid_count > 0:
                 output_path = os.path.join(config.DATA_DIR, get_safe_filename(url))
-                async with aiofiles.open(output_path, 'w', encoding='utf-8') as node_file:
-                    await node_file.write('\n'.join(sorted(nodes)))
+                with open(output_path, 'w', encoding='utf-8') as node_file:
+                    node_file.write('\n'.join(sorted(nodes)))
                 logger.info(f"保存 {valid_count} 个节点到 {output_path}")
             writer.writerow([url, valid_count])
             total_valid_nodes += valid_count
