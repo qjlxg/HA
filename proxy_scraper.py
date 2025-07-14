@@ -4,7 +4,7 @@ import re
 import os
 import csv
 import hashlib
-from urllib.parse import urlparse
+from urllib.parse import urlparse, parse_qs, urlencode
 from bs4 import BeautifulSoup
 import yaml
 import base64
@@ -58,13 +58,14 @@ USER_AGENTS = {
     ]
 }
 
+# 更新后的 NODE_REGEXES，更严格地识别 URL 的结束位置
 NODE_REGEXES = {
-    "hysteria2": r"hysteria2:\/\/(?P<id>[a-zA-Z0-9\-_.~%]+:[a-zA-Z0-9\-_.~%]+@)?(?P<host>[a-zA-Z0-9\-\.]+)(?::(?P<port>\d+))?\/?\?.*",
-    "vmess": r"vmess:\/\/(?P<data>[a-zA-Z0-9+\/=]+)",
-    "trojan": r"trojan:\/\/(?P<password>[a-zA-Z0-9\-_.~%]+)@(?P<host>[a-zA-Z0-9\-\.]+):(?P<port>\d+)(?:\/\?.*)?",
-    "ss": r"ss:\/\/(?P<method_password>[a-zA-Z0-9+\/=]+)@(?P<host>[a-zA-Z0-9\-\.]+):(?P<port>\d+)(?:#(?P<name>.*))?",
-    "ssr": r"ssr:\/\/(?P<data>[a-zA-Z0-9+\/=]+)",
-    "vless": r"vless:\/\/(?P<uuid>[a-zA-Z0-9\-]+)@(?P<host>[a-zA-Z0-9\-\.]+):(?P<port>\d+)\?(?:.*&)?type=(?P<type>[a-zA-Z0-9]+)(?:&security=(?P<security>[a-zA-Z0-9]+))?.*",
+    "ss": r"ss://[^#\s]+(?:#.*)?",
+    "ssr": r"ssr://[^#\s]+(?:#.*)?",
+    "vmess": r"vmess://[^#\s]+(?:#.*)?",
+    "vless": r"vless://[^#\s]+(?:#.*)?",
+    "trojan": r"trojan://[^#\s]+(?:#.*)?",
+    "hysteria2": r"hysteria2://[^#\s]+(?:#.*)?"
 }
 
 # --- 缓存处理函数 ---
@@ -152,7 +153,7 @@ async def fetch_url(url, http_client, playwright_instance: Playwright):
             browser = await playwright_instance.chromium.launch() # 启动 Chromium 浏览器
             page = await browser.new_page()
             # 设置 Playwright 的 User-Agent 与随机生成的一致
-            await page.set_extra_http_headers(get_random_headers()) 
+            await page.set_extra_http_headers(get_random_headers())
             
             full_url = f"https://{url}" # 优先尝试 HTTPS，因为 Playwright 通常处理得更好
             try:
@@ -214,85 +215,208 @@ def is_valid_ip(address):
     except ValueError:
         return False
 
-def validate_node(protocol, data):
-    logger.debug(f"正在验证 {protocol} 节点数据: {data}")
-
-    if protocol == "hysteria2":
-        if not all(k in data for k in ['host', 'port']): return False
-        if not data['host'] or not data['port'] or not data['port'].isdigit(): return False
-        if not (re.match(r"^[a-zA-Z0-9\-\.]+$", data['host']) or is_valid_ip(data['host'])): return False
-        if not (1 <= int(data['port']) <= 65535): return False
-        return True
-    elif protocol == "vmess":
-        try:
-            decoded = base64.b64decode(data.get('data', '')).decode('utf-8', errors='ignore')
-            json_data = json.loads(decoded)
-            if not all(k in json_data for k in ['add', 'port', 'id']): return False
-            if not json_data['add'] or not json_data['port'] or not json_data['id']: return False
-            if not (re.match(r"^[a-zA-Z0-9\-\.]+$", json_data['add']) or is_valid_ip(json_data['add'])): return False
-            if not isinstance(json_data['port'], int) or not (1 <= json_data['port'] <= 65535): return False
-            if not re.match(r"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$", json_data['id']): return False
-            return True
-        except (base64.binascii.Error, json.JSONDecodeError) as e:
-            logger.debug(f"VMess 解码或 JSON 解析失败: {e}")
-            return False
-    elif protocol == "trojan":
-        if not all(k in data for k in ['password', 'host', 'port']): return False
-        if not data['password'] or not data['host'] or not data['port'] or not data['port'].isdigit(): return False
-        if not (re.match(r"^[a-zA-Z0-9\-\.]+$", data['host']) or is_valid_ip(data['host'])): return False
-        if not (1 <= int(data['port']) <= 65535): return False
-        return True
-    elif protocol == "ss":
-        if not all(k in data for k in ['method_password', 'host', 'port']): return False
-        if not data['method_password'] or not data['host'] or not data['port'] or not data['port'].isdigit(): return False
-        try:
-            decoded_mp = base64.b64decode(data['method_password']).decode('utf-8', errors='ignore')
-            if ':' not in decoded_mp: return False
-        except base64.binascii.Error as e:
-            logger.debug(f"SS method_password 解码失败: {e}")
-            return False
-        if not (re.match(r"^[a-zA-Z0-9\-\.]+$", data['host']) or is_valid_ip(data['host'])): return False
-        if not (1 <= int(data['port']) <= 65535): return False
-        return True
-    elif protocol == "ssr":
-        try:
-            decoded = base64.b64decode(data.get('data', '')).decode('utf-8', errors='ignore')
-            parts = decoded.split(':')
-            if len(parts) < 6: return False
-            if not (re.match(r"^[a-zA-Z0-9\-\.]+$", parts[0]) or is_valid_ip(parts[0])): return False
-            if not parts[1].isdigit() or not (1 <= int(parts[1]) <= 65535): return False
-            return True
-        except (base64.binascii.Error, IndexError) as e:
-            logger.debug(f"SSR 解码或格式错误: {e}")
-            return False
-    elif protocol == "vless":
-        if not all(k in data for k in ['uuid', 'host', 'port', 'type']): return False
-        if not data['uuid'] or not data['host'] or not data['port'] or not data['port'].isdigit() or not data['type']: return False
-        if not re.match(r"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$", data['uuid']): return False
-        if not (re.match(r"^[a-zA-Z0-9\-\.]+$", data['host']) or is_valid_ip(data['host'])): return False
-        if not (1 <= int(data['port']) <= 65535): return False
-        return True
+def validate_node(protocol, url_components):
+    # This validation is now less detailed, relying more on get_node_canonical_fingerprint
+    # to catch malformed URLs by returning None.
+    # We just do basic structural checks here.
+    
+    if protocol in ["ss", "ssr", "vmess", "vless", "trojan", "hysteria2"]:
+        # Simply check if the basic URL parsing worked and scheme matches
+        return url_components.scheme == protocol
     return False
+
+# 2. 新增节点规范化函数 get_node_canonical_fingerprint
+def get_node_canonical_fingerprint(node_url: str) -> str | None:
+    """
+    接收一个原始节点 URL，然后根据协议类型进行解析和规范化以生成唯一的指纹。
+
+    规范化规则：
+    - 忽略备注：统一移除 # 及其后的备注信息。
+    - SS 节点：解码 method_password 部分，并清理其中的潜在杂质（如 Cg== 导致的换行符）。
+    - VLESS/Trojan/Hysteria2 节点：解析 URL 中的查询参数，并对它们进行排序。
+    - SSR 节点：解码其 base64 数据并提取核心连接参数作为指纹。
+    - VMess 节点：解码其 base64 编码的 JSON 数据，并提取 add、port、id 等关键字段
+      以及排序后的关键可选参数（如 net, type, security, path 等）作为指纹。
+    - 如果节点无法被有效规范化（例如格式错误），该函数将返回 None。
+    """
+    
+    # 统一移除 # 及其后的备注信息
+    base_url_no_remark = node_url.split('#', 1)[0]
+
+    try:
+        parsed_url = urlparse(base_url_no_remark)
+        scheme = parsed_url.scheme
+
+        if not scheme:
+            return None # Must have a scheme
+
+        if scheme == "ss":
+            # Format: ss://base64_encoded_method_password@server:port
+            if not parsed_url.netloc:
+                return None
+            
+            # netloc is method_password_encoded@server:port
+            auth_and_host = parsed_url.netloc
+            
+            if '@' not in auth_and_host:
+                return None # Invalid SS format without @
+
+            method_password_encoded, server_port = auth_and_host.split('@', 1)
+            
+            # Decode method_password part
+            try:
+                # Add padding if necessary for base64 decoding
+                padded_method_password_encoded = method_password_encoded + '=' * (4 - len(method_password_encoded) % 4)
+                decoded_method_password = base64.b64decode(padded_method_password_encoded).decode('utf-8', errors='ignore').strip()
+            except Exception:
+                return None # Malformed base64
+            
+            # Clean potential impurities like newlines from Cg==
+            decoded_method_password = decoded_method_password.replace('\n', '').replace('\r', '')
+
+            # Reconstruct for fingerprint
+            return f"ss://{decoded_method_password}@{server_port}"
+
+        elif scheme == "ssr":
+            # Format: ssr://base64_encoded_params
+            encoded_params = base_url_no_remark[len("ssr://"):]
+            try:
+                padded_encoded_params = encoded_params + '=' * (4 - len(encoded_params) % 4)
+                decoded_params = base64.b64decode(padded_encoded_params).decode('utf-8', errors='ignore')
+            except Exception:
+                return None # Malformed base64
+
+            # SSR parameters are usually like server:port:protocol:method:obfs:password_base64/?params...
+            # Extract core connection parameters as fingerprint.
+            # We split by /? to ignore optional query parameters and remarks in the SSR payload itself.
+            core_params_part = decoded_params.split("/?")[0]
+            
+            # Further clean up password if it has base64 padding
+            parts = core_params_part.split(':')
+            if len(parts) >= 6:
+                # The 6th part is usually the base64 encoded password
+                try:
+                    password_encoded = parts[5]
+                    # Ensure it's padded correctly before decoding
+                    padded_password_encoded = password_encoded + '=' * (4 - len(password_encoded) % 4)
+                    decoded_password = base64.b64decode(padded_password_encoded.replace('-', '+').replace('_', '/')).decode('utf-8', errors='ignore')
+                    parts[5] = decoded_password.strip() # Remove padding and extra chars
+                except Exception:
+                    pass # Leave as is if decoding fails, for robustness
+
+            # Reconstruct the core part
+            return f"ssr://{':'.join(parts)}"
+
+        elif scheme == "vmess":
+            # Format: vmess://base64_encoded_json
+            encoded_json = base_url_no_remark[len("vmess://"):]
+            try:
+                padded_encoded_json = encoded_json + '=' * (4 - len(encoded_json) % 4)
+                decoded_json = base64.b64decode(padded_encoded_json).decode('utf-8', errors='ignore')
+                vmess_config = json.loads(decoded_json)
+            except Exception:
+                return None # Malformed base64 or JSON
+
+            # Extract essential fields
+            fingerprint_data = {
+                "add": vmess_config.get("add"),
+                "port": vmess_config.get("port"),
+                "id": vmess_config.get("id"),
+            }
+
+            # Sort key optional parameters for consistent fingerprint
+            # Common optional parameters in VMess config
+            optional_keys = ["net", "type", "security", "path", "host", "tls", "sni", "aid", "fp", "scy"]
+            optional_params = {}
+            for key in optional_keys:
+                if key in vmess_config and vmess_config[key] is not None:
+                    optional_params[key] = vmess_config[key]
+            
+            # Sort optional parameters by key for consistent representation
+            sorted_optional_params = sorted(optional_params.items())
+            
+            # Convert to a tuple for hashing and consistency if put into a larger structure
+            # For JSON dump, we just ensure original dict is built with sorted items.
+            for k, v in sorted_optional_params:
+                fingerprint_data[k] = v
+            
+            # Use JSON dump with sorted keys to create a consistent string representation
+            return f"vmess://{json.dumps(fingerprint_data, sort_keys=True)}"
+
+        elif scheme in ["vless", "trojan", "hysteria2"]:
+            # These protocols typically follow a standard URL structure with query parameters.
+            # Reconstruct the URL without fragment (remarks) but with sorted query parameters.
+            
+            # Components to keep: scheme, netloc (userinfo@host:port), path, and sorted query.
+            # We discard fragment and params as they are not typically for core deduplication.
+            
+            # parsed_url.query gives 'key1=val1&key2=val2'
+            query_params_list = parse_qs(parsed_url.query, keep_blank_values=True)
+            
+            # Convert to a list of (key, value) tuples and sort by key
+            sorted_query_params = []
+            for key in sorted(query_params_list.keys()):
+                for value in query_params_list[key]: # parse_qs returns lists of values
+                    sorted_query_params.append((key, value))
+            
+            # Re-encode sorted query parameters
+            sorted_query_string = urlencode(sorted_query_params)
+            
+            # Reconstruct the URL, including userinfo, host, port, path, and sorted query
+            # parsed_url.path might contain some parameters for VLESS, e.g., /?ed=2048
+            # So, we should keep it.
+            
+            # Building a canonical URL for fingerprinting.
+            # The netloc usually contains userinfo, host, and port.
+            # For VLESS, userinfo is UUID. For Trojan, it's password. For Hysteria2, it's ID:Password.
+            canonical_url_parts = [scheme, "://", parsed_url.netloc]
+            
+            if parsed_url.path:
+                canonical_url_parts.append(parsed_url.path)
+            
+            if sorted_query_string:
+                # If path contains query-like string, we must handle it.
+                # However, parsed_url.query should already separate true query from path.
+                # So, we just append '?' and sorted_query_string.
+                canonical_url_parts.append("?")
+                canonical_url_parts.append(sorted_query_string)
+            
+            return "".join(canonical_url_parts)
+            
+        else:
+            return None # Unsupported protocol
+
+    except Exception as e:
+        logger.debug(f"规范化节点 '{node_url}' 失败: {e}", exc_info=True)
+        return None
 
 # --- 节点解析与提取函数 ---
 def extract_nodes_from_text(text_content):
     extracted_nodes = set() 
 
     for protocol, regex_pattern in NODE_REGEXES.items():
+        # Use re.finditer to get all matches
         for match in re.finditer(regex_pattern, text_content):
-            matched_data = match.groupdict()
-            if validate_node(protocol, matched_data):
-                # 直接添加完整的原始匹配字符串，不再修改名称
-                extracted_nodes.add(match.group(0))
+            node_url = match.group(0) # Get the full matched URL string
+            try:
+                # Perform a basic parse to validate the scheme before deeper validation
+                parsed_node = urlparse(node_url)
+                if parsed_node.scheme == protocol: # Ensure the matched scheme is correct
+                    extracted_nodes.add(node_url)
+            except Exception as e:
+                logger.debug(f"URL解析失败 for {node_url}: {e}")
 
     # Try parsing Base64 encoded content
     try:
+        # This regex looks for base64-like blocks. It's broad.
+        # It needs to be careful not to match too many random strings.
+        # Adding a minimum length can help.
         base64_matches = re.findall(r"(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?", text_content)
         for b64_block in base64_matches:
-            if len(b64_block) > 16 and len(b64_block) % 4 == 0: 
+            if len(b64_block) > 16 and len(b64_block) % 4 == 0: # Minimum length to avoid false positives
                 try:
                     decoded_content = base64.b64decode(b64_block).decode('utf-8', errors='ignore')
-                    extracted_nodes.update(extract_nodes_from_text(decoded_content))
+                    extracted_nodes.update(extract_nodes_from_text(decoded_content)) # Recursive call
                 except Exception as e:
                     logger.debug(f"Base64 解码或递归处理失败: {e}, 块: {b64_block[:50]}...")
     except Exception as e:
@@ -368,6 +492,7 @@ async def process_url(url, http_client, playwright_instance: Playwright, process
         href = a_tag['href']
         parsed_href = urlparse(href)
         if parsed_href.netloc:
+            # Check if link is a potential subscription or related to the same domain
             if "subscribe" in href or "config" in href or "proxy" in href or parsed_href.netloc == urlparse(f"http://{url}").netloc:
                 domain_match = re.match(r"(?:https?://)?(?:www\.)?([^/]+)", parsed_href.netloc)
                 if domain_match:
@@ -477,9 +602,13 @@ async def main():
                     
                     # 将这些节点添加到全局唯一节点字典中进行去重
                     for node in nodes_from_tree:
-                        key_for_dedup = node.split('#', 1)[0] # 获取 # 之前的部分作为去重键
-                        if key_for_dedup not in global_unique_nodes_map_ref:
-                            global_unique_nodes_map_ref[key_for_dedup] = node # 保留第一个遇到的完整节点字符串
+                        # 3. 修改全局去重逻辑，调用 get_node_canonical_fingerprint
+                        canonical_fingerprint = get_node_canonical_fingerprint(node)
+                        if canonical_fingerprint is not None:
+                            if canonical_fingerprint not in global_unique_nodes_map_ref:
+                                global_unique_nodes_map_ref[canonical_fingerprint] = node # 保留第一个遇到的完整节点字符串
+                        else:
+                            logger.debug(f"节点 '{node}' 无法生成规范化指纹，跳过去重。")
                     return nodes_from_tree
 
             tasks = [bounded_process_url(url, http_client, p, processed_urls, all_nodes_count, global_unique_nodes_map, semaphore) for url in valid_urls_after_dns]
