@@ -11,7 +11,6 @@ import csv
 import random
 import hashlib
 import ipaddress
-from playwright.async_api import async_playwright, TimeoutError as PlaywrightTimeoutError
 import logging
 from dataclasses import dataclass, field
 from typing import List, Set, Dict, Optional, Tuple
@@ -25,8 +24,8 @@ class Config:
     CACHE_DIR: str = "cache"  # 缓存目录
     CACHE_EXPIRY_HOURS: int = 108  # 缓存有效期（小时）
     MAX_DEPTH: int = 1  # 最大递归深度
-    CONCURRENT_REQUEST_LIMIT: int = 2  # 并发请求限制
-    REQUEST_TIMEOUT: int = 60000  # 请求超时时间（毫秒，60秒）
+    CONCURRENT_REQUEST_LIMIT: int = 5  # 并发请求限制 (httpx 可以适当调高)
+    REQUEST_TIMEOUT: int = 30000  # 请求超时时间（毫秒，30秒）
     USER_AGENTS: List[str] = field(default_factory=lambda: [
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36",
         "Mozilla/50 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Mobile/15E148 Safari/604.1",
@@ -44,8 +43,8 @@ class Config:
     })
     CONTENT_TAGS: List[str] = field(default_factory=lambda: ['pre', 'code', 'textarea', 'div', 'p', 'body', 'span', 'a', 'script', 'input'])
     CONTENT_ATTRIBUTES: List[str] = field(default_factory=lambda: ['value', 'data', 'href', 'content', 'src', 'data-config', 'data-nodes'])
-    # 新增：是否使用 Playwright，如果为 False 将尝试使用 httpx
-    USE_PLAYWRIGHT: bool = True
+    # 彻底禁用 Playwright，只使用 httpx
+    USE_PLAYWRIGHT: bool = False
 
 # 配置日志
 logging.basicConfig(
@@ -123,98 +122,7 @@ def get_safe_filename(url: str) -> str:
 
 # --- 核心抓取和解析逻辑 ---
 
-async def fetch_url_content_with_playwright(url: str, semaphore: asyncio.Semaphore, config: Config) -> Optional[Tuple[str, str]]:
-    """使用Playwright异步获取URL内容，自动处理无协议头的URL，无重试。"""
-    # Normalize URL for consistent caching and fetching
-    if not url.startswith(("http://", "https://")):
-        https_url = f"https://{url}"
-        http_url = f"http://{url}"
-    else:
-        https_url = url
-        http_url = url.replace("https://", "http://") if url.startswith("https://") else url.replace("http://", "https://")
-
-    # Try both HTTPS and HTTP, preferring HTTPS
-    for full_url in [https_url, http_url]:
-        cache_path = get_cache_path(full_url, config)
-
-        # Check cache first
-        if os.path.exists(cache_path):
-            try:
-                async with aiofiles.open(cache_path, 'r', encoding='utf-8') as f:
-                    cache_data = json.loads(await f.read())
-                    cached_timestamp = datetime.fromisoformat(cache_data['timestamp'])
-                    if datetime.now() - cached_timestamp < timedelta(hours=config.CACHE_EXPIRY_HOURS):
-                        logger.debug(f"使用缓存内容: {full_url}")
-                        return cache_data['content'], full_url
-            except (json.JSONDecodeError, KeyError, Exception) as e:
-                logger.warning(f"缓存文件 {cache_path} 损坏或格式错误: {e}，删除并重新获取")
-                if os.path.exists(cache_path):
-                    os.remove(cache_path)
-
-        # Fetch live content if not in cache or cache is invalid/expired
-        async with semaphore:
-            browser = None
-            context = None
-            try:
-                await asyncio.sleep(random.uniform(0.5, 2.5)) # Polite delay
-                async with async_playwright() as p:
-                    browser = await p.chromium.launch(headless=True)
-                    context = await browser.new_context(
-                        user_agent=random.choice(config.USER_AGENTS),
-                        ignore_https_errors=True
-                    )
-                    page = await context.new_page()
-
-                    # 修复：将 lambda 替换为 async def 函数
-                    async def _route_interception_handler(route):
-                        if route.request.resource_type in ["image", "stylesheet", "font"]:
-                            await route.abort()
-                        else:
-                            await route.continue_() # 注意这里是 continue_ 而不是 continue
-
-                    await page.route("**/*", _route_interception_handler)
-
-                    try:
-                        await page.goto(full_url, wait_until='domcontentloaded', timeout=config.REQUEST_TIMEOUT) # 尝试更快加载事件
-                        await page.wait_for_timeout(3000) # 等待少量动态内容，可调
-                        content = await page.content()
-                        cache_data = {
-                            'timestamp': datetime.now().isoformat(),
-                            'content_hash': get_url_content_hash(content),
-                            'content': content
-                        }
-                        async with aiofiles.open(cache_path, 'w', encoding='utf-8') as f:
-                            await f.write(json.dumps(cache_data))
-                        logger.info(f"成功获取: {full_url}")
-                        return content, full_url
-                    except PlaywrightTimeoutError:
-                        logger.warning(f"获取 {full_url} 超时，尝试获取部分内容")
-                        content = await page.content()
-                        if content:
-                            logger.info(f"成功获取部分内容: {full_url}")
-                            cache_data = {
-                                'timestamp': datetime.now().isoformat(),
-                                'content_hash': get_url_content_hash(content),
-                                'content': content
-                            }
-                            async with aiofiles.open(cache_path, 'w', encoding='utf-8') as f:
-                                await f.write(json.dumps(cache_data))
-                            return content, full_url
-                        logger.warning(f"无法获取任何内容: {full_url}")
-                        continue # Try the next protocol (HTTP if HTTPS failed, or vice versa)
-                    except Exception as e:
-                        logger.error(f"获取 {full_url} 失败: {e}，尝试下一个协议")
-                        continue # Try the next protocol
-            except Exception as e:
-                logger.error(f"Playwright 环境或启动失败: {e}，尝试下一个协议")
-                continue # Try the next protocol
-            finally:
-                if context:
-                    await context.close()
-                if browser:
-                    await browser.close()
-    logger.error(f"所有协议尝试失败: {url}")
-    return None, url # Return None if all attempts fail
+# 移除 fetch_url_content_with_playwright 函数，因为不再使用 Playwright
 
 async def fetch_url_content_with_httpx(url: str, semaphore: asyncio.Semaphore, config: Config) -> Optional[Tuple[str, str]]:
     """使用 httpx 异步获取 URL 内容，自动处理无协议头的 URL。"""
@@ -282,7 +190,6 @@ def extract_nodes_from_text(text: str, config: Config) -> Set[str]:
 
 def clean_node(node: str) -> Optional[str]:
     """清洗节点字符串，移除多余字符并验证。"""
-    # **重要：已移除此处导致无限递归的 `node = clean_node(node)`**
     if not node or len(node) < 10:
         logger.debug(f"节点过短或为空，已弃用: {node[:50]}...")
         return None
@@ -510,11 +417,8 @@ async def process_url(url: str, processed_urls: Set[str], all_nodes: Dict[str, S
 
     logger.info(f"处理URL (深度 {depth}): {url}")
     
-    # 根据配置选择使用 Playwright 或 httpx
-    if config.USE_PLAYWRIGHT:
-        content, resolved_url = await fetch_url_content_with_playwright(url, semaphore, config)
-    else:
-        content, resolved_url = await fetch_url_content_with_httpx(url, semaphore, config)
+    # 始终使用 httpx
+    content, resolved_url = await fetch_url_content_with_httpx(url, semaphore, config)
     
     if not content:
         logger.warning(f"无法获取内容: {url}，跳过节点提取")
@@ -525,7 +429,6 @@ async def process_url(url: str, processed_urls: Set[str], all_nodes: Dict[str, S
         all_nodes[resolved_url] = set()
 
     for node in nodes:
-        # 修正：调用 clean_node 代替 validate_node
         valid_node = clean_node(node) 
         if valid_node:
             all_nodes[resolved_url].add(valid_node)
