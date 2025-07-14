@@ -282,15 +282,8 @@ def extract_nodes_from_text(text_content):
         for match in re.finditer(regex_pattern, text_content):
             matched_data = match.groupdict()
             if validate_node(protocol, matched_data):
-                node_string = match.group(0)
-                if '#' in node_string:
-                    parts = node_string.split('#')
-                    if len(parts) > 1:
-                        name = parts[-1]
-                        if len(name) > 5:
-                            name = name[:5]
-                        node_string = '#'.join(parts[:-1]) + '#' + name
-                extracted_nodes.add(node_string)
+                # 直接添加完整的原始匹配字符串，不再修改名称
+                extracted_nodes.add(match.group(0))
 
     # Try parsing Base64 encoded content
     try:
@@ -352,7 +345,8 @@ def parse_and_extract_nodes(content):
 
     return nodes_from_html 
 
-async def process_url(url, http_client, playwright_instance: Playwright, processed_urls, all_nodes_count, global_unique_nodes):
+# process_url 函数不再直接修改 global_unique_nodes，而是返回它收集到的节点
+async def process_url(url, http_client, playwright_instance: Playwright, processed_urls, all_nodes_count):
     if url in processed_urls:
         logger.debug(f"URL '{url}' 已经处理过，跳过。")
         return set() # Return an empty set, as no new nodes will be processed from this URL
@@ -386,10 +380,9 @@ async def process_url(url, http_client, playwright_instance: Playwright, process
     for link_to_process in found_links:
         if link_to_process not in processed_urls:
             logger.info(f"发现新链接，准备递归处理: {link_to_process}")
-            recursive_nodes_from_child = await process_url(link_to_process, http_client, playwright_instance, processed_urls, all_nodes_count, global_unique_nodes)
+            # 递归调用 process_url，并将返回的节点添加到当前 URL 的节点集合中
+            recursive_nodes_from_child = await process_url(link_to_process, http_client, playwright_instance, processed_urls, all_nodes_count)
             collected_nodes_for_this_url_tree.update(recursive_nodes_from_child)
-
-    global_unique_nodes.update(collected_nodes_for_this_url_tree)
 
     nodes_count = len(collected_nodes_for_this_url_tree) 
     logger.info(f"从 {url} (及其子链接) 提取了 {nodes_count} 个有效节点。")
@@ -470,28 +463,38 @@ async def main():
 
     processed_urls = set()
     all_nodes_count = {} 
-    global_unique_nodes = set() 
+    # 使用字典进行全局去重，键是节点核心部分，值是完整的节点字符串
+    global_unique_nodes_map = {} 
 
     async with async_playwright() as p:
         async with httpx.AsyncClient(http2=True, follow_redirects=True) as http_client:
             semaphore = asyncio.Semaphore(MAX_CONCURRENT_REQUESTS)
             
-            async def bounded_process_url(url, http_client, playwright_instance, processed_urls, all_nodes_count, global_unique_nodes, semaphore):
+            async def bounded_process_url(url, http_client, playwright_instance, processed_urls, all_nodes_count, global_unique_nodes_map_ref, semaphore):
                 async with semaphore:
-                    return await process_url(url, http_client, playwright_instance, processed_urls, all_nodes_count, global_unique_nodes)
+                    # process_url 返回从当前 URL 及其子链接收集到的节点
+                    nodes_from_tree = await process_url(url, http_client, playwright_instance, processed_urls, all_nodes_count)
+                    
+                    # 将这些节点添加到全局唯一节点字典中进行去重
+                    for node in nodes_from_tree:
+                        key_for_dedup = node.split('#', 1)[0] # 获取 # 之前的部分作为去重键
+                        if key_for_dedup not in global_unique_nodes_map_ref:
+                            global_unique_nodes_map_ref[key_for_dedup] = node # 保留第一个遇到的完整节点字符串
+                    return nodes_from_tree
 
-            tasks = [bounded_process_url(url, http_client, p, processed_urls, all_nodes_count, global_unique_nodes, semaphore) for url in valid_urls_after_dns]
+            tasks = [bounded_process_url(url, http_client, p, processed_urls, all_nodes_count, global_unique_nodes_map, semaphore) for url in valid_urls_after_dns]
             
             logger.info(f"即将开始处理 {len(valid_urls_after_dns)} 个 URL 的抓取任务，最大并发数：{MAX_CONCURRENT_REQUESTS}")
             await asyncio.gather(*tasks)
 
     # --- 保存全局唯一节点列表 ---
     all_unique_nodes_file = os.path.join(OUTPUT_DIR, "all_unique_nodes.txt")
-    if global_unique_nodes:
+    if global_unique_nodes_map: # 现在使用字典检查是否有唯一节点
         async with aiofiles.open(all_unique_nodes_file, 'w', encoding='utf-8') as f:
-            for node in sorted(list(global_unique_nodes)): 
+            # 遍历字典的值（即完整的唯一节点字符串），并排序写入文件
+            for node in sorted(global_unique_nodes_map.values()): 
                 await f.write(node + '\n')
-        logger.info(f"所有 {len(global_unique_nodes)} 个唯一节点已保存到 {all_unique_nodes_file}。")
+        logger.info(f"所有 {len(global_unique_nodes_map)} 个唯一节点已保存到 {all_unique_nodes_file}。")
     else:
         logger.info("未找到任何唯一节点，跳过保存 all_unique_nodes.txt 文件。")
 
