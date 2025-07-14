@@ -17,7 +17,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         persist-credentials: true
-        fetch-depth: 0
+        fetch-depth: 0 # Ensure full history for rebase
 
     - name: Set up Python
       uses: actions/setup-python@v5
@@ -38,14 +38,11 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        # Playwright 会检查已存在的驱动，如果没有，它会下载
         playwright install chromium --with-deps # --with-deps 确保安装所有依赖
-      # 确保你的 requirements.txt 中包含了 playwright
 
     - name: Run proxy scraper
       run: |
         python proxy_scraper.py
-        # 添加 ls 命令来验证文件是否生成，这对于调试很有帮助
         echo "Listing contents of data/ directory after script run:"
         ls -l data/
         echo "Listing contents of cache/ directory:"
@@ -56,15 +53,16 @@ jobs:
         git config --global user.name 'github-actions[bot]'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
         
-        # 总是尝试添加 data 目录中的所有文件（包括新文件和修改过的文件）到暂存区
         git add data/
         
-        # 检查暂存区是否有任何待提交的更改
-        # 如果暂存区是空的 (exit code 0), 说明没有新的或修改过的文件需要提交
+        # Check if there are any staged changes
         if git diff --cached --exit-code --quiet; then
           echo "No changes in data/ directory to commit. Skipping commit."
         else
-          # 如果暂存区有更改 (exit code non-zero), 则执行提交和推送
+          echo "Changes detected. Attempting to commit and push."
+          # Fetch the latest remote changes and rebase the current branch
+          git pull --rebase origin main
+          # Now commit and push
           git commit -m "chore: Auto-update collected proxy data [skip ci]"
           git push
           echo "Changes committed and pushed."
