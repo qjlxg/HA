@@ -164,8 +164,15 @@ async def fetch_url_content_with_playwright(url: str, semaphore: asyncio.Semapho
                         ignore_https_errors=True
                     )
                     page = await context.new_page()
-                    # 优化：禁用不必要的资源加载
-                    await page.route("**/*", lambda route: route.abort() if route.request.resource_type in ["image", "stylesheet", "font"] else route.continue())
+
+                    # 修复：将 lambda 替换为 async def 函数
+                    async def _route_interception_handler(route):
+                        if route.request.resource_type in ["image", "stylesheet", "font"]:
+                            await route.abort()
+                        else:
+                            await route.continue_() # 注意这里是 continue_ 而不是 continue
+
+                    await page.route("**/*", _route_interception_handler)
 
                     try:
                         await page.goto(full_url, wait_until='domcontentloaded', timeout=config.REQUEST_TIMEOUT) # 尝试更快加载事件
