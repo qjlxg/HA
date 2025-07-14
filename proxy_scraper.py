@@ -24,7 +24,7 @@ class Config:
     CACHE_DIR: str = "cache"
     CACHE_EXPIRY_HOURS: int = 24
     MAX_DEPTH: int = 3
-    CONCURRENT_REQUEST_LIMIT: int = 2
+    CONCURRENT_REQUEST_LIMIT: int = 1
     # 移除了 REQUEST_TIMEOUT 和 MAX_RETRIES，因为不再进行重试
     USER_AGENTS: List[str] = field(default_factory=lambda: [
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36",
