@@ -13,16 +13,24 @@ import random
 import hashlib
 import ipaddress
 from playwright.async_api import async_playwright
+import logging # 引入 logging 模块
 
 # --- 配置 ---
 DATA_DIR = "data"
 CACHE_DIR = "cache"
 CACHE_EXPIRY_HOURS = 24  # 缓存有效期
 MAX_DEPTH = 3            # 递归抓取最大深度
-# Playwright 启动浏览器需要更多资源，并发限制需要更保守
 CONCURRENT_REQUEST_LIMIT = 2 # 限制同时进行的请求数量，推荐Playwright保持较低并发
 
-# 模拟不同设备的用户代理，确保 Playwright 也能使用
+# 配置日志
+logging.basicConfig(
+    level=logging.INFO, # 默认只显示 INFO 级别及以上的日志 (INFO, WARNING, ERROR, CRITICAL)
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
+# 如果需要看详细的“丢弃节点”警告，可以改成 logging.DEBUG 或 logging.WARNING
+# logging.getLogger().setLevel(logging.WARNING) 
+
 USER_AGENTS = [
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36",
     "Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Mobile/15E148 Safari/604.1",
@@ -57,10 +65,10 @@ async def read_sources_list(file_path="sources.list"):
         async with aiofiles.open(file_path, 'r') as f:
             async for line in f:
                 line = line.strip()
-                if line and not line.startswith('#'): # 忽略空行和注释行
+                if line and not line.startswith('#'):
                     urls.append(line)
     except FileNotFoundError:
-        print(f"错误: 文件 {file_path} 未找到。")
+        logging.error(f"文件 {file_path} 未找到。")
     return urls
 
 def get_cache_path(url):
@@ -75,7 +83,6 @@ def get_url_content_hash(content):
 def decode_base64_content(content):
     """尝试解码 Base64 内容。"""
     try:
-        # Base64 strings are often padded with '='
         return base64.b64decode(content + '=' * (-len(content) % 4)).decode('utf-8')
     except Exception:
         return None
@@ -92,13 +99,12 @@ def is_valid_ip(ip_string):
 
 async def fetch_url_content(url: str, semaphore: asyncio.Semaphore):
     """
-    安全地异步获取 URL 内容，优先尝试 HTTP，失败后尝试 HTTPS。
-    加入信号量限制并发请求，使用 Playwright 模拟浏览器行为。
+    安全地异步获取 URL 内容，加入信号量限制并发请求，使用 Playwright 模拟浏览器行为。
     """
     schemes = ["http://", "https://"]
     
-    async with semaphore: # 限制并发
-        await asyncio.sleep(random.uniform(1.0, 4.0)) # 增加延迟范围，给浏览器更多时间加载
+    async with semaphore:
+        await asyncio.sleep(random.uniform(1.0, 4.0))
 
         for scheme in schemes:
             full_url = f"{scheme}{url}" if not url.startswith(("http://", "https://")) else url
@@ -111,14 +117,14 @@ async def fetch_url_content(url: str, semaphore: asyncio.Semaphore):
                         cache_data = json.load(f)
                         cached_timestamp = datetime.fromisoformat(cache_data['timestamp'])
                         if datetime.now() - cached_timestamp < timedelta(hours=CACHE_EXPIRY_HOURS):
-                            # print(f"从缓存读取: {full_url}") # 减少日志输出
+                            # logging.info(f"从缓存读取: {full_url}") # 进一步减少日志
                             return cache_data['content']
                     except (json.JSONDecodeError, KeyError) as e:
-                        print(f"警告: 缓存文件 {cache_path} 损坏或格式错误: {e}. 删除并重新获取。")
-                        os.remove(cache_path) # 删除损坏的缓存
+                        logging.warning(f"缓存文件 {cache_path} 损坏或格式错误: {e}. 删除并重新获取。")
+                        os.remove(cache_path)
 
             try:
-                # print(f"尝试使用 Playwright 获取: {full_url}") # 减少日志输出
+                # logging.info(f"尝试使用 Playwright 获取: {full_url}") # 进一步减少日志
                 async with async_playwright() as p:
                     browser = await p.chromium.launch(headless=True)
                     context = await browser.new_context(user_agent=random.choice(USER_AGENTS))
@@ -137,10 +143,10 @@ async def fetch_url_content(url: str, semaphore: asyncio.Semaphore):
                     }
                     with open(cache_path, 'w') as f:
                         json.dump(cache_data, f)
-                    print(f"成功获取: {full_url}") # 只在成功时打印
+                    logging.info(f"成功获取: {full_url}") # 只在成功时打印 INFO
                     return content
             except Exception as e:
-                print(f"获取 {full_url} 失败: {e}") # 失败时打印
+                logging.error(f"获取 {full_url} 失败: {e}") # 失败时打印 ERROR
                 continue
         return None
 
@@ -297,7 +303,7 @@ async def process_url(url: str, processed_urls: set, all_collected_nodes: dict, 
         return
 
     processed_urls.add(url)
-    # print(f"开始处理 URL: {url} (深度: {current_depth})") # 减少日志输出
+    # logging.info(f"开始处理 URL: {url}") # 减少日志输出
     
     content = await fetch_url_content(url, semaphore)
 
@@ -319,7 +325,9 @@ async def process_url(url: str, processed_urls: set, all_collected_nodes: dict, 
             
             validated_nodes_for_url.append(processed_node)
         else:
-            print(f"警告: 丢弃无效或不完整的节点: {node[:min(len(node), 100)]}...") # 只在丢弃时打印警告
+            # logging.warning(f"丢弃无效或不完整的节点: {node[:min(len(node), 100)]}...") # 调整为 DEBUG 级别，默认不显示
+            logging.debug(f"丢弃无效或不完整的节点: {node[:min(len(node), 100)]}...") # 使用 debug 级别，默认不显示
+            pass # 不打印此警告
 
     if url not in all_collected_nodes:
         all_collected_nodes[url] = set()
@@ -335,10 +343,13 @@ async def process_url(url: str, processed_urls: set, all_collected_nodes: dict, 
 
 async def main():
     """主函数，协调抓取和保存过程。"""
+    logging.info("开始执行代理抓取任务") # 任务开始时打印
     source_urls = await read_sources_list()
     if not source_urls:
-        print("未找到任何要处理的 URL。请检查 sources.list 文件。")
+        logging.error("未找到任何要处理的 URL。请检查 sources.list 文件。")
         return
+
+    logging.info(f"从 sources.list 读取了 {len(source_urls)} 个 URL") # 打印读取数量
 
     all_collected_nodes_by_url = {} 
     processed_urls = set()
@@ -346,23 +357,25 @@ async def main():
     semaphore = asyncio.Semaphore(CONCURRENT_REQUEST_LIMIT)
     
     # 开始处理所有源 URL
-    print("开始从 sources.list 读取并处理 URL...")
-    tasks = [process_url(url, processed_urls, all_collected_nodes_by_url, semaphore) for url in source_urls]
+    logging.info("开始处理 URLs...")
+    tasks = [process_url(url, processed_nodes, all_collected_nodes_by_url, semaphore) for url in source_urls]
     await asyncio.gather(*tasks)
-    print("所有 URL 处理完毕。")
+    logging.info("所有 URL 处理完毕。")
 
     # 保存每个原始 URL 获取到的所有节点（包括递归抓取到的）
-    print(f"开始保存节点到 {DATA_DIR}/ 目录...")
+    logging.info(f"开始保存节点到 {DATA_DIR}/ 目录...")
     for url, nodes_set in all_collected_nodes_by_url.items():
         if nodes_set:
             safe_url_name = re.sub(r'[^a-zA-Z0-9_\-.]', '_', url)
             output_file_path = os.path.join(DATA_DIR, f"{safe_url_name}.txt")
             async with aiofiles.open(output_file_path, 'w') as f:
                 await f.write('\n'.join(sorted(list(nodes_set))))
-            print(f"已保存 {len(nodes_set)} 个节点，来源: {url}") # 简化日志
+            logging.info(f"已保存 {len(nodes_set)} 个节点，来源: {url}")
         else:
-            print(f"注意: URL {url} 未找到有效节点。") # 提示未找到节点
-    print("节点保存完成。")
+            # logging.info(f"URL {url} 未解析到任何节点，未创建/清空独立节点文件。") # 调整为 DEBUG 级别，默认不显示
+            logging.debug(f"URL {url} 未解析到任何节点，未创建/清空独立节点文件。") # 使用 debug 级别，默认不显示
+
+    logging.info("节点保存完成。")
 
     # 统计节点数量并保存为 CSV
     csv_file_path = os.path.join(DATA_DIR, "node_counts.csv")
@@ -371,7 +384,7 @@ async def main():
         writer.writerow(["URL", "Node Count"])
         for url, nodes_set in all_collected_nodes_by_url.items():
             writer.writerow([url, len(nodes_set)])
-    print(f"节点统计已保存到 {csv_file_path}")
+    logging.info(f"节点统计已保存到 {csv_file_path}")
 
 if __name__ == "__main__":
     asyncio.run(main())
