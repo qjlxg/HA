@@ -1,3 +1,4 @@
+
 import asyncio
 import aiofiles
 import re
@@ -15,7 +16,7 @@ import logging
 from dataclasses import dataclass, field
 from typing import List, Set, Dict, Optional, Tuple
 from urllib.parse import urlparse, urljoin
-import httpx # 导入 httpx
+import httpx
 
 # --- 配置 ---
 @dataclass
@@ -24,11 +25,11 @@ class Config:
     CACHE_DIR: str = "cache"  # 缓存目录
     CACHE_EXPIRY_HOURS: int = 108  # 缓存有效期（小时）
     MAX_DEPTH: int = 1  # 最大递归深度
-    CONCURRENT_REQUEST_LIMIT: int = 5  # 并发请求限制 (httpx 可以适当调高)
-    REQUEST_TIMEOUT: int = 30000  # 请求超时时间（毫秒，30秒）
+    CONCURRENT_REQUEST_LIMIT: int = 5  # 并发请求限制
+    REQUEST_TIMEOUT: int = 60000  # 请求超时时间（毫秒，60秒）
     USER_AGENTS: List[str] = field(default_factory=lambda: [
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36",
-        "Mozilla/50 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Mobile/15E148 Safari/604.1",
+        "Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Mobile/15E148 Safari/604.1",
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36",
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36 Edg/100.0.1185.39",
         "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36 OPR/86.0.4363.32",
@@ -43,8 +44,6 @@ class Config:
     })
     CONTENT_TAGS: List[str] = field(default_factory=lambda: ['pre', 'code', 'textarea', 'div', 'p', 'body', 'span', 'a', 'script', 'input'])
     CONTENT_ATTRIBUTES: List[str] = field(default_factory=lambda: ['value', 'data', 'href', 'content', 'src', 'data-config', 'data-nodes'])
-    # 彻底禁用 Playwright，只使用 httpx
-    USE_PLAYWRIGHT: bool = False
 
 # 配置日志
 logging.basicConfig(
@@ -88,10 +87,8 @@ def decode_base64_content(content: str, max_recursion: int = 5) -> Optional[str]
         logger.debug("达到Base64解码最大递归深度，停止解码")
         return None
     try:
-        # Pad content to be a multiple of 4 characters
         decoded_bytes = base64.b64decode(content + '=' * (-len(content) % 4), validate=True)
         decoded_str = decoded_bytes.decode('utf-8', errors='ignore')
-        # Check if the decoded string itself looks like Base64 (simple heuristic)
         if re.fullmatch(r'^(?:[A-Za-z0-9+/]{4})+(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$', decoded_str.strip()):
             logger.debug(f"发现嵌套Base64，尝试进一步解码: {decoded_str[:50]}...")
             nested_decoded = decode_base64_content(decoded_str, max_recursion - 1)
@@ -113,20 +110,154 @@ def get_safe_filename(url: str) -> str:
     """从URL提取域名作为文件名，清理特殊字符。"""
     parsed_url = urlparse(url if url.startswith(("http://", "https://")) else f"https://{url}")
     netloc = parsed_url.netloc or url
-    # 清理域名中的特殊字符，保留字母、数字、连字符和点号
     safe_netloc = re.sub(r'[^a-zA-Z0-9\-\.]', '_', netloc)
-    # 移除多余的点号和下划线
     safe_netloc = re.sub(r'\.+', '.', safe_netloc)
     safe_netloc = re.sub(r'_+', '_', safe_netloc).strip('_')
     return f"{safe_netloc}.txt"
 
+def extract_node_key(node: str) -> Optional[Tuple[str, str, str, int, str]]:
+    """提取节点的关键字段用于去重：协议、UUID、主机、端口、SNI。"""
+    try:
+        parsed = urlparse(node)
+        protocol = parsed.scheme  # trojan 或 vless
+        uuid = parsed.username
+        host = parsed.hostname
+        port = parsed.port or (443 if parsed.scheme == 'https' else 80)
+        query_params = dict(re.findall(r'(\w+)=([^&]+)', parsed.query))
+        sni = query_params.get('sni', '')
+        return (protocol, uuid, host, port, sni)
+    except Exception as e:
+        logger.debug(f"解析节点 {node[:50]}... 失败，跳过去重: {e}")
+        return None
+
+def clean_node(node: str) -> Optional[str]:
+    """清洗节点字符串，移除多余字符并验证。"""
+    node = node.strip()
+    node = re.sub(r'\s+', '', node)
+    node = re.sub(r'[\n\r]+', '', node)
+    if not node or len(node) < 10:
+        logger.debug(f"节点过短或为空，已弃用: {node[:50]}...")
+        return None
+
+    def validate_host_port(host: str, port_str: str) -> bool:
+        if not (host and port_str and port_str.isdigit()):
+            return False
+        if not is_valid_ip(host) and not re.match(r'^[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,}(?:\.[a-zA-Z]{2,})*$', host):
+            return False
+        port = int(port_str)
+        return 1 <= port <= 65535
+
+    try:
+        if node.startswith("hysteria2://"):
+            parts = node[len("hysteria2://"):].split('?')
+            if len(parts) < 1:
+                logger.debug(f"Hysteria2节点缺少地址部分，已弃用: {node[:50]}...")
+                return None
+            host_port = parts[0].split(':')
+            if len(host_port) != 2:
+                logger.debug(f"Hysteria2节点地址格式错误，已弃用: {node[:50]}...")
+                return None
+            if validate_host_port(host_port[0], host_port[1]) and 'password' in node:
+                return node
+            logger.debug(f"Hysteria2节点缺少密码或主机无效，已弃用: {node[:50]}...")
+            return None
+
+        elif node.startswith("vmess://"):
+            decoded = decode_base64_content(node[len("vmess://"):])
+            if not decoded:
+                logger.debug(f"VMess节点Base64解码失败，已弃用: {node[:50]}...")
+                return None
+            try:
+                data = json.loads(decoded)
+                if all(k in data for k in ['v', 'ps', 'add', 'port', 'id']) and validate_host_port(data['add'], str(data['port'])):
+                    return node
+                logger.debug(f"VMess节点缺少必要字段或主机无效，已弃用: {node[:50]}...")
+                return None
+            except json.JSONDecodeError:
+                logger.debug(f"VMess节点JSON解析失败，已弃用: {node[:50]}...")
+                return None
+
+        elif node.startswith("trojan://"):
+            parts = node[len("trojan://"):].split('@')
+            if len(parts) < 2:
+                logger.debug(f"Trojan节点缺少密码或地址，已弃用: {node[:50]}...")
+                return None
+            password_part = parts[0]
+            host_port_part = parts[1].split('#')[0].split('?')[0]
+            host_port = host_port_part.split(':')
+            if len(host_port) != 2:
+                logger.debug(f"Trojan节点地址格式错误，已弃用: {node[:50]}...")
+                return None
+            if password_part and validate_host_port(host_port[0], host_port[1]):
+                return node
+            logger.debug(f"Trojan节点密码或主机无效，已弃用: {node[:50]}...")
+            return None
+
+        elif node.startswith("ss://"):
+            encoded_str = node[len("ss://"):].split('#')[0].split('?')[0]
+            if '@' not in encoded_str:
+                decoded = decode_base64_content(encoded_str)
+                if not decoded:
+                    logger.debug(f"SS节点Base64解码失败，已弃用: {node[:50]}...")
+                    return None
+                parts = decoded.split('@')
+            else:
+                parts = encoded_str.split('@')
+            if len(parts) < 2:
+                logger.debug(f"SS节点格式错误，缺少加密或地址，已弃用: {node[:50]}...")
+                return None
+            method_password_part, host_port_part = parts
+            try:
+                method, password = method_password_part.split(':', 1)
+                host, port = host_port_part.split(':', 1)
+                if method and password and validate_host_port(host, port):
+                    return node
+                logger.debug(f"SS节点加密方式、密码或主机无效，已弃用: {node[:50]}...")
+                return None
+            except ValueError:
+                logger.debug(f"SS节点格式解析错误，已弃用: {node[:50]}...")
+                return None
+
+        elif node.startswith("ssr://"):
+            decoded = decode_base64_content(node[len("ssr://"):])
+            if not decoded:
+                logger.debug(f"SSR节点Base64解码失败，已弃用: {node[:50]}...")
+                return None
+            parts = decoded.split(':')
+            if len(parts) < 6:
+                logger.debug(f"SSR节点缺少必要部分，已弃用: {node[:50]}...")
+                return None
+            host, port, protocol, method, obfs, password_b64 = parts[:6]
+            if validate_host_port(host, port) and protocol and method and obfs and password_b64:
+                return node
+            logger.debug(f"SSR节点参数或主机无效，已弃用: {node[:50]}...")
+            return None
+
+        elif node.startswith("vless://"):
+            parts = node[len("vless://"):].split('@')
+            if len(parts) < 2:
+                logger.debug(f"VLESS节点缺少UUID或地址，已弃用: {node[:50]}...")
+                return None
+            uuid_part, host_port_params = parts
+            host, port = host_port_params.split('?')[0].split(':', 1)
+            if re.match(r'^[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}$', uuid_part) and validate_host_port(host, port):
+                return node
+            logger.debug(f"VLESS节点UUID或主机无效，已弃用: {node[:50]}...")
+            return None
+
+        logger.debug(f"未知或不符合协议的节点格式，已弃用: {node[:100]}...")
+        return None
+    except Exception as e:
+        logger.debug(f"节点验证过程中出现异常，已弃用: {node[:50]}... 错误: {e}")
+        return None
+
 # --- 核心抓取和解析逻辑 ---
-
-# 移除 fetch_url_content_with_playwright 函数，因为不再使用 Playwright
-
 async def fetch_url_content_with_httpx(url: str, semaphore: asyncio.Semaphore, config: Config) -> Optional[Tuple[str, str]]:
     """使用 httpx 异步获取 URL 内容，自动处理无协议头的 URL。"""
-    if not url.startswith(("http://", "https://")):
+    if is_valid_ip(url.split(':')[0]):
+        https_url = f"https://{url}"
+        http_url = f"http://{url}"
+    elif not url.startswith(("http://", "https://")):
         https_url = f"https://{url}"
         http_url = f"http://{url}"
     else:
@@ -151,13 +282,12 @@ async def fetch_url_content_with_httpx(url: str, semaphore: asyncio.Semaphore, c
 
         async with semaphore:
             try:
-                await asyncio.sleep(random.uniform(0.5, 2.5)) # Polite delay
+                await asyncio.sleep(random.uniform(0.5, 2.5))
                 async with httpx.AsyncClient(timeout=config.REQUEST_TIMEOUT / 1000, verify=False, follow_redirects=True) as client:
                     headers = {'User-Agent': random.choice(config.USER_AGENTS)}
                     response = await client.get(full_url, headers=headers)
-                    response.raise_for_status() # Raises an exception for 4xx/5xx responses
+                    response.raise_for_status()
                     content = response.text
-                    
                     cache_data = {
                         'timestamp': datetime.now().isoformat(),
                         'content_hash': get_url_content_hash(content),
@@ -173,10 +303,9 @@ async def fetch_url_content_with_httpx(url: str, semaphore: asyncio.Semaphore, c
                 logger.error(f"获取 {full_url} 失败: 请求错误 {e} (使用 httpx)")
             except Exception as e:
                 logger.error(f"获取 {full_url} 失败: 未知错误 {e} (使用 httpx)")
-        continue # Try next protocol
+        continue
     logger.error(f"所有协议尝试失败: {url} (使用 httpx)")
     return None, url
-
 
 def extract_nodes_from_text(text: str, config: Config) -> Set[str]:
     """从文本中提取代理节点。"""
@@ -188,163 +317,31 @@ def extract_nodes_from_text(text: str, config: Config) -> Set[str]:
             logger.debug(f"从文本提取到 {len(matches)} 个 {protocol} 节点")
     return nodes
 
-def clean_node(node: str) -> Optional[str]:
-    """清洗节点字符串，移除多余字符并验证。"""
-    if not node or len(node) < 10:
-        logger.debug(f"节点过短或为空，已弃用: {node[:50]}...")
-        return None
-
-    def validate_host_port(host: str, port_str: str) -> bool:
-        if not (host and port_str and port_str.isdigit()):
-            return False
-        # Basic regex for domain or check if it's a valid IP
-        if not is_valid_ip(host) and not re.match(r'^[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,}(?:\.[a-zA-Z]{2,})*$', host):
-            return False
-        port = int(port_str)
-        return 1 <= port <= 65535
-
-    try:
-        if node.startswith("hysteria2://"):
-            parts = node[len("hysteria2://"):].split('?')
-            if len(parts) < 1:
-                logger.debug(f"Hysteria2节点缺少地址部分，已弃用: {node[:50]}...")
-                return None
-            host_port = parts[0].split(':')
-            if len(host_port) != 2:
-                logger.debug(f"Hysteria2节点地址格式错误，已弃用: {node[:50]}...")
-                return None
-            if validate_host_port(host_port[0], host_port[1]) and 'password' in node: # Ensure password parameter exists
-                return node
-            logger.debug(f"Hysteria2节点缺少密码或主机无效，已弃用: {node[:50]}...")
-            return None
-
-        elif node.startswith("vmess://"):
-            decoded = decode_base64_content(node[len("vmess://"):])
-            if not decoded:
-                logger.debug(f"VMess节点Base64解码失败，已弃用: {node[:50]}...")
-                return None
-            try:
-                data = json.loads(decoded)
-                # Check for essential VMess fields
-                if all(k in data for k in ['v', 'ps', 'add', 'port', 'id']) and validate_host_port(data['add'], str(data['port'])):
-                    return node
-                logger.debug(f"VMess节点缺少必要字段或主机无效，已弃用: {node[:50]}...")
-                return None
-            except json.JSONDecodeError:
-                logger.debug(f"VMess节点JSON解析失败，已弃用: {node[:50]}...")
-                return None
-
-        elif node.startswith("trojan://"):
-            parts = node[len("trojan://"):].split('@')
-            if len(parts) < 2:
-                logger.debug(f"Trojan节点缺少密码或地址，已弃用: {node[:50]}...")
-                return None
-            password_part = parts[0]
-            # Remove any fragment or query parameters for host/port extraction
-            host_port_part = parts[1].split('#')[0].split('?')[0]
-            host_port = host_port_part.split(':')
-            if len(host_port) != 2:
-                logger.debug(f"Trojan节点地址格式错误，已弃用: {node[:50]}...")
-                return None
-            if password_part and validate_host_port(host_port[0], host_port[1]):
-                return node
-            logger.debug(f"Trojan节点密码或主机无效，已弃用: {node[:50]}...")
-            return None
-
-        elif node.startswith("ss://"):
-            encoded_str = node[len("ss://"):].split('#')[0].split('?')[0] # Remove fragment and query
-            if '@' not in encoded_str: # If not already decoded, try base64 decode
-                decoded = decode_base64_content(encoded_str)
-                if not decoded:
-                    logger.debug(f"SS节点Base64解码失败，已弃用: {node[:50]}...")
-                    return None
-                parts = decoded.split('@')
-            else:
-                parts = encoded_str.split('@')
-            
-            if len(parts) < 2:
-                logger.debug(f"SS节点格式错误，缺少加密或地址，已弃用: {node[:50]}...")
-                return None
-            method_password_part, host_port_part = parts
-            try:
-                method, password = method_password_part.split(':', 1)
-                host, port = host_port_part.split(':', 1)
-                if method and password and validate_host_port(host, port):
-                    return node
-                logger.debug(f"SS节点加密方式、密码或主机无效，已弃用: {node[:50]}...")
-                return None
-            except ValueError:
-                logger.debug(f"SS节点格式解析错误，已弃用: {node[:50]}...")
-                return None
-
-        elif node.startswith("ssr://"):
-            decoded = decode_base64_content(node[len("ssr://"):])
-            if not decoded:
-                logger.debug(f"SSR节点Base64解码失败，已弃用: {node[:50]}...")
-                return None
-            parts = decoded.split(':')
-            if len(parts) < 6: # host:port:protocol:method:obfs:password_b64
-                logger.debug(f"SSR节点缺少必要部分，已弃用: {node[:50]}...")
-                return None
-            host, port, protocol, method, obfs, password_b64 = parts[:6]
-            if validate_host_port(host, port) and protocol and method and obfs and password_b64:
-                return node
-            logger.debug(f"SSR节点参数或主机无效，已弃用: {node[:50]}...")
-            return None
-
-        elif node.startswith("vless://"):
-            parts = node[len("vless://"):].split('@')
-            if len(parts) < 2:
-                logger.debug(f"VLESS节点缺少UUID或地址，已弃用: {node[:50]}...")
-                return None
-            uuid_part, host_port_params = parts
-            host, port = host_port_params.split('?')[0].split(':', 1) # Split host:port from parameters
-            # Basic UUID validation and host/port validation
-            if re.match(r'^[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}$', uuid_part) and validate_host_port(host, port):
-                return node
-            logger.debug(f"VLESS节点UUID或主机无效，已弃用: {node[:50]}...")
-            return None
-
-        logger.debug(f"未知或不符合协议的节点格式，已弃用: {node[:100]}...")
-        return None
-    except Exception as e:
-        logger.debug(f"节点验证过程中出现异常，已弃用: {node[:50]}... 错误: {e}")
-        return None
-
 def parse_and_extract_nodes(content: str, current_depth: int, config: Config, base_url: str) -> Tuple[Set[str], Set[str]]:
     """解析网页内容，提取节点和嵌套链接。"""
     all_nodes = set()
     new_urls = set()
 
-    # 修正: 移除 from_encoding 参数
     soup = BeautifulSoup(content, 'html.parser')
-    # Remove style and script tags from the main parsing for cleaner text extraction
     for tag in soup(["style", "script"]):
         tag.decompose()
 
-    # Extract from specific content tags and attributes
     for tag_name in config.CONTENT_TAGS:
         for tag in soup.find_all(tag_name):
             text = tag.get_text(separator='\n', strip=True)
             all_nodes.update(extract_nodes_from_text(text, config))
-            
-            # Attempt Base64 decoding within text
             base64_matches = re.findall(r'(?:[A-Za-z0-9+/]{4}){1,}(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?', text)
             for b64_str in base64_matches:
                 decoded = decode_base64_content(b64_str)
                 if decoded:
                     all_nodes.update(extract_nodes_from_text(decoded, config))
                     new_urls.update(re.findall(r'(?:http|https)://[^\s"\']+', decoded))
-            
-            # Extract from specified attributes
             for attr in config.CONTENT_ATTRIBUTES:
                 if attr in tag.attrs:
                     attr_value = tag[attr]
                     if isinstance(attr_value, list):
                         attr_value = ' '.join(attr_value)
                     all_nodes.update(extract_nodes_from_text(attr_value, config))
-                    
-                    # Attempt Base64 decoding within attribute values
                     base64_matches = re.findall(r'(?:[A-Za-z0-9+/]{4}){1,}(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?', attr_value)
                     for b64_str in base64_matches:
                         decoded = decode_base64_content(b64_str)
@@ -352,8 +349,7 @@ def parse_and_extract_nodes(content: str, current_depth: int, config: Config, ba
                             all_nodes.update(extract_nodes_from_text(decoded, config))
                             new_urls.update(re.findall(r'(?:http|https)://[^\s"\']+', decoded))
 
-    # Re-process script tags separately for JSON content
-    for script_tag in BeautifulSoup(content, 'html.parser').find_all('script'): # 修正: 移除 from_encoding 参数
+    for script_tag in BeautifulSoup(content, 'html.parser').find_all('script'):
         script_content = script_tag.get_text(strip=True)
         try:
             json_data = json.loads(script_content)
@@ -366,10 +362,8 @@ def parse_and_extract_nodes(content: str, current_depth: int, config: Config, ba
                         walk_json_data(sub_item)
             walk_json_data(json_data)
         except json.JSONDecodeError:
-            # If not JSON, treat as plain text and extract nodes
             all_nodes.update(extract_nodes_from_text(script_content, config))
 
-    # Attempt to parse as YAML/JSON directly for entire content
     try:
         data = None
         try:
@@ -378,8 +372,7 @@ def parse_and_extract_nodes(content: str, current_depth: int, config: Config, ba
             try:
                 data = json.loads(content)
             except json.JSONDecodeError:
-                pass # Not YAML or JSON
-        
+                pass
         if isinstance(data, (dict, list)):
             def walk_structured_data(item):
                 if isinstance(item, str):
@@ -390,57 +383,59 @@ def parse_and_extract_nodes(content: str, current_depth: int, config: Config, ba
                         walk_structured_data(sub_item)
             walk_structured_data(data)
     except Exception:
-        pass # Ignore errors during structured data parsing
+        pass
 
-
-    # Extract new URLs from anchor tags for recursive fetching
     if current_depth < config.MAX_DEPTH:
         for a_tag in soup.find_all('a', href=True):
             href = a_tag['href']
             if href.startswith(('http://', 'https://')):
                 new_urls.add(href)
-            elif href.startswith('/'): # Relative path
+            elif href.startswith('/'):
                 new_urls.add(urljoin(base_url, href))
-            elif not href.startswith(('#', 'javascript:', 'mailto:', 'tel:')): # Other relative links, treat as part of base_url
+            elif not href.startswith(('#', 'javascript:', 'mailto:', 'tel:')):
                 new_urls.add(urljoin(base_url, href))
 
     logger.debug(f"从 {base_url} 提取到 {len(all_nodes)} 个潜在节点，{len(new_urls)} 个新链接")
     return all_nodes, new_urls
 
-
-async def process_url(url: str, processed_urls: Set[str], all_nodes: Dict[str, Set[str]], semaphore: asyncio.Semaphore, config: Config, depth: int = 0) -> None:
-    """递归处理URL，提取和验证节点。"""
-    base_url = url.split('#')[0].split('?')[0] # Normalize URL for processing set
+async def process_url(url: str, processed_urls: Set[str], all_nodes: Dict[str, Set[str]], unique_nodes: Dict[Tuple[str, str, str, int, str], str], semaphore: asyncio.Semaphore, config: Config, depth: int = 0) -> None:
+    """递归处理URL，提取和验证节点，并进行去重。"""
+    base_url = url.split('#')[0].split('?')[0]
     if base_url in processed_urls:
         logger.debug(f"规范化后的URL已处理: {url} -> {base_url}")
         return
     processed_urls.add(base_url)
 
     logger.info(f"处理URL (深度 {depth}): {url}")
-    
-    # 始终使用 httpx
     content, resolved_url = await fetch_url_content_with_httpx(url, semaphore, config)
-    
     if not content:
         logger.warning(f"无法获取内容: {url}，跳过节点提取")
+        if resolved_url not in all_nodes:
+            all_nodes[resolved_url] = set()
         return
 
     nodes, new_urls = parse_and_extract_nodes(content, depth, config, resolved_url)
     if resolved_url not in all_nodes:
         all_nodes[resolved_url] = set()
 
+    raw_node_count = len(nodes)
     for node in nodes:
-        valid_node = clean_node(node) 
+        valid_node = clean_node(node)
         if valid_node:
-            all_nodes[resolved_url].add(valid_node)
+            node_key = extract_node_key(valid_node)
+            if node_key:
+                unique_nodes[node_key] = valid_node
+                all_nodes[resolved_url].add(valid_node)
+            else:
+                logger.debug(f"无法提取节点 {valid_node[:50]}... 的关键字段，跳过去重")
         else:
             logger.debug(f"节点 '{node[:50]}...' 因不符合要求被弃用")
 
-    logger.info(f"URL {resolved_url}: 发现 {len(all_nodes[resolved_url])} 个有效节点")
+    logger.info(f"URL {resolved_url}: 提取 {raw_node_count} 个潜在节点，验证后 {len(all_nodes[resolved_url])} 个有效节点，当前唯一节点总数 {len(unique_nodes)}")
 
     if depth < config.MAX_DEPTH:
         tasks = [
-            process_url(new_url, processed_urls, all_nodes, semaphore, config, depth + 1)
+            process_url(new_url, processed_urls, all_nodes, unique_nodes, semaphore, config, depth + 1)
             for new_url in new_urls if new_url.split('#')[0].split('?')[0] not in processed_urls
         ]
         if tasks:
@@ -464,12 +459,13 @@ async def main():
 
     logger.info(f"读取到 {len(source_urls)} 个URL")
     all_nodes: Dict[str, Set[str]] = {}
+    unique_nodes: Dict[Tuple[str, str, str, int, str], str] = {}
     processed_urls: Set[str] = set()
     semaphore = asyncio.Semaphore(config.CONCURRENT_REQUEST_LIMIT)
 
     try:
         await asyncio.gather(*[
-            process_url(url, processed_urls, all_nodes, semaphore, config)
+            process_url(url, processed_urls, all_nodes, unique_nodes, semaphore, config)
             for url in source_urls
         ])
     except asyncio.CancelledError:
@@ -478,20 +474,12 @@ async def main():
         logger.error(f"主任务执行失败: {e}")
 
     logger.info("所有URL处理完毕，开始保存节点")
-
-    # 计算所有 URL 收集到的总去重节点
-    overall_unique_nodes = set()
-    for nodes_set in all_nodes.values():
-        overall_unique_nodes.update(nodes_set)
-    
-    logger.info(f"所有URL共发现 {len(overall_unique_nodes)} 个唯一有效节点。")
-
-    # 将节点计数保存到 CSV 并将每个 URL 的节点保存到单独文件
     async with aiofiles.open(os.path.join(config.DATA_DIR, "node_counts.csv"), 'w', newline='', encoding='utf-8') as f:
         writer = csv.writer(f)
         await writer.writerow(["URL", "Valid Nodes"])
-        total_valid_nodes_sum = 0 
-        for url, nodes in all_nodes.items():
+        total_valid_nodes = 0
+        for url in set(list(all_nodes.keys()) + list(processed_urls)):
+            nodes = all_nodes.get(url, set())
             valid_count = len(nodes)
             if valid_count > 0:
                 output_path = os.path.join(config.DATA_DIR, get_safe_filename(url))
@@ -499,11 +487,14 @@ async def main():
                     await node_file.write('\n'.join(sorted(nodes)))
                 logger.info(f"保存 {valid_count} 个节点到 {output_path}")
             await writer.writerow([url, valid_count])
-            total_valid_nodes_sum += valid_count
+            total_valid_nodes += valid_count
 
-    logger.info(f"任务完成。共发现 {total_valid_nodes_sum} 个有效节点（非去重前，各URL节点总和）。")
-    logger.info(f"最终去重后得到 {len(overall_unique_nodes)} 个独特节点。")
+        unique_output_path = os.path.join(config.DATA_DIR, "unique_nodes.txt")
+        async with aiofiles.open(unique_output_path, 'w', encoding='utf-8') as unique_file:
+            await unique_file.write('\n'.join(sorted(unique_nodes.values())))
+        logger.info(f"保存 {len(unique_nodes)} 个唯一节点到 {unique_output_path}")
 
+    logger.info(f"任务完成。共发现 {total_valid_nodes} 个有效节点，{len(unique_nodes)} 个唯一节点，统计信息已保存")
 
 if __name__ == "__main__":
     try:
