@@ -10,7 +10,7 @@ on:
 jobs:
   scrape_proxies:
     runs-on: ubuntu-latest
-    timeout-minutes: 15 # 增加超时时间，以避免操作被取消
+    timeout-minutes: 360 # 增加超时时间，以避免操作被取消
 
     steps:
     - name: Checkout repository
