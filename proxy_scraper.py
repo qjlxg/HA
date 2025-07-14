@@ -1,4 +1,3 @@
-```python
 import asyncio
 import aiofiles
 import re
@@ -24,8 +23,8 @@ class Config:
     DATA_DIR: str = "data"  # 数据存储目录
     CACHE_DIR: str = "cache"  # 缓存目录
     CACHE_EXPIRY_HOURS: int = 24  # 缓存有效期（小时）
-    MAX_DEPTH: int = 3  # 最大递归深度
-    CONCURRENT_REQUEST_LIMIT: int = 2  # 并发请求限制
+    MAX_DEPTH: int = 1  # 最大递归深度
+    CONCURRENT_REQUEST_LIMIT: int = 1  # 并发请求限制
     REQUEST_TIMEOUT: int = 60000  # 请求超时时间（毫秒，增加至60秒）
     USER_AGENTS: List[str] = field(default_factory=lambda: [
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36",
