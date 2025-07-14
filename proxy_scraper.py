@@ -148,7 +148,13 @@ async def fetch_url_content(url: str, semaphore: asyncio.Semaphore, config: Conf
                         logger.error(f"无法启动 Chromium 浏览器: {e}. 请确保已安装 Playwright 浏览器二进制文件。")
                         return None # 如果无法启动浏览器，则直接返回None
 
-                    context = await browser.new_context(user_agent=random.choice(config.USER_AGENTS))
+                    # --- 修改点：添加 ignore_https_errors=True ---
+                    context = await browser.new_context(
+                        user_agent=random.choice(config.USER_AGENTS),
+                        ignore_https_errors=True # 忽略 HTTPS 证书错误
+                    )
+                    # --- 修改点结束 ---
+                    
                     page = await context.new_page()
 
                     try:
