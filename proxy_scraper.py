@@ -24,8 +24,8 @@ class Config:
     CACHE_DIR: str = "cache"  # 缓存目录
     CACHE_EXPIRY_HOURS: int = 24  # 缓存有效期（小时）
     MAX_DEPTH: int = 1  # 最大递归深度
-    CONCURRENT_REQUEST_LIMIT: int = 1  # 并发请求限制
-    REQUEST_TIMEOUT: int = 60000  # 请求超时时间（毫秒，增加至60秒）
+    CONCURRENT_REQUEST_LIMIT: int = 2  # 并发请求限制
+    REQUEST_TIMEOUT: int = 60000  # 请求超时时间（毫秒，60秒）
     USER_AGENTS: List[str] = field(default_factory=lambda: [
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36",
         "Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Mobile/15E148 Safari/604.1",
@@ -41,8 +41,8 @@ class Config:
         "ssr": r"ssr://[a-zA-Z0-9+/=@:\.-]+",
         "vless": r"vless://[^\"'\s]+",
     })
-    CONTENT_TAGS: List[str] = field(default_factory=lambda: ['pre', 'code', 'textarea', 'div', 'p', 'body', 'span', 'a', 'script', 'input'])  # 增加input标签
-    CONTENT_ATTRIBUTES: List[str] = field(default_factory=lambda: ['value', 'data', 'href', 'content', 'src', 'data-config', 'data-nodes'])  # 增加data-nodes属性
+    CONTENT_TAGS: List[str] = field(default_factory=lambda: ['pre', 'code', 'textarea', 'div', 'p', 'body', 'span', 'a', 'script', 'input'])  # 包含input标签
+    CONTENT_ATTRIBUTES: List[str] = field(default_factory=lambda: ['value', 'data', 'href', 'content', 'src', 'data-config', 'data-nodes'])  # 包含data-nodes属性
 
 # 配置日志
 logging.basicConfig(
@@ -106,64 +106,82 @@ def is_valid_ip(ip_string: str) -> bool:
         return False
 
 # --- 核心抓取和解析逻辑 ---
-async def fetch_url_content(url: str, semaphore: asyncio.Semaphore, config: Config) -> Optional[str]:
-    """使用Playwright异步获取URL内容，无重试。"""
-    full_url = url if url.startswith(("http://", "https://")) else f"https://{url}"
-    cache_path = get_cache_path(full_url, config)
+async def fetch_url_content(url: str, semaphore: asyncio.Semaphore, config: Config) -> Optional[Tuple[str, str]]:
+    """使用Playwright异步获取URL内容，自动处理无协议头的URL，无重试。"""
+    # 处理无协议头的URL
+    if not url.startswith(("http://", "https://")):
+        https_url = f"https://{url}"
+        http_url = f"http://{url}"
+    else:
+        https_url = url
+        http_url = url.replace("https://", "http://") if url.startswith("https://") else url.replace("http://", "https://")
 
-    # 检查缓存
-    if os.path.exists(cache_path):
-        try:
-            async with aiofiles.open(cache_path, 'r', encoding='utf-8') as f:
-                cache_data = json.loads(await f.read())
-                cached_timestamp = datetime.fromisoformat(cache_data['timestamp'])
-                if datetime.now() - cached_timestamp < timedelta(hours=config.CACHE_EXPIRY_HOURS):
-                    logger.debug(f"使用缓存内容: {full_url}")
-                    return cache_data['content']
-        except (json.JSONDecodeError, KeyError, Exception) as e:
-            logger.warning(f"缓存文件 {cache_path} 损坏或格式错误: {e}，删除并重新获取")
-            os.remove(cache_path)
+    # 优先尝试 HTTPS
+    for full_url in [https_url, http_url]:
+        cache_path = get_cache_path(full_url, config)
 
-    async with semaphore:
-        try:
-            await asyncio.sleep(random.uniform(0.5, 2.5))
-            async with async_playwright() as p:
-                browser = await p.chromium.launch(headless=True)
-                context = await browser.new_context(
-                    user_agent=random.choice(config.USER_AGENTS),
-                    ignore_https_errors=True
-                )
-                page = await context.new_page()
-                try:
-                    await page.goto(full_url, wait_until='load', timeout=config.REQUEST_TIMEOUT)
-                    await page.wait_for_timeout(5000)  # 等待5秒以加载动态内容
-                    content = await page.content()
-                    cache_data = {
-                        'timestamp': datetime.now().isoformat(),
-                        'content_hash': get_url_content_hash(content),
-                        'content': content
-                    }
-                    async with aiofiles.open(cache_path, 'w', encoding='utf-8') as f:
-                        await f.write(json.dumps(cache_data))
-                    logger.info(f"成功获取: {full_url}")
-                    return content
-                except PlaywrightTimeoutError:
-                    logger.warning(f"获取 {full_url} 超时，尝试获取部分内容")
-                    content = await page.content()  # 尝试获取部分加载的内容
-                    if content:
-                        logger.info(f"成功获取部分内容: {full_url}")
-                        return content
-                    logger.warning(f"无法获取任何内容: {full_url}")
-                    return None
-                except Exception as e:
-                    logger.error(f"获取 {full_url} 失败: {e}，跳过")
-                    return None
-                finally:
-                    await context.close()
-                    await browser.close()
-        except Exception as e:
-            logger.error(f"Playwright 环境或启动失败: {e}，跳过")
-            return None
+        # 检查缓存
+        if os.path.exists(cache_path):
+            try:
+                async with aiofiles.open(cache_path, 'r', encoding='utf-8') as f:
+                    cache_data = json.loads(await f.read())
+                    cached_timestamp = datetime.fromisoformat(cache_data['timestamp'])
+                    if datetime.now() - cached_timestamp < timedelta(hours=config.CACHE_EXPIRY_HOURS):
+                        logger.debug(f"使用缓存内容: {full_url}")
+                        return cache_data['content'], full_url
+            except (json.JSONDecodeError, KeyError, Exception) as e:
+                logger.warning(f"缓存文件 {cache_path} 损坏或格式错误: {e}，删除并重新获取")
+                os.remove(cache_path)
+
+        async with semaphore:
+            try:
+                await asyncio.sleep(random.uniform(0.5, 2.5))
+                async with async_playwright() as p:
+                    browser = await p.chromium.launch(headless=True)
+                    context = await browser.new_context(
+                        user_agent=random.choice(config.USER_AGENTS),
+                        ignore_https_errors=True
+                    )
+                    page = await context.new_page()
+                    try:
+                        await page.goto(full_url, wait_until='load', timeout=config.REQUEST_TIMEOUT)
+                        await page.wait_for_timeout(5000)  # 等待5秒以加载动态内容
+                        content = await page.content()
+                        cache_data = {
+                            'timestamp': datetime.now().isoformat(),
+                            'content_hash': get_url_content_hash(content),
+                            'content': content
+                        }
+                        async with aiofiles.open(cache_path, 'w', encoding='utf-8') as f:
+                            await f.write(json.dumps(cache_data))
+                        logger.info(f"成功获取: {full_url}")
+                        return content, full_url
+                    except PlaywrightTimeoutError:
+                        logger.warning(f"获取 {full_url} 超时，尝试获取部分内容")
+                        content = await page.content()
+                        if content:
+                            logger.info(f"成功获取部分内容: {full_url}")
+                            cache_data = {
+                                'timestamp': datetime.now().isoformat(),
+                                'content_hash': get_url_content_hash(content),
+                                'content': content
+                            }
+                            async with aiofiles.open(cache_path, 'w', encoding='utf-8') as f:
+                                await f.write(json.dumps(cache_data))
+                            return content, full_url
+                        logger.warning(f"无法获取任何内容: {full_url}")
+                        continue  # 尝试下一个协议
+                    except Exception as e:
+                        logger.error(f"获取 {full_url} 失败: {e}，尝试下一个协议")
+                        continue
+                    finally:
+                        await context.close()
+                        await browser.close()
+            except Exception as e:
+                logger.error(f"Playwright 环境或启动失败: {e}，尝试下一个协议")
+                continue
+    logger.error(f"所有协议尝试失败: {url}")
+    return None, url
 
 def extract_nodes_from_text(text: str, config: Config) -> Set[str]:
     """从文本中提取代理节点。"""
@@ -181,7 +199,7 @@ def parse_and_extract_nodes(content: str, current_depth: int, config: Config, ba
     new_urls = set()
 
     soup = BeautifulSoup(content, 'html.parser', from_encoding='utf-8')
-    for style_tag in soup(["style"]):  # 移除style标签，保留script
+    for style_tag in soup(["style"]):
         style_tag.decompose()
 
     # 提取标签内容和属性
@@ -246,7 +264,7 @@ def parse_and_extract_nodes(content: str, current_depth: int, config: Config, ba
     except Exception:
         pass
 
-    # 提取链接
+    # 提取链接并规范化
     if current_depth < config.MAX_DEPTH:
         for a_tag in soup.find_all('a', href=True):
             href = a_tag['href']
@@ -254,6 +272,8 @@ def parse_and_extract_nodes(content: str, current_depth: int, config: Config, ba
                 new_urls.add(href)
             elif href.startswith('/'):
                 new_urls.add(urljoin(base_url, href))
+            elif not href.startswith(('#', 'javascript:', 'mailto:', 'tel:')):  # 处理无协议头的相对URL
+                new_urls.add(urljoin(base_url, f"https://{href}"))
 
     logger.debug(f"从 {base_url} 提取到 {len(all_nodes)} 个潜在节点，{len(new_urls)} 个新链接")
     return all_nodes, new_urls
@@ -393,23 +413,23 @@ async def process_url(url: str, processed_urls: Set[str], all_nodes: Dict[str, S
     processed_urls.add(base_url)
 
     logger.info(f"处理URL (深度 {depth}): {url}")
-    content = await fetch_url_content(url, semaphore, config)
+    content, resolved_url = await fetch_url_content(url, semaphore, config)
     if not content:
         logger.warning(f"无法获取内容: {url}，跳过节点提取")
         return
 
-    nodes, new_urls = parse_and_extract_nodes(content, depth, config, base_url)
-    if url not in all_nodes:
-        all_nodes[url] = set()
+    nodes, new_urls = parse_and_extract_nodes(content, depth, config, resolved_url)
+    if resolved_url not in all_nodes:
+        all_nodes[resolved_url] = set()
 
     for node in nodes:
         valid_node = validate_node(node)
         if valid_node:
-            all_nodes[url].add(valid_node)
+            all_nodes[resolved_url].add(valid_node)
         else:
             logger.debug(f"节点 '{node[:50]}...' 因不符合要求被弃用")
 
-    logger.info(f"URL {url}: 发现 {len(all_nodes[url])} 个有效节点")
+    logger.info(f"URL {resolved_url}: 发现 {len(all_nodes[resolved_url])} 个有效节点")
 
     if depth < config.MAX_DEPTH:
         tasks = [
@@ -460,7 +480,7 @@ async def main():
             if valid_count > 0:
                 url_hash = hashlib.md5(url.encode()).hexdigest()[:10]
                 parsed_url = urlparse(url)
-                parsed_url_netloc = parsed_url.netloc.replace('.', '_').replace(':', '_')
+                parsed_url_netloc = parsed_url.netloc.replace('.', '_').replace(':', '_') if parsed_url.netloc else url.replace('/', '_')
                 safe_url_name = f"{parsed_url_netloc}_{url_hash}"
                 output_path = os.path.join(config.DATA_DIR, f"{safe_url_name}.txt")
                 async with aiofiles.open(output_path, 'w', encoding='utf-8') as node_file:
