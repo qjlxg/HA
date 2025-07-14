@@ -12,7 +12,7 @@ import csv
 import random
 import hashlib
 import ipaddress
-from playwright.async_api import async_playwright # New import
+from playwright.async_api import async_playwright
 
 # --- 配置 ---
 DATA_DIR = "data"
@@ -90,7 +90,7 @@ def is_valid_ip(ip_string):
 
 # --- 核心抓取和解析逻辑 (使用 Playwright) ---
 
-async def fetch_url_content(url: str, semaphore: asyncio.Semaphore): # Removed client, now using playwright directly
+async def fetch_url_content(url: str, semaphore: asyncio.Semaphore):
     """
     安全地异步获取 URL 内容，优先尝试 HTTP，失败后尝试 HTTPS。
     加入信号量限制并发请求，使用 Playwright 模拟浏览器行为。
@@ -98,7 +98,6 @@ async def fetch_url_content(url: str, semaphore: asyncio.Semaphore): # Removed c
     schemes = ["http://", "https://"]
     
     async with semaphore: # 限制并发
-        # 增加随机延迟，避免过快请求
         await asyncio.sleep(random.uniform(1.0, 4.0)) # 增加延迟范围，给浏览器更多时间加载
 
         for scheme in schemes:
@@ -112,30 +111,25 @@ async def fetch_url_content(url: str, semaphore: asyncio.Semaphore): # Removed c
                         cache_data = json.load(f)
                         cached_timestamp = datetime.fromisoformat(cache_data['timestamp'])
                         if datetime.now() - cached_timestamp < timedelta(hours=CACHE_EXPIRY_HOURS):
-                            print(f"从缓存读取: {full_url}")
+                            # print(f"从缓存读取: {full_url}") # 减少日志输出
                             return cache_data['content']
                     except (json.JSONDecodeError, KeyError) as e:
-                        print(f"缓存文件 {cache_path} 损坏或格式错误: {e}. 删除并重新获取。")
+                        print(f"警告: 缓存文件 {cache_path} 损坏或格式错误: {e}. 删除并重新获取。")
                         os.remove(cache_path) # 删除损坏的缓存
 
             try:
-                print(f"尝试使用 Playwright 获取: {full_url}")
+                # print(f"尝试使用 Playwright 获取: {full_url}") # 减少日志输出
                 async with async_playwright() as p:
-                    # 使用 Chromium 浏览器，headless=True 表示无头模式
-                    # 可以尝试 'firefox' 或 'webkit'
                     browser = await p.chromium.launch(headless=True)
                     context = await browser.new_context(user_agent=random.choice(USER_AGENTS))
                     page = await context.new_page()
 
-                    # 设置更灵活的等待条件
-                    await page.goto(full_url, wait_until='domcontentloaded', timeout=30000) # 增加 goto 超时
-                    # 等待网络空闲或特定元素出现，这取决于网站如何加载内容
-                    await page.wait_for_load_state('networkidle', timeout=30000) # 等待网络空闲
+                    await page.goto(full_url, wait_until='domcontentloaded', timeout=30000)
+                    await page.wait_for_load_state('networkidle', timeout=30000)
 
-                    content = await page.content() # 获取完整渲染后的页面内容
+                    content = await page.content()
                     await browser.close()
 
-                    # 写入缓存
                     cache_data = {
                         'timestamp': datetime.now().isoformat(),
                         'content_hash': get_url_content_hash(content),
@@ -143,11 +137,11 @@ async def fetch_url_content(url: str, semaphore: asyncio.Semaphore): # Removed c
                     }
                     with open(cache_path, 'w') as f:
                         json.dump(cache_data, f)
-                    print(f"成功使用 Playwright 获取并缓存: {full_url}")
+                    print(f"成功获取: {full_url}") # 只在成功时打印
                     return content
-            except Exception as e: # Catch broader exceptions from Playwright
-                print(f"使用 Playwright 获取 {full_url} 失败: {e}")
-                continue # 尝试下一个scheme或返回None
+            except Exception as e:
+                print(f"获取 {full_url} 失败: {e}") # 失败时打印
+                continue
         return None
 
 def extract_nodes_from_text(text: str):
@@ -164,30 +158,24 @@ def parse_and_extract_nodes(content: str, current_depth=0):
     all_nodes = set()
     new_urls_to_fetch = set()
 
-    # 尝试解析 HTML
     soup = BeautifulSoup(content, 'html.parser')
 
-    # 提取所有文本内容，去除 HTML 标签，包括JS脚本和CSS样式
     for script_or_style in soup(["script", "style"]):
-        script_or_style.extract() # 移除脚本和样式标签
+        script_or_style.extract()
 
     plain_text = soup.get_text(separator='\n', strip=True)
 
-    # 提取 Base64 编码的链接 (长度至少20，通常Base64节点会更长)
     base64_matches = re.findall(r'(?:[A-Za-z0-9+/]{4}){1,}(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?', plain_text)
     for b64_str in base64_matches:
         decoded = decode_base64_content(b64_str)
         if decoded:
             extracted_from_decoded = extract_nodes_from_text(decoded)
-            if extracted_from_decoded: # 只有当解码内容确实包含节点时才添加
+            if extracted_from_decoded:
                 all_nodes.update(extracted_from_decoded)
-                # 尝试从解码内容中寻找新的 URL
                 new_urls_to_fetch.update(re.findall(r'(?:http|https)://[^\s"\']+', decoded))
 
-    # 提取明文节点
     all_nodes.update(extract_nodes_from_text(plain_text))
 
-    # 尝试解析 YAML 或 JSON
     try:
         data = yaml.safe_load(content)
         if isinstance(data, (dict, list)):
@@ -200,13 +188,11 @@ def parse_and_extract_nodes(content: str, current_depth=0):
                         walk_data(sub_item)
             walk_data(data)
     except (yaml.YAMLError, json.JSONDecodeError):
-        pass # 不是 YAML 或 JSON，忽略
+        pass
 
-    # 提取页面中的其他链接进行深度抓取
     if current_depth < MAX_DEPTH:
         for a_tag in soup.find_all('a', href=True):
             href = a_tag['href']
-            # 只考虑绝对 URL 或协议相对 URL
             if href.startswith('http://') or href.startswith('https://'):
                 new_urls_to_fetch.add(href)
 
@@ -216,17 +202,15 @@ def parse_and_extract_nodes(content: str, current_depth=0):
 def validate_node(node: str) -> bool:
     """
     根据官方要求验证节点格式是否符合要求。
-    这个函数需要根据不同协议的实际规范进行详细实现。
     """
-    if not node or len(node) < 10: # 基本长度检查
+    if not node or len(node) < 10:
         return False
 
-    # Helper for common host:port validation
     def validate_host_port(host, port_str):
         if not (host and port_str and port_str.isdigit()):
             return False
         if not is_valid_ip(host) and not re.match(r'^[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,}(?:\.[a-zA-Z]{2,})*$', host):
-            return False # 检查域名格式
+            return False
         if not (1 <= int(port_str) <= 65535):
             return False
         return True
@@ -236,7 +220,7 @@ def validate_node(node: str) -> bool:
         host_port_str = parts[0]
         if ':' not in host_port_str: return False
         host, port = host_port_str.split(':', 1)
-        return validate_host_port(host, port) and 'password' in node # 简单检查密码存在
+        return validate_host_port(host, port) and 'password' in node
 
     elif node.startswith("vmess://"):
         try:
@@ -250,8 +234,8 @@ def validate_node(node: str) -> bool:
     elif node.startswith("trojan://"):
         parts = node[len("trojan://"):].split('@')
         if len(parts) < 2: return False
-        password = parts[0][len("trojan://"):] if "trojan://" in parts[0] else parts[0] # remove prefix if present
-        host_port_path = parts[1].split('#')[0].split('?')[0] # 忽略备注和参数
+        password = parts[0][len("trojan://"):] if "trojan://" in parts[0] else parts[0]
+        host_port_path = parts[1].split('#')[0].split('?')[0]
         if ':' not in host_port_path: return False
         host, port_str = host_port_path.split(':', 1)
         return password and validate_host_port(host, port_str)
@@ -259,7 +243,7 @@ def validate_node(node: str) -> bool:
     elif node.startswith("ss://"):
         try:
             encoded_str_with_prefix = node[len("ss://"):]
-            if '@' not in encoded_str_with_prefix: # 可能是 Base64 编码
+            if '@' not in encoded_str_with_prefix:
                 decoded_str = base64.urlsafe_b64decode(encoded_str_with_prefix + '=' * (-len(encoded_str_with_prefix) % 4)).decode('utf-8')
             else:
                 decoded_str = encoded_str_with_prefix
@@ -267,7 +251,7 @@ def validate_node(node: str) -> bool:
             parts = decoded_str.split('@')
             if len(parts) < 2: return False
             method_password = parts[0]
-            host_port = parts[1].split('#')[0].split('?')[0] # 忽略备注和参数
+            host_port = parts[1].split('#')[0].split('?')[0]
 
             if ':' not in method_password or ':' not in host_port: return False
             method, password = method_password.split(':', 1)
@@ -281,32 +265,31 @@ def validate_node(node: str) -> bool:
             encoded_str = node[len("ssr://"):]
             decoded_str = base64.urlsafe_b64decode(encoded_str + '=' * (-len(encoded_str) % 4)).decode('utf-8')
             parts = decoded_str.split(':')
-            if len(parts) < 6: return False # host:port:protocol:method:obfs:password_base64
+            if len(parts) < 6: return False
             host, port_str, protocol, method, obfs, password_b64 = parts[:6]
             return validate_host_port(host, port_str) and protocol and method and obfs and password_b64
         except Exception: return False
 
     elif node.startswith("vless://"):
         try:
-            uuid_host_port_params = node[len("vless://"):].split('#')[0] # 忽略备注
+            uuid_host_port_params = node[len("vless://"):].split('#')[0]
             if '@' not in uuid_host_port_params or ':' not in uuid_host_port_params: return False
             uuid_part, host_port_params = uuid_host_port_params.split('@', 1)
             host_part, port_part = host_port_params.split(':', 1)
-            host = host_part.split('?')[0] # remove parameters from host
-            port_str = port_part.split('?')[0] # remove parameters from port
+            host = host_part.split('?')[0]
+            port_str = port_part.split('?')[0]
 
             if not re.match(r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$', uuid_part):
-                return False # UUID格式检查
+                return False
             return validate_host_port(host, port_str)
         except Exception: return False
 
-    # 对于明文节点，检查是否为 host:port 格式
     if ':' in node and len(node.split(':')) >= 2:
         host, port_str = node.split(':', 1)
         if validate_host_port(host, port_str):
             return True
 
-    return False # 未知协议或不符合任何已知格式
+    return False
 
 async def process_url(url: str, processed_urls: set, all_collected_nodes: dict, semaphore: asyncio.Semaphore, current_depth=0):
     """处理单个 URL，获取内容，提取节点，并进行递归抓取。"""
@@ -314,9 +297,9 @@ async def process_url(url: str, processed_urls: set, all_collected_nodes: dict, 
         return
 
     processed_urls.add(url)
-    print(f"开始处理 URL: {url} (深度: {current_depth})")
+    # print(f"开始处理 URL: {url} (深度: {current_depth})") # 减少日志输出
     
-    content = await fetch_url_content(url, semaphore) # Removed client, using playwright directly
+    content = await fetch_url_content(url, semaphore)
 
     if not content:
         return
@@ -326,29 +309,25 @@ async def process_url(url: str, processed_urls: set, all_collected_nodes: dict, 
     
     for node in nodes:
         if validate_node(node):
-            # 只保留原节点名称前5位，多余的全部删除。
             processed_node = node
-            match = re.search(r'#(.*?)(?:&|\s|$)', node) # 匹配 # 到下一个 & 或空格或行尾
+            match = re.search(r'#(.*?)(?:&|\s|$)', node)
             if match:
                 original_name = match.group(1)
                 if original_name:
-                    new_name = original_name[:5] # 保留前5位
+                    new_name = original_name[:5]
                     processed_node = node.replace(f"#{original_name}", f"#{new_name}")
             
             validated_nodes_for_url.append(processed_node)
         else:
-            print(f"无效或不完整的节点被丢弃: {node[:min(len(node), 100)]}...") # 打印部分以便调试
+            print(f"警告: 丢弃无效或不完整的节点: {node[:min(len(node), 100)]}...") # 只在丢弃时打印警告
 
-    # 使用 set 进行去重，因为不同深度可能抓取到相同节点
     if url not in all_collected_nodes:
         all_collected_nodes[url] = set()
     all_collected_nodes[url].update(validated_nodes_for_url)
 
-    # 递归抓取新发现的链接
     if current_depth < MAX_DEPTH:
         tasks = []
         for new_url in new_urls:
-            # 避免重复处理已处理的URL
             if new_url not in processed_urls:
                 tasks.append(process_url(new_url, processed_urls, all_collected_nodes, semaphore, current_depth + 1))
         if tasks:
@@ -365,22 +344,25 @@ async def main():
     processed_urls = set()
 
     semaphore = asyncio.Semaphore(CONCURRENT_REQUEST_LIMIT)
-
-    # Note: httpx.AsyncClient is no longer directly used for main content fetching,
-    # but could be kept if needed for other HTTP-only tasks later.
-    # We remove it from the 'async with' block for simplicity if only Playwright is fetching.
     
+    # 开始处理所有源 URL
+    print("开始从 sources.list 读取并处理 URL...")
     tasks = [process_url(url, processed_urls, all_collected_nodes_by_url, semaphore) for url in source_urls]
     await asyncio.gather(*tasks)
+    print("所有 URL 处理完毕。")
 
     # 保存每个原始 URL 获取到的所有节点（包括递归抓取到的）
+    print(f"开始保存节点到 {DATA_DIR}/ 目录...")
     for url, nodes_set in all_collected_nodes_by_url.items():
         if nodes_set:
-            safe_url_name = re.sub(r'[^a-zA-Z0-9_\-.]', '_', url) # 将URL转换为安全文件名
+            safe_url_name = re.sub(r'[^a-zA-Z0-9_\-.]', '_', url)
             output_file_path = os.path.join(DATA_DIR, f"{safe_url_name}.txt")
             async with aiofiles.open(output_file_path, 'w') as f:
-                await f.write('\n'.join(sorted(list(nodes_set)))) # 排序并保存
-            print(f"已保存 {url} 及其递归获取到的节点到 {output_file_path}，共 {len(nodes_set)} 个节点。")
+                await f.write('\n'.join(sorted(list(nodes_set))))
+            print(f"已保存 {len(nodes_set)} 个节点，来源: {url}") # 简化日志
+        else:
+            print(f"注意: URL {url} 未找到有效节点。") # 提示未找到节点
+    print("节点保存完成。")
 
     # 统计节点数量并保存为 CSV
     csv_file_path = os.path.join(DATA_DIR, "node_counts.csv")
