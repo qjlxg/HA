@@ -51,7 +51,7 @@ async def read_urls_from_file(file_path="sources.list"):
                 line = line.strip()
                 if line and not line.startswith('#'):  # 忽略空行和注释行
                     urls.append(line)
-        logging.info(f"成功从 {file_path} 读取 {len(urls)} 个URL。") # 修正这里，使用 len(urls)
+        logging.info(f"成功从 {file_path} 读取 {len(urls)} 个URL。")
     except FileNotFoundError:
         logging.error(f"错误：文件 {file_path} 未找到。")
     return urls
@@ -71,9 +71,9 @@ def validate_node(node_string):
     for protocol in SUPPORTED_PROTOCOLS:
         if node_string.startswith(protocol):
             try:
-                # 针对不同协议进行初步验证
                 if protocol == "vmess://":
                     # VMess 节点是 Base64 编码的 JSON
+                    # 注意：如果解码后的JSON内容包含非UTF-8字符，这里也可能报错
                     decoded = base64.b64decode(node_string[len("vmess://"):].encode('utf-8')).decode('utf-8')
                     node_info = json.loads(decoded)
                     return all(k in node_info for k in ['v', 'ps', 'add', 'port', 'id', 'aid', 'net', 'type'])
@@ -86,18 +86,29 @@ def validate_node(node_string):
                     parts = re.match(r"trojan:\/\/([^@]+)@([\d\w\.-]+):(\d+)", node_string)
                     return bool(parts)
                 elif protocol == "ss://":
-                    # SS 节点是 Base64 编码的 method:password@address:port
+                    # SS 节点是 Base64 编码的 method:password@server:port
+                    # Base64 部分可能包含非 UTF-8 编码的密码
                     encoded_part = node_string[len("ss://"):].split('#')[0]
-                    decoded = base64.b64decode(encoded_part.split('@')[0]).decode('utf-8')
-                    return '@' in node_string and ':' in node_string
+                    if '@' in encoded_part:
+                        base66_segment = encoded_part.split('@')[0]
+                        try:
+                            # 尝试对 Base64 部分解码，但不强制进行 UTF-8 解码，只判断 Base64 格式是否有效
+                            base64.b64decode(base66_segment.encode('utf-8'))
+                            return '@' in node_string and ':' in node_string # 确保有 @ 和 : 分隔符
+                        except (base64.binascii.Error):
+                            # Base64 解码失败，说明 Base64 字符串本身无效
+                            return False
+                    return False # 没有 @ 分隔符也不是有效的 SS 链接
                 elif protocol == "ssr://":
                     # SSR 节点是 Base64 编码的 URL
-                    decoded = base64.b64decode(node_string[len("ssr://"):].encode('utf-8')).decode('utf-8')
+                    # 对解码后的内容忽略 UTF-8 错误
+                    decoded = base64.b64decode(node_string[len("ssr://"):].encode('utf-8')).decode('utf-8', errors='ignore')
                     return 'obfsparam=' in decoded and 'protoparam=' in decoded
                 elif protocol == "hysteria2://":
                     # Hysteria2 节点格式
                     return re.match(r"hysteria2:\/\/([^@]+)@([\d\w\.-]+):(\d+)\?.*", node_string) is not None
             except Exception as e:
+                # 捕获所有其他解析/验证错误
                 logging.warning(f"节点 {node_string[:50]}... 验证失败: {e}")
                 return False
     return False
@@ -122,24 +133,26 @@ def parse_and_extract_nodes(content):
                     if validate_node(node):
                         nodes.add(node)
 
-    # 查找 Base64 编码的字符串
+    # 查找 Base64 编码的字符串 (更谨慎地处理解码)
     base64_patterns = [
-        r'[A-Za-z0-9+/]{20,}=+', # 常见的 Base64 模式
+        r'[A-Za-z0-9+/]{20,}=+', # 常见的 Base64 模式，可能包含非节点内容
         r'vmess:\/\/([A-Za-z0-9+/]+={0,2})', # 捕获 VMess Base64 部分
         r'ss:\/\/([A-Za-z0-9+/]+={0,2})' # 捕获 SS Base64 部分
     ]
     for pattern in base64_patterns:
         for match in re.findall(pattern, content):
             try:
-                decoded_content = base64.b64decode(match).decode('utf-8')
+                # 在这里，我们假设解码后的内容是 UTF-8，但如果不是，我们忽略错误
+                decoded_content = base64.b64decode(match).decode('utf-8', errors='ignore')
                 for protocol in SUPPORTED_PROTOCOLS:
                     # 再次在解码内容中查找节点
                     found_nodes = re.findall(rf'{re.escape(protocol)}[^\s]+', decoded_content)
                     for node in found_nodes:
-                        if validate_node(node):
+                        if validate_node(node): # 这里的 validate_node 已经改进了对 ss:// 的处理
                             nodes.add(node)
-            except Exception:
-                pass # 忽略解码失败的情况
+            except (base64.binascii.Error, UnicodeDecodeError):
+                # 忽略 Base64 解码失败的情况，或 Base64 解码成功但不是有效 UTF-8 的情况
+                pass
 
     # 查找 YAML 和 JSON 中的节点（假设节点是字符串值）
     try:
@@ -169,251 +182,4 @@ def parse_and_extract_nodes(content):
     # 查找明文节点
     for protocol in SUPPORTED_PROTOCOLS:
         # 在整个内容中查找，但避免匹配HTML标签属性等
-        found_nodes = re.findall(rf'{re.escape(protocol)}[^\s<>"\'`]+', content)
-        for node in found_nodes:
-            if validate_node(node):
-                nodes.add(node)
-
-    return list(nodes)
-
-def get_cache_path(url_hash):
-    """
-    获取缓存文件的路径。
-    """
-    return os.path.join(CACHE_DIR, f"{url_hash}.cache")
-
-def get_cache_timestamp_path(url_hash):
-    """
-    获取缓存时间戳文件的路径。
-    """
-    return os.path.join(CACHE_DIR, f"{url_hash}.timestamp")
-
-async def get_cached_content(url_hash):
-    """
-    从缓存中获取内容，如果缓存有效。
-    """
-    cache_file = get_cache_path(url_hash)
-    timestamp_file = get_cache_timestamp_path(url_hash)
-
-    if os.path.exists(cache_file) and os.path.exists(timestamp_file):
-        try:
-            async with aiofiles.open(timestamp_file, 'r', encoding='utf-8') as f:
-                timestamp_str = await f.read()
-            cached_time = datetime.fromisoformat(timestamp_str)
-            if datetime.now() - cached_time < CACHE_EXPIRATION_TIME:
-                async with aiofiles.open(cache_file, 'r', encoding='utf-8') as f:
-                    logging.info(f"从缓存中读取 {url_hash}。")
-                    return await f.read()
-        except Exception as e:
-            logging.warning(f"读取缓存失败 {url_hash}: {e}")
-    return None
-
-async def save_to_cache(url_hash, content):
-    """
-    将内容保存到缓存。
-    """
-    cache_file = get_cache_path(url_hash)
-    timestamp_file = get_cache_timestamp_path(url_hash)
-    try:
-        async with aiofiles.open(cache_file, 'w', encoding='utf-8') as f:
-            await f.write(content)
-        async with aiofiles.open(timestamp_file, 'w', encoding='utf-8') as f:
-            await f.write(datetime.now().isoformat())
-        logging.info(f"内容已缓存 {url_hash}。")
-    except Exception as e:
-        logging.error(f"保存缓存失败 {url_hash}: {e}")
-
-async def fetch_url_content(client, url, visited_urls, depth=0, max_depth=3):
-    """
-    异步安全地获取 URL 内容，优先尝试 HTTP，失败后尝试 HTTPS。
-    支持多层读取和缓存机制。
-    """
-    original_url = url
-    full_url = get_full_url(original_url)
-
-    if full_url in visited_urls:
-        logging.debug(f"已访问URL，跳过：{full_url}")
-        return []
-
-    url_hash = hashlib.sha256(full_url.encode('utf-8')).hexdigest()
-
-    # 尝试从缓存获取
-    cached_content = await get_cached_content(url_hash)
-    if cached_content:
-        logging.info(f"从缓存获取 {full_url} 的内容。")
-        nodes = parse_and_extract_nodes(cached_content)
-        # 递归获取新链接
-        if depth < max_depth:
-            # 找到网页中的所有链接
-            soup = BeautifulSoup(cached_content, 'html.parser')
-            internal_links = set()
-            for link in soup.find_all('a', href=True):
-                href = link['href']
-                # 简单过滤，避免非HTTP/HTTPS链接和外部链接
-                if href.startswith('http://') or href.startswith('https://'):
-                    internal_links.add(href)
-                elif href.startswith('/') and full_url.startswith('http'): # 相对路径
-                    base_url_parsed = httpx.URL(full_url)
-                    internal_links.add(str(base_url_parsed.join(href)))
-
-            tasks = []
-            for link in internal_links:
-                if link not in visited_urls: # 避免重复访问
-                    tasks.append(fetch_url_content(client, link, visited_urls, depth + 1, max_depth))
-            if tasks:
-                results = await asyncio.gather(*tasks)
-                for res_nodes in results:
-                    nodes.extend(res_nodes)
-        visited_urls.add(full_url) # 缓存命中也标记为已访问
-        return nodes
-
-    content = None
-    headers = {"User-Agent": random.choice(USER_AGENTS)}
-    effective_url = full_url # 记录实际请求的URL，可能从http重定向到https
-
-    try:
-        # 尝试 HTTP 请求，httpx 默认会跟随重定向
-        response = await client.get(full_url, timeout=10, headers=headers)
-        response.raise_for_status()  # 检查最终响应的状态码
-        content = response.text
-        effective_url = str(response.url) # 获取最终的 URL (处理了重定向)
-        logging.info(f"成功获取 {effective_url} 的内容。")
-
-    except httpx.HTTPStatusError as e:
-        # 捕获 HTTP 状态码错误 (如 4xx, 5xx), 不包括重定向 (3xx) 因为 httpx 默认会跟随
-        logging.warning(f"获取 {full_url} 失败: HTTP 状态码 {e.response.status_code} - {e.response.reason_phrase}。")
-    except httpx.RequestError as e:
-        # 捕获网络请求错误 (如连接超时、DNS解析失败等)
-        logging.warning(f"获取 {full_url} 失败: {e}。")
-        # 如果 HTTP 失败，尝试 HTTPS
-        if full_url.startswith("http://"):
-            https_url = "https://" + full_url[len("http://"):]
-            try:
-                logging.info(f"尝试通过 HTTPS 获取 {https_url}...")
-                response = await client.get(https_url, timeout=10, headers=headers)
-                response.raise_for_status()
-                content = response.text
-                effective_url = str(response.url)
-                logging.info(f"成功通过 HTTPS 获取 {effective_url} 的内容。")
-            except (httpx.RequestError, httpx.HTTPStatusError) as e_https:
-                logging.error(f"通过 HTTPS 获取 {https_url} 再次失败: {e_https}。")
-        else:
-            logging.error(f"获取 {full_url} 失败: {e}。")
-
-    if content:
-        # 标记为已访问
-        visited_urls.add(effective_url)
-        # 保存到缓存，使用 effective_url 的哈希值
-        effective_url_hash = hashlib.sha256(effective_url.encode('utf-8')).hexdigest()
-        await save_to_cache(effective_url_hash, content)
-
-        # 保存原始网页内容到data目录，文件名为 URL 的哈希值，扩展名为 .html 或 .txt
-        file_extension = "txt"
-        if "html" in response.headers.get("Content-Type", "").lower():
-            file_extension = "html"
-        original_content_path = os.path.join("data", f"{effective_url_hash}.{file_extension}")
-        async with aiofiles.open(original_content_path, 'w', encoding='utf-8') as f:
-            await f.write(content)
-        logging.info(f"原始网页内容已保存到 {original_content_path}")
-
-        nodes = parse_and_extract_nodes(content)
-
-        # 递归获取新链接
-        if depth < max_depth:
-            # 找到网页中的所有链接
-            soup = BeautifulSoup(content, 'html.parser')
-            internal_links = set()
-            for link in soup.find_all('a', href=True):
-                href = link['href']
-                if href.startswith('http://') or href.startswith('https://'):
-                    internal_links.add(href)
-                elif href.startswith('/') and effective_url.startswith('http'):
-                    base_url_parsed = httpx.URL(effective_url)
-                    internal_links.add(str(base_url_parsed.join(href)))
-
-            tasks = []
-            for link in internal_links:
-                if link not in visited_urls:
-                    tasks.append(fetch_url_content(client, link, visited_urls, depth + 1, max_depth))
-            if tasks:
-                results = await asyncio.gather(*tasks)
-                for res_nodes in results:
-                    nodes.extend(res_nodes)
-        return nodes
-    return []
-
-def shorten_node_name(node_string):
-    """
-    只保留原节点名称前5位，多余的全部删除。
-    """
-    for protocol in SUPPORTED_PROTOCOLS:
-        if node_string.startswith(protocol):
-            # 尝试找到 # 后面的名称部分
-            match = re.search(r'#([^&]+)$', node_string)
-            if match:
-                original_name = match.group(1)
-                shortened_name = original_name[:5]
-                return node_string.replace(f"#{original_name}", f"#{shortened_name}")
-            break
-    return node_string # 如果没有找到名称或不匹配协议，返回原字符串
-
-async def main():
-    start_time = time.time()
-    urls = await read_urls_from_file()
-    all_nodes = set()
-    url_node_counts = []
-    visited_urls = set() # 跟踪所有被访问过的URL，包括通过递归发现的
-
-    async with httpx.AsyncClient(http2=True, follow_redirects=True) as client: # 明确设置跟随重定向
-        tasks = []
-        for url in urls:
-            tasks.append(fetch_url_content(client, url, visited_urls))
-        
-        results = await asyncio.gather(*tasks)
-
-        for i, nodes_from_url in enumerate(results):
-            original_url = urls[i]
-            unique_nodes_from_url = set()
-            for node in nodes_from_url:
-                shortened_node = shorten_node_name(node)
-                all_nodes.add(shortened_node)
-                unique_nodes_from_url.add(shortened_node)
-            
-            # 使用原始 URL 进行统计
-            url_node_counts.append({
-                "url": original_url,
-                "node_count": len(unique_nodes_from_url)
-            })
-            
-            # 将每个URL获取到的节点单独保存
-            # 注意：这里应该使用原始URL的哈希值作为文件名，因为我们统计的是从哪个原始URL开始获取的节点
-            # 但是为了避免文件名冲突和更好地反映来源，可以考虑用原始URL的哈希值命名文件夹，然后把节点放进去
-            # 或者像现在这样，文件名包含原始URL的哈希值
-            original_url_hash_for_file = hashlib.sha256(get_full_url(original_url).encode('utf-8')).hexdigest()
-            output_file = os.path.join("data", f"{original_url_hash_for_file}_nodes.txt")
-            async with aiofiles.open(output_file, 'w', encoding='utf-8') as f:
-                for node in unique_nodes_from_url:
-                    await f.write(node + '\n')
-            logging.info(f"URL: {original_url} 提取到 {len(unique_nodes_from_url)} 个节点，保存到 {output_file}。")
-
-    # 保存节点数量统计到CSV
-    csv_file_path = os.path.join("data", "node_counts.csv")
-    async with aiofiles.open(csv_file_path, 'w', newline='', encoding='utf-8') as f:
-        writer = csv.DictWriter(f, fieldnames=["url", "node_count"])
-        await f.write(','.join(writer.fieldnames) + '\n') # 写头部
-        for row in url_node_counts:
-            await f.write(f"{row['url']},{row['node_count']}\n")
-    logging.info(f"节点数量统计已保存到 {csv_file_path}。")
-
-    # 将所有收集到的唯一节点保存到combined_nodes.txt
-    combined_nodes_path = os.path.join("data", "combined_nodes.txt")
-    async with aiofiles.open(combined_nodes_path, 'w', encoding='utf-8') as f:
-        for node in sorted(list(all_nodes)): # 排序以便每次生成一致的文件
-            await f.write(node + '\n')
-    logging.info(f"所有唯一节点已保存到 {combined_nodes_path}。总计 {len(all_nodes)} 个节点。")
-
-    end_time = time.time()
-    logging.info(f"脚本执行完毕，总耗时：{end_time - start_time:.2f} 秒。")
-
-if __name__ == "__main__":
-    asyncio.run(main())
+        found_nodes = re.findall(rf'{re.escape(protocol)}[^\s<>"\'
