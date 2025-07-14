@@ -1,408 +1,374 @@
-import asyncio
 import httpx
+import asyncio
 import re
 import os
-import yaml
-import base64
-import json
 import csv
-from bs4 import BeautifulSoup
-import logging
-from urllib.parse import urlparse, urljoin
 import hashlib
-import time
+import json
+from datetime import datetime, timedelta
+from bs4 import BeautifulSoup
+import base64
+import yaml
+from urllib.parse import urlparse, unquote
 
-# 配置日志
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s', encoding='utf-8')
-
-# 定义支持的节点协议正则
-NODE_PROTOCOLS = {
-    "hysteria2": r"hysteria2://",
-    "vmess": r"vmess://",
-    "trojan": r"trojan://",
-    "ss": r"ss://",
-    "ssr": r"ssr://",
-    "vless": r"vless://",
-}
-
-# 缓存目录
+# 配置
 CACHE_DIR = "cache"
-os.makedirs(CACHE_DIR, exist_ok=True)
-CACHE_EXPIRATION_TIME = 3600  # 缓存过期时间，单位秒 (1小时)
+DATA_DIR = "data"
+SOURCES_LIST = "sources.list"
+CACHE_EXPIRATION_HOURS = 24  # 缓存有效期（小时）
+CONCURRENT_REQUESTS_PER_URL = 5  # 每个URL并行请求数
+REQUEST_TIMEOUT = 15  # 请求超时时间（秒）
 
-# 请求头列表
+# 确保目录存在
+os.makedirs(CACHE_DIR, exist_ok=True)
+os.makedirs(DATA_DIR, exist_ok=True)
+
+# 请求头列表，包含多种设备类型
 USER_AGENTS = [
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.88 Safari/537.36",
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Safari/605.1.15",
-    "Mozilla/5.0 (Linux; Android 11; Pixel 5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Mobile Safari/537.36",
-    "Mozilla/5.0 (iPad; CPU OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1",
-    "Mozilla/5.0 (Linux; U; Android 10; zh-cn; HarmonyOS) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.106 Mobile Safari/537.36",
-    "Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1"
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Safari/605.1.15",
+    "Mozilla/5.0 (Linux; Android 12; Pixel 6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Mobile Safari/537.36",
+    "Mozilla/5.0 (iPad; CPU OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148",
+    "Mozilla/5.0 (Linux; U; Android 10; zh-cn; HarmonyOS) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.105 Mobile Safari/537.36",
+    "Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148",
 ]
 
-# 节点验证函数 (示例，需根据实际协议规范补充完整)
-def validate_node(node_url: str) -> bool:
+# 代理协议正则表达式
+NODE_PATTERNS = {
+    "hysteria2": r"hysteria2://[\w\d\-\._~:/?#\[\]@!$&'()*+,;=]+",
+    "vmess": r"vmess://[a-zA-Z0-9+/=]+",
+    "trojan": r"trojan://[\w\d\-\._~:/?#\[\]@!$&'()*+,;=]+",
+    "ss": r"ss://[a-zA-Z0-9+/=]+",
+    "ssr": r"ssr://[a-zA-Z0-9+/=]+",
+    "vless": r"vless://[\w\d\-\._~:/?#\[\]@!$&'()*+,;=]+"
+}
+
+# 已知代理协议的验证函数 (简化示例，实际验证需更复杂)
+# 实际验证需要根据协议规范进行详细解析和字段检查
+def validate_node(node_string, protocol_type):
     """
-    验证节点是否符合协议规范且信息完整。
-    实际应用中需要根据不同的协议（vmess, trojan, ss等）补充详细的验证逻辑。
-    目前仅做基础的URL格式和协议头校验。
-    """
-    if not any(node_url.startswith(p) for p in NODE_PROTOCOLS.values()):
-        logging.debug(f"节点 {node_url[:50]}... 协议头不匹配，丢弃。")
-        return False
-
-    # 简单的验证逻辑，实际应用中需要更严谨的校验
-    if "://" not in node_url:
-        logging.debug(f"节点 {node_url[:50]}... 缺少协议分隔符，丢弃。")
-        return False
-
-    parts = node_url.split("://", 1)
-    if len(parts) < 2:
-        logging.debug(f"节点 {node_url[:50]}... 格式不正确，丢弃。")
-        return False
-
-    protocol = parts[0]
-    content = parts[1]
-
-    if protocol == "vmess":
-        try:
-            # vmess 节点内容通常是 base64 编码的 JSON
-            decoded_content = base64.b64decode(content).decode('utf-8')
-            node_data = json.loads(decoded_content)
-            # 检查关键字段是否存在
-            if not all(k in node_data for k in ['add', 'port', 'id', 'net', 'type']):
-                logging.debug(f"VMess 节点 {node_url[:50]}... 缺少关键字段，丢弃。")
-                return False
-        except (base64.binascii.Error, json.JSONDecodeError, UnicodeDecodeError) as e:
-            logging.debug(f"VMess 节点 {node_url[:50]}... 解码或解析失败: {e}，丢弃。")
-            return False
-    elif protocol == "trojan":
-        # trojan://password@host:port
-        if not re.match(r"[^@]+@[^:]+:\d+", content):
-            logging.debug(f"Trojan 节点 {node_url[:50]}... 格式不正确，丢弃。")
-            return False
-    elif protocol == "ss":
-        # ss://base64(method:password@host:port)
-        try:
-            decoded_content = base64.b64decode(content.split("#")[0]).decode('utf-8') # 忽略注释部分
-            if ":" not in decoded_content or "@" not in decoded_content:
-                logging.debug(f"SS 节点 {node_url[:50]}... 解码后格式不正确，丢弃。")
-                return False
-        except (base64.binascii.Error, UnicodeDecodeError) as e:
-            logging.debug(f"SS 节点 {node_url[:50]}... 解码失败: {e}，丢弃。")
-            return False
-    elif protocol == "ssr":
-        # ssr://base64(...)
-        try:
-            decoded_content = base64.b64decode(content).decode('utf-8')
-            # 简单的检查，ssr协议通常包含多个字段，用:或/分隔
-            if len(decoded_content.split(':')) < 6: # 基础字段数量
-                logging.debug(f"SSR 节点 {node_url[:50]}... 解码后字段不全，丢弃。")
-                return False
-        except (base64.binascii.Error, UnicodeDecodeError) as e:
-            logging.debug(f"SSR 节点 {node_url[:50]}... 解码失败: {e}，丢弃。")
-            return False
-    elif protocol == "vless":
-        # vless://uuid@host:port?params
-        if not re.match(r"[0-9a-fA-F-]+@[^:]+:\d+", content):
-            logging.debug(f"VLESS 节点 {node_url[:50]}... 格式不正确，丢弃。")
-            return False
-    elif protocol == "hysteria2":
-        # hysteria2://host:port?params
-        if not re.match(r"[^:]+:\d+", content):
-            logging.debug(f"Hysteria2 节点 {node_url[:50]}... 格式不正确，丢弃。")
-            return False
-
-    return True
-
-def clean_node_name(node_url: str) -> str:
-    """
-    只保留原节点名称前5位，多余的全部删除。
+    验证代理节点字符串是否符合协议规范且信息完整。
     """
     try:
-        # 尝试从URL中提取节点名称部分（通常在#后面）
-        if "#" in node_url:
-            name_part = node_url.split("#", 1)[1]
-            return node_url.replace(name_part, name_part[:5])
-        return node_url # 如果没有名称部分，则不处理
+        if protocol_type == "vmess":
+            # 尝试解码VMess，检查JSON结构
+            decoded = base64.b64decode(node_string[len("vmess://"):])
+            json.loads(decoded)
+            return True
+        elif protocol_type in ["trojan", "vless", "hysteria2"]:
+            # 这些协议通常有明确的结构，这里简单检查是否包含必要的域名/IP和端口
+            parts = node_string.split('@')
+            if len(parts) < 2:
+                return False
+            addr_port = parts[1].split('#')[0]
+            if ':' not in addr_port:
+                return False
+            host, port = addr_port.rsplit(':', 1)
+            # 简单判断host是否非空，port是否为数字
+            return bool(host) and port.isdigit()
+        elif protocol_type == "ss":
+            # SS协议的base64解码后通常是user:pass@server:port或加密方法:password@server:port
+            decoded = base64.b64decode(node_string[len("ss://"):])
+            # 这里可以进一步解析解码后的内容
+            return True
+        elif protocol_type == "ssr":
+            # SSR协议有更复杂的参数，这里仅做初步检查
+            decoded = base64.b64decode(node_string[len("ssr://"):])
+            # 可以检查是否有足够的参数
+            return True
+        else:
+            return False
     except Exception as e:
-        logging.warning(f"清洗节点名称失败: {e}, 原始URL: {node_url}")
-        return node_url
+        # print(f"节点验证失败: {node_string}, 错误: {e}")
+        return False
 
-def extract_domain_from_url(url: str) -> str:
-    """
-    从URL中提取中间域名，去除http,https,和后缀如com.net,等
-    """
-    try:
-        parsed_url = urlparse(url)
-        netloc = parsed_url.netloc
-        # 移除端口号
-        if ':' in netloc:
-            netloc = netloc.split(':')[0]
-
-        # 移除 www. 前缀
-        if netloc.startswith("www."):
-            netloc = netloc[4:]
-
-        # 移除顶级域名后缀，这里只是一个简单示例，更精确的需要使用公共后缀列表
-        parts = netloc.split('.')
-        if len(parts) > 2:
-            # 假设倒数第二个是主要域名
-            return ".".join(parts[-2:])
-        return netloc
-    except Exception as e:
-        logging.error(f"提取域名失败: {url} - {e}")
-        return hashlib.md5(url.encode()).hexdigest()[:10] # 失败时返回URL的MD5前10位
-
-def get_cache_path(url: str) -> str:
-    """根据URL生成缓存文件路径"""
-    url_hash = hashlib.md5(url.encode('utf-8')).hexdigest()
-    return os.path.join(CACHE_DIR, f"{url_hash}.cache")
-
-async def get_cached_content(url: str) -> str | None:
-    """尝试从缓存中读取内容，如果缓存有效则返回"""
-    cache_path = get_cache_path(url)
-    if os.path.exists(cache_path):
-        mod_time = os.path.getmtime(cache_path)
-        if (time.time() - mod_time) < CACHE_EXPIRATION_TIME:
-            async with aiofiles.open(cache_path, 'r', encoding='utf-8') as f:
-                content = await f.read()
-                logging.info(f"从缓存中读取: {url}")
-                return content
-    return None
-
-async def save_content_to_cache(url: str, content: str):
-    """将内容保存到缓存"""
-    cache_path = get_cache_path(url)
-    async with aiofiles.open(cache_path, 'w', encoding='utf-8') as f:
-        await f.write(content)
-        logging.info(f"内容保存到缓存: {url}")
-
-async def fetch_url_content(client: httpx.AsyncClient, url: str) -> str | None:
+async def fetch_url(client: httpx.AsyncClient, url: str) -> str:
     """
     安全地异步获取 URL 内容，优先尝试 HTTP，失败后尝试 HTTPS。
-    随机使用一个请求头。
     """
-    if not url.startswith(('http://', 'https://')):
-        logging.warning(f"URL格式不正确，自动添加http://: {url}")
-        url = "http://" + url # 尝试添加http://
-
-    cached_content = await get_cached_content(url)
-    if cached_content:
-        return cached_content
-
-    headers = {"User-Agent": USER_AGENTS[hash(url) % len(USER_AGENTS)]} # 根据URL哈希值随机选择请求头
-
-    async def _fetch(full_url: str):
+    headers = {'User-Agent': USER_AGENTS[hash(url) % len(USER_AGENTS)]} # 根据URL随机选择请求头
+    try:
+        # 尝试 HTTPS
+        response = await client.get(f"https://{url}", headers=headers, timeout=REQUEST_TIMEOUT, follow_redirects=True)
+        response.raise_for_status()
+        print(f"成功获取 HTTPS: {url}")
+        return response.text
+    except httpx.RequestError as exc:
+        print(f"HTTPS 请求失败: {url} - {exc}")
         try:
-            logging.info(f"尝试获取内容: {full_url}")
-            response = await client.get(full_url, headers=headers, follow_redirects=True, timeout=15)
-            response.raise_for_status()  # 检查 HTTP 状态码
-            await save_content_to_cache(full_url, response.text)
+            # 尝试 HTTP
+            response = await client.get(f"http://{url}", headers=headers, timeout=REQUEST_TIMEOUT, follow_redirects=True)
+            response.raise_for_status()
+            print(f"成功获取 HTTP: {url}")
             return response.text
-        except httpx.RequestError as e:
-            logging.warning(f"请求 {full_url} 失败: {e}")
-            return None
-        except httpx.HTTPStatusError as e:
-            logging.warning(f"请求 {full_url} 返回非成功状态码: {e.response.status_code}")
-            return None
+        except httpx.RequestError as exc_http:
+            print(f"HTTP 请求失败: {url} - {exc_http}")
+            return ""
+    except Exception as e:
+        print(f"获取 URL 过程中发生未知错误: {url} - {e}")
+        return ""
 
-    # 优先尝试原始URL (可能已在外面添加http/https)
-    content = await _fetch(url)
+def get_cache_path(url: str) -> str:
+    """
+    根据URL生成缓存文件路径。
+    """
+    url_hash = hashlib.md5(url.encode('utf-8')).hexdigest()
+    return os.path.join(CACHE_DIR, f"{url_hash}.json")
+
+async def get_content_with_cache(client: httpx.AsyncClient, url: str) -> str:
+    """
+    从缓存中读取内容，如果缓存不存在或过期则从URL获取并更新缓存。
+    """
+    cache_path = get_cache_path(url)
+    current_time = datetime.now()
+
+    if os.path.exists(cache_path):
+        with open(cache_path, 'r', encoding='utf-8') as f:
+            try:
+                cache_data = json.load(f)
+                cached_time = datetime.fromisoformat(cache_data['timestamp'])
+                if current_time - cached_time < timedelta(hours=CACHE_EXPIRATION_HOURS):
+                    print(f"从缓存读取: {url}")
+                    return cache_data['content']
+            except (json.JSONDecodeError, KeyError) as e:
+                print(f"缓存文件损坏或格式不正确: {cache_path}, 错误: {e}")
+
+    # 缓存无效或不存在，从网络获取
+    content = await fetch_url(client, url)
     if content:
-        return content
+        with open(cache_path, 'w', encoding='utf-8') as f:
+            json.dump({'timestamp': current_time.isoformat(), 'content': content}, f, ensure_ascii=False, indent=2)
+    return content
 
-    # 如果原始URL失败，尝试 http 和 https
-    if not url.startswith('http://') and not url.startswith('https://'):
-        for scheme in ['http://', 'https://']:
-            full_url = scheme + url
-            content = await _fetch(full_url)
-            if content:
-                return content
-    else: # 如果原始URL已经带协议，但仍失败，则尝试切换协议
-        if url.startswith('http://'):
-            content = await _fetch('https://' + url[7:])
-            if content: return content
-        elif url.startswith('https://'):
-            content = await _fetch('http://' + url[8:])
-            if content: return content
-
-    logging.error(f"无法获取任何形式的URL内容: {url}")
-    return None
-
-def parse_and_extract_nodes(html_content: str, base_url: str) -> tuple[list[str], list[str]]:
+def extract_urls_from_text(text: str, base_url: str) -> set:
     """
-    解析 HTML 内容，提取节点和嵌套链接。
-    优先处理 <pre>、<code>、<textarea> 等可能包含节点内容的标签。
+    从文本中提取符合条件的URL，并进行格式化。
     """
+    found_urls = set()
+    # 查找所有类似URL的字符串
+    potential_urls = re.findall(r"(?:https?://)?(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6}(?:/[^\s\"'<>]*)?", text)
+    for p_url in potential_urls:
+        parsed_url = urlparse(p_url)
+        # 确保是有效的网络地址
+        if parsed_url.netloc:
+            # 移除http/https，只保留域名和路径
+            normalized_url = parsed_url.netloc + parsed_url.path
+            # 移除末尾的斜杠
+            if normalized_url.endswith('/'):
+                normalized_url = normalized_url[:-1]
+            found_urls.add(normalized_url)
+    return found_urls
+
+def parse_and_extract_nodes(html_content: str) -> set:
+    """
+    解析HTML内容，优先从特定标签中提取节点，并处理多种节点格式。
+    """
+    nodes = set()
     soup = BeautifulSoup(html_content, 'html.parser')
-    extracted_nodes = []
-    nested_urls = []
 
-    # 优先从 pre, code, textarea 标签中提取文本
+    # 优先处理 <pre>, <code>, <textarea> 等可能包含节点内容的标签
     for tag in soup.find_all(['pre', 'code', 'textarea']):
-        text_content = tag.get_text()
-        extracted_nodes.extend(re.findall(r'(' + '|'.join(NODE_PROTOCOLS.values()) + r')[^\s"\']+', text_content))
-        # 尝试解析YAML或JSON中的节点
-        if tag.name == 'pre' or tag.name == 'code':
-            try:
-                # 尝试解析 YAML
-                data = yaml.safe_load(text_content)
-                if isinstance(data, dict):
-                    # 递归查找可能的节点列表
-                    def find_nodes_in_dict(d):
-                        nodes = []
-                        for k, v in d.items():
-                            if isinstance(v, str) and any(v.startswith(p) for p in NODE_PROTOCOLS.values()):
-                                nodes.append(v)
-                            elif isinstance(v, list):
-                                for item in v:
-                                    if isinstance(item, str) and any(item.startswith(p) for p in NODE_PROTOCOLS.values()):
-                                        nodes.append(item)
-                                    elif isinstance(item, dict):
-                                        nodes.extend(find_nodes_in_dict(item))
-                            elif isinstance(v, dict):
-                                nodes.extend(find_nodes_in_dict(v))
-                        return nodes
-                    extracted_nodes.extend(find_nodes_in_dict(data))
-            except yaml.YAMLError:
-                pass
-            try:
-                # 尝试解析 JSON
-                data = json.loads(text_content)
-                if isinstance(data, dict):
-                    def find_nodes_in_json_dict(d):
-                        nodes = []
-                        for k, v in d.items():
-                            if isinstance(v, str) and any(v.startswith(p) for p in NODE_PROTOCOLS.values()):
-                                nodes.append(v)
-                            elif isinstance(v, list):
-                                for item in v:
-                                    if isinstance(item, str) and any(item.startswith(p) for p in NODE_PROTOCOLS.values()):
-                                        nodes.append(item)
-                                    elif isinstance(item, dict):
-                                        nodes.extend(find_nodes_in_json_dict(item))
-                            elif isinstance(v, dict):
-                                nodes.extend(find_nodes_in_json_dict(v))
-                        return nodes
-                    extracted_nodes.extend(find_nodes_in_json_dict(data))
-            except json.JSONDecodeError:
-                pass
+        content = tag.get_text()
+        extracted_from_tag = extract_nodes_from_text(content)
+        if extracted_from_tag:
+            nodes.update(extracted_from_tag)
 
-    # 从所有文本中提取明文节点
+    # 如果特定标签没有提取到足够内容，或者需要从整个页面中提取
+    # 提取所有文本内容（去除脚本、样式等）
+    for script_or_style in soup(["script", "style"]):
+        script_or_style.decompose()
     text_content = soup.get_text()
-    all_potential_nodes = re.findall(r'(' + '|'.join(NODE_PROTOCOLS.values()) + r')[^\s"\']+', text_content)
-    extracted_nodes.extend(all_potential_nodes)
 
-    # 尝试解码 Base64 字符串并提取节点
-    for match in re.findall(r'[a-zA-Z0-9+/=]{20,}', text_content): # 查找可能的Base64字符串
-        try:
-            decoded_text = base64.b64decode(match).decode('utf-8')
-            extracted_nodes.extend(re.findall(r'(' + '|'.join(NODE_PROTOCOLS.values()) + r')[^\s"\']+', decoded_text))
-        except (base64.binascii.Error, UnicodeDecodeError):
-            pass # 不是有效的Base64或解码失败
-
-    # 提取所有链接
-    for a_tag in soup.find_all('a', href=True):
-        href = a_tag['href']
-        full_url = urljoin(base_url, href)
-        # 过滤掉非http/https链接，以及可能不是有效链接的
-        if full_url.startswith(('http://', 'https://')):
-            # 避免重复抓取主域名
-            if urlparse(full_url).netloc != urlparse(base_url).netloc:
-                nested_urls.append(full_url)
+    extracted_from_text = extract_nodes_from_text(text_content)
+    if extracted_from_text:
+        nodes.update(extracted_from_text)
     
-    # 移除重复和无效的节点
-    unique_nodes = [node for node in set(extracted_nodes) if validate_node(node)]
-    
-    return unique_nodes, list(set(nested_urls)) # 返回去重后的节点和链接
+    return nodes
 
-async def scrape_url(client: httpx.AsyncClient, url: str, visited_urls: set, all_nodes: dict, depth: int = 0, max_depth: int = 3):
+def extract_nodes_from_text(text_content: str) -> set:
     """
-    抓取单个URL及其嵌套链接，并提取节点。
+    从纯文本内容中提取符合代理协议格式的节点，并处理base64和YAML/JSON。
     """
-    if url in visited_urls or depth > max_depth:
-        return
-    
-    visited_urls.add(url)
-    logging.info(f"正在抓取 (深度 {depth}): {url}")
+    found_nodes = set()
 
-    content = await fetch_url_content(client, url)
-    if not content:
-        return
+    # 尝试解码 Base64
+    try:
+        decoded_text = base64.b64decode(text_content).decode('utf-8', errors='ignore')
+        for proto, pattern in NODE_PATTERNS.items():
+            for match in re.finditer(pattern, decoded_text):
+                node = match.group(0)
+                if validate_node(node, proto):
+                    found_nodes.add(node)
+    except Exception as e:
+        # print(f"Base64 解码失败: {e}")
+        pass # 不是base64编码的内容
 
-    nodes, nested_urls = parse_and_extract_nodes(content, url)
-    
-    # 清洗节点名称
-    cleaned_nodes = [clean_node_name(node) for node in nodes]
-    
-    domain_name = extract_domain_from_url(url)
-    
-    # 将节点添加到总集合中，以原始 URL 的域名作为键
-    if domain_name not in all_nodes:
-        all_nodes[domain_name] = []
-    all_nodes[domain_name].extend(cleaned_nodes)
+    # 尝试解析 YAML 或 JSON
+    try:
+        data = yaml.safe_load(text_content)
+        if isinstance(data, dict):
+            # 假设节点在某个键下，例如 'proxies', 'nodes'
+            if 'proxies' in data and isinstance(data['proxies'], list):
+                for proxy_item in data['proxies']:
+                    if isinstance(proxy_item, dict) and 'type' in proxy_item:
+                        # 简单的将字典转换为字符串，然后尝试匹配
+                        node_str = json.dumps(proxy_item) # 或者构建成协议字符串
+                        for proto, pattern in NODE_PATTERNS.items():
+                            if proto in node_str: # 简单匹配协议名
+                                # 更高级的解析会在这里根据type构建具体的协议URL
+                                # 目前，我们只是检查是否能从其中提取到已知格式
+                                for match in re.finditer(pattern, node_str):
+                                    node = match.group(0)
+                                    if validate_node(node, proto):
+                                        found_nodes.add(node)
+            elif 'nodes' in data and isinstance(data['nodes'], list):
+                for node_item in data['nodes']:
+                    if isinstance(node_item, str):
+                        for proto, pattern in NODE_PATTERNS.items():
+                            if re.match(pattern, node_item):
+                                if validate_node(node_item, proto):
+                                    found_nodes.add(node_item)
+    except Exception as e:
+        # print(f"YAML/JSON 解析失败: {e}")
+        pass # 不是YAML/JSON格式
 
-    # 保存当前URL的节点到单独的文件
-    output_dir = "data"
-    os.makedirs(output_dir, exist_ok=True)
-    filename = os.path.join(output_dir, f"{domain_name}.txt")
-    
-    # 去重并保存
-    unique_nodes_for_file = list(set(cleaned_nodes))
-    if unique_nodes_for_file:
-        async with aiofiles.open(filename, 'a', encoding='utf-8') as f:
-            for node in unique_nodes_for_file:
-                await f.write(node + "\n")
-        logging.info(f"从 {url} 获取到 {len(unique_nodes_for_file)} 个有效节点，保存到 {filename}")
-    else:
-        logging.info(f"从 {url} 未获取到有效节点。")
+    # 直接从文本中匹配协议格式
+    for proto, pattern in NODE_PATTERNS.items():
+        for match in re.finditer(pattern, text_content):
+            node = match.group(0)
+            if validate_node(node, proto):
+                found_nodes.add(node)
 
-    # 并行抓取嵌套链接
-    tasks = [scrape_url(client, u, visited_urls, all_nodes, depth + 1, max_depth) for u in nested_urls]
-    await asyncio.gather(*tasks)
+    return found_nodes
+
+def truncate_node_name(node_string: str) -> str:
+    """
+    只保留原始节点名称前5位，多余的全部删除。
+    """
+    # 提取节点名称部分，例如在 # 之后的部分
+    match = re.search(r'#([^&\s]+)', node_string)
+    if match:
+        original_name = match.group(1)
+        truncated_name = original_name[:5]
+        # 替换回原字符串
+        return node_string.replace(original_name, truncated_name)
+    return node_string # 如果没有找到名称，则返回原字符串
+
+def get_sanitized_filename(url: str) -> str:
+    """
+    生成一个基于URL的合法文件名，只保留中间域名。
+    """
+    parsed_url = urlparse(f"http://{url}") # 随意加上http://以便urlparse处理
+    domain_parts = parsed_url.netloc.split('.')
+    if len(domain_parts) >= 2:
+        # 移除常见的顶级域名后缀和www
+        domain_parts = [p for p in domain_parts if p not in ['www', 'com', 'net', 'org', 'cn', 'co', 'jp', 'uk', 'io', 'xyz', 'top', 'info', 'me', 'gov', 'edu']]
+        if len(domain_parts) > 0:
+            # 尝试保留核心部分，例如 google.com -> google
+            # 或者 sub.domain.com -> domain
+            if len(domain_parts) > 1:
+                return domain_parts[-2].replace('.', '_').replace('-', '_') # 取倒数第二个作为主要域名
+            else:
+                return domain_parts[0].replace('.', '_').replace('-', '_')
+    
+    # 如果无法有效提取，则使用哈希值
+    return hashlib.md5(url.encode('utf-8')).hexdigest()[:10]
+
+async def scrape_url(client: httpx.AsyncClient, url: str, all_collected_nodes: set):
+    """
+    抓取单个URL及其内联链接，收集节点并统计。
+    """
+    print(f"开始处理 URL: {url}")
+    visited_urls = set()
+    urls_to_visit = [url]
+    url_nodes_count = 0
+    url_specific_nodes = set()
+
+    while urls_to_visit:
+        current_url = urls_to_visit.pop(0)
+        if current_url in visited_urls:
+            continue
+        visited_urls.add(current_url)
+
+        content = await get_content_with_cache(client, current_url)
+        if not content:
+            print(f"未能获取内容或内容为空: {current_url}")
+            continue
+
+        # 提取节点
+        new_nodes = parse_and_extract_nodes(content)
+        
+        # 截断节点名称
+        truncated_nodes = set()
+        for node in new_nodes:
+            truncated_nodes.add(truncate_node_name(node))
+
+        # 筛选有效的节点
+        valid_nodes = set()
+        for node in truncated_nodes:
+            for proto_type, pattern in NODE_PATTERNS.items():
+                if re.match(pattern, node) and validate_node(node, proto_type):
+                    valid_nodes.add(node)
+                    break # 找到匹配项就跳出内部循环
+
+        url_specific_nodes.update(valid_nodes)
+        all_collected_nodes.update(valid_nodes)
+        url_nodes_count += len(valid_nodes)
+
+        # 提取新的链接继续抓取
+        extracted_links = extract_urls_from_text(content, current_url)
+        for link in extracted_links:
+            # 避免循环引用和重复访问，并且只抓取当前域名的子路径或相关域名
+            parsed_current = urlparse(f"http://{current_url}")
+            parsed_link = urlparse(f"http://{link}")
+            if parsed_link.netloc == parsed_current.netloc or parsed_link.netloc.endswith(f".{parsed_current.netloc}"):
+                if link not in visited_urls:
+                    urls_to_visit.append(link)
+    
+    # 保存该URL获取到的节点
+    if url_specific_nodes:
+        sanitized_filename = get_sanitized_filename(url)
+        output_filepath = os.path.join(DATA_DIR, f"{sanitized_filename}.txt")
+        with open(output_filepath, 'w', encoding='utf-8') as f:
+            for node in sorted(list(url_specific_nodes)):
+                f.write(node + '\n')
+        print(f"已将 {len(url_specific_nodes)} 个节点保存到 {output_filepath}")
+
+    return url, url_nodes_count
 
 async def main():
-    sources_list_path = "sources.list"
-    output_data_dir = "data"
-    output_csv_path = os.path.join(output_data_dir, "node_counts.csv")
+    all_collected_nodes = set()
+    node_counts = [] # (URL, 节点数量) 列表
 
-    os.makedirs(output_data_dir, exist_ok=True)
-
-    urls_to_scrape = []
-    if os.path.exists(sources_list_path):
-        async with aiofiles.open(sources_list_path, 'r', encoding='utf-8') as f:
-            async for line in f:
-                url = line.strip()
-                if url:
-                    urls_to_scrape.append(url)
-    else:
-        logging.error(f"文件 '{sources_list_path}' 不存在。请确保该文件在根目录下。")
+    # 读取 sources.list
+    if not os.path.exists(SOURCES_LIST):
+        print(f"错误: {SOURCES_LIST} 文件不存在。请在项目根目录创建此文件并填入URL。")
         return
 
-    all_scraped_nodes = {}  # 存储所有 URL 获取到的节点，键为URL的域名
-    visited_urls = set()    # 存储已访问的URL，避免重复抓取
+    with open(SOURCES_LIST, 'r', encoding='utf-8') as f:
+        urls = [line.strip() for line in f if line.strip()]
 
-    # 使用 httpx 的异步客户端进行请求
-    async with httpx.AsyncClient(http2=True, verify=False) as client: # verify=False 忽略SSL证书错误
-        tasks = [scrape_url(client, url, visited_urls, all_scraped_nodes) for url in urls_to_scrape]
-        await asyncio.gather(*tasks)
+    async with httpx.AsyncClient(http2=True) as client:
+        tasks = [scrape_url(client, url, all_collected_nodes) for url in urls]
+        results = await asyncio.gather(*tasks)
+        for url, count in results:
+            node_counts.append({'URL': url, '节点数量': count})
+    
+    # 保存总节点文件
+    total_nodes_path = os.path.join(DATA_DIR, "all_proxies.txt")
+    with open(total_nodes_path, 'w', encoding='utf-8') as f:
+        for node in sorted(list(all_collected_nodes)):
+            f.write(node + '\n')
+    print(f"\n所有唯一节点已保存到 {total_nodes_path}，共 {len(all_collected_nodes)} 个节点。")
 
-    # 统计节点数量并保存为 CSV
-    node_counts = []
-    for domain, nodes in all_scraped_nodes.items():
-        node_counts.append({'URL_Domain': domain, 'Node_Count': len(set(nodes))}) # 使用 set 去重后计数
-
-    if node_counts:
-        async with aiofiles.open(output_csv_path, 'w', newline='', encoding='utf-8') as csvfile:
-            fieldnames = ['URL_Domain', 'Node_Count']
-            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-            await writer.writeheader()
-            for row in node_counts:
-                await writer.writerow(row)
-        logging.info(f"节点数量统计已保存到: {output_csv_path}")
-    else:
-        logging.info("未获取到任何节点。")
+    # 保存节点数量统计到 CSV
+    csv_path = os.path.join(DATA_DIR, "node_counts.csv")
+    with open(csv_path, 'w', newline='', encoding='utf-8') as csvfile:
+        fieldnames = ['URL', '节点数量']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(node_counts)
+    print(f"节点数量统计已保存到 {csv_path}")
 
 if __name__ == "__main__":
     asyncio.run(main())
