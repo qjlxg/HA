@@ -16,6 +16,7 @@ import logging
 from dataclasses import dataclass, field
 from typing import List, Set, Dict, Optional, Tuple
 from urllib.parse import urlparse, urljoin
+import httpx # 导入 httpx
 
 # --- 配置 ---
 @dataclass
@@ -24,11 +25,11 @@ class Config:
     CACHE_DIR: str = "cache"  # 缓存目录
     CACHE_EXPIRY_HOURS: int = 108  # 缓存有效期（小时）
     MAX_DEPTH: int = 1  # 最大递归深度
-    CONCURRENT_REQUEST_LIMIT: int = 1  # 并发请求限制
+    CONCURRENT_REQUEST_LIMIT: int = 2  # 并发请求限制
     REQUEST_TIMEOUT: int = 60000  # 请求超时时间（毫秒，60秒）
     USER_AGENTS: List[str] = field(default_factory=lambda: [
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36",
-        "Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Mobile/15E148 Safari/604.1",
+        "Mozilla/50 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Mobile/15E148 Safari/604.1",
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36",
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36 Edg/100.0.1185.39",
         "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36 OPR/86.0.4363.32",
@@ -43,6 +44,8 @@ class Config:
     })
     CONTENT_TAGS: List[str] = field(default_factory=lambda: ['pre', 'code', 'textarea', 'div', 'p', 'body', 'span', 'a', 'script', 'input'])
     CONTENT_ATTRIBUTES: List[str] = field(default_factory=lambda: ['value', 'data', 'href', 'content', 'src', 'data-config', 'data-nodes'])
+    # 新增：是否使用 Playwright，如果为 False 将尝试使用 httpx
+    USE_PLAYWRIGHT: bool = True
 
 # 配置日志
 logging.basicConfig(
@@ -119,7 +122,8 @@ def get_safe_filename(url: str) -> str:
     return f"{safe_netloc}.txt"
 
 # --- 核心抓取和解析逻辑 ---
-async def fetch_url_content(url: str, semaphore: asyncio.Semaphore, config: Config) -> Optional[Tuple[str, str]]:
+
+async def fetch_url_content_with_playwright(url: str, semaphore: asyncio.Semaphore, config: Config) -> Optional[Tuple[str, str]]:
     """使用Playwright异步获取URL内容，自动处理无协议头的URL，无重试。"""
     # Normalize URL for consistent caching and fetching
     if not url.startswith(("http://", "https://")):
@@ -149,6 +153,8 @@ async def fetch_url_content(url: str, semaphore: asyncio.Semaphore, config: Conf
 
         # Fetch live content if not in cache or cache is invalid/expired
         async with semaphore:
+            browser = None
+            context = None
             try:
                 await asyncio.sleep(random.uniform(0.5, 2.5)) # Polite delay
                 async with async_playwright() as p:
@@ -158,9 +164,12 @@ async def fetch_url_content(url: str, semaphore: asyncio.Semaphore, config: Conf
                         ignore_https_errors=True
                     )
                     page = await context.new_page()
+                    # 优化：禁用不必要的资源加载
+                    await page.route("**/*", lambda route: route.abort() if route.request.resource_type in ["image", "stylesheet", "font"] else route.continue())
+
                     try:
-                        await page.goto(full_url, wait_until='load', timeout=config.REQUEST_TIMEOUT)
-                        await page.wait_for_timeout(5000) # Wait for dynamic content
+                        await page.goto(full_url, wait_until='domcontentloaded', timeout=config.REQUEST_TIMEOUT) # 尝试更快加载事件
+                        await page.wait_for_timeout(3000) # 等待少量动态内容，可调
                         content = await page.content()
                         cache_data = {
                             'timestamp': datetime.now().isoformat(),
@@ -189,14 +198,70 @@ async def fetch_url_content(url: str, semaphore: asyncio.Semaphore, config: Conf
                     except Exception as e:
                         logger.error(f"获取 {full_url} 失败: {e}，尝试下一个协议")
                         continue # Try the next protocol
-                    finally:
-                        await context.close()
-                        await browser.close()
             except Exception as e:
                 logger.error(f"Playwright 环境或启动失败: {e}，尝试下一个协议")
                 continue # Try the next protocol
+            finally:
+                if context:
+                    await context.close()
+                if browser:
+                    await browser.close()
     logger.error(f"所有协议尝试失败: {url}")
     return None, url # Return None if all attempts fail
+
+async def fetch_url_content_with_httpx(url: str, semaphore: asyncio.Semaphore, config: Config) -> Optional[Tuple[str, str]]:
+    """使用 httpx 异步获取 URL 内容，自动处理无协议头的 URL。"""
+    if not url.startswith(("http://", "https://")):
+        https_url = f"https://{url}"
+        http_url = f"http://{url}"
+    else:
+        https_url = url
+        http_url = url.replace("https://", "http://") if url.startswith("https://") else url.replace("http://", "https://")
+
+    for full_url in [https_url, http_url]:
+        cache_path = get_cache_path(full_url, config)
+
+        if os.path.exists(cache_path):
+            try:
+                async with aiofiles.open(cache_path, 'r', encoding='utf-8') as f:
+                    cache_data = json.loads(await f.read())
+                    cached_timestamp = datetime.fromisoformat(cache_data['timestamp'])
+                    if datetime.now() - cached_timestamp < timedelta(hours=config.CACHE_EXPIRY_HOURS):
+                        logger.debug(f"使用缓存内容: {full_url} (httpx)")
+                        return cache_data['content'], full_url
+            except (json.JSONDecodeError, KeyError, Exception) as e:
+                logger.warning(f"缓存文件 {cache_path} 损坏或格式错误: {e}，删除并重新获取 (httpx)")
+                if os.path.exists(cache_path):
+                    os.remove(cache_path)
+
+        async with semaphore:
+            try:
+                await asyncio.sleep(random.uniform(0.5, 2.5)) # Polite delay
+                async with httpx.AsyncClient(timeout=config.REQUEST_TIMEOUT / 1000, verify=False, follow_redirects=True) as client:
+                    headers = {'User-Agent': random.choice(config.USER_AGENTS)}
+                    response = await client.get(full_url, headers=headers)
+                    response.raise_for_status() # Raises an exception for 4xx/5xx responses
+                    content = response.text
+                    
+                    cache_data = {
+                        'timestamp': datetime.now().isoformat(),
+                        'content_hash': get_url_content_hash(content),
+                        'content': content
+                    }
+                    async with aiofiles.open(cache_path, 'w', encoding='utf-8') as f:
+                        await f.write(json.dumps(cache_data))
+                    logger.info(f"成功获取: {full_url} (使用 httpx)")
+                    return content, full_url
+            except httpx.HTTPStatusError as e:
+                logger.warning(f"获取 {full_url} 失败: HTTP 状态码 {e.response.status_code} (使用 httpx)")
+            except httpx.RequestError as e:
+                logger.error(f"获取 {full_url} 失败: 请求错误 {e} (使用 httpx)")
+            except Exception as e:
+                logger.error(f"获取 {full_url} 失败: 未知错误 {e} (使用 httpx)")
+        continue # Try next protocol
+    logger.error(f"所有协议尝试失败: {url} (使用 httpx)")
+    return None, url
+
 
 def extract_nodes_from_text(text: str, config: Config) -> Set[str]:
     """从文本中提取代理节点。"""
@@ -210,7 +275,7 @@ def extract_nodes_from_text(text: str, config: Config) -> Set[str]:
 
 def clean_node(node: str) -> Optional[str]:
     """清洗节点字符串，移除多余字符并验证。"""
-    # Removed the problematic recursive call: node = clean_node(node)
+    # **重要：已移除此处导致无限递归的 `node = clean_node(node)`**
     if not node or len(node) < 10:
         logger.debug(f"节点过短或为空，已弃用: {node[:50]}...")
         return None
@@ -422,7 +487,7 @@ def parse_and_extract_nodes(content: str, current_depth: int, config: Config, ba
             elif href.startswith('/'): # Relative path
                 new_urls.add(urljoin(base_url, href))
             elif not href.startswith(('#', 'javascript:', 'mailto:', 'tel:')): # Other relative links, treat as part of base_url
-                new_urls.add(urljoin(base_url, href)) # Corrected to use href directly for join
+                new_urls.add(urljoin(base_url, href))
 
     logger.debug(f"从 {base_url} 提取到 {len(all_nodes)} 个潜在节点，{len(new_urls)} 个新链接")
     return all_nodes, new_urls
@@ -437,7 +502,13 @@ async def process_url(url: str, processed_urls: Set[str], all_nodes: Dict[str, S
     processed_urls.add(base_url)
 
     logger.info(f"处理URL (深度 {depth}): {url}")
-    content, resolved_url = await fetch_url_content(url, semaphore, config)
+    
+    # 根据配置选择使用 Playwright 或 httpx
+    if config.USE_PLAYWRIGHT:
+        content, resolved_url = await fetch_url_content_with_playwright(url, semaphore, config)
+    else:
+        content, resolved_url = await fetch_url_content_with_httpx(url, semaphore, config)
+    
     if not content:
         logger.warning(f"无法获取内容: {url}，跳过节点提取")
         return
@@ -447,7 +518,7 @@ async def process_url(url: str, processed_urls: Set[str], all_nodes: Dict[str, S
         all_nodes[resolved_url] = set()
 
     for node in nodes:
-        # Corrected: Call clean_node instead of validate_node
+        # 修正：调用 clean_node 代替 validate_node
         valid_node = clean_node(node) 
         if valid_node:
             all_nodes[resolved_url].add(valid_node)
@@ -497,18 +568,18 @@ async def main():
 
     logger.info("所有URL处理完毕，开始保存节点")
 
-    # Calculate total unique nodes across all URLs
+    # 计算所有 URL 收集到的总去重节点
     overall_unique_nodes = set()
     for nodes_set in all_nodes.values():
         overall_unique_nodes.update(nodes_set)
     
     logger.info(f"所有URL共发现 {len(overall_unique_nodes)} 个唯一有效节点。")
 
-    # Save node counts to CSV and individual node files
+    # 将节点计数保存到 CSV 并将每个 URL 的节点保存到单独文件
     async with aiofiles.open(os.path.join(config.DATA_DIR, "node_counts.csv"), 'w', newline='', encoding='utf-8') as f:
         writer = csv.writer(f)
-        await writer.writerow(["URL", "Valid Nodes"]) # Ensure this is awaited if async
-        total_valid_nodes_sum = 0 # Renamed to avoid confusion with overall_unique_nodes
+        await writer.writerow(["URL", "Valid Nodes"])
+        total_valid_nodes_sum = 0 
         for url, nodes in all_nodes.items():
             valid_count = len(nodes)
             if valid_count > 0:
@@ -516,7 +587,7 @@ async def main():
                 async with aiofiles.open(output_path, 'w', encoding='utf-8') as node_file:
                     await node_file.write('\n'.join(sorted(nodes)))
                 logger.info(f"保存 {valid_count} 个节点到 {output_path}")
-            await writer.writerow([url, valid_count]) # Ensure this is awaited if async
+            await writer.writerow([url, valid_count])
             total_valid_nodes_sum += valid_count
 
     logger.info(f"任务完成。共发现 {total_valid_nodes_sum} 个有效节点（非去重前，各URL节点总和）。")
