@@ -12,14 +12,17 @@ import csv
 import random
 import hashlib
 import ipaddress
+from playwright.async_api import async_playwright # New import
 
 # --- 配置 ---
 DATA_DIR = "data"
 CACHE_DIR = "cache"
 CACHE_EXPIRY_HOURS = 24  # 缓存有效期
 MAX_DEPTH = 3            # 递归抓取最大深度
-CONCURRENT_REQUEST_LIMIT = 5 # 限制同时进行的 HTTP 请求数量
+# Playwright 启动浏览器需要更多资源，并发限制需要更保守
+CONCURRENT_REQUEST_LIMIT = 2 # 限制同时进行的请求数量，推荐Playwright保持较低并发
 
+# 模拟不同设备的用户代理，确保 Playwright 也能使用
 USER_AGENTS = [
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36",
     "Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Mobile/15E148 Safari/604.1",
@@ -85,18 +88,18 @@ def is_valid_ip(ip_string):
     except ValueError:
         return False
 
-# --- 核心抓取和解析逻辑 ---
+# --- 核心抓取和解析逻辑 (使用 Playwright) ---
 
-async def fetch_url_content(url: str, client: httpx.AsyncClient, semaphore: asyncio.Semaphore):
+async def fetch_url_content(url: str, semaphore: asyncio.Semaphore): # Removed client, now using playwright directly
     """
     安全地异步获取 URL 内容，优先尝试 HTTP，失败后尝试 HTTPS。
-    加入信号量限制并发请求。
+    加入信号量限制并发请求，使用 Playwright 模拟浏览器行为。
     """
     schemes = ["http://", "https://"]
     
     async with semaphore: # 限制并发
         # 增加随机延迟，避免过快请求
-        await asyncio.sleep(random.uniform(0.5, 2.0))
+        await asyncio.sleep(random.uniform(1.0, 4.0)) # 增加延迟范围，给浏览器更多时间加载
 
         for scheme in schemes:
             full_url = f"{scheme}{url}" if not url.startswith(("http://", "https://")) else url
@@ -108,7 +111,6 @@ async def fetch_url_content(url: str, client: httpx.AsyncClient, semaphore: asyn
                     try:
                         cache_data = json.load(f)
                         cached_timestamp = datetime.fromisoformat(cache_data['timestamp'])
-                        # If content hash also matches, and within expiry, use cache
                         if datetime.now() - cached_timestamp < timedelta(hours=CACHE_EXPIRY_HOURS):
                             print(f"从缓存读取: {full_url}")
                             return cache_data['content']
@@ -117,35 +119,34 @@ async def fetch_url_content(url: str, client: httpx.AsyncClient, semaphore: asyn
                         os.remove(cache_path) # 删除损坏的缓存
 
             try:
-                headers = {
-                    "User-Agent": random.choice(USER_AGENTS),
-                    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-                    "Accept-Language": "en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7",
-                    "Connection": "keep-alive",
-                    "DNT": "1",
-                    "Upgrade-Insecure-Requests": "1", # Some sites look for this
-                }
-                print(f"尝试获取: {full_url}")
-                response = await client.get(full_url, follow_redirects=True, timeout=15, headers=headers) # 增加超时时间
-                response.raise_for_status()  # 检查 HTTP 状态码
+                print(f"尝试使用 Playwright 获取: {full_url}")
+                async with async_playwright() as p:
+                    # 使用 Chromium 浏览器，headless=True 表示无头模式
+                    # 可以尝试 'firefox' 或 'webkit'
+                    browser = await p.chromium.launch(headless=True)
+                    context = await browser.new_context(user_agent=random.choice(USER_AGENTS))
+                    page = await context.new_page()
 
-                content = response.text
-                # 写入缓存
-                cache_data = {
-                    'timestamp': datetime.now().isoformat(),
-                    'content_hash': get_url_content_hash(content),
-                    'content': content
-                }
-                with open(cache_path, 'w') as f:
-                    json.dump(cache_data, f)
-                print(f"成功获取并缓存: {full_url}")
-                return content
-            except httpx.RequestError as e:
-                print(f"获取 {full_url} 失败: {e}")
-                if isinstance(e, httpx.HTTPStatusError) and e.response.status_code == 403:
-                    print(f"403 Forbidden: {full_url} - Server denied access. Response: {e.response.text[:200]}...")
-                elif isinstance(e, httpx.RequestError) and "hostname nor servname provided" in str(e):
-                    print(f"DNS解析失败或URL无效: {full_url}")
+                    # 设置更灵活的等待条件
+                    await page.goto(full_url, wait_until='domcontentloaded', timeout=30000) # 增加 goto 超时
+                    # 等待网络空闲或特定元素出现，这取决于网站如何加载内容
+                    await page.wait_for_load_state('networkidle', timeout=30000) # 等待网络空闲
+
+                    content = await page.content() # 获取完整渲染后的页面内容
+                    await browser.close()
+
+                    # 写入缓存
+                    cache_data = {
+                        'timestamp': datetime.now().isoformat(),
+                        'content_hash': get_url_content_hash(content),
+                        'content': content
+                    }
+                    with open(cache_path, 'w') as f:
+                        json.dump(cache_data, f)
+                    print(f"成功使用 Playwright 获取并缓存: {full_url}")
+                    return content
+            except Exception as e: # Catch broader exceptions from Playwright
+                print(f"使用 Playwright 获取 {full_url} 失败: {e}")
                 continue # 尝试下一个scheme或返回None
         return None
 
@@ -173,7 +174,6 @@ def parse_and_extract_nodes(content: str, current_depth=0):
     plain_text = soup.get_text(separator='\n', strip=True)
 
     # 提取 Base64 编码的链接 (长度至少20，通常Base64节点会更长)
-    # 修正：Base64 字符串可能出现在文本的任何位置，不再仅限于URL格式
     base64_matches = re.findall(r'(?:[A-Za-z0-9+/]{4}){1,}(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?', plain_text)
     for b64_str in base64_matches:
         decoded = decode_base64_content(b64_str)
@@ -301,7 +301,6 @@ def validate_node(node: str) -> bool:
         except Exception: return False
 
     # 对于明文节点，检查是否为 host:port 格式
-    # 并且如果是非协议的明文，长度不应过短
     if ':' in node and len(node.split(':')) >= 2:
         host, port_str = node.split(':', 1)
         if validate_host_port(host, port_str):
@@ -309,7 +308,7 @@ def validate_node(node: str) -> bool:
 
     return False # 未知协议或不符合任何已知格式
 
-async def process_url(url: str, client: httpx.AsyncClient, processed_urls: set, all_collected_nodes: dict, semaphore: asyncio.Semaphore, current_depth=0):
+async def process_url(url: str, processed_urls: set, all_collected_nodes: dict, semaphore: asyncio.Semaphore, current_depth=0):
     """处理单个 URL，获取内容，提取节点，并进行递归抓取。"""
     if url in processed_urls:
         return
@@ -317,7 +316,7 @@ async def process_url(url: str, client: httpx.AsyncClient, processed_urls: set, 
     processed_urls.add(url)
     print(f"开始处理 URL: {url} (深度: {current_depth})")
     
-    content = await fetch_url_content(url, client, semaphore)
+    content = await fetch_url_content(url, semaphore) # Removed client, using playwright directly
 
     if not content:
         return
@@ -328,16 +327,12 @@ async def process_url(url: str, client: httpx.AsyncClient, processed_urls: set, 
     for node in nodes:
         if validate_node(node):
             # 只保留原节点名称前5位，多余的全部删除。
-            # 这部分逻辑需要根据节点协议的实际情况来调整如何提取和修改名称
             processed_node = node
-            # 尝试匹配 # 后面的名称或特定协议的名称字段
             match = re.search(r'#(.*?)(?:&|\s|$)', node) # 匹配 # 到下一个 & 或空格或行尾
             if match:
                 original_name = match.group(1)
                 if original_name:
                     new_name = original_name[:5] # 保留前5位
-                    # 替换原名称，这里需要小心，避免误替换
-                    # 最稳妥的方式是重新构建节点字符串
                     processed_node = node.replace(f"#{original_name}", f"#{new_name}")
             
             validated_nodes_for_url.append(processed_node)
@@ -355,7 +350,7 @@ async def process_url(url: str, client: httpx.AsyncClient, processed_urls: set, 
         for new_url in new_urls:
             # 避免重复处理已处理的URL
             if new_url not in processed_urls:
-                tasks.append(process_url(new_url, client, processed_urls, all_collected_nodes, semaphore, current_depth + 1))
+                tasks.append(process_url(new_url, processed_urls, all_collected_nodes, semaphore, current_depth + 1))
         if tasks:
             await asyncio.gather(*tasks)
 
@@ -366,16 +361,17 @@ async def main():
         print("未找到任何要处理的 URL。请检查 sources.list 文件。")
         return
 
-    # 使用 set 收集所有发现的 URL 的节点，以便在保存时合并
-    # 键为原始URL，值为该URL及其递归抓取到的所有节点的去重集合
     all_collected_nodes_by_url = {} 
-    processed_urls = set() # 跟踪所有已尝试或正在处理的URL，避免循环抓取
+    processed_urls = set()
 
     semaphore = asyncio.Semaphore(CONCURRENT_REQUEST_LIMIT)
 
-    async with httpx.AsyncClient(http2=True, verify=False, timeout=20) as client: # 增加客户端级别超时
-        tasks = [process_url(url, client, processed_urls, all_collected_nodes_by_url, semaphore) for url in source_urls]
-        await asyncio.gather(*tasks)
+    # Note: httpx.AsyncClient is no longer directly used for main content fetching,
+    # but could be kept if needed for other HTTP-only tasks later.
+    # We remove it from the 'async with' block for simplicity if only Playwright is fetching.
+    
+    tasks = [process_url(url, processed_urls, all_collected_nodes_by_url, semaphore) for url in source_urls]
+    await asyncio.gather(*tasks)
 
     # 保存每个原始 URL 获取到的所有节点（包括递归抓取到的）
     for url, nodes_set in all_collected_nodes_by_url.items():
