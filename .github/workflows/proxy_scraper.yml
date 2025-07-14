@@ -10,7 +10,7 @@ on:
 jobs:
   scrape_proxies:
     runs-on: ubuntu-latest
-    timeout-minutes: 5 # 降低超时时间，因为不再使用浏览器，操作会快很多
+    timeout-minutes: 15 # 增加超时时间，以避免操作被取消
 
     steps:
     - name: Checkout repository
@@ -28,7 +28,6 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        # Playwright 相关安装命令已移除
 
     - name: Run proxy scraper
       run: |
