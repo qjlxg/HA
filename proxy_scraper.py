@@ -316,7 +316,8 @@ def parse_and_extract_nodes(content: str, current_depth: int, config: Config, ba
     all_nodes = set()
     new_urls = set()
 
-    soup = BeautifulSoup(content, 'html.parser', from_encoding='utf-8')
+    # 修正: 移除 from_encoding 参数
+    soup = BeautifulSoup(content, 'html.parser')
     # Remove style and script tags from the main parsing for cleaner text extraction
     for tag in soup(["style", "script"]):
         tag.decompose()
@@ -352,7 +353,7 @@ def parse_and_extract_nodes(content: str, current_depth: int, config: Config, ba
                             new_urls.update(re.findall(r'(?:http|https)://[^\s"\']+', decoded))
 
     # Re-process script tags separately for JSON content
-    for script_tag in BeautifulSoup(content, 'html.parser', from_encoding='utf-8').find_all('script'):
+    for script_tag in BeautifulSoup(content, 'html.parser').find_all('script'): # 修正: 移除 from_encoding 参数
         script_content = script_tag.get_text(strip=True)
         try:
             json_data = json.loads(script_content)
