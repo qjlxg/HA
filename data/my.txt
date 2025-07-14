@@ -1,2 +1,0 @@
-vless://ee36759f-a621-4424-95f2-fb9d5b4c6efd@quiz.int.vidio.com.id1.qerleng.my.id:443?encryption=none&security=tls&sni=quiz.int.vidio.com.id1.qerleng.my.id&fp=randomized&type=ws&host=quiz.int.vidio.com.id1.qerleng.my.id&path=%2Frotate#ROTATE+PROXY
-vless://e6a7abe1-ec19-4eb7-b7e7-483b3ec0c293@quiz.int.vidio.com.id1.qerleng.my.id:80?path=%2Frotate&security=none&encryption=none&host=quiz.int.vidio.com.id1.qerleng.my.id&fp=randomized&type=ws&sni=quiz.int.vidio.com.id1.qerleng.my.id#ROTATE+PROXY

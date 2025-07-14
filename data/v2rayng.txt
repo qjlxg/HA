@@ -1,2 +1,0 @@
-vless://4d88f071-8013-4c02-b0e6-d025e47fd3f4@127.0.0.1:443?encryption=none&security=tls&sni=127.0.0.1&fp=randomized&type=ws&host=127.0.0.1&path=%2F%3Fed%3D2048#请刷新订阅获取节点
-vless://c7320fa7-90e9-4699-b2f2-63e02a591a73@beta.vless1.lk1337.top:443?encryption=none&security=tls&sni=beta.vless1.lk1337.top&fp=randomized&type=ws&host=beta.vless1.lk1337.top&path=%2F%3Fed%3D2048#节点3-陈睿
