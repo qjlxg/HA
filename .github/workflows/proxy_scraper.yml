@@ -1,4 +1,4 @@
-name: Proxy Scraper and Validator
+name: Proxy Scraper
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
 jobs:
   scrape_proxies:
     runs-on: ubuntu-latest
-    timeout-minutes: 15 # 增加超时时间，因为浏览器操作可能耗时更长
+    timeout-minutes: 5 # 降低超时时间，因为不再使用浏览器，操作会快很多
 
     steps:
     - name: Checkout repository
@@ -28,23 +28,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        # 这里移除 playwright install chromium 和 playwright install-deps
-        # 我们会在下一个缓存步骤中处理
-
-    # --- 新增的缓存步骤 ---
-    - name: Cache Playwright browsers
-      uses: actions/cache@v3 # 使用缓存 Action
-      with:
-        path: ~/.cache/ms-playwright # Playwright 默认的浏览器缓存路径
-        key: ${{ runner.os }}-playwright-${{ hashFiles('requirements.txt') }} # 缓存的key
-        # 如果requirements.txt变化，或者操作系统变化，缓存就会失效，重新下载
-        restore-keys: |
-          ${{ runner.os }}-playwright- # 恢复keys，为了兼容旧版本缓存
-
-    - name: Install Playwright browsers and system dependencies
-      run: |
-        playwright install chromium # 只有当缓存未命中时才会真正下载
-        playwright install-deps    # 安装系统依赖
+        # Playwright 相关安装命令已移除
 
     - name: Run proxy scraper
       run: |
