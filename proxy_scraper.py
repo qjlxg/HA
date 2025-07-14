@@ -14,6 +14,7 @@ import dns.resolver # For aiodns, although aiodns is not directly used for resol
 import platform
 import random
 import datetime
+import aiofiles 
 
 # 配置常量
 OUTPUT_DIR = "data"
