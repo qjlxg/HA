@@ -7,3 +7,4 @@ tenacity
 geoip2
 maxminddb
 playwright
+dnspython
