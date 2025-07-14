@@ -1,3 +1,4 @@
+
 import asyncio
 import aiofiles
 import re
@@ -22,7 +23,7 @@ from urllib.parse import urlparse, urljoin
 class Config:
     DATA_DIR: str = "data"  # 数据存储目录
     CACHE_DIR: str = "cache"  # 缓存目录
-    CACHE_EXPIRY_HOURS: int = 24  # 缓存有效期（小时）
+    CACHE_EXPIRY_HOURS: int = 108  # 缓存有效期（小时）
     MAX_DEPTH: int = 1  # 最大递归深度
     CONCURRENT_REQUEST_LIMIT: int = 2  # 并发请求限制
     REQUEST_TIMEOUT: int = 60000  # 请求超时时间（毫秒，60秒）
@@ -41,8 +42,8 @@ class Config:
         "ssr": r"ssr://[a-zA-Z0-9+/=@:\.-]+",
         "vless": r"vless://[^\"'\s]+",
     })
-    CONTENT_TAGS: List[str] = field(default_factory=lambda: ['pre', 'code', 'textarea', 'div', 'p', 'body', 'span', 'a', 'script', 'input'])  # 包含input标签
-    CONTENT_ATTRIBUTES: List[str] = field(default_factory=lambda: ['value', 'data', 'href', 'content', 'src', 'data-config', 'data-nodes'])  # 包含data-nodes属性
+    CONTENT_TAGS: List[str] = field(default_factory=lambda: ['pre', 'code', 'textarea', 'div', 'p', 'body', 'span', 'a', 'script', 'input'])
+    CONTENT_ATTRIBUTES: List[str] = field(default_factory=lambda: ['value', 'data', 'href', 'content', 'src', 'data-config', 'data-nodes'])
 
 # 配置日志
 logging.basicConfig(
@@ -105,10 +106,20 @@ def is_valid_ip(ip_string: str) -> bool:
     except ValueError:
         return False
 
+def get_safe_filename(url: str) -> str:
+    """从URL提取域名作为文件名，清理特殊字符。"""
+    parsed_url = urlparse(url if url.startswith(("http://", "https://")) else f"https://{url}")
+    netloc = parsed_url.netloc or url
+    # 清理域名中的特殊字符，保留字母、数字、连字符和点号
+    safe_netloc = re.sub(r'[^a-zA-Z0-9\-\.]', '_', netloc)
+    # 移除多余的点号和下划线
+    safe_netloc = re.sub(r'\.+', '.', safe_netloc)
+    safe_netloc = re.sub(r'_+', '_', safe_netloc).strip('_')
+    return f"{safe_netloc}.txt"
+
 # --- 核心抓取和解析逻辑 ---
 async def fetch_url_content(url: str, semaphore: asyncio.Semaphore, config: Config) -> Optional[Tuple[str, str]]:
     """使用Playwright异步获取URL内容，自动处理无协议头的URL，无重试。"""
-    # 处理无协议头的URL
     if not url.startswith(("http://", "https://")):
         https_url = f"https://{url}"
         http_url = f"http://{url}"
@@ -116,11 +127,9 @@ async def fetch_url_content(url: str, semaphore: asyncio.Semaphore, config: Conf
         https_url = url
         http_url = url.replace("https://", "http://") if url.startswith("https://") else url.replace("http://", "https://")
 
-    # 优先尝试 HTTPS
     for full_url in [https_url, http_url]:
         cache_path = get_cache_path(full_url, config)
 
-        # 检查缓存
         if os.path.exists(cache_path):
             try:
                 async with aiofiles.open(cache_path, 'r', encoding='utf-8') as f:
@@ -145,7 +154,7 @@ async def fetch_url_content(url: str, semaphore: asyncio.Semaphore, config: Conf
                     page = await context.new_page()
                     try:
                         await page.goto(full_url, wait_until='load', timeout=config.REQUEST_TIMEOUT)
-                        await page.wait_for_timeout(5000)  # 等待5秒以加载动态内容
+                        await page.wait_for_timeout(5000)
                         content = await page.content()
                         cache_data = {
                             'timestamp': datetime.now().isoformat(),
@@ -170,7 +179,7 @@ async def fetch_url_content(url: str, semaphore: asyncio.Semaphore, config: Conf
                                 await f.write(json.dumps(cache_data))
                             return content, full_url
                         logger.warning(f"无法获取任何内容: {full_url}")
-                        continue  # 尝试下一个协议
+                        continue
                     except Exception as e:
                         logger.error(f"获取 {full_url} 失败: {e}，尝试下一个协议")
                         continue
@@ -202,7 +211,6 @@ def parse_and_extract_nodes(content: str, current_depth: int, config: Config, ba
     for style_tag in soup(["style"]):
         style_tag.decompose()
 
-    # 提取标签内容和属性
     for tag_name in config.CONTENT_TAGS:
         for tag in soup.find_all(tag_name):
             text = tag.get_text(separator='\n', strip=True)
@@ -226,7 +234,6 @@ def parse_and_extract_nodes(content: str, current_depth: int, config: Config, ba
                             all_nodes.update(extract_nodes_from_text(decoded, config))
                             new_urls.update(re.findall(r'(?:http|https)://[^\s"\']+', decoded))
 
-    # 解析<script>标签中的JSON
     for script_tag in soup.find_all('script'):
         script_content = script_tag.get_text(strip=True)
         try:
@@ -242,7 +249,6 @@ def parse_and_extract_nodes(content: str, current_depth: int, config: Config, ba
         except json.JSONDecodeError:
             all_nodes.update(extract_nodes_from_text(script_content, config))
 
-    # 解析YAML/JSON
     try:
         data = None
         try:
@@ -264,7 +270,6 @@ def parse_and_extract_nodes(content: str, current_depth: int, config: Config, ba
     except Exception:
         pass
 
-    # 提取链接并规范化
     if current_depth < config.MAX_DEPTH:
         for a_tag in soup.find_all('a', href=True):
             href = a_tag['href']
@@ -272,7 +277,7 @@ def parse_and_extract_nodes(content: str, current_depth: int, config: Config, ba
                 new_urls.add(href)
             elif href.startswith('/'):
                 new_urls.add(urljoin(base_url, href))
-            elif not href.startswith(('#', 'javascript:', 'mailto:', 'tel:')):  # 处理无协议头的相对URL
+            elif not href.startswith(('#', 'javascript:', 'mailto:', 'tel:')):
                 new_urls.add(urljoin(base_url, f"https://{href}"))
 
     logger.debug(f"从 {base_url} 提取到 {len(all_nodes)} 个潜在节点，{len(new_urls)} 个新链接")
@@ -280,13 +285,6 @@ def parse_and_extract_nodes(content: str, current_depth: int, config: Config, ba
 
 def clean_node(node: str) -> str:
     """清洗节点字符串，移除多余字符。"""
-    node = node.strip()
-    node = re.sub(r'\s+', '', node)
-    node = re.sub(r'[\n\r]+', '', node)
-    return node
-
-def validate_node(node: str) -> Optional[str]:
-    """验证节点，仅保留完整且符合协议格式的节点。"""
     node = clean_node(node)
     if not node or len(node) < 10:
         logger.debug(f"节点过短或为空，已弃用: {node[:50]}...")
@@ -478,11 +476,7 @@ async def main():
         for url, nodes in all_nodes.items():
             valid_count = len(nodes)
             if valid_count > 0:
-                url_hash = hashlib.md5(url.encode()).hexdigest()[:10]
-                parsed_url = urlparse(url)
-                parsed_url_netloc = parsed_url.netloc.replace('.', '_').replace(':', '_') if parsed_url.netloc else url.replace('/', '_')
-                safe_url_name = f"{parsed_url_netloc}_{url_hash}"
-                output_path = os.path.join(config.DATA_DIR, f"{safe_url_name}.txt")
+                output_path = os.path.join(config.DATA_DIR, get_safe_filename(url))
                 async with aiofiles.open(output_path, 'w', encoding='utf-8') as node_file:
                     await node_file.write('\n'.join(sorted(nodes)))
                 logger.info(f"保存 {valid_count} 个节点到 {output_path}")
