@@ -51,7 +51,7 @@ async def read_urls_from_file(file_path="sources.list"):
                 line = line.strip()
                 if line and not line.startswith('#'):  # 忽略空行和注释行
                     urls.append(line)
-        logging.info(f"成功从 {file_path} 读取 {len} 个URL。")
+        logging.info(f"成功从 {file_path} 读取 {len(urls)} 个URL。") # 修正这里，使用 len(urls)
     except FileNotFoundError:
         logging.error(f"错误：文件 {file_path} 未找到。")
     return urls
@@ -228,12 +228,13 @@ async def fetch_url_content(client, url, visited_urls, depth=0, max_depth=3):
     异步安全地获取 URL 内容，优先尝试 HTTP，失败后尝试 HTTPS。
     支持多层读取和缓存机制。
     """
-    full_url = get_full_url(url)
+    original_url = url
+    full_url = get_full_url(original_url)
+
     if full_url in visited_urls:
         logging.debug(f"已访问URL，跳过：{full_url}")
         return []
 
-    visited_urls.add(full_url)
     url_hash = hashlib.sha256(full_url.encode('utf-8')).hexdigest()
 
     # 尝试从缓存获取
@@ -257,47 +258,60 @@ async def fetch_url_content(client, url, visited_urls, depth=0, max_depth=3):
 
             tasks = []
             for link in internal_links:
-                if link not in visited_urls:
+                if link not in visited_urls: # 避免重复访问
                     tasks.append(fetch_url_content(client, link, visited_urls, depth + 1, max_depth))
             if tasks:
                 results = await asyncio.gather(*tasks)
                 for res_nodes in results:
                     nodes.extend(res_nodes)
+        visited_urls.add(full_url) # 缓存命中也标记为已访问
         return nodes
 
     content = None
     headers = {"User-Agent": random.choice(USER_AGENTS)}
+    effective_url = full_url # 记录实际请求的URL，可能从http重定向到https
 
     try:
+        # 尝试 HTTP 请求，httpx 默认会跟随重定向
         response = await client.get(full_url, timeout=10, headers=headers)
-        response.raise_for_status()  # 检查 HTTP 错误
+        response.raise_for_status()  # 检查最终响应的状态码
         content = response.text
-        logging.info(f"成功获取 {full_url} 的内容。")
+        effective_url = str(response.url) # 获取最终的 URL (处理了重定向)
+        logging.info(f"成功获取 {effective_url} 的内容。")
+
+    except httpx.HTTPStatusError as e:
+        # 捕获 HTTP 状态码错误 (如 4xx, 5xx), 不包括重定向 (3xx) 因为 httpx 默认会跟随
+        logging.warning(f"获取 {full_url} 失败: HTTP 状态码 {e.response.status_code} - {e.response.reason_phrase}。")
     except httpx.RequestError as e:
-        logging.warning(f"获取 {full_url} 失败: {e}。尝试 HTTPS...")
+        # 捕获网络请求错误 (如连接超时、DNS解析失败等)
+        logging.warning(f"获取 {full_url} 失败: {e}。")
         # 如果 HTTP 失败，尝试 HTTPS
         if full_url.startswith("http://"):
             https_url = "https://" + full_url[len("http://"):]
             try:
+                logging.info(f"尝试通过 HTTPS 获取 {https_url}...")
                 response = await client.get(https_url, timeout=10, headers=headers)
                 response.raise_for_status()
                 content = response.text
-                logging.info(f"成功通过 HTTPS 获取 {https_url} 的内容。")
-                full_url = https_url # 更新为实际获取成功的URL
-            except httpx.RequestError as e_https:
+                effective_url = str(response.url)
+                logging.info(f"成功通过 HTTPS 获取 {effective_url} 的内容。")
+            except (httpx.RequestError, httpx.HTTPStatusError) as e_https:
                 logging.error(f"通过 HTTPS 获取 {https_url} 再次失败: {e_https}。")
         else:
             logging.error(f"获取 {full_url} 失败: {e}。")
 
     if content:
-        # 保存到缓存
-        await save_to_cache(url_hash, content)
+        # 标记为已访问
+        visited_urls.add(effective_url)
+        # 保存到缓存，使用 effective_url 的哈希值
+        effective_url_hash = hashlib.sha256(effective_url.encode('utf-8')).hexdigest()
+        await save_to_cache(effective_url_hash, content)
 
         # 保存原始网页内容到data目录，文件名为 URL 的哈希值，扩展名为 .html 或 .txt
         file_extension = "txt"
         if "html" in response.headers.get("Content-Type", "").lower():
             file_extension = "html"
-        original_content_path = os.path.join("data", f"{url_hash}.{file_extension}")
+        original_content_path = os.path.join("data", f"{effective_url_hash}.{file_extension}")
         async with aiofiles.open(original_content_path, 'w', encoding='utf-8') as f:
             await f.write(content)
         logging.info(f"原始网页内容已保存到 {original_content_path}")
@@ -313,8 +327,8 @@ async def fetch_url_content(client, url, visited_urls, depth=0, max_depth=3):
                 href = link['href']
                 if href.startswith('http://') or href.startswith('https://'):
                     internal_links.add(href)
-                elif href.startswith('/') and full_url.startswith('http'):
-                    base_url_parsed = httpx.URL(full_url)
+                elif href.startswith('/') and effective_url.startswith('http'):
+                    base_url_parsed = httpx.URL(effective_url)
                     internal_links.add(str(base_url_parsed.join(href)))
 
             tasks = []
@@ -348,9 +362,9 @@ async def main():
     urls = await read_urls_from_file()
     all_nodes = set()
     url_node_counts = []
-    visited_urls = set()
+    visited_urls = set() # 跟踪所有被访问过的URL，包括通过递归发现的
 
-    async with httpx.AsyncClient(http2=True) as client:
+    async with httpx.AsyncClient(http2=True, follow_redirects=True) as client: # 明确设置跟随重定向
         tasks = []
         for url in urls:
             tasks.append(fetch_url_content(client, url, visited_urls))
@@ -365,14 +379,18 @@ async def main():
                 all_nodes.add(shortened_node)
                 unique_nodes_from_url.add(shortened_node)
             
+            # 使用原始 URL 进行统计
             url_node_counts.append({
                 "url": original_url,
                 "node_count": len(unique_nodes_from_url)
             })
             
             # 将每个URL获取到的节点单独保存
-            url_hash = hashlib.sha256(get_full_url(original_url).encode('utf-8')).hexdigest()
-            output_file = os.path.join("data", f"{url_hash}_nodes.txt")
+            # 注意：这里应该使用原始URL的哈希值作为文件名，因为我们统计的是从哪个原始URL开始获取的节点
+            # 但是为了避免文件名冲突和更好地反映来源，可以考虑用原始URL的哈希值命名文件夹，然后把节点放进去
+            # 或者像现在这样，文件名包含原始URL的哈希值
+            original_url_hash_for_file = hashlib.sha256(get_full_url(original_url).encode('utf-8')).hexdigest()
+            output_file = os.path.join("data", f"{original_url_hash_for_file}_nodes.txt")
             async with aiofiles.open(output_file, 'w', encoding='utf-8') as f:
                 for node in unique_nodes_from_url:
                     await f.write(node + '\n')
