@@ -74,51 +74,81 @@ def parse_vless_node(node_str: str) -> Dict[str, Optional[str]]:
     except Exception:
         return {"type": "vless", "raw": node_str}
 
+# 支持 Nekoray 的 JSON 数组格式
+def parse_json_subscription(node_str: str) -> List[Dict[str, Optional[str]]]:
+    """解析 JSON 格式的节点订阅（如 Nekoray 支持的 JSON 数组）。"""
+    try:
+        nodes = json.loads(node_str)
+        if isinstance(nodes, list):
+            parsed_nodes = []
+            for node in nodes:
+                if isinstance(node, dict):
+                    protocol = node.get("protocol", "").lower()
+                    if protocol in PROTOCOL_HANDLERS:
+                        parsed_nodes.append({
+                            "type": protocol,
+                            "address": node.get("add") or node.get("server"),
+                            "port": str(node.get("port")),
+                            "id": node.get("id") or node.get("password"),
+                            "net": node.get("net") or node.get("type"),
+                            "params": node.get("params", {})
+                        })
+                    else:
+                        parsed_nodes.append({"type": protocol, "raw": json.dumps(node)})
+            return parsed_nodes
+        return [{"type": "invalid", "raw": node_str}]
+    except Exception:
+        return [{"type": "invalid", "raw": node_str}]
+
 # 协议处理器映射
 PROTOCOL_HANDLERS = {
     "ss": parse_ss_node,
     "vmess": parse_vmess_node,
     "trojan": parse_trojan_node,
-    "vless": parse_vless_node
+    "vless": parse_vless_node,
+    "json": parse_json_subscription
 }
 
-def parse_node(node_str: str) -> Dict[str, Optional[str]]:
-    """通用节点解析函数。"""
+def parse_node(node_str: str) -> List[Dict[str, Optional[str]]]:
+    """通用节点解析函数，支持 Nekoray 的链接和 JSON 订阅格式。"""
     node_str = node_str.strip()
     if not node_str:
-        return {"type": "invalid", "raw": node_str}
+        return [{"type": "invalid", "raw": node_str}]
+
+    if node_str.startswith("["):
+        return parse_json_subscription(node_str)
 
     protocol = node_str.split("://", 1)[0].lower()
-    handler = PROTOCOL_HANDLERS.get(protocol, lambda x: {"type": protocol, "raw": x})
-    parsed = handler(node_str)
-    if not parsed.get("raw") and not all(parsed.get(key) for key in ["address", "port"]):
+    handler = PROTOCOL_HANDLERS.get(protocol, lambda x: [{"type": protocol, "raw": x}])
+    result = handler(node_str)
+    if isinstance(result, list):
+        return result
+    if not result.get("raw") and not all(result.get(key) for key in ["address", "port"]):
         logger.warning(f"无效节点: {node_str}")
-        return {"type": protocol, "raw": node_str}
-    return parsed
+        return [{"type": protocol, "raw": node_str}]
+    return [result]
 
-def get_node_dedup_key(node_str: str) -> str:
-    """生成去重键。"""
-    parsed = parse_node(node_str)
-    protocol = parsed.get("type", "raw")
-
-    if parsed.get("raw"):
-        return f"raw_{node_str}"
+def get_node_dedup_key(node: Dict[str, Optional[str]], raw_str: str) -> str:
+    """生成去重键，适配 Nekoray 节点特征。"""
+    protocol = node.get("type", "raw")
+    if node.get("raw"):
+        return f"raw_{hashlib.md5(raw_str.encode('utf-8')).hexdigest()}"
 
     key_parts = [protocol]
     if protocol == "ss":
-        key_parts.extend([parsed.get("credential", ""), parsed["address"], parsed["port"]])
+        key_parts.extend([node.get("credential", ""), node["address"], node["port"]])
     elif protocol == "vmess":
-        key_parts.extend([parsed.get("id", ""), parsed["address"], parsed["port"], parsed.get("net", "")])
+        key_parts.extend([node.get("id", ""), node["address"], node["port"], node.get("net", "")])
     elif protocol == "trojan":
-        key_parts.extend([parsed.get("password", ""), parsed["address"], parsed["port"]])
+        key_parts.extend([node.get("password", ""), node["address"], node["port"]])
     elif protocol == "vless":
-        params = "&".join(f"{k}={v[0]}" for k, v in sorted(parsed.get("params", {}).items()))
+        params = "&".join(f"{k}={v[0]}" for k, v in sorted(node.get("params", {}).items()))
         params_hash = hashlib.md5(params.encode("utf-8")).hexdigest()
-        key_parts.extend([parsed.get("id", ""), parsed["address"], parsed["port"], params_hash])
+        key_parts.extend([node.get("id", ""), node["address"], node["port"], params_hash])
     else:
-        return f"raw_{node_str}"
+        return f"raw_{hashlib.md5(raw_str.encode('utf-8')).hexdigest()}"
 
-    return "_".join(key_parts)
+    return "_".join(str(part) for part in key_parts if part)
 
 def deduplicate_nodes(
     input_nodes_content: str,
@@ -126,7 +156,7 @@ def deduplicate_nodes(
     sort_by: Optional[str] = None,
     report_duplicates: bool = False
 ) -> Tuple[List[str], List[str]]:
-    """去重节点。"""
+    """去重节点，适配 Nekoray 的节点格式。"""
     unique_keys = set()
     unique_nodes = []
     duplicate_nodes = []
@@ -136,22 +166,24 @@ def deduplicate_nodes(
         if not clean_line:
             continue
 
-        dedup_key = get_node_dedup_key(clean_line)
-        if dedup_key not in unique_keys:
-            unique_keys.add(dedup_key)
-            unique_nodes.append(clean_line)
-        else:
-            duplicate_nodes.append(clean_line)
-            if report_duplicates:
-                logger.info(f"重复节点: {clean_line}")
+        parsed_nodes = parse_node(clean_line)
+        for node in parsed_nodes:
+            dedup_key = get_node_dedup_key(node, clean_line)
+            if dedup_key not in unique_keys:
+                unique_keys.add(dedup_key)
+                unique_nodes.append(clean_line)
+            else:
+                duplicate_nodes.append(clean_line)
+                if report_duplicates:
+                    logger.info(f"重复节点: {clean_line}")
 
     if sort_by == "protocol":
-        unique_nodes.sort(key=lambda x: parse_node(x).get("type", ""))
+        unique_nodes.sort(key=lambda x: parse_node(x)[0].get("type", ""))
     elif sort_by == "address":
-        unique_nodes.sort(key=lambda x: parse_node(x).get("address", ""))
+        unique_nodes.sort(key=lambda x: parse_node(x)[0].get("address", ""))
 
     if output_format == "json":
-        unique_nodes = [json.dumps(parse_node(node), ensure_ascii=False) for node in unique_nodes]
+        unique_nodes = [json.dumps(node, ensure_ascii=False) for node in [parse_node(n)[0] for n in unique_nodes]]
 
     return unique_nodes, duplicate_nodes
 
@@ -162,7 +194,7 @@ def main(
     sort_by: Optional[str] = None,
     report_duplicates: bool = False
 ):
-    """主函数：读取节点文件，执行去重并保存结果。"""
+    """主函数：读取节点文件，执行去重并保存结果，适配 Nekoray。"""
     try:
         with open(input_path, "r", encoding="utf-8") as f:
             content = f.read()
