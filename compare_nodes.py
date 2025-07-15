@@ -3,254 +3,258 @@ import re
 import base64
 import json
 import hashlib
+import logging
+from functools import lru_cache
+from typing import Dict, Optional, List, Tuple
+from urllib.parse import parse_qs, urlparse
+
+# 设置日志
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    handlers=[logging.StreamHandler()]
+)
+logger = logging.getLogger(__name__)
 
 # ================================================
-# 1. 节点解析函数 - 用于提取关键特征
+# 1. 通用解析函数和协议处理器
 # ================================================
 
-def parse_ss_node_full(node_str):
-    """Parses a Shadowsocks (ss://) node string for full deduplication features."""
+@lru_cache(maxsize=1000)
+def parse_node(node_str: str) -> Dict[str, Optional[str]]:
+    """通用节点解析函数，根据协议调用特定的解析器。"""
+    node_str = node_str.strip()
+    if not node_str:
+        return {"type": "invalid", "raw": node_str}
+
+    protocol = node_str.split("://", 1)[0].lower()
+    handler = PROTOCOL_HANDLERS.get(protocol, lambda x: {"type": protocol, "raw": x})
     try:
-        if '://' in node_str:
-            main_part_with_remark = node_str.split('://', 1)[1]
-            main_part = main_part_with_remark.split('#', 1)[0] # Remove remark for core features
+        parsed = handler(node_str)
+        if not parsed.get("raw") and not validate_node(parsed):
+            logger.warning(f"无效的节点格式: {node_str}")
+            return {"type": protocol, "raw": node_str}
+        return parsed
+    except Exception as e:
+        logger.error(f"解析节点失败 {node_str}: {str(e)}")
+        return {"type": protocol, "raw": node_str}
 
-            if '@' in main_part:
-                cred_b64, addr_port = main_part.split('@', 1)
-                try:
-                    # Best attempt to decode credential, adding padding for base64 if needed
-                    decoded_cred = base64.b64decode(cred_b64 + '==').decode('utf-8')
-                except Exception:
-                    decoded_cred = cred_b64 # Fallback if not pure base64 or incomplete
+def validate_node(parsed: Dict[str, Optional[str]]) -> bool:
+    """验证解析后的节点是否包含必要字段。"""
+    required = ["address", "port"]
+    return all(parsed.get(key) for key in required)
 
-                address_parts = addr_port.split(':')
-                address = address_parts[0]
-                port = address_parts[1] if len(address_parts) > 1 else None
-
-                return {
-                    "type": "ss",
-                    "credential": decoded_cred, # e.g., "method:password"
-                    "address": address,
-                    "port": port
-                }
-            else:
-                # Handle ss://base64(method:password@address:port) or simpler ss://address:port
-                # This format is less common for standard deduplication, usually the cred is separate.
-                # If it's a direct base64 of the whole string, it's treated as a raw string for now
-                try:
-                    decoded_main = base64.b64decode(main_part + '==').decode('utf-8')
-                    # If this succeeds, it might be a complex SS format, we'll use a generic key
-                    return {"type": "ss", "raw_decoded": decoded_main, "raw": node_str}
-                except Exception:
-                    # It might just be ss://address:port or some other simple form
-                    parts = main_part.split(':')
-                    return {
-                        "type": "ss",
-                        "address": parts[0],
-                        "port": parts[1] if len(parts) > 1 else None,
-                        "credential": "" # No explicit credential
-                    }
+def parse_ss_node(node_str: str) -> Dict[str, Optional[str]]:
+    """解析 Shadowsocks 节点。"""
+    try:
+        main_part = node_str.split("://", 1)[1].split("#", 1)[0]
+        if "@" in main_part:
+            cred_b64, addr_port = main_part.split("@", 1)
+            try:
+                decoded_cred = base64.b64decode(cred_b64 + "==").decode("utf-8")
+            except Exception:
+                decoded_cred = cred_b64
+            address, port = addr_port.rsplit(":", 1)
+            return {
+                "type": "ss",
+                "credential": decoded_cred,
+                "address": address,
+                "port": port
+            }
+        else:
+            try:
+                decoded = base64.b64decode(main_part + "==").decode("utf-8")
+                return {"type": "ss", "raw_decoded": decoded, "raw": node_str}
+            except Exception:
+                address, port = main_part.split(":", 1)
+                return {"type": "ss", "address": address, "port": port, "credential": ""}
     except Exception:
-        pass
-    return {"type": "ss", "raw": node_str} # Fallback to raw if parsing fails
+        return {"type": "ss", "raw": node_str}
 
-def parse_vmess_node_full(node_str):
-    """Parses a Vmess (vmess://) node string for full deduplication features."""
+def parse_vmess_node(node_str: str) -> Dict[str, Optional[str]]:
+    """解析 Vmess 节点。"""
     try:
-        b64_data = node_str.split('vmess://', 1)[1]
-        decoded_data = base64.b64decode(b64_data).decode('utf-8')
+        b64_data = node_str.split("vmess://", 1)[1]
+        decoded_data = base64.b64decode(b64_data).decode("utf-8")
         node_json = json.loads(decoded_data)
         return {
             "type": "vmess",
             "address": node_json.get("add"),
-            "port": node_json.get("port"),
-            "id": node_json.get("id"), # UUID
-            "net": node_json.get("net"), # network type (tcp, ws, http, quic)
-            # "tls": node_json.get("tls"), # Can be considered for more strict uniqueness
-            # "host": node_json.get("host"), # SNI or custom host
-            # "path": node_json.get("path"), # ws path
+            "port": str(node_json.get("port")),
+            "id": node_json.get("id"),
+            "net": node_json.get("net")
         }
     except Exception:
-        pass
-    return {"type": "vmess", "raw": node_str}
+        return {"type": "vmess", "raw": node_str}
 
-def parse_trojan_node_full(node_str):
-    """Parses a Trojan (trojan://) node string for full deduplication features."""
+def parse_trojan_node(node_str: str) -> Dict[str, Optional[str]]:
+    """解析 Trojan 节点。"""
     try:
-        # Format: trojan://password@address:port?params#remark
-        parts = node_str.split('trojan://', 1)[1].split('@', 1)
-        if len(parts) == 2:
-            password = parts[0]
-            addr_port_params_remark = parts[1]
-            
-            addr_port_params = addr_port_params_remark.split('#', 1)[0] # Remove remark
-            addr_port_parts = addr_port_params.split('?', 1)
-            
-            address_port = addr_port_parts[0]
-            params_str = addr_port_parts[1] if len(addr_port_parts) > 1 else ''
-
-            address_parts = address_port.split(':')
-            address = address_parts[0]
-            port = address_parts[1] if len(address_parts) > 1 else None
-
-            # Parse query parameters (e.g., security=tls, type=ws, host=...)
-            params = {}
-            for param_pair in params_str.split('&'):
-                if '=' in param_pair:
-                    key, value = param_pair.split('=', 1)
-                    params[key] = value
-
-            return {
-                "type": "trojan",
-                "password": password,
-                "address": address,
-                "port": port,
-                "params": params # Store params for potential future use or stricter matching
-            }
+        parsed_url = urlparse(node_str)
+        password = parsed_url.username
+        address, port = parsed_url.hostname, parsed_url.port
+        params = parse_qs(parsed_url.query)
+        return {
+            "type": "trojan",
+            "password": password,
+            "address": address,
+            "port": str(port) if port else None,
+            "params": params
+        }
     except Exception:
-        pass
-    return {"type": "trojan", "raw": node_str}
+        return {"type": "trojan", "raw": node_str}
 
-def parse_vless_node_full(node_str):
-    """Parses a Vless (vless://) node string for full deduplication features."""
+def parse_vless_node(node_str: str) -> Dict[str, Optional[str]]:
+    """解析 Vless 节点。"""
     try:
-        # Format: vless://uuid@address:port?params#remark
-        parts = node_str.split('vless://', 1)[1].split('@', 1)
-        if len(parts) == 2:
-            uuid = parts[0]
-            addr_port_params_remark = parts[1]
-            
-            addr_port_params = addr_port_params_remark.split('#', 1)[0] # Remove remark
-            addr_port_parts = addr_port_params.split('?', 1)
-            
-            address_port = addr_port_parts[0]
-            params_str = addr_port_parts[1] if len(addr_port_parts) > 1 else ''
-
-            address_parts = address_port.split(':')
-            address = address_parts[0]
-            port = address_parts[1] if len(address_parts) > 1 else None
-
-            params = {}
-            for param_pair in params_str.split('&'):
-                if '=' in param_pair:
-                    key, value = param_pair.split('=', 1)
-                    params[key] = value
-
-            return {
-                "type": "vless",
-                "id": uuid,
-                "address": address,
-                "port": port,
-                "params": params
-            }
+        parsed_url = urlparse(node_str)
+        uuid = parsed_url.username
+        address, port = parsed_url.hostname, parsed_url.port
+        params = parse_qs(parsed_url.query)
+        return {
+            "type": "vless",
+            "id": uuid,
+            "address": address,
+            "port": str(port) if port else None,
+            "params": params
+        }
     except Exception:
-        pass
-    return {"type": "vless", "raw": node_str}
+        return {"type": "vless", "raw": node_str}
 
-def get_node_dedup_key(node_str):
-    """
-    根据节点类型和关键特征生成去重键。
-    这个键将用于判断两个节点是否重复。
-    """
-    node_str = node_str.strip()
+# 协议处理器映射
+PROTOCOL_HANDLERS = {
+    "ss": parse_ss_node,
+    "vmess": parse_vmess_node,
+    "trojan": parse_trojan_node,
+    "vless": parse_vless_node
+}
+
+# ================================================
+# 2. 去重键生成
+# ================================================
+
+def get_node_dedup_key(node_str: str) -> str:
+    """根据节点类型和关键特征生成去重键。"""
+    parsed = parse_node(node_str)
+    protocol = parsed.get("type", "raw")
+
+    if protocol == "ss" and parsed.get("credential") is not None:
+        return f"ss_{parsed['credential']}@{parsed['address']}:{parsed['port']}"
+    elif protocol == "vmess" and parsed.get("id"):
+        return f"vmess_{parsed['id']}@{parsed['address']}:{parsed['port']}_{parsed['net']}"
+    elif protocol == "trojan" and parsed.get("password"):
+        return f"trojan_{parsed['password']}@{parsed['address']}:{parsed['port']}"
+    elif protocol == "vless" and parsed.get("id"):
+        param_string = "&".join(f"{k}={v[0]}" for k, v in sorted(parsed.get("params", {}).items()))
+        params_hash = hashlib.md5(param_string.encode("utf-8")).hexdigest()
+        return f"vless_{parsed['id']}@{parsed['address']}:{parsed['port']}_{params_hash}"
     
-    if node_str.startswith("ss://"):
-        parsed = parse_ss_node_full(node_str)
-        if parsed and parsed.get("address") and parsed.get("port") and parsed.get("credential") is not None:
-            # SS key: type_credential@address:port
-            return f"ss_{parsed['credential']}@{parsed['address']}:{parsed['port']}"
-    
-    elif node_str.startswith("vmess://"):
-        parsed = parse_vmess_node_full(node_str)
-        if parsed and parsed.get("id") and parsed.get("address") and parsed.get("port") and parsed.get("net"):
-            # VMess key: type_id@address:port_net
-            return f"vmess_{parsed['id']}@{parsed['address']}:{parsed['port']}_{parsed['net']}"
-    
-    elif node_str.startswith("trojan://"):
-        parsed = parse_trojan_node_full(node_str)
-        if parsed and parsed.get("password") and parsed.get("address") and parsed.get("port"):
-            # Trojan key: type_password@address:port
-            # For stricter Trojan dedup, consider params if they affect connection uniqueness
-            return f"trojan_{parsed['password']}@{parsed['address']}:{parsed['port']}"
-    
-    elif node_str.startswith("vless://"):
-        parsed = parse_vless_node_full(node_str)
-        if parsed and parsed.get("id") and parsed.get("address") and parsed.get("port"):
-            # VLESS key: type_id@address:port_params_hash
-            # Parameters can be important for VLESS uniqueness (e.g., flow, security)
-            # Hash sorted params to ensure consistent key
-            param_string = ""
-            if parsed.get("params"):
-                sorted_params = sorted(parsed["params"].items())
-                param_string = "&".join([f"{k}={v}" for k, v in sorted_params])
-            
-            params_hash = hashlib.md5(param_string.encode('utf-8')).hexdigest()
-            return f"vless_{parsed['id']}@{parsed['address']}:{parsed['port']}_{params_hash}"
-    
-    # Fallback for unknown/unparsed formats: use full raw string
     return f"raw_{node_str}"
 
 # ================================================
-# 2. 去重函数
+# 3. 去重函数
 # ================================================
 
-def deduplicate_nodes(input_nodes_content):
+def deduplicate_nodes(
+    input_nodes_content: str,
+    output_format: str = "text",
+    sort_by: Optional[str] = None,
+    report_duplicates: bool = False
+) -> Tuple[List[str], List[str]]:
     """
     根据提取的特征对节点进行去重。
 
     参数:
-        input_nodes_content (str): 包含原始节点列表的字符串内容。
+        input_nodes_content: 包含原始节点列表的字符串。
+        output_format: 输出格式 ("text" 或 "json")。
+        sort_by: 排序字段 ("protocol" 或 "address").
 
     返回:
-        list: 去重后的唯一节点列表。
+        Tuple[List[str], List[str]]: 去重后的节点列表和重复节点列表。
     """
     unique_keys = set()
-    deduplicated_nodes = []
-    
-    lines = input_nodes_content.splitlines()
-    for line in lines:
+    unique_nodes = []
+    duplicate_nodes = []
+
+    for line in input_nodes_content.splitlines():
         clean_line = line.strip()
-        if not clean_line: # Skip empty lines
+        if not clean_line:
             continue
 
         dedup_key = get_node_dedup_key(clean_line)
-        
         if dedup_key not in unique_keys:
             unique_keys.add(dedup_key)
-            deduplicated_nodes.append(clean_line)
-        # else:
-        #     print(f"Skipping duplicate: {clean_line} (key: {dedup_key})") # 可以选择打印被移除的节点
+            unique_nodes.append(clean_line)
+        else:
+            duplicate_nodes.append(clean_line)
+            if report_duplicates:
+                logger.info(f"发现重复节点: {clean_line} (键: {dedup_key})")
 
-    return deduplicated_nodes
+    # 排序
+    if sort_by:
+        if sort_by == "protocol":
+            unique_nodes.sort(key=lambda x: parse_node(x).get("type", ""))
+        elif sort_by == "address":
+            unique_nodes.sort(key=lambda x: parse_node(x).get("address", ""))
+
+    # 格式化输出
+    if output_format == "json":
+        unique_nodes = [json.dumps(parse_node(node), ensure_ascii=False) for node in unique_nodes]
+
+    return unique_nodes, duplicate_nodes
 
 # ================================================
-# 3. 实际应用 (假设你从文件中读取内容)
+# 4. 主函数
 # ================================================
+
+def main(
+    input_path: str = "data/all_unique_nodes.txt",
+    output_path: str = "data/deduplicated_output.txt",
+    output_format: str = "text",
+    sort_by: Optional[str] = None,
+    report_duplicates: bool = False
+):
+    """主函数：读取节点文件，执行去重并保存结果。"""
+    try:
+        with open(input_path, "r", encoding="utf-8") as f:
+            content = f.read()
+    except FileNotFoundError:
+        logger.error(f"未找到输入文件: {input_path}")
+        return
+    except PermissionError:
+        logger.error(f"无权限读取文件: {input_path}")
+        return
+    except Exception as e:
+        logger.error(f"读取文件失败: {str(e)}")
+        return
+
+    unique_nodes, duplicate_nodes = deduplicate_nodes(content, output_format, sort_by, report_duplicates)
+    
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    try:
+        with open(output_path, "w", encoding="utf-8") as f:
+            if output_format == "json":
+                json.dump(unique_nodes, f, ensure_ascii=False, indent=2)
+            else:
+                f.write("\n".join(unique_nodes) + "\n")
+    except PermissionError:
+        logger.error(f"无权限写入文件: {output_path}")
+        return
+    except Exception as e:
+        logger.error(f"写入文件失败: {str(e)}")
+        return
+
+    logger.info(f"去重完成！唯一节点已保存到: {output_path}")
+    logger.info(f"原始节点数量: {len(content.splitlines())}")
+    logger.info(f"去重后节点数量: {len(unique_nodes)}")
+    if report_duplicates:
+        logger.info(f"重复节点数量: {len(duplicate_nodes)}")
 
 if __name__ == "__main__":
-    # 请确保 'all_unique_nodes.txt' 文件位于 'data/' 目录下
-    original_nodes_file_path = os.path.join("data", "all_unique_nodes.txt")
-    
-    try:
-        with open(original_nodes_file_path, 'r', encoding='utf-8') as f:
-            original_content = f.read()
-    except FileNotFoundError:
-        print(f"错误: 原始节点文件未找到: {original_nodes_file_path}")
-        exit(1)
-
-    # 执行去重
-    final_unique_nodes = deduplicate_nodes(original_content)
-
-    # 将去重结果输出到文件
-    output_dir = "data"
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
-    
-    output_file_path = os.path.join(output_dir, "deduplicated_output.txt")
-    with open(output_file_path, "w", encoding='utf-8') as f:
-        for node in final_unique_nodes:
-            f.write(node + "\n")
-
-    print(f"去重完成！唯一节点已保存到: {output_file_path}")
-    print(f"原始节点数量: {len(original_content.splitlines())}")
-    print(f"去重后节点数量: {len(final_unique_nodes)}")
+    main(
+        input_path="data/all_unique_nodes.txt",
+        output_path="data/deduplicated_output.txt",
+        output_format="text",
+        sort_by="protocol",  # 可选: "protocol", "address", 或 None
+        report_duplicates=True
+    )
