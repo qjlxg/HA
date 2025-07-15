@@ -6,7 +6,7 @@ on:
       - main
   schedule:
     - cron: '0 0 * * *' # 每天 UTC 0 点运行
-
+  workflow_dispatch:
 jobs:
   scrape_proxies:
     runs-on: ubuntu-latest
