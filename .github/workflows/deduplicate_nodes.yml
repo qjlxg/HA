@@ -8,29 +8,22 @@ on:
 
 jobs:
   deduplicate-nodes:
-    runs-on: ubuntu-latest # 在最新的Ubuntu环境中运行
+    runs-on: ubuntu-latest # 在最新的 Ubuntu 环境中运行
 
     steps:
-    - name: Checkout repository # 步骤1: 检出你的GitHub仓库代码
+    - name: Checkout repository # 步骤 1: 检出 GitHub 仓库代码
       uses: actions/checkout@v4
 
-    - name: Set up Python # 步骤2: 设置Python环境
+    - name: Set up Python # 步骤 2: 设置 Python 环境
       uses: actions/setup-python@v5
       with:
-        python-version: '3.x' # 使用最新的Python 3版本
+        python-version: '3.x' # 使用最新的 Python 3 版本
 
-    - name: Create data directory # 步骤3: 创建data目录 (确保它存在，如果输入文件不在根目录，请确保已提交)
-      run: mkdir -p data
+    - name: Create data directory # 步骤 3: 创建 data 目录
+      run: mkdir -p data # 确保 data 目录存在
 
-    # ⚠️ 重要提示: 在运行此工作流之前，请确保你的 `all_unique_nodes.txt` 文件
-    # 已经位于你的GitHub仓库中的 `data/` 目录下。
-    # 你需要将 `all_unique_nodes.txt` 文件上传到你仓库的 `data/` 目录中。
+    # ⚠️ 重要提示: 请确保 `data/all_unique_nodes.txt` 文件已存在于仓库中。
+    # 在运行工作流之前，需将 `all_unique_nodes.txt` 提交到仓库的 `data/` 目录。
 
-    - name: Run node deduplication script # 步骤4: 运行新的Python去重脚本
-      run: python compare_nodes.py # 假设 compare_nodes.py 已经包含上述的去重逻辑
-
-    - name: Upload deduplicated nodes as artifact # 步骤5: 将去重后的结果文件作为工作流产物上传
-      uses: actions/upload-artifact@v4
-      with:
-        name: deduplicated-nodes
-        path: data/deduplicated_output.txt # 上传 data 目录下的去重结果文件
+    - name: Run node deduplication script # 步骤 4: 运行 Python 去重脚本
+      run: python compare_nodes.py # 假设去重脚本命名为 compare_nodes.py
