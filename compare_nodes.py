@@ -303,7 +303,7 @@ def main(
 
 if __name__ == "__main__":
     main(
-        input_path="data/all_unique_nodes (1).txt", # 确保这里指向你最新上传的文件
+        input_path="data/all_unique_nodes.txt", # 确保这里指向你最新上传的文件
         output_path="data/deduplicated_output.txt",
         output_format="text",
         sort_by="protocol",
