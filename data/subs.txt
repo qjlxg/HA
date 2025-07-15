@@ -1,2 +1,2 @@
-vless://0b7121b6-d09e-4a47-98b2-9b7a42d167f9@ip.cryptoyee.com:443?security=tls&sni=vls.cryptoyee.com&type=ws&path=/mahsa&host=vls.cryptoyee.com&encryption=none#vless-hostinger-cf
 vless://0b7121b6-d09e-4a47-98b2-9b7a42d167f9@zula.ir:443?security=tls&sni=vls.cryptoyee.com&type=ws&path=/mahsa&host=vls.cryptoyee.com&encryption=none#vless-hostinger-zula
+vless://0b7121b6-d09e-4a47-98b2-9b7a42d167f9@ip.cryptoyee.com:443?security=tls&sni=vls.cryptoyee.com&type=ws&path=/mahsa&host=vls.cryptoyee.com&encryption=none#vless-hostinger-cf
