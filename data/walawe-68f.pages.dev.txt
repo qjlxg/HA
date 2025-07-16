@@ -1,0 +1,2 @@
+vless://1a225732-bf40-4bdc-bc3a-1fcb6bdd5ddd@walawe-68f.pages.dev:80?encryption=none&security=none&fp=randomized&type=ws&host=walawe-68f.pages.dev&path=/vlesscf#walawe-68f.pages.dev
+vless://1a225732-bf40-4bdc-bc3a-1fcb6bdd5ddd@walawe-68f.pages.dev:443?encryption=none&security=tls&sni=walawe-68f.pages.dev&fp=randomized&type=ws&host=walawe-68f.pages.dev&path=/vlesscf#walawe-68f.pages.dev
