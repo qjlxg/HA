@@ -1,0 +1,2 @@
+vless://26c637d9-fe0d-4fbf-b3ed-2fe26b7f3f8b@xsm.web.id:80?path=/xsm&security=none&encryption=none&host=xsm.web.id&fp=randomized&type=ws&sni=xsm.web.id#Amazon.com, Inc.
+vless://26c637d9-fe0d-4fbf-b3ed-2fe26b7f3f8b@xsm.web.id:443?encryption=none&security=tls&sni=xsm.web.id&fp=randomized&type=ws&host=xsm.web.id&path=/xsm#Amazon.com, Inc.

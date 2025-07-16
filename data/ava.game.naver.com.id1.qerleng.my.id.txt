@@ -1,0 +1,2 @@
+vless://ae0fbd57-8f92-4a97-b594-5b105c323b1a@ava.game.naver.com.id1.qerleng.my.id:443?encryption=none&security=tls&sni=ava.game.naver.com.id1.qerleng.my.id&fp=randomized&type=ws&host=ava.game.naver.com.id1.qerleng.my.id&path=%2Frotate#ROTATE+PROXY
+vless://daf5a341-bf3f-4062-8041-ac07e1c0c2d2@ava.game.naver.com.id1.qerleng.my.id:80?path=%2Frotate&security=none&encryption=none&host=ava.game.naver.com.id1.qerleng.my.id&fp=randomized&type=ws&sni=ava.game.naver.com.id1.qerleng.my.id#ROTATE+PROXY
