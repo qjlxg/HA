@@ -1,2 +1,0 @@
-vless://8a71b7c0-6902-4f5d-ad51-44b425ad41dd@id1.qerleng.my.id:80?path=%2Frotate&security=none&encryption=none&host=id1.qerleng.my.id&fp=randomized&type=ws&sni=id1.qerleng.my.id#ROTATE+PROXY
-vless://6795b5b6-3cda-41fd-99f4-6d3e95b4043a@id1.qerleng.my.id:443?encryption=none&security=tls&sni=id1.qerleng.my.id&fp=randomized&type=ws&host=id1.qerleng.my.id&path=%2Frotate#ROTATE+PROXY
