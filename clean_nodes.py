@@ -55,7 +55,6 @@ def clean_duplicate_nodes_advanced(file_path, output_path=None, debug_samples=10
                 try:
                     node_key = generate_node_key(core_part, strict_dedup)
                     if node_key:
-                        # 记录前 debug_samples 个去重键用于调试
                         if len(debug_keys) < debug_samples:
                             debug_keys.append((protocol, node_key))
                         if node_key not in unique_node_keys:
@@ -108,7 +107,7 @@ def generate_node_key(url, strict_dedup=False):
     try:
         parsed = urllib.parse.urlparse(url)
         scheme = parsed.scheme.lower()
-        netloc = parsed.netloc.lower()  # 转换为小写以避免大小写差异
+        netloc = parsed.netloc.lower()
         query = parsed.query
 
         if scheme == "vless":
@@ -118,14 +117,12 @@ def generate_node_key(url, strict_dedup=False):
         elif scheme == "ss":
             return normalize_ss(netloc, url)
         else:
-            # 未识别协议，直接返回原始 URL
             return url.lower()
     except Exception as e:
         raise ValueError(f"解析 URL 失败: {e}")
 
 def normalize_vless(netloc, query, strict_dedup):
     """标准化 VLESS 链接，忽略非关键字段"""
-    # 如果 strict_dedup=True，仅使用 host:port 和关键参数，忽略 UUID
     if strict_dedup:
         try:
             _, host_port = netloc.split('@', 1)
@@ -135,7 +132,6 @@ def normalize_vless(netloc, query, strict_dedup):
         host_port = netloc
     query_params = urllib.parse.parse_qs(query)
     key_params = {k: sorted(query_params[k]) for k in ['type', 'path', 'security', 'encryption'] if k in query_params}
-    # 规范化 path 参数
     if 'path' in key_params:
         key_params['path'] = [urllib.parse.quote(urllib.parse.unquote(p)) for p in key_params['path']]
     sorted_query = urllib.parse.urlencode(key_params, doseq=True)
@@ -143,7 +139,6 @@ def normalize_vless(netloc, query, strict_dedup):
 
 def normalize_trojan(netloc, query, strict_dedup):
     """标准化 Trojan 链接"""
-    # 如果 strict_dedup=True，仅使用 host:port，忽略 password
     if strict_dedup:
         try:
             _, host_port = netloc.split('@', 1)
@@ -163,26 +158,27 @@ def normalize_ss(netloc, url):
             b64_config, host_port = netloc.split('@', 1)
             # 清理 Base64 字符串
             b64_config = re.sub(r'[^A-Za-z0-9+/=]', '', b64_config)
-            # 验证 Base64 合法性
             if not re.match(r'^[A-Za-z0-9+/=]+$', b64_config):
                 raise ValueError(f"无效的 Base64 字符串: {b64_config}")
             try:
-                config = base64.urlsafe_b64decode(b64_config + '===').decode('utf-8')
-                # 验证 method:password 格式
+                # 尝试解码并验证格式
+                config = base64.urlsafe_b64decode(b64_config + '===').decode('ascii')
                 if ':' not in config:
                     raise ValueError(f"无效的 SS 配置格式: {config}")
-                return f"ss://{config}@{host_port}"
-            except (base64.binascii.Error, UnicodeDecodeError) as e:
+                method, password = config.split(':', 1)
+                if not method or not password:
+                    raise ValueError(f"无效的 SS 配置: method={method}, password={password}")
+                return f"ss://{method}:{password}@{host_port}"
+            except (base64.binascii.Error, UnicodeDecodeError, ValueError) as e:
                 logging.warning(f"SS Base64 解码失败，使用原始 Base64 作为键: {b64_config} | 错误: {e}")
                 return f"ss://{b64_config}@{host_port}"
         else:
-            # 清理并验证 Base64
             netloc = re.sub(r'[^A-Za-z0-9+/=]', '', netloc)
-            config = base64.urlsafe_b64decode(netloc + '===').decode('utf-8', errors='ignore')
+            config = base64.urlsafe_b64decode(netloc + '===').decode('ascii', errors='ignore')
             return f"ss://{config}"
     except Exception as e:
         raise ValueError(f"无法解析 SS 配置: {e}")
 
 if __name__ == "__main__":
     nodes_file = os.path.join('data', 'a.isidomain.web.id.txt')
-    clean_duplicate_nodes_advanced(nodes_file, debug_samples=10)
+    clean_duplicate_nodes_advanced(nodes_file, debug_samples=10, strict_dedup=True)
