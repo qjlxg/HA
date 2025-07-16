@@ -37,6 +37,7 @@ def clean_duplicate_nodes_advanced(file_path, output_path=None, debug_samples=5)
                 line_count += 1
                 stripped_line = line.strip()
                 if not stripped_line:
+                    stats['empty_lines'] += 1
                     continue
 
                 # 分离核心部分和备注
@@ -76,8 +77,11 @@ def clean_duplicate_nodes_advanced(file_path, output_path=None, debug_samples=5)
         logging.info(f"✅ 成功清理重复节点。结果保存到: {output_path}")
         logging.info(f"📊 统计数据:")
         logging.info(f"  - 原始节点数: {line_count}")
+        logging.info(f"  - 有效节点数: {line_count - stats['empty_lines']}")
         logging.info(f"  - 唯一节点数: {len(unique_lines_output)}")
-        logging.info(f"  - 移除的重复节点数: {line_count - len(unique_lines_output)}")
+        logging.info(f"  - 重复节点数: {sum(stats[f'{p}_duplicates'] for p in ['vless', 'trojan', 'ss'])}")
+        logging.info(f"  - 解析失败节点数: {len(error_lines)}")
+        logging.info(f"  - 空行数: {stats['empty_lines']}")
         logging.info(f"  - 按协议分类:")
         for protocol in ['vless', 'trojan', 'ss']:
             logging.info(f"    - {protocol.upper()}: {stats[protocol]} 节点, {stats[f'{protocol}_duplicates']} 重复, {stats[f'{protocol}_errors']} 解析失败")
@@ -110,7 +114,7 @@ def generate_node_key(url):
         elif scheme == "trojan":
             return normalize_trojan(netloc, query)
         elif scheme == "ss":
-            return normalize_ss(netloc)
+            return normalize_ss(netloc, url)
         else:
             # 未识别协议，直接返回原始 URL
             return url.lower()
@@ -121,7 +125,6 @@ def normalize_vless(netloc, query):
     """标准化 VLESS 链接，忽略非关键字段"""
     uuid_host_port = netloc
     query_params = urllib.parse.parse_qs(query)
-    # 仅保留关键字段，忽略 fp、sni 等非必要字段
     key_params = {k: sorted(query_params[k]) for k in ['type', 'path', 'security', 'encryption'] if k in query_params}
     sorted_query = urllib.parse.urlencode(key_params, doseq=True)
     return f"vless://{uuid_host_port}?{sorted_query}"
@@ -133,17 +136,25 @@ def normalize_trojan(netloc, query):
     sorted_query = urllib.parse.urlencode(key_params, doseq=True)
     return f"trojan://{netloc}?{sorted_query}"
 
-def normalize_ss(netloc):
-    """标准化 SS 链接"""
+def normalize_ss(netloc, url):
+    """标准化 SS 链接，增强容错性"""
     try:
         if '@' in netloc:
             b64_config, host_port = netloc.split('@', 1)
-            config = base64.urlsafe_b64decode(b64_config + '===').decode('utf-8')
-            return f"ss://{config}@{host_port}"
+            # 清理 Base64 字符串，去除非法字符
+            b64_config = b64_config.replace('\n', '').replace(' ', '')
+            try:
+                # 尝试 Base64 解码
+                config = base64.urlsafe_b64decode(b64_config + '===').decode('utf-8', errors='ignore')
+                return f"ss://{config}@{host_port}"
+            except (base64.binascii.Error, UnicodeDecodeError) as e:
+                # 如果解码失败，记录原始 Base64 字符串作为键
+                logging.warning(f"SS Base64 解码失败，使用原始 netloc 作为键: {netloc}")
+                return f"ss://{netloc}"
         else:
-            config = base64.urlsafe_b64decode(netloc + '===').decode('utf-8')
+            config = base64.urlsafe_b64decode(netloc + '===').decode('utf-8', errors='ignore')
             return f"ss://{config}"
-    except (base64.binascii.Error, UnicodeDecodeError) as e:
+    except Exception as e:
         raise ValueError(f"无法解析 SS 配置: {e}")
 
 if __name__ == "__main__":
