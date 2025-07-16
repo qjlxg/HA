@@ -26,7 +26,7 @@ jobs:
     - name: Run node cleaning script
       run: |
         mkdir -p data # Ensure data directory exists
-        python clean_duplicate_nodes.py
+        python clean_nodes.py
       # The script processes data/a.isidomain.web.id.txt and outputs to data/a.isidomain.web.id_cleaned.txt
 
     - name: Commit and push if changes exist
