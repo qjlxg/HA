@@ -125,7 +125,11 @@ def normalize_vless(netloc, query):
     """标准化 VLESS 链接，忽略非关键字段"""
     uuid_host_port = netloc
     query_params = urllib.parse.parse_qs(query)
+    # 仅保留关键字段，忽略 fp、sni 等非必要字段
     key_params = {k: sorted(query_params[k]) for k in ['type', 'path', 'security', 'encryption'] if k in query_params}
+    # 规范化 path 参数，解码后重新编码以确保一致性
+    if 'path' in key_params:
+        key_params['path'] = [urllib.parse.quote(urllib.parse.unquote(p)) for p in key_params['path']]
     sorted_query = urllib.parse.urlencode(key_params, doseq=True)
     return f"vless://{uuid_host_port}?{sorted_query}"
 
@@ -148,9 +152,9 @@ def normalize_ss(netloc, url):
                 config = base64.urlsafe_b64decode(b64_config + '===').decode('utf-8', errors='ignore')
                 return f"ss://{config}@{host_port}"
             except (base64.binascii.Error, UnicodeDecodeError) as e:
-                # 如果解码失败，记录原始 Base64 字符串作为键
-                logging.warning(f"SS Base64 解码失败，使用原始 netloc 作为键: {netloc}")
-                return f"ss://{netloc}"
+                # 如果解码失败，使用原始 Base64 字符串作为键
+                logging.warning(f"SS Base64 解码失败，使用原始 Base64 作为键: {b64_config} | 错误: {e}")
+                return f"ss://{b64_config}@{host_port}"
         else:
             config = base64.urlsafe_b64decode(netloc + '===').decode('utf-8', errors='ignore')
             return f"ss://{config}"
