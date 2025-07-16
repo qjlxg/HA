@@ -1,3 +1,0 @@
-vless://eb0c94ef-3fd6-4cf4-9578-8c22423ed1db@maginajoker.top:8080?encryption=none&security=none&sni=maginajoker.top&fp=randomized&type=ws&host=maginajoker.top&path=%2F%3Fed%3D2048#NONE-8080
-vless://eb0c94ef-3fd6-4cf4-9578-8c22423ed1db@maginajoker.top:80?encryption=none&security=none&sni=maginajoker.top&fp=randomized&type=ws&host=maginajoker.top&path=%2F%3Fed%3D2048#NONE-80
-vless://eb0c94ef-3fd6-4cf4-9578-8c22423ed1db@maginajoker.top:443?encryption=none&security=tls&sni=maginajoker.top&fp=randomized&type=ws&host=maginajoker.top&path=%2F%3Fed%3D2048#TLS-443
