@@ -3,53 +3,46 @@ name: Clean Duplicate Nodes
 on:
   push:
     branches:
-      - main # 当有新的提交推送到 main 分支时触发
+      - main # Trigger on push to main branch
   schedule:
-    - cron: '0 0 * * *' # 每天 UTC 时间午夜（0点）运行一次，用于定期清理
-  workflow_dispatch: # 允许手动从 GitHub UI 触发此工作流
+    - cron: '0 0 * * *' # Run daily at midnight UTC
+  workflow_dispatch: # Allow manual trigger from GitHub UI
 
 jobs:
   clean-nodes:
-    runs-on: ubuntu-latest # 在 Ubuntu 最新版本上运行
+    runs-on: ubuntu-latest # Run on latest Ubuntu
 
     steps:
-    - name: Checkout repository # 步骤1: 检出仓库代码
+    - name: Checkout repository
       uses: actions/checkout@v4
       with:
-        # 获取所有历史记录，包括所有分支和标签。
-        # 这是为了确保 git diff 能够正确比较文件，如果文件没有变化则不创建空提交。
-        fetch-depth: 0
+        fetch-depth: 0 # Fetch full history for accurate git diff
 
-    - name: Set up Python # 步骤2: 设置 Python 环境
+    - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.x' # 使用最新的 Python 3.x 版本
+        python-version: '3.x' # Use latest Python 3.x
 
-    - name: Run node cleaning script # 步骤3: 运行节点清理脚本
+    - name: Run node cleaning script
       run: |
-        # 确保数据目录存在，以防万一（尽管通常是已有的）
-        mkdir -p data
-        # 运行清理脚本
-        python clean_nodes.py
-      # clean_nodes.py 脚本中已经指定了文件路径为 'data/a.isidomain.web.id.txt'
+        mkdir -p data # Ensure data directory exists
+        python clean_duplicate_nodes.py
+      # The script processes data/a.isidomain.web.id.txt and outputs to data/a.isidomain.web.id_cleaned.txt
 
-    - name: Commit and push if changes exist # 步骤4: 如果有更改，则提交并推送
+    - name: Commit and push if changes exist
       run: |
-        git config user.name "github-actions[bot]" # 配置 Git 用户名
-        git config user.email "github-actions[bot]@users.noreply.github.com" # 配置 Git 邮箱
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
 
-        # 检查 data/a.isidomain.web.id.txt 文件是否有更改
-        # 如果文件有差异 (git diff --quiet --exit-code 返回非零退出码)，则执行提交和推送
-        # 否则，不执行任何操作，避免创建空提交。
-        git add data/a.isidomain.web.id.txt # 将清理后的文件添加到暂存区
-        
-        # 检查是否有实际的文件内容变化，而不是仅仅时间戳变化
+        # Check for changes in the cleaned file
+        git add data/a.isidomain.web.id_cleaned.txt
+
+        # Commit only if there are actual content changes
         if ! git diff --cached --exit-code --quiet; then
-          git commit -m "自动: 清理重复节点"
+          git commit -m "Auto: Cleaned duplicate nodes in a.isidomain.web.id_cleaned.txt"
           git push
         else
-          echo "文件 'data/a.isidomain.web.id.txt' 没有变化，跳过提交。"
+          echo "No changes in data/a.isidomain.web.id_cleaned.txt, skipping commit."
         fi
       env:
-        # GITHUB_TOKEN 是 GitHub Actions 自动提供的秘密，用于认证操作
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
