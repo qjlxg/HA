@@ -24,7 +24,7 @@ CACHE_DIR = "cache"  # 缓存目录
 CACHE_EXPIRATION_HOURS = 24  # 缓存过期时间（小时）
 MAX_CONCURRENT_REQUESTS = 5  # 最大并发请求数，适配 Playwright 资源消耗
 REQUEST_TIMEOUT_SECONDS = 30  # 单次请求超时时间
-RETRY_ATTEMPTS = 2  # 失败重试次数
+RETRY_ATTEMPTS = 0  # 失败重试0次
 
 # 配置日志
 logger = logging.getLogger('proxy_scraper')
