@@ -14,10 +14,11 @@ logging.basicConfig(
     ]
 )
 
-def clean_duplicate_nodes_advanced(file_path, output_path=None):
+def clean_duplicate_nodes_advanced(file_path, output_path=None, debug_samples=5):
     """
     读取文件，基于协议特定解析逻辑移除重复行，保存到新文件，并提供详细统计数据。
     支持 VLESS、Trojan、SS 协议，忽略非关键字段（如备注、fp），记录解析失败的节点。
+    debug_samples: 记录前 N 个去重键用于调试。
     """
     if output_path is None:
         base, ext = os.path.splitext(file_path)
@@ -28,6 +29,7 @@ def clean_duplicate_nodes_advanced(file_path, output_path=None):
     error_lines = []         # 存储解析失败的行
     stats = defaultdict(int)  # 按协议统计节点数
     line_count = 0
+    debug_keys = []          # 调试用的去重键样本
 
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
@@ -49,11 +51,17 @@ def clean_duplicate_nodes_advanced(file_path, output_path=None):
                 # 解析并生成去重键
                 try:
                     node_key = generate_node_key(core_part)
-                    if node_key and node_key not in unique_node_keys:
-                        unique_node_keys.add(node_key)
-                        unique_lines_output.append(line)
+                    if node_key:
+                        # 记录前 debug_samples 个去重键用于调试
+                        if len(debug_keys) < debug_samples:
+                            debug_keys.append(node_key)
+                        if node_key not in unique_node_keys:
+                            unique_node_keys.add(node_key)
+                            unique_lines_output.append(line)
+                        else:
+                            stats[f"{protocol}_duplicates"] += 1
                     else:
-                        stats[f"{protocol}_duplicates"] += 1
+                        raise ValueError("无法生成去重键")
                 except Exception as e:
                     logging.error(f"解析节点失败 (行 {line_count}): {stripped_line} | 错误: {e}")
                     error_lines.append((line_count, stripped_line, str(e)))
@@ -75,6 +83,10 @@ def clean_duplicate_nodes_advanced(file_path, output_path=None):
             logging.info(f"    - {protocol.upper()}: {stats[protocol]} 节点, {stats[f'{protocol}_duplicates']} 重复, {stats[f'{protocol}_errors']} 解析失败")
         if error_lines:
             logging.warning(f"解析失败的节点数: {len(error_lines)}，详情见 node_cleaning_errors.log")
+        if debug_keys:
+            logging.info(f"🔍 调试: 前 {len(debug_keys)} 个去重键样本:")
+            for i, key in enumerate(debug_keys, 1):
+                logging.info(f"    {i}. {key}")
 
         return True
 
@@ -87,40 +99,41 @@ def clean_duplicate_nodes_advanced(file_path, output_path=None):
 
 def generate_node_key(url):
     """根据协议生成去重键，仅包含关键字段"""
-    parsed = urllib.parse.urlparse(url)
-    scheme = parsed.scheme.lower()
-    netloc = parsed.netloc
-    query = parsed.query
+    try:
+        parsed = urllib.parse.urlparse(url)
+        scheme = parsed.scheme.lower()
+        netloc = parsed.netloc.lower()  # 转换为小写以避免大小写差异
+        query = parsed.query
 
-    if scheme == "vless":
-        return normalize_vless(url, netloc, query)
-    elif scheme == "trojan":
-        return normalize_trojan(url, netloc, query)
-    elif scheme == "ss":
-        return normalize_ss(url, netloc)
-    else:
-        # 未识别协议，直接返回原始 URL（可扩展为其他协议）
-        return url
+        if scheme == "vless":
+            return normalize_vless(netloc, query)
+        elif scheme == "trojan":
+            return normalize_trojan(netloc, query)
+        elif scheme == "ss":
+            return normalize_ss(netloc)
+        else:
+            # 未识别协议，直接返回原始 URL
+            return url.lower()
+    except Exception as e:
+        raise ValueError(f"解析 URL 失败: {e}")
 
-def normalize_vless(url, netloc, query):
+def normalize_vless(netloc, query):
     """标准化 VLESS 链接，忽略非关键字段"""
-    # 提取 UUID 和 host:port
     uuid_host_port = netloc
-    # 解析查询参数，仅保留关键字段
     query_params = urllib.parse.parse_qs(query)
-    key_params = {k: query_params[k] for k in ['type', 'path', 'security', 'encryption'] if k in query_params}
+    # 仅保留关键字段，忽略 fp、sni 等非必要字段
+    key_params = {k: sorted(query_params[k]) for k in ['type', 'path', 'security', 'encryption'] if k in query_params}
     sorted_query = urllib.parse.urlencode(key_params, doseq=True)
     return f"vless://{uuid_host_port}?{sorted_query}"
 
-def normalize_trojan(url, netloc, query):
+def normalize_trojan(netloc, query):
     """标准化 Trojan 链接"""
-    # Trojan 的 netloc 是 password@host:port
     query_params = urllib.parse.parse_qs(query)
-    key_params = {k: query_params[k] for k in ['type', 'sni'] if k in query_params}
+    key_params = {k: sorted(query_params[k]) for k in ['type', 'sni'] if k in query_params}
     sorted_query = urllib.parse.urlencode(key_params, doseq=True)
     return f"trojan://{netloc}?{sorted_query}"
 
-def normalize_ss(url, netloc):
+def normalize_ss(netloc):
     """标准化 SS 链接"""
     try:
         if '@' in netloc:
@@ -135,4 +148,4 @@ def normalize_ss(url, netloc):
 
 if __name__ == "__main__":
     nodes_file = os.path.join('data', 'a.isidomain.web.id.txt')
-    clean_duplicate_nodes_advanced(nodes_file)
+    clean_duplicate_nodes_advanced(nodes_file, debug_samples=5)
