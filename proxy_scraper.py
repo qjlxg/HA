@@ -61,7 +61,7 @@ USER_AGENTS = {
     ]
 }
 
-# 节点协议正则表达式（保留旧脚本的详细正则）
+# 节点协议正则表达式 (增强和更新)
 NODE_REGEXES = {
     "hysteria2": r"hysteria2:\/\/(?P<id>[a-zA-Z0-9\-_.~%]+:[a-zA-Z0-9\-_.~%]+@)?(?P<host>[a-zA-Z0-9\-\.]+)(?::(?P<port>\d+))?\/?\?.*",
     "vmess": r"vmess:\/\/(?P<data>[a-zA-Z0-9+\/=]+)",
@@ -69,6 +69,8 @@ NODE_REGEXES = {
     "ss": r"ss:\/\/(?P<method_password>[a-zA-Z0-9+\/=]+)@(?P<host>[a-zA-Z0-9\-\.]+):(?P<port>\d+)(?:#(?P<name>.*))?",
     "ssr": r"ssr:\/\/(?P<data>[a-zA-Z0-9+\/=]+)",
     "vless": r"vless:\/\/(?P<uuid>[a-zA-Z0-9\-]+)@(?P<host>[a-zA-Z0-9\-\.]+):(?P<port>\d+)\?(?:.*&)?type=(?P<type>[a-zA-Z0-9]+)(?:&security=(?P<security>[a-zA-Z0-9]+))?.*",
+    "tuic": r"tuic:\/\/(?P<uuid>[a-zA-Z0-9\-]+):(?P<password>[a-zA-Z0-9\-_.~%]+)@(?P<host>[a-zA-Z0-9\-\.]+):(?P<port>\d+)\?(?:.*&)?(?:udp_relay=(?P<udp_relay>[^&]*))?", # TUIC 协议
+    "wg": r"wg:\/\/(?P<data>[a-zA-Z0-9+\/=]+)", # WireGuard (通常是Base64编码的配置)
 }
 
 # --- 缓存处理函数 ---
@@ -125,78 +127,88 @@ def get_random_headers():
 
 async def fetch_url(url, http_client, playwright_instance: Playwright):
     """尝试获取 URL 内容，先用 httpx，若失败则用 Playwright，支持重试"""
-    full_url_http = f"http://{url}"
-    full_url_https = f"https://{url}"
-    
+    # 尝试将 URL 规范化，确保有 scheme
+    parsed_url = urlparse(url)
+    if not parsed_url.scheme:
+        # 优先尝试 HTTPS，因为现在很多网站都强制 HTTPS
+        full_url_https = f"https://{url}"
+        full_url_http = f"http://{url}"
+    else:
+        full_url_https = url
+        full_url_http = url.replace("https://", "http://", 1) # 尝试降级到 HTTP
+
     cached_content = await read_cache(url)
     if cached_content:
         return cached_content
         
     content = None
     
-    # 尝试 httpx 获取 HTTP
+    # 尝试 httpx 获取 HTTPS
     for attempt in range(RETRY_ATTEMPTS):
         try:
             async with asyncio.timeout(REQUEST_TIMEOUT_SECONDS):
                 headers = get_random_headers()
-                logger.info(f"尝试用 httpx 从 {full_url_http} 获取内容 (第 {attempt + 1} 次)...")
-                response = await http_client.get(full_url_http, timeout=REQUEST_TIMEOUT_SECONDS, headers=headers)
+                logger.info(f"尝试用 httpx 从 {full_url_https} 获取内容 (第 {attempt + 1} 次)...")
+                response = await http_client.get(full_url_https, timeout=REQUEST_TIMEOUT_SECONDS, headers=headers)
                 response.raise_for_status()
                 content = response.text
-                logger.info(f"httpx 成功从 {full_url_http} 获取内容。")
+                logger.info(f"httpx 成功从 {full_url_https} 获取内容。")
                 break
         except asyncio.TimeoutError:
-            logger.warning(f"httpx 从 {full_url_http} 获取超时 (第 {attempt + 1} 次)。")
+            logger.warning(f"httpx 从 {full_url_https} 获取超时 (第 {attempt + 1} 次)。")
         except httpx.HTTPStatusError as e:
-            logger.warning(f"httpx 从 {full_url_http} 获取失败 (HTTP 错误: {e.response.status_code}, 第 {attempt + 1} 次)。")
+            logger.warning(f"httpx 从 {full_url_https} 获取失败 (HTTP 错误: {e.response.status_code}, 第 {attempt + 1} 次)。")
         except httpx.RequestError as e:
-            logger.warning(f"httpx 从 {full_url_http} 获取失败 (请求错误: {e}, 第 {attempt + 1} 次)。")
+            logger.warning(f"httpx 从 {full_url_https} 获取失败 (请求错误: {e}, 第 {attempt + 1} 次)。")
         except Exception as e:
-            logger.error(f"httpx 从 {full_url_http} 获取时发生未知错误: {e} (第 {attempt + 1} 次)。", exc_info=True)
+            logger.error(f"httpx 从 {full_url_https} 获取时发生未知错误: {e} (第 {attempt + 1} 次)。", exc_info=True)
 
-    # 尝试 httpx 获取 HTTPS
+    # 如果 HTTPS 失败，尝试 httpx 获取 HTTP
     if content is None:
         for attempt in range(RETRY_ATTEMPTS):
             try:
                 async with asyncio.timeout(REQUEST_TIMEOUT_SECONDS):
                     headers = get_random_headers()
-                    logger.info(f"尝试用 httpx 从 {full_url_https} 获取内容 (第 {attempt + 1} 次)...")
-                    response = await http_client.get(full_url_https, timeout=REQUEST_TIMEOUT_SECONDS, headers=headers)
+                    logger.info(f"尝试用 httpx 从 {full_url_http} 获取内容 (第 {attempt + 1} 次)...")
+                    response = await http_client.get(full_url_http, timeout=REQUEST_TIMEOUT_SECONDS, headers=headers)
                     response.raise_for_status()
                     content = response.text
-                    logger.info(f"httpx 成功从 {full_url_https} 获取内容。")
+                    logger.info(f"httpx 成功从 {full_url_http} 获取内容。")
                     break
             except asyncio.TimeoutError:
-                logger.warning(f"httpx 从 {full_url_https} 获取超时 (第 {attempt + 1} 次)。")
+                logger.warning(f"httpx 从 {full_url_http} 获取超时 (第 {attempt + 1} 次)。")
             except httpx.HTTPStatusError as e:
-                logger.warning(f"httpx 从 {full_url_https} 获取失败 (HTTP 错误: {e.response.status_code}, 第 {attempt + 1} 次)。")
+                logger.warning(f"httpx 从 {full_url_http} 获取失败 (HTTP 错误: {e.response.status_code}, 第 {attempt + 1} 次)。")
             except httpx.RequestError as e:
-                logger.warning(f"httpx 从 {full_url_https} 获取失败 (请求错误: {e}, 第 {attempt + 1} 次)。")
+                logger.warning(f"httpx 从 {full_url_http} 获取失败 (请求错误: {e}, 第 {attempt + 1} 次)。")
             except Exception as e:
-                logger.error(f"httpx 从 {full_url_https} 获取时发生未知错误: {e} (第 {attempt + 1} 次)。", exc_info=True)
-    
+                logger.error(f"httpx 从 {full_url_http} 获取时发生未知错误: {e} (第 {attempt + 1} 次)。", exc_info=True)
+            
     # 如果 httpx 失败，尝试 Playwright
     if content is None:
         for attempt in range(RETRY_ATTEMPTS):
             logger.info(f"httpx 未能获取 {url} 内容，尝试使用 Playwright (第 {attempt + 1} 次)...")
             browser = None
             try:
+                # Playwright 尝试 HTTPS
                 async with asyncio.timeout(REQUEST_TIMEOUT_SECONDS * 2):  # Playwright 可能需要更长时间
                     browser = await playwright_instance.chromium.launch()
                     page = await browser.new_page()
                     await page.set_extra_http_headers(get_random_headers())
-                    full_url = f"https://{url}"
+                    
+                    full_url_pw = full_url_https # 优先尝试 HTTPS
                     try:
-                        await page.goto(full_url, timeout=30000, wait_until='networkidle')
+                        await page.goto(full_url_pw, timeout=30000, wait_until='networkidle')
                         content = await page.content()
-                        logger.info(f"Playwright 成功从 {full_url} 获取内容。")
+                        logger.info(f"Playwright 成功从 {full_url_pw} 获取内容。")
                         break
                     except Exception as e:
-                        logger.warning(f"Playwright 从 {full_url} 获取失败: {e} (第 {attempt + 1} 次)。尝试 HTTP。")
-                        full_url = f"http://{url}"
-                        await page.goto(full_url, timeout=30000, wait_until='networkidle')
+                        logger.warning(f"Playwright 从 {full_url_pw} 获取失败: {e} (第 {attempt + 1} 次)。尝试 HTTP。")
+                        # 尝试 Playwright HTTP
+                        full_url_pw = full_url_http
+                        await page.goto(full_url_pw, timeout=30000, wait_until='networkidle')
                         content = await page.content()
-                        logger.info(f"Playwright 成功从 {full_url} 获取内容。")
+                        logger.info(f"Playwright 成功从 {full_url_pw} 获取内容。")
                         break
             except asyncio.TimeoutError:
                 logger.warning(f"Playwright 从 {url} 获取超时 (第 {attempt + 1} 次)。")
@@ -218,29 +230,39 @@ async def fetch_url(url, http_client, playwright_instance: Playwright):
 # --- DNS 解析函数 ---
 async def check_dns_resolution(url):
     """检查域名是否能解析到有效 IP 地址"""
+    # 提取域名部分
+    parsed_url = urlparse(url)
+    hostname = parsed_url.hostname or parsed_url.path.split('/')[0] # 兼容只有路径的情况
+    if not hostname:
+        logger.warning(f"无法从 '{url}' 提取有效域名进行 DNS 解析。")
+        return False
+        
+    if is_valid_ip(hostname): # 如果已经是 IP 地址，则直接通过
+        return True
+
     try:
         async with asyncio.timeout(REQUEST_TIMEOUT_SECONDS):
-            answers = await asyncio.to_thread(dns.resolver.resolve, url, 'A')
+            answers = await asyncio.to_thread(dns.resolver.resolve, hostname, 'A')
             if answers:
-                logger.info(f"域名 '{url}' 解析成功，IP: {[str(a) for a in answers]}")
+                logger.info(f"域名 '{hostname}' 解析成功，IP: {[str(a) for a in answers]}")
                 return True
             else:
-                logger.warning(f"域名 '{url}' 未能解析到 IP 地址。")
+                logger.warning(f"域名 '{hostname}' 未能解析到 IP 地址。")
                 return False
     except asyncio.TimeoutError:
-        logger.warning(f"DNS 解析 '{url}' 超时。")
+        logger.warning(f"DNS 解析 '{hostname}' 超时。")
         return False
     except dns.resolver.NXDOMAIN:
-        logger.warning(f"域名 '{url}' 不存在 (NXDOMAIN)。")
+        logger.warning(f"域名 '{hostname}' 不存在 (NXDOMAIN)。")
         return False
     except dns.resolver.NoAnswer:
-        logger.warning(f"域名 '{url}' 没有可用的 A 记录。")
+        logger.warning(f"域名 '{hostname}' 没有可用的 A 记录。")
         return False
     except dns.resolver.NoNameservers as e:
-        logger.warning(f"DNS 解析 '{url}' 失败: 所有名称服务器都未能应答 ({e})。")
+        logger.warning(f"DNS 解析 '{hostname}' 失败: 所有名称服务器都未能应答 ({e})。")
         return False
     except Exception as e:
-        logger.error(f"DNS 解析 '{url}' 时发生未知错误: {e}", exc_info=True)
+        logger.error(f"DNS 解析 '{hostname}' 时发生未知错误: {e}", exc_info=True)
         return False
 
 # --- 节点验证函数 ---
@@ -253,8 +275,8 @@ def is_valid_ip(address):
         return False
 
 def validate_node(protocol, data):
-    """验证节点数据有效性"""
-    logger.debug(f"正在验证 {protocol} 节点数据: {data}")
+    """验证节点数据有效性 (增强验证逻辑)"""
+    # logger.debug(f"正在验证 {protocol} 节点数据: {data}") # 过多日志，仅在调试时开启
     try:
         if protocol == "hysteria2":
             if not all(k in data for k in ['host', 'port']): return False
@@ -263,12 +285,18 @@ def validate_node(protocol, data):
             if not (1 <= int(data['port']) <= 65535): return False
             return True
         elif protocol == "vmess":
-            decoded = base64.b64decode(data.get('data', '')).decode('utf-8', errors='ignore')
-            json_data = json.loads(decoded)
+            # 尝试解码，如果解码失败或不是有效JSON，则返回False
+            try:
+                decoded = base64.b64decode(data.get('data', '') + '=' * (4 - len(data.get('data', '')) % 4)).decode('utf-8', errors='ignore')
+                json_data = json.loads(decoded)
+            except Exception:
+                return False
+            
             if not all(k in json_data for k in ['add', 'port', 'id']): return False
             if not json_data['add'] or not json_data['port'] or not json_data['id']: return False
             if not (re.match(r"^[a-zA-Z0-9\-\.]+$", json_data['add']) or is_valid_ip(json_data['add'])): return False
-            if not isinstance(json_data['port'], int) or not (1 <= json_data['port'] <= 65535): return False
+            if not isinstance(json_data['port'], (int, str)): return False # 端口可以是字符串
+            if not (1 <= int(json_data['port']) <= 65535): return False
             if not re.match(r"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$", json_data['id']): return False
             return True
         elif protocol == "trojan":
@@ -280,17 +308,25 @@ def validate_node(protocol, data):
         elif protocol == "ss":
             if not all(k in data for k in ['method_password', 'host', 'port']): return False
             if not data['method_password'] or not data['host'] or not data['port'] or not data['port'].isdigit(): return False
-            decoded_mp = base64.b64decode(data['method_password']).decode('utf-8', errors='ignore')
-            if ':' not in decoded_mp: return False
+            try:
+                # SS的method_password部分可能需要Base64解码
+                decoded_mp = base64.b64decode(data['method_password'] + '=' * (4 - len(data['method_password']) % 4)).decode('utf-8', errors='ignore')
+            except Exception:
+                return False
+            if ':' not in decoded_mp: return False # 确保包含 method:password
             if not (re.match(r"^[a-zA-Z0-9\-\.]+$", data['host']) or is_valid_ip(data['host'])): return False
             if not (1 <= int(data['port']) <= 65535): return False
             return True
         elif protocol == "ssr":
-            decoded = base64.b64decode(data.get('data', '')).decode('utf-8', errors='ignore')
+            try:
+                decoded = base64.b64decode(data.get('data', '') + '=' * (4 - len(data.get('data', '')) % 4)).decode('utf-8', errors='ignore')
+            except Exception:
+                return False
             parts = decoded.split(':')
-            if len(parts) < 6: return False
-            if not (re.match(r"^[a-zA-Z0-9\-\.]+$", parts[0]) or is_valid_ip(parts[0])): return False
-            if not parts[1].isdigit() or not (1 <= int(parts[1]) <= 65535): return False
+            if len(parts) < 6: return False # server:port:protocol:method:obfs:password_base64
+            if not (re.match(r"^[a-zA-Z0-9\-\.]+$", parts[0]) or is_valid_ip(parts[0])): return False # server
+            if not parts[1].isdigit() or not (1 <= int(parts[1]) <= 65535): return False # port
+            # 协议、加密、混淆和密码可以更宽松，只要存在即可
             return True
         elif protocol == "vless":
             if not all(k in data for k in ['uuid', 'host', 'port', 'type']): return False
@@ -299,6 +335,23 @@ def validate_node(protocol, data):
             if not (re.match(r"^[a-zA-Z0-9\-\.]+$", data['host']) or is_valid_ip(data['host'])): return False
             if not (1 <= int(data['port']) <= 65535): return False
             return True
+        elif protocol == "tuic":
+            if not all(k in data for k in ['uuid', 'password', 'host', 'port']): return False
+            if not data['uuid'] or not data['password'] or not data['host'] or not data['port'] or not data['port'].isdigit(): return False
+            if not (re.match(r"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$", data['uuid'])): return False
+            if not (re.match(r"^[a-zA-Z0-9\-\.]+$", data['host']) or is_valid_ip(data['host'])): return False
+            if not (1 <= int(data['port']) <= 65535): return False
+            return True
+        elif protocol == "wg":
+            # WireGuard 通常是 Base64 编码的完整配置，解码后会有特定格式
+            try:
+                decoded = base64.b64decode(data.get('data', '') + '=' * (4 - len(data.get('data', '')) % 4)).decode('utf-8', errors='ignore')
+                # 简单检查 WireGuard 配置的关键字
+                if "PrivateKey" in decoded and "Address" in decoded and "Endpoint" in decoded:
+                    return True
+            except Exception:
+                return False
+            return False
         return False
     except Exception as e:
         logger.debug(f"验证节点 {protocol} 失败: {e}")
@@ -325,7 +378,11 @@ def get_node_canonical_fingerprint(node_url: str) -> str | None:
                 padded_method_password_encoded = method_password_encoded + '=' * (4 - len(method_password_encoded) % 4)
                 decoded_method_password = base64.b64decode(padded_method_password_encoded).decode('utf-8', errors='ignore').strip()
                 decoded_method_password = decoded_method_password.replace('\n', '').replace('\r', '')
-                return f"ss://{decoded_method_password}@{server_port}"
+                # 标准化方法和密码的顺序，通常方法在前
+                parts = decoded_method_password.split(':', 1)
+                method = parts[0]
+                password = parts[1] if len(parts) > 1 else ""
+                return f"ss://{method}:{password}@{server_port}"
             except Exception:
                 return None
 
@@ -337,13 +394,15 @@ def get_node_canonical_fingerprint(node_url: str) -> str | None:
                 core_params_part = decoded_params.split("/?")[0]
                 parts = core_params_part.split(':')
                 if len(parts) >= 6:
+                    # 解码密码部分并标准化
                     try:
                         password_encoded = parts[5]
                         padded_password_encoded = password_encoded + '=' * (4 - len(password_encoded) % 4)
+                        # SSR密码可能使用URL安全Base64变体，需要替换字符
                         decoded_password = base64.b64decode(padded_password_encoded.replace('-', '+').replace('_', '/')).decode('utf-8', errors='ignore')
                         parts[5] = decoded_password.strip()
                     except Exception:
-                        pass
+                        pass # 如果密码解码失败，保持原样，但这会影响去重精度
                 return f"ssr://{':'.join(parts)}"
             except Exception:
                 return None
@@ -359,29 +418,51 @@ def get_node_canonical_fingerprint(node_url: str) -> str | None:
                     "port": vmess_config.get("port"),
                     "id": vmess_config.get("id"),
                 }
-                optional_keys = ["net", "type", "security", "path", "host", "tls", "sni", "aid", "fp", "scy"]
-                optional_params = {key: vmess_config[key] for key in optional_keys if key in vmess_config and vmess_config[key] is not None}
-                sorted_optional_params = sorted(optional_params.items())
-                for k, v in sorted_optional_params:
-                    fingerprint_data[k] = v
+                # 包含关键的传输配置，如 net, type, tls, host, path, sni 等，按字典序排序
+                optional_keys_for_fingerprint = ["net", "type", "security", "path", "host", "tls", "sni", "aid", "fp", "scy"]
+                for key in sorted(optional_keys_for_fingerprint):
+                    if key in vmess_config and vmess_config[key] is not None:
+                        fingerprint_data[key] = vmess_config[key]
+                
                 return f"vmess://{json.dumps(fingerprint_data, sort_keys=True)}"
             except Exception:
                 return None
 
-        elif scheme in ["vless", "trojan", "hysteria2"]:
+        elif scheme in ["vless", "trojan", "hysteria2", "tuic"]:
+            # 对于这些协议，主机、端口、ID/密码和查询参数是关键
+            # 规范化查询参数：排序并重新编码
             query_params_list = parse_qs(parsed_url.query, keep_blank_values=True)
             sorted_query_params = []
             for key in sorted(query_params_list.keys()):
-                for value in query_params_list[key]:
+                for value in sorted(query_params_list[key]): # 对值也进行排序，确保一致性
                     sorted_query_params.append((key, value))
             sorted_query_string = urlencode(sorted_query_params)
-            canonical_url_parts = [scheme, "://", parsed_url.netloc]
+
+            canonical_url_parts = [scheme, "://"]
+            # 用户信息（如果存在）
+            if parsed_url.username:
+                canonical_url_parts.append(parsed_url.username)
+                if parsed_url.password:
+                    canonical_url_parts.append(f":{parsed_url.password}")
+                canonical_url_parts.append("@")
+            
+            canonical_url_parts.append(parsed_url.netloc)
+            
             if parsed_url.path:
                 canonical_url_parts.append(parsed_url.path)
             if sorted_query_string:
                 canonical_url_parts.append("?")
                 canonical_url_parts.append(sorted_query_string)
             return "".join(canonical_url_parts)
+            
+        elif scheme == "wg":
+            encoded_data = base_url_no_remark[len("wg://"):]
+            try:
+                # WireGuard 指纹可以简单地基于其 Base64 编码的配置（假设配置是唯一的）
+                # 理论上可以解析内部配置并规范化，但对于去重，原始编码通常足够
+                return f"wg://{encoded_data}" 
+            except Exception:
+                return None
             
         return None
     except Exception as e:
@@ -390,68 +471,102 @@ def get_node_canonical_fingerprint(node_url: str) -> str | None:
 
 # --- 节点解析与提取函数 ---
 def extract_nodes_from_text(text_content):
-    """从文本中提取代理节点"""
+    """从文本中提取代理节点 (增强提取逻辑)"""
     extracted_nodes = set()
+    
+    # 优先匹配已知协议的节点
+    for protocol, regex_pattern in NODE_REGEXES.items():
+        for match in re.finditer(regex_pattern, text_content, re.IGNORECASE): # 忽略大小写
+            full_uri = match.group(0)
+            matched_data = match.groupdict()
+            if validate_node(protocol, matched_data):
+                extracted_nodes.add(full_uri)
+
+    # 尝试 Base64 解码和递归处理
+    # 查找可能包含 Base64 编码数据的块
+    # 改进的 Base64 正则表达式，尝试匹配更长的、以 = 结尾的有效 Base64 字符串
+    # 并且避免匹配太短的、可能是普通文本的字符串
+    base64_candidates = re.findall(r"(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{4})(?![A-Za-z0-9+/])", text_content)
+    for b64_block in sorted(base64_candidates, key=len, reverse=True): # 优先处理长块
+        if len(b64_block) > 30 and len(b64_block) % 4 == 0: # 设一个合理的长度阈值
+            try:
+                decoded_content = base64.b64decode(b64_block).decode('utf-8', errors='ignore')
+                # 递归处理解码后的内容
+                recursive_nodes = extract_nodes_from_text(decoded_content)
+                extracted_nodes.update(recursive_nodes)
+            except Exception as e:
+                logger.debug(f"Base64 解码或递归处理失败: {e}, 块: {b64_block[:50]}...")
+        # 如果是订阅链接，有时会直接是 Base64 编码的订阅内容，长度可能会很长
+        elif len(b64_block) > 100: # 对很长的Base64块也尝试一下
+            try:
+                decoded_content = base64.b64decode(b64_block).decode('utf-8', errors='ignore')
+                recursive_nodes = extract_nodes_from_text(decoded_content)
+                extracted_nodes.update(recursive_nodes)
+            except Exception:
+                pass
+
+
+    # 递归处理嵌套结构 (YAML/JSON)
+    def extract_from_nested(data_obj):
+        if isinstance(data_obj, dict):
+            for key, value in data_obj.items():
+                if isinstance(value, str):
+                    extracted_nodes.update(extract_nodes_from_text(value))
+                elif isinstance(value, (dict, list)):
+                    extract_from_nested(value)
+        elif isinstance(data_obj, list):
+            for item in data_obj:
+                if isinstance(item, str):
+                    extracted_nodes.update(extract_nodes_from_text(item))
+                elif isinstance(item, (dict, list)):
+                    extract_from_nested(item)
+
     try:
-        for protocol, regex_pattern in NODE_REGEXES.items():
-            for match in re.finditer(regex_pattern, text_content):
-                matched_data = match.groupdict()
-                if validate_node(protocol, matched_data):
-                    extracted_nodes.add(match.group(0))
+        yaml_content = yaml.safe_load(text_content)
+        if isinstance(yaml_content, (dict, list)):
+            extract_from_nested(yaml_content)
+    except yaml.YAMLError as e:
+        logger.debug(f"YAML 解析失败: {e}")
 
-        base64_matches = re.findall(r"(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?", text_content)
-        for b64_block in base64_matches:
-            if len(b64_block) > 16 and len(b64_block) % 4 == 0:
-                try:
-                    decoded_content = base64.b64decode(b64_block).decode('utf-8', errors='ignore')
-                    extracted_nodes.update(extract_nodes_from_text(decoded_content))
-                except Exception as e:
-                    logger.debug(f"Base64 解码或递归处理失败: {e}, 块: {b64_block[:50]}...")
+    try:
+        json_content = json.loads(text_content)
+        if isinstance(json_content, (dict, list)):
+            extract_from_nested(json_content)
+    except json.JSONDecodeError as e:
+        logger.debug(f"JSON 解析失败: {e}")
 
-        def extract_from_nested(data_obj):
-            if isinstance(data_obj, dict):
-                for key, value in data_obj.items():
-                    if isinstance(value, str):
-                        extracted_nodes.update(extract_nodes_from_text(value))
-                    elif isinstance(value, (dict, list)):
-                        extract_from_nested(value)
-            elif isinstance(data_obj, list):
-                for item in data_obj:
-                    if isinstance(item, str):
-                        extracted_nodes.update(extract_nodes_from_text(item))
-                    elif isinstance(item, (dict, list)):
-                        extract_from_nested(item)
-
-        try:
-            yaml_content = yaml.safe_load(text_content)
-            if isinstance(yaml_content, (dict, list)):
-                extract_from_nested(yaml_content)
-        except yaml.YAMLError as e:
-            logger.debug(f"YAML 解析失败: {e}")
-
-        try:
-            json_content = json.loads(text_content)
-            if isinstance(json_content, (dict, list)):
-                extract_from_nested(json_content)
-        except json.JSONDecodeError as e:
-            logger.debug(f"JSON 解析失败: {e}")
-    except Exception as e:
-        logger.error(f"提取节点时发生错误: {e}")
     return extracted_nodes
 
 def parse_and_extract_nodes(content):
-    """从 HTML 内容中解析并提取节点"""
+    """从 HTML 内容中解析并提取节点 (增强HTML解析范围)"""
     nodes_from_html = set()
     try:
         soup = BeautifulSoup(content, 'html.parser')
+
+        # 优先从常见包含配置的标签中提取
         for tag_name in ['pre', 'code', 'textarea']:
             for tag in soup.find_all(tag_name):
-                text_content = tag.get_text()
+                text_content = tag.get_text(separator='\n', strip=True) # 使用换行符分隔，并去除空白
                 if text_content:
                     nodes_from_html.update(extract_nodes_from_text(text_content))
+
+        # 尝试从 <script> 标签中提取 JSON 或其他配置
+        for script_tag in soup.find_all('script'):
+            script_content = script_tag.string
+            if script_content:
+                # 尝试解析 JSON 格式的脚本内容
+                try:
+                    json_data = json.loads(script_content)
+                    nodes_from_html.update(extract_nodes_from_text(json.dumps(json_data)))
+                except json.JSONDecodeError:
+                    # 如果不是标准JSON，也尝试作为普通文本处理
+                    nodes_from_html.update(extract_nodes_from_text(script_content))
+            
+        # 如果以上标签未找到节点，或者为了更全面，检查整个 body 文本
         if not nodes_from_html:
-            body_text = soup.get_text()
+            body_text = soup.body.get_text(separator='\n', strip=True) if soup.body else soup.get_text(separator='\n', strip=True)
             nodes_from_html.update(extract_nodes_from_text(body_text))
+
     except Exception as e:
         logger.error(f"解析 HTML 内容时发生错误: {e}")
     return nodes_from_html
@@ -479,6 +594,8 @@ async def process_url(url, http_client, playwright_instance: Playwright, process
         if canonical_fingerprint and canonical_fingerprint not in global_unique_nodes_map:
             global_unique_nodes_map[canonical_fingerprint] = node
             collected_nodes_for_this_url_tree.add(node)
+        elif canonical_fingerprint:
+            logger.debug(f"节点 '{node[:50]}...' 已存在，跳过。")
 
     try:
         soup = BeautifulSoup(content, 'html.parser')
@@ -486,16 +603,26 @@ async def process_url(url, http_client, playwright_instance: Playwright, process
         for a_tag in soup.find_all('a', href=True):
             href = a_tag['href']
             parsed_href = urlparse(href)
-            if parsed_href.netloc:
-                if "subscribe" in href or "config" in href or "proxy" in href or parsed_href.netloc == urlparse(f"http://{url}").netloc:
-                    domain_match = re.match(r"(?:https?://)?(?:www\.)?([^/]+)", parsed_href.netloc)
-                    if domain_match:
-                        found_links.add(domain_match.group(1))
-            elif href.startswith('/') and len(href) > 1:
-                base_domain = urlparse(f"http://{url}").netloc
-                if base_domain:
-                    found_links.add(base_domain)
-        
+
+            # 提取域名部分进行比较
+            current_base_domain = urlparse(f"http://{url}").netloc # 确保当前处理的URL有scheme
+            target_netloc = parsed_href.netloc # 提取链接的netloc
+
+            # 如果链接是相对路径，或者与当前域名相同，或者包含特定关键词
+            if parsed_href.scheme and target_netloc and (
+                "subscribe" in href.lower() or 
+                "config" in href.lower() or 
+                "proxy" in href.lower() or 
+                target_netloc == current_base_domain # 同域名链接
+            ):
+                # 进一步规范化链接，只保留域名部分用于去重和递归
+                domain_to_add = target_netloc
+                if domain_to_add and domain_to_add not in processed_urls:
+                    found_links.add(domain_to_add)
+            elif not parsed_href.scheme and href.startswith('/') and len(href) > 1: # 相对路径
+                if current_base_domain and current_base_domain not in processed_urls:
+                    found_links.add(current_base_domain) # 相对路径回到本域名
+
         for link_to_process in found_links:
             if link_to_process not in processed_urls:
                 logger.info(f"发现新链接，准备递归处理: {link_to_process}")
@@ -507,6 +634,8 @@ async def process_url(url, http_client, playwright_instance: Playwright, process
                             if canonical_fingerprint and canonical_fingerprint not in global_unique_nodes_map:
                                 global_unique_nodes_map[canonical_fingerprint] = node
                                 collected_nodes_for_this_url_tree.add(node)
+                            elif canonical_fingerprint:
+                                logger.debug(f"递归节点 '{node[:50]}...' 已存在，跳过。")
                 except asyncio.TimeoutError:
                     logger.warning(f"递归处理链接 {link_to_process} 超时，跳过。")
                 except Exception as e:
@@ -518,50 +647,61 @@ async def process_url(url, http_client, playwright_instance: Playwright, process
     logger.info(f"从 {url} (及其子链接) 提取了 {nodes_count} 个有效节点。")
     all_nodes_count[url] = nodes_count
 
-    # --- 修改这里，以完整域名保存文件 ---
-    file_domain_name = None
-    try:
-        # 确保 URL 有 scheme，以便 urlparse 正确解析 netloc
-        temp_url_for_parse = url
-        if not urlparse(url).scheme:
-            temp_url_for_parse = f"http://{url}" # 假设默认是 http，因为原始 URL 可能没有 scheme
+    # --- 文件输出逻辑修改：只有有节点时才生成文件 ---
+    if nodes_count > 0:
+        file_domain_name = None
+        try:
+            temp_url_for_parse = url
+            if not urlparse(url).scheme:
+                temp_url_for_parse = f"http://{url}" 
 
-        parsed_url_for_filename = urlparse(temp_url_for_parse)
-        file_domain_name = parsed_url_for_filename.netloc
+            parsed_url_for_filename = urlparse(temp_url_for_parse)
+            # 优先使用 netloc 作为文件名
+            file_domain_name = parsed_url_for_filename.netloc
 
-        # 如果 netloc 为空（例如，URL 只有路径），尝试从路径中生成文件名
-        if not file_domain_name and parsed_url_for_filename.path:
-            # 清理路径，将非文件名的字符替换掉，例如 / : .
-            file_domain_name = parsed_url_for_filename.path.strip('/').replace('/', '_').replace(':', '_').replace('.', '_')
-        elif not file_domain_name: # 最终的兜底，直接使用原始 URL进行简单清理
-            file_domain_name = url.replace('/', '_').replace(':', '_').replace('.', '_')
+            if not file_domain_name:
+                # 如果 netloc 为空（例如，URL 只有路径），尝试从路径中生成文件名
+                path_segments = [seg for seg in parsed_url_for_filename.path.strip('/').split('/') if seg]
+                if path_segments:
+                    # 取路径的最后一段或多段作为文件名基础
+                    file_domain_name = '_'.join(path_segments[-2:]) # 取最后两段，更具描述性
+                else:
+                    # 最终的兜底，直接使用原始 URL进行简单清理
+                    file_domain_name = url.replace('/', '_').replace(':', '_').replace('.', '_')
+            
+            # 清理文件名，确保合法且不包含特殊字符
+            file_domain_name = re.sub(r'[<>:"/\\|?*]', '_', file_domain_name) 
+            file_domain_name = file_domain_name.strip().lower() # 移除首尾空格，转换为小写
+            # 避免文件名过长
+            if len(file_domain_name) > 100:
+                file_domain_name = hashlib.md5(file_domain_name.encode('utf-8')).hexdigest()
+            
+            if not file_domain_name:
+                file_domain_name = None # 如果清理后仍然为空，则设为None
 
-        # 进一步清理，确保文件名合法
-        file_domain_name = re.sub(r'[<>:"/\\|?*]', '_', file_domain_name) # 移除非法文件名字符
-        file_domain_name = file_domain_name.strip() # 移除首尾空格
-        if not file_domain_name: # 如果清理后文件名为空，则设置为 None
+        except Exception as e:
+            logger.error(f"生成 URL '{url}' 的文件名前发生错误: {e}")
             file_domain_name = None
 
-    except Exception as e:
-        logger.error(f"生成 URL '{url}' 的文件名前发生错误: {e}")
-        file_domain_name = None
-
-    if file_domain_name:
-        output_file = os.path.join(OUTPUT_DIR, f"{file_domain_name}.txt")
-        try:
-            async with aiofiles.open(output_file, 'w', encoding='utf-8') as f:
-                for node in collected_nodes_for_this_url_tree:
-                    await f.write(node + '\n')
-            logger.info(f"从 {url} 获取的 {nodes_count} 个节点已保存到 {output_file}。")
-        except Exception as e:
-            logger.error(f"保存节点到 {output_file} 失败: {e}")
+        if file_domain_name:
+            output_file = os.path.join(OUTPUT_DIR, f"{file_domain_name}.txt")
+            try:
+                async with aiofiles.open(output_file, 'w', encoding='utf-8') as f:
+                    for node in collected_nodes_for_this_url_tree:
+                        await f.write(node + '\n')
+                logger.info(f"从 {url} 获取的 {nodes_count} 个节点已保存到 {output_file}。")
+            except Exception as e:
+                logger.error(f"保存节点到 {output_file} 失败: {e}")
+        else:
+            logger.warning(f"无法为 URL '{url}' 生成有效的文件名，该 URL 的节点未单独保存。")
     else:
-        logger.warning(f"无法为 URL '{url}' 生成有效的文件名，节点未单独保存。")
-        
+        logger.info(f"URL '{url}' 及其子链接未提取到任何节点，跳过生成独立文件。")
+            
     return collected_nodes_for_this_url_tree
 
 def get_short_url_name(url):
-    """从 URL 生成简短文件名"""
+    """从 URL 生成简短文件名 (旧函数，实际已在 process_url 中优化)"""
+    # 此函数已不再用于生成单独的文件名，但保留以防万一或未来其他用途
     try:
         if not urlparse(url).scheme:
             url_with_scheme = f"http://{url}"
