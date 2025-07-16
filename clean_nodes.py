@@ -15,7 +15,7 @@ logging.basicConfig(
     ]
 )
 
-def clean_duplicate_nodes_advanced(file_path, output_path=None, debug_samples=10, strict_dedup=False):
+def clean_duplicate_nodes_advanced(file_path, output_path=None, debug_samples=10, strict_dedup=True):
     """
     读取文件，基于协议特定解析逻辑移除重复行，保存到新文件，并提供详细统计数据。
     支持 VLESS、Trojan、SS 协议，忽略非关键字段（如备注、fp），记录解析失败的节点。
@@ -102,7 +102,7 @@ def clean_duplicate_nodes_advanced(file_path, output_path=None, debug_samples=10
         logging.error(f"❌ 清理节点时发生错误: {e}")
         return False
 
-def generate_node_key(url, strict_dedup=False):
+def generate_node_key(url, strict_dedup):
     """根据协议生成去重键，仅包含关键字段"""
     try:
         parsed = urllib.parse.urlparse(url)
@@ -115,7 +115,7 @@ def generate_node_key(url, strict_dedup=False):
         elif scheme == "trojan":
             return normalize_trojan(netloc, query, strict_dedup)
         elif scheme == "ss":
-            return normalize_ss(netloc, url)
+            return normalize_ss(netloc, url, strict_dedup)
         else:
             return url.lower()
     except Exception as e:
@@ -151,7 +151,7 @@ def normalize_trojan(netloc, query, strict_dedup):
     sorted_query = urllib.parse.urlencode(key_params, doseq=True)
     return f"trojan://{host_port}?{sorted_query}"
 
-def normalize_ss(netloc, url):
+def normalize_ss(netloc, url, strict_dedup):
     """标准化 SS 链接，增强容错性"""
     try:
         if '@' in netloc:
@@ -162,20 +162,30 @@ def normalize_ss(netloc, url):
                 raise ValueError(f"无效的 Base64 字符串: {b64_config}")
             try:
                 # 尝试解码并验证格式
-                config = base64.urlsafe_b64decode(b64_config + '===').decode('ascii')
+                config = base64.urlsafe_b64decode(b64_config + '===').decode('utf-8')
                 if ':' not in config:
                     raise ValueError(f"无效的 SS 配置格式: {config}")
                 method, password = config.split(':', 1)
                 if not method or not password:
                     raise ValueError(f"无效的 SS 配置: method={method}, password={password}")
+                if strict_dedup:
+                    return f"ss://{host_port}"
                 return f"ss://{method}:{password}@{host_port}"
             except (base64.binascii.Error, UnicodeDecodeError, ValueError) as e:
                 logging.warning(f"SS Base64 解码失败，使用原始 Base64 作为键: {b64_config} | 错误: {e}")
+                if strict_dedup:
+                    return f"ss://{host_port}"
                 return f"ss://{b64_config}@{host_port}"
         else:
             netloc = re.sub(r'[^A-Za-z0-9+/=]', '', netloc)
-            config = base64.urlsafe_b64decode(netloc + '===').decode('ascii', errors='ignore')
-            return f"ss://{config}"
+            try:
+                config = base64.urlsafe_b64decode(netloc + '===').decode('utf-8')
+                if strict_dedup:
+                    return f"ss://{netloc}"
+                return f"ss://{config}"
+            except (base64.binascii.Error, UnicodeDecodeError) as e:
+                logging.warning(f"SS Base64 解码失败，使用原始 Base64 作为键: {netloc} | 错误: {e}")
+                return f"ss://{netloc}"
     except Exception as e:
         raise ValueError(f"无法解析 SS 配置: {e}")
 
