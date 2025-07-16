@@ -1,88 +1,137 @@
 import os
+import urllib.parse
+import base64
+import logging
+from collections import defaultdict
 
-def clean_duplicate_nodes_advanced(file_path):
+# 配置日志
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler('node_cleaning_errors.log', encoding='utf-8'),
+        logging.StreamHandler()
+    ]
+)
+
+def clean_duplicate_nodes_advanced(file_path, output_path=None):
     """
-    读取文件，根据协议特定（有限的）解析逻辑移除重复行，
-    并将唯一的行写回文件。
-
-    尝试对 VLESS/VMESS 链接的查询参数进行简单排序以标准化，并忽略备注。
-
-    !!! 重要局限性警告 !!!
-    此脚本受到严格限制，无法使用 Python 标准库中的模块，如 `urllib.parse`, `base64`, 或 `json`。
-    因此，它无法正确解析复杂的 URL (例如处理 URL 编码)，解码 Base64 编码的数据，
-    或处理某些代理链接中（例如 VMESS/VLESS 的 JSON 配置，SS/SSR 编码）的 JSON 结构。
-    它依赖于基本的字符串操作，这在处理复杂情况时极易出错且不健壮。
-    为了实现真正健壮的去重，需要使用支持全面协议解析的专业库或客户端。
+    读取文件，基于协议特定解析逻辑移除重复行，保存到新文件，并提供详细统计数据。
+    支持 VLESS、Trojan、SS 协议，忽略非关键字段（如备注、fp），记录解析失败的节点。
     """
+    if output_path is None:
+        base, ext = os.path.splitext(file_path)
+        output_path = f"{base}_cleaned{ext}"
+
+    unique_node_keys = set()  # 存储去重键
+    unique_lines_output = []  # 存储原始行
+    error_lines = []         # 存储解析失败的行
+    stats = defaultdict(int)  # 按协议统计节点数
+    line_count = 0
+
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
-            lines = f.readlines()
+            for line in f:  # 流式读取
+                line_count += 1
+                stripped_line = line.strip()
+                if not stripped_line:
+                    continue
 
-        unique_node_identifiers = set() # 用于存储节点的标准化标识，用于去重
-        unique_lines_output = []        # 用于存储最终要输出的唯一完整行
+                # 分离核心部分和备注
+                hash_index = stripped_line.find('#')
+                core_part = stripped_line[:hash_index].strip() if hash_index != -1 else stripped_line
+                remark = stripped_line[hash_index:] if hash_index != -1 else ''
 
-        for line in lines:
-            stripped_line = line.strip()
-            if not stripped_line: # 跳过空行
-                continue
+                # 提取协议并计数
+                protocol = core_part.split('://')[0].lower()
+                stats[protocol] += 1
 
-            # 1. 分离核心部分和备注部分
-            # 备注通常在 '#' 之后，我们去重时会忽略它，但原始行会保留备注。
-            hash_index = stripped_line.find('#')
-            if hash_index != -1:
-                # 核心部分：从开始到 '#'
-                core_part_with_query = stripped_line[:hash_index].strip()
-            else:
-                # 如果没有 '#', 则整个去除空白的行就是核心部分
-                core_part_with_query = stripped_line
+                # 解析并生成去重键
+                try:
+                    node_key = generate_node_key(core_part)
+                    if node_key and node_key not in unique_node_keys:
+                        unique_node_keys.add(node_key)
+                        unique_lines_output.append(line)
+                    else:
+                        stats[f"{protocol}_duplicates"] += 1
+                except Exception as e:
+                    logging.error(f"解析节点失败 (行 {line_count}): {stripped_line} | 错误: {e}")
+                    error_lines.append((line_count, stripped_line, str(e)))
+                    stats[f"{protocol}_errors"] += 1
+                    continue
 
-            # 2. 根据协议类型进行有限的初步标准化
-            # 这是我们去重比较的“标准化标识符”
-            normalized_identifier = core_part_with_query
-
-            # 针对 VLESS/VMESS 链接：尝试对查询参数进行排序
-            # 这种方法非常简陋，仅在参数形式为 key=value&key=value 且值中不含特殊字符时有效。
-            # 无法处理URL编码、重复键名等复杂情况。
-            if normalized_identifier.startswith("vless://") or normalized_identifier.startswith("vmess://"):
-                question_mark_index = normalized_identifier.find('?')
-                if question_mark_index != -1:
-                    base_url = normalized_identifier[:question_mark_index]
-                    query_string = normalized_identifier[question_mark_index + 1:]
-                    
-                    params = query_string.split('&')
-                    # 过滤掉空的参数字符串（例如 "&&" 导致的空字符串）
-                    params = [p.strip() for p in params if p.strip()]
-                    params.sort() # 对参数进行字母排序以标准化，忽略顺序差异
-                    
-                    normalized_identifier = base_url + '?' + '&'.join(params)
-                # 如果没有问号，则保持原样，因为没有查询参数。
-            
-            # 重要局限性：
-            # - SS/SSR 链接 (ss://, ssr://) 包含 Base64 编码的数据，此脚本无法解码和解析。
-            # - Trojan/Hysteria2 等协议的特定参数解析也无法实现。
-            # - 无法处理 VLESS/VMESS 中可能包含的复杂 JSON 配置。
-
-            # 3. 使用标准化标识符进行去重判断
-            if normalized_identifier not in unique_node_identifiers:
-                unique_node_identifiers.add(normalized_identifier)
-                # 如果是新的唯一节点，则将原始完整行（包括备注和换行符）添加到输出列表
-                unique_lines_output.append(line)
-            # 否则（发现重复），则跳过此行
-
-        # 写入唯一的节点到文件
-        with open(file_path, 'w', encoding='utf-8') as f:
+        # 写入结果
+        with open(output_path, 'w', encoding='utf-8') as f:
             f.writelines(unique_lines_output)
-        
-        print(f"✅ 成功清理重复节点。唯一节点已保存到: {file_path}")
-        print(f"原始节点数: {len(lines)}")
-        print(f"清理后唯一节点数: {len(unique_lines_output)}")
+
+        # 输出统计信息
+        logging.info(f"✅ 成功清理重复节点。结果保存到: {output_path}")
+        logging.info(f"📊 统计数据:")
+        logging.info(f"  - 原始节点数: {line_count}")
+        logging.info(f"  - 唯一节点数: {len(unique_lines_output)}")
+        logging.info(f"  - 移除的重复节点数: {line_count - len(unique_lines_output)}")
+        logging.info(f"  - 按协议分类:")
+        for protocol in ['vless', 'trojan', 'ss']:
+            logging.info(f"    - {protocol.upper()}: {stats[protocol]} 节点, {stats[f'{protocol}_duplicates']} 重复, {stats[f'{protocol}_errors']} 解析失败")
+        if error_lines:
+            logging.warning(f"解析失败的节点数: {len(error_lines)}，详情见 node_cleaning_errors.log")
+
         return True
+
     except FileNotFoundError:
-        print(f"❌ 错误：文件未找到在 {file_path}")
+        logging.error(f"❌ 文件未找到: {file_path}")
         return False
     except Exception as e:
-        print(f"❌ 清理节点时发生错误: {e}")
+        logging.error(f"❌ 清理节点时发生错误: {e}")
         return False
+
+def generate_node_key(url):
+    """根据协议生成去重键，仅包含关键字段"""
+    parsed = urllib.parse.urlparse(url)
+    scheme = parsed.scheme.lower()
+    netloc = parsed.netloc
+    query = parsed.query
+
+    if scheme == "vless":
+        return normalize_vless(url, netloc, query)
+    elif scheme == "trojan":
+        return normalize_trojan(url, netloc, query)
+    elif scheme == "ss":
+        return normalize_ss(url, netloc)
+    else:
+        # 未识别协议，直接返回原始 URL（可扩展为其他协议）
+        return url
+
+def normalize_vless(url, netloc, query):
+    """标准化 VLESS 链接，忽略非关键字段"""
+    # 提取 UUID 和 host:port
+    uuid_host_port = netloc
+    # 解析查询参数，仅保留关键字段
+    query_params = urllib.parse.parse_qs(query)
+    key_params = {k: query_params[k] for k in ['type', 'path', 'security', 'encryption'] if k in query_params}
+    sorted_query = urllib.parse.urlencode(key_params, doseq=True)
+    return f"vless://{uuid_host_port}?{sorted_query}"
+
+def normalize_trojan(url, netloc, query):
+    """标准化 Trojan 链接"""
+    # Trojan 的 netloc 是 password@host:port
+    query_params = urllib.parse.parse_qs(query)
+    key_params = {k: query_params[k] for k in ['type', 'sni'] if k in query_params}
+    sorted_query = urllib.parse.urlencode(key_params, doseq=True)
+    return f"trojan://{netloc}?{sorted_query}"
+
+def normalize_ss(url, netloc):
+    """标准化 SS 链接"""
+    try:
+        if '@' in netloc:
+            b64_config, host_port = netloc.split('@', 1)
+            config = base64.urlsafe_b64decode(b64_config + '===').decode('utf-8')
+            return f"ss://{config}@{host_port}"
+        else:
+            config = base64.urlsafe_b64decode(netloc + '===').decode('utf-8')
+            return f"ss://{config}"
+    except (base64.binascii.Error, UnicodeDecodeError) as e:
+        raise ValueError(f"无法解析 SS 配置: {e}")
 
 if __name__ == "__main__":
     nodes_file = os.path.join('data', 'a.isidomain.web.id.txt')
