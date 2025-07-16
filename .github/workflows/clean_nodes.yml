@@ -3,46 +3,46 @@ name: Clean Duplicate Nodes
 on:
   push:
     branches:
-      - main # Trigger on push to main branch
+      - main # 触发于 main 分支的推送
   schedule:
-    - cron: '0 0 * * *' # Run daily at midnight UTC
-  workflow_dispatch: # Allow manual trigger from GitHub UI
+    - cron: '0 0 * * *' # 每天 UTC 午夜运行
+  workflow_dispatch: # 允许手动触发
 
 jobs:
   clean-nodes:
-    runs-on: ubuntu-latest # Run on latest Ubuntu
+    runs-on: ubuntu-latest # 使用最新 Ubuntu 环境
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
-        fetch-depth: 0 # Fetch full history for accurate git diff
+        fetch-depth: 0 # 获取完整历史记录以确保 git diff 准确
 
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.x' # Use latest Python 3.x
+        python-version: '3.x' # 使用最新 Python 3.x
 
     - name: Run node cleaning script
       run: |
-        mkdir -p data # Ensure data directory exists
+        mkdir -p data # 确保 data 目录存在
         python clean_nodes.py
-      # The script processes data/a.isidomain.web.id.txt and outputs to data/a.isidomain.web.id_cleaned.txt
+      # 脚本处理 data/a.isidomain.web.id.txt，输出到 data/a.isidomain.web.id_cleaned.txt
 
     - name: Commit and push if changes exist
       run: |
         git config user.name "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"
 
-        # Check for changes in the cleaned file
+        # 检查清理后的文件是否有变化
         git add data/a.isidomain.web.id_cleaned.txt
 
-        # Commit only if there are actual content changes
+        # 仅当文件内容有实际变化时提交
         if ! git diff --cached --exit-code --quiet; then
-          git commit -m "Auto: Cleaned duplicate nodes in a.isidomain.web.id_cleaned.txt"
+          git commit -m "自动清理: 更新去重后的节点文件 a.isidomain.web.id_cleaned.txt"
           git push
         else
-          echo "No changes in data/a.isidomain.web.id_cleaned.txt, skipping commit."
+          echo "文件 data/a.isidomain.web.id_cleaned.txt 无变化，跳过提交。"
         fi
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
