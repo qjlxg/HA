@@ -27,7 +27,7 @@ def clean_duplicate_nodes_advanced(file_path, output_path=None, debug_samples=10
     output_path (str, optional): 清理后节点输出文件路径。如果为 None，则在原文件名后添加 _cleaned。
     debug_samples (int): 记录前 N 个去重键用于调试。
     strict_dedup (bool): 如果为 True，仅比较 host:port 和关键参数，忽略 uuid/password。
-                         如果为 False，则 uuid/password 也将作为去重的一部分。
+                          如果为 False，则 uuid/password 也将作为去重的一部分。
     """
     # 如果未指定输出路径，则自动生成一个
     if output_path is None:
@@ -95,7 +95,7 @@ def clean_duplicate_nodes_advanced(file_path, output_path=None, debug_samples=10
         logging.info(f"  - 有效节点数 (非空行): {line_count - stats['empty_lines']}")
         logging.info(f"  - 唯一节点数: {len(unique_lines_output)}")
         # 计算总重复节点数，只包括我们明确处理的协议
-        total_duplicates = sum(stats[f'{p}_duplicates'] for p in ['vless', 'trojan', 'ss'])
+        total_duplicates = sum(stats[f'{p}_duplicates'] for p in ['vless', 'trojan', 'ss', 'vmess', 'ssr', 'hysteria2'])
         logging.info(f"  - 重复节点数: {total_duplicates}")
         logging.info(f"  - 解析失败节点数: {len(error_lines)}")
         logging.info(f"  - 空行数: {stats['empty_lines']}")
@@ -131,53 +131,19 @@ def generate_node_key(url, strict_dedup):
         parsed = urllib.parse.urlparse(url)
         scheme = parsed.scheme.lower() # 协议类型，如 'vless', 'trojan', 'ss'
         netloc = parsed.netloc.lower() # 网络位置，通常是 '用户ID@服务器:端口' 或 '服务器:端口'
-        query = parsed.query           # 查询字符串，如 'type=ws&security=tls'
+        query = parsed.query            # 查询字符串，如 'type=ws&security=tls'
 
         # 根据协议类型调用相应的标准化函数
         if scheme == "vless":
             return normalize_vless(netloc, query, strict_dedup)
         elif scheme == "vmess":
-            # VMESS 通常是 Base64 编码的 JSON，这里进行简化处理
-            # 完整解析需要 json 和 base64 库，这里仅尝试提取 host:port
-            try:
-                # 尝试解码 Base64 部分，并解析 JSON（如果存在）
-                # 这是一个简化的尝试，可能无法处理所有 VMESS 变体
-                decoded_vmess = base64.urlsafe_b64decode(netloc + '===').decode('utf-8')
-                # 尝试从 JSON 中提取 host 和 port
-                # 实际的 VMESS JSON 结构可能更复杂，这里仅作示意
-                match = re.search(r'"add":"([^"]+)".*"port":(\d+)', decoded_vmess)
-                if match:
-                    host = match.group(1)
-                    port = match.group(2)
-                    return f"vmess://{host}:{port}"
-                else:
-                    # 如果无法解析 JSON，退化为使用原始 netloc
-                    return f"vmess://{netloc}"
-            except (base64.binascii.Error, UnicodeDecodeError, ValueError) as e:
-                logging.warning(f"VMESS Base64/JSON 解析失败，使用原始 netloc: {netloc} | 错误: {e}")
-                return f"vmess://{netloc}"
+            return normalize_vmess(netloc, strict_dedup)
         elif scheme == "trojan":
             return normalize_trojan(netloc, query, strict_dedup)
         elif scheme == "ss":
             return normalize_ss(netloc, url, strict_dedup)
         elif scheme == "ssr":
-            # SSR 协议通常是 Base64 编码，且结构比 SS 更复杂
-            # 这里仅做非常简化的处理，可能无法完全去重
-            try:
-                # 尝试解码 Base64 部分
-                decoded_ssr = base64.urlsafe_b64decode(netloc + '===').decode('utf-8')
-                # SSR 链接通常是 host:port:protocol:method:obfs:password_base64/?params
-                # 这里只取 host:port 作为去重键
-                parts = decoded_ssr.split(':')
-                if len(parts) >= 2:
-                    host = parts[0]
-                    port = parts[1]
-                    return f"ssr://{host}:{port}"
-                else:
-                    return f"ssr://{netloc}" # 退化为使用原始 netloc
-            except (base64.binascii.Error, UnicodeDecodeError) as e:
-                logging.warning(f"SSR Base64 解码失败，使用原始 netloc: {netloc} | 错误: {e}")
-                return f"ssr://{netloc}"
+            return normalize_ssr(netloc, strict_dedup)
         elif scheme == "hysteria2":
             # Hysteria2 链接通常是 hysteria2://<server>:<port>?<params>
             # 提取 server:port 和关键参数
@@ -227,6 +193,35 @@ def normalize_vless(netloc, query, strict_dedup):
     sorted_query = urllib.parse.urlencode(key_params, doseq=True)
     
     return f"vless://{host_port}?{sorted_query}"
+
+def normalize_vmess(netloc, strict_dedup):
+    """标准化 VMESS 链接，忽略非关键字段。"""
+    try:
+        # 尝试解码 Base64 部分，并解析 JSON（如果存在）
+        # 这是一个简化的尝试，可能无法处理所有 VMESS 变体
+        # 确保 Base64 字符串长度是 4 的倍数，进行填充
+        missing_padding = len(netloc) % 4
+        if missing_padding != 0:
+            netloc += '=' * (4 - missing_padding)
+
+        decoded_vmess = base64.urlsafe_b64decode(netloc).decode('utf-8')
+        # 尝试从 JSON 中提取 host 和 port
+        # 实际的 VMESS JSON 结构可能更复杂，这里仅作示意
+        match = re.search(r'"add":"([^"]+)".*"port":(\d+)', decoded_vmess)
+        if match:
+            host = match.group(1)
+            port = match.group(2)
+            if strict_dedup:
+                return f"vmess://{host}:{port}"
+            # 如果是非严格去重，可以考虑包含 UUID (id) 和 alterId (aid)
+            # 这里为了简化，仅包含 host:port
+            return f"vmess://{host}:{port}"
+        else:
+            # 如果无法解析 JSON，退化为使用原始 netloc
+            return f"vmess://{netloc}"
+    except (base64.binascii.Error, UnicodeDecodeError, ValueError) as e:
+        logging.warning(f"VMESS Base64/JSON 解析失败，使用原始 netloc: {netloc} | 错误: {e}")
+        return f"vmess://{netloc}"
 
 def normalize_trojan(netloc, query, strict_dedup):
     """标准化 Trojan 链接，忽略非关键字段。"""
@@ -309,6 +304,33 @@ def normalize_ss(netloc, url, strict_dedup):
     except Exception as e:
         # 捕获 SS 链接处理中的任何其他错误
         raise ValueError(f"无法解析 SS 配置: {e}")
+
+def normalize_ssr(netloc, strict_dedup):
+    """标准化 SSR 链接，忽略非关键字段。"""
+    try:
+        # 尝试解码 Base64 部分
+        # 确保 Base64 字符串长度是 4 的倍数，进行填充
+        missing_padding = len(netloc) % 4
+        if missing_padding != 0:
+            netloc += '=' * (4 - missing_padding)
+
+        decoded_ssr = base64.urlsafe_b64decode(netloc).decode('utf-8')
+        # SSR 链接通常是 host:port:protocol:method:obfs:password_base64/?params
+        # 这里只取 host:port 作为去重键
+        parts = decoded_ssr.split(':')
+        if len(parts) >= 2:
+            host = parts[0]
+            port = parts[1]
+            if strict_dedup:
+                return f"ssr://{host}:{port}"
+            # 如果是非严格去重，可以考虑包含 protocol, method, obfs 等
+            # 这里为了简化，仅包含 host:port
+            return f"ssr://{host}:{port}"
+        else:
+            return f"ssr://{netloc}" # 退化为使用原始 netloc
+    except (base64.binascii.Error, UnicodeDecodeError) as e:
+        logging.warning(f"SSR Base64 解码失败，使用原始 netloc: {netloc} | 错误: {e}")
+        return f"ssr://{netloc}"
 
 if __name__ == "__main__":
     # 定义节点文件路径
