@@ -11,7 +11,7 @@ import yaml
 from loguru import logger
 import os
 from urllib.parse import urlparse # Import urlparse for generic URL parsing
-import sys # <-- **确保已添加此行**
+import sys
 
 class Source:
     def __init__(self, line: str):
@@ -107,16 +107,11 @@ class Source:
             logger.info(f"Attempting to extract links from Telegram HTML for {url}")
             # Find all potential links that look like vmess/vless etc.
             # This is a basic regex, could be improved. Telegram often puts links in <pre> or <code> blocks.
-            found_links = re.findall(r'(vmess|vless|ss|ssr|trojan|hysteria2)://[a-zA-Z0-9+/=%\-._~:@]+(?:#.+?)?', text)
-            for link_match in found_links:
-                full_link = link_match # The regex group will be the full link if it's the whole pattern
-                if link_match.startswith(('vmess', 'vless', 'ss', 'ssr', 'trojan', 'hysteria2')):
-                    # Re-find with the full protocol prefix to get the complete URL
-                    full_match = re.search(r'(' + re.escape(link_match.split('://')[0]) + r'://[a-zA-Z0-9+/=%\-._~:@]+(?:#.+?)?)', text)
-                    if full_match:
-                        full_link = full_match.group(1)
-                        if node := self.load_url_to_node(full_link, exc_queue):
-                            self.nodes.append(node)
+            # Use re.IGNORECASE for robust matching of protocols
+            found_links = re.findall(r'(vmess|vless|ss|ssr|trojan|hysteria2)://[a-zA-Z0-9+/=%\-._~:@]+(?:#.+?)?', text, re.IGNORECASE)
+            for link_match_full_str in found_links: # link_match_full_str is already the full link
+                if self.load_url_to_node(link_match_full_str, exc_queue):
+                    self.nodes.append(self.load_url_to_node(link_match_full_str, exc_queue))
             if not found_links:
                 logger.warning(f"No direct node links found in Telegram HTML for {url}.")
             return # HTML processed, do not try other parsers on HTML
@@ -124,13 +119,23 @@ class Source:
         # --- Generic Content Parsing ---
         try:
             # Attempt to decode Base64 if it doesn't look like a direct link list or YAML/JSON
-            if "://" not in text.splitlines()[0] and not (url.endswith((".yaml", ".yml", ".json"))) and not text.strip().startswith(("{", "[")):
+            # First, check if the string primarily consists of base64-valid characters.
+            # This is a heuristic to avoid trying to decode arbitrary text.
+            is_potential_base64 = re.fullmatch(r'[A-Za-z0-9+/=\s]*', text.strip()) is not None
+
+            if is_potential_base64 and "://" not in text.splitlines()[0] and not (url.endswith((".yaml", ".yml", ".json"))) and not text.strip().startswith(("{", "[")):
                 try:
-                    decoded_text = base64.b64decode(text).decode("utf-8", errors="ignore")
-                    text = decoded_text
-                    logger.debug(f"Successfully Base64 decoded content from {url}")
-                except (base64.binascii.Error, UnicodeDecodeError):
-                    logger.debug(f"Content from {url} is not base64 encoded or invalid, processing as plain text/JSON.")
+                    # Encode the string to bytes before base64 decoding
+                    decoded_text = base64.b64decode(text.encode('utf-8')).decode("utf-8", errors="ignore")
+                    # Check if decoding actually produced something meaningful (e.g., contains '://')
+                    # A basic heuristic: if decoded text is significantly longer or contains common protocol prefixes
+                    if "://" in decoded_text or len(decoded_text) > len(text) / 2: 
+                        text = decoded_text
+                        logger.debug(f"Successfully Base64 decoded content from {url}")
+                    else:
+                        logger.debug(f"Base64 decoding from {url} produced unhelpful content, treating as plain text.")
+                except (base64.binascii.Error, UnicodeDecodeError) as e:
+                    logger.debug(f"Content from {url} is not valid base64 or has encoding issue ({e}), processing as plain text/JSON.")
                     pass # Not base64, proceed to other parsers
 
             if url.endswith((".yaml", ".yml")):
@@ -469,7 +474,8 @@ class Node:
             if '@' in creds_server_port:
                 b64_creds, server_port = creds_server_port.split('@', 1)
                 try:
-                    decoded_creds = base64.b64decode(b64_creds + "===").decode('utf-8') # Add padding
+                    # Pad the base64 string and decode
+                    decoded_creds = base64.b64decode(b64_creds + "===").decode('utf-8') 
                     method, password = decoded_creds.split(":", 1)
                     self.config["method"] = method
                     self.config["password"] = password
@@ -480,10 +486,10 @@ class Node:
                     self.config["method"] = method
                     self.config["password"] = password
             else: # No '@' means base64 encoded method:password@server:port
+                # Decode the entire part if no '@' is present initially
                 decoded_entire = base64.b64decode(creds_server_port + "===").decode('utf-8')
-                method_pass_server_port = decoded_entire
                 
-                parts_decoded = method_pass_server_port.split('@', 1)
+                parts_decoded = decoded_entire.split('@', 1)
                 if len(parts_decoded) == 2:
                     method_password_str, server_port = parts_decoded
                     method, password = method_password_str.split(':', 1)
