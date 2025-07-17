@@ -1,21 +1,13 @@
-# node.freeclashnode.com 每日节点 (0-4)
-+date https://node.freeclashnode.com/uploads/%Y/%m/0-%Y%m%d.txt
-+date https://node.freeclashnode.com/uploads/%Y/%m/1-%Y%m%d.txt
-+date https://node.freeclashnode.com/uploads/%Y/%m/2-%Y%m%d.txt
-+date https://node.freeclashnode.com/uploads/%Y/%m/3-%Y%m%d.txt
-+date https://node.freeclashnode.com/uploads/%Y/%m/4-%Y%m%d.txt
-
-# V2RayN.org 每日节点
-+date https://v2rayn.org/%Y/%m/%Y%m%d.txt
-
-# FreeNode.me 每日节点
-+date https://freenode.me/nodes/%Y/%m/%d/nodes.txt
-
-# NodeDaily.top 每日节点
-+date https://nodedaily.top/free/%Y/%m/%Y%m%d-nodes.txt
-
-# ClashNode.net 每日节点
-+date https://clashnode.net/free-nodes/%Y/%m/%Y%m%d.txt
-
-# ProxyHub.io 每日节点
-+date https://proxyhub.io/nodes/%Y/%m/%d/free-nodes.txt
+ https://node.freeclashnode.com
+ https://v2rayn.org
+ https://freenode.me
+ https://nodedaily.top
+ https://clashnode.net
+ https://proxyhub.io
+ https://freeclash.org
+ https://freev2ray.org
+ https://www.ssrshare.com
+ https://v2free.org
+ https://nodeshare.top
+ https://freenodelist.com
+ https://fastnode.xyz
