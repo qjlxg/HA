@@ -10,6 +10,8 @@ import aiohttp
 import yaml
 from loguru import logger
 import os
+from urllib.parse import urlparse # Import urlparse for generic URL parsing
+import sys # <-- **确保已添加此行**
 
 class Source:
     def __init__(self, line: str):
@@ -21,7 +23,23 @@ class Source:
     def get_url(self, date: str = None):
         if not self.is_date:
             return self.url
-        return self.url.replace("%Y%m%d", date).replace("%Y/%m/%d", date[:4] + "/" + date[4:6] + "/" + date[6:])
+        # Replace date placeholders
+        formatted_url = self.url.replace("%Y%m%d", date)
+        if "%Y/%m/%d" in formatted_url:
+            formatted_url = formatted_url.replace("%Y/%m/%d", date[:4] + "/" + date[4:6] + "/" + date[6:])
+        elif "%Y-%m-%d" in formatted_url:
+            formatted_url = formatted_url.replace("%Y-%m-%d", date[:4] + "-" + date[4:6] + "-" + date[6:])
+        elif "%Y/%m/%d" in formatted_url:
+            formatted_url = formatted_url.replace("%Y/%m/%d", date[:4] + "/" + date[4:6] + "/" + date[6:])
+        # Telegram channel links often need special handling, but direct parsing might be limited
+        # For 't.me/s/channelname/date.txt', aiohttp will likely fetch the Telegram HTML page,
+        # which then needs to be scraped for content, which is beyond direct fetching.
+        # The current script assumes a direct text/file link.
+        # For Telegram 's/' links, they typically serve HTML content, not raw text.
+        # This script's `fetch_url` will get the HTML. The `parse` method may fail
+        # to find nodes within HTML unless specific scraping logic is added.
+        # For now, it will attempt to parse, but likely produce errors for Telegram links.
+        return formatted_url
 
     @staticmethod
     async def fetch_url(url: str, session: aiohttp.ClientSession, exc_queue: asyncio.Queue):
@@ -29,7 +47,25 @@ class Source:
             logger.debug(f"Fetching URL: {url}")
             async with session.get(url, timeout=30) as response: # Increased timeout
                 if response.status != 200:
-                    raise Exception(f"HTTP {response.status}")
+                    # For Telegram 't.me/s/' links, status is usually 200 but content is HTML.
+                    # We might want to check content-type or infer from URL.
+                    logger.warning(f"HTTP Status {response.status} for {url}")
+                    # If it's a Telegram link, and not a direct file, it's expected to be HTML.
+                    # We don't want to raise an exception here for expected non-direct content.
+                    if "t.me/s/" in url: # Heuristic for Telegram channel pages
+                        text = await response.text()
+                        if "tgme_page_extra" in text: # Common div in Telegram channel pages
+                            logger.info(f"Detected Telegram channel page for {url}. Attempting to extract links from HTML.")
+                            return text # Return HTML for potential scraping in parse()
+                        else:
+                            raise Exception(f"Unexpected content for Telegram link: HTTP {response.status}")
+                    else:
+                        raise Exception(f"HTTP {response.status}")
+                
+                content_type = response.headers.get("Content-Type", "")
+                if "text/html" in content_type and "t.me/s/" not in url: # If it's unexpected HTML
+                    logger.warning(f"Received HTML content for {url} (Content-Type: {content_type}), expected text/yaml/json. Attempting to parse anyway.")
+
                 text = await response.text()
                 logger.debug(f"Successfully fetched {len(text)} bytes from {url}")
                 return text
@@ -49,8 +85,11 @@ class Source:
     @staticmethod
     def load_url_to_node(url: str, exc_queue: asyncio.Queue):
         try:
-            if url.startswith(("vmess://", "vless://", "ss://", "ssr://", "trojan://", "hysteria2://")):
+            # Basic validation before creating a Node
+            if re.match(r"^(vmess|vless|ss|ssr|trojan|hysteria2)://", url):
                 return Node(url)
+            else:
+                raise ValueError("Unsupported protocol or invalid URL format")
         except Exception as e:
             exc_queue.put_nowait(f"Invalid node URL {url}: {str(e)}")
             logger.warning(f"Invalid node URL {url}: {e}")
@@ -63,355 +102,520 @@ class Source:
         if not text:
             return
 
+        # --- Telegram Channel HTML Parsing (Specific for t.me/s/ links) ---
+        if "t.me/s/" in url and "tgme_page_extra" in text:
+            logger.info(f"Attempting to extract links from Telegram HTML for {url}")
+            # Find all potential links that look like vmess/vless etc.
+            # This is a basic regex, could be improved. Telegram often puts links in <pre> or <code> blocks.
+            found_links = re.findall(r'(vmess|vless|ss|ssr|trojan|hysteria2)://[a-zA-Z0-9+/=%\-._~:@]+(?:#.+?)?', text)
+            for link_match in found_links:
+                full_link = link_match # The regex group will be the full link if it's the whole pattern
+                if link_match.startswith(('vmess', 'vless', 'ss', 'ssr', 'trojan', 'hysteria2')):
+                    # Re-find with the full protocol prefix to get the complete URL
+                    full_match = re.search(r'(' + re.escape(link_match.split('://')[0]) + r'://[a-zA-Z0-9+/=%\-._~:@]+(?:#.+?)?)', text)
+                    if full_match:
+                        full_link = full_match.group(1)
+                        if node := self.load_url_to_node(full_link, exc_queue):
+                            self.nodes.append(node)
+            if not found_links:
+                logger.warning(f"No direct node links found in Telegram HTML for {url}.")
+            return # HTML processed, do not try other parsers on HTML
+
+        # --- Generic Content Parsing ---
         try:
-            # Attempt to decode Base64 if it doesn't look like a direct link list or YAML
-            if "://" not in text and not (url.endswith((".yaml", ".yml"))):
+            # Attempt to decode Base64 if it doesn't look like a direct link list or YAML/JSON
+            if "://" not in text.splitlines()[0] and not (url.endswith((".yaml", ".yml", ".json"))) and not text.strip().startswith(("{", "[")):
                 try:
                     decoded_text = base64.b64decode(text).decode("utf-8", errors="ignore")
                     text = decoded_text
                     logger.debug(f"Successfully Base64 decoded content from {url}")
                 except (base64.binascii.Error, UnicodeDecodeError):
-                    logger.debug(f"Content from {url} is not base64 encoded, processing as plain text/JSON.")
+                    logger.debug(f"Content from {url} is not base64 encoded or invalid, processing as plain text/JSON.")
                     pass # Not base64, proceed to other parsers
 
             if url.endswith((".yaml", ".yml")):
                 logger.debug(f"Parsing YAML from {url}")
                 data = yaml.safe_load(text)
                 if isinstance(data, dict) and "proxies" in data:
-                    for proxy in data["proxies"]:
-                        if isinstance(proxy, dict) and (node_url := proxy.get("url") or proxy.get("link")):
-                            if node := self.load_url_to_node(node_url, exc_queue):
-                                self.nodes.append(node)
-                elif isinstance(data, list): # Some YAML files might be just a list of proxies
-                     for proxy_config in data:
-                        # Attempt to reconstruct URL for generic YAML proxy config if possible
-                        # This is a simplified example, a real parser would need more logic for different types
-                        if isinstance(proxy_config, dict) and 'type' in proxy_config and 'server' in proxy_config:
-                            # This part would need extensive logic to convert dict to URL
-                            # For now, let's just skip unless it explicitly has a 'url' or 'link' field
-                            if (node_url := proxy_config.get("url") or proxy_config.get("link")):
-                                if node := self.load_url_to_node(node_url, exc_queue):
-                                    self.nodes.append(node)
-                else:
-                    logger.warning(f"YAML from {url} has unexpected structure.")
+                    for proxy_config in data["proxies"]:
+                        if isinstance(proxy_config, dict):
+                            # Attempt to reconstruct a URI for common proxy types
+                            node_url = None
+                            if proxy_config.get("type") == "vmess":
+                                # Minimal VMESS reconstruction for demonstration
+                                # This is a simplification; a full implementation needs to handle all fields
+                                try:
+                                    vmess_obj = {
+                                        "v": "2",
+                                        "ps": proxy_config.get("name", "vmess-node"),
+                                        "add": proxy_config["server"],
+                                        "port": proxy_config["port"],
+                                        "id": proxy_config["uuid"],
+                                        "aid": proxy_config.get("alterId", 0),
+                                        "net": proxy_config.get("network", "tcp"),
+                                        "type": proxy_config.get("tls", "") if proxy_config.get("tls") else "none", # e.g., 'tls'
+                                        "host": proxy_config.get("servername", ""), # For SNI
+                                    }
+                                    if vmess_obj["net"] == "ws":
+                                        ws_opts = proxy_config.get("ws-opts", {})
+                                        vmess_obj["path"] = ws_opts.get("path", "/")
+                                        if "headers" in ws_opts and "Host" in ws_opts["headers"]:
+                                            vmess_obj["host"] = ws_opts["headers"]["Host"]
+                                    
+                                    # Base64 encode the JSON string of the config
+                                    vmess_b64 = base64.b64encode(json.dumps(vmess_obj).encode('utf-8')).decode('utf-8')
+                                    node_url = f"vmess://{vmess_b64}"
+                                except KeyError as e:
+                                    logger.warning(f"Missing key in VMESS config from {url}: {e}")
+                                    continue # Skip this proxy
+                                except Exception as e:
+                                    logger.warning(f"Error reconstructing VMESS link from {url}: {e}")
+                                    continue # Skip this proxy
 
-            elif text.strip().startswith(("{", "[")): # Likely JSON
+                            elif proxy_config.get("type") == "vless":
+                                # Minimal VLESS reconstruction
+                                try:
+                                    node_url = f"vless://{proxy_config['uuid']}@{proxy_config['server']}:{proxy_config['port']}"
+                                    params = []
+                                    if proxy_config.get("tls"):
+                                        params.append("security=tls")
+                                    if proxy_config.get("flow"):
+                                        params.append(f"flow={proxy_config['flow']}")
+                                    if proxy_config.get("network") == "ws":
+                                        ws_opts = proxy_config.get("ws-opts", {})
+                                        params.append("type=ws")
+                                        if ws_opts.get("path"):
+                                            params.append(f"path={ws_opts['path']}")
+                                        if ws_opts.get("headers", {}).get("Host"):
+                                            params.append(f"host={ws_opts['headers']['Host']}")
+                                    if params:
+                                        node_url += "?" + "&".join(params)
+                                    node_url += f"#{proxy_config.get('name', 'vless-node')}"
+                                except KeyError as e:
+                                    logger.warning(f"Missing key in VLESS config from {url}: {e}")
+                                    continue
+                                except Exception as e:
+                                    logger.warning(f"Error reconstructing VLESS link from {url}: {e}")
+                                    continue
+
+                            elif proxy_config.get("type") == "trojan":
+                                try:
+                                    node_url = f"trojan://{proxy_config['password']}@{proxy_config['server']}:{proxy_config['port']}"
+                                    params = []
+                                    if proxy_config.get("tls"):
+                                        params.append("security=tls")
+                                    if proxy_config.get("network") == "ws":
+                                        ws_opts = proxy_config.get("ws-opts", {})
+                                        params.append("type=ws")
+                                        if ws_opts.get("path"):
+                                            params.append(f"path={ws_opts['path']}")
+                                        if ws_opts.get("headers", {}).get("Host"):
+                                            params.append(f"host={ws_opts['headers']['Host']}")
+                                    if params:
+                                        node_url += "?" + "&".join(params)
+                                    node_url += f"#{proxy_config.get('name', 'trojan-node')}"
+                                except KeyError as e:
+                                    logger.warning(f"Missing key in Trojan config from {url}: {e}")
+                                    continue
+                                except Exception as e:
+                                    logger.warning(f"Error reconstructing Trojan link from {url}: {e}")
+                                    continue
+
+                            elif proxy_config.get("type") == "ss":
+                                # Shadowsocks in Clash YAML can be complex.
+                                # This is a very basic attempt and might not cover all cases.
+                                try:
+                                    cipher = proxy_config.get("cipher")
+                                    password = proxy_config.get("password")
+                                    server = proxy_config.get("server")
+                                    port = proxy_config.get("port")
+                                    name = proxy_config.get("name", "ss-node")
+
+                                    if all([cipher, password, server, port]):
+                                        # SS link format: ss://base64_encoded_method:password@server:port#name
+                                        creds = f"{cipher}:{password}"
+                                        encoded_creds = base64.b64encode(creds.encode('utf-8')).decode('utf-8').replace('=', '')
+                                        node_url = f"ss://{encoded_creds}@{server}:{port}#{name}"
+                                except KeyError as e:
+                                    logger.warning(f"Missing key in Shadowsocks config from {url}: {e}")
+                                    continue
+                                except Exception as e:
+                                    logger.warning(f"Error reconstructing Shadowsocks link from {url}: {e}")
+                                    continue
+
+
+                            if node_url and (node := self.load_url_to_node(node_url, exc_queue)):
+                                self.nodes.append(node)
+                        else:
+                            logger.warning(f"Unexpected proxy format in YAML from {url}: {proxy_config}")
+                else:
+                    logger.warning(f"YAML from {url} does not contain a 'proxies' key or is not a dictionary.")
+            elif url.endswith(".json") or text.strip().startswith(("{", "[")):
                 logger.debug(f"Parsing JSON from {url}")
                 data = json.loads(text)
-                if isinstance(data, dict):
-                    for key, value in data.items():
-                        if isinstance(value, list):
-                            for item in value:
-                                if isinstance(item, dict) and (node_url := item.get("url") or item.get("link")):
+                # Assuming JSON is a list of node URLs or a specific structure
+                if isinstance(data, list):
+                    for item in data:
+                        if isinstance(item, str) and (node := self.load_url_to_node(item, exc_queue)):
+                            self.nodes.append(node)
+                        elif isinstance(item, dict):
+                            # Attempt to parse common JSON structures for nodes
+                            if "protocol" in item and "details" in item:
+                                # Example: {"protocol": "vmess", "details": {...}}
+                                # This would need specific logic per protocol
+                                logger.warning(f"Structured JSON content detected, but not yet fully supported for {url}: {item}")
+                            elif "ps" in item and "add" in item and "port" in item:
+                                # Assume it might be a direct VMESS JSON object
+                                try:
+                                    vmess_b64 = base64.b64encode(json.dumps(item).encode('utf-8')).decode('utf-8')
+                                    node_url = f"vmess://{vmess_b64}"
                                     if node := self.load_url_to_node(node_url, exc_queue):
                                         self.nodes.append(node)
-                elif isinstance(data, list): # Directly a list of nodes/objects
-                    for item in data:
-                        if isinstance(item, dict) and (node_url := item.get("url") or item.get("link")):
-                            if node := self.load_url_to_node(node_url, exc_queue):
-                                self.nodes.append(node)
-                else:
-                    logger.warning(f"JSON from {url} has unexpected structure.")
+                                except Exception as e:
+                                    logger.warning(f"Could not parse JSON item as VMESS from {url}: {e} - {item}")
+                            else:
+                                logger.warning(f"Unhandled JSON item format from {url}: {item}")
 
-            else: # Treat as plain text, line by line
-                logger.debug(f"Parsing plain text/links from {url}")
+                elif isinstance(data, dict):
+                    # For a dictionary, might be a single node or a collection under a key
+                    if "proxies" in data and isinstance(data["proxies"], list):
+                        for proxy_config in data["proxies"]:
+                            if isinstance(proxy_config, dict):
+                                # Re-use the YAML proxy reconstruction logic if applicable
+                                node_url = None
+                                if proxy_config.get("type") == "vmess":
+                                    try:
+                                        vmess_obj = {
+                                            "v": "2",
+                                            "ps": proxy_config.get("name", "vmess-node"),
+                                            "add": proxy_config["server"],
+                                            "port": proxy_config["port"],
+                                            "id": proxy_config["uuid"],
+                                            "aid": proxy_config.get("alterId", 0),
+                                            "net": proxy_config.get("network", "tcp"),
+                                            "type": proxy_config.get("tls", "") if proxy_config.get("tls") else "none",
+                                            "host": proxy_config.get("servername", ""),
+                                        }
+                                        if vmess_obj["net"] == "ws":
+                                            ws_opts = proxy_config.get("ws-opts", {})
+                                            vmess_obj["path"] = ws_opts.get("path", "/")
+                                            if "headers" in ws_opts and "Host" in ws_opts["headers"]:
+                                                vmess_obj["host"] = ws_opts["headers"]["Host"]
+                                        vmess_b64 = base64.b64encode(json.dumps(vmess_obj).encode('utf-8')).decode('utf-8')
+                                        node_url = f"vmess://{vmess_b64}"
+                                    except KeyError as e:
+                                        logger.warning(f"Missing key in VMESS config from {url} (JSON): {e}")
+                                        continue
+                                    except Exception as e:
+                                        logger.warning(f"Error reconstructing VMESS link from {url} (JSON): {e}")
+                                        continue
+                                # Add similar logic for vless, trojan, ss if found in JSON
+                                elif proxy_config.get("type") == "vless":
+                                    try:
+                                        node_url = f"vless://{proxy_config['uuid']}@{proxy_config['server']}:{proxy_config['port']}"
+                                        params = []
+                                        if proxy_config.get("tls"):
+                                            params.append("security=tls")
+                                        if proxy_config.get("flow"):
+                                            params.append(f"flow={proxy_config['flow']}")
+                                        if proxy_config.get("network") == "ws":
+                                            ws_opts = proxy_config.get("ws-opts", {})
+                                            params.append("type=ws")
+                                            if ws_opts.get("path"):
+                                                params.append(f"path={ws_opts['path']}")
+                                            if ws_opts.get("headers", {}).get("Host"):
+                                                params.append(f"host={ws_opts['headers']['Host']}")
+                                        if params:
+                                            node_url += "?" + "&".join(params)
+                                        node_url += f"#{proxy_config.get('name', 'vless-node')}"
+                                    except KeyError as e:
+                                        logger.warning(f"Missing key in VLESS config from {url} (JSON): {e}")
+                                        continue
+                                    except Exception as e:
+                                        logger.warning(f"Error reconstructing VLESS link from {url} (JSON): {e}")
+                                        continue
+                                elif proxy_config.get("type") == "trojan":
+                                    try:
+                                        node_url = f"trojan://{proxy_config['password']}@{proxy_config['server']}:{proxy_config['port']}"
+                                        params = []
+                                        if proxy_config.get("tls"):
+                                            params.append("security=tls")
+                                        if proxy_config.get("network") == "ws":
+                                            ws_opts = proxy_config.get("ws-opts", {})
+                                            params.append("type=ws")
+                                            if ws_opts.get("path"):
+                                                params.append(f"path={ws_opts['path']}")
+                                            if ws_opts.get("headers", {}).get("Host"):
+                                                params.append(f"host={ws_opts['headers']['Host']}")
+                                        if params:
+                                            node_url += "?" + "&".join(params)
+                                        node_url += f"#{proxy_config.get('name', 'trojan-node')}"
+                                    except KeyError as e:
+                                        logger.warning(f"Missing key in Trojan config from {url} (JSON): {e}")
+                                        continue
+                                    except Exception as e:
+                                        logger.warning(f"Error reconstructing Trojan link from {url} (JSON): {e}")
+                                        continue
+                                elif proxy_config.get("type") == "ss":
+                                    try:
+                                        cipher = proxy_config.get("cipher")
+                                        password = proxy_config.get("password")
+                                        server = proxy_config.get("server")
+                                        port = proxy_config.get("port")
+                                        name = proxy_config.get("name", "ss-node")
+
+                                        if all([cipher, password, server, port]):
+                                            creds = f"{cipher}:{password}"
+                                            encoded_creds = base64.b64encode(creds.encode('utf-8')).decode('utf-8').replace('=', '')
+                                            node_url = f"ss://{encoded_creds}@{server}:{port}#{name}"
+                                    except KeyError as e:
+                                        logger.warning(f"Missing key in Shadowsocks config from {url} (JSON): {e}")
+                                        continue
+                                    except Exception as e:
+                                        logger.warning(f"Error reconstructing Shadowsocks link from {url} (JSON): {e}")
+                                        continue
+
+                                if node_url and (node := self.load_url_to_node(node_url, exc_queue)):
+                                    self.nodes.append(node)
+                            else:
+                                logger.warning(f"Unexpected proxy format in JSON from {url}: {proxy_config}")
+                    else:
+                        logger.warning(f"JSON from {url} is a dictionary but does not contain a 'proxies' key or it's not a list.")
+                else:
+                    logger.warning(f"Unsupported JSON format from {url}: {type(data)}")
+            else:
+                logger.debug(f"Parsing plain text content from {url}")
+                # Treat as plain text, line by line
                 for line in text.splitlines():
                     line = line.strip()
                     if line and (node := self.load_url_to_node(line, exc_queue)):
                         self.nodes.append(node)
-
-        except yaml.YAMLError as e:
-            await exc_queue.put(f"YAML parsing failed for {url}: {str(e)}")
-            logger.error(f"YAML parsing failed for {url}: {e}")
-        except json.JSONDecodeError as e:
-            await exc_queue.put(f"JSON parsing failed for {url}: {str(e)}")
-            logger.error(f"JSON parsing failed for {url}: {e}")
+        except (json.JSONDecodeError, yaml.YAMLError) as e:
+            await exc_queue.put(f"Parsing error (JSON/YAML) for {url}: {str(e)}")
+            logger.error(f"Parsing error (JSON/YAML) for {url}: {e}")
         except Exception as e:
-            await exc_queue.put(f"Generic parsing failed for {url}: {type(e).__name__}: {str(e)}")
-            logger.error(f"Generic parsing failed for {url}: {e}", exc_info=True)
+            await exc_queue.put(f"Unknown parsing error for {url}: {str(e)}")
+            logger.error(f"Unknown parsing error for {url}: {e}")
 
 
 class Node:
     def __init__(self, url: str):
         self.url = url
-        self.protocol = url.split("://")[0]
-        self.name = self.generate_name()
+        self.protocol = ""
+        self.config = {}
+        self.parse_url()
 
-    def __hash__(self):
-        return hash(self.url) # Use URL as hash for uniqueness
+    def parse_url(self):
+        # Determine protocol and parse accordingly
+        if self.url.startswith("vmess://"):
+            self.protocol = "vmess"
+            self._parse_vmess()
+        elif self.url.startswith("vless://"):
+            self.protocol = "vless"
+            self._parse_vless()
+        elif self.url.startswith("ss://"):
+            self.protocol = "ss"
+            self._parse_ss()
+        elif self.url.startswith("trojan://"):
+            self.protocol = "trojan"
+            self._parse_trojan()
+        elif self.url.startswith("hysteria2://"):
+            self.protocol = "hysteria2"
+            self._parse_hysteria2()
+        else:
+            logger.warning(f"Unsupported protocol for URL: {self.url[:50]}...")
+            self.protocol = "unknown"
 
-    def __eq__(self, other):
-        return self.url == other.url
-
-    def generate_name(self):
+    def _parse_vmess(self):
         try:
-            if self.protocol == "vmess":
-                config = json.loads(base64.b64decode(self.url[8:]).decode("utf-8"))
-                return config.get('ps', f"vmess-{config.get('add', 'unnamed')}")
-            elif self.protocol in ("vless", "trojan", "hysteria2"):
-                # Extract part after last # for name, or hostname:port if no fragment
-                parsed_url = re.match(r"^(vless|trojan|hysteria2)://(?:[^@]+@)?([^\s:]+):(\d+)(?:[^#]*)#?(.+)?", self.url)
-                if parsed_url:
-                    name_fragment = parsed_url.group(4)
-                    if name_fragment:
-                        return name_fragment # Use the fragment as name
-                    else:
-                        return f"{parsed_url.group(2)}:{parsed_url.group(3)} ({self.protocol})"
-                return f"unnamed-{self.protocol}"
-            elif self.protocol in ("ss", "ssr"):
-                # SS/SSR names are typically after # or require more complex parsing
-                match_name = re.search(r'#([^&]+)$', self.url)
-                if match_name:
-                    try:
-                        return base64.urlsafe_b64decode(match_name.group(1) + '=' * (-len(match_name.group(1)) % 4)).decode('utf-8')
-                    except Exception:
-                        return match_name.group(1)
-                return f"shadowsocks ({self.protocol})"
-            return f"node ({self.protocol})"
+            encoded_config = self.url[8:]
+            decoded_config = base64.b64decode(encoded_config).decode("utf-8")
+            self.config = json.loads(decoded_config)
         except Exception as e:
-            logger.warning(f"Failed to generate name for {self.protocol} node: {self.url}. Error: {e}")
-            return f"unnamed ({self.protocol})"
+            logger.error(f"Error parsing VMESS URL {self.url}: {e}")
+            self.config = {}
 
-    def to_yaml(self):
-        # Simplified conversion to YAML suitable for Clash/Sing-box (requires more detailed parsing for full compatibility)
-        config = {"name": self.name, "type": self.protocol}
-
+    def _parse_vless(self):
         try:
-            if self.protocol == "vmess":
-                data = json.loads(base64.b64decode(self.url[8:]).decode("utf-8"))
-                config.update({
-                    "server": data.get("add"),
-                    "port": int(data.get("port")),
-                    "uuid": data.get("id"),
-                    "alterId": int(data.get("aid", 0)),
-                    "cipher": data.get("scy", "auto"),
-                    "network": data.get("net", "tcp"),
-                    "tls": data.get("tls") == "tls",
-                    "udp": True # Default to true for better compatibility
-                })
-                if config["network"] == "ws":
-                    config["ws-opts"] = {"path": data.get("path", "/"), "headers": {"Host": data.get("host", data.get("add"))}}
-                if config["network"] == "grpc":
-                    config["grpc-opts"] = {"grpc-service-name": data.get("path", "")} # path is often serviceName in vmess grpc
-                if data.get("sni"):
-                    config["sni"] = data["sni"]
-
-            elif self.protocol in ("vless", "trojan"):
-                # Regex to parse vless/trojan: //uuid@server:port?params#name
-                match = re.match(r"^(vless|trojan)://([^@]+)@([^\s:]+):(\d+)(?:\?([^#]+))?(?:#(.+))?", self.url)
-                if not match: raise ValueError("Invalid VLESS/Trojan URL format")
-                _, user_id, server, port_str, query_params_str, name_fragment = match.groups()
-                config.update({
-                    "server": server,
-                    "port": int(port_str),
-                    "password": user_id if self.protocol == "trojan" else None,
-                    "uuid": user_id if self.protocol == "vless" else None,
-                    "udp": True
-                })
-
-                if query_params_str:
-                    params = dict(p.split("=") for p in query_params_str.split("&"))
-                    config["network"] = params.get("type", "tcp")
-                    if params.get("security") == "tls":
-                        config["tls"] = True
-                        config["sni"] = params.get("sni", server)
-                        if params.get("alpn"):
-                            config["alpn"] = params["alpn"].split(',')
-                        if params.get("fp"):
-                            config["fingerprint"] = params["fp"]
-                        config["skip-cert-verify"] = params.get("allowInsecure") == "1"
-
-                    if config["network"] == "ws":
-                        config["ws-opts"] = {"path": params.get("path", "/"), "headers": {"Host": params.get("host", server)}}
-                    elif config["network"] == "grpc":
-                        config["grpc-opts"] = {"grpc-service-name": params.get("serviceName", "")}
-
-            elif self.protocol == "hysteria2":
-                # hysteria2://password@server:port?params#name
-                match = re.match(r"^hysteria2://([^@]+)@([^\s:]+):(\d+)(?:\?([^#]+))?(?:#(.+))?", self.url)
-                if not match: raise ValueError("Invalid Hysteria2 URL format")
-                _, password, server, port_str, query_params_str, name_fragment = match.groups()
-                config.update({
-                    "server": server,
-                    "port": int(port_str),
-                    "password": password,
-                    "udp": True # Hysteria2 is UDP based
-                })
-                if query_params_str:
-                    params = dict(p.split("=") for p in query_params_str.split("&"))
-                    if params.get("sni"): config["sni"] = params["sni"]
-                    if params.get("obfs"): config["obfs"] = params["obfs"]
-                    if params.get("obfs-password"): config["obfs-password"] = params["obfs-password"]
-                    if params.get("alpn"): config["alpn"] = params["alpn"].split(',')
-                    if params.get("fastopen"): config["fast-open"] = params["fastopen"] == "1"
-                    if params.get("insecure"): config["skip-cert-verify"] = params["insecure"] == "1"
-                    if params.get("mptcp"): config["mptcp"] = params["mptcp"] == "1"
-                    if params.get("up"): config["up"] = f"{params['up']}Mbps"
-                    if params.get("down"): config["down"] = f"{params['down']}Mbps"
-                    if params.get("recv_window"): config["recv-window"] = int(params["recv_window"])
-                    if params.get("recv_window_conn"): config["recv-window-conn"] = int(params["recv_window_conn"])
-                    if params.get("lazy"): config["lazy"] = params["lazy"] == "1"
-                    if params.get("udptun"): config["udp-relay-mode"] = params["udptun"] # Clash specific
-
-            elif self.protocol == "ss":
-                # ss://method:password@server:port#name
-                # ss://base64encoded_info@server:port#name
-                parsed = re.match(r"ss://(?:([^@]+)@)?([^\s:]+):(\d+)(?:#(.+))?", self.url)
-                if parsed:
-                    auth_info, server, port_str, name_fragment = parsed.groups()
-                    config.update({
-                        "server": server,
-                        "port": int(port_str),
-                        "udp": True
-                    })
-                    if auth_info:
-                        try: # Try decoding if it's base64 encoded auth
-                            decoded_auth = base64.urlsafe_b64decode(auth_info + '=' * (-len(auth_info) % 4)).decode('utf-8')
-                            method, password = decoded_auth.split(':', 1)
-                            config["cipher"] = method
-                            config["password"] = password
-                        except Exception: # Not base64, assume method:password directly
-                            if ':' in auth_info:
-                                method, password = auth_info.split(':', 1)
-                                config["cipher"] = method
-                                config["password"] = password
-                            else: # Just method, no password in auth part
-                                config["cipher"] = auth_info
-                                config["password"] = "" # Default to empty password
-                    else: # No auth_info, try to get from userinfo if present
-                         parsed_url = urlparse(self.url)
-                         if parsed_url.username and parsed_url.password:
-                             config["cipher"] = parsed_url.username
-                             config["password"] = parsed_url.password
-                else: raise ValueError("Invalid SS URL format")
-
-            elif self.protocol == "ssr":
-                # ssr://base64encoded_params
-                decoded_params = base64.urlsafe_b64decode(self.url[6:] + '=' * (-len(self.url[6:]) % 4)).decode('utf-8')
-                parts = decoded_params.split(':')
-                if len(parts) >= 6:
-                    server, port_str, protocol, method, obfs, password_encoded_fragment = parts[0:6]
-                    password_encoded = password_encoded_fragment.split('/?')[0]
-                    password = base64.urlsafe_b64decode(password_encoded + '=' * (-len(password_encoded) % 4)).decode('utf-8')
-
-                    config.update({
-                        "server": server,
-                        "port": int(port_str),
-                        "protocol": protocol,
-                        "cipher": method,
-                        "obfs": obfs,
-                        "password": password,
-                        "udp": True
-                    })
-                    # Parse additional parameters from fragment
-                    if '/?' in decoded_params:
-                        query_str = decoded_params.split('/?')[1]
-                        params = dict(p.split('=') for p in query_str.split('&') if '=' in p)
-                        if 'remarks' in params: config["name"] = base64.urlsafe_b64decode(params['remarks'] + '=' * (-len(params['remarks']) % 4)).decode('utf-8')
-                        if 'protoparam' in params: config["protocol-param"] = base64.urlsafe_b64decode(params['protoparam'] + '=' * (-len(params['protoparam']) % 4)).decode('utf-8')
-                        if 'obfsparam' in params: config["obfs-param"] = base64.urlsafe_b64decode(params['obfsparam'] + '=' * (-len(params['obfsparam']) % 4)).decode('utf-8')
-                else: raise ValueError("Invalid SSR URL format")
-
-            # Remove password field for VLESS as it uses UUID
-            if self.protocol == "vless" and "password" in config:
-                del config["password"]
-
-            # Set a default name if still unnamed
-            if not config.get("name"):
-                config["name"] = self.name # Use the auto-generated name if original was empty
-
-            return config
-
+            # vless://uuid@server:port?params#name
+            match = re.match(r"vless://([^@]+)@([^:]+):(\d+)(?:\?(.*))?(?:#(.+))?", self.url)
+            if match:
+                self.config["uuid"] = match.group(1)
+                self.config["server"] = match.group(2)
+                self.config["port"] = int(match.group(3))
+                if match.group(4): # params
+                    params = match.group(4).split("&")
+                    for param in params:
+                        key_val = param.split("=", 1)
+                        if len(key_val) == 2:
+                            self.config[key_val[0]] = key_val[1]
+                self.config["name"] = match.group(5) if match.group(5) else self.config["server"]
         except Exception as e:
-            logger.error(f"Failed to convert node {self.url} to YAML: {type(e).__name__}: {e}", exc_info=True)
-            return None
+            logger.error(f"Error parsing VLESS URL {self.url}: {e}")
+            self.config = {}
 
-def load_sources():
-    sources = []
-    file_path = 'sources.list'
-    if not os.path.exists(file_path):
-        logger.error(f"{file_path} not found in {os.getcwd()}")
-        raise FileNotFoundError(f"{file_path} not found")
-    logger.info(f"Loading sources from {file_path}")
-    with open(file_path, 'r', encoding='utf-8') as file:
-        for line in file:
-            line = line.strip()
-            if line and not line.startswith('#'):
-                sources.append(Source(line))
-                logger.debug(f"Loaded source: {line}")
-    logger.info(f"Loaded {len(sources)} sources")
-    return sources
+    def _parse_ss(self):
+        try:
+            # ss://method:password@server:port#name or ss://base64_encoded_method:password@server:port#name
+            # Simplified parsing, assuming base64(method:password)
+            parts = self.url[5:].split("#", 1)
+            name = ""
+            if len(parts) > 1:
+                name = parts[1]
+            
+            creds_server_port = parts[0]
+            
+            # Check if it's base64 encoded credentials
+            if '@' in creds_server_port:
+                b64_creds, server_port = creds_server_port.split('@', 1)
+                try:
+                    decoded_creds = base64.b64decode(b64_creds + "===").decode('utf-8') # Add padding
+                    method, password = decoded_creds.split(":", 1)
+                    self.config["method"] = method
+                    self.config["password"] = password
+                except (base64.binascii.Error, UnicodeDecodeError):
+                    # Not base64, assume it's direct method:password
+                    method_pass, server_port = creds_server_port.split("@", 1)
+                    method, password = method_pass.split(":", 1)
+                    self.config["method"] = method
+                    self.config["password"] = password
+            else: # No '@' means base64 encoded method:password@server:port
+                decoded_entire = base64.b64decode(creds_server_port + "===").decode('utf-8')
+                method_pass_server_port = decoded_entire
+                
+                parts_decoded = method_pass_server_port.split('@', 1)
+                if len(parts_decoded) == 2:
+                    method_password_str, server_port = parts_decoded
+                    method, password = method_password_str.split(':', 1)
+                    self.config["method"] = method
+                    self.config["password"] = password
+                else:
+                    raise ValueError("Invalid Shadowsocks format")
+
+            server, port = server_port.rsplit(":", 1)
+            self.config["server"] = server
+            self.config["port"] = int(port)
+            self.config["name"] = name if name else server
+            
+        except Exception as e:
+            logger.error(f"Error parsing SS URL {self.url}: {e}")
+            self.config = {}
+
+    def _parse_trojan(self):
+        try:
+            # trojan://password@server:port?params#name
+            match = re.match(r"trojan://([^@]+)@([^:]+):(\d+)(?:\?(.*))?(?:#(.+))?", self.url)
+            if match:
+                self.config["password"] = match.group(1)
+                self.config["server"] = match.group(2)
+                self.config["port"] = int(match.group(3))
+                if match.group(4): # params
+                    params = match.group(4).split("&")
+                    for param in params:
+                        key_val = param.split("=", 1)
+                        if len(key_val) == 2:
+                            self.config[key_val[0]] = key_val[1]
+                self.config["name"] = match.group(5) if match.group(5) else self.config["server"]
+        except Exception as e:
+            logger.error(f"Error parsing Trojan URL {self.url}: {e}")
+            self.config = {}
+
+    def _parse_hysteria2(self):
+        try:
+            # hysteria2://password@server:port?params#name
+            match = re.match(r"hysteria2://([^@]+)@([^:]+):(\d+)(?:\?(.*))?(?:#(.+))?", self.url)
+            if match:
+                self.config["password"] = match.group(1)
+                self.config["server"] = match.group(2)
+                self.config["port"] = int(match.group(3))
+                if match.group(4): # params
+                    params = match.group(4).split("&")
+                    for param in params:
+                        key_val = param.split("=", 1)
+                        if len(key_val) == 2:
+                            self.config[key_val[0]] = key_val[1]
+                self.config["name"] = match.group(5) if match.group(5) else self.config["server"]
+        except Exception as e:
+            logger.error(f"Error parsing Hysteria2 URL {self.url}: {e}")
+            self.config = {}
+
 
 async def main():
+    # Setup logging
     logger.remove()
     logger.add(sys.stderr, level="INFO") # Log to stderr for GitHub Actions output
-    logger.add("fetch.log", rotation="1 MB", level="DEBUG") # Detailed logs to file
 
-    date = time.strftime("%Y%m%d")
-    sources = load_sources()
-    logger.info(f"Starting parsing for {len(sources)} sources...")
+    today_date = time.strftime("%Y%m%d")
+    logger.info(f"Today's date: {today_date}")
 
-    exc_queue = asyncio.Queue()
-    # Use a custom header for better request success rate
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.0.0 Safari/537.36"
-    }
-    async with aiohttp.ClientSession(headers=headers) as session:
-        tasks = [source.parse(date, session, exc_queue) for source in sources]
-        await asyncio.gather(*tasks)
+    sources_file = Path("sources.list")
+    if not sources_file.exists():
+        logger.error("sources.list not found. Please create it with node URLs.")
+        return
+
+    sources_obj = []
+    with open(sources_file, "r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if line and not line.startswith("#"):
+                sources_obj.append(Source(line))
+
+    # Use a single session for all requests
+    connector = aiohttp.TCPConnector(limit=50) # Limit concurrent connections
+    async with aiohttp.ClientSession(connector=connector) as session:
+        exc_queue = asyncio.Queue() # Queue to collect exceptions and warnings
+
+        parse_tasks = [source.parse(today_date, session, exc_queue) for source in sources_obj]
+        await asyncio.gather(*parse_tasks)
 
     all_nodes = []
-    for source in sources:
+    for source in sources_obj:
         all_nodes.extend(source.nodes)
+
+    logger.info(f"Total nodes collected: {len(all_nodes)}")
+
+    # Group nodes by protocol
+    nodes_by_protocol = {
+        "vmess": [],
+        "vless": [],
+        "ss": [],
+        "trojan": [],
+        "hysteria2": []
+    }
+
+    for node in all_nodes:
+        if node.protocol in nodes_by_protocol:
+            nodes_by_protocol[node.protocol].append(node.url)
+
+    # Save to files
+    output_dir = Path("parsed_nodes")
+    output_dir.mkdir(exist_ok=True)
+
+    for protocol, nodes_list in nodes_by_protocol.items():
+        output_file = output_dir / f"{protocol}_nodes.txt"
+        with open(output_file, "w", encoding="utf-8") as f:
+            for node_url in nodes_list:
+                f.write(f"{node_url}\n")
+        logger.info(f"Saved {len(nodes_list)} {protocol} nodes to {output_file}")
+
+    # Generate an all_nodes.txt file
+    with open(output_dir / "all_nodes.txt", "w", encoding="utf-8") as f:
+        for node in all_nodes:
+            f.write(f"{node.url}\n")
+    logger.info(f"Saved {len(all_nodes)} total nodes to {output_dir / 'all_nodes.txt'}")
+
+    # Process and print exceptions/warnings
+    errors = []
+    while not exc_queue.empty():
+        errors.append(await exc_queue.get())
     
-    # Use a set to remove duplicates based on Node's __hash__ and __eq__
-    unique_nodes = list(dict.fromkeys(all_nodes))  
-    logger.info(f"Collected {len(unique_nodes)} unique nodes")
-
-    Path("output").mkdir(exist_ok=True)
+    if errors:
+        logger.warning("\n--- Collected Errors and Warnings ---")
+        for error_msg in errors:
+            logger.warning(error_msg)
+        logger.warning("-------------------------------------")
     
-    # Write all unique nodes to a single .txt file
-    with open("output/all_nodes.txt", "w", encoding="utf-8") as f:
-        for node in unique_nodes:
-            f.write(node.url + "\n")
-    logger.info("All unique nodes written to output/all_nodes.txt")
-
-    # Split nodes into multiple files if total size exceeds 100MB (adjusted to a more reasonable default for typical nodes)
-    # This feature might be less critical for typical node counts.
-    # Let's write the `nodes_partX.txt` files directly using the unique_nodes.
-    # The previous `part_size` was 100MB which is very large for simple text links.
-    # Re-evaluating this part for practical use: A single `all_nodes.txt` is often sufficient.
-    # If splitting is truly desired based on file size, it needs careful implementation
-    # to avoid creating too many tiny files or overcomplicating.
-    # For now, let's keep it simple with `all_nodes.txt` and `list.yml`.
-    
-    yaml_nodes = [node.to_yaml() for node in unique_nodes if node.to_yaml()]
-    # Ensure all names are unique for Clash/Singbox compatibility
-    name_counts = {}
-    for y_node in yaml_nodes:
-        original_name = y_node["name"]
-        count = name_counts.get(original_name, 0)
-        if count > 0:
-            y_node["name"] = f"{original_name} #{count + 1}"
-        name_counts[original_name] = count + 1
-
-    with open("output/list.yml", "w", encoding="utf-8") as f:
-        yaml.dump({"proxies": yaml_nodes}, f, allow_unicode=True, sort_keys=False) # sort_keys=False to preserve order
-    logger.info(f"Converted {len(yaml_nodes)} nodes to output/list.yml")
-
-
-    with open("node_counts.csv", "w", encoding="utf-8") as f:
-        f.write("Source,NodeCount\n")
-        for source in sources:
-            f.write(f"{source.url},{len(source.nodes)}\n")
-    logger.info("Node counts written to node_counts.csv")
-
-    errors_count = 0
-    with open("errors.log", "w", encoding="utf-8") as f:
-        while not exc_queue.empty():
-            f.write(exc_queue.get_nowait() + "\n")
-            errors_count += 1
-    logger.info(f"Wrote {errors_count} errors to errors.log")
+    logger.info("Node parsing completed.")
 
 if __name__ == "__main__":
     asyncio.run(main())
