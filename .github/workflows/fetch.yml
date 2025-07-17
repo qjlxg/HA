@@ -1,4 +1,4 @@
-```yaml
+
 name: Fetch VPN Nodes
 
 on:
@@ -36,4 +36,3 @@ jobs:
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-```
