@@ -1,48 +1,37 @@
-name: Fetch and Parse Nodes
+name: Fetch and Parse VPN Nodes
 
 on:
   schedule:
-    - cron: '0 0 * * *' # Run daily at 00:00 UTC
-  workflow_dispatch: # Allows manual triggering
+    - cron: '0 0 * * *' # 每天 UTC 00:00 运行
+  workflow_dispatch: # 支持手动触发
 
 jobs:
-  fetch_and_parse:
+  fetch-nodes:
     runs-on: ubuntu-latest
+
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.x' # Use the latest Python 3.x
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          cache: 'pip'
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install aiohttp pyyaml loguru
+      - name: Install dependencies
+        run: |
+          pip install requests pyyaml requests-file
 
-    - name: Create sources.list (if not exists)
-      # This step ensures that sources.list exists for the script to run.
-      # In a real scenario, you would commit your actual sources.list file.
-      run: |
-        if [ ! -f sources.list ]; then
-          echo "https://example.com/your-first-sub.txt" > sources.list
-          echo "+date https://example.com/daily-sub-%Y%m%d.yml" >> sources.list
-          echo "# Add your subscription links here, one per line." >> sources.list
-          echo "# Use '+date ' prefix for date-formatted URLs (e.g., +date https://example.com/sub_%Y%m%d.txt)" >> sources.list
-          echo "Please commit your actual sources.list file to the repository."
-        fi
-      shell: bash
+      - name: Run fetch script
+        run: python fetch.py
 
-    - name: Run fetch.py script
-      run: python fetch.py
-
-    - name: Upload output files
-      uses: actions/upload-artifact@v4
-      with:
-        name: parsed-nodes-output
-        path: |
-          output/
-          node_counts.csv
-          errors.log
+      - name: Commit and push results
+        run: |
+          git config --global user.name 'GitHub Action'
+          git config --global user.email 'action@github.com'
+          git add list_raw.txt list.txt list.yml
+          git commit -m "Update VPN nodes $(date +%Y-%m-%d)"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
