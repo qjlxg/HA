@@ -1,18 +1,22 @@
-
-name: Fetch VPN Nodes
+name: Fetch Nodes
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # Run daily at 00:00 UTC
-  workflow_dispatch:  # Allow manual trigger
+    - cron: '0 0 * * *'  # 每天 UTC 00:00 运行
+  workflow_dispatch:     # 支持手动触发
 
 jobs:
   fetch:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+
+      - name: Check sources.list
+        run: |
+          ls -l
+          cat sources.list || echo "sources.list not found"
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -31,8 +35,8 @@ jobs:
         run: |
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@github.com'
-          git add nodes_part*.txt list.yml node_counts.csv errors.log
-          git commit -m "Update nodes $(date +%Y-%m-%d)"
+          git add output/nodes_part*.txt output/list.yml node_counts.csv errors.log
+          git commit -m "Update nodes $(date +%Y-%m-%d)" || echo "Nothing to commit"
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
