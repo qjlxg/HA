@@ -1,380 +1,380 @@
-trojan://IpUWX2yFv3Uy@masukan.bug.ws:443
-trojan://yZpB0UiF0ZCQ@masukan.bug.ws:443
-trojan://hABEQB5bvlbZ@masukan.bug.ws:443
-vless://01671f50-32a7-40ce-83a7-0e59f6ad782e@masukan.bug.ws:80?path=%2Fvl%3D51.79.254.182%3D443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) OVH SAS🇸🇬
-vless://6f121366-7e7b-437a-a61e-02b1c7247006@masukan.bug.ws:80?path=%2Fvl%3D172.232.239.151%3D587&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(ID) Akamai Connected Cloud🇮🇩
-vless://b2459be8-5868-4605-939f-c82573dbc1f8@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D103.133.223.50%3D2096#(ID) Cloud Teknologi Nusantara🇮🇩
-vless://91db358a-9dd4-434a-9cc7-f55eaf0ab637@masukan.bug.ws:80?path=%2Fvl%3D129.150.36.188%3D53435&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Oracle Cloud🇸🇬
-vless://6df1cb55-3698-41c8-a01e-17edfc38859a@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D8.219.197.113%3D45714#(SG) Alibaba us Technology Co   Ltd🇸🇬
-trojan://fMFCeXaXVeVT@masukan.bug.ws:80
-vless://a657cf2b-9f62-4cbc-a3f3-c5bb5597d839@masukan.bug.ws:80?path=%2Fvl%3D45.77.36.40%3D443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) The Constant Company  LLC🇸🇬
-trojan://wlG3V2W6N9dk@masukan.bug.ws:80
-trojan://nQjCLKYBma04@masukan.bug.ws:443
-vless://8fb6270b-d416-4fb0-9c7d-ad449565d861@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D104.248.146.212%3D8443#(SG) Digital Ocean🇸🇬
-vless://62fd8f99-9f35-4c67-8f3b-5419ab4beaf0@masukan.bug.ws:80?path=%2Fvl%3D43.133.145.156%3D53136&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(ID) Tencent cloud computing🇮🇩
-vless://6083c732-e6c1-4537-ac62-35414e53413e@masukan.bug.ws:80?path=%2Fvl%3D146.235.18.248%3D45137&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-vless://b8118001-fa69-435f-9353-c0bf671b72cc@masukan.bug.ws:80?path=%2Fvl%3D139.180.131.125%3D10005&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) The Constant Company  LLC🇸🇬
-vless://acf22544-31f3-4d3a-bdd9-cc3c0d0bd82b@masukan.bug.ws:80?path=%2Fvl%3D203.194.112.119%3D2053&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(ID) First Cagayan Converge Data Center Inc.🇮🇩
-vless://c214a761-0423-449b-8264-c1b43fbb464f@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D54.251.167.101%3D443#(SG) Amazon com  Inc🇸🇬
-trojan://pBln0cGvvvuM@masukan.bug.ws:443
-vless://e9150800-dfdd-49b3-bbf6-92b973d82dba@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D47.236.119.190%3D51342#(SG) Alibaba us Technology Co   Ltd🇸🇬
-trojan://ZCYwmOpKSdF4@masukan.bug.ws:443
-trojan://xsgXUQFWeuYN@masukan.bug.ws:80
-trojan://ZUnjlib6OXPr@masukan.bug.ws:443
-vless://423a142a-3f3b-40ae-a741-84229645eb94@masukan.bug.ws:80?path=%2Fvl%3D103.6.207.108%3D8080&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(ID) PT Pusat Media Indonesia🇮🇩
-trojan://tJiLgvuCRPgP@masukan.bug.ws:80
-vless://dc58e478-50f8-4f73-ba41-f875855b8efb@masukan.bug.ws:80?path=%2Fvl%3D94.237.75.31%3D62174&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Upcloud LTD🇸🇬
-trojan://4SJRBw5BPCSn@masukan.bug.ws:80
-trojan://Q9tBPs2FTHcS@masukan.bug.ws:80
-trojan://Pll6ifXOagjq@masukan.bug.ws:80
-trojan://uIrQ5XSY79pp@masukan.bug.ws:443
-trojan://ZDYfa541UAp3@masukan.bug.ws:80
-trojan://aCZgJZCdue9C@masukan.bug.ws:80
-trojan://QZQ2YhCLQmey@masukan.bug.ws:443
-trojan://YTUeQVZCBM3w@masukan.bug.ws:443
-trojan://U0CitlvFU6mi@masukan.bug.ws:443
-trojan://aHdOhc8F6IrO@masukan.bug.ws:443
-trojan://af0cPUP4xUc1@masukan.bug.ws:80
-vless://723d6f23-c988-4155-846e-de446ef18a18@masukan.bug.ws:80?path=%2Fvl%3D47.236.246.163%3D14108&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
-trojan://do5ynPmxR5NT@masukan.bug.ws:80
-trojan://YK2HDcxDfG0i@masukan.bug.ws:80
-vless://4346416f-eb4b-484e-b257-8f2f65bc424f@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D51.79.254.182%3D443#(SG) OVH SAS🇸🇬
-trojan://NJboa02YPYvO@masukan.bug.ws:80
-vless://9be50f73-014e-451e-9ff6-85b8519048d0@masukan.bug.ws:80?path=%2Fvl%3D143.198.213.197%3D443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Digitalocean  LLC🇸🇬
-vless://a36e8a70-c45d-487b-8f0b-0c7d1ba54cc1@masukan.bug.ws:80?path=%2Fvl%3D103.20.199.118%3D12999&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(JP) Nearoute🇯🇵
-trojan://onpruTbEyMi8@masukan.bug.ws:80
-vless://5c1c0701-4c8b-49bb-9b27-e3581d71d62b@masukan.bug.ws:80?path=%2Fvl%3D139.180.215.77%3D57878&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) The Constant Company  LLC🇸🇬
-trojan://2bycRfEqlhJi@masukan.bug.ws:80
-vless://0c5c3728-4027-4b57-8dde-b73b00296983@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D138.2.74.219%3D28616#(SG) Cloudflare Warp🇸🇬
-trojan://lSzEERMjz3IL@masukan.bug.ws:80
-trojan://oCQJB1LC4HGp@masukan.bug.ws:443
-vless://0454eae2-cd5a-4506-ac56-c414abb048c2@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D143.42.68.97%3D17055#(SG) Akamai Technologies  Inc🇸🇬
-trojan://m2eyJgfKheER@masukan.bug.ws:80
-vless://06d51cc4-aef9-41b4-bf88-cbb71af6b81a@masukan.bug.ws:80?path=%2Fvl%3D143.42.68.97%3D17055&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Akamai Technologies  Inc🇸🇬
-vless://e882a28a-55ba-4367-8107-aabfbd9277d5@masukan.bug.ws:80?path=%2Fvl%3D103.3.63.253%3D46683&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Akamai Connected Cloud🇸🇬
-trojan://IcGrJ4RkmeN4@masukan.bug.ws:443
-trojan://ALfLf9Bfvekp@masukan.bug.ws:443
-trojan://qQ8uYQuH32aC@masukan.bug.ws:443
-vless://da8e8da2-5fb5-4db9-a19b-3e0e16f1be57@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D138.2.95.61%3D1111#(SG) Oracle Corporation🇸🇬
-trojan://7N0Iq6Zwahox@masukan.bug.ws:80
-vless://7affa61a-dac6-497b-b3a2-d2e75c9a08bc@masukan.bug.ws:80?path=%2Fvl%3D149.129.250.187%3D443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(ID) Alibaba🇮🇩
-trojan://JiGCYLGZbnYu@masukan.bug.ws:443
-vless://3f6f1ba3-bde2-488b-b057-a30db02a01e5@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D103.133.223.52%3D2096#(ID) Cloud Teknologi Nusantara🇮🇩
-trojan://1MJPnD3zLD6s@masukan.bug.ws:80
-vless://17345407-4cac-47aa-9330-f50e18bd0a2a@masukan.bug.ws:80?path=%2Fvl%3D139.180.136.178%3D29806&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) The Constant Company  LLC🇸🇬
-trojan://9QH0LJa1ZGk8@masukan.bug.ws:80
-vless://7717b091-0125-49d8-baac-a34ae1ec460b@masukan.bug.ws:80?path=%2Fvl%3D43.133.145.156%3D53136&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(ID) Shenzhen Tencent Computer Systems Company Limited🇮🇩
-vless://35890372-819c-4e23-938f-44a31471a5a9@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D47.236.22.194%3D52324#(SG) Alibaba us Technology Co   Ltd🇸🇬
-trojan://rPFwgVeCR0B7@masukan.bug.ws:443
-trojan://ssI3AKH9Kq8b@masukan.bug.ws:443
-vless://c1b776e9-6ea9-46ed-9d91-615ea9f2a235@masukan.bug.ws:80?path=%2Fvl%3D103.133.223.52%3D2096&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(ID) Cloud Teknologi Nusantara🇮🇩
-vless://1b6f9c7c-4d93-4ce6-b5d4-09c633fe7d2a@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D94.237.75.31%3D62174#(SG) Upcloud LTD🇸🇬
-trojan://Buab5d8B0El2@masukan.bug.ws:80
-vless://34cae4ae-0681-4faf-82a2-9a2243b0a4be@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D139.180.136.178%3D29661#(SG) The Constant Company  LLC🇸🇬
-trojan://Mmq2xyKp2kko@masukan.bug.ws:80
-trojan://EVq3LV5FBKXB@masukan.bug.ws:80
-vless://8d3f8ed4-efb4-4d1b-92ab-824820d6e1c3@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D8.218.107.145%3D31166#(ID) PT Deneva🇮🇩
-trojan://AeRbEyVHmyjW@masukan.bug.ws:80
-vless://bd3cf5d5-1b74-4405-8c85-857874cf7324@masukan.bug.ws:80?path=%2Fvl%3D158.178.225.124%3D37461&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-vless://65d33d16-1be8-4e52-aa8a-8a699d7f288f@masukan.bug.ws:80?path=%2Fvl%3D8.219.197.113%3D45714&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
-vless://c97362e8-93a3-40a9-a22f-1bf8cef9a84d@masukan.bug.ws:80?path=%2Fvl%3D106.240.106.61%3D38937&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(KR) LG DACOM Corporation🇰🇷
-vless://9e6f2a90-053c-4594-aac7-b64b4b6fb787@masukan.bug.ws:80?path=%2Fvl%3D119.81.201.154%3D9089&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) SoftLayer Technologies🇸🇬
-vless://70f5f074-953d-4081-b427-7a12dc173226@masukan.bug.ws:80?path=%2Fvl%3D103.133.223.50%3D2096&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(ID) Cloud Teknologi Nusantara🇮🇩
-trojan://GmvO2HkEySKj@masukan.bug.ws:80
-trojan://HJBxSXYqsqYe@masukan.bug.ws:80
-trojan://RvC68PkznbQx@masukan.bug.ws:443
-vless://c7a96e98-57ad-4f42-9b35-dd424a4da188@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D38.207.172.235%3D8003#(KR) Oracle Cloud🇰🇷
-trojan://n4kcLROVKe8U@masukan.bug.ws:443
-vless://61eb5941-78c1-48c7-82b0-2ea9655d9056@masukan.bug.ws:80?path=%2Fvl%3D15.235.162.49%3D443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) OVH SAS🇸🇬
-vless://1078b53e-3882-443a-a91f-b9968b22926f@masukan.bug.ws:80?path=%2Fvl%3D103.186.1.209%3D2053&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(ID) PT Cloud Hosting Indonesia🇮🇩
-vless://8d2dc310-9316-4b4b-8e84-c0339b12c84d@masukan.bug.ws:80?path=%2Fvl%3D47.236.22.194%3D52324&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
-trojan://ktGFqmZfSZ0n@masukan.bug.ws:443
-trojan://V5sESzh4kPMt@masukan.bug.ws:443
-vless://ec1760d7-183a-47c3-9922-472a205e318e@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D158.178.225.124%3D12934#(SG) Oracle Corporation🇸🇬
-vless://70133b55-c56a-430c-9f1e-b1acf5192e01@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D103.180.161.123%3D587#(SG) Hong Kong Megalayer Technology Co  limited🇸🇬
-vless://7bf345b9-f866-4833-9594-a6136941673e@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D45.77.171.102%3D3128#(SG) The Constant Company  LLC🇸🇬
-trojan://U7qOEu63tYo5@masukan.bug.ws:443
-vless://6cd28455-933e-402b-b079-7bfa8737bf5c@masukan.bug.ws:80?path=%2Fvl%3D8.222.143.82%3D24245&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
-trojan://pufrK1clIDsv@masukan.bug.ws:80
-trojan://Etn4BbhHtdgK@masukan.bug.ws:80
-vless://9f5f0fc5-e187-4d6f-8be9-36ed6b34567a@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D161.117.249.114%3D2025#(SG) Alibaba us Technology Co   Ltd🇸🇬
-vless://9b8c81cc-b629-494c-8fac-6549cbdc05c1@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D158.178.225.124%3D37461#(SG) Oracle Corporation🇸🇬
-trojan://99RLtmT65Qwr@masukan.bug.ws:443
-vless://6f0d65d7-9545-42cc-a24f-b9578f23badf@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D203.194.112.119%3D8443#(ID) First Cagayan Converge Data Center Inc.🇮🇩
-trojan://1Z1N9CSMNShF@masukan.bug.ws:443
-trojan://kjaA9I9l7nmd@masukan.bug.ws:80
-vless://7c9572df-2e65-4dbc-90f7-17425830fd01@masukan.bug.ws:80?path=%2Fvl%3D158.178.225.124%3D37497&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-vless://6ebdda8a-2695-4e09-8dc4-83409adffb8e@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D188.166.255.195%3D443#(SG) Digitalocean  LLC🇸🇬
-trojan://hpXv9mnIWIXK@masukan.bug.ws:443
-trojan://MkCpxUNSsdal@masukan.bug.ws:443
-vless://ccaa6415-b8a6-45df-a7bd-707cdf71446c@masukan.bug.ws:80?path=%2Fvl%3D106.244.196.196%3D32485&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(KR) LG DACOM Corporation🇰🇷
-trojan://eB1AfEYOGH12@masukan.bug.ws:80
-trojan://otuegZMOSAVF@masukan.bug.ws:80
-trojan://l0CMAwLuIlgu@masukan.bug.ws:443
-trojan://4bPOaPLSPMGl@masukan.bug.ws:443
-trojan://VXz1RdBAJjT7@masukan.bug.ws:80
-trojan://7Y9Pi3HYqlYg@masukan.bug.ws:80
-trojan://E2LV5fRQdCTi@masukan.bug.ws:80
-vless://092fcfb5-22f7-4397-a818-0a014a535cc7@masukan.bug.ws:80?path=%2Fvl%3D139.180.144.170%3D666&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) The Constant Company  LLC🇸🇬
-vless://c385f3b4-5486-4278-a4e4-38a62e1166bc@masukan.bug.ws:80?path=%2Fvl%3D168.138.166.213%3D10500&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-vless://86bad8b0-cf84-4682-b3fd-54b9f0d900c0@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D103.3.63.253%3D46683#(SG) Akamai Connected Cloud🇸🇬
-trojan://QPBUHySr4n3d@masukan.bug.ws:443
-trojan://8ArtPa3aR4cB@masukan.bug.ws:80
-vless://92fdf73c-4a0f-4958-b2cd-1dc7401e52f6@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D13.250.14.76%3D443#(SG) Amazon🇸🇬
-vless://32aa1c15-8304-437e-a66f-e2f09a240964@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D47.236.246.163%3D14108#(SG) Alibaba us Technology Co   Ltd🇸🇬
-vless://f0b12c1a-dc0e-4f7a-8e62-e91d11f4fde4@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D139.180.215.77%3D57878#(SG) The Constant Company  LLC🇸🇬
-trojan://Uwo3kHLLB9mJ@masukan.bug.ws:443
-vless://5218e56b-4a0b-4cd5-a239-4d9cd7016525@masukan.bug.ws:80?path=%2Fvl%3D139.162.48.174%3D10000&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Akamai Technologies  Inc🇸🇬
-trojan://n4QycgwQzgU0@masukan.bug.ws:443
-trojan://tupPFDCpGHPa@masukan.bug.ws:80
-vless://97e16bd0-02d6-4c3a-ab66-dce1b3e715d5@masukan.bug.ws:80?path=%2Fvl%3D138.2.109.23%3D587&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-vless://f3747dd5-b57b-4c7d-b512-dd8c2982fcc3@masukan.bug.ws:80?path=%2Fvl%3D103.6.207.108%3D8080&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(ID) Pt Pusat Media Indonesia🇮🇩
-vless://73206607-2167-40e6-b64d-e314b24803ef@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D54.169.229.188%3D443#(SG) Amazon com  Inc🇸🇬
-trojan://zfwW46ov9lSH@masukan.bug.ws:443
-trojan://ocVQ6yOXmJHD@masukan.bug.ws:80
-vless://84b8f701-c097-41dd-91cb-b83098138abb@masukan.bug.ws:80?path=%2Fvl%3D47.236.119.190%3D51342&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
-trojan://B2OICGZVTGeh@masukan.bug.ws:443
-trojan://eHvvLGEA18vG@masukan.bug.ws:80
-vless://8cf93d4a-4117-44b3-a18e-6ad6905563ee@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D143.198.213.197%3D443#(SG) Digitalocean  LLC🇸🇬
-trojan://8S2CGlJPvfsY@masukan.bug.ws:443
-vless://4d495875-0232-413a-ada6-8d680e543ca7@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D35.219.50.99%3D443#(ID) Google Cloud🇮🇩
-trojan://ghDX4RWtD5Cg@masukan.bug.ws:80
-vless://0be4ed2a-a21d-408b-a82a-9fdc7c5531b0@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D8.222.143.82%3D24245#(SG) Alibaba us Technology Co   Ltd🇸🇬
-trojan://0aS4fF2jERau@masukan.bug.ws:443
-trojan://JQSotWG6cj99@masukan.bug.ws:443
-vless://8ed3aaf1-5921-4ea3-8885-2b0a5edf271f@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D47.236.173.166%3D587#(SG) Alibaba us Technology Co   Ltd🇸🇬
-trojan://ivqFjKwG2JF5@masukan.bug.ws:443
-trojan://BxPobHl7DURs@masukan.bug.ws:80
-vless://f62a3367-98e6-43df-a35b-7abd5293095d@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3DIP: 35.219.50.99%3D443#(ID) Google Cloud🇮🇩
-vless://78b90f5f-fcaf-4aa5-94b2-22ac00647bd8@masukan.bug.ws:80?path=%2Fvl%3D45.77.171.102%3D3128&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) The Constant Company  LLC🇸🇬
-vless://516c1f08-343d-43e6-9faf-a1ae56f63ce9@masukan.bug.ws:80?path=%2Fvl%3D158.178.225.124%3D53618&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-trojan://ZQ9GUQzUq8Aj@masukan.bug.ws:80
-vless://ac63cc0c-498f-430f-bcc5-36a472b8702d@masukan.bug.ws:80?path=%2Fvl%3D138.2.74.219%3D28616&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Cloudflare Warp🇸🇬
-trojan://6L9pxNw2kIWH@masukan.bug.ws:80
-trojan://Y0vSJUHS7jEk@masukan.bug.ws:443
-vless://ee5f2a8e-df2b-4e81-9b9a-0e78a405c9a8@masukan.bug.ws:80?path=%2Fvl%3D119.81.201.154%3D9089&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Softlayer Technologies Inc🇸🇬
-trojan://z6Ei3pECwbDC@masukan.bug.ws:80
-vless://7f37e972-58fb-492a-bcb0-562c2ab4a31c@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D158.178.225.124%3D53618#(SG) Oracle Corporation🇸🇬
-vless://d4b1938a-674d-4d48-bd71-0c5d46659af1@masukan.bug.ws:80?path=%2Fvl%3D51.79.158.126%3D443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) OVH SAS🇸🇬
-vless://fec28426-b50f-48df-9f26-86cc8dba7b7a@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D103.180.161.10%3D587#(SG) Hong Kong Megalayer Technology Co  limited🇸🇬
-vless://178bd185-1c83-448e-ae65-0182f00b8f16@masukan.bug.ws:80?path=%2Fvl%3D178.128.80.43%3D443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Digitalocean  LLC🇸🇬
-vless://73ef6dcd-6344-4fd5-9479-cb6ca4c4f01e@masukan.bug.ws:80?path=%2Fvl%3D47.245.95.160%3D1443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
-vless://b3fb7275-c943-481f-92d4-7f3e135f01e0@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D119.81.201.154%3D9089#(SG) Softlayer Technologies Inc🇸🇬
-vless://43e92910-4b53-4749-b544-321aff31dbac@masukan.bug.ws:80?path=%2Fvl%3D119.81.201.154%3D9089&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Softlayer Technologies Inc🇸🇬
-vless://330c6ab3-04fa-428c-9904-14e4758ca1aa@masukan.bug.ws:80?path=%2Fvl%3D38.207.172.235%3D8003&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(KR) Oracle Cloud🇰🇷
-trojan://lO2mwVORYTV4@masukan.bug.ws:80
-vless://13008748-83c2-428d-9793-74748bf1ff20@masukan.bug.ws:80?path=%2Fvl%3D158.178.225.124%3D12934&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-vless://9cfa2b53-8971-4bd3-820e-301c0b361a1a@masukan.bug.ws:80?path=%2Fvl%3D161.117.249.114%3D2025&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
-vless://8d575484-e6fb-43b4-a078-b59838ac3e04@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D103.6.207.108%3D8080#(ID) PT Pusat Media Indonesia🇮🇩
-vless://297f0505-e070-4d70-a3c4-d50d71cb08eb@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D149.129.250.187%3D443#(ID) Alibaba🇮🇩
-vless://b4b267aa-dfc0-4f06-9f23-23f2babd359b@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D8.219.237.57%3D31523#(SG) Alibaba us Technology Co   Ltd🇸🇬
-vless://06fb2bef-2e33-49ad-99c0-9ab3c0b7905d@masukan.bug.ws:80?path=%2Fvl%3D139.180.136.178%3D29661&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) The Constant Company  LLC🇸🇬
-vless://107a8e7f-039c-4f7e-ade8-c5b0e0dbb1fc@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D188.166.255.195%3D8443#(SG) Digitalocean  LLC🇸🇬
-vless://b83e052e-ae56-4d90-855f-98537bbd74c9@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D8.222.243.73%3D26385#(SG) Alibaba us Technology Co   Ltd🇸🇬
-vless://3c559167-fc89-4dfa-9e87-f809b122bb0d@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D213.35.107.73%3D443#(SG) Oracle Corporation🇸🇬
-trojan://IhF6BjJHxvra@masukan.bug.ws:80
-trojan://RTZazaGXFxvv@masukan.bug.ws:443
-trojan://hVJ3caPZfM8R@masukan.bug.ws:80
-vless://85beb0f8-2a2e-4d2e-9e5d-7907932b757a@masukan.bug.ws:80?path=%2Fvl%3D103.180.161.123%3D587&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Hong Kong Megalayer Technology Co  limited🇸🇬
-trojan://DwEIGzDLF0bf@masukan.bug.ws:443
-vless://96504a6f-f860-4ec3-8c32-4b5943d61a9e@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D194.127.193.240%3D50791#(SG) LEASEWEB SINGAPORE PTE  LTD🇸🇬
-vless://1a3f30a2-8b39-485e-b849-9410e6167bac@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D139.180.144.170%3D666#(SG) The Constant Company  LLC🇸🇬
-trojan://Mgua9bMUKqGC@masukan.bug.ws:443
-trojan://LfPneX3GniKE@masukan.bug.ws:443
-vless://548e0b55-8fc3-44ad-8809-6c3594c445cf@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D103.6.207.108%3D8080#(ID) PT Pusat Media Indonesia🇮🇩
-trojan://HbxalJTWeqqu@masukan.bug.ws:80
-vless://ee5b4bf6-6061-4f2e-ad40-062b8a26fdc4@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D167.71.194.185%3D8443#(SG) Digitalocean  LLC🇸🇬
-trojan://caTEhPjDnjvP@masukan.bug.ws:443
-vless://ca74ceb2-a2e2-4551-8882-7e98edac754b@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D129.150.49.58%3D18650#(SG) Oracle Corporation🇸🇬
-vless://8d1ad239-a213-45fa-b362-4b8b411a34a5@masukan.bug.ws:80?path=%2Fvl%3D43.156.16.213%3D31528&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Shenzhen Tencent Computer Systems Company Limited🇸🇬
-vless://95d66733-0037-415c-a390-97b6c0e7cef9@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D8.222.129.175%3D58808#(SG) Alibaba us Technology Co   Ltd🇸🇬
-trojan://0EOjSGxdz6Bc@masukan.bug.ws:80
-trojan://Y9zxLUI3btTX@masukan.bug.ws:443
-trojan://yDqtoxqIrc7r@masukan.bug.ws:80
-trojan://pjHMSwlnVkgT@masukan.bug.ws:443
-trojan://JT5c3gBrmSdT@masukan.bug.ws:443
-vless://40694d65-1d91-432d-b084-75faad1be599@masukan.bug.ws:80?path=%2Fvl%3D103.180.161.10%3D587&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Hong Kong Megalayer Technology Co  limited🇸🇬
-vless://9373b230-bf66-4c63-b71a-44ced7943ea6@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D103.186.1.209%3D2053#(ID) PT Cloud Hosting Indonesia🇮🇩
-vless://18dce98e-0a71-44d7-a548-33ef8386709e@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D119.81.201.154%3D9089#(SG) SoftLayer Technologies🇸🇬
-trojan://BkKvI3usZcNB@masukan.bug.ws:80
-vless://64800e18-db8f-4a52-8828-d78cfec8a15f@masukan.bug.ws:80?path=%2Fvl%3D194.127.193.124%3D24467&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) LEASEWEB SINGAPORE PTE  LTD🇸🇬
-vless://47e24def-f8e8-4952-9d95-36ab00dd4d8b@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D35.219.50.99%3D443#(ID) Google LLC🇮🇩
-trojan://0eDpVM655qwS@masukan.bug.ws:80
-vless://7a11dc94-f6d0-4375-a213-b80871448c2e@masukan.bug.ws:80?path=%2Fvl%3D194.127.193.240%3D50791&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) LEASEWEB SINGAPORE PTE  LTD🇸🇬
-vless://9333ee16-ed53-44ea-b096-d8df9985949e@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D103.20.199.118%3D12999#(JP) Nearoute🇯🇵
-trojan://Qry9VCThKrHL@masukan.bug.ws:80
-trojan://DiMBYjqBqLEL@masukan.bug.ws:80
-vless://4c9fb070-6e17-4649-8d3d-d9c5f961b97c@masukan.bug.ws:80?path=%2Fvl%3D129.150.58.86%3D57621&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-trojan://JspRXTpsBMxQ@masukan.bug.ws:80
-vless://4f313eb6-3f6d-48c0-8f88-98075b53d3aa@masukan.bug.ws:80?path=%2Fvl%3D172.232.239.147%3D587&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(ID) Akamai Connected Cloud🇮🇩
-vless://29d28991-93bf-45f3-8c69-30c031fd945d@masukan.bug.ws:80?path=%2Fvl%3D35.219.50.99%3D443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(ID) Google Cloud🇮🇩
-trojan://QfRTako4us33@masukan.bug.ws:80
-trojan://uQHtUo4Y4ZpM@masukan.bug.ws:80
-vless://3a5d58d6-ddc9-4bf5-b796-e03666c9005e@masukan.bug.ws:80?path=%2Fvl%3D167.71.194.185%3D8443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Digitalocean  LLC🇸🇬
-trojan://DKSP8O7xSeDq@masukan.bug.ws:80
-trojan://3tkD4PzsoVUP@masukan.bug.ws:80
-vless://a8b4f1c5-a2ce-46a7-ae24-8f0ef241c101@masukan.bug.ws:80?path=%2Fvl%3D213.35.108.135%3D12596&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-trojan://jCo0O62vnN9I@masukan.bug.ws:443
-vless://ea0e7827-1972-4e50-9c7f-af8674b84de4@masukan.bug.ws:80?path=%2Fvl%3D168.138.160.54%3D19081&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-trojan://xnG1YoV7IRKI@masukan.bug.ws:80
-trojan://yRCBDlwP4pip@masukan.bug.ws:443
-trojan://HY5TCLjaVxft@masukan.bug.ws:80
-trojan://dxibOO3UAZ94@masukan.bug.ws:443
-vless://83ab2db5-3ea6-49f3-ae24-8eb1e89db1a3@masukan.bug.ws:80?path=%2Fvl%3D138.2.95.61%3D1111&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-vless://fb8bc72f-74d4-45cc-8cb5-40976d76cc09@masukan.bug.ws:80?path=%2Fvl%3D47.236.173.166%3D587&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
-trojan://tFjAk2lFR1cu@masukan.bug.ws:443
-trojan://Q6k10ETBeCmS@masukan.bug.ws:443
-vless://5149a705-1ed2-4959-8d1a-b0b357ab376a@masukan.bug.ws:80?path=%2Fvl%3D172.232.239.147%3D587&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(ID) Akamai Technologies  Inc🇮🇩
-vless://06ef4768-3d3e-4d51-a9f5-9dea83a9f2bd@masukan.bug.ws:80?path=%2Fvl%3D43.133.145.156%3D53136&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(ID) Tencent cloud computing🇮🇩
-trojan://mjiDfVbu4YOL@masukan.bug.ws:443
-trojan://U5MhlYiAoUSG@masukan.bug.ws:80
-vless://403e81f1-f0c5-4fd6-bb2a-eb52df5c47da@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D129.150.36.188%3D53435#(SG) Oracle Cloud🇸🇬
-trojan://VsXbtuAFg5zR@masukan.bug.ws:80
-trojan://acKUsMPqf377@masukan.bug.ws:443
-trojan://DAHhup3w7if5@masukan.bug.ws:443
-trojan://SC8nb8YOW0Pz@masukan.bug.ws:443
-vless://62aef329-7d76-47c1-a0a0-7884e09fef3b@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D35.219.15.90%3D443#(ID) Google LLC🇮🇩
-vless://8ddda127-44e6-4388-bee8-dcaf94367756@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D18.192.93.64%3D443#(DE) Amazon Inc🇩🇪
-trojan://gMxmqnaYc4xE@masukan.bug.ws:80
-trojan://vZvmy7MroYLM@masukan.bug.ws:80
-vless://7abaf904-2487-4793-afae-21ed77685544@masukan.bug.ws:80?path=%2Fvl%3D62.72.46.14%3D8443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Contabo Asia Private Limited🇸🇬
-vless://9245c8f0-5ecf-436e-8517-cc911364e825@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D138.2.89.238%3D43254#(SG) Oracle Corporation🇸🇬
-vless://cd878645-955a-4434-a33c-72fc16893c76@masukan.bug.ws:80?path=%2Fvl%3D8.222.129.175%3D58808&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
-trojan://16N3avEfm4qT@masukan.bug.ws:80
-trojan://ymHUiChQ6sm6@masukan.bug.ws:80
-vless://d2a09813-def5-4ad7-a0a6-d256ac213374@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D47.236.25.107%3D27903#(SG) Alibaba us Technology Co   Ltd🇸🇬
-vless://72155fd4-6b5b-4f7e-b4b7-90ea152b3e80@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D51.79.158.126%3D443#(SG) OVH SAS🇸🇬
-vless://f9c812a3-302a-47ea-8411-52aa6e23d202@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D178.128.80.43%3D443#(SG) Digitalocean  LLC🇸🇬
-vless://f2f3bbff-b00d-4712-9dfe-7b18691da1d1@masukan.bug.ws:80?path=%2Fvl%3D192.53.113.156%3D587&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Akamai Technologies  Inc🇸🇬
-vless://e3a695a2-c6d0-4cfd-9f4d-c17680b12e3a@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D168.138.183.48%3D9090#(SG) Oracle Corporation🇸🇬
-vless://30371ecd-aad5-4c50-a9ca-49113f27cbbe@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D172.232.239.147%3D587#(ID) Akamai Connected Cloud🇮🇩
-vless://88f5746a-1dfb-4ae7-b6c3-3256811606c3@masukan.bug.ws:80?path=%2Fvl%3DIP: 35.219.50.99%3D443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(ID) Google Cloud🇮🇩
-vless://f49d2a4c-e5db-47e0-b601-aa6826ed54c5@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D106.244.196.196%3D32485#(KR) LG DACOM Corporation🇰🇷
-trojan://gX72DZZNAWux@masukan.bug.ws:443
-trojan://kMVHOPN3Yvs3@masukan.bug.ws:443
-trojan://nGg5Bw3xL1Px@masukan.bug.ws:80
-trojan://xqa1xwFLX90F@masukan.bug.ws:443
-trojan://qiByQpdgTStK@masukan.bug.ws:443
-vless://9541ed1a-eb78-40d7-8389-f4018667b464@masukan.bug.ws:80?path=%2Fvl%3D213.35.107.73%3D443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-vless://878e37dd-74cc-40d2-ae03-a50f7e242106@masukan.bug.ws:80?path=%2Fvl%3D54.251.167.101%3D443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Amazon com  Inc🇸🇬
-trojan://w79RaJlXDoIe@masukan.bug.ws:80
-vless://1026c060-a1ce-40d6-ad50-ea8c371de94c@masukan.bug.ws:80?path=%2Fvl%3D138.2.74.219%3D28616&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-trojan://tEVcREYKnHuB@masukan.bug.ws:443
-vless://b3408ad4-81b0-472f-8d0f-ac42f5f6c695@masukan.bug.ws:80?path=%2Fvl%3D54.169.229.188%3D443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Amazon com  Inc🇸🇬
-trojan://fnFlFGbgqeqO@masukan.bug.ws:443
-vless://fa389e2b-d8ad-4d42-84f1-29f4e50e4e43@masukan.bug.ws:80?path=%2Fvl%3D129.150.50.63%3D443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-trojan://Dpvyb9MSSzDQ@masukan.bug.ws:80
-vless://79607eac-1440-4bdf-b175-f2398029a20a@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D194.127.193.124%3D24467#(SG) LEASEWEB SINGAPORE PTE  LTD🇸🇬
-trojan://RTrZ4NPXQApG@masukan.bug.ws:443
-vless://408e8559-8005-4830-bd9e-ebfdf3b11b74@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D103.133.223.51%3D2096#(ID) Cloud Teknologi Nusantara🇮🇩
-trojan://y1su3f3rAUFK@masukan.bug.ws:80
-vless://0fdd973c-f539-47a1-b8de-cfc19345e2cb@masukan.bug.ws:80?path=%2Fvl%3D203.194.112.119%3D8443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(ID) First Cagayan Converge Data Center Inc.🇮🇩
-trojan://CYMEbptsNLSM@masukan.bug.ws:80
-vless://5be10de5-3824-4d40-b902-c1774b9961f8@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D139.162.33.248%3D587#(SG) Akamai Technologies  Inc🇸🇬
-trojan://EomrWqNskYgz@masukan.bug.ws:80
-trojan://T2bUS393Biex@masukan.bug.ws:443
-vless://fe9c7c63-e5e9-49e6-ad55-35eb1bd5b2fa@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D106.240.106.61%3D38937#(KR) LG DACOM Corporation🇰🇷
-trojan://vBHFr9M9AnNe@masukan.bug.ws:80
-vless://eecf8184-7227-4694-9fbe-e8240d551684@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D139.180.136.178%3D29806#(SG) The Constant Company  LLC🇸🇬
-trojan://DMUm3A3ZzdEF@masukan.bug.ws:80
-vless://2a87ae32-8a43-4d85-8799-cbcffb6304ba@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D203.194.112.119%3D2053#(ID) First Cagayan Converge Data Center Inc.🇮🇩
-vless://5324dc1b-93fc-4e85-be07-ac2b081bfdff@masukan.bug.ws:80?path=%2Fvl%3D138.2.89.238%3D43254&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-trojan://Ze7aABn3RX3N@masukan.bug.ws:443
-trojan://HmqrJkommThQ@masukan.bug.ws:443
-trojan://pJuPtW7apU1l@masukan.bug.ws:443
-vless://6d71d411-2c27-4a1c-94b7-a0c928e634cd@masukan.bug.ws:80?path=%2Fvl%3D35.219.50.99%3D443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(ID) Google LLC🇮🇩
-vless://e264479c-4bc7-4ee1-b2d8-6cf41d7e8d97@masukan.bug.ws:80?path=%2Fvl%3D103.133.223.52%3D2096&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(ID) PT Cloud Teknologi Nusantara🇮🇩
-vless://b27bea39-2dc9-4b2a-adf1-ac623bc25d70@masukan.bug.ws:80?path=%2Fvl%3D168.138.183.48%3D9090&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-vless://6f28d9e1-3dc9-424c-8936-cdcf2cd7ffe1@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D47.245.95.160%3D1443#(SG) Alibaba us Technology Co   Ltd🇸🇬
-trojan://fHWcMv6HU4Tg@masukan.bug.ws:80
-vless://555fa75f-3561-4b3d-8752-37513785684e@masukan.bug.ws:80?path=%2Fvl%3D103.6.207.108%3D8080&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(ID) PT Pusat Media Indonesia🇮🇩
-vless://4444874e-0090-45d8-b5f0-a5431e69fbd8@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D43.156.16.213%3D31528#(SG) Shenzhen Tencent Computer Systems Company Limited🇸🇬
-vless://db65799a-934e-4c89-a2f9-535a851642e0@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D103.6.207.108%3D8080#(ID) Pt Pusat Media Indonesia🇮🇩
-trojan://mLOIMKDFTSdT@masukan.bug.ws:443
-trojan://sRojVgkwWSro@masukan.bug.ws:80
-trojan://2XvzOsA1DWWR@masukan.bug.ws:443
-trojan://XSGiFAEGMGBC@masukan.bug.ws:80
-trojan://kKJbp4de5yuj@masukan.bug.ws:443
-vless://fab97aae-7bc9-4551-aa45-d0de8a0012b1@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D129.150.50.63%3D443#(SG) Oracle Corporation🇸🇬
-vless://18a54e3b-51f6-4390-a5cd-e63a127df80a@masukan.bug.ws:80?path=%2Fvl%3D47.74.254.191%3D8900&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
-trojan://4cCHJ8C4JPRD@masukan.bug.ws:80
-vless://7f6095ae-54b2-49b3-9747-2ef63eb45827@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D43.133.145.156%3D53136#(ID) Tencent cloud computing🇮🇩
-vless://506eea3d-5b23-4729-856c-fb2a2341075c@masukan.bug.ws:80?path=%2Fvl%3D139.162.33.248%3D587&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Akamai Technologies  Inc🇸🇬
-vless://587c87c7-b4d6-4803-9189-0ae77c644445@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D213.35.108.135%3D12596#(SG) Oracle Corporation🇸🇬
-trojan://E83H8P8ECzlG@masukan.bug.ws:80
-vless://358b0751-2c88-46d0-910d-c0dd60775599@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D168.138.166.213%3D10500#(SG) Oracle Corporation🇸🇬
-vless://2e3a327b-d949-4344-ade6-c62bf1e64402@masukan.bug.ws:80?path=%2Fvl%3D18.192.93.64%3D443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(DE) Amazon Inc🇩🇪
-vless://b8c59d76-0ced-4153-8773-c739eff93cce@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D138.2.74.219%3D28616#(SG) Oracle Corporation🇸🇬
-vless://88cc9b8c-c72f-4102-8e9f-bb07cbe705a7@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D103.180.161.69%3D587#(SG) Hong Kong Megalayer Technology Co  limited🇸🇬
-vless://b4f82bf4-2cb2-474d-b943-9be8cab945dc@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D192.53.113.156%3D587#(SG) Akamai Technologies  Inc🇸🇬
-trojan://NTS6Q9PhTOyt@masukan.bug.ws:443
-vless://a7f20cb7-431c-4435-8905-c0c4560cca50@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D43.133.145.156%3D53136#(ID) Tencent cloud computing🇮🇩
-vless://c1b93d49-461f-40da-95e9-182e57f8ead8@masukan.bug.ws:80?path=%2Fvl%3D188.166.255.195%3D8443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Digitalocean  LLC🇸🇬
-vless://a1cf44e1-e060-4c5e-b11c-c1908d266842@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D103.133.223.52%3D2096#(ID) PT Cloud Teknologi Nusantara🇮🇩
-vless://301bce64-de5a-4f37-94bf-db278718efc3@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D15.235.162.49%3D443#(SG) OVH SAS🇸🇬
-trojan://WPlJGD3ldJM7@masukan.bug.ws:443
-vless://e215aa76-bac6-4e27-8ebb-384c4c27ba01@masukan.bug.ws:80?path=%2Fvl%3D103.133.223.51%3D2096&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(ID) Cloud Teknologi Nusantara🇮🇩
-trojan://o1PzVBUeR54f@masukan.bug.ws:443
-trojan://hKdsTG2h3rcZ@masukan.bug.ws:80
-trojan://2HaowEmq6RPB@masukan.bug.ws:443
-vless://ed460f0e-cf8a-4f22-81eb-bffd84dd99fa@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D45.77.36.40%3D443#(SG) The Constant Company  LLC🇸🇬
-vless://21b9213d-7939-4f64-a0d2-2f0a9bf0fc05@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D146.190.111.165%3D443#(SG) Digitalocean  LLC🇸🇬
-vless://bdb3c66f-a755-4479-99d4-ceabc2a97231@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D62.72.46.14%3D8443#(SG) Contabo Asia Private Limited🇸🇬
-trojan://2EFNRvN2pVue@masukan.bug.ws:80
-vless://3a2acda3-97fc-4ef4-ba14-549a60bf854b@masukan.bug.ws:80?path=%2Fvl%3D103.180.161.69%3D587&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Hong Kong Megalayer Technology Co  limited🇸🇬
-trojan://JYhcsrgEKvfB@masukan.bug.ws:443
-vless://00472c0d-cf29-4678-8ec3-ae7a0fae9c47@masukan.bug.ws:80?path=%2Fvl%3D35.219.15.90%3D443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(ID) Google LLC🇮🇩
-trojan://QP7pFuA6nPNj@masukan.bug.ws:443
-vless://cf7c8001-fa90-4ea1-9d5c-c73f481c7148@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D43.133.145.156%3D53136#(ID) Shenzhen Tencent Computer Systems Company Limited🇮🇩
-trojan://MDP8yXEyuT5T@masukan.bug.ws:80
-trojan://kWATyJqYPY5b@masukan.bug.ws:443
-vless://7ae0d7f7-ecb0-4397-9fb9-b212902a2951@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D139.180.131.125%3D10005#(SG) The Constant Company  LLC🇸🇬
-trojan://rCzJzcJU4ySm@masukan.bug.ws:443
-vless://3aeb7557-7ffd-4790-b439-8ab4afa548d8@masukan.bug.ws:80?path=%2Fvl%3D188.166.255.195%3D443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Digitalocean  LLC🇸🇬
-trojan://BJojY0VCTYhM@masukan.bug.ws:80
-trojan://tiFrQBv9xXhm@masukan.bug.ws:443
-vless://4e7debbd-d41d-4790-977d-97f601f4374b@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D138.2.109.23%3D587#(SG) Oracle Corporation🇸🇬
-trojan://FpBJh8S5iLmt@masukan.bug.ws:80
-vless://f5301484-5a96-436a-b423-69333699b798@masukan.bug.ws:80?path=%2Fvl%3D129.150.49.58%3D18650&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-trojan://SbqtoNUY4FR9@masukan.bug.ws:80
-trojan://JC4ChQHt1Dbf@masukan.bug.ws:80
-trojan://xxXv7An4E12w@masukan.bug.ws:443
-trojan://GTt4ZrQZDuef@masukan.bug.ws:443
-trojan://Fr33EuZAb1v7@masukan.bug.ws:80
-trojan://mB8BPmgHg43T@masukan.bug.ws:443
-trojan://9trAOGvir8mU@masukan.bug.ws:443
-trojan://shVGw4d0OKC6@masukan.bug.ws:443
-vless://41c6b047-5a40-4549-b92b-d712340b2a31@masukan.bug.ws:80?path=%2Fvl%3D8.222.243.73%3D26385&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
-vless://cf72aa23-4ac0-48aa-8f26-315a4d649cf1@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D129.150.58.86%3D57621#(SG) Oracle Corporation🇸🇬
-trojan://EIYrvgpOq8mf@masukan.bug.ws:80
-trojan://AjCmeSDfSBum@masukan.bug.ws:443
-trojan://VmbevLGth5vR@masukan.bug.ws:80
-vless://4df07934-6ac4-4b9a-8250-5f4cfea960d1@masukan.bug.ws:80?path=%2Fvl%3D8.219.237.57%3D31523&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
-trojan://jsJD06lVFzKZ@masukan.bug.ws:443
-trojan://7HHPmILwAPa8@masukan.bug.ws:443
-trojan://DJqCsMdBPksq@masukan.bug.ws:443
-vless://09e48e5a-f48e-4d32-b0bf-5134793069c0@masukan.bug.ws:80?path=%2Fvl%3D47.236.25.107%3D27903&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
-trojan://Cr0HnTfHgDMD@masukan.bug.ws:80
-vless://bf43c51d-ff85-4b0e-8c71-8edf0ea713b4@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D47.74.254.191%3D8900#(SG) Alibaba us Technology Co   Ltd🇸🇬
-vless://e5df7f2a-677c-445d-9fdd-05ae032ca8cc@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D158.178.225.124%3D37497#(SG) Oracle Corporation🇸🇬
-trojan://hH58MPEJpOyP@masukan.bug.ws:80
-vless://ba5a4306-e9d3-4236-97e9-7809eb9767fc@masukan.bug.ws:80?path=%2Fvl%3D104.248.146.212%3D8443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Digital Ocean🇸🇬
-trojan://96CW19ay6LCY@masukan.bug.ws:443
-vless://137651ba-f4cc-44d8-9c34-fc87579210fa@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D172.232.239.151%3D587#(ID) Akamai Connected Cloud🇮🇩
-vless://849091a0-1e82-4a8d-a2df-20c38aa0f717@masukan.bug.ws:80?path=%2Fvl%3D13.250.14.76%3D443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Amazon🇸🇬
-vless://f234183f-6605-441b-99fe-72847b37dd31@masukan.bug.ws:80?path=%2Fvl%3D146.190.111.165%3D443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Digitalocean  LLC🇸🇬
-vless://17d1c4d1-e927-461b-851c-322d2d0a6dba@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D172.232.239.147%3D587#(ID) Akamai Technologies  Inc🇮🇩
-trojan://N0odBzSQfB6s@masukan.bug.ws:80
-trojan://wNB7L26E7FDl@masukan.bug.ws:443
-vless://b6a037b0-3624-4155-9c9f-f8c286fcd484@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D168.138.160.54%3D19081#(SG) Oracle Corporation🇸🇬
-trojan://Sb7csGvXBZ2t@masukan.bug.ws:80
-vless://15af0647-9bc6-400a-89ef-4c2b2227be03@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D139.162.48.174%3D10000#(SG) Akamai Technologies  Inc🇸🇬
-trojan://LsxExIEcU6Y7@masukan.bug.ws:80
-trojan://tiVHA2MR1WgB@masukan.bug.ws:443
-vless://2d0973b6-13f6-4a06-9ab5-c13df9be42eb@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D146.235.18.248%3D45137#(SG) Oracle Corporation🇸🇬
-trojan://BzymnKMaXenD@masukan.bug.ws:443
-trojan://OOJ4D7OT4P2S@masukan.bug.ws:443
-trojan://7SGrSXRr7sRj@masukan.bug.ws:443
-vless://468a43a5-17c9-4ff6-9b68-a85456f79acc@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D119.81.201.154%3D9089#(SG) Softlayer Technologies Inc🇸🇬
-vless://54eac9c3-df89-4ba6-9410-0d1554637371@masukan.bug.ws:80?path=%2Fvl%3D8.218.107.145%3D31166&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(ID) PT Deneva🇮🇩
-trojan://WL9rPBhRNRcP@masukan.bug.ws:80
+vless://5fe4de26-b135-4799-bddb-d782d3e1ae95@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D103.6.207.108%3D8080#(ID) PT Pusat Media Indonesia🇮🇩
+trojan://JSTQ08CXyIfG@masukan.bug.ws:443
+trojan://MLHFRvFfFL7Y@masukan.bug.ws:80
+vless://3681e3c8-ec63-4143-b420-ba9a163f4bb0@masukan.bug.ws:80?path=%2Fvl%3D43.133.145.156%3D53136&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(ID) Shenzhen Tencent Computer Systems Company Limited🇮🇩
+vless://4aceda8d-3460-4bc3-96a4-ce21b134467b@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D178.128.80.43%3D443#(SG) Digitalocean  LLC🇸🇬
+trojan://ekfAnVrE3Gxf@masukan.bug.ws:443
+trojan://muWFWx3GLuxt@masukan.bug.ws:443
+vless://3b47f0bb-c425-4324-9780-7537db8bdb52@masukan.bug.ws:80?path=%2Fvl%3D103.180.161.10%3D587&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Hong Kong Megalayer Technology Co  limited🇸🇬
+trojan://T9ZfGE32GsX0@masukan.bug.ws:80
+vless://05550e8d-24e0-43b2-b2c9-a811bf729268@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D103.6.207.108%3D8080#(ID) PT Pusat Media Indonesia🇮🇩
+trojan://rXErAzhpwy5y@masukan.bug.ws:80
+trojan://cBg7MttbBYjP@masukan.bug.ws:443
+trojan://f8pksEUbNusg@masukan.bug.ws:80
+trojan://OBavtMzOFlps@masukan.bug.ws:443
+trojan://vlPjdqR6ghRu@masukan.bug.ws:80
+vless://3f685e0f-6113-4038-a2d3-e882ccb8d83a@masukan.bug.ws:80?path=%2Fvl%3D51.79.158.126%3D443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) OVH SAS🇸🇬
+trojan://0MK9BF9YXolW@masukan.bug.ws:80
+trojan://vpVgsSBqzma4@masukan.bug.ws:443
+trojan://A7JrLzxZ4nAG@masukan.bug.ws:80
+trojan://WK8yFN4eknzU@masukan.bug.ws:443
+vless://1e494ed7-2398-46c3-8f3c-67aa0323f7fe@masukan.bug.ws:80?path=%2Fvl%3D203.194.112.119%3D2053&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(ID) First Cagayan Converge Data Center Inc.🇮🇩
+vless://a7a6ae73-efd0-4030-ba96-f8534b630d17@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D35.219.15.90%3D443#(ID) Google LLC🇮🇩
+trojan://YQIZ8yR1mS1Y@masukan.bug.ws:443
+trojan://UzU9s581VVAk@masukan.bug.ws:80
+trojan://Tzpi1XpX3wyu@masukan.bug.ws:443
+trojan://WrRF0tK1fv7Y@masukan.bug.ws:443
+vless://f3860bcb-8524-4fe6-9f38-8b75f0f013c6@masukan.bug.ws:80?path=%2Fvl%3D106.240.106.61%3D38937&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(KR) LG DACOM Corporation🇰🇷
+trojan://PtxKk5ShbBRV@masukan.bug.ws:443
+trojan://sEJXo1B8LlZv@masukan.bug.ws:80
+trojan://248DfaC4SBmP@masukan.bug.ws:80
+vless://3bf3315e-5156-4dcb-af73-4b34c3b22397@masukan.bug.ws:80?path=%2Fvl%3D158.178.225.124%3D12934&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+trojan://WEfOqlV3M94S@masukan.bug.ws:443
+trojan://75rFjAytQJyZ@masukan.bug.ws:80
+vless://be58a944-7127-4a54-a3af-1967617cf486@masukan.bug.ws:80?path=%2Fvl%3D103.180.161.69%3D587&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Hong Kong Megalayer Technology Co  limited🇸🇬
+vless://05808b75-a151-455c-8b95-82cacd593340@masukan.bug.ws:80?path=%2Fvl%3D47.236.25.107%3D27903&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
+trojan://SNofB4ko5UDJ@masukan.bug.ws:443
+trojan://2iPB55LppoGS@masukan.bug.ws:443
+trojan://m4CRjTCV2DXv@masukan.bug.ws:80
+vless://5a992e95-b38c-4871-8a13-10a316373a60@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D47.236.173.166%3D587#(SG) Alibaba us Technology Co   Ltd🇸🇬
+vless://6752ba54-a475-44cb-9052-6247f7f3c2d9@masukan.bug.ws:80?path=%2Fvl%3D192.53.113.156%3D587&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Akamai Technologies  Inc🇸🇬
+trojan://5ciCGqaDtIXo@masukan.bug.ws:80
+trojan://aAzkL8wpGt3r@masukan.bug.ws:80
+trojan://i0Yvb6DHTXhR@masukan.bug.ws:80
+vless://d3f4e2bf-1242-44b8-b9ef-60fd8673e756@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D119.81.201.154%3D9089#(SG) Softlayer Technologies Inc🇸🇬
+trojan://6EZ6myMrcgV3@masukan.bug.ws:80
+trojan://cPzntUCjegej@masukan.bug.ws:443
+vless://551fdfcf-4f3e-4f5e-a8cd-1dd6cdedc70d@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D158.178.225.124%3D12934#(SG) Oracle Corporation🇸🇬
+trojan://jSNxC1GBQq45@masukan.bug.ws:443
+trojan://goCFlJgFEn6l@masukan.bug.ws:443
+trojan://gO3wpA0FuzQm@masukan.bug.ws:80
+trojan://6LJoknW4WCco@masukan.bug.ws:80
+trojan://vzhAaVwGtuBj@masukan.bug.ws:443
+vless://2b1ae008-98e0-4cc7-8edd-fc97b6b5704b@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D35.219.50.99%3D443#(ID) Google Cloud🇮🇩
+trojan://vJpHqRskzc5N@masukan.bug.ws:80
+vless://6f583080-e9b8-45cc-89a3-0ed3c410faf8@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D43.133.145.156%3D53136#(ID) Shenzhen Tencent Computer Systems Company Limited🇮🇩
+vless://327ec6b9-3c6d-422f-bc87-895b91bfcc8c@masukan.bug.ws:80?path=%2Fvl%3D172.232.239.147%3D587&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(ID) Akamai Connected Cloud🇮🇩
+trojan://tJRF7mFhuFTN@masukan.bug.ws:80
+vless://38ff55db-e505-4609-b5dc-d71421f183e7@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D43.133.145.156%3D53136#(ID) Tencent cloud computing🇮🇩
+vless://cfff6d03-592d-40ed-b843-e16fe401d629@masukan.bug.ws:80?path=%2Fvl%3D119.81.201.154%3D9089&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Softlayer Technologies Inc🇸🇬
+vless://b0a3361b-186d-4a7a-ac02-1b5f5894a8eb@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D47.245.95.160%3D1443#(SG) Alibaba us Technology Co   Ltd🇸🇬
+vless://91081e86-79ba-4e7d-ab95-9a067305a60f@masukan.bug.ws:80?path=%2Fvl%3D146.235.18.248%3D45137&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+trojan://OnWC5zh9fNNI@masukan.bug.ws:80
+trojan://I9idpOZ1PcDX@masukan.bug.ws:80
+trojan://ox7F2CqtonHp@masukan.bug.ws:80
+vless://6fa2c964-80ea-4283-ab85-ad2f791b4aec@masukan.bug.ws:80?path=%2Fvl%3D13.250.14.76%3D443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Amazon🇸🇬
+trojan://ZYAlgLVm57cm@masukan.bug.ws:443
+trojan://z1zoGihF6eyq@masukan.bug.ws:443
+trojan://tVlgvct9P1BD@masukan.bug.ws:80
+vless://31df801f-e935-4f85-99fe-b66ee406d8ef@masukan.bug.ws:80?path=%2Fvl%3D158.178.225.124%3D37497&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+vless://58d3e6e8-62ca-47e4-a491-83c4bc43871a@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D51.79.158.126%3D443#(SG) OVH SAS🇸🇬
+vless://5ab39cf7-84ce-4cdf-ab88-4b52181e5231@masukan.bug.ws:80?path=%2Fvl%3D139.180.144.170%3D666&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) The Constant Company  LLC🇸🇬
+vless://12c2aefa-8fea-400d-a4cd-f622e3d374d3@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D47.74.254.191%3D8900#(SG) Alibaba us Technology Co   Ltd🇸🇬
+vless://81d656dd-baa0-423c-81d5-9efc71c8974c@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D139.162.33.248%3D587#(SG) Akamai Technologies  Inc🇸🇬
+vless://84da41cf-2320-4a0c-9d5c-fc291af1af86@masukan.bug.ws:80?path=%2Fvl%3D8.219.197.113%3D45714&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
+trojan://WWUOy9ug6o72@masukan.bug.ws:443
+vless://b763974a-fba0-4a0f-aa27-968ac6ad3832@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D8.219.237.57%3D31523#(SG) Alibaba us Technology Co   Ltd🇸🇬
+vless://08b59db4-5722-4769-a1e0-4d84986914e7@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D35.219.50.99%3D443#(ID) Google LLC🇮🇩
+vless://6c25d3ca-8f39-41bc-a3f0-ac20ea44e130@masukan.bug.ws:80?path=%2Fvl%3D8.222.243.73%3D26385&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
+vless://12de40f1-8bfd-4a5d-b589-dd9eea704cde@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D47.236.25.107%3D27903#(SG) Alibaba us Technology Co   Ltd🇸🇬
+trojan://E5F3oT3NP2Eh@masukan.bug.ws:443
+vless://4a8146b0-fb2f-46f2-bb2e-f4830f7d9b85@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D129.150.58.86%3D57621#(SG) Oracle Corporation🇸🇬
+vless://20d8dc2c-96ea-4cfd-a0b9-c5fdd4983476@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3DIP: 35.219.50.99%3D443#(ID) Google Cloud🇮🇩
+trojan://j8hszne9VS1f@masukan.bug.ws:443
+vless://1f5fd541-001a-459f-b404-50e4c3a5c549@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D172.232.239.151%3D587#(ID) Akamai Connected Cloud🇮🇩
+trojan://WpOH68tEhZu0@masukan.bug.ws:80
+trojan://7KtC8r2aHtjm@masukan.bug.ws:80
+trojan://S09nHVNsVTvK@masukan.bug.ws:80
+vless://7b7cc07a-c565-468a-b29b-1837ab0004ba@masukan.bug.ws:80?path=%2Fvl%3D8.218.107.145%3D31166&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(ID) PT Deneva🇮🇩
+trojan://OtgHlvLSCtGj@masukan.bug.ws:80
+vless://d83694bb-a38a-4a3b-b1f4-6a7326c7d312@masukan.bug.ws:80?path=%2Fvl%3D47.74.254.191%3D8900&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
+vless://473d5bad-ff5b-4833-9133-404d18566056@masukan.bug.ws:80?path=%2Fvl%3D138.2.95.61%3D1111&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+vless://7db04092-48ed-4ad6-a122-5bbd049acca0@masukan.bug.ws:80?path=%2Fvl%3D47.245.95.160%3D1443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
+trojan://uO7j4EaOzp4T@masukan.bug.ws:80
+vless://9de151c2-c402-4ed5-9509-0d7861ae143a@masukan.bug.ws:80?path=%2Fvl%3D119.81.201.154%3D9089&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Softlayer Technologies Inc🇸🇬
+vless://1c8f2ceb-b1d4-44b0-a5cb-5a61def0c481@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D138.2.109.23%3D587#(SG) Oracle Corporation🇸🇬
+vless://5ad0c40e-8475-413e-a4c9-40f63d1c41f6@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D143.198.213.197%3D443#(SG) Digitalocean  LLC🇸🇬
+trojan://s8fUy1JuJ8df@masukan.bug.ws:443
+trojan://A2uSWhSCdAzu@masukan.bug.ws:80
+trojan://pVjq3QgHS9gW@masukan.bug.ws:80
+vless://49002e82-706d-4275-ba04-9ef19d3a6150@masukan.bug.ws:80?path=%2Fvl%3D103.133.223.51%3D2096&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(ID) Cloud Teknologi Nusantara🇮🇩
+vless://2451aefb-2076-48a2-bb38-16ac4462c40b@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D188.166.255.195%3D443#(SG) Digitalocean  LLC🇸🇬
+vless://cffa2a47-c257-47e5-a061-c2d2dd5322c1@masukan.bug.ws:80?path=%2Fvl%3D119.81.201.154%3D9089&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) SoftLayer Technologies🇸🇬
+vless://76f55f66-30d5-44d4-9c84-a33fd174d959@masukan.bug.ws:80?path=%2Fvl%3D194.127.193.124%3D24467&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) LEASEWEB SINGAPORE PTE  LTD🇸🇬
+trojan://IHytS7xQJbRB@masukan.bug.ws:80
+trojan://LPsQkvyYtcS2@masukan.bug.ws:80
+trojan://JJzIl0F0huoF@masukan.bug.ws:443
+trojan://HZpHpT0m3NOR@masukan.bug.ws:443
+trojan://rGJjrkBpi54l@masukan.bug.ws:80
+vless://bc346c41-91e6-496a-befa-73b80394d32f@masukan.bug.ws:80?path=%2Fvl%3D172.232.239.147%3D587&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(ID) Akamai Technologies  Inc🇮🇩
+vless://7a73bcf6-3333-4776-aa7d-b38e48c54ce8@masukan.bug.ws:80?path=%2Fvl%3D213.35.108.135%3D12596&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+vless://22b6e8ad-f29a-4bf8-88c1-d3dc38dc0e01@masukan.bug.ws:80?path=%2Fvl%3D94.237.75.31%3D62174&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Upcloud LTD🇸🇬
+vless://c29f0a25-3280-4aa3-bbbe-f15fbe170ea8@masukan.bug.ws:80?path=%2Fvl%3D103.20.199.118%3D12999&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(JP) Nearoute🇯🇵
+trojan://fUKMJNGjT7d5@masukan.bug.ws:443
+trojan://cL2dfGMUcbWn@masukan.bug.ws:80
+vless://ef9c19b8-3ea8-4a81-bb61-502dda89dc4e@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D139.180.215.77%3D57878#(SG) The Constant Company  LLC🇸🇬
+trojan://gFFz0D5vu9lH@masukan.bug.ws:80
+vless://b3492118-fcf9-4090-94c5-044649d8a6d2@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D213.35.107.73%3D443#(SG) Oracle Corporation🇸🇬
+vless://93202f72-f1bc-49a0-9303-0ac96d4a7e6c@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D194.127.193.124%3D24467#(SG) LEASEWEB SINGAPORE PTE  LTD🇸🇬
+vless://e7765f7c-4ed0-4495-8c27-64800b089237@masukan.bug.ws:80?path=%2Fvl%3D106.244.196.196%3D32485&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(KR) LG DACOM Corporation🇰🇷
+trojan://hUFHfBiGgrFL@masukan.bug.ws:443
+vless://c368a511-cfb6-4897-a805-889978a12103@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D103.180.161.69%3D587#(SG) Hong Kong Megalayer Technology Co  limited🇸🇬
+vless://947a56f2-e615-47f9-9d41-49dd75fc3440@masukan.bug.ws:80?path=%2Fvl%3D35.219.15.90%3D443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(ID) Google LLC🇮🇩
+trojan://In4Xg4DQW9Tx@masukan.bug.ws:443
+trojan://itZtqncPsDF2@masukan.bug.ws:443
+vless://7eb9f9f1-ed51-49d0-ba97-c8fe08d31cb2@masukan.bug.ws:80?path=%2Fvl%3D172.232.239.151%3D587&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(ID) Akamai Connected Cloud🇮🇩
+vless://a9345025-5efc-4af5-a022-aa8657c390f7@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D203.194.112.119%3D8443#(ID) First Cagayan Converge Data Center Inc.🇮🇩
+vless://e271229f-bedc-4322-a8b7-729c3c1c6abe@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D45.77.171.102%3D3128#(SG) The Constant Company  LLC🇸🇬
+trojan://zEbNmNihHD97@masukan.bug.ws:443
+trojan://T1BXxmvH0OSo@masukan.bug.ws:80
+trojan://HvFQ2drOn8lF@masukan.bug.ws:80
+trojan://toJlr0lhAVrZ@masukan.bug.ws:443
+trojan://wkSJUzZZSsGM@masukan.bug.ws:80
+trojan://iHDhPSIhk5Sl@masukan.bug.ws:80
+vless://f54d1b11-ee08-4890-85d2-7300c8383a86@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D103.133.223.50%3D2096#(ID) Cloud Teknologi Nusantara🇮🇩
+vless://01e01b4e-6bca-436e-b9e7-14022ed748c5@masukan.bug.ws:80?path=%2Fvl%3D138.2.89.238%3D43254&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+trojan://KlFJJTD70kAT@masukan.bug.ws:443
+trojan://3gFDxs6xvse6@masukan.bug.ws:443
+vless://6960fc25-374c-44f6-a86a-eb0eeb8126dc@masukan.bug.ws:80?path=%2Fvl%3D8.222.129.175%3D58808&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
+trojan://I5ueUUwli7f7@masukan.bug.ws:443
+vless://632954da-b640-4631-9720-ef9e70d5a2b7@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D119.81.201.154%3D9089#(SG) Softlayer Technologies Inc🇸🇬
+vless://422ad926-e51f-4564-bf1f-895d22952e2d@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D158.178.225.124%3D37461#(SG) Oracle Corporation🇸🇬
+vless://3bb54591-7339-49c4-9ea8-96604f08c3f3@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D45.77.36.40%3D443#(SG) The Constant Company  LLC🇸🇬
+vless://0887a2b9-ca6d-4faa-b6ae-55fde2c5ec36@masukan.bug.ws:80?path=%2Fvl%3D139.180.215.77%3D57878&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) The Constant Company  LLC🇸🇬
+trojan://hjDWvCclahxa@masukan.bug.ws:443
+trojan://xCqRuvK0loAf@masukan.bug.ws:443
+trojan://1hw7CRaVMZUZ@masukan.bug.ws:443
+trojan://NdCO0yFJS4RK@masukan.bug.ws:443
+trojan://eUCagkX9rx61@masukan.bug.ws:80
+trojan://jNQtK1UHFeFI@masukan.bug.ws:80
+vless://7a7ba484-ea74-4f48-a08d-f4ccce14c7b8@masukan.bug.ws:80?path=%2Fvl%3D103.6.207.108%3D8080&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(ID) PT Pusat Media Indonesia🇮🇩
+vless://a517e9b5-9070-4e84-9be6-02f96d41a739@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D47.236.22.194%3D52324#(SG) Alibaba us Technology Co   Ltd🇸🇬
+vless://d126b00f-bafa-48d0-aa18-88204ae5a693@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D149.129.250.187%3D443#(ID) Alibaba🇮🇩
+trojan://bQ1sKA6CEjJs@masukan.bug.ws:80
+vless://16aca9bd-c403-4e63-8b68-34b6b61c8e6c@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D106.244.196.196%3D32485#(KR) LG DACOM Corporation🇰🇷
+vless://162334ec-ef18-40d7-b2f8-37adf21774e3@masukan.bug.ws:80?path=%2Fvl%3DIP: 35.219.50.99%3D443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(ID) Google Cloud🇮🇩
+vless://d2f408a5-392d-44d9-930e-e3514bac936a@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D129.150.49.58%3D18650#(SG) Oracle Corporation🇸🇬
+vless://72c8591e-067e-4a9d-8ca3-fe74de594518@masukan.bug.ws:80?path=%2Fvl%3D213.35.107.73%3D443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+trojan://jgmNzIlxsOVh@masukan.bug.ws:80
+trojan://rvTMcbfrHcNd@masukan.bug.ws:443
+vless://8084818b-806b-44a0-a72d-05cb3df6128e@masukan.bug.ws:80?path=%2Fvl%3D168.138.166.213%3D10500&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+trojan://QojskXZrMOvk@masukan.bug.ws:443
+vless://0f5dabb7-5cf9-4f60-824f-aec9117d74ee@masukan.bug.ws:80?path=%2Fvl%3D167.71.194.185%3D8443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Digitalocean  LLC🇸🇬
+trojan://tF9FIvPsfgHQ@masukan.bug.ws:443
+trojan://lk1ShSeGhVL1@masukan.bug.ws:80
+vless://d8c14edf-5f09-4c18-827d-cc1013781d5f@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D129.150.36.188%3D53435#(SG) Oracle Cloud🇸🇬
+trojan://h6m3D0B8gWDu@masukan.bug.ws:80
+trojan://AtnsLgpRDVt7@masukan.bug.ws:443
+trojan://TqBDan8B5aao@masukan.bug.ws:80
+trojan://CxTH1p0Cc8o4@masukan.bug.ws:443
+trojan://CkmiyCU5sP9Q@masukan.bug.ws:443
+vless://4134f6d5-c1d2-48c4-9b49-6b81de8267a0@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D62.72.46.14%3D8443#(SG) Contabo Asia Private Limited🇸🇬
+vless://ab394c08-5177-4f0b-a47a-aa3ee284c7f6@masukan.bug.ws:80?path=%2Fvl%3D203.194.112.119%3D8443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(ID) First Cagayan Converge Data Center Inc.🇮🇩
+trojan://mLvtR0pVS9eA@masukan.bug.ws:80
+trojan://w9AuLuxz3DbN@masukan.bug.ws:443
+trojan://dSIogrH8fGWf@masukan.bug.ws:443
+trojan://KtKhKRjQR85V@masukan.bug.ws:80
+vless://70f64190-75c9-4c37-b226-f5af9ccee838@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D8.219.197.113%3D45714#(SG) Alibaba us Technology Co   Ltd🇸🇬
+vless://b2b674e2-a568-4113-834c-5a3093d616f9@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D143.42.68.97%3D17055#(SG) Akamai Technologies  Inc🇸🇬
+vless://e5d57ea3-faf0-4e22-9909-1e6fba7c29e4@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D188.166.255.195%3D8443#(SG) Digitalocean  LLC🇸🇬
+vless://0279cb13-e01b-4808-b659-5f0ee4e47dc2@masukan.bug.ws:80?path=%2Fvl%3D129.150.50.63%3D443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+vless://fe5e12fc-94c5-4445-a4d2-7207b841ecc2@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D103.6.207.108%3D8080#(ID) Pt Pusat Media Indonesia🇮🇩
+vless://680af1ab-9cd6-4647-b353-82e8e1b32609@masukan.bug.ws:80?path=%2Fvl%3D139.180.136.178%3D29661&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) The Constant Company  LLC🇸🇬
+vless://c2c8e0f2-378f-4696-a633-9b89f7c9d42d@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D138.2.74.219%3D28616#(SG) Oracle Corporation🇸🇬
+vless://e3247aa6-b338-41af-95f9-d9dd746bfb29@masukan.bug.ws:80?path=%2Fvl%3D129.150.58.86%3D57621&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+vless://51748443-e197-4b7d-86d4-243a66cb7731@masukan.bug.ws:80?path=%2Fvl%3D188.166.255.195%3D8443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Digitalocean  LLC🇸🇬
+vless://517208a9-e613-4394-b01f-18f3b132d0a0@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D161.117.249.114%3D2025#(SG) Alibaba us Technology Co   Ltd🇸🇬
+vless://5db56ea1-866b-42af-9143-ffab6518a718@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D158.178.225.124%3D53618#(SG) Oracle Corporation🇸🇬
+trojan://GVHNS8iEc6dV@masukan.bug.ws:443
+trojan://mwUaxOE0BJZP@masukan.bug.ws:443
+trojan://1h7G95TMuUk6@masukan.bug.ws:80
+vless://8fd46fc4-d297-4928-919a-3fc6b61f5862@masukan.bug.ws:80?path=%2Fvl%3D103.180.161.123%3D587&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Hong Kong Megalayer Technology Co  limited🇸🇬
+trojan://FCzDkqCeZ50W@masukan.bug.ws:443
+trojan://xLO7hSTZ66qu@masukan.bug.ws:443
+vless://221a30c3-6e06-411f-b9e4-5d5b81a3d6bd@masukan.bug.ws:80?path=%2Fvl%3D51.79.254.182%3D443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) OVH SAS🇸🇬
+vless://6e96cac3-eff5-4312-8202-8b2de23ede64@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D8.222.243.73%3D26385#(SG) Alibaba us Technology Co   Ltd🇸🇬
+vless://6a5e6f56-53ea-409d-86ce-a097aec99986@masukan.bug.ws:80?path=%2Fvl%3D146.190.111.165%3D443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Digitalocean  LLC🇸🇬
+trojan://LwlA3COf4i1P@masukan.bug.ws:80
+trojan://ALHGQxfpqCbR@masukan.bug.ws:443
+trojan://oBmYcGirVCrH@masukan.bug.ws:443
+vless://07083133-e89c-4d42-8074-5e83f39ab581@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D103.180.161.123%3D587#(SG) Hong Kong Megalayer Technology Co  limited🇸🇬
+vless://2751759a-1c45-4266-9d45-2c11471bbcf4@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D139.180.144.170%3D666#(SG) The Constant Company  LLC🇸🇬
+vless://84d28049-c402-464b-a213-96aa86ecebbc@masukan.bug.ws:80?path=%2Fvl%3D139.180.136.178%3D29806&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) The Constant Company  LLC🇸🇬
+vless://6f1a4e13-c317-4fee-ba14-078407607281@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D138.2.89.238%3D43254#(SG) Oracle Corporation🇸🇬
+vless://f4a744da-d4be-41e2-b048-4d81aa8d15c2@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D158.178.225.124%3D37497#(SG) Oracle Corporation🇸🇬
+trojan://DnRxi6ZD2a9Y@masukan.bug.ws:80
+vless://a5235a66-8b6a-4626-84d9-748da737a3fa@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D43.133.145.156%3D53136#(ID) Tencent cloud computing🇮🇩
+trojan://uqVdVoi0zPiW@masukan.bug.ws:443
+trojan://izwwXTaMnxzO@masukan.bug.ws:443
+trojan://FOMPX1dNyZ2D@masukan.bug.ws:80
+vless://a5807003-c054-48d5-bdfb-9ad8e7ffb5b7@masukan.bug.ws:80?path=%2Fvl%3D194.127.193.240%3D50791&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) LEASEWEB SINGAPORE PTE  LTD🇸🇬
+trojan://6FKchEWwNKKs@masukan.bug.ws:80
+vless://20ec71aa-8b91-4397-9c64-e7942ce2c9c5@masukan.bug.ws:80?path=%2Fvl%3D138.2.74.219%3D28616&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Cloudflare Warp🇸🇬
+trojan://N9vBt0or94be@masukan.bug.ws:80
+vless://fae99ab8-333b-4f6a-af47-6bcc11dcf28c@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D8.222.143.82%3D24245#(SG) Alibaba us Technology Co   Ltd🇸🇬
+trojan://qU16MXhaFCDU@masukan.bug.ws:443
+trojan://4t2IuSJ9HsqD@masukan.bug.ws:443
+vless://44aed15b-9202-4307-98d8-b63bab089670@masukan.bug.ws:80?path=%2Fvl%3D139.162.48.174%3D10000&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Akamai Technologies  Inc🇸🇬
+trojan://iVf19Tqcdi6F@masukan.bug.ws:80
+vless://40a7bbca-752b-4c2b-83f2-8c0d44ea6892@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D43.156.16.213%3D31528#(SG) Shenzhen Tencent Computer Systems Company Limited🇸🇬
+vless://03198523-8ac9-4566-815b-73183a7b0021@masukan.bug.ws:80?path=%2Fvl%3D47.236.173.166%3D587&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
+trojan://xnoQO0bIeh5Z@masukan.bug.ws:443
+vless://c575c881-cf0a-4b77-b59f-d2eaa7fc3b48@masukan.bug.ws:80?path=%2Fvl%3D38.207.172.235%3D8003&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(KR) Oracle Cloud🇰🇷
+vless://dc800dde-5c99-4867-af75-75eed4d00922@masukan.bug.ws:80?path=%2Fvl%3D129.150.49.58%3D18650&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+trojan://HyEJB4I1W0vj@masukan.bug.ws:80
+vless://c7d72438-696b-410c-8960-00476b193286@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D103.133.223.51%3D2096#(ID) Cloud Teknologi Nusantara🇮🇩
+vless://53c085f3-4bf1-4ff7-bade-e409444df63c@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D94.237.75.31%3D62174#(SG) Upcloud LTD🇸🇬
+vless://f13206e6-30de-4fb7-89b8-be7516ec9703@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D104.248.146.212%3D8443#(SG) Digital Ocean🇸🇬
+trojan://8lnSZrrFXm17@masukan.bug.ws:443
+vless://017ee13f-99ca-4eaf-a022-4e1aeb66e0c4@masukan.bug.ws:80?path=%2Fvl%3D47.236.22.194%3D52324&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
+trojan://Um7CDsgLmWml@masukan.bug.ws:443
+vless://4b6ec4e7-4389-4ca0-9989-1a31eb767fae@masukan.bug.ws:80?path=%2Fvl%3D104.248.146.212%3D8443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Digital Ocean🇸🇬
+vless://05351a2a-c1cf-414b-a2bf-5191ebc159b0@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D106.240.106.61%3D38937#(KR) LG DACOM Corporation🇰🇷
+trojan://CPjYXqdkNuR5@masukan.bug.ws:443
+vless://ec543ff8-b6c8-4e62-a3c3-133799977bdf@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D172.232.239.147%3D587#(ID) Akamai Connected Cloud🇮🇩
+trojan://BrvrDeHZIqUI@masukan.bug.ws:80
+trojan://NAN0Az60YvfA@masukan.bug.ws:80
+vless://29aaca3f-96c0-4d7c-ad43-064d1a0fa957@masukan.bug.ws:80?path=%2Fvl%3D18.192.93.64%3D443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(DE) Amazon Inc🇩🇪
+trojan://XuLZ14HmPupU@masukan.bug.ws:443
+vless://3caf3b96-5f00-460d-9d1d-af9bf09b5de0@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D139.180.136.178%3D29806#(SG) The Constant Company  LLC🇸🇬
+trojan://BsSOrIhaD37J@masukan.bug.ws:80
+vless://6c3e3c51-19f7-4743-a742-24a93bbe2d14@masukan.bug.ws:80?path=%2Fvl%3D168.138.160.54%3D19081&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+trojan://y51R83Q7w4op@masukan.bug.ws:80
+vless://2146aa59-7221-4388-a083-d6920f0cf51a@masukan.bug.ws:80?path=%2Fvl%3D139.162.33.248%3D587&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Akamai Technologies  Inc🇸🇬
+trojan://KyJttK79tHKW@masukan.bug.ws:443
+vless://c9377348-f80c-413e-b57c-43098b9320ea@masukan.bug.ws:80?path=%2Fvl%3D168.138.183.48%3D9090&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+vless://266a4cdf-7b7e-41d9-b8db-9bd467846f5a@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D139.180.131.125%3D10005#(SG) The Constant Company  LLC🇸🇬
+vless://296b5312-65f9-48ed-b464-8bcd9b8faf62@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D18.192.93.64%3D443#(DE) Amazon Inc🇩🇪
+vless://c8efd71e-7912-4ac6-a64c-83ef6767ae72@masukan.bug.ws:80?path=%2Fvl%3D15.235.162.49%3D443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) OVH SAS🇸🇬
+trojan://WPF3E23VhtgC@masukan.bug.ws:443
+trojan://HYcYwrYfzTpw@masukan.bug.ws:443
+vless://0fb981d4-acb8-47a6-9687-b639572065ab@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D103.3.63.253%3D46683#(SG) Akamai Connected Cloud🇸🇬
+vless://c20e4474-84f6-447e-8378-8744e0505afd@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D168.138.160.54%3D19081#(SG) Oracle Corporation🇸🇬
+trojan://0zmTtnmywYZ8@masukan.bug.ws:80
+trojan://oxeESClJh4ZF@masukan.bug.ws:443
+trojan://WxeyyGNRBmEo@masukan.bug.ws:80
+vless://9e83ddb8-0fe8-43e2-9ba9-0ad6a5a62196@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D8.222.129.175%3D58808#(SG) Alibaba us Technology Co   Ltd🇸🇬
+vless://2e0bf301-4bdf-450a-bb91-6b6a7197d025@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D168.138.183.48%3D9090#(SG) Oracle Corporation🇸🇬
+trojan://eCj3RTZ8aXka@masukan.bug.ws:443
+trojan://QaTnYvvLSAGa@masukan.bug.ws:443
+vless://48cb9c29-a31d-4382-b7f3-8f291a7fa477@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D168.138.166.213%3D10500#(SG) Oracle Corporation🇸🇬
+trojan://antwjjkjRTVg@masukan.bug.ws:443
+trojan://HcMCD3ntabHs@masukan.bug.ws:443
+vless://3e0cd85e-c565-48fb-91ad-0f4eeeb8db8c@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D103.133.223.52%3D2096#(ID) Cloud Teknologi Nusantara🇮🇩
+vless://c29781a4-a34c-4b31-a68e-dd9ad75c850c@masukan.bug.ws:80?path=%2Fvl%3D138.2.109.23%3D587&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+vless://56946c7d-e14f-41f2-b88b-f9866403f64c@masukan.bug.ws:80?path=%2Fvl%3D103.186.1.209%3D2053&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(ID) PT Cloud Hosting Indonesia🇮🇩
+trojan://BQyJ6ODRVq9L@masukan.bug.ws:80
+vless://53a51dbe-e9d1-4316-a3cb-4da2dc7bc4a1@masukan.bug.ws:80?path=%2Fvl%3D139.180.131.125%3D10005&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) The Constant Company  LLC🇸🇬
+trojan://Fb8uCfEowIKE@masukan.bug.ws:80
+trojan://OZfsoU2fqP0q@masukan.bug.ws:443
+trojan://sKjVzY3oGy4D@masukan.bug.ws:80
+trojan://q181HxGAhujo@masukan.bug.ws:443
+vless://59573cd3-de37-4cc7-824f-6e2e729d5fa8@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D54.251.167.101%3D443#(SG) Amazon com  Inc🇸🇬
+vless://544ffd58-991a-43b5-a992-bb7534d155b9@masukan.bug.ws:80?path=%2Fvl%3D47.236.119.190%3D51342&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
+vless://015b1c68-dede-4875-99bc-5a3e850977ed@masukan.bug.ws:80?path=%2Fvl%3D158.178.225.124%3D53618&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+vless://cd2297d6-3a15-4efc-a413-64181a3566b9@masukan.bug.ws:80?path=%2Fvl%3D129.150.36.188%3D53435&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Oracle Cloud🇸🇬
+trojan://ucPhGHgxCtc6@masukan.bug.ws:443
+vless://14dabec0-c9e1-418b-802e-b34ed0bb6fcd@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D103.20.199.118%3D12999#(JP) Nearoute🇯🇵
+vless://5516aec2-0ff5-4ea4-a338-8c12697eebfd@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D192.53.113.156%3D587#(SG) Akamai Technologies  Inc🇸🇬
+vless://b33bd2b1-7f7e-44bb-8c9f-bfbd583ddb39@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D54.169.229.188%3D443#(SG) Amazon com  Inc🇸🇬
+trojan://UEGM3u9Saz0r@masukan.bug.ws:443
+trojan://TFLsi5EV3G8M@masukan.bug.ws:80
+trojan://BAYwrgRpcLLA@masukan.bug.ws:80
+vless://186cc06e-bd70-45fe-b3ca-87c109712204@masukan.bug.ws:80?path=%2Fvl%3D143.42.68.97%3D17055&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Akamai Technologies  Inc🇸🇬
+trojan://U1xZsnoosLBZ@masukan.bug.ws:80
+vless://20c12bc8-cd61-4531-b09c-8d1a57a8b041@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D138.2.74.219%3D28616#(SG) Cloudflare Warp🇸🇬
+trojan://bjkhy7L6i3ZD@masukan.bug.ws:80
+trojan://bkQ8R2SdpkIF@masukan.bug.ws:80
+trojan://ed45187Z0uye@masukan.bug.ws:80
+trojan://YBU4YHtD2r47@masukan.bug.ws:80
+trojan://YRxEz7A7AR7W@masukan.bug.ws:80
+trojan://R84ma8V14P3f@masukan.bug.ws:443
+trojan://8o8k44kFzbrw@masukan.bug.ws:443
+vless://21bf6d89-0d62-4876-b11b-3ef787bc3b64@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D139.162.48.174%3D10000#(SG) Akamai Technologies  Inc🇸🇬
+trojan://q7CrUGIP1vqs@masukan.bug.ws:80
+trojan://5o4vTHrCCjuk@masukan.bug.ws:443
+vless://ae2ef6de-1b95-4c0e-87ed-cdfb447f3044@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D13.250.14.76%3D443#(SG) Amazon🇸🇬
+vless://e55cb0d7-480a-4a5f-83c1-05a9fc5a186e@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D203.194.112.119%3D2053#(ID) First Cagayan Converge Data Center Inc.🇮🇩
+trojan://eNEwXSS8uAmJ@masukan.bug.ws:80
+trojan://9r7WtByvDZmZ@masukan.bug.ws:443
+trojan://phv4GyYwbTPk@masukan.bug.ws:443
+trojan://WkThnr6pMQjr@masukan.bug.ws:80
+trojan://qJNrnOQFms5M@masukan.bug.ws:443
+trojan://XWdANqVgbtDw@masukan.bug.ws:80
+vless://c93db1eb-5347-4f1c-9e2b-4e795cab7e51@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D146.235.18.248%3D45137#(SG) Oracle Corporation🇸🇬
+vless://585893db-d2c2-4317-ac5a-f74b1ad01f9c@masukan.bug.ws:80?path=%2Fvl%3D43.156.16.213%3D31528&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Shenzhen Tencent Computer Systems Company Limited🇸🇬
+trojan://5Qs04XiZvJRC@masukan.bug.ws:443
+trojan://jtduaCoXp6zg@masukan.bug.ws:80
+trojan://9d6d4D2AkCHy@masukan.bug.ws:80
+trojan://KD7sEcslnkfa@masukan.bug.ws:80
+vless://932077bf-2b21-4f43-96b7-9cd1fe6d06fe@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D129.150.50.63%3D443#(SG) Oracle Corporation🇸🇬
+vless://a82a68d3-3e30-4508-8680-3270f08336f7@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D213.35.108.135%3D12596#(SG) Oracle Corporation🇸🇬
+vless://452ba275-6eca-4077-9cb1-86bde9cc7957@masukan.bug.ws:80?path=%2Fvl%3D143.198.213.197%3D443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Digitalocean  LLC🇸🇬
+vless://dd4e65a9-19eb-43a8-880a-6b9af89cfb82@masukan.bug.ws:80?path=%2Fvl%3D103.133.223.52%3D2096&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(ID) PT Cloud Teknologi Nusantara🇮🇩
+trojan://3uC7uLyA5ynw@masukan.bug.ws:443
+vless://b504ca47-c4dc-4f51-bd92-bfa52e395402@masukan.bug.ws:80?path=%2Fvl%3D149.129.250.187%3D443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(ID) Alibaba🇮🇩
+vless://2c9c6ff6-7fb2-432f-af1f-93b7fc84c656@masukan.bug.ws:80?path=%2Fvl%3D188.166.255.195%3D443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Digitalocean  LLC🇸🇬
+vless://49773a2f-b200-40e6-806d-9d7fb7ae6140@masukan.bug.ws:80?path=%2Fvl%3D45.77.171.102%3D3128&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) The Constant Company  LLC🇸🇬
+trojan://xBD2KLHq02Wv@masukan.bug.ws:443
+trojan://ZxAWYXe1QlYj@masukan.bug.ws:443
+vless://d15cdc4d-8fed-4cdd-88bb-febc1d9dc443@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D146.190.111.165%3D443#(SG) Digitalocean  LLC🇸🇬
+vless://9305aa08-5212-4c72-b4e1-c31bb98601d0@masukan.bug.ws:80?path=%2Fvl%3D103.6.207.108%3D8080&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(ID) PT Pusat Media Indonesia🇮🇩
+vless://7ca13067-b081-4c6b-94e2-7dc653aac5e7@masukan.bug.ws:80?path=%2Fvl%3D103.133.223.52%3D2096&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(ID) Cloud Teknologi Nusantara🇮🇩
+vless://12add363-86dc-4efe-ae15-596798ef3dec@masukan.bug.ws:80?path=%2Fvl%3D103.6.207.108%3D8080&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(ID) Pt Pusat Media Indonesia🇮🇩
+vless://e55142ab-1f8b-4151-a51f-ed8ce59d8ca1@masukan.bug.ws:80?path=%2Fvl%3D161.117.249.114%3D2025&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
+vless://e3eefdea-6302-4bef-ad94-cbf79c72fcf7@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D194.127.193.240%3D50791#(SG) LEASEWEB SINGAPORE PTE  LTD🇸🇬
+vless://c12aa6ee-5804-456d-a78c-3aacb764576b@masukan.bug.ws:80?path=%2Fvl%3D158.178.225.124%3D37461&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+vless://4b904d7b-1339-47f2-aa9e-914673227b56@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D15.235.162.49%3D443#(SG) OVH SAS🇸🇬
+trojan://PG8FRDJixJsE@masukan.bug.ws:80
+trojan://SP92E2TDG3Gk@masukan.bug.ws:443
+vless://d914c60e-2ab5-40b4-9717-78d6fe156760@masukan.bug.ws:80?path=%2Fvl%3D103.3.63.253%3D46683&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Akamai Connected Cloud🇸🇬
+trojan://GSFkhdqJOfPp@masukan.bug.ws:80
+vless://ca5370e6-fa68-4c5c-a707-e8eff5346196@masukan.bug.ws:80?path=%2Fvl%3D54.169.229.188%3D443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Amazon com  Inc🇸🇬
+vless://63abcbb7-f68a-48c0-9883-3bb094b38e9e@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D51.79.254.182%3D443#(SG) OVH SAS🇸🇬
+vless://cf1e06e8-0c44-4ff2-a0ac-102ac1527fe8@masukan.bug.ws:80?path=%2Fvl%3D8.222.143.82%3D24245&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
+vless://94f9e617-213f-45a4-83f6-bb879b88fad5@masukan.bug.ws:80?path=%2Fvl%3D47.236.246.163%3D14108&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
+trojan://BARxrHhpseos@masukan.bug.ws:80
+vless://87a4fc5d-23b8-4d8c-82fd-d89d19bf6c56@masukan.bug.ws:80?path=%2Fvl%3D35.219.50.99%3D443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(ID) Google LLC🇮🇩
+vless://d8571a78-4159-4677-817e-0bea65540a1a@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D172.232.239.147%3D587#(ID) Akamai Technologies  Inc🇮🇩
+trojan://nZYloibQXL8C@masukan.bug.ws:443
+vless://ce44c15a-5739-44bc-afd9-8db20222613b@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D47.236.119.190%3D51342#(SG) Alibaba us Technology Co   Ltd🇸🇬
+vless://94d4041e-f1f8-4c52-88ae-7d2df46e72dd@masukan.bug.ws:80?path=%2Fvl%3D103.133.223.50%3D2096&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(ID) Cloud Teknologi Nusantara🇮🇩
+trojan://9hiTLlKu9Sy5@masukan.bug.ws:80
+trojan://dxKgWIj7rAyD@masukan.bug.ws:80
+trojan://McxBuB319Qig@masukan.bug.ws:443
+trojan://PlrSB5ApbVBA@masukan.bug.ws:80
+vless://ce8eb7c4-4700-4e00-869a-c4defb1db7d0@masukan.bug.ws:80?path=%2Fvl%3D43.133.145.156%3D53136&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(ID) Tencent cloud computing🇮🇩
+trojan://Bb3e7EVTfLHu@masukan.bug.ws:80
+trojan://MzscxFQoaa8G@masukan.bug.ws:443
+trojan://1su7HzHYfqgJ@masukan.bug.ws:80
+vless://9f10be68-5c9e-4b35-b760-e420c437d33f@masukan.bug.ws:80?path=%2Fvl%3D8.219.237.57%3D31523&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
+vless://eb4be550-d16e-40d5-9958-84ce68979c97@masukan.bug.ws:80?path=%2Fvl%3D138.2.74.219%3D28616&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+vless://ce785e22-91ea-48ee-9955-d3d227e0dd63@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D167.71.194.185%3D8443#(SG) Digitalocean  LLC🇸🇬
+vless://75979b3b-ece1-4c46-9543-494e8f7f95de@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D103.133.223.52%3D2096#(ID) PT Cloud Teknologi Nusantara🇮🇩
+trojan://vNyaYIlIA4Zw@masukan.bug.ws:80
+vless://36080131-0d7c-4cb9-bf74-9048585fa849@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D103.186.1.209%3D2053#(ID) PT Cloud Hosting Indonesia🇮🇩
+vless://15c048f0-0c47-4746-ac0e-061f2cc5e549@masukan.bug.ws:80?path=%2Fvl%3D178.128.80.43%3D443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Digitalocean  LLC🇸🇬
+trojan://w6vc8brwJUzo@masukan.bug.ws:443
+trojan://DIlreiUsNTuP@masukan.bug.ws:443
+vless://eda014f2-4b06-4e5c-a31e-60e9c192d057@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D139.180.136.178%3D29661#(SG) The Constant Company  LLC🇸🇬
+trojan://KaQx3t1NeUMX@masukan.bug.ws:80
+vless://d190f3d5-c656-47a6-b6d6-ee75e1aa4420@masukan.bug.ws:80?path=%2Fvl%3D43.133.145.156%3D53136&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(ID) Tencent cloud computing🇮🇩
+trojan://AVm2sMUdtKda@masukan.bug.ws:80
+vless://17dc87eb-3f5e-44fc-9ee1-d00aae7f2290@masukan.bug.ws:80?path=%2Fvl%3D45.77.36.40%3D443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) The Constant Company  LLC🇸🇬
+trojan://ZVcrUK4Dxjfj@masukan.bug.ws:443
+trojan://6lplKXi14M9q@masukan.bug.ws:443
+trojan://JbBSyVR2vrFC@masukan.bug.ws:443
+trojan://2NPdCfz4WfvR@masukan.bug.ws:443
+vless://b28bc867-3cd6-41b4-b6e8-d28556cded4a@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D119.81.201.154%3D9089#(SG) SoftLayer Technologies🇸🇬
+trojan://o2n7h7GGsfRl@masukan.bug.ws:443
+vless://466dfafa-c920-49d3-93ab-641fa2826b07@masukan.bug.ws:80?path=%2Fvl%3D54.251.167.101%3D443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Amazon com  Inc🇸🇬
+vless://203dcdd4-8d80-4047-9f91-d667822dbfaf@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D138.2.95.61%3D1111#(SG) Oracle Corporation🇸🇬
+trojan://9WCG9wnlGJTI@masukan.bug.ws:80
+vless://07e66ba6-def0-46ef-8b9a-50c04aeeb0f9@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D38.207.172.235%3D8003#(KR) Oracle Cloud🇰🇷
+vless://8a75defd-7635-4ad8-b927-b4e812eef2f5@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D8.218.107.145%3D31166#(ID) PT Deneva🇮🇩
+vless://a18a8310-cac1-4513-bf3c-9cdbc5ab00a7@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D103.180.161.10%3D587#(SG) Hong Kong Megalayer Technology Co  limited🇸🇬
+vless://d5c54739-160c-4378-87ad-53a438bdb366@masukan.bug.ws:80?path=%2Fvl%3D35.219.50.99%3D443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(ID) Google Cloud🇮🇩
+trojan://YOEqwsjDFKY2@masukan.bug.ws:80
+vless://a053d72d-a4e0-42a2-b42a-b7ce7efe3cc9@masukan.bug.ws:443?encryption=none&security=tls&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&path=%2Fvl%3D47.236.246.163%3D14108#(SG) Alibaba us Technology Co   Ltd🇸🇬
+vless://90ca8959-5048-462c-98e1-160b578988d2@masukan.bug.ws:80?path=%2Fvl%3D62.72.46.14%3D8443&security=none&encryption=none&host=zaintest.vuclip.comwilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=zaintest.vuclip.comwilcard.cyantiknya.my.id#(SG) Contabo Asia Private Limited🇸🇬
+trojan://lQdMj1SkapFI@masukan.bug.ws:80
