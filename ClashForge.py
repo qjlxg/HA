@@ -1029,4 +1029,5 @@ def work(links,check=False,allowed_types=[],only_check=False):
         print("\n用户中断执行")
         sys.exit(0)
     except Exception as e:
-        print(f"程序执行...
+        # Corrected line: terminated f-string literal
+        print(f"程序执行出错: {e}")
