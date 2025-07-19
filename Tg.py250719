@@ -487,7 +487,6 @@ if __name__ == "__main__":
         print("正在创建统计 CSV 文件...")
         create_stats_csv(source_stats)
         print("正在更新 README.md...")
-        create_sub_section(source_name_map)
-        print("所有任务完成：配置已保存，生成合并文件、协议文件、统计文件和 README.md。")
+   
     else:
         print("\n所有来源均未获取到代理配置，未生成合并文件、统计文件或更新 README.md。")
