@@ -74,6 +74,7 @@ def check_valid_url(url):
     return True
 
 async def check_proxy_speed(session, proxy_name: str, proxy_type: str, test_url: str, timeout: int = 5):
+    print(f"DEBUG: 开始检查节点 {proxy_name} 的速度...") # 调试打印
     start_time = time.time()
     clash_api_url = f"http://{CLASH_API_HOST}:{CLASH_API_PORTS[0]}"
     try:
@@ -141,10 +142,11 @@ def switch_proxy(proxy_name: str):
         print(f"切换 Clash 代理失败: {e}")
 
 async def proxy_clean():
+    print("DEBUG: 进入 proxy_clean 函数，开始清理和检测代理。") # 调试打印
     clash_api_url = f"http://{CLASH_API_HOST}:{CLASH_API_PORTS[0]}"
     proxies_data = await get_clash_proxies(clash_api_url)
     if not proxies_data:
-        print("无法获取代理信息，跳过清理。")
+        print("DEBUG: 无法获取代理信息，跳过清理。") # 调试打印
         return
 
     all_proxies = []
@@ -159,7 +161,7 @@ async def proxy_clean():
 
     # 过滤掉重复的代理名称，确保每个代理只检测一次
     unique_proxies = {p['name']: p for p in all_proxies}.values()
-    # print(f"共找到 {len(unique_proxies)} 个代理节点进行检测。")
+    print(f"DEBUG: 找到 {len(unique_proxies)} 个唯一代理节点进行检测。") # 调试打印
     print(f"===================开始批量检测节点可用性======================")
 
     valid_proxies_info = []
@@ -177,13 +179,16 @@ async def proxy_clean():
         await asyncio.gather(*tasks)
 
     print(f"===================节点可用性检测完毕，共 {len(valid_proxies_info)} 个可用节点======================")
+    print("DEBUG: 准备过滤已排除的代理。") # 调试打印
 
     # 过滤掉已排除的代理
     exclude_proxies = read_exclude_proxies()
     final_valid_proxies = [p for p in valid_proxies_info if p['name'] not in exclude_proxies]
+    print(f"DEBUG: 过滤排除代理后，剩余 {len(final_valid_proxies)} 个代理。") # 调试打印
 
     # 保存可用节点
     save_successful_proxies(final_valid_proxies)
+    print("DEBUG: 已保存可用代理。") # 调试打印
 
     # 速度测试
     if SPEED_TEST and final_valid_proxies:
@@ -216,9 +221,10 @@ async def proxy_clean():
         results_speed = sorted_speed_results
         print(f"===================节点速度检测完毕======================")
     else:
-        print("跳过速度测试。")
+        print("DEBUG: 跳过速度测试。") # 调试打印
 
 def start_clash():
+    print("DEBUG: 进入 start_clash 函数，准备启动 Clash 核心。") # 调试打印
     # 检测系统类型
     system = platform.system()
     clash_executable = f"./{CLASH_CORE_NAME}"
@@ -237,10 +243,10 @@ def start_clash():
 
     # 检查 Clash 核心是否存在
     if not os.path.exists(clash_executable):
-        print(f"未找到 Clash 核心 '{clash_executable}'，正在尝试下载...")
+        print(f"DEBUG: 未找到 Clash 核心 '{clash_executable}'，正在尝试下载...") # 调试打印
         download_clash_core()
         if not os.path.exists(clash_executable):
-            print(f"下载失败，请手动将 Clash 核心放入脚本所在目录并命名为 '{clash_executable}'。")
+            print(f"DEBUG: 下载失败，请手动将 Clash 核心放入脚本所在目录并命名为 '{clash_executable}'。") # 调试打印
             sys.exit(1)
     
     # 赋予执行权限 (Linux/macOS)
@@ -254,7 +260,7 @@ def start_clash():
     if CLASH_API_SECRET:
         cmd.extend(["-secret", CLASH_API_SECRET])
     
-    # print(f"执行命令: {' '.join(cmd)}")
+    print(f"DEBUG: 执行 Clash 启动命令: {' '.join(cmd)}") # 调试打印
     process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
     # 等待 Clash 启动并监听端口
@@ -279,6 +285,7 @@ def start_clash():
     sys.exit(1)
 
 def download_clash_core():
+    print("DEBUG: 进入 download_clash_core 函数，开始下载 Clash 核心。") # 调试打印
     system = platform.system()
     machine = platform.machine()
     download_url = None
@@ -305,7 +312,7 @@ def download_clash_core():
             asset_name = f"{CLASH_CORE_NAME}-linux-386"
 
     if not asset_name:
-        print(f"不支持的操作系统或架构: {system}/{machine}")
+        print(f"DEBUG: 不支持的操作系统或架构: {system}/{machine}") # 调试打印
         return
 
     try:
@@ -321,13 +328,13 @@ def download_clash_core():
                 break
 
         if not download_url:
-            print(f"未找到适合您系统 ({system}-{machine}) 的 Clash 核心下载链接。")
+            print(f"DEBUG: 未找到适合您系统 ({system}-{machine}) 的 Clash 核心下载链接。") # 调试打印
             print("可用资产:")
             for asset in release_info['assets']:
                 print(f"- {asset['name']}")
             return
 
-        print(f"正在下载 Clash 核心: {download_url}")
+        print(f"DEBUG: 正在下载 Clash 核心: {download_url}") # 调试打印
         core_response = requests.get(download_url, stream=True, timeout=30)
         core_response.raise_for_status()
 
@@ -336,7 +343,7 @@ def download_clash_core():
         with open(compressed_file_path, 'wb') as f:
             for chunk in core_response.iter_content(chunk_size=8192):
                 f.write(chunk)
-        print(f"下载完成: {compressed_file_path}")
+        print(f"DEBUG: 下载完成: {compressed_file_path}") # 调试打印
 
         # 解压文件
         output_filename = CLASH_CORE_NAME
@@ -346,15 +353,15 @@ def download_clash_core():
         with gzip.open(compressed_file_path, 'rb') as f_in:
             with open(output_filename, 'wb') as f_out:
                 shutil.copyfileobj(f_in, f_out)
-        print(f"解压完成: {output_filename}")
+        print(f"DEBUG: 解压完成: {output_filename}") # 调试打印
         
         os.remove(compressed_file_path)
-        print(f"已删除压缩包: {compressed_file_path}")
+        print(f"DEBUG: 已删除压缩包: {compressed_file_path}") # 调试打印
 
     except requests.exceptions.RequestException as e:
-        print(f"下载 Clash 核心失败: {e}")
+        print(f"DEBUG: 下载 Clash 核心失败: {e}") # 调试打印
     except Exception as e:
-        print(f"处理下载文件时发生错误: {e}")
+        print(f"DEBUG: 处理下载文件时发生错误: {e}") # 调试打印
 
 def parse_vmess_link(link):
     try:
@@ -495,7 +502,7 @@ def parse_trojan_link(link):
         tag = urllib.parse.unquote(parts[1]) if len(parts) > 1 else f"trojan-{random_string(6)}"
 
         password_server_port, params_str = (core_part.split('?', 1) + [''])[:2]
-        password, server_port = password_server_port.split('@', 1)
+        password, server_port = password_server_port.split(':', 1)
         server, port = server_port.split(':', 1)
 
         proxy_node = {
@@ -656,15 +663,17 @@ def random_string(length=8):
     return ''.join(random.choices(string.ascii_letters + string.digits, k=length))
 
 def generate_clash_config(subscribe_links: List[str], load_nodes: List[Dict]):
+    print("DEBUG: 进入 generate_clash_config 函数，开始生成 Clash 配置。") # 调试打印
     proxies = []
     # 从订阅链接生成代理节点
     for link in subscribe_links:
         if not check_valid_url(link):
+            print(f"DEBUG: 跳过无效URL: {link}") # 调试打印
             continue
         try:
             # 尝试作为 Clash 订阅链接处理
             headers = {'User-Agent': 'ClashforWindows/0.19.8'}
-            # print(f"尝试下载订阅: {link}")
+            print(f"DEBUG: 尝试下载订阅: {link}") # 调试打印
             with requests.get(link, headers=headers, timeout=10, stream=True) as response:
                 response.raise_for_status()
                 # 检查是否是 gzip 压缩
@@ -677,7 +686,7 @@ def generate_clash_config(subscribe_links: List[str], load_nodes: List[Dict]):
                 try:
                     config = yaml.safe_load(decoded_content)
                     if isinstance(config, dict) and 'proxies' in config:
-                        # print(f"从 Clash 订阅链接加载到 {len(config['proxies'])} 个节点。")
+                        print(f"DEBUG: 从 Clash 订阅链接加载到 {len(config['proxies'])} 个节点。") # 调试打印
                         for proxy in config['proxies']:
                             if 'name' in proxy and 'type' in proxy:
                                 proxies.append(proxy)
@@ -695,7 +704,7 @@ def generate_clash_config(subscribe_links: List[str], load_nodes: List[Dict]):
                         if node:
                             proxies.append(node)
                     if urls: # 如果成功解析出链接，说明是 Base64 订阅，跳过单链接解析
-                        # print(f"从 Base64 订阅链接加载到 {len(urls)} 个节点。")
+                        print(f"DEBUG: 从 Base64 订阅链接加载到 {len(urls)} 个节点。") # 调试打印
                         continue
                 except (base64.binascii.Error, UnicodeDecodeError):
                     pass # 不是 Base64，继续尝试单链接解析
@@ -704,18 +713,20 @@ def generate_clash_config(subscribe_links: List[str], load_nodes: List[Dict]):
                 node = parse_url(link)
                 if node:
                     proxies.append(node)
-                    # print(f"从单链接加载到 1 个节点。")
+                    print(f"DEBUG: 从单链接加载到 1 个节点。") # 调试打印
 
         except requests.exceptions.RequestException as e:
-            print(f"处理订阅链接 {link} 失败: {e}")
+            print(f"DEBUG: 处理订阅链接 {link} 失败: {e}") # 调试打印
         except Exception as e:
-            print(f"处理订阅链接 {link} 时发生未知错误: {e}")
+            print(f"DEBUG: 处理订阅链接 {link} 时发生未知错误: {e}") # 调试打印
 
     # 合并预加载的节点
     proxies.extend(load_nodes)
+    print(f"DEBUG: 合并预加载节点后，共有 {len(proxies)} 个节点。") # 调试打印
     # 过滤掉已排除的代理
     exclude_proxies = read_exclude_proxies()
     proxies = [p for p in proxies if p['name'] not in exclude_proxies]
+    print(f"DEBUG: 过滤排除代理后，剩余 {len(proxies)} 个节点。") # 调试打印
 
     # 去重
     unique_proxies = {}
@@ -723,17 +734,18 @@ def generate_clash_config(subscribe_links: List[str], load_nodes: List[Dict]):
         if 'name' in proxy:
             unique_proxies[proxy['name']] = proxy
     proxies = list(unique_proxies.values())
+    print(f"DEBUG: 去重后，剩余 {len(proxies)} 个节点。") # 调试打印
     
     # 限制节点数量
     if LIMIT and len(proxies) > LIMIT:
-        # print(f"节点数量超过限制 {LIMIT}，将随机抽取 {LIMIT} 个节点。")
+        print(f"DEBUG: 节点数量超过限制 {LIMIT}，将随机抽取 {LIMIT} 个节点。") # 调试打印
         proxies = random.sample(proxies, LIMIT)
 
     if not proxies:
         print("没有可用的代理节点，无法生成配置。")
         return
 
-    # print(f"成功加载 {len(proxies)} 个代理节点。")
+    print(f"成功加载 {len(proxies)} 个代理节点。") # 调试打印
 
     # 创建代理组
     proxy_names = [p['name'] for p in proxies]
@@ -888,39 +900,43 @@ def generate_clash_config(subscribe_links: List[str], load_nodes: List[Dict]):
 
     with open(config_path, 'w', encoding='utf-8') as f:
         yaml.safe_dump(clash_config, f, allow_unicode=True, sort_keys=False)
-    # print(f"Clash 配置文件已生成: {config_path}")
+    print(f"Clash 配置文件已生成: {config_path}") # 调试打印
 
 def read_txt_files(folder_path):
     links = []
     # 确保文件夹存在
     if not os.path.exists(folder_path):
+        print(f"DEBUG: 文件夹 {folder_path} 不存在，跳过读取txt文件。") # 调试打印
         return links
     
     for filename in glob.glob(os.path.join(folder_path, '*.txt')):
         try:
+            print(f"DEBUG: 正在读取txt文件: {filename}") # 调试打印
             with open(filename, 'r', encoding='utf-8') as f:
                 for line in f:
                     stripped_line = line.strip()
                     if stripped_line and not stripped_line.startswith('#'):
                         links.append(stripped_line)
         except Exception as e:
-            print(f"读取文件 {filename} 失败: {e}")
+            print(f"DEBUG: 读取文件 {filename} 失败: {e}") # 调试打印
     return links
 
 def read_yaml_files(folder_path):
     nodes = []
     # 确保文件夹存在
     if not os.path.exists(folder_path):
+        print(f"DEBUG: 文件夹 {folder_path} 不存在，跳过读取yaml文件。") # 调试打印
         return nodes
 
     for filename in glob.glob(os.path.join(folder_path, '*.yaml')):
         try:
+            print(f"DEBUG: 正在读取yaml文件: {filename}") # 调试打印
             with open(filename, 'r', encoding='utf-8') as f:
                 config = yaml.safe_load(f)
                 if isinstance(config, dict) and 'proxies' in config:
                     nodes.extend(config['proxies'])
         except Exception as e:
-            print(f"读取或解析 YAML 文件 {filename} 失败: {e}")
+            print(f"DEBUG: 读取或解析 YAML 文件 {filename} 失败: {e}") # 调试打印
     return nodes
 
 def filter_by_types_alt(allowed_types: List[str], nodes: List[Dict]) -> List[Dict]:
@@ -940,7 +956,7 @@ def read_last_check_file():
         with open(LAST_CHECK_FILE, 'r', encoding='utf-8') as f:
             return [line.strip() for line in f if line.strip()]
     except Exception as e:
-        print(f"读取上次检测文件失败: {e}")
+        print(f"DEBUG: 读取上次检测文件失败: {e}") # 调试打印
         return []
 
 def write_last_check_file(successful_links):
@@ -949,7 +965,7 @@ def write_last_check_file(successful_links):
             for link in successful_links:
                 f.write(f"{link}\n")
     except Exception as e:
-        print(f"写入上次检测文件失败: {e}")
+        print(f"DEBUG: 写入上次检测文件失败: {e}") # 调试打印
 
 def read_successful_proxies():
     if not os.path.exists(LAST_SUC_FILE):
@@ -967,7 +983,7 @@ def read_successful_proxies():
                         pass
             return proxies
     except Exception as e:
-        print(f"读取成功代理文件失败: {e}")
+        print(f"DEBUG: 读取成功代理文件失败: {e}") # 调试打印
         return []
 
 def save_successful_proxies(proxies_info):
@@ -976,7 +992,7 @@ def save_successful_proxies(proxies_info):
             for p in proxies_info:
                 f.write(json.dumps(p, ensure_ascii=False) + '\n')
     except Exception as e:
-        print(f"保存成功代理文件失败: {e}")
+        print(f"DEBUG: 保存成功代理文件失败: {e}") # 调试打印
 
 def read_exclude_proxies():
     if not os.path.exists(EXCLUDE_FILE):
@@ -985,7 +1001,7 @@ def read_exclude_proxies():
         with open(EXCLUDE_FILE, 'r', encoding='utf-8') as f:
             return [line.strip() for line in f if line.strip()]
     except Exception as e:
-        print(f"读取排除代理文件失败: {e}")
+        print(f"DEBUG: 读取排除代理文件失败: {e}") # 调试打印
         return []
 
 def record_sub_links(links: List[str]):
@@ -994,35 +1010,47 @@ def record_sub_links(links: List[str]):
             for link in links:
                 f.write(f"{link}\n")
     except Exception as e:
-        print(f"记录订阅链接失败: {str(e)}")
+        print(f"DEBUG: 记录订阅链接失败: {str(e)}") # 调试打印
 
-    return result
+    # NOTE: The original function returned 'result' which was not defined.
+    # It seems this function is meant to append links and not return anything specific.
+    # If it was meant to return success status, it should be explicitly handled.
+    # For now, it will implicitly return None.
+    # If a return value is indeed needed, please specify what it should be.
 
 def work(links,check=False,allowed_types=[],only_check=False):
+    print("DEBUG: 进入 work 函数，开始执行主逻辑。") # 调试打印
     try:
         if not only_check:
+            print("DEBUG: only_check 为 False，准备加载和生成配置。") # 调试打印
             load_nodes = read_yaml_files(folder_path=INPUT)
             if allowed_types:
                 load_nodes = filter_by_types_alt(allowed_types,nodes=load_nodes)
             links = merge_lists(read_txt_files(folder_path=INPUT), links)
             if links or load_nodes:
                 generate_clash_config(links,load_nodes)
+            else:
+                print("DEBUG: 没有找到任何订阅链接或加载的节点，跳过生成Clash配置。") # 调试打印
 
         if check or only_check:
+            print("DEBUG: check 或 only_check 为 True，准备进行代理检查。") # 调试打印
             clash_process = None
             try:
                 # 启动clash
                 print(f"===================启动clash并初始化配置======================")
                 clash_process = start_clash()
                 # 切换节点到'节点选择-DIRECT'
+                print("DEBUG: 切换节点到 'DIRECT'。") # 调试打印
                 switch_proxy('DIRECT')
+                print("DEBUG: 运行 proxy_clean 进行批量检测。") # 调试打印
                 asyncio.run(proxy_clean())
                 print(f'批量检测完毕')
             except Exception as e:
-                print("Error calling Clash API:", e)
+                print(f"Error calling Clash API: {e}") # 调试打印
             finally:
                 print(f'关闭Clash API')
                 if clash_process is not None:
+                    print("DEBUG: 终止 Clash 进程。") # 调试打印
                     clash_process.kill()
 
     except KeyboardInterrupt:
@@ -1030,4 +1058,5 @@ def work(links,check=False,allowed_types=[],only_check=False):
         sys.exit(0)
     except Exception as e:
         # Corrected line: terminated f-string literal
-        print(f"程序执行出错: {e}")
+        print(f"程序执行出错: {e}") # 调试打印
+    print("DEBUG: work 函数执行完毕。") # 调试打印
