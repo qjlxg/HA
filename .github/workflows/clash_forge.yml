@@ -1,0 +1,53 @@
+name: Clash Forge Config Update
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # Allows manual trigger from GitHub UI
+  schedule:
+    - cron: '0 0 * * *' # Runs daily at midnight UTC
+
+permissions:
+  contents: write # Needed to push changes back to the repository
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest # Or windows-latest, macos-latest based on your preference
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.x' # Use the latest stable Python 3.x
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pyyaml httpx requests requests-html psutil
+
+    - name: Ensure input directory exists
+      run: |
+        mkdir -p input
+
+    - name: Run ClashForge.py
+      # The script will download the mihomo core if it's not present
+      # We pass 'check=True' to enable the proxy checking functionality
+      run: |
+        python ClashForge.py --check
+
+    - name: Commit and push changes
+      run: |
+        git config user.name "GitHub Actions"
+        git config user.email "github-actions@github.com"
+        git add clash_config.yaml # The main generated config file
+        git add last_successful_proxies.txt # Stores successful proxies
+        git add last_check.txt # Stores last checked links (if implemented to write to it)
+        
+        # Check if there are any changes to commit
+        git diff --quiet && git diff --staged --quiet || (git commit -m "Update Clash config and proxy data [skip ci]" && git push)
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Automatically provided by GitHub Actions
