@@ -40,7 +40,7 @@ jobs:
       - name: Commit and push changes
         run: |
           git add -A
-          git diff --staged --quiet || git commit -m "Update V2Ray configs, test results, and channel lists - $(TZ='Asia/Shanghai' date '+%Y-%m-%d %H:%M:%S')"
+          git diff --staged --quiet || git commit -m "$(TZ='Asia/Shanghai' date '+%Y-%m-%d %H:%M:%S')"
           git fetch origin
           git rebase origin/main
           git push --force-with-lease
