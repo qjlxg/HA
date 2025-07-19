@@ -1,2 +1,2 @@
-vless://8a6bbf50-6440-4bab-92a1-5def72326ff9@107.170.77.232:17478?type=grpc&serviceName=%40Silver_v2ray%40Silver_v2ray%40UCIRANIR%40UCIRANIR&authority=&security=none#%40Silver_v2ray%40UCIRANIR
 vless://efd33b7c-41cc-4139-b40e-f7472f32de3a@91.107.244.159:8080?security=none&encryption=none&host=drive.google.com&headerType=http&type=tcp#%40Silver_v2ray%20%40UCIRANIR
+vless://8a6bbf50-6440-4bab-92a1-5def72326ff9@107.170.77.232:17478?type=grpc&serviceName=%40Silver_v2ray%40Silver_v2ray%40UCIRANIR%40UCIRANIR&authority=&security=none#%40Silver_v2ray%40UCIRANIR
