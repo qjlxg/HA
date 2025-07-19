@@ -7,29 +7,33 @@ on:
   schedule:
     - cron: '0 0 * * *' # 每天 UTC 0 点运行
   workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   scrape_proxies:
     runs-on: ubuntu-latest
-    timeout-minutes: 360 # 增加超时时间，以避免操作被取消
+    timeout-minutes: 360
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
         persist-credentials: true
-        fetch-depth: 0 # Ensure full history for rebase
+        fetch-depth: 0
 
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
         python-version: '3.11'
 
-    # --- 添加 Playwright 浏览器缓存 ---
     - name: Cache Playwright browsers
       id: cache-playwright-browsers
       uses: actions/cache@v4
       with:
-        path: ~/.cache/ms-playwright  # Playwright 默认的浏览器缓存路径
+        path: ~/.cache/ms-playwright
         key: ${{ runner.os }}-playwright-browsers-${{ hashFiles('requirements.txt') }}
         restore-keys: |
           ${{ runner.os }}-playwright-browsers-
@@ -38,7 +42,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        playwright install chromium --with-deps # --with-deps 确保安装所有依赖
+        playwright install chromium --with-deps
 
     - name: Run proxy scraper
       run: |
@@ -62,15 +66,32 @@ jobs:
         else
           echo "Changes detected. Attempting to commit and push."
           
-          # First, commit the local changes
+          # Commit the local changes
           git commit -m "chore: Auto-update collected proxy data [skip ci]"
           
-          # Try to push. If it fails due to remote changes, pull and rebase, then try again.
-          # Use `||` to execute the second command only if the first fails (non-zero exit code).
-          git push \
-          || (echo "Push rejected, pulling and rebasing..." && git pull --rebase origin main && git push)
+          # Attempt to push
+          git push || (
+            echo "Push rejected, pulling and attempting to merge..."
+            git pull --no-rebase origin main
+            
+            # Attempt to auto-resolve conflicts by preferring local changes
+            git checkout --ours data/
+            git add data/
+            git commit -m "chore: Resolve merge conflicts by keeping local proxy data [skip ci]"
+            git push
+          )
           
           echo "Process finished."
         fi
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Notify on failure
+      if: failure()
+      uses: slackapi/slack-github-action@v1.27.0
+      with:
+        slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
+        channel-id: 'your-channel-id'
+        text: 'Proxy Scraper workflow failed due to merge conflicts. Please resolve manually.'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
