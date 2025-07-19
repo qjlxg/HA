@@ -27,7 +27,8 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pyyaml httpx requests requests-html psutil
+        # 确保安装 lxml[html_clean] 来解决 requests_html 的依赖问题
+        pip install pyyaml httpx requests requests-html psutil lxml[html_clean]
 
     - name: Ensure input directory exists
       run: |
