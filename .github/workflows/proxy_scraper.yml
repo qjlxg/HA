@@ -1,0 +1,102 @@
+name: Proxy Scraper
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '0 0 * * *' # 每天 UTC 0 点运行
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  scrape_proxies:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        persist-credentials: true
+        fetch-depth: 0
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Cache Playwright browsers
+      id: cache-playwright-browsers
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/ms-playwright
+        key: ${{ runner.os }}-playwright-browsers-${{ hashFiles('requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-playwright-browsers-
+
+    - name: Install dependencies and Playwright browsers
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        playwright install chromium --with-deps
+
+    - name: Run proxy scraper
+      run: |
+        python proxy_scraper.py
+        echo "Listing contents of data/ directory after script run:"
+        ls -l data/
+        echo "Listing contents of cache/ directory:"
+        ls -l cache/
+        echo "Listing contents of root directory after script run:" # 新增：列出根目录内容
+        ls -l ./ # 新增：列出当前目录（根目录）内容
+
+    - name: Commit and Push changes
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+        # Always add data/ files, and the new files in the root to the staging area
+        git add data/
+        git add all_unique_nodes.txt nodes_summary.csv # 修改点：添加根目录的这两个文件
+
+        # Check if there are any staged changes. If not, skip the rest.
+        if git diff --cached --exit-code --quiet; then
+          echo "No changes to commit. Skipping commit."
+        else
+          echo "Changes detected. Attempting to commit and push."
+
+          # Commit the local changes
+          git commit -m "chore: Auto-update collected proxy data [skip ci]"
+
+          # Attempt to push
+          git push || (
+            echo "Push rejected, pulling and attempting to merge..."
+            git pull --no-rebase origin main
+
+            # Attempt to auto-resolve conflicts by preferring local changes
+            git checkout --ours data/
+            git checkout --ours all_unique_nodes.txt nodes_summary.csv 
+            git add data/
+            git add all_unique_nodes.txt nodes_summary.csv # 
+            git commit -m "chore: Resolve merge conflicts by keeping local proxy data [skip ci]"
+            git push
+          )
+
+          echo "Process finished."
+        fi
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Notify on failure
+      if: failure()
+      uses: slackapi/slack-github-action@v1.27.0
+      with:
+        slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
+        channel-id: 'your-channel-id'
+        text: 'Proxy Scraper workflow failed. Please check logs for details.' 
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
