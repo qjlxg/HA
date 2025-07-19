@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # !/usr/bin/env python3
-print(
-"DEBUG: 脚本已开始执行！")
+print("DEBUG: 脚本已开始执行！")
 import base64
 import subprocess
 import threading
