@@ -76,7 +76,7 @@ NODE_REGEXES = {
 # --- 缓存处理函数 ---
 def generate_cache_key(url):
     """生成 URL 的缓存键"""
-    [cite_start]return hashlib.md5(url.encode('utf-8')).hexdigest() + ".cache" [cite: 5]
+    return hashlib.md5(url.encode('utf-8')).hexdigest() + ".cache"
 
 def get_cache_path(url):
     """获取缓存文件路径"""
