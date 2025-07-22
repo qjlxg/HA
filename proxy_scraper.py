@@ -10,12 +10,14 @@ import json
 import ipaddress
 import dns.resolver
 import logging
-from typing import Dict, Set, Optional, Tuple, List
+from typing import Dict, Set, Optional, List
 from urllib.parse import urlparse, parse_qs, urlencode
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 from aiofiles import open as aio_open
 from playwright.async_api import async_playwright, Playwright
+from concurrent.futures import ThreadPoolExecutor
+import socket
 
 # 配置日志
 logging.basicConfig(
@@ -37,6 +39,8 @@ class ProxyScraperConfig:
         self.max_concurrent_requests: int = 5
         self.request_timeout_seconds: int = 30
         self.retry_attempts: int = 1
+        self.tcp_test_timeout: int = 5  # TCP 测试超时时间
+        self.max_dns_threads: int = 10  # DNS 解析最大线程数
         self.load_config(config_file)
 
     def load_config(self, config_file: str) -> None:
@@ -50,6 +54,8 @@ class ProxyScraperConfig:
             self.max_concurrent_requests = config.get('max_concurrent_requests', self.max_concurrent_requests)
             self.request_timeout_seconds = config.get('request_timeout_seconds', self.request_timeout_seconds)
             self.retry_attempts = config.get('retry_attempts', self.retry_attempts)
+            self.tcp_test_timeout = config.get('tcp_test_timeout', self.tcp_test_timeout)
+            self.max_dns_threads = config.get('max_dns_threads', self.max_dns_threads)
             logger.info(f"Loaded configuration from {config_file}")
         except FileNotFoundError:
             logger.warning(f"Config file {config_file} not found, using default settings")
@@ -72,9 +78,7 @@ class ProxyScraper:
         "hysteria2": r"hysteria2:\/\/(?:[a-zA-Z0-9\-_.~%]+:[a-zA-Z0-9\-_.~%]+@)?([a-zA-Z0-9\-\.]+)(?::(\d+))?\/?\?.*",
         "vmess": r"vmess:\/\/([a-zA-Z0-9+\/=]+)",
         "trojan": r"trojan:\/\/([a-zA-Z0-9\-_.~%]+)@([a-zA-Z0-9\-\.]+):(\d+)(?:\/\?.*)?",
-        "ss": r"ss:\/\/([a-zA-Z0-9+\/=]+)@([a-zA-Z0-9\-\
-
-System: .]+):(\d+)(?:#(.*))?",
+        "ss": r"ss:\/\/([a-zA-Z0-9+\/=]+)@([a-zA-Z0-9\-\.]+):(\d+)(?:#(.*))?",
         "ssr": r"ssr:\/\/([a-zA-Z0-9+\/=]+)",
         "vless": r"vless:\/\/([0-9a-fA-F\-]+)@([a-zA-Z0-9\-\.]+):(\d+)\?(?:.*&)?type=([a-zA-Z0-9]+)(?:&security=([a-zA-Z0-9]+))?.*",
         "tuic": r"tuic:\/\/([0-9a-fA-F\-]+):([a-zA-Z0-9\-_.~%]+)@([a-zA-Z0-9\-\.]+):(\d+)\?(?:.*&)?(?:udp_relay=([^&]*))?",
@@ -85,7 +89,8 @@ System: .]+):(\d+)(?:#(.*))?",
         self.config = config
         self.cache_lock = asyncio.Lock()
         self.processed_urls: Set[str] = set()
-        self.global_unique_nodes: Dict[str, str] = {}
+        self.global_valid_nodes: Dict[str, str] = {}  # 仅存储通过可用性测试的节点
+        self.global_unique_nodes: Dict[str, str] = {}  # 存储所有唯一节点
         self.all_nodes_count: Dict[str, int] = {}
 
     async def read_cache(self, url: str) -> Optional[str]:
@@ -155,6 +160,7 @@ System: .]+):(\d+)(?:#(.*))?",
 
         if not content:
             for attempt in range(self.config.retry_attempts):
+                browser = None
                 try:
                     async with asyncio.timeout(self.config.request_timeout_seconds * 2):
                         browser = await playwright.chromium.launch()
@@ -163,7 +169,6 @@ System: .]+):(\d+)(?:#(.*))?",
                         await page.goto(full_url, timeout=30000, wait_until='networkidle')
                         content = await page.content()
                         logger.info(f"Successfully fetched {full_url} with Playwright")
-                        await browser.close()
                         break
                 except Exception as e:
                     logger.warning(f"Playwright failed for {full_url} (attempt {attempt + 1}): {e}")
@@ -184,10 +189,26 @@ System: .]+):(\d+)(?:#(.*))?",
         except ValueError:
             return False
 
+    async def test_node_connectivity(self, host: str, port: int) -> bool:
+        """测试节点可用性（异步 TCP 连接）"""
+        try:
+            async with asyncio.timeout(self.config.tcp_test_timeout):
+                reader, writer = await asyncio.open_connection(host, port)
+                writer.close()
+                await writer.wait_closed()
+                logger.info(f"TCP connection succeeded for {host}:{port}")
+                return True
+        except (asyncio.TimeoutError, ConnectionRefusedError, OSError) as e:
+            logger.warning(f"TCP connection failed for {host}:{port}: {e}")
+            return False
+        except Exception as e:
+            logger.error(f"Unexpected error testing {host}:{port}: {e}")
+            return False
+
     def validate_node(self, protocol: str, data: Dict[str, str]) -> bool:
         """验证节点有效性"""
         try:
-            if protocol in ("hysteria2", "trojan", "tuic"):
+            if protocol == "hysteria2":
                 return (
                     all(k in data for k in ['host', 'port']) and
                     data['host'] and data['port'].isdigit() and
@@ -207,10 +228,73 @@ System: .]+):(\d+)(?:#(.*))?",
                         re.match(r"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$", json_data['id'])
                     )
                 except Exception:
+                    logger.debug(f"Invalid vmess node: {data.get('data', '')[:50]}...")
                     return False
-            # 其他协议验证逻辑类似，简化代码
+            elif protocol == "trojan":
+                return (
+                    all(k in data for k in ['password', 'host', 'port']) and
+                    data['password'] and data['host'] and data['port'].isdigit() and
+                    (re.match(r"^[a-zA-Z0-9\-\.]+$", data['host']) or self.is_valid_ip(data['host'])) and
+                    1 <= int(data['port']) <= 65535
+                )
+            elif protocol == "ss":
+                if not all(k in data for k in ['method_password', 'host', 'port']):
+                    return False
+                try:
+                    padded_mp = data['method_password'] + '=' * (4 - len(data['method_password']) % 4)
+                    decoded_mp = base64.b64decode(padded_mp).decode('utf-8')
+                    if ':' not in decoded_mp:
+                        return False
+                    return (
+                        data['host'] and data['port'].isdigit() and
+                        (re.match(r"^[a-zA-Z0-9\-\.]+$", data['host']) or self.is_valid_ip(data['host'])) and
+                        1 <= int(data['port']) <= 65535
+                    )
+                except Exception:
+                    logger.debug(f"Invalid ss node: {data.get('method_password', '')[:50]}...")
+                    return False
+            elif protocol == "ssr":
+                try:
+                    decoded = base64.b64decode(data.get('data', '') + '=' * (4 - len(data.get('data', '')) % 4)).decode('utf-8')
+                    parts = decoded.split(':')
+                    if len(parts) < 6:
+                        return False
+                    server, port = parts[0], parts[1]
+                    password = base64.b64decode(parts[5] + '=' * (4 - len(parts[5]) % 4)).decode('utf-8')
+                    return (
+                        server and port.isdigit() and password and
+                        (re.match(r"^[a-zA-Z0-9\-\.]+$", server) or self.is_valid_ip(server)) and
+                        1 <= int(port) <= 65535
+                    )
+                except Exception:
+                    logger.debug(f"Invalid ssr node: {data.get('data', '')[:50]}...")
+                    return False
+            elif protocol == "vless":
+                return (
+                    all(k in data for k in ['uuid', 'host', 'port', 'type']) and
+                    data['uuid'] and data['host'] and data['port'].isdigit() and data['type'] and
+                    re.match(r"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$", data['uuid']) and
+                    (re.match(r"^[a-zA-Z0-9\-\.]+$", data['host']) or self.is_valid_ip(data['host'])) and
+                    1 <= int(data['port']) <= 65535
+                )
+            elif protocol == "tuic":
+                return (
+                    all(k in data for k in ['uuid', 'password', 'host', 'port']) and
+                    data['uuid'] and data['password'] and data['host'] and data['port'].isdigit() and
+                    re.match(r"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$", data['uuid']) and
+                    (re.match(r"^[a-zA-Z0-9\-\.]+$", data['host']) or self.is_valid_ip(data['host'])) and
+                    1 <= int(data['port']) <= 65535
+                )
+            elif protocol == "wg":
+                try:
+                    decoded = base64.b64decode(data.get('data', '') + '=' * (4 - len(data.get('data', '')) % 4)).decode('utf-8')
+                    return "PrivateKey" in decoded and "Address" in decoded and "Endpoint" in decoded
+                except Exception:
+                    logger.debug(f"Invalid wg node: {data.get('data', '')[:50]}...")
+                    return False
             return False
-        except Exception:
+        except Exception as e:
+            logger.debug(f"Validation failed for {protocol} node: {e}")
             return False
 
     def get_node_canonical_fingerprint(self, node_url: str) -> Optional[str]:
@@ -227,9 +311,49 @@ System: .]+):(\d+)(?:#(.*))?",
                 decoded_mp = base64.b64decode(method_password + '=' * (4 - len(method_password) % 4)).decode('utf-8')
                 method, password = decoded_mp.split(':', 1)
                 return f"ss://{method}:{password}@{server_port}"
-            # 其他协议类似
-            return base_url
-        except Exception:
+            elif scheme == "ssr":
+                encoded_params = base_url[len("ssr://"):]
+                decoded_params = base64.b64decode(encoded_params + '=' * (4 - len(encoded_params) % 4)).decode('utf-8')
+                parts = decoded_params.split(':')
+                if len(parts) >= 6:
+                    password = base64.b64decode(parts[5] + '=' * (4 - len(parts[5]) % 4)).decode('utf-8')
+                    parts[5] = password
+                return f"ssr://{':'.join(parts)}"
+            elif scheme == "vmess":
+                encoded_json = base_url[len("vmess://"):]
+                decoded_json = base64.b64decode(encoded_json + '=' * (4 - len(encoded_json) % 4)).decode('utf-8')
+                vmess_config = json.loads(decoded_json)
+                fingerprint_data = {
+                    "add": vmess_config.get("add"),
+                    "port": vmess_config.get("port"),
+                    "id": vmess_config.get("id"),
+                }
+                for key in sorted(["net", "type", "security", "path", "host", "tls", "sni", "aid", "fp", "scy"]):
+                    if key in vmess_config and vmess_config[key] is not None:
+                        fingerprint_data[key] = vmess_config[key]
+                return f"vmess://{json.dumps(fingerprint_data, sort_keys=True)}"
+            elif scheme in ["vless", "trojan", "hysteria2", "tuic"]:
+                query_params_list = parse_qs(parsed_url.query, keep_blank_values=True)
+                sorted_query_params = [(key, value) for key in sorted(query_params_list.keys()) for value in sorted(query_params_list[key])]
+                sorted_query_string = urlencode(sorted_query_params)
+                canonical_url_parts = [scheme, "://"]
+                if parsed_url.username:
+                    canonical_url_parts.append(parsed_url.username)
+                    if parsed_url.password:
+                        canonical_url_parts.append(f":{parsed_url.password}")
+                    canonical_url_parts.append("@")
+                canonical_url_parts.append(parsed_url.netloc)
+                if parsed_url.path:
+                    canonical_url_parts.append(parsed_url.path)
+                if sorted_query_string:
+                    canonical_url_parts.append("?")
+                    canonical_url_parts.append(sorted_query_string)
+                return "".join(canonical_url_parts)
+            elif scheme == "wg":
+                return f"wg://{base_url[len('wg://'):]}"
+            return None
+        except Exception as e:
+            logger.debug(f"Failed to generate fingerprint for {node_url[:50]}...: {e}")
             return None
 
     def extract_nodes_from_text(self, text: str) -> Set[str]:
@@ -250,48 +374,101 @@ System: .]+):(\d+)(?:#(.*))?",
                 except Exception:
                     pass
 
+        try:
+            yaml_content = yaml.safe_load(text)
+            if isinstance(yaml_content, (dict, list)):
+                def extract_from_nested(data):
+                    if isinstance(data, dict):
+                        for value in data.values():
+                            if isinstance(value, str):
+                                nodes.update(self.extract_nodes_from_text(value))
+                            elif isinstance(value, (dict, list)):
+                                extract_from_nested(value)
+                    elif isinstance(data, list):
+                        for item in data:
+                            if isinstance(item, str):
+                                nodes.update(self.extract_nodes_from_text(item))
+                            elif isinstance(item, (dict, list)):
+                                extract_from_nested(item)
+                extract_from_nested(yaml_content)
+        except yaml.YAMLError:
+            pass
+
+        try:
+            json_content = json.loads(text)
+            if isinstance(json_content, (dict, list)):
+                def extract_from_nested(data):
+                    if isinstance(data, dict):
+                        for value in data.values():
+                            if isinstance(value, str):
+                                nodes.update(self.extract_nodes_from_text(value))
+                            elif isinstance(value, (dict, list)):
+                                extract_from_nested(value)
+                    elif isinstance(data, list):
+                        for item in data:
+                            if isinstance(item, str):
+                                nodes.update(self.extract_nodes_from_text(item))
+                            elif isinstance(item, (dict, list)):
+                                extract_from_nested(item)
+                extract_from_nested(json_content)
+        except json.JSONDecodeError:
+            pass
+
         return nodes
 
     async def process_url(self, url: str, http_client: httpx.AsyncClient, playwright: Playwright, semaphore: asyncio.Semaphore) -> Set[str]:
         """处理单个 URL"""
         if url in self.processed_urls:
+            logger.debug(f"Skipping already processed URL: {url}")
             return set()
 
         self.processed_urls.add(url)
         content = await self.fetch_url(url, http_client, playwright)
         if not content:
+            logger.error(f"Failed to fetch content from {url}")
             return set()
 
-        nodes = self.extract_nodes_from_text(BeautifulSoup(content, 'html.parser').get_text(separator='\n', strip=True))
-        unique_nodes = set()
+        soup = BeautifulSoup(content, 'html.parser')
+        nodes = set()
+        for tag_name in ['pre', 'code', 'textarea', 'script']:
+            for tag in soup.find_all(tag_name):
+                text_content = tag.get_text(separator='\n', strip=True)
+                if text_content:
+                    nodes.update(self.extract_nodes_from_text(text_content))
+        if not nodes:
+            nodes.update(self.extract_nodes_from_text(soup.get_text(separator='\n', strip=True)))
+
+        valid_nodes = set()
         for node in nodes:
             fingerprint = self.get_node_canonical_fingerprint(node)
             if fingerprint and fingerprint not in self.global_unique_nodes:
-                self.global_unique_nodes[fingerprint] = node
-                unique_nodes.add(node)
+                parsed_url = urlparse(node)
+                host = parsed_url.hostname or (parsed_url.netloc.split('@')[-1] if '@' in parsed_url.netloc else parsed_url.netloc)
+                port = parsed_url.port or (parsed_url.netloc.split(':')[-1] if ':' in parsed_url.netloc else None)
+                if host and port and await self.test_node_connectivity(host, int(port)):
+                    self.global_valid_nodes[fingerprint] = node
+                    self.global_unique_nodes[fingerprint] = node
+                    valid_nodes.add(node)
+                else:
+                    self.global_unique_nodes[fingerprint] = node
+                    valid_nodes.add(node)  # 仍保留不可连接节点，供后续分析
 
         output_file = os.path.join(self.config.output_dir, f"{urlparse(url).netloc or 'unknown'}.txt")
         os.makedirs(self.config.output_dir, exist_ok=True)
-        async with aio_open(output_file, 'w', encoding='utf-8') as f:
-            for node in unique_nodes:
-                await f.write(node + '\n')
-        self.all_nodes_count[url] = len(unique_nodes)
-        return unique_nodes
+        if valid_nodes:
+            async with aio_open(output_file, 'w', encoding='utf-8') as f:
+                for node in valid_nodes:
+                    await f.write(node + '\n')
+            logger.info(f"Saved {len(valid_nodes)} nodes from {url} to {output_file}")
+        self.all_nodes_count[url] = len(valid_nodes)
+        return valid_nodes
 
     async def run(self, urls: List[str]) -> None:
         """运行抓取器"""
         os.makedirs(self.config.output_dir, exist_ok=True)
         os.makedirs(self.config.cache_dir, exist_ok=True)
 
-        valid_urls = []
-        dns_tasks = [check_dns_resolution(url) for url in urls]
-        dns_results = await asyncio.gather(*dns_tasks, return_exceptions=True)
-        for url, result in zip(urls, dns_results):
-            if isinstance(result, Exception) or not result:
-                logger.warning(f"DNS resolution failed for {url}")
-            else:
-                valid_urls.append(url)
-
+        valid_urls = await self.check_dns_resolution(urls)
         async with async_playwright() as p:
             async with httpx.AsyncClient(http2=True, follow_redirects=True) as client:
                 semaphore = asyncio.Semaphore(self.config.max_concurrent_requests)
@@ -301,38 +478,53 @@ System: .]+):(\d+)(?:#(.*))?",
         with open("all_unique_nodes.txt", 'w', encoding='utf-8') as f:
             for node in sorted(self.global_unique_nodes.values()):
                 f.write(node + '\n')
+        logger.info(f"Saved {len(self.global_unique_nodes)} unique nodes to all_unique_nodes.txt")
+
+        with open("valid_nodes.txt", 'w', encoding='utf-8') as f:
+            for node in sorted(self.global_valid_nodes.values()):
+                f.write(node + '\n')
+        logger.info(f"Saved {len(self.global_valid_nodes)} valid nodes to valid_nodes.txt")
 
         with open("nodes_summary.csv", 'w', newline='', encoding='utf-8') as csvfile:
             writer = csv.DictWriter(csvfile, fieldnames=['URL', '节点数量'])
             writer.writeheader()
             for url, count in self.all_nodes_count.items():
                 writer.writerow({'URL': url, '节点数量': count})
+        logger.info("Saved node summary to nodes_summary.csv")
 
-async def check_dns_resolution(url: str) -> bool:
-    """检查 DNS 解析"""
-    hostname = urlparse(url).hostname or urlparse(f"http://{url}").hostname
-    if not hostname or is_valid_ip(hostname):
-        return True
-    try:
-        async with asyncio.timeout(30):
-            answers = await asyncio.to_thread(dns.resolver.resolve, hostname, 'A')
+    def resolve_dns(self, hostname: str) -> bool:
+        """同步 DNS 解析，用于线程池"""
+        try:
+            answers = dns.resolver.resolve(hostname, 'A')
             return bool(answers)
-    except Exception as e:
-        logger.warning(f"DNS resolution failed for {hostname}: {e}")
-        return False
+        except Exception as e:
+            logger.warning(f"DNS resolution failed for {hostname}: {e}")
+            return False
 
-def is_valid_ip(address: str) -> bool:
-    try:
-        ipaddress.ip_address(address)
-        return True
-    except ValueError:
-        return False
+    async def check_dns_resolution(self, urls: List[str]) -> List[str]:
+        """多线程 DNS 解析"""
+        valid_urls = []
+        with ThreadPoolExecutor(max_workers=self.config.max_dns_threads) as executor:
+            loop = asyncio.get_event_loop()
+            tasks = [loop.run_in_executor(executor, self.resolve_dns, urlparse(url).hostname or urlparse(f"http://{url}").hostname) for url in urls]
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+            for url, result in zip(urls, results):
+                if isinstance(result, Exception) or not result:
+                    logger.warning(f"DNS resolution failed for {url}")
+                else:
+                    valid_urls.append(url)
+        logger.info(f"Resolved {len(valid_urls)} valid URLs via DNS")
+        return valid_urls
 
 async def main():
     config = ProxyScraperConfig()
     scraper = ProxyScraper(config)
-    with open("sources.list", 'r', encoding='utf-8') as f:
-        urls = [line.strip() for line in f if line.strip()]
+    try:
+        with open("sources.list", 'r', encoding='utf-8') as f:
+            urls = [line.strip() for line in f if line.strip()]
+    except FileNotFoundError:
+        logger.critical("sources.list file not found")
+        return
     await scraper.run(urls)
 
 if __name__ == "__main__":
