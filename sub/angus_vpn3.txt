@@ -1,0 +1,1 @@
+vless://035e3dd7-f897-4496-93ae-5b0df5e61c5e@104.25.254.88:8443?security=tls&encryption=none&type=grpc&sni=freedom.freoce.life&fp=chrome&serviceName=@AnGuS_VPN,@AnGuS_VPN,@AnGuS_VPN,@AnGuS_VPN,@AnGuS_VPN,@AnGuS_VPN,@AnGuS_VPN,@AnGuS_VPN&alpn=h2,http/1.1#@AnGuS_VPN-ALL-4
