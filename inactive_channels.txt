@@ -38,6 +38,7 @@ IBV2RAY
 v2rayng_vpnrog
 mfbp1
 jiedian_share
+v2rayyNGvpn
 meli_proxyy
 freeV2rayi
 ProxyV2rayNG1
@@ -98,6 +99,7 @@ V2parsin
 Proxy_PJ
 Cov2ray
 kiava
+DeamNet
 GiveVPN
 vpnhat
 fsghdhr
@@ -130,9 +132,6 @@ TLS_v2ray
 TVCminer
 V2RayTz
 V2Ray_FreedomIran
-V2pedia
-V2rayCollectorDonate
-V2rayNG3
 V2rayNGn
 V2ray_Alpha
 V2rayng_Fast
@@ -148,14 +147,19 @@ ZDYZ2
 abra_vpn
 academi_vpn
 accountplanetir
+adamak_vpn
 afv2ray
 ahe_vpn
 aifenxiang2020
 ailumao
 airproxies
 aiuvpn
+alfred_config
+alienvpn402
+alismartvpn
 aliyosgraphy
 allporter
+alo_v2rayng
 alpha_v2ray_fazayi
 alphaomegavpn
 alsheykhvpn
@@ -963,6 +967,7 @@ vpn_gold_free_1
 vpn_ioss
 vpn_kanfik
 vpn_mafia
+vpn_mikey
 vpn_nafas
 vpn_ocean
 vpn_room
@@ -982,6 +987,7 @@ vpn_zvpn
 vpnafra
 vpnaiden
 vpnandroid2
+vpnbigbang
 vpnchina
 vpnclick
 vpncostume
@@ -2148,6 +2154,7 @@ vpn_gold_free_1
 vpn_ioss
 vpn_kanfik
 vpn_mafia
+vpn_mikey
 vpn_nafas
 vpn_ocean
 vpn_room
@@ -2167,6 +2174,7 @@ vpn_zvpn
 vpnafra
 vpnaiden
 vpnandroid2
+vpnbigbang
 vpnchina
 vpnclick
 vpncostume
@@ -2462,6 +2470,8 @@ vp22ray
 vpfreen
 vpn707
 vpn_kanfik
+vpn_mikey
+vpnbigbang
 proxifly
 fresh_proxy
 freenode
