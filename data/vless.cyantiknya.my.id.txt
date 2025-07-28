@@ -1,380 +1,380 @@
-trojan://ORK1HxSN24gN@masukan.bug.ws:80
-trojan://rXMe44p7mX3s@masukan.bug.ws:443
-vless://ba906839-7d96-4abd-bc4d-5ed1f9e0c6fe@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D129.150.50.63%3D443#(SG) Oracle Corporation🇸🇬
-vless://dae59670-7fc9-4189-8224-33e17db34529@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D35.219.50.99%3D443#(ID) Google LLC🇮🇩
-trojan://bdTrmuczF3k7@masukan.bug.ws:443
-vless://e4803031-d6e7-4110-9719-b2a268e6c014@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D167.71.194.185%3D8443#(SG) Digitalocean  LLC🇸🇬
-vless://bc30074b-ca35-4b34-bc85-2f041a6661bf@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D103.6.207.108%3D8080#(ID) Pt Pusat Media Indonesia🇮🇩
-trojan://vXpYBaMv2nPg@masukan.bug.ws:80
-trojan://39Le5TBgQRQk@masukan.bug.ws:80
-trojan://kBZEGAfClhOa@masukan.bug.ws:443
-vless://6dd59b6b-23a6-4658-9bdd-f14bbfa94249@masukan.bug.ws:80?path=%2Fvl%3D35.219.50.99%3D443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(ID) Google Cloud🇮🇩
-vless://2fcbc587-149d-4b3e-980a-fe54d3ffa5c9@masukan.bug.ws:80?path=%2Fvl%3D143.42.68.97%3D17055&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Akamai Technologies  Inc🇸🇬
-trojan://kHGphG5kADJK@masukan.bug.ws:443
-vless://62ebbfcf-5c89-46a2-9358-4dc5c2e93f8e@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D35.219.50.99%3D443#(ID) Google Cloud🇮🇩
-vless://bfd37465-7a69-41cd-8942-9a5cad91b0ed@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D203.194.112.119%3D8443#(ID) First Cagayan Converge Data Center Inc.🇮🇩
-vless://9f6f5922-8f76-4258-839a-9af86d261832@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D8.222.129.175%3D58808#(SG) Alibaba us Technology Co   Ltd🇸🇬
-vless://d13b5f53-5ba0-487b-b8bf-42e3968bc0ef@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D103.6.207.108%3D8080#(ID) PT Pusat Media Indonesia🇮🇩
-trojan://RQhkWjkDmalO@masukan.bug.ws:80
-trojan://7fYYxJGlZ8hF@masukan.bug.ws:443
-trojan://9ehi6pdKWcno@masukan.bug.ws:80
-trojan://AD2e62OShT4S@masukan.bug.ws:443
-vless://18b8525f-44e0-478b-8cda-6af1a9562f28@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D45.77.36.40%3D443#(SG) The Constant Company  LLC🇸🇬
-vless://f15c36cc-1d58-42b3-b197-697b1b726d48@masukan.bug.ws:80?path=%2Fvl%3D138.2.95.61%3D1111&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-trojan://Nno5d5lED47V@masukan.bug.ws:80
-trojan://GsLVrWlIOLVz@masukan.bug.ws:443
-vless://55541b94-5daa-4e71-90bd-ddb7b00953a6@masukan.bug.ws:80?path=%2Fvl%3D103.6.207.108%3D8080&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(ID) PT Pusat Media Indonesia🇮🇩
-vless://d37e6100-43bd-4ac8-adf2-ec2e62eb3fa2@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D47.236.246.163%3D14108#(SG) Alibaba us Technology Co   Ltd🇸🇬
-trojan://U6P2OH3sEyGw@masukan.bug.ws:80
-trojan://hslzIFPXcxs7@masukan.bug.ws:443
-trojan://opDiJlkPzKGo@masukan.bug.ws:80
-trojan://tzQhMiNazkfc@masukan.bug.ws:80
-trojan://CTXxoBtSCE63@masukan.bug.ws:443
-trojan://90VXvRVGQzTF@masukan.bug.ws:80
-vless://4673d52a-3ab7-44b0-8571-1807a495aac6@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D203.194.112.119%3D2053#(ID) First Cagayan Converge Data Center Inc.🇮🇩
-vless://7dd9fe9e-c973-435d-874e-ff0078f127b5@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D139.180.215.77%3D57878#(SG) The Constant Company  LLC🇸🇬
-vless://fb9480f7-c905-42c4-82ca-6645c128907e@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D146.235.18.248%3D45137#(SG) Oracle Corporation🇸🇬
-vless://d88ddcf7-bc78-40d5-b1e3-d8d54fd1b179@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D51.79.254.182%3D443#(SG) OVH SAS🇸🇬
-vless://d6b33ee4-45f0-4d6e-a325-45d81fd05709@masukan.bug.ws:80?path=%2Fvl%3D62.72.46.14%3D8443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Contabo Asia Private Limited🇸🇬
-trojan://uLVgk7ZfxAES@masukan.bug.ws:443
-trojan://zhUfPbGON5CD@masukan.bug.ws:80
-trojan://vDzyl0mHkOYB@masukan.bug.ws:443
-vless://28ba7c77-c93c-4092-a276-8f88b68960f4@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D119.81.201.154%3D9089#(SG) SoftLayer Technologies🇸🇬
-trojan://CMJQmwpVi0Pi@masukan.bug.ws:80
-trojan://gNMrce4SDZ44@masukan.bug.ws:443
-trojan://1vErZ7WhmWZN@masukan.bug.ws:80
-trojan://ZpPPkjjJzxfC@masukan.bug.ws:443
-vless://386d8f5c-3fae-4500-8458-3fdad97805d6@masukan.bug.ws:80?path=%2Fvl%3D43.156.16.213%3D31528&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Shenzhen Tencent Computer Systems Company Limited🇸🇬
-trojan://GePEmaBBby0c@masukan.bug.ws:80
-trojan://45AfkBx3A6P1@masukan.bug.ws:80
-vless://63696019-372d-40d8-914b-9a4f9a4c4492@masukan.bug.ws:80?path=%2Fvl%3D45.77.36.40%3D443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) The Constant Company  LLC🇸🇬
-vless://569d7b41-1503-4345-8cf2-d3d454f84523@masukan.bug.ws:80?path=%2Fvl%3D203.194.112.119%3D2053&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(ID) First Cagayan Converge Data Center Inc.🇮🇩
-trojan://gtTORkQTjuG7@masukan.bug.ws:443
-vless://aa31cd20-49a1-4d8e-aaed-95c56e3e8c15@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D47.236.25.107%3D27903#(SG) Alibaba us Technology Co   Ltd🇸🇬
-trojan://2Q7ttfBLDUtF@masukan.bug.ws:80
-trojan://0g85AqVvCWc6@masukan.bug.ws:443
-vless://9a501c0b-11f8-4dd4-89a2-f4cb4ae9b103@masukan.bug.ws:80?path=%2Fvl%3D45.77.171.102%3D3128&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) The Constant Company  LLC🇸🇬
-trojan://PaKvbmCkwxZz@masukan.bug.ws:443
-trojan://o4lVBRagjE0a@masukan.bug.ws:80
-trojan://xFcyH95mXzMm@masukan.bug.ws:443
-vless://859e36dd-a548-4327-88a7-795f2853ae7d@masukan.bug.ws:80?path=%2Fvl%3D213.35.108.135%3D12596&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-vless://9c513bc5-2545-4782-adf7-ebc1fa1c257c@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D8.222.243.73%3D26385#(SG) Alibaba us Technology Co   Ltd🇸🇬
-vless://4faf6e30-e2c8-4053-b45d-fff55675e7d4@masukan.bug.ws:80?path=%2Fvl%3D146.190.111.165%3D443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Digitalocean  LLC🇸🇬
-vless://958b13d5-3ff0-43e1-9ae9-95a8dedf9732@masukan.bug.ws:80?path=%2Fvl%3D35.219.15.90%3D443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(ID) Google LLC🇮🇩
-vless://414297d8-3ae4-4ec5-b0a9-b851c0d1bf45@masukan.bug.ws:80?path=%2Fvl%3D158.178.225.124%3D53618&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-trojan://iFqpzXp02UYC@masukan.bug.ws:80
-vless://c2d76f97-8f13-4a0d-9cea-0f8cfe269b0e@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D129.150.49.58%3D18650#(SG) Oracle Corporation🇸🇬
-trojan://rkTUXMiIF37L@masukan.bug.ws:443
-vless://7e1bf63c-3a00-4fcb-8e3a-7215fbe685d2@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D106.240.106.61%3D38937#(KR) LG DACOM Corporation🇰🇷
-trojan://R6rd4cPu5K33@masukan.bug.ws:443
-trojan://CKACQfn7x9lO@masukan.bug.ws:443
-vless://78688eb3-9ca5-40de-ba6c-b166bbf408bc@masukan.bug.ws:80?path=%2Fvl%3D8.219.197.113%3D45714&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
-vless://fb9a65b5-2034-45b8-b6f0-1c08053b5a23@masukan.bug.ws:80?path=%2Fvl%3D106.240.106.61%3D38937&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(KR) LG DACOM Corporation🇰🇷
-vless://e709dd60-ace9-4bc1-a5eb-f04e8b2369c4@masukan.bug.ws:80?path=%2Fvl%3D139.162.33.248%3D587&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Akamai Technologies  Inc🇸🇬
-vless://91be7218-b1e5-46f4-a102-48a36be94363@masukan.bug.ws:80?path=%2Fvl%3D188.166.255.195%3D443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Digitalocean  LLC🇸🇬
-trojan://DhjB6Uxta1gF@masukan.bug.ws:443
-vless://abcaf185-30d4-4d72-aac2-8df89b93df85@masukan.bug.ws:80?path=%2Fvl%3DIP: 35.219.50.99%3D443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(ID) Google Cloud🇮🇩
-vless://577aefa0-6d37-439f-b9a3-65c89edc211f@masukan.bug.ws:80?path=%2Fvl%3D47.74.254.191%3D8900&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
-vless://613219ee-8bc1-4af1-b1d0-82d7214dc047@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D158.178.225.124%3D12934#(SG) Oracle Corporation🇸🇬
-trojan://O6SBV9CzSqmr@masukan.bug.ws:443
-trojan://Wg4dZ67CKUFc@masukan.bug.ws:80
-trojan://txgRaxBFRNWd@masukan.bug.ws:80
-trojan://nLbhU8jGNBOz@masukan.bug.ws:443
-vless://dff697eb-2378-48df-aaae-b9970f130f15@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D139.180.144.170%3D666#(SG) The Constant Company  LLC🇸🇬
-vless://4847944c-dc8f-4158-94ac-d4ee74797c1a@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D54.251.167.101%3D443#(SG) Amazon com  Inc🇸🇬
-vless://67db9a69-f8a1-4e03-a36b-4a2f194d862f@masukan.bug.ws:80?path=%2Fvl%3D129.150.50.63%3D443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-vless://371584db-17f0-420f-a6c1-f1d93a148964@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D143.42.68.97%3D17055#(SG) Akamai Technologies  Inc🇸🇬
-vless://1f6c9420-6bc9-4295-9d46-90338a132da7@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D138.2.89.238%3D43254#(SG) Oracle Corporation🇸🇬
-trojan://VTvZXjTnSpVU@masukan.bug.ws:80
-vless://a3428207-dd8e-4bbc-ac13-6e2aab9b2b4a@masukan.bug.ws:80?path=%2Fvl%3D18.192.93.64%3D443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(DE) Amazon Inc🇩🇪
-trojan://xhFAlSrn21U8@masukan.bug.ws:443
-vless://3e140577-6d72-41c0-a88e-a9707dc17d8d@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D43.133.145.156%3D53136#(ID) Shenzhen Tencent Computer Systems Company Limited🇮🇩
-trojan://bHgRfjgUHY7K@masukan.bug.ws:80
-trojan://P2gGMRBituEG@masukan.bug.ws:443
-vless://1e8f1951-de0d-4b49-8a48-63a165f79f5c@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D172.232.239.147%3D587#(ID) Akamai Connected Cloud🇮🇩
-vless://c5379f26-10e8-468f-adec-5c038dc31825@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D47.245.95.160%3D1443#(SG) Alibaba us Technology Co   Ltd🇸🇬
-trojan://A7oA4zv5I9AP@masukan.bug.ws:80
-trojan://YCsoCQGYwrBg@masukan.bug.ws:80
-vless://d0b29383-8aeb-4f94-a334-66dcb406b87d@masukan.bug.ws:80?path=%2Fvl%3D103.180.161.69%3D587&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Hong Kong Megalayer Technology Co  limited🇸🇬
-vless://0e79893a-4d1d-49eb-9bc6-0f2f8cd3204f@masukan.bug.ws:80?path=%2Fvl%3D172.232.239.147%3D587&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(ID) Akamai Connected Cloud🇮🇩
-trojan://l9aQETuKoDmD@masukan.bug.ws:80
-trojan://e1b7g6gm2vkz@masukan.bug.ws:443
-trojan://jBH56PbMmmJD@masukan.bug.ws:443
-trojan://nP6Y2I77NyLv@masukan.bug.ws:80
-trojan://kfbCHv6sRAMe@masukan.bug.ws:80
-vless://7133fae2-d9bf-432c-9eb9-a2c6ea53134b@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D103.180.161.69%3D587#(SG) Hong Kong Megalayer Technology Co  limited🇸🇬
-trojan://GDJpLpnM3VGp@masukan.bug.ws:443
-trojan://EB8LFTsvZmYe@masukan.bug.ws:80
-trojan://24CsuphlzmOw@masukan.bug.ws:443
-vless://1dd260c6-1e57-40e4-8e48-33b0cb5ee28a@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D143.198.213.197%3D443#(SG) Digitalocean  LLC🇸🇬
-vless://af851788-26a8-45df-bba1-e43f07212c24@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D18.192.93.64%3D443#(DE) Amazon Inc🇩🇪
-trojan://QkQddGzBBdeJ@masukan.bug.ws:80
-vless://6c6adb26-3914-441d-bf54-f1688d0e15ad@masukan.bug.ws:80?path=%2Fvl%3D138.2.109.23%3D587&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-vless://d7651a50-a14b-45b7-9618-ca7ed56c78a8@masukan.bug.ws:80?path=%2Fvl%3D178.128.80.43%3D443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Digitalocean  LLC🇸🇬
-vless://c915fbaf-6396-4940-9eb9-b5b996a2adc4@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D146.190.111.165%3D443#(SG) Digitalocean  LLC🇸🇬
-vless://49c9edd4-91fb-4424-bdd8-5b9aaf0f4b35@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D172.232.239.151%3D587#(ID) Akamai Connected Cloud🇮🇩
-vless://92294c2b-5346-411a-b983-0fe651514437@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D168.138.166.213%3D10500#(SG) Oracle Corporation🇸🇬
-vless://5931bf4d-b20f-45b2-aa56-2a7b9d239a73@masukan.bug.ws:80?path=%2Fvl%3D129.150.49.58%3D18650&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-vless://ec1da8fc-b993-42e1-baf3-7d7796d5831b@masukan.bug.ws:80?path=%2Fvl%3D146.235.18.248%3D45137&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-trojan://bxVIQXBYtu9G@masukan.bug.ws:443
-vless://d0034dad-de9e-4c61-85bb-16fbd00690a0@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D194.127.193.240%3D50791#(SG) LEASEWEB SINGAPORE PTE  LTD🇸🇬
-trojan://euDpZTeGiscY@masukan.bug.ws:80
-trojan://qiGOg2BxSeIM@masukan.bug.ws:443
-trojan://6iFVFvfqbePk@masukan.bug.ws:443
-trojan://FzkdW8LCeYDp@masukan.bug.ws:80
-vless://31146a45-022e-48dd-9fb2-97fcfbd18869@masukan.bug.ws:80?path=%2Fvl%3D168.138.166.213%3D10500&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-vless://632d26d4-e589-4f1c-85a7-6ac58d22bef8@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D8.219.237.57%3D31523#(SG) Alibaba us Technology Co   Ltd🇸🇬
-trojan://xE7rfhph9h1I@masukan.bug.ws:443
-vless://17adc720-0162-439d-a8f3-70b320e756a7@masukan.bug.ws:80?path=%2Fvl%3D158.178.225.124%3D37461&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-vless://e3f0920e-5fb0-406d-b171-5261b8768ad9@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D103.133.223.52%3D2096#(ID) Cloud Teknologi Nusantara🇮🇩
-vless://6806ea7a-df1f-47a4-b8c2-b74d7d9c1bdc@masukan.bug.ws:80?path=%2Fvl%3D8.219.237.57%3D31523&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
-trojan://TdgHeu6c9HhF@masukan.bug.ws:80
-trojan://8Me3jYw13MBQ@masukan.bug.ws:443
-trojan://yczhfDSfftLF@masukan.bug.ws:80
-trojan://SsxlbLfjtuoq@masukan.bug.ws:443
-vless://d7d2ba75-1c06-4401-83c0-5521e09c430d@masukan.bug.ws:80?path=%2Fvl%3D15.235.162.49%3D443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) OVH SAS🇸🇬
-trojan://FsUBrJJBHwDX@masukan.bug.ws:443
-vless://f48bf9df-9e77-4cfc-bf5a-59d1bf67a628@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D47.236.119.190%3D51342#(SG) Alibaba us Technology Co   Ltd🇸🇬
-vless://8e867d7d-8b56-4551-8a79-eecff305bb89@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D45.77.171.102%3D3128#(SG) The Constant Company  LLC🇸🇬
-vless://5b7320b7-2ba4-4077-b3d4-92bf18ff8a14@masukan.bug.ws:80?path=%2Fvl%3D119.81.201.154%3D9089&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Softlayer Technologies Inc🇸🇬
-trojan://lgawqu8rcNsM@masukan.bug.ws:443
-vless://57be6e21-9cf5-4fa9-a8a3-6332df115eef@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D47.236.22.194%3D52324#(SG) Alibaba us Technology Co   Ltd🇸🇬
-trojan://bbho1VvZ8q9U@masukan.bug.ws:80
-vless://11e766d8-d3b1-4ec1-9809-b85462bcdc4c@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D35.219.15.90%3D443#(ID) Google LLC🇮🇩
-vless://f68275d1-19b7-4f54-9a6e-4bd3c902dab4@masukan.bug.ws:80?path=%2Fvl%3D47.236.22.194%3D52324&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
-vless://f7c55ba9-79e4-4213-ae5d-c6c34cf71964@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D149.129.250.187%3D443#(ID) Alibaba🇮🇩
-trojan://zIrA0H8E2tgl@masukan.bug.ws:443
-vless://5109ac49-79e0-4a6f-9342-85353a99d0a9@masukan.bug.ws:80?path=%2Fvl%3D172.232.239.147%3D587&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(ID) Akamai Technologies  Inc🇮🇩
-vless://d1fc8593-a8aa-4bcc-85d8-c3f03fbdd5ad@masukan.bug.ws:80?path=%2Fvl%3D103.3.63.253%3D46683&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Akamai Connected Cloud🇸🇬
-vless://ddbab069-fcbf-479f-a241-243bf25629a6@masukan.bug.ws:80?path=%2Fvl%3D168.138.160.54%3D19081&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-trojan://dt8yJ03EAD2O@masukan.bug.ws:80
-vless://40a65704-3b16-43f8-ad32-99e823f1f19e@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D138.2.74.219%3D28616#(SG) Cloudflare Warp🇸🇬
-vless://4ad68fbf-61b4-4e3c-b37b-9776a4b389bb@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D103.20.199.118%3D12999#(JP) Nearoute🇯🇵
-trojan://pNPNzLc5uBcF@masukan.bug.ws:80
-trojan://EBiG5RgK2DKh@masukan.bug.ws:443
-trojan://aTKX9KabcAa8@masukan.bug.ws:80
-trojan://RYHfFS4WgqOK@masukan.bug.ws:80
-trojan://wJowimjrBJZ3@masukan.bug.ws:443
-trojan://bUW2VzPMgGm5@masukan.bug.ws:443
-trojan://bplgjSBoRZjn@masukan.bug.ws:80
-trojan://RsMpq7EnXTpB@masukan.bug.ws:80
-trojan://NqFFRyNgeSUR@masukan.bug.ws:80
-trojan://idnjQOSvqxVq@masukan.bug.ws:80
-trojan://iuAcm1VwfmYV@masukan.bug.ws:80
-trojan://qCV2FMye37Fm@masukan.bug.ws:443
-vless://2a65d883-cf9b-47df-9051-e92d279c9756@masukan.bug.ws:80?path=%2Fvl%3D103.180.161.123%3D587&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Hong Kong Megalayer Technology Co  limited🇸🇬
-vless://c01d1305-1bea-40c4-b16c-77f8114d6eab@masukan.bug.ws:80?path=%2Fvl%3D8.222.129.175%3D58808&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
-vless://6e4e7bd5-609c-4b65-8e6a-429995ad83c9@masukan.bug.ws:80?path=%2Fvl%3D103.133.223.52%3D2096&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(ID) Cloud Teknologi Nusantara🇮🇩
-vless://a2e02717-ad4a-4f88-a8be-e0a2c44a1baf@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D178.128.80.43%3D443#(SG) Digitalocean  LLC🇸🇬
-trojan://UxR5sFqTMrM5@masukan.bug.ws:443
-trojan://pucMzZg3XDnL@masukan.bug.ws:80
-trojan://29dn5bqLZrKd@masukan.bug.ws:443
-trojan://biC4yi5XTrfa@masukan.bug.ws:80
-trojan://2Gb8BYy3R0QH@masukan.bug.ws:80
-trojan://OuERWF8IHTZM@masukan.bug.ws:443
-vless://09e458a6-9a88-4a4f-9024-7c74726f8f4a@masukan.bug.ws:80?path=%2Fvl%3D167.71.194.185%3D8443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Digitalocean  LLC🇸🇬
-vless://989d5c65-cb39-4216-830d-66ac67883ecc@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D158.178.225.124%3D37461#(SG) Oracle Corporation🇸🇬
-trojan://5Rjl8nMBxg7M@masukan.bug.ws:443
-vless://d31ad11c-a30b-40f6-b39d-49036f30cfb3@masukan.bug.ws:80?path=%2Fvl%3D194.127.193.240%3D50791&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) LEASEWEB SINGAPORE PTE  LTD🇸🇬
-vless://3daf3be5-cfe3-40c4-9ed2-b512e096040b@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D188.166.255.195%3D443#(SG) Digitalocean  LLC🇸🇬
-vless://50d5acc5-ec41-46b0-a6db-ce94e1c4411f@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D103.133.223.52%3D2096#(ID) PT Cloud Teknologi Nusantara🇮🇩
-vless://2b5b1e3e-b5eb-488a-a95c-047ae4a0db92@masukan.bug.ws:80?path=%2Fvl%3D172.232.239.151%3D587&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(ID) Akamai Connected Cloud🇮🇩
-trojan://BvrbI4s9Tqf5@masukan.bug.ws:80
-vless://eb7bd071-15b6-4af7-956e-24f9a5add27c@masukan.bug.ws:80?path=%2Fvl%3D119.81.201.154%3D9089&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Softlayer Technologies Inc🇸🇬
-trojan://HfVpO9QRcD2l@masukan.bug.ws:443
-vless://ab696419-706e-41cf-8ed2-ee38477f4027@masukan.bug.ws:80?path=%2Fvl%3D192.53.113.156%3D587&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Akamai Technologies  Inc🇸🇬
-vless://4c538e2a-6168-4935-892e-446f522f9769@masukan.bug.ws:80?path=%2Fvl%3D47.236.246.163%3D14108&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
-vless://a15a30e7-0dd4-44a0-b2a0-4ff9f3a6089c@masukan.bug.ws:80?path=%2Fvl%3D106.244.196.196%3D32485&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(KR) LG DACOM Corporation🇰🇷
-trojan://8JfPcQh8IlCd@masukan.bug.ws:80
-trojan://VGvD1ZSusJIW@masukan.bug.ws:443
-vless://ecf99cba-bdd0-4d86-a5ce-b63a6985c739@masukan.bug.ws:80?path=%2Fvl%3D47.236.25.107%3D27903&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
-vless://9a92d77f-4133-4531-a730-8a62cb7b3621@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D119.81.201.154%3D9089#(SG) Softlayer Technologies Inc🇸🇬
-vless://5e567f67-0ab0-45d0-ab86-27bc4d91f7b8@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D119.81.201.154%3D9089#(SG) Softlayer Technologies Inc🇸🇬
-trojan://GNGkUV5ZjZvl@masukan.bug.ws:80
-trojan://uKTuaIO2eVYy@masukan.bug.ws:443
-trojan://3fL5xLFplZZi@masukan.bug.ws:443
-trojan://VnhWxrKRQ4kv@masukan.bug.ws:443
-trojan://ieQiI8FxbERo@masukan.bug.ws:80
-trojan://uROhTZ0z78vR@masukan.bug.ws:80
-vless://41f17622-3ef2-4e8d-b060-74c80fa43617@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D129.150.58.86%3D57621#(SG) Oracle Corporation🇸🇬
-trojan://6SVABJRGB3E2@masukan.bug.ws:443
-vless://c0076282-553d-4706-b226-a5bd2ae6f847@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D213.35.107.73%3D443#(SG) Oracle Corporation🇸🇬
-vless://7e4c88ea-3c54-41f5-ba57-8ba6c8df3ed0@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D138.2.74.219%3D28616#(SG) Oracle Corporation🇸🇬
-trojan://4lCGeR2HcKPu@masukan.bug.ws:443
-vless://70f7fe1e-3f5c-4e02-b986-a0fb67ee0b22@masukan.bug.ws:80?path=%2Fvl%3D168.138.183.48%3D9090&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-vless://3e4f0480-288f-44c0-8de8-14a145a5e33e@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D62.72.46.14%3D8443#(SG) Contabo Asia Private Limited🇸🇬
-vless://7cc13783-1d0f-46d8-af14-3831bacc5b2a@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D188.166.255.195%3D8443#(SG) Digitalocean  LLC🇸🇬
-vless://a8305aa8-55ad-4b51-857b-16f6f0e47bc1@masukan.bug.ws:80?path=%2Fvl%3D139.180.215.77%3D57878&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) The Constant Company  LLC🇸🇬
-trojan://7O9JlpyeTBiO@masukan.bug.ws:80
-trojan://pwAy2RlU2HqH@masukan.bug.ws:80
-trojan://lPpbMWkZ52Q6@masukan.bug.ws:443
-vless://19b79a0f-0954-4f48-bcf6-654f3c3b28c3@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D161.117.249.114%3D2025#(SG) Alibaba us Technology Co   Ltd🇸🇬
-vless://e47d78a4-8cd3-4b3a-a435-67097313d4a0@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D194.127.193.124%3D24467#(SG) LEASEWEB SINGAPORE PTE  LTD🇸🇬
-vless://93348c23-9c61-49fd-9831-e16458a00e32@masukan.bug.ws:80?path=%2Fvl%3D103.20.199.118%3D12999&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(JP) Nearoute🇯🇵
-vless://28f35c81-175f-487e-a446-e3b0442c7b87@masukan.bug.ws:80?path=%2Fvl%3D129.150.58.86%3D57621&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-trojan://aQ46Y39G2Ht8@masukan.bug.ws:80
-vless://6fb333fa-f60a-4c95-a9ed-34458ce5d9a5@masukan.bug.ws:80?path=%2Fvl%3D47.236.119.190%3D51342&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
-trojan://MTO0T42ewDGT@masukan.bug.ws:80
-trojan://HIuUNXFvLCIu@masukan.bug.ws:443
-vless://17d2f23f-823d-4cfb-9cf6-8a2fced83676@masukan.bug.ws:80?path=%2Fvl%3D138.2.89.238%3D43254&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-vless://152db71a-24e7-4963-9817-49f2acd28d12@masukan.bug.ws:80?path=%2Fvl%3D103.133.223.52%3D2096&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(ID) PT Cloud Teknologi Nusantara🇮🇩
-vless://ef937c6b-461b-46e7-bc2b-a94a9c0a2ef9@masukan.bug.ws:80?path=%2Fvl%3D149.129.250.187%3D443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(ID) Alibaba🇮🇩
-trojan://KZRMFzgJdHi9@masukan.bug.ws:443
-vless://7b727cfb-5d50-44ea-817e-14e3074fe7d0@masukan.bug.ws:80?path=%2Fvl%3D103.186.1.209%3D2053&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(ID) PT Cloud Hosting Indonesia🇮🇩
-vless://f8207d47-d9df-4104-af71-565bbe09abbf@masukan.bug.ws:80?path=%2Fvl%3D139.180.144.170%3D666&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) The Constant Company  LLC🇸🇬
-vless://8a9a6f22-ff03-4626-b72e-29cb6e0cd2d9@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D15.235.162.49%3D443#(SG) OVH SAS🇸🇬
-vless://43677edb-8444-4bf5-9842-8ded5cc3d7ef@masukan.bug.ws:80?path=%2Fvl%3D103.6.207.108%3D8080&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(ID) PT Pusat Media Indonesia🇮🇩
-trojan://QIpOLELErDXh@masukan.bug.ws:80
-trojan://r2YtfrhBWuBD@masukan.bug.ws:443
-vless://139d198e-7617-4028-b772-ade9469ad9e3@masukan.bug.ws:80?path=%2Fvl%3D8.222.243.73%3D26385&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
-vless://f0376bfb-bcaa-4ac1-a8e1-e2da96fe9cbf@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D192.53.113.156%3D587#(SG) Akamai Technologies  Inc🇸🇬
-vless://9ac9a372-75e1-4559-8afe-404e37508562@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D103.133.223.51%3D2096#(ID) Cloud Teknologi Nusantara🇮🇩
-vless://5b2e0c6d-8526-4162-891c-a5464f8c89b5@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D106.244.196.196%3D32485#(KR) LG DACOM Corporation🇰🇷
-trojan://QPjX1dFg0YcJ@masukan.bug.ws:443
-vless://e71072b1-30d4-42a8-a9b5-db3d29553d25@masukan.bug.ws:80?path=%2Fvl%3D103.133.223.51%3D2096&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(ID) Cloud Teknologi Nusantara🇮🇩
-trojan://ML8x6LnrfTXy@masukan.bug.ws:443
-trojan://REEuXcvAu2dX@masukan.bug.ws:443
-trojan://ytQdWcvNJRgi@masukan.bug.ws:80
-vless://ce511325-f597-455f-9dfe-4729ccdfc75c@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D38.207.172.235%3D8003#(KR) Oracle Cloud🇰🇷
-trojan://IlB2q436uE7T@masukan.bug.ws:80
-vless://cabb3d4b-2f02-4c7e-b907-66c619c9aa98@masukan.bug.ws:80?path=%2Fvl%3D38.207.172.235%3D8003&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(KR) Oracle Cloud🇰🇷
-vless://7f784005-9c6a-4723-ba36-9b81be72243b@masukan.bug.ws:80?path=%2Fvl%3D138.2.74.219%3D28616&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Cloudflare Warp🇸🇬
-vless://9746cfc0-b209-4565-972a-204679693819@masukan.bug.ws:80?path=%2Fvl%3D139.180.136.178%3D29661&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) The Constant Company  LLC🇸🇬
-vless://e73e4774-9938-4099-bf72-5ac98efcd307@masukan.bug.ws:80?path=%2Fvl%3D188.166.255.195%3D8443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Digitalocean  LLC🇸🇬
-vless://9f87ef65-aa4d-4283-9b07-705851b8d30d@masukan.bug.ws:80?path=%2Fvl%3D13.250.14.76%3D443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Amazon🇸🇬
-vless://a2fc1c99-137d-481d-aceb-367e68be75ca@masukan.bug.ws:80?path=%2Fvl%3D47.236.173.166%3D587&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
-trojan://cQUauI1xM0CW@masukan.bug.ws:80
-trojan://7xOL15WbGeIZ@masukan.bug.ws:80
-trojan://rvMCCFQTmZhe@masukan.bug.ws:443
-vless://f5cadd5d-c660-4a70-bb54-b4b6b624fc32@masukan.bug.ws:80?path=%2Fvl%3D103.133.223.50%3D2096&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(ID) Cloud Teknologi Nusantara🇮🇩
-vless://e0c57e87-13ab-45f0-b584-866ed5ba4767@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D158.178.225.124%3D37497#(SG) Oracle Corporation🇸🇬
-vless://0ee59113-55bd-4cd8-97bf-dd86db86cb0e@masukan.bug.ws:80?path=%2Fvl%3D138.2.74.219%3D28616&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-vless://0ba3af8b-fd46-4ddd-baa6-a230d3bc1e9b@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D104.248.146.212%3D8443#(SG) Digital Ocean🇸🇬
-trojan://eRiSPXLItVvG@masukan.bug.ws:80
-trojan://4CwAc9vYhMPy@masukan.bug.ws:443
-trojan://wD04yvwAWUrp@masukan.bug.ws:443
-trojan://FcGZfATvLBfz@masukan.bug.ws:80
-trojan://DVPRCIOp3lo6@masukan.bug.ws:80
-vless://0eb235ff-a679-456a-84c9-cb29b3ef6005@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D103.3.63.253%3D46683#(SG) Akamai Connected Cloud🇸🇬
-trojan://H2s3Nw8YHQ04@masukan.bug.ws:443
-trojan://miFjbMhNKmlM@masukan.bug.ws:443
-vless://8f02b6a3-72cb-42e8-a481-bc1e375d4633@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D47.236.173.166%3D587#(SG) Alibaba us Technology Co   Ltd🇸🇬
-trojan://PgqQ4Mgum4TI@masukan.bug.ws:80
-trojan://acDGwDEG846z@masukan.bug.ws:443
-vless://4b776eae-7475-4a67-a78a-b2c05e637c1d@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D8.218.107.145%3D31166#(ID) PT Deneva🇮🇩
-vless://5deb35a7-05e6-4bbc-ab37-61c71d0d77e3@masukan.bug.ws:80?path=%2Fvl%3D143.198.213.197%3D443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Digitalocean  LLC🇸🇬
-trojan://0niYpWjOANX2@masukan.bug.ws:443
-trojan://lQrAMguynGq5@masukan.bug.ws:443
-vless://705a905d-39c1-4978-940e-faa73ca64cf6@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D51.79.158.126%3D443#(SG) OVH SAS🇸🇬
-trojan://mNd8yaD9s0HX@masukan.bug.ws:443
-vless://fd1d5901-1ce3-4c1e-b499-b8918649e8ca@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D8.222.143.82%3D24245#(SG) Alibaba us Technology Co   Ltd🇸🇬
-trojan://dDa0pfHFQuWi@masukan.bug.ws:443
-vless://3bb45514-c1b1-4f31-992b-4cbd63ef4424@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3DIP: 35.219.50.99%3D443#(ID) Google Cloud🇮🇩
-vless://1ee0a24e-83ee-45af-bfad-37c4d2697d5a@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D103.180.161.10%3D587#(SG) Hong Kong Megalayer Technology Co  limited🇸🇬
-vless://714556e7-555b-4feb-b6dd-a3bc18d6e9fd@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D103.133.223.50%3D2096#(ID) Cloud Teknologi Nusantara🇮🇩
-vless://cc1b3a17-4e69-4ad9-b32d-7d03f4a676da@masukan.bug.ws:80?path=%2Fvl%3D194.127.193.124%3D24467&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) LEASEWEB SINGAPORE PTE  LTD🇸🇬
-trojan://9Dis8D9cBIik@masukan.bug.ws:80
-vless://b03ff58c-b875-43a9-8bf1-fb0f4cc301af@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D139.162.48.174%3D10000#(SG) Akamai Technologies  Inc🇸🇬
-vless://01760c40-935e-46ce-85b6-aded7d1872bb@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D103.6.207.108%3D8080#(ID) PT Pusat Media Indonesia🇮🇩
-vless://dc7a1941-0519-44fa-8a02-a19966ef1aab@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D43.156.16.213%3D31528#(SG) Shenzhen Tencent Computer Systems Company Limited🇸🇬
-trojan://G0dfCtfMQdgm@masukan.bug.ws:443
-vless://53ed82e7-4a8c-499c-a8ce-85a00bf7360c@masukan.bug.ws:80?path=%2Fvl%3D139.180.136.178%3D29806&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) The Constant Company  LLC🇸🇬
-vless://bf73ed77-7e62-42de-adb0-2d477f23f3de@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D138.2.95.61%3D1111#(SG) Oracle Corporation🇸🇬
-trojan://RDZRVBaqIqLu@masukan.bug.ws:80
-trojan://r4MShgSqRyC6@masukan.bug.ws:80
-trojan://HVlDJ2ZLthUR@masukan.bug.ws:80
-trojan://ZN25NfkenXZD@masukan.bug.ws:443
-trojan://1EawemyiaH20@masukan.bug.ws:80
-vless://844a9ae8-75d6-46cc-9db3-555a08cebceb@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D139.180.131.125%3D10005#(SG) The Constant Company  LLC🇸🇬
-trojan://brZuOqhkYPpX@masukan.bug.ws:443
-vless://42ebf607-c327-4c05-96f2-f5560a463c17@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D43.133.145.156%3D53136#(ID) Tencent cloud computing🇮🇩
-trojan://hOV9ATWdTPka@masukan.bug.ws:80
-trojan://dJ67B04bRszH@masukan.bug.ws:443
-vless://7c233743-1fd8-4a85-beb3-d56eed335016@masukan.bug.ws:80?path=%2Fvl%3D35.219.50.99%3D443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(ID) Google LLC🇮🇩
-trojan://vQ3DkVB2OZB7@masukan.bug.ws:80
-vless://62beaf1f-eb1c-4f4e-ad8b-c8af87d040c2@masukan.bug.ws:80?path=%2Fvl%3D8.222.143.82%3D24245&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
-vless://43514c47-399a-4c0b-b939-6a23c02d859d@masukan.bug.ws:80?path=%2Fvl%3D8.218.107.145%3D31166&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(ID) PT Deneva🇮🇩
-vless://0291f394-50e5-4b44-9d9a-9a3d9f86392b@masukan.bug.ws:80?path=%2Fvl%3D43.133.145.156%3D53136&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(ID) Shenzhen Tencent Computer Systems Company Limited🇮🇩
-vless://99933d03-38cc-4adc-b983-251d9101e665@masukan.bug.ws:80?path=%2Fvl%3D158.178.225.124%3D37497&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-trojan://yVvUChS1DT9l@masukan.bug.ws:80
-trojan://KaiSf8qWGk9G@masukan.bug.ws:443
-trojan://O77N0wqtXBUn@masukan.bug.ws:443
-trojan://WpoKTGsWRAYC@masukan.bug.ws:80
-trojan://vsuZ8Y0kvbcs@masukan.bug.ws:443
-trojan://Skjr6mcCNHBF@masukan.bug.ws:80
-trojan://ouTxOQCsj2Fh@masukan.bug.ws:443
-trojan://vmBPL2sraBOF@masukan.bug.ws:80
-vless://842a10e8-3146-488c-8ccd-1a0767e8ee3d@masukan.bug.ws:80?path=%2Fvl%3D203.194.112.119%3D8443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(ID) First Cagayan Converge Data Center Inc.🇮🇩
-vless://e33a8e17-0b28-498b-908b-df3ee68c9040@masukan.bug.ws:80?path=%2Fvl%3D213.35.107.73%3D443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-vless://576ffb9b-8726-4d2c-ac9b-8de4180deee5@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D139.180.136.178%3D29661#(SG) The Constant Company  LLC🇸🇬
-vless://e2bf5e2e-0fa2-41f2-a97e-4b7bb5b53488@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D168.138.183.48%3D9090#(SG) Oracle Corporation🇸🇬
-trojan://ZlWzsIpADI9m@masukan.bug.ws:443
-trojan://TqnohWXsnBTZ@masukan.bug.ws:80
-trojan://Aqv0gYbJBvOJ@masukan.bug.ws:443
-vless://ad29196d-9980-4293-9e04-0bf0eecccb05@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D168.138.160.54%3D19081#(SG) Oracle Corporation🇸🇬
-vless://d37360e1-5630-402c-b550-2b43c90d9771@masukan.bug.ws:80?path=%2Fvl%3D51.79.254.182%3D443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) OVH SAS🇸🇬
-vless://0d4d3dfc-b67f-4714-888c-5ba2323be4b5@masukan.bug.ws:80?path=%2Fvl%3D139.180.131.125%3D10005&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) The Constant Company  LLC🇸🇬
-trojan://BX6fRTrM6R3l@masukan.bug.ws:80
-trojan://KHqWeKq1pI0X@masukan.bug.ws:80
-trojan://2CYuNENrjCJx@masukan.bug.ws:443
-trojan://KQiqmRbhqrAb@masukan.bug.ws:443
-vless://95a7d606-ed7b-49b5-8322-cda2bb8f0fc6@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D13.250.14.76%3D443#(SG) Amazon🇸🇬
-trojan://b8BBq5hn79M0@masukan.bug.ws:443
-vless://282e801e-c5e1-4ff2-aabe-2b8f7daada3c@masukan.bug.ws:80?path=%2Fvl%3D119.81.201.154%3D9089&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) SoftLayer Technologies🇸🇬
-trojan://zMEjL8R4HHnv@masukan.bug.ws:443
-trojan://0TuA1gOODqC4@masukan.bug.ws:80
-trojan://LTVvnGGN897D@masukan.bug.ws:443
-trojan://FsSrGBZm6rVM@masukan.bug.ws:80
-trojan://mnDP5mugz0nP@masukan.bug.ws:80
-vless://b3eb1b0e-3baf-43e7-9b8f-08087d4c9e3c@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D139.162.33.248%3D587#(SG) Akamai Technologies  Inc🇸🇬
-trojan://IdjFgKRbHoEY@masukan.bug.ws:80
-trojan://ajA4W3Rvhhml@masukan.bug.ws:443
-trojan://atU6J53guJK9@masukan.bug.ws:80
-trojan://x68q05YD0ize@masukan.bug.ws:443
-trojan://SR89uiTj2MU7@masukan.bug.ws:443
-vless://19b066f4-59a4-4407-a967-f2b9add85925@masukan.bug.ws:80?path=%2Fvl%3D158.178.225.124%3D12934&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-trojan://BR6FGI6WSPh7@masukan.bug.ws:80
-vless://cd6d4261-681b-4bc0-a393-50f2e54c74e7@masukan.bug.ws:80?path=%2Fvl%3D43.133.145.156%3D53136&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(ID) Tencent cloud computing🇮🇩
-vless://c68dcb02-e4cc-41b3-a772-1fd919936880@masukan.bug.ws:80?path=%2Fvl%3D94.237.75.31%3D62174&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Upcloud LTD🇸🇬
-vless://1d15561e-ea53-446f-878d-b4422be2f0f3@masukan.bug.ws:80?path=%2Fvl%3D54.169.229.188%3D443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Amazon com  Inc🇸🇬
-vless://07bb89b0-c777-4d10-9a79-87c3911ba807@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D94.237.75.31%3D62174#(SG) Upcloud LTD🇸🇬
-vless://b302b0c7-8b38-4245-b5c0-55fd592c9a7e@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D158.178.225.124%3D53618#(SG) Oracle Corporation🇸🇬
-vless://2593b794-a139-4e58-bacd-5f2f674956e5@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D43.133.145.156%3D53136#(ID) Tencent cloud computing🇮🇩
-vless://ebc86613-50d1-4d6d-99a8-70f5f39e3b26@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D47.74.254.191%3D8900#(SG) Alibaba us Technology Co   Ltd🇸🇬
-vless://27a3760a-a73a-4769-ac24-32a186beb922@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D138.2.109.23%3D587#(SG) Oracle Corporation🇸🇬
-trojan://o24RHQPFJYRM@masukan.bug.ws:80
-vless://b7009909-e0c5-480a-aee5-28ccabe71d31@masukan.bug.ws:80?path=%2Fvl%3D104.248.146.212%3D8443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Digital Ocean🇸🇬
-vless://77f66895-51da-4b07-8a2e-675436be44d6@masukan.bug.ws:80?path=%2Fvl%3D103.180.161.10%3D587&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Hong Kong Megalayer Technology Co  limited🇸🇬
-vless://76eff7ae-0dcf-4c31-9ce6-5efb4501480e@masukan.bug.ws:80?path=%2Fvl%3D129.150.36.188%3D53435&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Oracle Cloud🇸🇬
-trojan://rcYLgXuFU223@masukan.bug.ws:443
-vless://fc2a908d-a356-4e2e-9f94-d3aa200751f1@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D129.150.36.188%3D53435#(SG) Oracle Cloud🇸🇬
-trojan://5BVcOfBBFmDd@masukan.bug.ws:443
-vless://32ac1395-2062-44a6-b381-7eb98a4f2c21@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D213.35.108.135%3D12596#(SG) Oracle Corporation🇸🇬
-trojan://vBSZc0Ckqrx1@masukan.bug.ws:80
-vless://db4f41a9-1133-4dbe-b899-508353023860@masukan.bug.ws:80?path=%2Fvl%3D51.79.158.126%3D443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) OVH SAS🇸🇬
-trojan://CPQ3x6Na297e@masukan.bug.ws:443
-vless://b8e1ae87-dac7-425f-b155-ce8952247aad@masukan.bug.ws:80?path=%2Fvl%3D161.117.249.114%3D2025&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
-vless://32f8abac-d7a9-4b87-a169-d19ce7214c46@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D54.169.229.188%3D443#(SG) Amazon com  Inc🇸🇬
-trojan://kY8kxwva0D12@masukan.bug.ws:80
-trojan://Aw14EuGkANJA@masukan.bug.ws:80
-trojan://lK7SgUMeBJDl@masukan.bug.ws:80
-trojan://jjzTOX1tZ7Zd@masukan.bug.ws:443
-trojan://KxTHnKH413LY@masukan.bug.ws:80
-trojan://x2nzGr1cMe5n@masukan.bug.ws:80
-trojan://RPcdqfjPnZk9@masukan.bug.ws:80
-trojan://7nPocm0H6BwX@masukan.bug.ws:80
-vless://fccdddb9-573e-45bf-9068-4232420f4ce8@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D103.180.161.123%3D587#(SG) Hong Kong Megalayer Technology Co  limited🇸🇬
-trojan://BGZSG2l38YG2@masukan.bug.ws:80
-vless://33ec30d0-6247-4df9-97b4-313640613540@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D103.186.1.209%3D2053#(ID) PT Cloud Hosting Indonesia🇮🇩
-vless://6e8290f1-1a43-4487-aa5e-3abcaa0143c0@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D172.232.239.147%3D587#(ID) Akamai Technologies  Inc🇮🇩
-trojan://cIwMUBhT0Yj4@masukan.bug.ws:80
-vless://b20424c3-e772-42e7-9598-c87aace6d598@masukan.bug.ws:80?path=%2Fvl%3D103.6.207.108%3D8080&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(ID) Pt Pusat Media Indonesia🇮🇩
-vless://7d5a1222-07f1-4064-90b4-d1d2bb299ceb@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D139.180.136.178%3D29806#(SG) The Constant Company  LLC🇸🇬
-vless://c5fa0ab5-5915-4dc5-91d5-c70de621f3a2@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D8.219.197.113%3D45714#(SG) Alibaba us Technology Co   Ltd🇸🇬
-vless://3f7ca0ee-c406-4e9a-bb10-c6baaafc7ebf@masukan.bug.ws:80?path=%2Fvl%3D139.162.48.174%3D10000&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Akamai Technologies  Inc🇸🇬
-vless://5b751c2c-8e9d-428a-818a-0d2f447bee94@masukan.bug.ws:80?path=%2Fvl%3D43.133.145.156%3D53136&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(ID) Tencent cloud computing🇮🇩
-trojan://qnSreE91gUBq@masukan.bug.ws:443
-trojan://LVZ9P6XJSN2W@masukan.bug.ws:443
-vless://79764f5b-5c32-4b67-b508-fbf766b7c105@masukan.bug.ws:80?path=%2Fvl%3D47.245.95.160%3D1443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
-trojan://uSFeuGGDbHho@masukan.bug.ws:443
-vless://cf4043cf-726c-4348-bd00-3c71289306d5@masukan.bug.ws:80?path=%2Fvl%3D54.251.167.101%3D443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Amazon com  Inc🇸🇬
+trojan://iJAuQyCZwtSy@masukan.bug.ws:443
+trojan://SF0eedFsrPEd@masukan.bug.ws:443
+vless://c4c57b67-e042-4825-bba4-165b4b4a65ad@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D146.235.18.248%3D45137#(SG) Oracle Corporation🇸🇬
+trojan://3v50IZHsIU68@masukan.bug.ws:80
+vless://96a0f2fd-e312-4980-ac92-3c426d71a9f8@masukan.bug.ws:80?path=%2Fvl%3D158.178.225.124%3D37461&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+vless://0597d013-5088-4893-9a1b-301e7e97a6b0@masukan.bug.ws:80?path=%2Fvl%3D138.2.95.61%3D1111&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+trojan://qcjrKpz8uEGh@masukan.bug.ws:443
+vless://e52862f6-9fc5-4921-adc2-406e0acae865@masukan.bug.ws:80?path=%2Fvl%3D158.178.225.124%3D37497&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+vless://1635e828-1e70-49aa-a93b-905d1728a137@masukan.bug.ws:80?path=%2Fvl%3D47.236.25.107%3D27903&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
+vless://92169abd-ea55-41ae-ae9d-8fbd2a4cf32a@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D158.178.225.124%3D37461#(SG) Oracle Corporation🇸🇬
+vless://e8f0b784-fbdc-4ec8-b082-f59b6d29fd15@masukan.bug.ws:80?path=%2Fvl%3D203.194.112.119%3D2053&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(ID) First Cagayan Converge Data Center Inc.🇮🇩
+vless://0ba738a1-6351-4018-a58d-034f1569a612@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D129.150.50.63%3D443#(SG) Oracle Corporation🇸🇬
+trojan://GiPUnZ1xGGIy@masukan.bug.ws:80
+vless://4a551655-0b62-476c-85b9-ac293176318c@masukan.bug.ws:80?path=%2Fvl%3D143.42.68.97%3D17055&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Akamai Technologies  Inc🇸🇬
+trojan://5qViBoyyzu1p@masukan.bug.ws:443
+trojan://ZJcFUREAHBDx@masukan.bug.ws:443
+vless://4462600a-931d-4f56-9a0e-6f7444a90880@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D47.236.246.163%3D14108#(SG) Alibaba us Technology Co   Ltd🇸🇬
+trojan://z9wl4DsYV6Uu@masukan.bug.ws:80
+vless://b89e8955-0d89-418b-b8ac-c9a88b6d6f60@masukan.bug.ws:80?path=%2Fvl%3D178.128.80.43%3D443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Digitalocean  LLC🇸🇬
+trojan://yRBMp6kSd5nF@masukan.bug.ws:443
+trojan://BGhlos0iwHsj@masukan.bug.ws:80
+trojan://sLkuQAIvAHD6@masukan.bug.ws:443
+trojan://qLN7M6gfwVRR@masukan.bug.ws:80
+trojan://vPgbBBD9jvAw@masukan.bug.ws:443
+trojan://fj1kBslTZ8K6@masukan.bug.ws:443
+vless://3670dafd-fe7e-4fb4-bfa0-4b89d5f4de38@masukan.bug.ws:80?path=%2Fvl%3D8.219.197.113%3D45714&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
+trojan://J8WNCFlbUMsl@masukan.bug.ws:80
+vless://04d3a0e9-fb56-4f4e-874c-53e3c366e2a0@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D47.245.95.160%3D1443#(SG) Alibaba us Technology Co   Ltd🇸🇬
+trojan://RaYMC9RNzPru@masukan.bug.ws:80
+vless://4aeb8bbd-73d1-4166-b41b-b5c4b0bc8284@masukan.bug.ws:80?path=%2Fvl%3D43.156.16.213%3D31528&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Shenzhen Tencent Computer Systems Company Limited🇸🇬
+trojan://FVfhSbBH9pcA@masukan.bug.ws:443
+vless://b3180c74-b2f8-4068-b992-424911759c21@masukan.bug.ws:80?path=%2Fvl%3D139.162.48.174%3D10000&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Akamai Technologies  Inc🇸🇬
+vless://b9dabbc7-1fb3-4a2f-89b2-5ffa542411ae@masukan.bug.ws:80?path=%2Fvl%3D62.72.46.14%3D8443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Contabo Asia Private Limited🇸🇬
+vless://9ece724e-1a87-425c-9307-df2da3c9dbc6@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D168.138.160.54%3D19081#(SG) Oracle Corporation🇸🇬
+trojan://JWBoFU9lE1vq@masukan.bug.ws:443
+trojan://leb1lX00S7zN@masukan.bug.ws:443
+vless://5544499f-2cda-4022-8dd7-45b9fcb9ead7@masukan.bug.ws:80?path=%2Fvl%3D143.198.213.197%3D443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Digitalocean  LLC🇸🇬
+vless://befb4fd9-762e-4e02-baea-7dae6b1855fc@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D47.236.119.190%3D51342#(SG) Alibaba us Technology Co   Ltd🇸🇬
+vless://18d92c29-6849-429b-b813-02badae92329@masukan.bug.ws:80?path=%2Fvl%3D139.180.136.178%3D29661&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) The Constant Company  LLC🇸🇬
+trojan://KqQNIOvGQENp@masukan.bug.ws:80
+trojan://0zuUEN7z0i5T@masukan.bug.ws:80
+vless://8e170f4e-822d-49a8-bd8b-2687b6e6b72e@masukan.bug.ws:80?path=%2Fvl%3D194.127.193.124%3D24467&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) LEASEWEB SINGAPORE PTE  LTD🇸🇬
+vless://f8d079ae-794f-424c-9a08-4f17982ada4d@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D119.81.201.154%3D9089#(SG) Softlayer Technologies Inc🇸🇬
+trojan://ZxIzZtuqT3Ud@masukan.bug.ws:80
+vless://c1fef680-4084-420b-bce5-c61179d7f64b@masukan.bug.ws:80?path=%2Fvl%3D47.236.22.194%3D52324&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
+vless://04e86925-aa82-489d-8247-5c2d3a30016b@masukan.bug.ws:80?path=%2Fvl%3D103.133.223.52%3D2096&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(ID) PT Cloud Teknologi Nusantara🇮🇩
+vless://ddce1df7-ba26-4b74-8675-2e9abe67656c@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D138.2.74.219%3D28616#(SG) Cloudflare Warp🇸🇬
+trojan://TCuZpzv4R5fg@masukan.bug.ws:443
+vless://f762d6b5-d924-4ff1-a468-79df3c32cac4@masukan.bug.ws:80?path=%2Fvl%3D47.236.246.163%3D14108&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
+trojan://GqSSTgChPTA0@masukan.bug.ws:80
+vless://7c8f8dc3-3d90-4139-abdb-f9c396c7f1fd@masukan.bug.ws:80?path=%2Fvl%3D168.138.166.213%3D10500&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+vless://b124be73-9d3f-49de-ad6f-65351785a910@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D103.6.207.108%3D8080#(ID) PT Pusat Media Indonesia🇮🇩
+trojan://QYeriA5GVkzB@masukan.bug.ws:80
+vless://eeadb73f-63a5-41ba-b9f9-2d57cc5c3eb8@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D43.133.145.156%3D53136#(ID) Tencent cloud computing🇮🇩
+trojan://4BrHjV43N1uV@masukan.bug.ws:80
+vless://4fd87a1f-65b2-4bff-aaa1-c58bdddb7585@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D45.77.36.40%3D443#(SG) The Constant Company  LLC🇸🇬
+vless://91e1cfe8-f149-431b-b873-a014e6d5a524@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D172.232.239.147%3D587#(ID) Akamai Technologies  Inc🇮🇩
+vless://e580137f-602a-4b44-b8a8-d6ac5982a51c@masukan.bug.ws:80?path=%2Fvl%3D94.237.75.31%3D62174&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Upcloud LTD🇸🇬
+trojan://DuBaZHaqjUT7@masukan.bug.ws:80
+vless://970e96aa-e765-4a9d-b362-2c7bd54e3d17@masukan.bug.ws:80?path=%2Fvl%3D47.74.254.191%3D8900&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
+vless://0a627674-a12a-4083-a24a-3f9145bdc0a8@masukan.bug.ws:80?path=%2Fvl%3D45.77.171.102%3D3128&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) The Constant Company  LLC🇸🇬
+trojan://m8q6WAXpk5EP@masukan.bug.ws:80
+vless://00eb960b-3c14-4d50-87df-44916227e30a@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D168.138.166.213%3D10500#(SG) Oracle Corporation🇸🇬
+trojan://7lt7f86k7MCP@masukan.bug.ws:80
+vless://4e3a6ce7-6ec1-4daf-bdb7-2ca16c8956e7@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D138.2.74.219%3D28616#(SG) Oracle Corporation🇸🇬
+trojan://KtvBcc0gl7AL@masukan.bug.ws:443
+vless://f77ba666-a4f0-411f-91f6-d97320d0bace@masukan.bug.ws:80?path=%2Fvl%3D8.222.243.73%3D26385&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
+vless://172bea4b-410e-4fa2-8b97-74fe74720b99@masukan.bug.ws:80?path=%2Fvl%3D106.244.196.196%3D32485&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(KR) LG DACOM Corporation🇰🇷
+trojan://HYHYKEfJHjOR@masukan.bug.ws:443
+trojan://lotPCedFCgQ0@masukan.bug.ws:443
+vless://22d64394-40df-4f3e-aa70-77647b510f59@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D158.178.225.124%3D53618#(SG) Oracle Corporation🇸🇬
+trojan://0qtlrMPOCXvj@masukan.bug.ws:80
+trojan://gWJGFEp40MdV@masukan.bug.ws:443
+vless://571fbe86-20b2-40b5-a7df-626616ca89ae@masukan.bug.ws:80?path=%2Fvl%3D38.207.172.235%3D8003&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(KR) Oracle Cloud🇰🇷
+trojan://htNuxdNHXDQv@masukan.bug.ws:80
+vless://2c3fe183-34ed-4409-ab26-68434cb5c41a@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D8.222.129.175%3D58808#(SG) Alibaba us Technology Co   Ltd🇸🇬
+trojan://6g0AS4O5izLo@masukan.bug.ws:443
+trojan://9JaNeds9r7iL@masukan.bug.ws:80
+vless://e5f1f9b1-4ba2-44c4-924a-86aaeb499318@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D138.2.95.61%3D1111#(SG) Oracle Corporation🇸🇬
+trojan://kdqNBFjMYjvk@masukan.bug.ws:443
+vless://1d81cd51-53f8-4297-ba4e-4e70ebed72e8@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D47.74.254.191%3D8900#(SG) Alibaba us Technology Co   Ltd🇸🇬
+trojan://K0FpuSaE34gD@masukan.bug.ws:443
+trojan://ZQSIs0YMePmi@masukan.bug.ws:80
+trojan://5KiHHpuWyVzv@masukan.bug.ws:80
+trojan://DYAJdU6Cl7pA@masukan.bug.ws:80
+vless://98e6fa86-785d-4ef8-a79b-88911e320302@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D139.162.48.174%3D10000#(SG) Akamai Technologies  Inc🇸🇬
+vless://ee1f53b4-f112-4d11-b842-d229159a4db5@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D8.219.237.57%3D31523#(SG) Alibaba us Technology Co   Ltd🇸🇬
+vless://e9000c37-c549-415b-981b-8c75d83602b0@masukan.bug.ws:80?path=%2Fvl%3D213.35.108.135%3D12596&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+trojan://atMJEkdNyUM1@masukan.bug.ws:443
+vless://9e18ba2a-4fb7-4c04-990f-115015400974@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D143.198.213.197%3D443#(SG) Digitalocean  LLC🇸🇬
+trojan://45Qv68VHBjo0@masukan.bug.ws:443
+vless://7ade5943-46f4-44dc-884b-b960e79c7b5b@masukan.bug.ws:80?path=%2Fvl%3D103.6.207.108%3D8080&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(ID) PT Pusat Media Indonesia🇮🇩
+vless://bb02b3a8-cef4-4734-9bb3-eeed55cbe132@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D138.2.109.23%3D587#(SG) Oracle Corporation🇸🇬
+vless://89edbec5-9647-4bb6-84ef-76afff6378b5@masukan.bug.ws:80?path=%2Fvl%3D103.6.207.108%3D8080&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(ID) PT Pusat Media Indonesia🇮🇩
+vless://71d4f738-7829-46bb-ad94-e78a4c6d0ef3@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D47.236.25.107%3D27903#(SG) Alibaba us Technology Co   Ltd🇸🇬
+vless://f17213d4-554b-44ee-8384-06bd904351e3@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D54.251.167.101%3D443#(SG) Amazon com  Inc🇸🇬
+vless://cd55324f-8267-4832-9fa0-2cfa89e3716c@masukan.bug.ws:80?path=%2Fvl%3D213.35.107.73%3D443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+trojan://ogsMu1OR1VDQ@masukan.bug.ws:80
+trojan://RziKOOJy9lrj@masukan.bug.ws:80
+vless://27d429ca-31c3-4ab2-a49e-464bcc45327a@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D43.133.145.156%3D53136#(ID) Shenzhen Tencent Computer Systems Company Limited🇮🇩
+trojan://iObAfyfPzJtJ@masukan.bug.ws:443
+trojan://lYQ1erkpijZ2@masukan.bug.ws:443
+vless://bd0e0311-aad8-4d44-ad77-53aa15fd2eec@masukan.bug.ws:80?path=%2Fvl%3D103.133.223.50%3D2096&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(ID) Cloud Teknologi Nusantara🇮🇩
+vless://e5e5051b-05eb-4966-b39d-f8772496b773@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D119.81.201.154%3D9089#(SG) Softlayer Technologies Inc🇸🇬
+trojan://n0dJilpNG1EI@masukan.bug.ws:80
+vless://da73346d-2a80-4b4f-b769-30a2a22d397b@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D106.244.196.196%3D32485#(KR) LG DACOM Corporation🇰🇷
+vless://9f27b03a-2afb-4f12-9e16-d2b84e1caf83@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D106.240.106.61%3D38937#(KR) LG DACOM Corporation🇰🇷
+trojan://jVxar0U4X823@masukan.bug.ws:443
+vless://41cfa9ac-f6d9-4d8b-95cd-226c469806eb@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D129.150.58.86%3D57621#(SG) Oracle Corporation🇸🇬
+trojan://YJA9E6oKG92q@masukan.bug.ws:80
+vless://7c31e305-8686-4fa0-8f69-e0c6845c727a@masukan.bug.ws:80?path=%2Fvl%3D129.150.36.188%3D53435&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Oracle Cloud🇸🇬
+vless://8c34e6c5-2ba0-4d8d-bf6f-854749d2f9dc@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D158.178.225.124%3D37497#(SG) Oracle Corporation🇸🇬
+vless://658ddd47-3bec-485f-ab93-43e8139cdac8@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D103.180.161.69%3D587#(SG) Hong Kong Megalayer Technology Co  limited🇸🇬
+vless://6ebf6f42-b56f-4f71-ac5c-3a2ba4f84267@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D103.133.223.52%3D2096#(ID) PT Cloud Teknologi Nusantara🇮🇩
+trojan://MWr4VdsbOpuE@masukan.bug.ws:443
+trojan://q42wOG2pFD8P@masukan.bug.ws:80
+trojan://3C9jzAXR9ykN@masukan.bug.ws:443
+trojan://ZMMQAWFG2OkY@masukan.bug.ws:80
+vless://9ffa93f6-adcd-404b-a60d-1d6ebd7cf4cf@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D43.133.145.156%3D53136#(ID) Tencent cloud computing🇮🇩
+vless://8c15ac17-b754-4e98-8d0e-1e406770df6e@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D104.248.146.212%3D8443#(SG) Digital Ocean🇸🇬
+trojan://V4fCYW54BPB8@masukan.bug.ws:80
+vless://08a16d64-71da-4cc6-98f0-f3c899ecf4f3@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D54.169.229.188%3D443#(SG) Amazon com  Inc🇸🇬
+vless://9843e65b-611f-4cc1-843f-6d496fc303b6@masukan.bug.ws:80?path=%2Fvl%3D47.245.95.160%3D1443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
+trojan://DCtrx4pNrUgV@masukan.bug.ws:80
+trojan://1ZZGujLdrpwh@masukan.bug.ws:443
+trojan://EUtL5AqzAncI@masukan.bug.ws:80
+vless://3d466aab-f978-40b2-a948-e4305592ac42@masukan.bug.ws:80?path=%2Fvl%3D139.180.144.170%3D666&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) The Constant Company  LLC🇸🇬
+vless://cafdc035-c52b-4b8e-805f-a0c1b648f0ac@masukan.bug.ws:80?path=%2Fvl%3D172.232.239.151%3D587&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(ID) Akamai Connected Cloud🇮🇩
+trojan://GNBRyV8ifxjN@masukan.bug.ws:443
+vless://a2c96a9b-ca29-4d3d-917d-d6545e0cf398@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D139.180.131.125%3D10005#(SG) The Constant Company  LLC🇸🇬
+vless://5120eeba-53b6-499d-b6ce-9e930c81c47f@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D103.6.207.108%3D8080#(ID) PT Pusat Media Indonesia🇮🇩
+trojan://mH0Cuk1xGovJ@masukan.bug.ws:443
+trojan://OJ2OBWzbvCtX@masukan.bug.ws:80
+trojan://zyIlwfyFVjrl@masukan.bug.ws:80
+trojan://081Sz3asemUc@masukan.bug.ws:443
+vless://7721ae3f-36f2-4380-9165-dacdade278ce@masukan.bug.ws:80?path=%2Fvl%3D188.166.255.195%3D443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Digitalocean  LLC🇸🇬
+trojan://M8HcUuGLQGSR@masukan.bug.ws:80
+trojan://pzZYDqfeyTWj@masukan.bug.ws:443
+trojan://BYOgWc603QQC@masukan.bug.ws:80
+vless://0a67d830-40de-4b6a-b3af-eb2b67a87b38@masukan.bug.ws:80?path=%2Fvl%3D103.20.199.118%3D12999&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(JP) Nearoute🇯🇵
+vless://03ef3b34-bf88-4fa8-ba2e-814225a6cfb7@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D119.81.201.154%3D9089#(SG) SoftLayer Technologies🇸🇬
+vless://6855d156-dd3f-40c6-bb8c-b6d075ec39e7@masukan.bug.ws:80?path=%2Fvl%3D194.127.193.240%3D50791&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) LEASEWEB SINGAPORE PTE  LTD🇸🇬
+vless://2532b465-f67b-4cdc-a6c7-6390cbb59317@masukan.bug.ws:80?path=%2Fvl%3D158.178.225.124%3D53618&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+vless://77e093c2-7d08-4126-bfa1-23f59b3b3361@masukan.bug.ws:80?path=%2Fvl%3D188.166.255.195%3D8443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Digitalocean  LLC🇸🇬
+vless://3237068e-21e9-4517-9d20-0e0113d82b4b@masukan.bug.ws:80?path=%2Fvl%3D103.6.207.108%3D8080&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(ID) Pt Pusat Media Indonesia🇮🇩
+vless://5344be9a-bbfc-415d-8172-9a7e89a90991@masukan.bug.ws:80?path=%2Fvl%3D18.192.93.64%3D443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(DE) Amazon Inc🇩🇪
+vless://2ac57c5e-bcd6-41e9-a90f-323114527f7c@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D103.186.1.209%3D2053#(ID) PT Cloud Hosting Indonesia🇮🇩
+trojan://fGoWYE05Jf4P@masukan.bug.ws:443
+trojan://HRpW84u2En97@masukan.bug.ws:443
+vless://0b8bf0c6-356a-46de-84d7-d45aff257872@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D62.72.46.14%3D8443#(SG) Contabo Asia Private Limited🇸🇬
+vless://a24afebc-a5e0-4f9c-8bae-3d5ac12c2db8@masukan.bug.ws:80?path=%2Fvl%3D45.77.36.40%3D443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) The Constant Company  LLC🇸🇬
+trojan://e9d4q5BAZUdn@masukan.bug.ws:80
+vless://6c96841b-ea4f-414d-9824-84a3c0b8cf81@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D139.180.144.170%3D666#(SG) The Constant Company  LLC🇸🇬
+vless://2c4057d5-c2b2-42b3-8872-3060aff3afe6@masukan.bug.ws:80?path=%2Fvl%3D43.133.145.156%3D53136&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(ID) Tencent cloud computing🇮🇩
+vless://b4af530a-4755-4d44-92b6-8b706f3676ab@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D18.192.93.64%3D443#(DE) Amazon Inc🇩🇪
+vless://5f85646a-02d3-4026-94df-5b47b64bcbf1@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D51.79.254.182%3D443#(SG) OVH SAS🇸🇬
+trojan://s9FxWBNRbPXF@masukan.bug.ws:443
+trojan://Tw0hHoxQcyrg@masukan.bug.ws:443
+trojan://zkoyXAwGUHfi@masukan.bug.ws:80
+trojan://vjuAFIPO7lro@masukan.bug.ws:80
+trojan://XBHg5nAg1rQU@masukan.bug.ws:80
+trojan://0aJOd7xGq64I@masukan.bug.ws:80
+trojan://dF0PE99BgMp9@masukan.bug.ws:80
+trojan://Xu5Z9y4vCFer@masukan.bug.ws:443
+vless://422417cb-656e-4637-b519-80f9551410f5@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D103.6.207.108%3D8080#(ID) Pt Pusat Media Indonesia🇮🇩
+trojan://w7XsJMjoUB6F@masukan.bug.ws:443
+vless://082024ba-7fc0-4810-b352-6fb69deed397@masukan.bug.ws:80?path=%2Fvl%3D119.81.201.154%3D9089&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Softlayer Technologies Inc🇸🇬
+trojan://tlL735zlwvNs@masukan.bug.ws:80
+trojan://OmAUFQkgyGPC@masukan.bug.ws:443
+trojan://vE415u81Ffrk@masukan.bug.ws:443
+trojan://UAKOeCCeFTZA@masukan.bug.ws:80
+vless://5bfb2d27-8720-43e4-b9da-39e308375dcb@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D103.180.161.10%3D587#(SG) Hong Kong Megalayer Technology Co  limited🇸🇬
+vless://9737e89d-d90a-4bef-979d-3ad93134ae1d@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D167.71.194.185%3D8443#(SG) Digitalocean  LLC🇸🇬
+vless://f60c1ebc-758c-430e-ab69-7efa25a9ba5f@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D203.194.112.119%3D8443#(ID) First Cagayan Converge Data Center Inc.🇮🇩
+vless://e6a15d8c-3089-4197-a9fc-47250ce69a92@masukan.bug.ws:80?path=%2Fvl%3D47.236.173.166%3D587&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
+vless://a4f06993-f02e-4b56-be27-0ad627e28753@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D129.150.36.188%3D53435#(SG) Oracle Cloud🇸🇬
+vless://2c0c08ea-1d50-4aa4-98d3-b11f49e542d2@masukan.bug.ws:80?path=%2Fvl%3D35.219.15.90%3D443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(ID) Google LLC🇮🇩
+vless://c9e368d7-a977-455a-9491-dc17e810b3a1@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D138.2.89.238%3D43254#(SG) Oracle Corporation🇸🇬
+trojan://YeBHnmUTEQ7A@masukan.bug.ws:443
+vless://0b4f7bab-7971-4862-ac9a-24270ecf1fe7@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D213.35.107.73%3D443#(SG) Oracle Corporation🇸🇬
+trojan://nmX20mP7FX6q@masukan.bug.ws:443
+trojan://XNzJukPhfIkT@masukan.bug.ws:80
+trojan://8RvyTlGjmb9m@masukan.bug.ws:443
+trojan://zJS0uypFVO7r@masukan.bug.ws:443
+vless://c7a32cbb-0e47-426d-99ff-ec5e5c4d644d@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D172.232.239.147%3D587#(ID) Akamai Connected Cloud🇮🇩
+vless://0e57b81c-aac6-47e3-b8db-3ef9fa736eb7@masukan.bug.ws:80?path=%2Fvl%3D35.219.50.99%3D443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(ID) Google Cloud🇮🇩
+vless://4483a80d-d6af-44ce-acad-46fb426c57f1@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D13.250.14.76%3D443#(SG) Amazon🇸🇬
+vless://c489b968-21a3-4e94-9d5e-c05ed2ea8234@masukan.bug.ws:80?path=%2Fvl%3D35.219.50.99%3D443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(ID) Google LLC🇮🇩
+trojan://zUJ5RqTbDZDz@masukan.bug.ws:80
+vless://85799c9d-c2c2-477d-b990-b3fff1847e50@masukan.bug.ws:80?path=%2Fvl%3D149.129.250.187%3D443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(ID) Alibaba🇮🇩
+trojan://WlQDVZfun3u2@masukan.bug.ws:80
+vless://a5c01414-99df-4aa9-873b-f05db40d6cb0@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D15.235.162.49%3D443#(SG) OVH SAS🇸🇬
+vless://a3b5ae4b-0896-4a6a-a759-76d62641ca43@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D45.77.171.102%3D3128#(SG) The Constant Company  LLC🇸🇬
+vless://0b81013e-6d74-4206-ac39-b51591997fc9@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3DIP: 35.219.50.99%3D443#(ID) Google Cloud🇮🇩
+vless://c8cae32d-722b-4cdf-8eca-7adfb1eee5f0@masukan.bug.ws:80?path=%2Fvl%3D139.180.131.125%3D10005&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) The Constant Company  LLC🇸🇬
+vless://e5fe5731-a4de-4878-933e-ab8b02847a57@masukan.bug.ws:80?path=%2Fvl%3D172.232.239.147%3D587&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(ID) Akamai Technologies  Inc🇮🇩
+vless://232198f1-2ebb-4fec-b30e-8921a499f226@masukan.bug.ws:80?path=%2Fvl%3D51.79.254.182%3D443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) OVH SAS🇸🇬
+vless://f8bee835-1122-478f-ac6d-da996241f86b@masukan.bug.ws:80?path=%2Fvl%3D138.2.74.219%3D28616&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+vless://99755d22-df59-4c2e-b050-63a0cb3119f3@masukan.bug.ws:80?path=%2Fvl%3D15.235.162.49%3D443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) OVH SAS🇸🇬
+vless://ff60000a-94b9-4d4b-8a97-49a9cda4851c@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D149.129.250.187%3D443#(ID) Alibaba🇮🇩
+vless://213aeb1e-48cb-4fc3-8d36-81318a597073@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D146.190.111.165%3D443#(SG) Digitalocean  LLC🇸🇬
+vless://2f87065e-ace8-4c5e-9606-415d92f419d7@masukan.bug.ws:80?path=%2Fvl%3D8.219.237.57%3D31523&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
+vless://d55ec63c-b4b4-4917-af33-ba85e59d7b3b@masukan.bug.ws:80?path=%2Fvl%3D106.240.106.61%3D38937&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(KR) LG DACOM Corporation🇰🇷
+trojan://pCgP5WbdAok2@masukan.bug.ws:443
+vless://5755a122-353a-41c0-bccf-738399f4e8d3@masukan.bug.ws:80?path=%2Fvl%3D138.2.74.219%3D28616&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Cloudflare Warp🇸🇬
+trojan://pnsRX13JHzcg@masukan.bug.ws:443
+vless://056eca4f-7dcf-44c3-bd86-f97ae1fd9557@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D161.117.249.114%3D2025#(SG) Alibaba us Technology Co   Ltd🇸🇬
+vless://aea824d6-fd35-4e97-bcb7-9c8e859f2d0f@masukan.bug.ws:80?path=%2Fvl%3D119.81.201.154%3D9089&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Softlayer Technologies Inc🇸🇬
+trojan://YIxX9HIHssoL@masukan.bug.ws:443
+trojan://m58dAZ4keJpI@masukan.bug.ws:80
+vless://8bd65000-9efe-4cd6-aa52-d92cd1efde35@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D139.180.215.77%3D57878#(SG) The Constant Company  LLC🇸🇬
+trojan://c0TqifjAAG2I@masukan.bug.ws:443
+vless://8eb43ba2-adfd-432f-8adf-ffb330f7beb2@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D143.42.68.97%3D17055#(SG) Akamai Technologies  Inc🇸🇬
+trojan://F97qxCVVTNqX@masukan.bug.ws:443
+trojan://g0AiGLuZfW8Q@masukan.bug.ws:80
+vless://482941cd-ca37-465b-a637-a07aba15eae1@masukan.bug.ws:80?path=%2Fvl%3D129.150.50.63%3D443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+vless://111fef60-ce12-4208-bce4-a6e05eda63f9@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D47.236.173.166%3D587#(SG) Alibaba us Technology Co   Ltd🇸🇬
+trojan://GEQqvupuAtQ0@masukan.bug.ws:80
+trojan://OJGZ3Sm7jCqT@masukan.bug.ws:80
+vless://001fa994-427f-46e3-848e-e6a21a2a5058@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D129.150.49.58%3D18650#(SG) Oracle Corporation🇸🇬
+trojan://1Ux5zaak3wrt@masukan.bug.ws:443
+vless://b77f84eb-4d3e-4ec9-acdd-2fa344787662@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D178.128.80.43%3D443#(SG) Digitalocean  LLC🇸🇬
+vless://04fa0c0b-6e68-4849-b1e7-a9295f0c11fc@masukan.bug.ws:80?path=%2Fvl%3D103.133.223.52%3D2096&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(ID) Cloud Teknologi Nusantara🇮🇩
+trojan://FTfVACxUOTh3@masukan.bug.ws:443
+trojan://EnDoKrnx3NrD@masukan.bug.ws:80
+vless://5ef6e7d7-d272-44c3-a472-6e006cef6547@masukan.bug.ws:80?path=%2Fvl%3D43.133.145.156%3D53136&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(ID) Tencent cloud computing🇮🇩
+vless://d04f33ac-16ce-4fa2-b5f4-a10a7a019444@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D203.194.112.119%3D2053#(ID) First Cagayan Converge Data Center Inc.🇮🇩
+trojan://Ey5OBfdTDXcs@masukan.bug.ws:443
+vless://572ffab7-f6d6-43e6-8f02-e25e555fd9c0@masukan.bug.ws:80?path=%2Fvl%3D13.250.14.76%3D443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Amazon🇸🇬
+vless://cbebb6b0-9a63-47a7-8688-c046b1aff289@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D192.53.113.156%3D587#(SG) Akamai Technologies  Inc🇸🇬
+trojan://192WlQKWLOgP@masukan.bug.ws:80
+trojan://PAuQyChYRoDc@masukan.bug.ws:80
+trojan://Ze59yCe4z4pR@masukan.bug.ws:80
+trojan://hWkY663PAfRF@masukan.bug.ws:443
+trojan://ulcEt4O20nDt@masukan.bug.ws:443
+vless://4296c3d0-3275-4f47-ac34-a9b98bfa9f8d@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D139.180.136.178%3D29661#(SG) The Constant Company  LLC🇸🇬
+vless://859f5002-376e-4a95-a62b-855c6afc051a@masukan.bug.ws:80?path=%2Fvl%3D139.180.136.178%3D29806&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) The Constant Company  LLC🇸🇬
+trojan://jgWkYGPZcVq1@masukan.bug.ws:80
+trojan://NzOvn58EK6QY@masukan.bug.ws:443
+trojan://KGxCzC6zH3iX@masukan.bug.ws:443
+vless://1548d050-4955-4c7b-97b7-58b9f7891426@masukan.bug.ws:80?path=%2Fvl%3D103.133.223.51%3D2096&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(ID) Cloud Teknologi Nusantara🇮🇩
+vless://f1ee20c2-51c9-4481-aa1e-4614b17cb321@masukan.bug.ws:80?path=%2Fvl%3D158.178.225.124%3D12934&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+vless://0ecf0b92-625a-437a-bc74-7d9ddc9694bd@masukan.bug.ws:80?path=%2Fvl%3D192.53.113.156%3D587&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Akamai Technologies  Inc🇸🇬
+trojan://gx5WvzBDUtyX@masukan.bug.ws:443
+trojan://Q3RZKVBt6QUP@masukan.bug.ws:80
+trojan://cFTNRxiv5RMY@masukan.bug.ws:80
+vless://0d2396d8-87fd-4a5d-9416-11519013a57e@masukan.bug.ws:80?path=%2Fvl%3D103.186.1.209%3D2053&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(ID) PT Cloud Hosting Indonesia🇮🇩
+vless://710740c7-1c91-4b29-872e-bb0b1a3ba2bc@masukan.bug.ws:80?path=%2Fvl%3D54.169.229.188%3D443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Amazon com  Inc🇸🇬
+trojan://6w8Qbnl381H0@masukan.bug.ws:80
+vless://366499fb-e15d-433b-8723-3a7f2f3b924f@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D103.133.223.51%3D2096#(ID) Cloud Teknologi Nusantara🇮🇩
+trojan://EfDHp1B2mRUP@masukan.bug.ws:443
+trojan://AFT64M7kFiZh@masukan.bug.ws:443
+trojan://UZPQQasyj7Z2@masukan.bug.ws:80
+trojan://9cFewNvvB6eT@masukan.bug.ws:80
+trojan://nfNqyHXQC8qg@masukan.bug.ws:443
+trojan://gAjJfvcJ0Jr0@masukan.bug.ws:80
+vless://ba717000-a882-4007-a1c9-7973c6cf2c7c@masukan.bug.ws:80?path=%2Fvl%3D8.218.107.145%3D31166&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(ID) PT Deneva🇮🇩
+vless://fd226781-faaf-4f14-a400-268fa4d77927@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D8.222.243.73%3D26385#(SG) Alibaba us Technology Co   Ltd🇸🇬
+vless://0ad8d2a6-78bb-4af8-b4a4-358e46f3b5ab@masukan.bug.ws:80?path=%2Fvl%3D172.232.239.147%3D587&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(ID) Akamai Connected Cloud🇮🇩
+vless://5abcb0cf-e208-4df3-9089-22b2e0130397@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D188.166.255.195%3D8443#(SG) Digitalocean  LLC🇸🇬
+trojan://IEJkLfRU59W4@masukan.bug.ws:443
+trojan://XrUdmN3AJBGA@masukan.bug.ws:443
+trojan://7eEZGEr6eHLq@masukan.bug.ws:443
+vless://00392372-fd6d-415a-81e0-19636a8e05a1@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D94.237.75.31%3D62174#(SG) Upcloud LTD🇸🇬
+trojan://IaDvxnKdAlDT@masukan.bug.ws:443
+trojan://atHULUIyZgpB@masukan.bug.ws:443
+trojan://s1UH06S6NQA6@masukan.bug.ws:80
+trojan://1wDBY9jK0mhJ@masukan.bug.ws:80
+trojan://3yMEDwQd0DWB@masukan.bug.ws:80
+vless://c68f15b6-1313-432a-afac-942dd36d63ff@masukan.bug.ws:80?path=%2Fvl%3D103.180.161.69%3D587&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Hong Kong Megalayer Technology Co  limited🇸🇬
+trojan://TA30tPfZf6E4@masukan.bug.ws:443
+vless://d0deebfd-023c-4f21-a82b-7f43b4b5919b@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D47.236.22.194%3D52324#(SG) Alibaba us Technology Co   Ltd🇸🇬
+vless://87cdecbb-5d52-49df-af05-aa261a87eb11@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D213.35.108.135%3D12596#(SG) Oracle Corporation🇸🇬
+trojan://g3JexHZAID3R@masukan.bug.ws:80
+vless://b4f31d02-33e5-4d9a-8799-a5101db341a5@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D51.79.158.126%3D443#(SG) OVH SAS🇸🇬
+trojan://dbU0XqzkDEEJ@masukan.bug.ws:80
+vless://f3a3baac-74f2-4720-9bf2-7763912ed249@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D103.133.223.50%3D2096#(ID) Cloud Teknologi Nusantara🇮🇩
+trojan://9tAiQTiyPzna@masukan.bug.ws:80
+vless://f47a7f63-7b2d-4217-baf2-3be602e33745@masukan.bug.ws:80?path=%2Fvl%3D146.235.18.248%3D45137&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+trojan://JNFdaxVVfniU@masukan.bug.ws:80
+vless://070e3228-10cd-4083-bf85-c6cfa0cf002b@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D8.219.197.113%3D45714#(SG) Alibaba us Technology Co   Ltd🇸🇬
+trojan://tBfmCwWiFvMW@masukan.bug.ws:80
+vless://17a1a1a5-f9d8-4f27-a16c-b06a62a4fbcf@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D8.218.107.145%3D31166#(ID) PT Deneva🇮🇩
+trojan://4zCkbY96GfZ6@masukan.bug.ws:443
+trojan://VjEe6h8Pwmpf@masukan.bug.ws:443
+trojan://RTg5zUm9uECS@masukan.bug.ws:80
+vless://370d0d79-5362-4f24-a60e-12e5c36086f1@masukan.bug.ws:80?path=%2Fvl%3D103.180.161.123%3D587&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Hong Kong Megalayer Technology Co  limited🇸🇬
+trojan://FoZg6gGFOFv8@masukan.bug.ws:80
+trojan://Z4cmLYkG1ysa@masukan.bug.ws:80
+vless://d828afd8-83b9-484c-a7a7-54af6a44be65@masukan.bug.ws:80?path=%2Fvl%3D103.3.63.253%3D46683&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Akamai Connected Cloud🇸🇬
+vless://a23c99c2-59ab-41b6-8a4a-36946ccdb21a@masukan.bug.ws:80?path=%2Fvl%3D8.222.143.82%3D24245&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
+trojan://8qxlM8K9MJJz@masukan.bug.ws:443
+vless://2ea9adb8-dfe0-4edc-8a49-a1b9721792fc@masukan.bug.ws:80?path=%2Fvl%3D43.133.145.156%3D53136&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(ID) Shenzhen Tencent Computer Systems Company Limited🇮🇩
+vless://bd9c75af-8d52-438d-9a53-f7dd685eea30@masukan.bug.ws:80?path=%2Fvl%3D104.248.146.212%3D8443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Digital Ocean🇸🇬
+trojan://vyrwdApnm9PQ@masukan.bug.ws:443
+trojan://Slhx4EVpaDmU@masukan.bug.ws:443
+trojan://wuuzBB1KQUMT@masukan.bug.ws:443
+vless://63893898-3f59-4695-8c24-ca13bdcd7b65@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D188.166.255.195%3D443#(SG) Digitalocean  LLC🇸🇬
+vless://1bae29c0-62d7-4522-ab0d-908f228e0dfe@masukan.bug.ws:80?path=%2Fvl%3D203.194.112.119%3D8443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(ID) First Cagayan Converge Data Center Inc.🇮🇩
+trojan://3E9scrw80P4q@masukan.bug.ws:80
+trojan://Gfmj7HPpid4l@masukan.bug.ws:80
+vless://3f44fe8a-e73d-4f4a-a858-35541998970a@masukan.bug.ws:80?path=%2Fvl%3D138.2.89.238%3D43254&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+trojan://FqP5Zf5sMaeG@masukan.bug.ws:443
+trojan://882glWLRbHDT@masukan.bug.ws:443
+vless://3e14d027-c5db-4137-ae61-9055eef93dee@masukan.bug.ws:80?path=%2Fvl%3D103.180.161.10%3D587&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Hong Kong Megalayer Technology Co  limited🇸🇬
+vless://b1454bc6-8029-43ae-9802-6f54408a388e@masukan.bug.ws:80?path=%2Fvl%3D139.162.33.248%3D587&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Akamai Technologies  Inc🇸🇬
+trojan://9BUHDzCiBpsu@masukan.bug.ws:80
+trojan://2mvFkY8H03Zl@masukan.bug.ws:80
+trojan://5QO0bE8m4kai@masukan.bug.ws:80
+trojan://sCnF7wi0df9H@masukan.bug.ws:443
+trojan://kMMBrXGsz5fS@masukan.bug.ws:80
+vless://ea60424a-af50-40bd-9b7e-2c20be99dc49@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D8.222.143.82%3D24245#(SG) Alibaba us Technology Co   Ltd🇸🇬
+trojan://nBNdHH5DnDnE@masukan.bug.ws:443
+vless://1c73bcf6-2e85-4848-87d3-b90cfbd61c6d@masukan.bug.ws:80?path=%2Fvl%3D168.138.160.54%3D19081&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+trojan://A08orIQI2Ggl@masukan.bug.ws:80
+trojan://iXORQtznDSOf@masukan.bug.ws:80
+vless://68fdc48d-b52a-4391-9596-36a0d1951cfe@masukan.bug.ws:80?path=%2Fvl%3D146.190.111.165%3D443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Digitalocean  LLC🇸🇬
+trojan://a7lEf2y8Lmky@masukan.bug.ws:443
+trojan://Y84koSoL9PGw@masukan.bug.ws:80
+vless://0214c8b1-9b67-45a3-9dd7-e9c4ba5bcc91@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D35.219.50.99%3D443#(ID) Google Cloud🇮🇩
+vless://489b550c-b062-4823-9ce1-a64cb2b8751b@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D172.232.239.151%3D587#(ID) Akamai Connected Cloud🇮🇩
+trojan://LimUtlR7yYQE@masukan.bug.ws:443
+vless://b427b638-3596-4ecc-abde-65bdd7653ed6@masukan.bug.ws:80?path=%2Fvl%3D168.138.183.48%3D9090&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+vless://12bd906e-db6e-4ad9-b2f6-a9f1372ac9fb@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D35.219.15.90%3D443#(ID) Google LLC🇮🇩
+vless://a6462bb1-53fe-4680-a690-87e8de991267@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D38.207.172.235%3D8003#(KR) Oracle Cloud🇰🇷
+vless://22215f1c-d658-49d9-b31d-e2ed149caf9c@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D194.127.193.240%3D50791#(SG) LEASEWEB SINGAPORE PTE  LTD🇸🇬
+trojan://rotecWSBks5V@masukan.bug.ws:443
+vless://6fab90ca-80fb-4706-9ae4-7897aac44bf4@masukan.bug.ws:80?path=%2Fvl%3D139.180.215.77%3D57878&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) The Constant Company  LLC🇸🇬
+trojan://x41T6j5VU5Ec@masukan.bug.ws:443
+vless://7a277f46-eb96-472f-86cd-f1e217a19e96@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D158.178.225.124%3D12934#(SG) Oracle Corporation🇸🇬
+trojan://87uvGmVWUtHd@masukan.bug.ws:80
+vless://23833359-22af-47a0-9706-fbe5ea3e33ef@masukan.bug.ws:80?path=%2Fvl%3D138.2.109.23%3D587&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+trojan://JGRsvoSc5G8t@masukan.bug.ws:443
+trojan://L5wekoYOqaxD@masukan.bug.ws:80
+vless://1dee7952-152e-45f4-9d71-9d9a9111d84b@masukan.bug.ws:80?path=%2Fvl%3D51.79.158.126%3D443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) OVH SAS🇸🇬
+trojan://91zEnEDCU0P1@masukan.bug.ws:80
+vless://3ddc314e-639c-4b47-8e8e-f0adbc2334ff@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D168.138.183.48%3D9090#(SG) Oracle Corporation🇸🇬
+trojan://9eAJ2fqfvJDp@masukan.bug.ws:443
+trojan://1Udmv08XDO9k@masukan.bug.ws:443
+vless://54520320-4caf-4220-8770-ee6d649354ff@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D194.127.193.124%3D24467#(SG) LEASEWEB SINGAPORE PTE  LTD🇸🇬
+trojan://ckoXsSG4M7DK@masukan.bug.ws:80
+trojan://yBSwEvEyoYtE@masukan.bug.ws:443
+trojan://jjPcytSMPGOi@masukan.bug.ws:80
+trojan://YT6AlEnjCQDK@masukan.bug.ws:80
+vless://7fb68de5-af52-4651-b6e9-67ea88807c61@masukan.bug.ws:80?path=%2Fvl%3D8.222.129.175%3D58808&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
+trojan://E7lEj8paFKlJ@masukan.bug.ws:80
+vless://5c9f03d3-5462-491f-a9ae-eee8b2ae0f7d@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D35.219.50.99%3D443#(ID) Google LLC🇮🇩
+vless://62429b1b-a785-457b-9d0b-ba91c26bf263@masukan.bug.ws:80?path=%2Fvl%3D47.236.119.190%3D51342&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
+trojan://EnVzNGmyeMsd@masukan.bug.ws:443
+vless://93d8d775-390b-49be-9189-6ade9e5362a1@masukan.bug.ws:80?path=%2Fvl%3D119.81.201.154%3D9089&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) SoftLayer Technologies🇸🇬
+trojan://PO9SRZSSafTL@masukan.bug.ws:443
+vless://5e65dd7c-2bf3-49d0-b4ad-2d3b7c48f3b6@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D139.162.33.248%3D587#(SG) Akamai Technologies  Inc🇸🇬
+vless://d4ddf6b4-7ac2-4cf6-a000-2168ce931ecc@masukan.bug.ws:80?path=%2Fvl%3D54.251.167.101%3D443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Amazon com  Inc🇸🇬
+trojan://dHRcCzbfD5GO@masukan.bug.ws:443
+vless://491a9a77-1be8-4cd0-945a-f8e74b285a9c@masukan.bug.ws:80?path=%2Fvl%3D129.150.58.86%3D57621&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+vless://b72901bc-0809-47a8-8ca6-3c9ceb615d52@masukan.bug.ws:80?path=%2Fvl%3D161.117.249.114%3D2025&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
+trojan://fywKxVJnr6ZW@masukan.bug.ws:443
+trojan://FcFRfkHvQNZ2@masukan.bug.ws:80
+trojan://5cTVFm8mWS4P@masukan.bug.ws:80
+vless://298e6826-2f03-4d3f-bfd7-8877c9845fe3@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D103.3.63.253%3D46683#(SG) Akamai Connected Cloud🇸🇬
+vless://3c1df31f-2e42-40f7-b393-8edeace20211@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D43.156.16.213%3D31528#(SG) Shenzhen Tencent Computer Systems Company Limited🇸🇬
+trojan://B5xOXMeLsJZg@masukan.bug.ws:443
+trojan://wSR2ZD4dKyy2@masukan.bug.ws:443
+trojan://6mxTiqleTyC4@masukan.bug.ws:443
+vless://341afc3c-2e7d-4d23-900f-3b049e3287a0@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D103.180.161.123%3D587#(SG) Hong Kong Megalayer Technology Co  limited🇸🇬
+vless://e830befe-daf9-4822-8ee1-2910b5a691c1@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D103.20.199.118%3D12999#(JP) Nearoute🇯🇵
+trojan://MJlwKhS1iwv9@masukan.bug.ws:80
+trojan://oWKClnGGmEoy@masukan.bug.ws:443
+trojan://ioM9DXnoEE6G@masukan.bug.ws:443
+trojan://xES04RQojVFl@masukan.bug.ws:80
+trojan://cHpKk9CzEUX6@masukan.bug.ws:80
+vless://2f805587-2a69-401f-8691-f4d247be9d61@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D139.180.136.178%3D29806#(SG) The Constant Company  LLC🇸🇬
+vless://8e5f5125-1a4c-4fee-9707-d46807027fa7@masukan.bug.ws:80?path=%2Fvl%3D129.150.49.58%3D18650&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+trojan://qRIRzSEA6seo@masukan.bug.ws:443
+trojan://PTEROcToQgEd@masukan.bug.ws:80
+vless://b03f27ee-b5ec-423a-a259-759c7a057338@masukan.bug.ws:80?path=%2Fvl%3DIP: 35.219.50.99%3D443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(ID) Google Cloud🇮🇩
+vless://923c477a-c0a9-43df-ab67-efab8390533f@masukan.bug.ws:80?path=%2Fvl%3D167.71.194.185%3D8443&security=none&encryption=none&host=vless.cyantiknya.my.id&fp=randomized&type=ws&sni=vless.cyantiknya.my.id#(SG) Digitalocean  LLC🇸🇬
+trojan://E8y3dunjWWtU@masukan.bug.ws:80
+vless://43fd060f-1721-459c-b30f-eb88d26d3b95@masukan.bug.ws:443?encryption=none&security=tls&sni=vless.cyantiknya.my.id&fp=randomized&type=ws&host=vless.cyantiknya.my.id&path=%2Fvl%3D103.133.223.52%3D2096#(ID) Cloud Teknologi Nusantara🇮🇩
+trojan://y5lt6snzx4Qb@masukan.bug.ws:443
