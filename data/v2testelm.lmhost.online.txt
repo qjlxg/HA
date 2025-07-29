@@ -1,4 +1,4 @@
+vless://88ed5b37-d06d-4d58-9347-b71ccb59581d@google.com:443?encryption=none&security=tls&sni=v2testelm.lmhost.online&fp=randomized&type=ws&host=v2testelm.lmhost.online&path=%2F%3Fed%3D2048#v2testelm.lmhost.online
+vless://b0b19704-862a-48bd-9814-f448cddd21b4@google.com:443?encryption=none&security=tls&sni=v2testelm.lmhost.online&fp=randomized&type=ws&host=v2testelm.lmhost.online&path=%2F%3Fed%3D2048#v2testelm.lmhost.online
 vless://b0b19704-862a-48bd-9814-f448cddd21b4@v2testelm.lmhost.online:443?encryption=none&security=tls&sni=v2testelm.lmhost.online&fp=randomized&type=ws&host=v2testelm.lmhost.online&path=%2F%3Fed%3D2048#v2testelm.lmhost.online
-vless://b0b19704-862a-48bd-9814-f448cddd21b4@discord.com:443?encryption=none&security=tls&sni=v2testelm.lmhost.online&fp=randomized&type=ws&host=v2testelm.lmhost.online&path=%2F%3Fed%3D2048#v2testelm.lmhost.online
-vless://88ed5b37-d06d-4d58-9347-b71ccb59581d@discord.com:443?encryption=none&security=tls&sni=v2testelm.lmhost.online&fp=randomized&type=ws&host=v2testelm.lmhost.online&path=%2F%3Fed%3D2048#v2testelm.lmhost.online
 vless://88ed5b37-d06d-4d58-9347-b71ccb59581d@v2testelm.lmhost.online:443?encryption=none&security=tls&sni=v2testelm.lmhost.online&fp=randomized&type=ws&host=v2testelm.lmhost.online&path=%2F%3Fed%3D2048#v2testelm.lmhost.online
