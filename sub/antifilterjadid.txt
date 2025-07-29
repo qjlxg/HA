@@ -1,2 +1,4 @@
-vless://ccbe6b7c-9264-40c4-8bc1-ef8f6205d7a4@www.speedtest.net:8443?path=%2F&security=tls&encryption=none&host=hetzner-2.access.name.ng&type=ws&sni=hetzner-2.access.name.ng#CHTZ-57519263
-vless://ccbe6b7c-9264-40c4-8bc1-ef8f6205d7a4@www.speedtest.net:8443?path=%2F&security=tls&encryption=none&host=hetzner-4.access.name.ng&type=ws&sni=hetzner-4.access.name.ng#CHTZ-9110715745
+vless://0424917a-379e-4b0f-9da3-a1ab3188cb6e@catherinede.hpcdn.info:80?encryption=none&security=none&type=httpupgrade&host=catherinede.hpcdn.info&path=%2F37265%2FhMMad#%F0%9F%87%A9%F0%9F%87%AA267MMad-H
+vless://0e146d11-ee89-4f4f-981d-9d6ec11d2ebf@alexde.hpcdn.info:80?encryption=none&security=none&type=httpupgrade&host=alexde.hpcdn.info&path=%2F13226%2FhMMad#%F0%9F%87%A9%F0%9F%87%AA268MMad-H
+vless://82bb0191-52ef-4e47-8d51-39630628cbc9@catherinede.hpcdn.info:80?encryption=none&security=none&type=ws&host=catherinede.hpcdn.info&path=%2F44618%2FwsMMad#%F0%9F%87%A9%F0%9F%87%AA267MMad-WS
+vless://7d419111-df92-46c5-949c-d9105f84433b@alexde.hpcdn.info:80?encryption=none&security=none&type=ws&host=alexde.hpcdn.info&path=%2F24391%2FwsMMad#%F0%9F%87%A9%F0%9F%87%AA268MMad-WS
