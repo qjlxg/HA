@@ -1,5 +1,5 @@
 vless://4aae04fa-f390-44bb-9558-a344c8baed36@admin.pirped.com:57546?type=grpc&serviceName=probrain-etl&authority=&security=reality&pbk=G4WqyBonyjuo6n6pIL_yLN33T9e8BNHIUlrVnqZPpTY&fp=random&sni=ratp.fr&sid=e9da&spx=%2F#chatou
 vless://3482a0f4-56aa-4096-aad4-19c5970c239b@dist.pirped.com:55945?type=grpc&security=reality&serviceName=bdd-etl&sni=ratp.fr&pbk=9rx7JwMO-KRZZEM9TQBO19BOAmmGjJyjN86ll2J7uVc&fp=chrome#bussy
+vless://16726ef0-f3f4-428b-c8aa-e9ce99ac34e8@res.pro-brain.com:47600?type=grpc&security=reality&serviceName=bdd-etl&sni=ratp.fr&pbk=g1f1wLjim5gOVGnI5LGUV0dL4iFXPoiepOPZfSxJe14&fp=chrome#ovh
 vless://4aae04fa-f390-44bb-9558-a344c8baed36@admin.pirped.com:57546?encryption=none&security=reality&sni=ratp.fr&fp=random&pbk=G4WqyBonyjuo6n6pIL_yLN33T9e8BNHIUlrVnqZPpTY&sid=e9da&spx=%2F&type=grpc&serviceName=probrain-etl&mode=gun#%E4%B8%8D%E8%A6%81%E6%9A%B4%E9%9C%B2sub
 vless://53c6db3f-6839-42b7-e696-e56306d1872b@res.pro-brain.com:8668?type=tcp&security=reality&sni=www.ratp.fr&pbk=S-g0oP36DShii1uPOnZDSEhp_wQghX6h68PgMivOmD4&flow=xtls-rprx-vision&fp=chrome#probrain|6pLE.love@xray.com
-vless://16726ef0-f3f4-428b-c8aa-e9ce99ac34e8@res.pro-brain.com:47600?type=grpc&security=reality&serviceName=bdd-etl&sni=ratp.fr&pbk=g1f1wLjim5gOVGnI5LGUV0dL4iFXPoiepOPZfSxJe14&fp=chrome#ovh
