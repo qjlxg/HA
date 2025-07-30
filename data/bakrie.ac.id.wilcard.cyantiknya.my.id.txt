@@ -1,380 +1,380 @@
-trojan://BYReHjKjApAB@masukan.bug.ws:443
-trojan://ATWxEbwQVwBb@masukan.bug.ws:80
-trojan://rADVYUIei5sm@masukan.bug.ws:443
-trojan://o0C69MJ8PANr@masukan.bug.ws:443
-vless://eb905457-2ba3-4314-8a58-4a2ea30a9ad1@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D172.232.239.151%3D587#(ID) Akamai Connected Cloud🇮🇩
-vless://0c31a354-afdf-4eee-b466-8b5555a2cb9d@masukan.bug.ws:80?path=%2Fvl%3D138.2.74.219%3D28616&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Cloudflare Warp🇸🇬
-trojan://W0uIKTrmPGLh@masukan.bug.ws:80
-vless://0c979047-145d-4ebd-b59e-f122e78704d9@masukan.bug.ws:80?path=%2Fvl%3D146.190.111.165%3D443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Digitalocean  LLC🇸🇬
-vless://176ef746-69bd-4218-980f-3c9f0b6ed52c@masukan.bug.ws:80?path=%2Fvl%3D158.178.225.124%3D53618&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-vless://61a62025-24b6-47e9-936d-7aea3255299d@masukan.bug.ws:80?path=%2Fvl%3D139.180.215.77%3D57878&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) The Constant Company  LLC🇸🇬
-trojan://e2VuAH1n18j4@masukan.bug.ws:80
-trojan://ha8gwp0fvRAf@masukan.bug.ws:80
-trojan://V2Jk4kCmBTFG@masukan.bug.ws:80
-vless://217cec27-0936-4a65-9621-c185e6d59994@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D146.235.18.248%3D45137#(SG) Oracle Corporation🇸🇬
-vless://7f5a71c8-d16d-41c0-8f8b-79666589f6d5@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D8.222.243.73%3D26385#(SG) Alibaba us Technology Co   Ltd🇸🇬
-vless://03f73ac3-1f50-47a9-9cde-18b27f893062@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D8.219.197.113%3D45714#(SG) Alibaba us Technology Co   Ltd🇸🇬
-trojan://RPLuRLiIgU8I@masukan.bug.ws:443
-vless://9ef94c44-b16a-4dec-9142-a331739f49a2@masukan.bug.ws:80?path=%2Fvl%3D161.117.249.114%3D2025&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
-vless://3bbbe497-d61f-4f82-ad20-042c78467724@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D43.156.16.213%3D31528#(SG) Shenzhen Tencent Computer Systems Company Limited🇸🇬
-trojan://D90WPcmZZkcM@masukan.bug.ws:443
-vless://cadb1350-5736-4943-8fb8-02226addc8bb@masukan.bug.ws:80?path=%2Fvl%3D15.235.162.49%3D443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) OVH SAS🇸🇬
-trojan://8OdTt3rmAhuO@masukan.bug.ws:80
-vless://4c1079e3-ed42-4630-b6b5-9823887b2a4e@masukan.bug.ws:80?path=%2Fvl%3D203.194.112.119%3D8443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(ID) First Cagayan Converge Data Center Inc.🇮🇩
-vless://e52779a6-1d20-48b2-a206-d9baf51a113a@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D139.162.33.248%3D587#(SG) Akamai Technologies  Inc🇸🇬
-vless://2b403bde-cf5d-4f0a-97df-72db9f4bb952@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D54.251.167.101%3D443#(SG) Amazon com  Inc🇸🇬
-vless://29322044-2042-4b91-91d9-2a1860c2a6a4@masukan.bug.ws:80?path=%2Fvl%3D103.6.207.108%3D8080&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(ID) PT Pusat Media Indonesia🇮🇩
-vless://f0f83704-9003-4ce7-8e68-754e6dce3668@masukan.bug.ws:80?path=%2Fvl%3D138.2.109.23%3D587&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-trojan://lMFhgIyyFzYH@masukan.bug.ws:80
-trojan://yqwedzxDzizr@masukan.bug.ws:443
-trojan://pLazcANIeeGH@masukan.bug.ws:443
-trojan://1WPzgkNuFhiS@masukan.bug.ws:80
-trojan://A1BlCI8xx4xQ@masukan.bug.ws:443
-vless://f4766e8f-dc4a-42eb-b642-94f6ae62341e@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D103.180.161.10%3D587#(SG) Hong Kong Megalayer Technology Co  limited🇸🇬
-trojan://VvweNHYWNeqn@masukan.bug.ws:443
-vless://0527154c-75b4-4a1f-95d9-14a268d2f313@masukan.bug.ws:80?path=%2Fvl%3D8.222.143.82%3D24245&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
-trojan://0DBZ6bzKr1FL@masukan.bug.ws:80
-trojan://yZEGPcRwbz0H@masukan.bug.ws:443
-trojan://HLMgX44jh93r@masukan.bug.ws:443
-trojan://ZrOgbLioFRCX@masukan.bug.ws:443
-trojan://sUOfbD0RyFMY@masukan.bug.ws:443
-vless://7b11b0ca-7b80-4db3-8f93-c6047a220f54@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D103.6.207.108%3D8080#(ID) Pt Pusat Media Indonesia🇮🇩
-vless://d0a50568-fb80-4b9d-b7b2-599f506e211d@masukan.bug.ws:80?path=%2Fvl%3D139.180.144.170%3D666&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) The Constant Company  LLC🇸🇬
-trojan://E7JDHPj5rjnQ@masukan.bug.ws:443
-trojan://cjCE6HEsCSZ8@masukan.bug.ws:443
-vless://44a3e7fa-6b4a-4a37-806c-dede953dff57@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D139.162.48.174%3D10000#(SG) Akamai Technologies  Inc🇸🇬
-trojan://kDB5twIMhZtS@masukan.bug.ws:443
-trojan://IumoYcitFN8W@masukan.bug.ws:443
-trojan://wPtvgfA9jyiI@masukan.bug.ws:80
-trojan://kpyF1t0RvSAr@masukan.bug.ws:443
-vless://1f1c759d-41ef-4413-98df-3a0f903385a3@masukan.bug.ws:80?path=%2Fvl%3D158.178.225.124%3D37497&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-vless://d81fb22b-c465-42e9-af12-0697a56327f4@masukan.bug.ws:80?path=%2Fvl%3D106.240.106.61%3D38937&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(KR) LG DACOM Corporation🇰🇷
-trojan://vT2LND3TLlaK@masukan.bug.ws:443
-vless://fdcc82dd-875d-425d-be50-7cdae017ae63@masukan.bug.ws:80?path=%2Fvl%3D8.222.243.73%3D26385&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
-trojan://XjTk7RT4HoEL@masukan.bug.ws:80
-vless://1533bac2-9ca3-4320-a236-52c893d9fe12@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D119.81.201.154%3D9089#(SG) Softlayer Technologies Inc🇸🇬
-trojan://Qx5OtnIzoqQR@masukan.bug.ws:443
-vless://2ff64307-3761-4365-bcfb-0f47ed3fb88c@masukan.bug.ws:80?path=%2Fvl%3D168.138.160.54%3D19081&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-vless://faa597d6-7c1e-456f-9256-720ccab51a55@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D143.198.213.197%3D443#(SG) Digitalocean  LLC🇸🇬
-trojan://vrajPopEBrLl@masukan.bug.ws:80
-vless://1255fdaf-e17e-47f3-ac3c-6b53244e5598@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D47.236.119.190%3D51342#(SG) Alibaba us Technology Co   Ltd🇸🇬
-trojan://XMGNkEGSitXE@masukan.bug.ws:80
-trojan://6o0SR1CpSvVt@masukan.bug.ws:443
-vless://682792d1-d082-474a-abb3-5176626c9c49@masukan.bug.ws:80?path=%2Fvl%3D139.180.136.178%3D29661&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) The Constant Company  LLC🇸🇬
-vless://ce17d5c7-0c8c-48cf-8a0b-ef806a53f14c@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D138.2.89.238%3D43254#(SG) Oracle Corporation🇸🇬
-vless://cbe1e093-5e17-431c-91e5-4b2aaaf1fab0@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D47.236.22.194%3D52324#(SG) Alibaba us Technology Co   Ltd🇸🇬
-trojan://UMrC7DNNgDCH@masukan.bug.ws:80
-vless://7e390963-61f8-4a65-9e19-c442cb181995@masukan.bug.ws:80?path=%2Fvl%3D188.166.255.195%3D443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Digitalocean  LLC🇸🇬
-vless://cc57dba5-4ac6-43f4-8b65-1755769011d6@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D35.219.15.90%3D443#(ID) Google LLC🇮🇩
-trojan://gyPyeICr2KEZ@masukan.bug.ws:443
-trojan://cB4lRdBZHIBb@masukan.bug.ws:80
-vless://acc83e20-559f-498f-a567-51702e9e3ed3@masukan.bug.ws:80?path=%2Fvl%3D18.192.93.64%3D443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(DE) Amazon Inc🇩🇪
-vless://4e9283d7-d87b-41e8-b3ab-024b09f35433@masukan.bug.ws:80?path=%2Fvl%3D43.133.145.156%3D53136&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(ID) Tencent cloud computing🇮🇩
-trojan://i4tKndyYogqN@masukan.bug.ws:80
-trojan://rwxxEOCjfupL@masukan.bug.ws:80
-trojan://EZmUAnYI6JNf@masukan.bug.ws:80
-vless://b89ea88c-6c80-48d7-b54a-fed074554139@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D194.127.193.240%3D50791#(SG) LEASEWEB SINGAPORE PTE  LTD🇸🇬
-trojan://ipZMDA4HHwVt@masukan.bug.ws:80
-vless://ebe1098c-0957-4371-b9d5-68954a82c381@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D168.138.160.54%3D19081#(SG) Oracle Corporation🇸🇬
-vless://71710a17-9ea1-4c1f-a87d-8ed0e717dc12@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D103.180.161.69%3D587#(SG) Hong Kong Megalayer Technology Co  limited🇸🇬
-trojan://XASHDI5nzvls@masukan.bug.ws:80
-vless://f43f6834-61dc-47f1-b245-08540c360972@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D103.133.223.52%3D2096#(ID) PT Cloud Teknologi Nusantara🇮🇩
-trojan://joULG9hLA16i@masukan.bug.ws:443
-vless://bde987ba-af59-40a3-bf65-f13e2d03f1f2@masukan.bug.ws:80?path=%2Fvl%3D172.232.239.147%3D587&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(ID) Akamai Technologies  Inc🇮🇩
-trojan://yiHG0G7Z4oZn@masukan.bug.ws:443
-trojan://t4PAPnEyDhim@masukan.bug.ws:443
-vless://1938b781-390a-45e9-92b3-aac24b0ee0a3@masukan.bug.ws:80?path=%2Fvl%3D51.79.254.182%3D443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) OVH SAS🇸🇬
-vless://e9231183-82c4-4ce0-a4c6-dbd13f694253@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D203.194.112.119%3D2053#(ID) First Cagayan Converge Data Center Inc.🇮🇩
-trojan://IfE5AoXzhzWC@masukan.bug.ws:80
-trojan://aHucKCk5Y5W0@masukan.bug.ws:443
-trojan://SaAXh00op7XR@masukan.bug.ws:80
-trojan://0hsVvFTPTl8X@masukan.bug.ws:80
-vless://d5fa60c0-2581-444c-afc8-5a4578377d4c@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D129.150.58.86%3D57621#(SG) Oracle Corporation🇸🇬
-trojan://CCmjmld7EjlO@masukan.bug.ws:80
-trojan://wViDngFBpG9Q@masukan.bug.ws:80
-trojan://Gbh0qSQ9HmjN@masukan.bug.ws:443
-trojan://C0Ryu6G9pEhX@masukan.bug.ws:80
-vless://232ed293-aca5-46c5-944f-25bb0adbc874@masukan.bug.ws:80?path=%2Fvl%3D103.20.199.118%3D12999&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(JP) Nearoute🇯🇵
-vless://15d98e05-f90f-4226-8314-78d01cd12fbb@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D139.180.215.77%3D57878#(SG) The Constant Company  LLC🇸🇬
-trojan://MbtAO6aqiiIz@masukan.bug.ws:443
-vless://573f843d-3f01-4434-95a5-85d1f40a4369@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D129.150.50.63%3D443#(SG) Oracle Corporation🇸🇬
-vless://d041228c-2b87-4223-9be3-2d0d79b2bf5d@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D139.180.136.178%3D29661#(SG) The Constant Company  LLC🇸🇬
-trojan://D7SizousMYUy@masukan.bug.ws:443
-trojan://mcUJnHfGB0vn@masukan.bug.ws:80
-trojan://FFZkPMeQOGcE@masukan.bug.ws:443
-trojan://Oa13hXi6NjIP@masukan.bug.ws:80
-trojan://Zw0YLhHqgl76@masukan.bug.ws:80
-trojan://bbIDOIQG2gWQ@masukan.bug.ws:443
-vless://1a1def5e-777e-4feb-97ce-f0934371d018@masukan.bug.ws:80?path=%2Fvl%3D103.6.207.108%3D8080&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(ID) PT Pusat Media Indonesia🇮🇩
-vless://b0a4c57d-647d-4ee0-b864-4c2e595e4440@masukan.bug.ws:80?path=%2Fvl%3D51.79.158.126%3D443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) OVH SAS🇸🇬
-vless://e6651533-c346-44db-98a3-4dd5717267c3@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D146.190.111.165%3D443#(SG) Digitalocean  LLC🇸🇬
-trojan://AlkmlkYtYmfK@masukan.bug.ws:80
-trojan://M5honq0jfNQ8@masukan.bug.ws:443
-trojan://sZhe0WuyvDa4@masukan.bug.ws:443
-trojan://wWR8h7QZrPy0@masukan.bug.ws:80
-trojan://HwA38GAn11jJ@masukan.bug.ws:443
-vless://33b9ac0b-2b4b-4df4-b404-5532a89ade4e@masukan.bug.ws:80?path=%2Fvl%3D119.81.201.154%3D9089&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Softlayer Technologies Inc🇸🇬
-vless://79ab2b41-85c4-4f16-98d1-988364b0a2a2@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D35.219.50.99%3D443#(ID) Google LLC🇮🇩
-trojan://r7p6HXH4JblH@masukan.bug.ws:443
-vless://1e5b7ddc-c445-4493-aea6-793b17abfd16@masukan.bug.ws:80?path=%2Fvl%3D94.237.75.31%3D62174&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Upcloud LTD🇸🇬
-vless://6c590a33-a50f-4e4d-895f-d2bfb1638df7@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3DIP: 35.219.50.99%3D443#(ID) Google Cloud🇮🇩
-vless://2188858f-073b-498b-a08c-74f28c17445b@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D143.42.68.97%3D17055#(SG) Akamai Technologies  Inc🇸🇬
-vless://6e5d35f7-dbb8-45b6-a798-69146b5c77f3@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D138.2.109.23%3D587#(SG) Oracle Corporation🇸🇬
-trojan://VO0ArvuatSW7@masukan.bug.ws:80
-vless://11442bd9-a56d-4cb8-8844-f7445276488c@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D54.169.229.188%3D443#(SG) Amazon com  Inc🇸🇬
-vless://743962a9-43ee-40b5-9e9b-32c4be3eae3c@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D138.2.74.219%3D28616#(SG) Oracle Corporation🇸🇬
-vless://220c4204-a6e1-40e8-b8d4-f5bf1713ce1e@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D43.133.145.156%3D53136#(ID) Tencent cloud computing🇮🇩
-trojan://gXheU7T0xsnZ@masukan.bug.ws:443
-trojan://N0q2Sk7oYA8X@masukan.bug.ws:80
-trojan://QpNO6VZACE7y@masukan.bug.ws:443
-trojan://einJWw4MgjHK@masukan.bug.ws:443
-vless://14020e90-9354-4bbf-b3c2-3779ae9fc484@masukan.bug.ws:80?path=%2Fvl%3D158.178.225.124%3D37461&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-vless://4fcc69bc-ac71-4234-acb2-6324580378d5@masukan.bug.ws:80?path=%2Fvl%3D47.236.25.107%3D27903&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
-trojan://sDjumabwM7Fx@masukan.bug.ws:80
-trojan://LhCtRN3iz0IZ@masukan.bug.ws:80
-trojan://YL6g6Aeobtm8@masukan.bug.ws:80
-trojan://vriowItJOfNY@masukan.bug.ws:80
-vless://36a3eb9b-aa37-4fc1-b6e1-51bbbcf2c0fe@masukan.bug.ws:80?path=%2Fvl%3D47.236.119.190%3D51342&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
-trojan://CRDOb3uiI4E9@masukan.bug.ws:80
-vless://faaa43e6-7274-462c-9f49-f47cd03d88cd@masukan.bug.ws:80?path=%2Fvl%3D172.232.239.151%3D587&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(ID) Akamai Connected Cloud🇮🇩
-vless://b4159e03-7e2f-4f2b-8a9f-44ae29e7c279@masukan.bug.ws:80?path=%2Fvl%3D35.219.15.90%3D443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(ID) Google LLC🇮🇩
-trojan://wDP2M6bGAGW9@masukan.bug.ws:443
-trojan://Pa4VTqbSFuV9@masukan.bug.ws:443
-vless://4ff2a997-c732-4fa9-9bff-3d213f2a13c0@masukan.bug.ws:80?path=%2Fvl%3D47.236.22.194%3D52324&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
-vless://a7782c0e-de60-422d-8db7-a8cc8643c728@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D47.236.246.163%3D14108#(SG) Alibaba us Technology Co   Ltd🇸🇬
-vless://008a337a-7c93-4f8e-9c57-960b6625613b@masukan.bug.ws:80?path=%2Fvl%3D172.232.239.147%3D587&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(ID) Akamai Connected Cloud🇮🇩
-vless://f63c9ec9-b91a-43a7-b6a6-a74007b19da4@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D168.138.183.48%3D9090#(SG) Oracle Corporation🇸🇬
-vless://826b545f-15ba-42a4-83e0-a91f5662986d@masukan.bug.ws:80?path=%2Fvl%3D47.236.173.166%3D587&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
-trojan://GU5554gmR0Ec@masukan.bug.ws:80
-vless://7b8358e3-7f93-474d-b60d-139a6e54f312@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D158.178.225.124%3D12934#(SG) Oracle Corporation🇸🇬
-vless://c50fdaf7-b5d3-4475-bf33-11e84d11b406@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D47.74.254.191%3D8900#(SG) Alibaba us Technology Co   Ltd🇸🇬
-vless://689799b5-1973-4666-b0e9-64d8ed2c501e@masukan.bug.ws:80?path=%2Fvl%3D103.186.1.209%3D2053&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(ID) PT Cloud Hosting Indonesia🇮🇩
-trojan://PdhYLB9Mq5SV@masukan.bug.ws:443
-vless://e35e3668-f35e-461f-b50c-ddd7616cd465@masukan.bug.ws:80?path=%2Fvl%3D103.133.223.52%3D2096&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(ID) Cloud Teknologi Nusantara🇮🇩
-vless://4ad90213-e51c-44a6-aad9-f2d6ce6af1f1@masukan.bug.ws:80?path=%2Fvl%3D8.219.237.57%3D31523&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
-trojan://reLwV8FPmii1@masukan.bug.ws:80
-trojan://bGOtKjFyPZPO@masukan.bug.ws:80
-vless://d271327b-7f6a-4288-8aa2-8bc36f3778fc@masukan.bug.ws:80?path=%2Fvl%3D168.138.183.48%3D9090&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-trojan://vdZjzXUYnjh5@masukan.bug.ws:80
-vless://704e18fb-f57f-4b5f-a7bc-25bc69d95984@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D103.186.1.209%3D2053#(ID) PT Cloud Hosting Indonesia🇮🇩
-trojan://fmzOzMAGDPVS@masukan.bug.ws:80
-vless://2f7c21d5-f1e4-449e-bb3f-cd55e12f4bc2@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D8.222.129.175%3D58808#(SG) Alibaba us Technology Co   Ltd🇸🇬
-vless://589ca55e-a72a-400d-b8b6-f48ec6c5a4a7@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D51.79.158.126%3D443#(SG) OVH SAS🇸🇬
-vless://0e5135ab-67c5-43f3-9e57-048f9a50152f@masukan.bug.ws:80?path=%2Fvl%3D129.150.50.63%3D443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-vless://ac887c5d-5666-44cc-9596-1bca73996630@masukan.bug.ws:80?path=%2Fvl%3D103.133.223.52%3D2096&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(ID) PT Cloud Teknologi Nusantara🇮🇩
-vless://a757096c-f605-410c-868b-dfc448fdcdef@masukan.bug.ws:80?path=%2Fvl%3D138.2.89.238%3D43254&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-trojan://PNISHW1TJAz6@masukan.bug.ws:443
-vless://24eb6b21-34dc-4643-812e-132b1b85e139@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D119.81.201.154%3D9089#(SG) Softlayer Technologies Inc🇸🇬
-trojan://ScuMZBCZVsVA@masukan.bug.ws:443
-trojan://m5RDPZ2OJiwq@masukan.bug.ws:80
-vless://75346d30-1733-4cc3-8739-6d98409c05c7@masukan.bug.ws:80?path=%2Fvl%3D13.250.14.76%3D443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Amazon🇸🇬
-trojan://EVdOOmP4RRlb@masukan.bug.ws:443
-trojan://BZurZQ7sKN1m@masukan.bug.ws:80
-vless://b43dab0a-bfce-4fa8-a225-3faaacb6d044@masukan.bug.ws:80?path=%2Fvl%3D103.180.161.123%3D587&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Hong Kong Megalayer Technology Co  limited🇸🇬
-trojan://snGnFzYcfCR0@masukan.bug.ws:443
-trojan://bkkTiAqF3bq4@masukan.bug.ws:80
-trojan://HwPTi4vCbE2h@masukan.bug.ws:443
-trojan://NKqIyQu1C8yd@masukan.bug.ws:80
-trojan://0YsHSFLfxQE2@masukan.bug.ws:80
-vless://605d8e15-99fe-4761-b324-f2e5c37a3c3f@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D158.178.225.124%3D53618#(SG) Oracle Corporation🇸🇬
-vless://fad33822-3488-46ce-93ac-1aaa8d16309b@masukan.bug.ws:80?path=%2Fvl%3D119.81.201.154%3D9089&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) SoftLayer Technologies🇸🇬
-trojan://78FDKLYssj4o@masukan.bug.ws:443
-vless://2be14880-45b8-4037-b325-3790978bf2e2@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D35.219.50.99%3D443#(ID) Google Cloud🇮🇩
-vless://cf905c75-079b-426b-a9b4-1696d285fdc7@masukan.bug.ws:80?path=%2Fvl%3D129.150.49.58%3D18650&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-trojan://9ELcvFxbOt4e@masukan.bug.ws:80
-trojan://nWHoUioaVLym@masukan.bug.ws:80
-vless://1fa417da-f470-4ce5-8505-84ed75cee336@masukan.bug.ws:80?path=%2Fvl%3D119.81.201.154%3D9089&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Softlayer Technologies Inc🇸🇬
-trojan://Ur5OcJs7lEh3@masukan.bug.ws:443
-trojan://Obr9ISWDBfFW@masukan.bug.ws:443
-vless://33b478e5-b6b2-42f5-b87a-083577b6a693@masukan.bug.ws:80?path=%2Fvl%3D192.53.113.156%3D587&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Akamai Technologies  Inc🇸🇬
-trojan://rKZvjsQaFAYR@masukan.bug.ws:80
-trojan://o0clG1B3vR2I@masukan.bug.ws:80
-vless://8638dacb-03bb-4953-a0c0-c06c3299783d@masukan.bug.ws:80?path=%2Fvl%3D146.235.18.248%3D45137&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-vless://62a3bc55-3528-43a6-96e3-bf4e6382cca3@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D45.77.36.40%3D443#(SG) The Constant Company  LLC🇸🇬
-trojan://1iBSGpqw89rh@masukan.bug.ws:80
-trojan://RnMWtEFXcera@masukan.bug.ws:80
-trojan://wWgOT5ik87Sy@masukan.bug.ws:80
-trojan://OaxUUFvEeQ4c@masukan.bug.ws:80
-vless://7d78f634-7694-414e-b95b-cbfba6629fc0@masukan.bug.ws:80?path=%2Fvl%3D203.194.112.119%3D2053&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(ID) First Cagayan Converge Data Center Inc.🇮🇩
-trojan://JghyKzpgU23P@masukan.bug.ws:443
-trojan://poDfGlX7HGxh@masukan.bug.ws:80
-vless://e59e50e1-9d3e-4d9e-81cf-61cf5ff79e24@masukan.bug.ws:80?path=%2Fvl%3D103.180.161.69%3D587&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Hong Kong Megalayer Technology Co  limited🇸🇬
-trojan://UX6PnCihKcCv@masukan.bug.ws:80
-trojan://hFjISpGIS0dA@masukan.bug.ws:443
-vless://b31b4c39-1472-433c-81e3-3520ea3b2eea@masukan.bug.ws:80?path=%2Fvl%3D38.207.172.235%3D8003&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(KR) Oracle Cloud🇰🇷
-vless://e6b0e716-3b5d-4bb7-8538-66fb91da6233@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D139.180.131.125%3D10005#(SG) The Constant Company  LLC🇸🇬
-vless://a838673f-9ca4-4353-9987-8f888a1cdc54@masukan.bug.ws:80?path=%2Fvl%3D129.150.36.188%3D53435&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Oracle Cloud🇸🇬
-vless://5ee807c3-23c7-4716-8d04-02b995772a57@masukan.bug.ws:80?path=%2Fvl%3D138.2.74.219%3D28616&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-trojan://TAccPyPAYf4N@masukan.bug.ws:443
-vless://ca774fec-959f-4133-a36f-577063416e95@masukan.bug.ws:80?path=%2Fvl%3D35.219.50.99%3D443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(ID) Google Cloud🇮🇩
-vless://6b3159db-5119-4500-af91-37b975c55ed1@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D62.72.46.14%3D8443#(SG) Contabo Asia Private Limited🇸🇬
-vless://3cc0ce32-3886-4353-a271-6bd464c72298@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D138.2.95.61%3D1111#(SG) Oracle Corporation🇸🇬
-trojan://MB2SrwRZUnj2@masukan.bug.ws:80
-vless://b137e0bd-8a66-4684-b0c1-616f2e358afa@masukan.bug.ws:80?path=%2Fvl%3D188.166.255.195%3D8443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Digitalocean  LLC🇸🇬
-vless://38e2b8d8-5642-4b96-a0ef-9a9725a5005f@masukan.bug.ws:80?path=%2Fvl%3D103.180.161.10%3D587&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Hong Kong Megalayer Technology Co  limited🇸🇬
-vless://bb7e3690-0197-453c-887b-e0fb6bd5e16c@masukan.bug.ws:80?path=%2Fvl%3D139.162.48.174%3D10000&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Akamai Technologies  Inc🇸🇬
-vless://c8071c16-dee0-4aa8-a585-8fc0e2fee5f6@masukan.bug.ws:80?path=%2Fvl%3D158.178.225.124%3D12934&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-trojan://9ZbI2egjpAaa@masukan.bug.ws:443
-vless://fb59b14a-a429-4ce7-bdcf-0fa23b947dc4@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D51.79.254.182%3D443#(SG) OVH SAS🇸🇬
-trojan://tDMZixMT3DHj@masukan.bug.ws:443
-vless://94443361-5e83-4f90-85a1-d3c2d8041e5b@masukan.bug.ws:80?path=%2Fvl%3D194.127.193.124%3D24467&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) LEASEWEB SINGAPORE PTE  LTD🇸🇬
-trojan://5CCfMtw2gE0T@masukan.bug.ws:80
-vless://b5e15602-2ac4-4a76-a5dd-9ef127cb07a9@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D18.192.93.64%3D443#(DE) Amazon Inc🇩🇪
-trojan://fhWi0FupcoVu@masukan.bug.ws:80
-trojan://TTXoJF2JHk3H@masukan.bug.ws:443
-vless://8d644e9d-06e4-4913-b9e5-1d23beb5d69d@masukan.bug.ws:80?path=%2Fvl%3D54.251.167.101%3D443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Amazon com  Inc🇸🇬
-vless://f102abff-3f2e-4d39-a386-f56bcfa9b521@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D103.180.161.123%3D587#(SG) Hong Kong Megalayer Technology Co  limited🇸🇬
-vless://f6c1663f-9e3a-4e0f-93a4-e3e7b55f753c@masukan.bug.ws:80?path=%2Fvl%3D143.42.68.97%3D17055&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Akamai Technologies  Inc🇸🇬
-trojan://rwqbs0yDEUUm@masukan.bug.ws:443
-vless://af2b3cf6-0c4e-412e-a0fb-f59ee77c53a4@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D43.133.145.156%3D53136#(ID) Shenzhen Tencent Computer Systems Company Limited🇮🇩
-trojan://JoNsR4tkgsbV@masukan.bug.ws:80
-trojan://uEDhhE5O7sMp@masukan.bug.ws:443
-trojan://asKHnoE3KW32@masukan.bug.ws:80
-vless://37d286b0-7a3f-42d4-a8d8-475f91125d91@masukan.bug.ws:80?path=%2Fvl%3D139.162.33.248%3D587&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Akamai Technologies  Inc🇸🇬
-trojan://oc6AgHQSjSuy@masukan.bug.ws:443
-trojan://cGyb8tHfBB7s@masukan.bug.ws:443
-trojan://j5cY3vjc8jtI@masukan.bug.ws:443
-vless://0c78764b-5168-49d5-9357-aa4778328702@masukan.bug.ws:80?path=%2Fvl%3D47.74.254.191%3D8900&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
-trojan://jrrSHqAh4q9K@masukan.bug.ws:443
-vless://fb36c827-e92a-470b-a7ee-f82d3120ef25@masukan.bug.ws:80?path=%2Fvl%3D104.248.146.212%3D8443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Digital Ocean🇸🇬
-vless://e8977208-930e-4fa5-a5fa-f153534b1cc5@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D149.129.250.187%3D443#(ID) Alibaba🇮🇩
-vless://a321b747-d04d-4b7d-a71a-716c9e9d74b7@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D103.20.199.118%3D12999#(JP) Nearoute🇯🇵
-vless://894a47ca-3e50-44f6-a778-88b419650807@masukan.bug.ws:80?path=%2Fvl%3D103.6.207.108%3D8080&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(ID) Pt Pusat Media Indonesia🇮🇩
-vless://df896980-8236-4ce6-99e3-1b4ad5b81bb3@masukan.bug.ws:80?path=%2Fvl%3D138.2.95.61%3D1111&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-vless://a8a4df7d-d51b-4e8e-a255-016138400f60@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D103.133.223.52%3D2096#(ID) Cloud Teknologi Nusantara🇮🇩
-vless://1641a8a6-dd7e-4b03-a49d-ead6ec3fe9a2@masukan.bug.ws:80?path=%2Fvl%3D43.133.145.156%3D53136&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(ID) Shenzhen Tencent Computer Systems Company Limited🇮🇩
-trojan://2844gJEz83PU@masukan.bug.ws:443
-trojan://dUrrw6H4u3c2@masukan.bug.ws:80
-trojan://hvCfIdneOtDO@masukan.bug.ws:443
-vless://d8c8fd2f-015f-40c2-ad65-127a4db8fd8d@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D194.127.193.124%3D24467#(SG) LEASEWEB SINGAPORE PTE  LTD🇸🇬
-trojan://EQVIxTsUQNTl@masukan.bug.ws:443
-vless://d8a6549f-df14-4105-aaa3-7eae93efc1e4@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D94.237.75.31%3D62174#(SG) Upcloud LTD🇸🇬
-vless://f40cb860-12cd-42e8-aea2-da293decf140@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D8.218.107.145%3D31166#(ID) PT Deneva🇮🇩
-trojan://KQYHCfSk3G1s@masukan.bug.ws:80
-trojan://eON0DBk8Dwq5@masukan.bug.ws:80
-vless://647b7892-5f8f-42dd-ac28-a70ace5eb60d@masukan.bug.ws:80?path=%2Fvl%3D106.244.196.196%3D32485&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(KR) LG DACOM Corporation🇰🇷
-trojan://fWYNwMdqW3rA@masukan.bug.ws:443
-trojan://TtCRwGv1EfzA@masukan.bug.ws:443
-trojan://NDHxlUCQtaIL@masukan.bug.ws:443
-vless://669bbf11-67f9-4b55-9bfd-f07932e818c2@masukan.bug.ws:80?path=%2Fvl%3D47.245.95.160%3D1443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
-vless://c8f36f38-ed11-4f0e-800d-2539e7ff6124@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D103.3.63.253%3D46683#(SG) Akamai Connected Cloud🇸🇬
-vless://bff6d7a7-c64e-42e0-92d8-bbf2aa6b5d30@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D139.180.144.170%3D666#(SG) The Constant Company  LLC🇸🇬
-vless://f6c2150b-08c4-4dca-8807-fc73214153f4@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D8.219.237.57%3D31523#(SG) Alibaba us Technology Co   Ltd🇸🇬
-vless://12e9cf80-174c-4b9c-9053-e177e58c1b52@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D188.166.255.195%3D443#(SG) Digitalocean  LLC🇸🇬
-trojan://70l19RbZWfh3@masukan.bug.ws:80
-trojan://zfDy3iw8Zovq@masukan.bug.ws:80
-vless://39cd06c1-68be-4cd0-8c3b-0c40a63c8ee5@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D129.150.49.58%3D18650#(SG) Oracle Corporation🇸🇬
-vless://e7e31945-2b3a-450c-be55-27243828dbd3@masukan.bug.ws:80?path=%2Fvl%3D8.222.129.175%3D58808&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
-trojan://56lhqjahyzfz@masukan.bug.ws:80
-vless://9be37da7-5af3-4734-af03-f30ebc28a4c5@masukan.bug.ws:80?path=%2Fvl%3D139.180.131.125%3D10005&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) The Constant Company  LLC🇸🇬
-vless://cc7165b2-057e-44d5-8022-d277c1bd5339@masukan.bug.ws:80?path=%2Fvl%3DIP: 35.219.50.99%3D443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(ID) Google Cloud🇮🇩
-trojan://kP4b7sACFE3t@masukan.bug.ws:443
-trojan://HVlNokypm2Ci@masukan.bug.ws:80
-trojan://wgXs0GNy9AfO@masukan.bug.ws:80
-trojan://MMB1ZxBrT5Js@masukan.bug.ws:443
-vless://5a11361f-1866-4a19-bb58-ae83149de064@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D15.235.162.49%3D443#(SG) OVH SAS🇸🇬
-vless://a09177fc-2f46-400f-a3e1-5d446aee1098@masukan.bug.ws:80?path=%2Fvl%3D45.77.171.102%3D3128&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) The Constant Company  LLC🇸🇬
-trojan://Y9tCnIe77Ouz@masukan.bug.ws:443
-vless://cf86db51-0f1f-411e-8316-43511b556375@masukan.bug.ws:80?path=%2Fvl%3D103.133.223.51%3D2096&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(ID) Cloud Teknologi Nusantara🇮🇩
-vless://64932e30-d771-4798-ba2e-e248da6d2844@masukan.bug.ws:80?path=%2Fvl%3D143.198.213.197%3D443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Digitalocean  LLC🇸🇬
-vless://5ca0f1a8-189f-4c5e-b444-61fd910b6ce8@masukan.bug.ws:80?path=%2Fvl%3D45.77.36.40%3D443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) The Constant Company  LLC🇸🇬
-vless://69d249b3-2238-4f89-af40-863777a2e90b@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D47.245.95.160%3D1443#(SG) Alibaba us Technology Co   Ltd🇸🇬
-trojan://Nf9gUKzzVgV7@masukan.bug.ws:443
-trojan://DAUOvELbSKnu@masukan.bug.ws:443
-trojan://sx9MmzlqKbYa@masukan.bug.ws:443
-vless://219edb92-e3c6-4e15-9fc7-a19330a8c1be@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D8.222.143.82%3D24245#(SG) Alibaba us Technology Co   Ltd🇸🇬
-trojan://dIpCmLCe26Fg@masukan.bug.ws:80
-trojan://hbrpTntRdNpS@masukan.bug.ws:443
-trojan://Tcw2TxjOSE09@masukan.bug.ws:80
-vless://38695ad5-6e8d-4574-8f62-142deb198841@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D13.250.14.76%3D443#(SG) Amazon🇸🇬
-vless://9d55f138-9450-4fc6-ad7e-5c85ad8381c4@masukan.bug.ws:80?path=%2Fvl%3D54.169.229.188%3D443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Amazon com  Inc🇸🇬
-trojan://tnSqjn4pnCJm@masukan.bug.ws:443
-vless://1ba412d7-ebd6-4c5f-9349-d4ad85409a49@masukan.bug.ws:80?path=%2Fvl%3D213.35.108.135%3D12596&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-vless://1246339c-df0d-4f47-b87e-df634734e6a6@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D106.240.106.61%3D38937#(KR) LG DACOM Corporation🇰🇷
-vless://2587abe6-4b84-4921-adcb-5f1ce0ebf992@masukan.bug.ws:80?path=%2Fvl%3D8.218.107.145%3D31166&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(ID) PT Deneva🇮🇩
-vless://c7ffe339-26f0-45c7-a300-083b59f7b260@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D103.6.207.108%3D8080#(ID) PT Pusat Media Indonesia🇮🇩
-trojan://brBliLiSjVev@masukan.bug.ws:443
-trojan://YNlceWxUETuu@masukan.bug.ws:443
-trojan://zhmZMRXDcnVR@masukan.bug.ws:443
-vless://1e0071b7-591c-4fd6-8b25-e58b7729f5c5@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D43.133.145.156%3D53136#(ID) Tencent cloud computing🇮🇩
-trojan://7y5zciXi7tqU@masukan.bug.ws:443
-vless://23052b4a-d408-431a-9939-a935c125c6ad@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D104.248.146.212%3D8443#(SG) Digital Ocean🇸🇬
-trojan://LDtugkMq5LuY@masukan.bug.ws:80
-trojan://58Nm64vbx3Ve@masukan.bug.ws:443
-trojan://JOwVfrtDYxWC@masukan.bug.ws:80
-trojan://53GAWtWNYDqy@masukan.bug.ws:443
-trojan://ij006oF9WqbK@masukan.bug.ws:80
-trojan://J7ROBBBUJvA9@masukan.bug.ws:80
-trojan://kL8Una8VR8sT@masukan.bug.ws:80
-trojan://RYzfR6R7ECrM@masukan.bug.ws:80
-vless://c2e33bd1-90c8-4341-9c3f-f1e4f7ff4347@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D158.178.225.124%3D37461#(SG) Oracle Corporation🇸🇬
-vless://f713db25-52d6-4f5f-8dc9-5448480118d2@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D106.244.196.196%3D32485#(KR) LG DACOM Corporation🇰🇷
-trojan://nzMfBh2lP4Qj@masukan.bug.ws:80
-trojan://xizDiMIgi7CV@masukan.bug.ws:443
-vless://1a8663d1-1f81-4e4f-baeb-4953403fa16e@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D129.150.36.188%3D53435#(SG) Oracle Cloud🇸🇬
-vless://093962bd-7ed8-4c90-b2e3-a4ae85e6673e@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D203.194.112.119%3D8443#(ID) First Cagayan Converge Data Center Inc.🇮🇩
-trojan://MimVIskmFP7D@masukan.bug.ws:443
-trojan://obInF7ry2Leh@masukan.bug.ws:443
-vless://1e052c66-b7af-4eb1-beef-486cc6ca79e7@masukan.bug.ws:80?path=%2Fvl%3D213.35.107.73%3D443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-trojan://sZga8rfz1zrP@masukan.bug.ws:80
-vless://3d12374c-be32-4aa3-bec1-203c60fdee74@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D47.236.25.107%3D27903#(SG) Alibaba us Technology Co   Ltd🇸🇬
-vless://84505ab7-8681-4d1f-bec9-e50ea77868e8@masukan.bug.ws:80?path=%2Fvl%3D194.127.193.240%3D50791&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) LEASEWEB SINGAPORE PTE  LTD🇸🇬
-vless://e7647043-cd59-48b3-9d40-63b982fc22a7@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D213.35.108.135%3D12596#(SG) Oracle Corporation🇸🇬
-trojan://Z9L1chzYsam5@masukan.bug.ws:80
-trojan://hepRk4YcazSm@masukan.bug.ws:443
-vless://0222e29e-cd56-4a5e-a3bb-c2338dfab51c@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D167.71.194.185%3D8443#(SG) Digitalocean  LLC🇸🇬
-vless://c0abb8cf-9871-4706-b339-c3629b8488ac@masukan.bug.ws:80?path=%2Fvl%3D8.219.197.113%3D45714&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
-trojan://h6sWGKNubCCJ@masukan.bug.ws:443
-vless://245ea761-d6f1-42d8-9ce8-f0e7b36731d1@masukan.bug.ws:80?path=%2Fvl%3D103.3.63.253%3D46683&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Akamai Connected Cloud🇸🇬
-vless://56ae830e-f487-468e-b661-2aab1266676c@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D47.236.173.166%3D587#(SG) Alibaba us Technology Co   Ltd🇸🇬
-vless://4855808b-2b54-4512-89db-511b9275363e@masukan.bug.ws:80?path=%2Fvl%3D43.156.16.213%3D31528&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Shenzhen Tencent Computer Systems Company Limited🇸🇬
-trojan://uTnurXEDjw65@masukan.bug.ws:80
-vless://a99ac862-beb7-46de-ac1a-bb95ed5b7793@masukan.bug.ws:80?path=%2Fvl%3D62.72.46.14%3D8443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Contabo Asia Private Limited🇸🇬
-vless://3181b516-e8cc-4134-adac-47d77e4bcadd@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D172.232.239.147%3D587#(ID) Akamai Connected Cloud🇮🇩
-vless://7ac2f47b-8828-4ca8-b561-91c36df89049@masukan.bug.ws:80?path=%2Fvl%3D178.128.80.43%3D443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Digitalocean  LLC🇸🇬
-trojan://Sm12lN6O6uHd@masukan.bug.ws:80
-vless://72470b84-4698-4d7f-8242-f7a8f2d3a908@masukan.bug.ws:80?path=%2Fvl%3D47.236.246.163%3D14108&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
-trojan://4k3y32iwbFFM@masukan.bug.ws:80
-vless://d2986bf8-9bf9-4189-a2ed-7209008e7891@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D178.128.80.43%3D443#(SG) Digitalocean  LLC🇸🇬
-trojan://efxYEITtw0cw@masukan.bug.ws:80
-trojan://8hQPN9glUtX3@masukan.bug.ws:443
-trojan://9ybD58qK0YJQ@masukan.bug.ws:80
-vless://003a5be0-a6e6-4d50-a604-bdb6e08ea91c@masukan.bug.ws:80?path=%2Fvl%3D43.133.145.156%3D53136&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(ID) Tencent cloud computing🇮🇩
-vless://827d04db-5b00-4d56-a409-9e11adde4b37@masukan.bug.ws:80?path=%2Fvl%3D129.150.58.86%3D57621&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-trojan://g0LoNfASkZbm@masukan.bug.ws:80
-vless://211633b6-6e8e-4fa8-98e3-ad799535840a@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D139.180.136.178%3D29806#(SG) The Constant Company  LLC🇸🇬
-trojan://pwF5Ih79Wbvc@masukan.bug.ws:443
-trojan://5EZycgautvB4@masukan.bug.ws:80
-trojan://oR4xc4BrRNCP@masukan.bug.ws:80
-trojan://8Py4Whwiqhqt@masukan.bug.ws:80
-trojan://ABSpCm4BfVVN@masukan.bug.ws:80
-vless://feaab999-5d56-4110-8bfb-99e81fc2b6f1@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D103.6.207.108%3D8080#(ID) PT Pusat Media Indonesia🇮🇩
-trojan://xm6YHzeOeWuB@masukan.bug.ws:443
-trojan://LOJVOE5GsQHf@masukan.bug.ws:443
-trojan://KtF7pDAevTJs@masukan.bug.ws:443
-vless://b6f93c78-e295-4619-bc14-cb711b5a4a26@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D158.178.225.124%3D37497#(SG) Oracle Corporation🇸🇬
-vless://b351a70b-fee7-4e49-a8aa-7d33fe08bf58@masukan.bug.ws:80?path=%2Fvl%3D167.71.194.185%3D8443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Digitalocean  LLC🇸🇬
-vless://4c993573-9311-4ac8-90e8-36035b02637d@masukan.bug.ws:80?path=%2Fvl%3D35.219.50.99%3D443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(ID) Google LLC🇮🇩
-vless://dc5c48b0-0266-4cfa-b12a-1496411b2e44@masukan.bug.ws:80?path=%2Fvl%3D139.180.136.178%3D29806&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) The Constant Company  LLC🇸🇬
-vless://26e4db88-4e81-4678-bef3-aae15f0ed772@masukan.bug.ws:80?path=%2Fvl%3D149.129.250.187%3D443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(ID) Alibaba🇮🇩
-vless://6833d526-039c-4952-9157-a6bd1fe93bdc@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D103.133.223.51%3D2096#(ID) Cloud Teknologi Nusantara🇮🇩
-vless://0998d278-03ab-43fc-b95f-628179b1186a@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D138.2.74.219%3D28616#(SG) Cloudflare Warp🇸🇬
-vless://c23e1f3a-35b1-4f6c-b4be-8c8d0f58c055@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D119.81.201.154%3D9089#(SG) SoftLayer Technologies🇸🇬
-trojan://QHDKKWI7MafK@masukan.bug.ws:443
-trojan://Z2KdONdy6IEo@masukan.bug.ws:443
-vless://10af42b5-c651-46c5-ba90-8e62c03e1479@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D192.53.113.156%3D587#(SG) Akamai Technologies  Inc🇸🇬
-vless://0a8973f2-a548-4f29-a429-1b8572631757@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D168.138.166.213%3D10500#(SG) Oracle Corporation🇸🇬
-trojan://OCyNGoXFPF5k@masukan.bug.ws:443
-vless://4beb9d16-c5f4-4a71-a69f-f315fef4cfb2@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D172.232.239.147%3D587#(ID) Akamai Technologies  Inc🇮🇩
-vless://c6f8f9e0-c630-4a9f-aa8a-7dd29da5ee37@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D38.207.172.235%3D8003#(KR) Oracle Cloud🇰🇷
-vless://0cabb547-feae-4927-9b87-d995df49bb16@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D161.117.249.114%3D2025#(SG) Alibaba us Technology Co   Ltd🇸🇬
-trojan://jMKoVWZA5mlE@masukan.bug.ws:443
-trojan://4kissvjFUE7T@masukan.bug.ws:80
-vless://58b9ddee-c64a-4fa9-b0bc-9ef2ba7ec041@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D45.77.171.102%3D3128#(SG) The Constant Company  LLC🇸🇬
-vless://41c1d0e3-e2e9-4f7e-a54c-53b35d4ad274@masukan.bug.ws:80?path=%2Fvl%3D168.138.166.213%3D10500&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
-vless://3e9fd2f5-b131-49e6-b8ec-20b33f3c1eaf@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D103.133.223.50%3D2096#(ID) Cloud Teknologi Nusantara🇮🇩
-vless://230d00e1-8c72-4ef9-bf43-cd8095fc2e2a@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D213.35.107.73%3D443#(SG) Oracle Corporation🇸🇬
-vless://79dc9d01-8079-4285-91b2-7fded90d83d2@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D188.166.255.195%3D8443#(SG) Digitalocean  LLC🇸🇬
-trojan://RHoSYgBVFPTA@masukan.bug.ws:80
-trojan://iB99qWO5AOeU@masukan.bug.ws:80
-vless://1794881d-36ea-4312-882a-fc7e95941c04@masukan.bug.ws:80?path=%2Fvl%3D103.133.223.50%3D2096&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(ID) Cloud Teknologi Nusantara🇮🇩
+trojan://3Gh8raqVLUOe@masukan.bug.ws:80
+vless://e1b2cff9-0af9-45ba-9fe3-afe71c0652ca@masukan.bug.ws:80?path=%2Fvl%3D35.219.50.99%3D443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(ID) Google LLC🇮🇩
+trojan://BxvpzJGPGrJq@masukan.bug.ws:80
+vless://3dc4b706-7304-49d9-9bf2-b57f8677a741@masukan.bug.ws:80?path=%2Fvl%3D51.79.158.126%3D443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) OVH SAS🇸🇬
+vless://b73e3a31-6db3-4197-8a8b-a8c3b44bc36c@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D45.77.171.102%3D3128#(SG) The Constant Company  LLC🇸🇬
+vless://629509e8-a97b-438e-ab4a-a1638bebf03b@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D194.127.193.124%3D24467#(SG) LEASEWEB SINGAPORE PTE  LTD🇸🇬
+trojan://O6i1u2iAgJh2@masukan.bug.ws:80
+vless://205a634a-5233-48d5-9248-3ff417980d27@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D139.162.48.174%3D10000#(SG) Akamai Technologies  Inc🇸🇬
+trojan://42opPOsAvHci@masukan.bug.ws:443
+trojan://9USsVefFWGTa@masukan.bug.ws:80
+trojan://c5XCmRGhJqiy@masukan.bug.ws:80
+trojan://YK5rdoX6feDl@masukan.bug.ws:80
+trojan://J0807eDJkz1l@masukan.bug.ws:443
+trojan://JN0NCy5kFfvo@masukan.bug.ws:80
+vless://525218fb-f1af-4d63-bab3-4ef2d4ecbc19@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D158.178.225.124%3D37497#(SG) Oracle Corporation🇸🇬
+vless://2361dd63-31b2-48cb-8c60-0d64316f320a@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D106.240.106.61%3D38937#(KR) LG DACOM Corporation🇰🇷
+vless://4fdba401-6510-4125-a94f-4a1ce99f4802@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D103.180.161.10%3D587#(SG) Hong Kong Megalayer Technology Co  limited🇸🇬
+trojan://SiNOMxQLGAXX@masukan.bug.ws:80
+trojan://UXjoSvw0z8rJ@masukan.bug.ws:443
+trojan://nDOu5RU6Yjtf@masukan.bug.ws:80
+vless://ab05ed35-ffcc-4858-945d-e716bfbec3ec@masukan.bug.ws:80?path=%2Fvl%3D139.180.136.178%3D29806&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) The Constant Company  LLC🇸🇬
+trojan://uzpN1Dahaa9l@masukan.bug.ws:80
+trojan://VQGRXfMtWQmU@masukan.bug.ws:80
+vless://aee4ddd0-245e-4cf5-944f-d932f9fafbd2@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D103.20.199.118%3D12999#(JP) Nearoute🇯🇵
+trojan://7gTg2JBLiAZE@masukan.bug.ws:443
+trojan://s42Rl8wASTFY@masukan.bug.ws:80
+trojan://ZGFWGIptvbr0@masukan.bug.ws:443
+vless://13757a8c-de2a-4a2f-95c4-2dbd6525da50@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D8.219.237.57%3D31523#(SG) Alibaba us Technology Co   Ltd🇸🇬
+trojan://x9P0tQjuRvYD@masukan.bug.ws:443
+vless://89f24082-8081-4371-ac86-36ee9512744c@masukan.bug.ws:80?path=%2Fvl%3D138.2.74.219%3D28616&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Cloudflare Warp🇸🇬
+vless://36cebc8b-7b23-4ba2-8da7-6dd81cd1cdde@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D146.235.18.248%3D45137#(SG) Oracle Corporation🇸🇬
+vless://a2af57e8-7a0c-4e47-a253-96b521a28029@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D8.222.243.73%3D26385#(SG) Alibaba us Technology Co   Ltd🇸🇬
+vless://a2e4d4ed-1acd-4b2c-b886-3f1bedb2f872@masukan.bug.ws:80?path=%2Fvl%3D47.236.119.190%3D51342&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
+vless://d30f2114-62ff-421a-a14e-8c0a4525b71d@masukan.bug.ws:80?path=%2Fvl%3D43.133.145.156%3D53136&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(ID) Tencent cloud computing🇮🇩
+vless://07517655-1100-4a68-97db-07602888fe22@masukan.bug.ws:80?path=%2Fvl%3D203.194.112.119%3D8443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(ID) First Cagayan Converge Data Center Inc.🇮🇩
+vless://c7d53f6f-de4e-48db-8631-3b7e69795e89@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D188.166.255.195%3D8443#(SG) Digitalocean  LLC🇸🇬
+vless://6062939b-189f-44bd-b81a-f9182781ea89@masukan.bug.ws:80?path=%2Fvl%3D103.180.161.69%3D587&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Hong Kong Megalayer Technology Co  limited🇸🇬
+trojan://Q66u3e3O2Et9@masukan.bug.ws:80
+trojan://bszhTfBVUy8G@masukan.bug.ws:443
+trojan://EfAyYUpaTkc2@masukan.bug.ws:80
+trojan://wqW9C3y1JMHd@masukan.bug.ws:80
+trojan://FbbHSc9wzGft@masukan.bug.ws:80
+trojan://0KxxJEis9Fdh@masukan.bug.ws:443
+trojan://W8WLxgqFTFVF@masukan.bug.ws:443
+vless://321683e2-0ddc-42f9-a476-a770cc234b82@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D43.133.145.156%3D53136#(ID) Tencent cloud computing🇮🇩
+vless://342d5772-7295-4a59-bfe4-592e2e209e73@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D139.180.215.77%3D57878#(SG) The Constant Company  LLC🇸🇬
+vless://42fd123b-7f89-4ec0-ba75-27d54d78ab68@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D47.236.173.166%3D587#(SG) Alibaba us Technology Co   Ltd🇸🇬
+vless://1be91998-49bf-4f38-aa9e-8aaea63589db@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D103.6.207.108%3D8080#(ID) Pt Pusat Media Indonesia🇮🇩
+vless://5d6a01b8-47d2-4c81-bce7-aaa9aaf01e77@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D51.79.254.182%3D443#(SG) OVH SAS🇸🇬
+trojan://jUzFjDuacdhW@masukan.bug.ws:443
+vless://047a29c8-e859-434a-ba29-3aacb410216f@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D172.232.239.151%3D587#(ID) Akamai Connected Cloud🇮🇩
+trojan://pg9IEpmZZ7kc@masukan.bug.ws:80
+trojan://q3x069WkYEEV@masukan.bug.ws:443
+trojan://ZhL5AuwG0jn1@masukan.bug.ws:443
+trojan://BMZbJGkkvWzU@masukan.bug.ws:80
+trojan://K2bCzVc1xu6I@masukan.bug.ws:443
+trojan://jh3RDJ9EfwDt@masukan.bug.ws:80
+trojan://tymLusPdejBy@masukan.bug.ws:443
+trojan://GELxwtHPVBSU@masukan.bug.ws:80
+vless://37c9aa19-d84b-473d-adfc-a25f42ed6026@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D192.53.113.156%3D587#(SG) Akamai Technologies  Inc🇸🇬
+vless://916ad6b5-4a34-48a8-957c-e6b8cc70b3de@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D47.236.25.107%3D27903#(SG) Alibaba us Technology Co   Ltd🇸🇬
+vless://12ea52a7-0190-4ef8-a055-e3f580e8f562@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D158.178.225.124%3D53618#(SG) Oracle Corporation🇸🇬
+trojan://qcU1EsSDKJCJ@masukan.bug.ws:80
+vless://27be3b5d-0bb6-4d86-bd37-aaa2a6d3be47@masukan.bug.ws:80?path=%2Fvl%3D45.77.171.102%3D3128&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) The Constant Company  LLC🇸🇬
+vless://a2de3f9a-60a3-46c4-94c8-fb827e8229ac@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D138.2.95.61%3D1111#(SG) Oracle Corporation🇸🇬
+trojan://66wbeoa5bIDO@masukan.bug.ws:443
+trojan://Oe6DzEI7OGXE@masukan.bug.ws:80
+vless://724fa67a-9f4e-4e4c-89c7-f2a6c5916162@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D138.2.74.219%3D28616#(SG) Oracle Corporation🇸🇬
+vless://8eaa66cc-8ea0-4c02-9798-314859169954@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D129.150.36.188%3D53435#(SG) Oracle Cloud🇸🇬
+vless://12a99690-9b16-444a-b28e-08c61007d80c@masukan.bug.ws:80?path=%2Fvl%3D103.180.161.10%3D587&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Hong Kong Megalayer Technology Co  limited🇸🇬
+vless://849bd37a-edd3-4fcf-9a3e-6476f1e448c6@masukan.bug.ws:80?path=%2Fvl%3D103.6.207.108%3D8080&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(ID) PT Pusat Media Indonesia🇮🇩
+vless://03152c59-d0b5-43da-841a-8ee3a274b73e@masukan.bug.ws:80?path=%2Fvl%3D192.53.113.156%3D587&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Akamai Technologies  Inc🇸🇬
+vless://096e8c23-6a6e-4dd1-b997-4b03bfc52616@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D103.180.161.123%3D587#(SG) Hong Kong Megalayer Technology Co  limited🇸🇬
+vless://5d35ca1f-b6d9-4732-bdf8-9909cfceb46d@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D54.251.167.101%3D443#(SG) Amazon com  Inc🇸🇬
+trojan://HKZmhiUh95eP@masukan.bug.ws:80
+vless://87733f9d-a8e4-459b-88c2-6fc965694bfd@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D203.194.112.119%3D8443#(ID) First Cagayan Converge Data Center Inc.🇮🇩
+vless://482219f3-4f9a-4d33-bc64-efba987f6d38@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D103.6.207.108%3D8080#(ID) PT Pusat Media Indonesia🇮🇩
+vless://ab7e9c34-f2fa-40da-85bb-d9a573491e51@masukan.bug.ws:80?path=%2Fvl%3D158.178.225.124%3D53618&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+trojan://CYd9yIC03SVq@masukan.bug.ws:80
+vless://ca277365-9f25-412d-9df0-920bd90ffc15@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D158.178.225.124%3D37461#(SG) Oracle Corporation🇸🇬
+vless://c96e2525-403c-4ede-92f8-67d917b0b33d@masukan.bug.ws:80?path=%2Fvl%3D54.169.229.188%3D443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Amazon com  Inc🇸🇬
+trojan://h6ey4UCD3liY@masukan.bug.ws:443
+trojan://9hJ4K2vyCqYQ@masukan.bug.ws:80
+trojan://hhPgrzB2MQjE@masukan.bug.ws:80
+trojan://PyeEH6owGKIy@masukan.bug.ws:443
+trojan://9AzFUHFte9aD@masukan.bug.ws:443
+vless://dd50d320-5ef7-4d81-9a09-14d2919e310e@masukan.bug.ws:80?path=%2Fvl%3D138.2.74.219%3D28616&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+trojan://s1JgnXZsUfV2@masukan.bug.ws:80
+trojan://8WONd96ionL6@masukan.bug.ws:443
+vless://25bde156-0740-40ed-89fc-ce06f9ce9245@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D158.178.225.124%3D12934#(SG) Oracle Corporation🇸🇬
+trojan://Fsw1130nj2mB@masukan.bug.ws:80
+vless://f2cb9656-92e2-443a-877e-543732ab1533@masukan.bug.ws:80?path=%2Fvl%3D138.2.109.23%3D587&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+vless://7991b0e2-9e97-4723-8622-2dd33b28a0e7@masukan.bug.ws:80?path=%2Fvl%3D158.178.225.124%3D12934&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+trojan://ZJMggoRizOeY@masukan.bug.ws:443
+vless://c1fca2e2-76fa-44dc-961e-89dfe918f540@masukan.bug.ws:80?path=%2Fvl%3D119.81.201.154%3D9089&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) SoftLayer Technologies🇸🇬
+vless://488d0095-58f6-4bd0-ae7b-6fadfbbf92b6@masukan.bug.ws:80?path=%2Fvl%3D172.232.239.147%3D587&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(ID) Akamai Technologies  Inc🇮🇩
+vless://ea50d4cf-8ba5-4ae8-b053-8ae7fb4ad3e5@masukan.bug.ws:80?path=%2Fvl%3D213.35.108.135%3D12596&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+trojan://upUCUWEgNaB4@masukan.bug.ws:443
+vless://3b4ed61a-c550-4330-9404-4dd3a5209e59@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D43.133.145.156%3D53136#(ID) Shenzhen Tencent Computer Systems Company Limited🇮🇩
+vless://ccc871c7-85c1-4d9f-9225-9c9280137e7c@masukan.bug.ws:80?path=%2Fvl%3D213.35.107.73%3D443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+trojan://4uDYWa1zcw5f@masukan.bug.ws:443
+trojan://8Qx0FJWg8chH@masukan.bug.ws:443
+vless://b4df8edd-9afb-4f43-8c4e-a379bc5e8ecf@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D146.190.111.165%3D443#(SG) Digitalocean  LLC🇸🇬
+trojan://AP13rNwyuF8f@masukan.bug.ws:443
+vless://e4922eb9-5820-45a0-af29-0fcd66ccdaef@masukan.bug.ws:80?path=%2Fvl%3D139.162.48.174%3D10000&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Akamai Technologies  Inc🇸🇬
+trojan://HIGZeBhaQp3z@masukan.bug.ws:443
+vless://fd4e1407-9f53-43df-9816-d568a8917073@masukan.bug.ws:80?path=%2Fvl%3D103.180.161.123%3D587&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Hong Kong Megalayer Technology Co  limited🇸🇬
+trojan://AKKBkOqFnyKu@masukan.bug.ws:443
+trojan://YHGYlS46Qtlk@masukan.bug.ws:80
+trojan://DPSvu9KZ1JSm@masukan.bug.ws:80
+trojan://sJkU0v5ASf8G@masukan.bug.ws:80
+vless://f7b5bece-4764-4205-8b6b-08bead1c2098@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D35.219.15.90%3D443#(ID) Google LLC🇮🇩
+vless://614cd0cc-14e8-4552-8b7a-e09fe82c44f8@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D178.128.80.43%3D443#(SG) Digitalocean  LLC🇸🇬
+trojan://2HHLFLZNxexu@masukan.bug.ws:443
+vless://c519ef61-58f1-402c-9a67-11c30acb2a19@masukan.bug.ws:80?path=%2Fvl%3D103.133.223.51%3D2096&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(ID) Cloud Teknologi Nusantara🇮🇩
+vless://9badcf1e-813e-4abc-a01d-f0e390516a4c@masukan.bug.ws:80?path=%2Fvl%3D149.129.250.187%3D443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(ID) Alibaba🇮🇩
+trojan://sml516lxFOTH@masukan.bug.ws:443
+trojan://9uKPOuH748u7@masukan.bug.ws:80
+vless://38b0cb8a-302c-4935-a136-a346b52a744f@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D45.77.36.40%3D443#(SG) The Constant Company  LLC🇸🇬
+trojan://GT6zRpHAt8eo@masukan.bug.ws:80
+trojan://D5EeiCrFZGIr@masukan.bug.ws:80
+vless://da583335-67f9-4129-a5ef-1511a8b4bb79@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D139.180.136.178%3D29661#(SG) The Constant Company  LLC🇸🇬
+trojan://sjBSUVfsp9qM@masukan.bug.ws:443
+vless://6b11385e-0a34-4395-81d8-aca1a55cfa88@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D47.236.246.163%3D14108#(SG) Alibaba us Technology Co   Ltd🇸🇬
+vless://a8a5350d-b038-401c-b1f2-1f07ffdf665f@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D172.232.239.147%3D587#(ID) Akamai Connected Cloud🇮🇩
+vless://e001b602-d177-4317-b62c-f629ff02d2e1@masukan.bug.ws:80?path=%2Fvl%3D47.236.246.163%3D14108&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
+trojan://UcEvsy3tny47@masukan.bug.ws:80
+trojan://tTPz9BIOwI1A@masukan.bug.ws:443
+trojan://xRoUw01k9rgh@masukan.bug.ws:80
+trojan://xxsScGfpxM5K@masukan.bug.ws:443
+trojan://DCHx9SEO7CTW@masukan.bug.ws:443
+vless://45f8e764-150d-4711-a848-cf63b71b85aa@masukan.bug.ws:80?path=%2Fvl%3D139.180.215.77%3D57878&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) The Constant Company  LLC🇸🇬
+trojan://KW4rtVjhICNt@masukan.bug.ws:443
+vless://1a308836-d473-4c02-b9b4-e8e1d5391220@masukan.bug.ws:80?path=%2Fvl%3D138.2.89.238%3D43254&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+vless://a6f5f6dd-7131-4b3d-ad63-77239c37f13d@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D167.71.194.185%3D8443#(SG) Digitalocean  LLC🇸🇬
+trojan://FnuEfSyNC9TQ@masukan.bug.ws:443
+trojan://2MMjClywClw4@masukan.bug.ws:443
+vless://a9c86965-304f-4c1c-a0ea-90f75d48022d@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D51.79.158.126%3D443#(SG) OVH SAS🇸🇬
+vless://b963bada-e14f-44c3-841b-a4d72d3e8600@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D161.117.249.114%3D2025#(SG) Alibaba us Technology Co   Ltd🇸🇬
+vless://357442f6-2376-4e2c-83a0-18e10e39b89f@masukan.bug.ws:80?path=%2Fvl%3D146.235.18.248%3D45137&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+trojan://6AfssMEBiAWb@masukan.bug.ws:80
+trojan://KJvkFQQgYsP1@masukan.bug.ws:443
+vless://07aa5cb8-3eb4-4dbd-8023-569079de9311@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D54.169.229.188%3D443#(SG) Amazon com  Inc🇸🇬
+trojan://cUD7iYw248ZS@masukan.bug.ws:443
+trojan://e8qf5OBJP5SV@masukan.bug.ws:443
+trojan://kAuhrpsVBF42@masukan.bug.ws:80
+vless://2e9cc41a-f8ed-4351-8616-f6678a5ec3e1@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D119.81.201.154%3D9089#(SG) Softlayer Technologies Inc🇸🇬
+vless://68d01fb7-94ee-4fd3-a297-63718bb2c616@masukan.bug.ws:80?path=%2Fvl%3D106.240.106.61%3D38937&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(KR) LG DACOM Corporation🇰🇷
+trojan://hcNxenUyJuAA@masukan.bug.ws:443
+trojan://Snm655oulXsj@masukan.bug.ws:80
+vless://c1ef8b4c-109a-4dc5-832f-986e1c519eb1@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D13.250.14.76%3D443#(SG) Amazon🇸🇬
+vless://980dd3a3-1e4f-4e28-aaf9-232f4cd5acd5@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D143.198.213.197%3D443#(SG) Digitalocean  LLC🇸🇬
+trojan://N0S4QC93gj6Q@masukan.bug.ws:443
+trojan://nbaSQuucqQe8@masukan.bug.ws:80
+vless://6607a09c-46c4-4fb8-be02-475379f77d44@masukan.bug.ws:80?path=%2Fvl%3D129.150.58.86%3D57621&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+trojan://vHzAyhVLEZTK@masukan.bug.ws:80
+vless://a89de89d-cf72-48de-b47d-10cd8c154b3f@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D47.236.119.190%3D51342#(SG) Alibaba us Technology Co   Ltd🇸🇬
+vless://b483b601-16c9-4a46-8460-b3ed12d4fca9@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D62.72.46.14%3D8443#(SG) Contabo Asia Private Limited🇸🇬
+vless://18df9b13-628e-4d15-8863-0f9ffe8a347d@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D213.35.108.135%3D12596#(SG) Oracle Corporation🇸🇬
+vless://77b2a13a-d8cd-4807-9e64-7cbb082241af@masukan.bug.ws:80?path=%2Fvl%3D8.222.129.175%3D58808&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
+vless://f8792c54-cd72-49f4-be85-d4ddfc832d51@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D103.133.223.52%3D2096#(ID) Cloud Teknologi Nusantara🇮🇩
+trojan://SuMFIkBSbDFh@masukan.bug.ws:80
+vless://ca3703bd-e78a-4af0-8fa4-3395d0cc2b35@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D139.180.136.178%3D29806#(SG) The Constant Company  LLC🇸🇬
+trojan://FukSV5DUjbyo@masukan.bug.ws:80
+trojan://qgv2LRG3NaHq@masukan.bug.ws:443
+trojan://DB6S1cVlaNGc@masukan.bug.ws:443
+trojan://L5A7TJ2uXAq1@masukan.bug.ws:443
+vless://102d4f87-d904-4c6c-8eb7-60c7761a2436@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D106.244.196.196%3D32485#(KR) LG DACOM Corporation🇰🇷
+trojan://U2NaQenYIw85@masukan.bug.ws:80
+trojan://l48BDqx32shl@masukan.bug.ws:80
+vless://554f159e-0d3b-45ca-b002-3cf7f3355a5f@masukan.bug.ws:80?path=%2Fvl%3D47.236.22.194%3D52324&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
+vless://bfca5913-3705-4c59-9b52-66ed77ffc48e@masukan.bug.ws:80?path=%2Fvl%3D18.192.93.64%3D443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(DE) Amazon Inc🇩🇪
+vless://cb8be62c-e5f1-445f-90e7-4555883723e8@masukan.bug.ws:80?path=%2Fvl%3D54.251.167.101%3D443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Amazon com  Inc🇸🇬
+trojan://0mQO2ysDnXHL@masukan.bug.ws:443
+trojan://25Ny5ldWxZ8I@masukan.bug.ws:443
+vless://6f81b763-abe9-4f15-ab48-9b57cb04e423@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D138.2.74.219%3D28616#(SG) Cloudflare Warp🇸🇬
+trojan://2NfY37yIGqMV@masukan.bug.ws:80
+vless://f1bc9897-9b6c-41dc-bc8e-fc00364d52a7@masukan.bug.ws:80?path=%2Fvl%3D43.156.16.213%3D31528&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Shenzhen Tencent Computer Systems Company Limited🇸🇬
+vless://37c1402d-4306-4c48-82ff-a0f8b592acfe@masukan.bug.ws:80?path=%2Fvl%3D188.166.255.195%3D443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Digitalocean  LLC🇸🇬
+vless://4e36f071-e6d2-4acb-89e3-b98dfb5048d7@masukan.bug.ws:80?path=%2Fvl%3D168.138.160.54%3D19081&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+trojan://0BXRZG1gBt6Z@masukan.bug.ws:443
+vless://51e107ce-0c7c-4a4b-bc1f-8bfc4414a76b@masukan.bug.ws:80?path=%2Fvl%3D15.235.162.49%3D443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) OVH SAS🇸🇬
+vless://c164ac55-8a8c-47c4-9ff7-e15127eac27d@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D172.232.239.147%3D587#(ID) Akamai Technologies  Inc🇮🇩
+trojan://EQ1sjz0vFn8R@masukan.bug.ws:443
+trojan://wyzSjilUH3vA@masukan.bug.ws:443
+trojan://Qyucc5ZaJYQe@masukan.bug.ws:80
+vless://db7d3e04-7bcd-4a6d-a737-a930ac33205a@masukan.bug.ws:80?path=%2Fvl%3D62.72.46.14%3D8443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Contabo Asia Private Limited🇸🇬
+vless://17580ed3-0945-4032-ba1c-ceb612e2b860@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D43.156.16.213%3D31528#(SG) Shenzhen Tencent Computer Systems Company Limited🇸🇬
+vless://e8e7028c-2141-4ff8-8f3b-5afa5030f5a7@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D139.180.144.170%3D666#(SG) The Constant Company  LLC🇸🇬
+trojan://WnbmT7pN5ndE@masukan.bug.ws:443
+trojan://2qP8gG80NIsk@masukan.bug.ws:443
+vless://57a3a55a-5866-4439-8ac9-ba14e0d23fe9@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D129.150.58.86%3D57621#(SG) Oracle Corporation🇸🇬
+trojan://vc5mPorke4Im@masukan.bug.ws:80
+trojan://reazrkHDq2dB@masukan.bug.ws:443
+vless://041af561-fa98-4f66-b701-6ad1421253a1@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D143.42.68.97%3D17055#(SG) Akamai Technologies  Inc🇸🇬
+vless://da9a7aad-c2e2-4fe3-a6c0-104a89f39202@masukan.bug.ws:80?path=%2Fvl%3D158.178.225.124%3D37497&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+vless://69a0ec5a-107d-4664-a987-cbb12a9534bd@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D138.2.89.238%3D43254#(SG) Oracle Corporation🇸🇬
+vless://3b6b8473-6da2-4626-afbe-b1b2626123a7@masukan.bug.ws:80?path=%2Fvl%3D38.207.172.235%3D8003&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(KR) Oracle Cloud🇰🇷
+vless://857c42f0-50a7-44f2-b545-00a1e1912db0@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D119.81.201.154%3D9089#(SG) SoftLayer Technologies🇸🇬
+trojan://iZ1O1yHgrHRZ@masukan.bug.ws:80
+vless://93a0f2b7-3453-4460-bc03-2927f175c4fd@masukan.bug.ws:80?path=%2Fvl%3D51.79.254.182%3D443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) OVH SAS🇸🇬
+vless://75abf068-ce81-402b-828a-fa8d77d1660f@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D103.133.223.50%3D2096#(ID) Cloud Teknologi Nusantara🇮🇩
+trojan://WLxem8VcCw4i@masukan.bug.ws:80
+trojan://CY7cmqve2ehp@masukan.bug.ws:443
+trojan://XkD1Rq7ustHG@masukan.bug.ws:80
+vless://f0a03c7b-f88e-494a-9f3b-fea40f058562@masukan.bug.ws:80?path=%2Fvl%3D103.133.223.52%3D2096&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(ID) Cloud Teknologi Nusantara🇮🇩
+trojan://oiWBYkfP4B6u@masukan.bug.ws:80
+vless://c9f1e5fb-e580-4c33-8486-c2d9fe96603b@masukan.bug.ws:80?path=%2Fvl%3D13.250.14.76%3D443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Amazon🇸🇬
+vless://1af44d7f-2ef9-44b6-8fa9-feae799e9e28@masukan.bug.ws:80?path=%2Fvl%3D139.180.144.170%3D666&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) The Constant Company  LLC🇸🇬
+vless://b1fde976-f826-4513-8200-8266de00c19d@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D18.192.93.64%3D443#(DE) Amazon Inc🇩🇪
+vless://c1f2c1fa-655b-4c03-98be-3e52965b7a4b@masukan.bug.ws:80?path=%2Fvl%3D43.133.145.156%3D53136&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(ID) Shenzhen Tencent Computer Systems Company Limited🇮🇩
+vless://9c627cc6-782e-496c-9704-3e14e1089cc8@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D129.150.49.58%3D18650#(SG) Oracle Corporation🇸🇬
+trojan://2NKT8bxCWktm@masukan.bug.ws:80
+trojan://RAbGqgbBy9I7@masukan.bug.ws:443
+trojan://2duAHCOoGTHo@masukan.bug.ws:80
+trojan://ydHQUAb4bhOV@masukan.bug.ws:443
+trojan://iQDEOpX1tBFa@masukan.bug.ws:80
+vless://e23af145-6416-4114-b8dc-d2a53bbd9f02@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D103.180.161.69%3D587#(SG) Hong Kong Megalayer Technology Co  limited🇸🇬
+vless://0862a686-9386-450f-aa29-e89e39cea7a4@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D47.236.22.194%3D52324#(SG) Alibaba us Technology Co   Ltd🇸🇬
+vless://9cd7fa94-2908-4c53-9a71-be3f1b897247@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D168.138.160.54%3D19081#(SG) Oracle Corporation🇸🇬
+vless://4459b3b8-1fc6-4a1e-aa84-badd742511ec@masukan.bug.ws:80?path=%2Fvl%3D129.150.49.58%3D18650&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+trojan://O7LsZYDJ1ThW@masukan.bug.ws:80
+trojan://pMKGG8RtcLa0@masukan.bug.ws:443
+vless://a2bd55ee-4e3e-4433-966a-85c310572c72@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D139.162.33.248%3D587#(SG) Akamai Technologies  Inc🇸🇬
+trojan://jCYgJuK9kObQ@masukan.bug.ws:80
+trojan://OJFsWO0v9e2b@masukan.bug.ws:443
+vless://9633c248-cb51-45e1-8620-72d4ff551963@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D188.166.255.195%3D443#(SG) Digitalocean  LLC🇸🇬
+trojan://jDMgEIEnTlsZ@masukan.bug.ws:80
+trojan://4L7CF7vBKe28@masukan.bug.ws:80
+vless://e9f8c023-9642-418f-a854-893c4973aba2@masukan.bug.ws:80?path=%2Fvl%3D43.133.145.156%3D53136&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(ID) Tencent cloud computing🇮🇩
+vless://846fe007-355e-4e19-95b6-69f6fc2a75f5@masukan.bug.ws:80?path=%2Fvl%3D35.219.15.90%3D443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(ID) Google LLC🇮🇩
+trojan://HCv8QxThOwAP@masukan.bug.ws:80
+vless://11e33fa0-c9f0-409c-ae7c-e97822b39652@masukan.bug.ws:80?path=%2Fvl%3D138.2.95.61%3D1111&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+trojan://cgypOB7oiWXy@masukan.bug.ws:443
+trojan://YDr6iaJfWxVf@masukan.bug.ws:80
+vless://32fce108-12be-4ea9-8b82-1fad763f8651@masukan.bug.ws:80?path=%2Fvl%3D146.190.111.165%3D443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Digitalocean  LLC🇸🇬
+vless://ebf7224e-d1a8-4ea8-b55d-5cefd6571c5a@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D103.3.63.253%3D46683#(SG) Akamai Connected Cloud🇸🇬
+vless://55e176c8-4483-431f-b241-07d5af230d1a@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D138.2.109.23%3D587#(SG) Oracle Corporation🇸🇬
+vless://0cec9d7c-2710-4d43-91fd-490bddc1d312@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D38.207.172.235%3D8003#(KR) Oracle Cloud🇰🇷
+vless://a37e1c6c-ead0-4b4b-a13e-f0a87d2d65cc@masukan.bug.ws:80?path=%2Fvl%3DIP: 35.219.50.99%3D443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(ID) Google Cloud🇮🇩
+trojan://QbYB1LWMZq6n@masukan.bug.ws:443
+trojan://xJdkiwne1XkG@masukan.bug.ws:443
+trojan://spOIm6UJpGor@masukan.bug.ws:80
+vless://c0ba5601-e732-447c-9baa-c7f9b7b85ae4@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D119.81.201.154%3D9089#(SG) Softlayer Technologies Inc🇸🇬
+vless://d1e92447-850d-4821-9e3e-b34946e054d9@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D8.218.107.145%3D31166#(ID) PT Deneva🇮🇩
+trojan://uc6HLaLH83UU@masukan.bug.ws:80
+trojan://FBUaxQfEcYf9@masukan.bug.ws:443
+trojan://X8WPbjJFdljq@masukan.bug.ws:80
+vless://a09aece1-54af-4b33-b85f-c6693b912ec9@masukan.bug.ws:80?path=%2Fvl%3D103.186.1.209%3D2053&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(ID) PT Cloud Hosting Indonesia🇮🇩
+trojan://3AgMxd72Rlg3@masukan.bug.ws:443
+trojan://DzbLFZHJndCJ@masukan.bug.ws:443
+trojan://2FvGAuIsYYL7@masukan.bug.ws:443
+vless://54e7dfab-bb82-42bb-979e-ed1b2bbe98c9@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D129.150.50.63%3D443#(SG) Oracle Corporation🇸🇬
+trojan://yviUZLLkxtyF@masukan.bug.ws:80
+trojan://IlTKBh3v9VdX@masukan.bug.ws:80
+vless://6e9f28b3-eb63-4159-b2bf-18f2cc304cc6@masukan.bug.ws:80?path=%2Fvl%3D8.219.197.113%3D45714&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
+vless://ed95b6ea-9f43-46da-94b2-f9f303c8399d@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D8.219.197.113%3D45714#(SG) Alibaba us Technology Co   Ltd🇸🇬
+trojan://oCOH3nllSxVE@masukan.bug.ws:80
+vless://a5186c51-53f8-4437-8da5-884d04e1ca67@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D8.222.143.82%3D24245#(SG) Alibaba us Technology Co   Ltd🇸🇬
+trojan://9OojI9tUvYwn@masukan.bug.ws:80
+trojan://qc63I58BZcs7@masukan.bug.ws:80
+vless://127bb8cb-305b-4ffc-966b-9766218a043b@masukan.bug.ws:80?path=%2Fvl%3D129.150.50.63%3D443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+vless://2ccf8245-1f39-4202-93ff-5684a034299f@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D168.138.183.48%3D9090#(SG) Oracle Corporation🇸🇬
+trojan://iCsz9SMPQYa3@masukan.bug.ws:80
+vless://fd5431db-9f6a-4288-be4c-fccccc42a5c7@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D35.219.50.99%3D443#(ID) Google LLC🇮🇩
+trojan://vTR63QEQDTgc@masukan.bug.ws:80
+trojan://1MpiJ7yJOdub@masukan.bug.ws:443
+trojan://isPxt4538DMd@masukan.bug.ws:443
+vless://abcd9fba-3a5b-4dea-a32c-8845c81c45a0@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D94.237.75.31%3D62174#(SG) Upcloud LTD🇸🇬
+vless://299ac2e9-1dbb-4c80-8565-237015b44fbd@masukan.bug.ws:80?path=%2Fvl%3D103.6.207.108%3D8080&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(ID) Pt Pusat Media Indonesia🇮🇩
+vless://c4e46448-9dca-4478-93da-0a7d1cafb799@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D104.248.146.212%3D8443#(SG) Digital Ocean🇸🇬
+vless://30330d99-3e14-409f-b4c6-adeb8c64c147@masukan.bug.ws:80?path=%2Fvl%3D139.180.136.178%3D29661&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) The Constant Company  LLC🇸🇬
+trojan://ItBBVyYX8YJM@masukan.bug.ws:443
+trojan://d7RWUsgN4q2k@masukan.bug.ws:80
+vless://b32f0dd7-8280-4cd0-bd8d-ea8a3a60600b@masukan.bug.ws:80?path=%2Fvl%3D143.198.213.197%3D443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Digitalocean  LLC🇸🇬
+trojan://HGJPkVUiBJzO@masukan.bug.ws:80
+vless://b272a9f0-b49a-4076-9d9f-e6f06c9a672c@masukan.bug.ws:80?path=%2Fvl%3D47.236.173.166%3D587&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
+trojan://ZAayfzRH9tmb@masukan.bug.ws:443
+trojan://WFBVwDwWxjo3@masukan.bug.ws:443
+trojan://EwxFKiNBYBF9@masukan.bug.ws:80
+trojan://Q0mcY7GgFaFX@masukan.bug.ws:443
+vless://7e1992fc-f5e2-4907-9e8d-5f134e94d379@masukan.bug.ws:80?path=%2Fvl%3D167.71.194.185%3D8443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Digitalocean  LLC🇸🇬
+vless://7cc10a72-56c2-4903-a7a0-737f71040879@masukan.bug.ws:80?path=%2Fvl%3D119.81.201.154%3D9089&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Softlayer Technologies Inc🇸🇬
+trojan://dCJRyYZJXfw4@masukan.bug.ws:443
+trojan://DaJnla12Jxw4@masukan.bug.ws:80
+trojan://CGDUvIf9EazK@masukan.bug.ws:443
+trojan://vrFeW43RovtE@masukan.bug.ws:443
+vless://2093dce6-bf41-4c71-ba7f-d3d85c99127e@masukan.bug.ws:80?path=%2Fvl%3D47.236.25.107%3D27903&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
+vless://829152e9-23ec-41d6-a6ed-d15d16ba9f73@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D194.127.193.240%3D50791#(SG) LEASEWEB SINGAPORE PTE  LTD🇸🇬
+trojan://9SvsXDLZcsZ5@masukan.bug.ws:443
+vless://43c6ea35-cb99-410c-b408-751d15800ffe@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D47.74.254.191%3D8900#(SG) Alibaba us Technology Co   Ltd🇸🇬
+vless://265acfb8-f513-41bb-a7d0-459b0e9f9bcb@masukan.bug.ws:80?path=%2Fvl%3D168.138.166.213%3D10500&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+trojan://Je9Jo5FSrO0D@masukan.bug.ws:443
+vless://9f1fb162-27ba-44c2-8ac1-2d45b6144279@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3DIP: 35.219.50.99%3D443#(ID) Google Cloud🇮🇩
+vless://6b77281e-e137-42bd-af2e-e793823fe847@masukan.bug.ws:80?path=%2Fvl%3D104.248.146.212%3D8443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Digital Ocean🇸🇬
+vless://c1ecdc47-960b-403f-a303-f37b189756b9@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D149.129.250.187%3D443#(ID) Alibaba🇮🇩
+vless://921772cd-5590-4c60-b8c1-5e3042c2f40e@masukan.bug.ws:80?path=%2Fvl%3D194.127.193.124%3D24467&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) LEASEWEB SINGAPORE PTE  LTD🇸🇬
+vless://6a0426d4-148a-46f4-86ed-dfbaa8c01cc6@masukan.bug.ws:80?path=%2Fvl%3D103.20.199.118%3D12999&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(JP) Nearoute🇯🇵
+vless://4d352f96-4ad1-4d61-ab10-a8d76a1d822d@masukan.bug.ws:80?path=%2Fvl%3D172.232.239.147%3D587&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(ID) Akamai Connected Cloud🇮🇩
+vless://5f1c01f3-09da-408c-818c-ed9e7e794b07@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D103.6.207.108%3D8080#(ID) PT Pusat Media Indonesia🇮🇩
+vless://a4c24e2e-9e2a-4162-8c6f-c482442f4d4d@masukan.bug.ws:80?path=%2Fvl%3D45.77.36.40%3D443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) The Constant Company  LLC🇸🇬
+trojan://hRFca9TUst42@masukan.bug.ws:80
+vless://ab584ae2-986c-4cc3-a339-3eefe2a137ef@masukan.bug.ws:80?path=%2Fvl%3D161.117.249.114%3D2025&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
+trojan://4xjFQN9EOhCv@masukan.bug.ws:80
+trojan://3Py2B9d7avMU@masukan.bug.ws:443
+vless://9645084f-0852-4d3d-89ce-9d42505c84f6@masukan.bug.ws:80?path=%2Fvl%3D188.166.255.195%3D8443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Digitalocean  LLC🇸🇬
+vless://897d823a-521f-4f3c-a486-7c0cd576c79c@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D203.194.112.119%3D2053#(ID) First Cagayan Converge Data Center Inc.🇮🇩
+trojan://kTBBKMJ5I6Qa@masukan.bug.ws:443
+vless://53ba79b0-2945-4fea-9da3-69918dedd50b@masukan.bug.ws:80?path=%2Fvl%3D203.194.112.119%3D2053&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(ID) First Cagayan Converge Data Center Inc.🇮🇩
+trojan://PWrfJzFjKhnl@masukan.bug.ws:80
+vless://e3a4e246-4d7c-4702-acfe-b8d1b7618132@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D103.133.223.52%3D2096#(ID) PT Cloud Teknologi Nusantara🇮🇩
+trojan://TC7QfJxFJ9XE@masukan.bug.ws:80
+vless://c6f9ddbb-209f-4fe6-a721-9f47ab119b8c@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D139.180.131.125%3D10005#(SG) The Constant Company  LLC🇸🇬
+trojan://nuXGZdY7o3hi@masukan.bug.ws:443
+trojan://3bWrt2EygJpG@masukan.bug.ws:80
+vless://4b357a77-807e-403c-90c0-960a1c77877a@masukan.bug.ws:80?path=%2Fvl%3D8.222.143.82%3D24245&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
+trojan://36Mw9oe4uzY3@masukan.bug.ws:80
+trojan://jpZcJyYIVKRX@masukan.bug.ws:80
+vless://ae0642ed-62b2-4e7c-b66c-f2dd5c395efb@masukan.bug.ws:80?path=%2Fvl%3D139.162.33.248%3D587&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Akamai Technologies  Inc🇸🇬
+vless://78f00e83-2552-45b5-b948-cf844d42ff98@masukan.bug.ws:80?path=%2Fvl%3D47.74.254.191%3D8900&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
+vless://56cb42cb-5a15-42c8-b709-de40945a6934@masukan.bug.ws:80?path=%2Fvl%3D178.128.80.43%3D443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Digitalocean  LLC🇸🇬
+vless://663ad6b1-0063-4e32-99d5-053edf8f8055@masukan.bug.ws:80?path=%2Fvl%3D158.178.225.124%3D37461&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+trojan://lSKEwQTsHyXm@masukan.bug.ws:443
+vless://f0608c86-03aa-42ec-a607-a51266f2c80c@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D213.35.107.73%3D443#(SG) Oracle Corporation🇸🇬
+vless://7eb7670a-3545-4208-a50e-e3befe9634b1@masukan.bug.ws:80?path=%2Fvl%3D139.180.131.125%3D10005&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) The Constant Company  LLC🇸🇬
+trojan://ZMbBYBj2TiUY@masukan.bug.ws:80
+vless://64aec0dc-1906-44be-9e85-fb3a2606223a@masukan.bug.ws:80?path=%2Fvl%3D47.245.95.160%3D1443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
+trojan://1kadKUghZ60i@masukan.bug.ws:80
+vless://a8114c94-fc11-4575-b9f6-a6e53ed4cf3b@masukan.bug.ws:80?path=%2Fvl%3D119.81.201.154%3D9089&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Softlayer Technologies Inc🇸🇬
+trojan://EZJYeDFj8KWr@masukan.bug.ws:443
+trojan://ZcYzcU8e1CMT@masukan.bug.ws:80
+vless://a9de2501-89bf-48e5-844e-41b303d5df8d@masukan.bug.ws:80?path=%2Fvl%3D106.244.196.196%3D32485&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(KR) LG DACOM Corporation🇰🇷
+trojan://afZ4D6txz4SS@masukan.bug.ws:80
+vless://523ece0b-8999-4e95-82d6-8b45ea93b22b@masukan.bug.ws:80?path=%2Fvl%3D168.138.183.48%3D9090&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Oracle Corporation🇸🇬
+vless://618eff27-2039-479b-b69d-95acfaf2d56a@masukan.bug.ws:80?path=%2Fvl%3D172.232.239.151%3D587&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(ID) Akamai Connected Cloud🇮🇩
+vless://36dfd56c-b608-4cf2-a948-a719e23d5853@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D168.138.166.213%3D10500#(SG) Oracle Corporation🇸🇬
+vless://51017c34-67a2-45ee-bf69-936b59a5aa9c@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D43.133.145.156%3D53136#(ID) Tencent cloud computing🇮🇩
+trojan://7XSFOlaCXcho@masukan.bug.ws:443
+trojan://L4y2ozgQgwkt@masukan.bug.ws:443
+vless://6209ddcf-af05-42a2-b29f-49f6714e7fda@masukan.bug.ws:80?path=%2Fvl%3D35.219.50.99%3D443&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(ID) Google Cloud🇮🇩
+trojan://VS7sCdoM3mEJ@masukan.bug.ws:443
+vless://2f5cde83-3c91-4ec9-85a8-fee27066caeb@masukan.bug.ws:80?path=%2Fvl%3D194.127.193.240%3D50791&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) LEASEWEB SINGAPORE PTE  LTD🇸🇬
+vless://66425899-f518-497c-860d-9de0754ef216@masukan.bug.ws:80?path=%2Fvl%3D8.222.243.73%3D26385&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
+trojan://d52BFBaWiMV0@masukan.bug.ws:80
+vless://94e8a8b7-58e6-4115-9f82-e1b8fa519258@masukan.bug.ws:80?path=%2Fvl%3D103.133.223.52%3D2096&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(ID) PT Cloud Teknologi Nusantara🇮🇩
+trojan://W09DYJcUAjMC@masukan.bug.ws:80
+trojan://3ODBUBibtqXO@masukan.bug.ws:80
+trojan://xE919TnVekZ8@masukan.bug.ws:443
+trojan://sKEkeJSZOYZg@masukan.bug.ws:443
+vless://4c33642e-3619-4f06-942a-06ea7f223902@masukan.bug.ws:80?path=%2Fvl%3D129.150.36.188%3D53435&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Oracle Cloud🇸🇬
+trojan://6rLOnWxlwcbF@masukan.bug.ws:443
+trojan://67MIvOYnvQ96@masukan.bug.ws:80
+vless://89c75882-f15e-4664-b865-54ca080f9310@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D35.219.50.99%3D443#(ID) Google Cloud🇮🇩
+vless://7fcea1fa-b25d-4633-8907-3c06cd4c25d1@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D15.235.162.49%3D443#(SG) OVH SAS🇸🇬
+vless://4a5a52dd-ab70-4539-b8cf-a802d06a7ae9@masukan.bug.ws:80?path=%2Fvl%3D94.237.75.31%3D62174&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Upcloud LTD🇸🇬
+vless://b68bfb1a-17aa-45b1-ad03-508930af758b@masukan.bug.ws:80?path=%2Fvl%3D103.6.207.108%3D8080&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(ID) PT Pusat Media Indonesia🇮🇩
+vless://20f9c860-c0cc-4c76-b88f-5b49be858142@masukan.bug.ws:80?path=%2Fvl%3D143.42.68.97%3D17055&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Akamai Technologies  Inc🇸🇬
+trojan://g5pHkJMqvzny@masukan.bug.ws:80
+trojan://AEcdxs52YC88@masukan.bug.ws:443
+trojan://5sRI5BpbjcWu@masukan.bug.ws:443
+trojan://Gwn0Paen6tP8@masukan.bug.ws:443
+vless://02a5f0a2-26f9-411d-8ab7-6ccff2c846a2@masukan.bug.ws:80?path=%2Fvl%3D8.218.107.145%3D31166&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(ID) PT Deneva🇮🇩
+vless://9b9fd4e2-695d-4a35-a039-38a85617fb5d@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D47.245.95.160%3D1443#(SG) Alibaba us Technology Co   Ltd🇸🇬
+vless://bea077fb-9386-46e9-833f-57631439baba@masukan.bug.ws:80?path=%2Fvl%3D8.219.237.57%3D31523&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Alibaba us Technology Co   Ltd🇸🇬
+trojan://4Gsqxcu5jGMA@masukan.bug.ws:443
+trojan://12RhHtWQXu8F@masukan.bug.ws:443
+trojan://MoPIRCDKg8sD@masukan.bug.ws:80
+trojan://hJv3cOKrIpiB@masukan.bug.ws:80
+vless://116749c3-7842-45ea-a74d-298bec59f813@masukan.bug.ws:80?path=%2Fvl%3D103.3.63.253%3D46683&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(SG) Akamai Connected Cloud🇸🇬
+trojan://kJIGzzOYEa04@masukan.bug.ws:443
+vless://c063995f-c98e-4d5a-a709-8448842ad859@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D103.186.1.209%3D2053#(ID) PT Cloud Hosting Indonesia🇮🇩
+trojan://VBeO3LrTn8l9@masukan.bug.ws:80
+trojan://ujUueXRbwDIW@masukan.bug.ws:443
+trojan://4knWDYBdBoMP@masukan.bug.ws:443
+trojan://MHBrLUHMsAxD@masukan.bug.ws:443
+vless://2b7031ee-e747-430e-a914-f958d583c5bb@masukan.bug.ws:80?path=%2Fvl%3D103.133.223.50%3D2096&security=none&encryption=none&host=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&sni=bakrie.ac.id.wilcard.cyantiknya.my.id#(ID) Cloud Teknologi Nusantara🇮🇩
+trojan://nx8SZUs4YTBK@masukan.bug.ws:443
+vless://c1e63cd3-ca6c-46f4-a1a9-70c25326e703@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D103.133.223.51%3D2096#(ID) Cloud Teknologi Nusantara🇮🇩
+vless://ca6a4727-e7b7-4161-83c9-cd4daec6244f@masukan.bug.ws:443?encryption=none&security=tls&sni=bakrie.ac.id.wilcard.cyantiknya.my.id&fp=randomized&type=ws&host=bakrie.ac.id.wilcard.cyantiknya.my.id&path=%2Fvl%3D8.222.129.175%3D58808#(SG) Alibaba us Technology Co   Ltd🇸🇬
+trojan://hHoGcV87AXQ4@masukan.bug.ws:80
