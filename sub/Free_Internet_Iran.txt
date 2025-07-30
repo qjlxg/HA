@@ -1,10 +1,11 @@
 trojan://ZJU29smXwp@172.67.191.189:2053?path=%2F&security=tls&host=k.teama.tk&type=ws&sni=web2.teama.tk#PS752
 trojan://ZJU29smXwp@cf1.teama.tk:2053?path=%2F&security=tls&host=k.teama.tk&type=ws&sni=omid.teama.tk#Alireza Shahrdari
-trojan://ZJU29smXwp@cf2.danesh-bonyan.store:2053?path=%2F&security=tls&host=k.teama.tk&type=ws&sni=omid1.teama.tk#Mahsa+Amini+2
-trojan://ZJU29smXwp@45.85.118.0:2053?path=%2F&security=tls&host=k.teama.tk&type=ws&sni=web2.teama.tk#Freedom
 trojan://ZJU29smXwp@172.67.68.87:2053?path=%2F&security=tls&host=k.teama.tk&type=ws&sni=Web2.teama.tk#Mona-Naghib
-trojan://ZJU29smXwp@cf1.danesh-bonyan.store:2053?path=%2F&security=tls&host=k.teama.tk&type=ws&sni=omid2.teama.tk#Mahsa+Amini+1
-trojan://ZJU29smXwp@45.85.118.88:2053?path=%2F&security=tls&host=k.teama.tk&type=ws&sni=omid.teama.tk#Omid
-trojan://ZJU29smXwp@cf1.danesh-bonyan.store:2053?path=%2F&security=tls&host=f-1.danesh-bonyan.store&type=ws&sni=damn-mci-again-3.danesh-bonyan.store#Mahsa+Amini+1
-trojan://ZJU29smXwp@cf1.my-cf.online:2053?path=%2F&security=tls&host=f-1.danesh-bonyan.store&type=ws&sni=damn-mci-again-3.danesh-bonyan.Store#Mahsa+Amini+1
 trojan://OVsFRZT5jG@172.67.191.189:443?path=%2F&security=tls&host=web.teama.tk&type=ws&sni=web.teama.tk#Sanchi
+trojan://ZJU29smXwp@cf1.danesh-bonyan.store:2053?path=%2F&security=tls&host=k.teama.tk&type=ws&sni=omid2.teama.tk#Mahsa+Amini+1
+trojan://ZJU29smXwp@cf1.danesh-bonyan.store:2053?path=%2F&security=tls&host=f-1.danesh-bonyan.store&type=ws&sni=damn-mci-again-3.danesh-bonyan.store#Mahsa+Amini+1
+trojan://OVsFRZT5jG@5.75.205.34:443?path=%2F&security=tls&host=web.teama.tk&type=ws&sni=web.teama.tk#Asra+Panahi
+trojan://ZJU29smXwp@cf2.danesh-bonyan.store:2053?path=%2F&security=tls&host=k.teama.tk&type=ws&sni=omid1.teama.tk#Mahsa+Amini+2
+trojan://ZJU29smXwp@45.85.118.88:2053?path=%2F&security=tls&host=k.teama.tk&type=ws&sni=omid.teama.tk#Omid
+trojan://ZJU29smXwp@cf1.my-cf.online:2053?path=%2F&security=tls&host=f-1.danesh-bonyan.store&type=ws&sni=damn-mci-again-3.danesh-bonyan.Store#Mahsa+Amini+1
+trojan://ZJU29smXwp@45.85.118.0:2053?path=%2F&security=tls&host=k.teama.tk&type=ws&sni=web2.teama.tk#Freedom
