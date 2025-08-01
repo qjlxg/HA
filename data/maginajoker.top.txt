@@ -1,3 +1,3 @@
-vless://339ca6ba-1d14-4313-8389-dad0589d7719@maginajoker.top:443?encryption=none&security=tls&sni=maginajoker.top&fp=randomized&type=ws&host=maginajoker.top&path=%2F%3Fed%3D2048#TLS-443
-vless://339ca6ba-1d14-4313-8389-dad0589d7719@maginajoker.top:8080?encryption=none&security=none&sni=maginajoker.top&fp=randomized&type=ws&host=maginajoker.top&path=%2F%3Fed%3D2048#NONE-8080
-vless://339ca6ba-1d14-4313-8389-dad0589d7719@maginajoker.top:80?encryption=none&security=none&sni=maginajoker.top&fp=randomized&type=ws&host=maginajoker.top&path=%2F%3Fed%3D2048#NONE-80
+vless://ecdecccd-31d8-41a4-a62f-d25e11d6f996@maginajoker.top:8080?encryption=none&security=none&sni=maginajoker.top&fp=randomized&type=ws&host=maginajoker.top&path=%2F%3Fed%3D2048#NONE-8080
+vless://ecdecccd-31d8-41a4-a62f-d25e11d6f996@maginajoker.top:80?encryption=none&security=none&sni=maginajoker.top&fp=randomized&type=ws&host=maginajoker.top&path=%2F%3Fed%3D2048#NONE-80
+vless://ecdecccd-31d8-41a4-a62f-d25e11d6f996@maginajoker.top:443?encryption=none&security=tls&sni=maginajoker.top&fp=randomized&type=ws&host=maginajoker.top&path=%2F%3Fed%3D2048#TLS-443
