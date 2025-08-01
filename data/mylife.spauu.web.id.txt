@@ -1,44 +1,44 @@
-trojan://EAOhfv62jc04@masukan.bug.ws:443
-trojan://NE93OTzTmXYy@masukan.bug.ws:443
-vless://bf974d44-1400-41f2-af40-6fca6f839bb5@masukan.bug.ws:80?path=%2Fvl%3D172.232.239.151%3D587&security=none&encryption=none&host=mylife.spauu.web.id&fp=randomized&type=ws&sni=mylife.spauu.web.id#(ID) Akamai Technologies  Inc
-trojan://GI5cgMlADxCv@masukan.bug.ws:80
-trojan://fswraLd6UGmT@masukan.bug.ws:80
-trojan://YlEJR1RRm51o@masukan.bug.ws:80
-vless://dd209517-9ec8-449d-9309-4b3db1da2be8@masukan.bug.ws:80?path=%2Fvl%3D172.232.239.134%3D587&security=none&encryption=none&host=mylife.spauu.web.id&fp=randomized&type=ws&sni=mylife.spauu.web.id#(ID) Akamai Technologies  Inc
-vless://df9d7a0e-4c20-4757-a096-63fa5e989091@masukan.bug.ws:443?encryption=none&security=tls&sni=mylife.spauu.web.id&fp=randomized&type=ws&host=mylife.spauu.web.id&path=%2Fvl%3D103.186.1.209%3D2053#(ID) Pt Cloud Hosting Indonesia
-vless://a77ec149-7b6e-46d2-82ca-2624c3f1cf43@masukan.bug.ws:80?path=%2Fvl%3D51.79.158.126%3D443&security=none&encryption=none&host=mylife.spauu.web.id&fp=randomized&type=ws&sni=mylife.spauu.web.id#(SG) OVH SAS
-trojan://rRMQ6zHjF8kG@masukan.bug.ws:80
-vless://0cd61cba-1f6b-4d33-b95d-cee231a1c020@masukan.bug.ws:80?path=%2Fvl%3D103.186.1.209%3D2053&security=none&encryption=none&host=mylife.spauu.web.id&fp=randomized&type=ws&sni=mylife.spauu.web.id#(ID) Pt Cloud Hosting Indonesia
-vless://8566bb1b-876c-4e50-b3d4-86224568fbef@masukan.bug.ws:443?encryption=none&security=tls&sni=mylife.spauu.web.id&fp=randomized&type=ws&host=mylife.spauu.web.id&path=%2Fvl%3D43.133.145.156%3D53136#(ID) Shenzhen Tencent Computer Systems Company Limited
-trojan://ZiDPfUO6Hm5F@masukan.bug.ws:80
-trojan://LPbO6CMV3UrA@masukan.bug.ws:443
-vless://24c1af48-b3da-4635-b105-b25593cea2d8@masukan.bug.ws:80?path=%2Fvl%3D172.232.239.147%3D587&security=none&encryption=none&host=mylife.spauu.web.id&fp=randomized&type=ws&sni=mylife.spauu.web.id#(ID) Akamai Technologies  Inc
-trojan://oErHd2ufW5AN@masukan.bug.ws:80
-trojan://GkwASEYz3aVB@masukan.bug.ws:443
-trojan://rhBUq1hx1BSG@masukan.bug.ws:80
-vless://cd29c18b-13e4-4c29-bb17-6835f7ec0500@masukan.bug.ws:80?path=%2Fvl%3D43.133.145.156%3D53136&security=none&encryption=none&host=mylife.spauu.web.id&fp=randomized&type=ws&sni=mylife.spauu.web.id#(ID) Shenzhen Tencent Computer Systems Company Limited
-vless://5e74b41a-d0b5-4208-a779-bc905a84b6e4@masukan.bug.ws:443?encryption=none&security=tls&sni=mylife.spauu.web.id&fp=randomized&type=ws&host=mylife.spauu.web.id&path=%2Fvl%3D172.232.239.147%3D587#(ID) Akamai Technologies  Inc
-vless://7e575052-982c-4abb-a70b-ed4a56151976@masukan.bug.ws:443?encryption=none&security=tls&sni=mylife.spauu.web.id&fp=randomized&type=ws&host=mylife.spauu.web.id&path=%2Fvl%3D172.232.239.175%3D587#(ID) Akamai Technologies  Inc
-vless://9a5ca3b3-8907-410b-aa76-206ee9a00e97@masukan.bug.ws:443?encryption=none&security=tls&sni=mylife.spauu.web.id&fp=randomized&type=ws&host=mylife.spauu.web.id&path=%2Fvl%3D103.168.146.169%3D20132#(ID) Pt Herza Digital Indonesia
-vless://5d8d41a9-7ef8-4bdb-b2d5-19b597409f02@masukan.bug.ws:443?encryption=none&security=tls&sni=mylife.spauu.web.id&fp=randomized&type=ws&host=mylife.spauu.web.id&path=%2Fvl%3D35.219.50.99%3D443#(ID) Google LLC
-trojan://GqvEqG750o6W@masukan.bug.ws:443
-vless://ac72b3c2-1662-4b15-b3c1-7e18fcb87b48@masukan.bug.ws:80?path=%2Fvl%3D103.168.146.169%3D20132&security=none&encryption=none&host=mylife.spauu.web.id&fp=randomized&type=ws&sni=mylife.spauu.web.id#(ID) Pt Herza Digital Indonesia
-vless://3eb1521c-8414-45c8-ac28-69156574b6bf@masukan.bug.ws:443?encryption=none&security=tls&sni=mylife.spauu.web.id&fp=randomized&type=ws&host=mylife.spauu.web.id&path=%2Fvl%3D172.232.239.134%3D587#(ID) Akamai Technologies  Inc
-vless://8e619add-79fc-4317-b5c3-c8c9863f0f5b@masukan.bug.ws:443?encryption=none&security=tls&sni=mylife.spauu.web.id&fp=randomized&type=ws&host=mylife.spauu.web.id&path=%2Fvl%3D172.232.239.151%3D587#(ID) Akamai Technologies  Inc
-trojan://2Ee4RmKzPn2N@masukan.bug.ws:80
-vless://58fd68ff-a6b1-4371-b742-38372ab75976@masukan.bug.ws:443?encryption=none&security=tls&sni=mylife.spauu.web.id&fp=randomized&type=ws&host=mylife.spauu.web.id&path=%2Fvl%3D103.6.207.108%3D8080#(ID) Pt Pusat Media Indonesia
-vless://15174270-6164-4e76-8000-7615192ac138@masukan.bug.ws:80?path=%2Fvl%3D172.232.239.175%3D587&security=none&encryption=none&host=mylife.spauu.web.id&fp=randomized&type=ws&sni=mylife.spauu.web.id#(ID) Akamai Technologies  Inc
-trojan://mDDy2GOFHzYf@masukan.bug.ws:443
-trojan://F7LBfDE1ExrV@masukan.bug.ws:443
-vless://cf8c7d15-8e5c-4dcb-815f-d7d68c2a7d0a@masukan.bug.ws:80?path=%2Fvl%3D103.133.223.52%3D2096&security=none&encryption=none&host=mylife.spauu.web.id&fp=randomized&type=ws&sni=mylife.spauu.web.id#(ID) Pt Cloud Teknologi Nusantara
-trojan://UClHkzLpqmQn@masukan.bug.ws:443
-trojan://76dElgguw8Y0@masukan.bug.ws:80
-trojan://6kcEao0338CC@masukan.bug.ws:443
-trojan://2ifa8H4dVPcG@masukan.bug.ws:80
-vless://fd21bfe2-7c4c-4829-ae75-c6b25b67230c@masukan.bug.ws:443?encryption=none&security=tls&sni=mylife.spauu.web.id&fp=randomized&type=ws&host=mylife.spauu.web.id&path=%2Fvl%3D103.133.223.52%3D2096#(ID) Pt Cloud Teknologi Nusantara
-vless://230198c9-ab42-444b-8b88-bd443c681bfc@masukan.bug.ws:443?encryption=none&security=tls&sni=mylife.spauu.web.id&fp=randomized&type=ws&host=mylife.spauu.web.id&path=%2Fvl%3D51.79.158.126%3D443#(SG) OVH SAS
-vless://083f8f0a-9fb8-43b0-8974-f9520073dca3@masukan.bug.ws:80?path=%2Fvl%3D103.6.207.108%3D8080&security=none&encryption=none&host=mylife.spauu.web.id&fp=randomized&type=ws&sni=mylife.spauu.web.id#(ID) Pt Pusat Media Indonesia
-vless://5eb038e9-dd80-4e41-a057-9eeb9a4b1e58@masukan.bug.ws:80?path=%2Fvl%3D35.219.50.99%3D443&security=none&encryption=none&host=mylife.spauu.web.id&fp=randomized&type=ws&sni=mylife.spauu.web.id#(ID) Google LLC
-trojan://mDo93WTIE07a@masukan.bug.ws:443
-trojan://RzzXECfXJMLQ@masukan.bug.ws:443
-trojan://4F0Bk4l2yCzi@masukan.bug.ws:80
+vless://3a24c7dc-4912-4a9d-8ec9-04d0baa781f8@masukan.bug.ws:443?encryption=none&security=tls&sni=mylife.spauu.web.id&fp=randomized&type=ws&host=mylife.spauu.web.id&path=%2Fvl%3D172.232.239.175%3D587#(ID) Akamai Technologies  Inc
+trojan://s8G83NEbSmyF@masukan.bug.ws:443
+trojan://hFP7b6ezvBNc@masukan.bug.ws:80
+vless://11ab7796-ac09-4e55-82e0-49d2b528cef8@masukan.bug.ws:80?path=%2Fvl%3D172.232.239.134%3D587&security=none&encryption=none&host=mylife.spauu.web.id&fp=randomized&type=ws&sni=mylife.spauu.web.id#(ID) Akamai Technologies  Inc
+trojan://5vTqlhHwjABl@masukan.bug.ws:443
+trojan://ryriCOqvu04Y@masukan.bug.ws:80
+vless://a706379c-e25d-48ac-8be5-ab04f2d704a0@masukan.bug.ws:80?path=%2Fvl%3D103.133.223.52%3D2096&security=none&encryption=none&host=mylife.spauu.web.id&fp=randomized&type=ws&sni=mylife.spauu.web.id#(ID) Pt Cloud Teknologi Nusantara
+vless://2fe7d027-a968-4eeb-aede-f935c1e4ae71@masukan.bug.ws:443?encryption=none&security=tls&sni=mylife.spauu.web.id&fp=randomized&type=ws&host=mylife.spauu.web.id&path=%2Fvl%3D103.186.1.209%3D2053#(ID) Pt Cloud Hosting Indonesia
+trojan://bwzHxDt6cG5l@masukan.bug.ws:443
+trojan://ASZOx3B0Hal5@masukan.bug.ws:80
+trojan://XMQb3yZCb4MH@masukan.bug.ws:443
+trojan://SSBXF4YwJCnV@masukan.bug.ws:80
+vless://8bf47e83-e1b8-4f55-9540-3047dbb21b2f@masukan.bug.ws:443?encryption=none&security=tls&sni=mylife.spauu.web.id&fp=randomized&type=ws&host=mylife.spauu.web.id&path=%2Fvl%3D43.133.145.156%3D53136#(ID) Shenzhen Tencent Computer Systems Company Limited
+trojan://IIYqbF1bv47p@masukan.bug.ws:80
+vless://cc586590-87f2-47e2-81dd-8ff7a0a046c1@masukan.bug.ws:443?encryption=none&security=tls&sni=mylife.spauu.web.id&fp=randomized&type=ws&host=mylife.spauu.web.id&path=%2Fvl%3D103.168.146.169%3D20132#(ID) Pt Herza Digital Indonesia
+vless://71739612-1e05-4f22-a59a-87c12e538f07@masukan.bug.ws:80?path=%2Fvl%3D103.6.207.108%3D8080&security=none&encryption=none&host=mylife.spauu.web.id&fp=randomized&type=ws&sni=mylife.spauu.web.id#(ID) Pt Pusat Media Indonesia
+vless://7acd1c58-288c-415b-83d2-d0e9381dae38@masukan.bug.ws:443?encryption=none&security=tls&sni=mylife.spauu.web.id&fp=randomized&type=ws&host=mylife.spauu.web.id&path=%2Fvl%3D51.79.158.126%3D443#(SG) OVH SAS
+trojan://QbCMPGHygARE@masukan.bug.ws:443
+trojan://CJ0OADpkJAGS@masukan.bug.ws:80
+trojan://hqcMykUTEdRL@masukan.bug.ws:80
+trojan://4mMjtG8MQtl2@masukan.bug.ws:443
+trojan://nH3VL83E8gAg@masukan.bug.ws:80
+trojan://377pMoGlSuFJ@masukan.bug.ws:443
+vless://58030651-0b3b-45f4-9125-43df4c5fd7cb@masukan.bug.ws:80?path=%2Fvl%3D172.232.239.175%3D587&security=none&encryption=none&host=mylife.spauu.web.id&fp=randomized&type=ws&sni=mylife.spauu.web.id#(ID) Akamai Technologies  Inc
+vless://ec56499d-7442-4c24-b048-d0f26cb10ffb@masukan.bug.ws:80?path=%2Fvl%3D103.186.1.209%3D2053&security=none&encryption=none&host=mylife.spauu.web.id&fp=randomized&type=ws&sni=mylife.spauu.web.id#(ID) Pt Cloud Hosting Indonesia
+vless://47e09c3a-9b18-4fd7-ae1e-1b92a1d18d9e@masukan.bug.ws:443?encryption=none&security=tls&sni=mylife.spauu.web.id&fp=randomized&type=ws&host=mylife.spauu.web.id&path=%2Fvl%3D172.232.239.147%3D587#(ID) Akamai Technologies  Inc
+trojan://gVzIXlsDyDLt@masukan.bug.ws:443
+vless://ab86b7bb-0012-4dbd-b812-1e4e1b0cf236@masukan.bug.ws:443?encryption=none&security=tls&sni=mylife.spauu.web.id&fp=randomized&type=ws&host=mylife.spauu.web.id&path=%2Fvl%3D103.6.207.108%3D8080#(ID) Pt Pusat Media Indonesia
+vless://05d9ae91-9165-4141-ba0d-f0e7f875837f@masukan.bug.ws:80?path=%2Fvl%3D43.133.145.156%3D53136&security=none&encryption=none&host=mylife.spauu.web.id&fp=randomized&type=ws&sni=mylife.spauu.web.id#(ID) Shenzhen Tencent Computer Systems Company Limited
+vless://fc9f1441-f2e0-491d-ad55-6e5c193fede3@masukan.bug.ws:443?encryption=none&security=tls&sni=mylife.spauu.web.id&fp=randomized&type=ws&host=mylife.spauu.web.id&path=%2Fvl%3D172.232.239.151%3D587#(ID) Akamai Technologies  Inc
+trojan://Ei5mvYugxoMP@masukan.bug.ws:80
+trojan://GOOyzq0nzw8y@masukan.bug.ws:443
+vless://43448d0e-3d09-41b5-90c5-077f27105026@masukan.bug.ws:443?encryption=none&security=tls&sni=mylife.spauu.web.id&fp=randomized&type=ws&host=mylife.spauu.web.id&path=%2Fvl%3D103.133.223.52%3D2096#(ID) Pt Cloud Teknologi Nusantara
+trojan://CqSfsr2BS1zP@masukan.bug.ws:80
+vless://d8ccb41a-706a-431b-9d49-fbbfe341e8a7@masukan.bug.ws:80?path=%2Fvl%3D172.232.239.151%3D587&security=none&encryption=none&host=mylife.spauu.web.id&fp=randomized&type=ws&sni=mylife.spauu.web.id#(ID) Akamai Technologies  Inc
+vless://d3e8b637-6e8e-4192-9b5a-bb1bf3d47bbf@masukan.bug.ws:80?path=%2Fvl%3D172.232.239.147%3D587&security=none&encryption=none&host=mylife.spauu.web.id&fp=randomized&type=ws&sni=mylife.spauu.web.id#(ID) Akamai Technologies  Inc
+trojan://CSjB5ilEuAV7@masukan.bug.ws:443
+trojan://htaW48CB00vl@masukan.bug.ws:443
+vless://5b431ffc-046d-4b23-9d61-31f5ac005f29@masukan.bug.ws:443?encryption=none&security=tls&sni=mylife.spauu.web.id&fp=randomized&type=ws&host=mylife.spauu.web.id&path=%2Fvl%3D172.232.239.134%3D587#(ID) Akamai Technologies  Inc
+vless://2f576e3a-108d-4d2f-a435-3906fdfbe611@masukan.bug.ws:80?path=%2Fvl%3D103.168.146.169%3D20132&security=none&encryption=none&host=mylife.spauu.web.id&fp=randomized&type=ws&sni=mylife.spauu.web.id#(ID) Pt Herza Digital Indonesia
+vless://480eba62-e24b-4493-9f7a-e73768f42e04@masukan.bug.ws:443?encryption=none&security=tls&sni=mylife.spauu.web.id&fp=randomized&type=ws&host=mylife.spauu.web.id&path=%2Fvl%3D35.219.50.99%3D443#(ID) Google LLC
+vless://d6bd910a-677d-4e42-90f8-009dff0f66ec@masukan.bug.ws:80?path=%2Fvl%3D51.79.158.126%3D443&security=none&encryption=none&host=mylife.spauu.web.id&fp=randomized&type=ws&sni=mylife.spauu.web.id#(SG) OVH SAS
+vless://34942fcb-e202-45ae-8b2b-666a8d740f27@masukan.bug.ws:80?path=%2Fvl%3D35.219.50.99%3D443&security=none&encryption=none&host=mylife.spauu.web.id&fp=randomized&type=ws&sni=mylife.spauu.web.id#(ID) Google LLC
+trojan://T5FAW4pQNOZo@masukan.bug.ws:80

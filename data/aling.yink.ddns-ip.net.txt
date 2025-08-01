@@ -1,6 +1,6 @@
-vless://e8113a32-b7f8-4bbb-9655-38fcbd57dd46@bestcf.030101.xyz:2083?encryption=none&security=tls&sni=aling.yink.ddns-ip.net&fp=random&type=ws&host=aling.yink.ddns-ip.net&path=%2F%3D2048#CFW_2083
 vless://e8113a32-b7f8-4bbb-9655-38fcbd57dd46@bestcf.030101.xyz:443?encryption=none&security=tls&sni=aling.yink.ddns-ip.net&fp=random&type=ws&host=aling.yink.ddns-ip.net&path=%2F%3D2048#CFW_443
-vless://e8113a32-b7f8-4bbb-9655-38fcbd57dd46@bestcf.030101.xyz:8443?encryption=none&security=tls&sni=aling.yink.ddns-ip.net&fp=random&type=ws&host=aling.yink.ddns-ip.net&path=%2F%3D2048#CFW_8443
 vless://e8113a32-b7f8-4bbb-9655-38fcbd57dd46@bestcf.030101.xyz:2053?encryption=none&security=tls&sni=aling.yink.ddns-ip.net&fp=random&type=ws&host=aling.yink.ddns-ip.net&path=%2F%3D2048#CFW_2053
-vless://e8113a32-b7f8-4bbb-9655-38fcbd57dd46@bestcf.030101.xyz:2096?encryption=none&security=tls&sni=aling.yink.ddns-ip.net&fp=random&type=ws&host=aling.yink.ddns-ip.net&path=%2F%3D2048#CFW_2096
+vless://e8113a32-b7f8-4bbb-9655-38fcbd57dd46@bestcf.030101.xyz:8443?encryption=none&security=tls&sni=aling.yink.ddns-ip.net&fp=random&type=ws&host=aling.yink.ddns-ip.net&path=%2F%3D2048#CFW_8443
+vless://e8113a32-b7f8-4bbb-9655-38fcbd57dd46@bestcf.030101.xyz:2083?encryption=none&security=tls&sni=aling.yink.ddns-ip.net&fp=random&type=ws&host=aling.yink.ddns-ip.net&path=%2F%3D2048#CFW_2083
 vless://e8113a32-b7f8-4bbb-9655-38fcbd57dd46@bestcf.030101.xyz:2087?encryption=none&security=tls&sni=aling.yink.ddns-ip.net&fp=random&type=ws&host=aling.yink.ddns-ip.net&path=%2F%3D2048#CFW_2087
+vless://e8113a32-b7f8-4bbb-9655-38fcbd57dd46@bestcf.030101.xyz:2096?encryption=none&security=tls&sni=aling.yink.ddns-ip.net&fp=random&type=ws&host=aling.yink.ddns-ip.net&path=%2F%3D2048#CFW_2096
