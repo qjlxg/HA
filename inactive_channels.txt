@@ -4,7 +4,6 @@ PROXY_MTM
 SiNABiGO
 v2rayng12023
 s/piazshekan
-VPNCUSTOMIZE
 MARAMBASHI
 client_proo
 VPN_Xpace
@@ -20,7 +19,6 @@ v2Line
 forwardv2ray
 polproxy
 IRN_VPN
-VPNCUSTOMIZE
 TVCminer
 MrV2Ray
 MehradLearn
@@ -126,6 +124,8 @@ TLS_v2ray
 TVCminer
 V2RayTz
 V2Ray_FreedomIran
+V2pedia
+V2rayCollectorDonate
 V2rayNG3
 V2rayNGn
 V2ray_Alpha
