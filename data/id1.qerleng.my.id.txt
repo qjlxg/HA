@@ -1,2 +1,2 @@
-vless://334b78b2-851c-4773-ba81-71b2bf37b6e5@id1.qerleng.my.id:443?encryption=none&security=tls&sni=id1.qerleng.my.id&fp=randomized&type=ws&host=id1.qerleng.my.id&path=%2Frotate#ROTATE+PROXY
-vless://eac4391e-ee69-44d0-aa1f-46b0db8271c8@id1.qerleng.my.id:80?path=%2Frotate&security=none&encryption=none&host=id1.qerleng.my.id&fp=randomized&type=ws&sni=id1.qerleng.my.id#ROTATE+PROXY
+vless://7e0f9b1f-6efd-4ab4-86c0-daf11ca36a5c@id1.qerleng.my.id:443?encryption=none&security=tls&sni=id1.qerleng.my.id&fp=randomized&type=ws&host=id1.qerleng.my.id&path=%2Frotate#ROTATE+PROXY
+vless://60cedfe2-378c-47ce-9157-88965bd2eec1@id1.qerleng.my.id:80?path=%2Frotate&security=none&encryption=none&host=id1.qerleng.my.id&fp=randomized&type=ws&sni=id1.qerleng.my.id#ROTATE+PROXY
