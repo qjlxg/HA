@@ -820,8 +820,8 @@
     "file_hash": "cdd8e3dc6064996a7ba95f1bc8abfe0a"
   },
   "ARv2ray": {
-    "last_updated": "2025-08-02T06:18:47.422599",
-    "file_hash": "1793255d24ea153c10e71b9f992697c3"
+    "last_updated": "2025-08-03T12:25:01.400352",
+    "file_hash": "3761a5c3eb8d7af18cab2c9bf322423a"
   },
   "UnlimitedDev": {
     "last_updated": "2025-08-02T12:24:48.937939",
@@ -890,5 +890,9 @@
   "v2_fast": {
     "last_updated": "2025-08-03T01:13:26.321302",
     "file_hash": "35b7eb2b862ac9021138de23866bf9aa"
+  },
+  "VPNCUSTOMIZE": {
+    "last_updated": "2025-08-03T12:25:01.400352",
+    "file_hash": "d64ec4fc361993415d0157a2ba69c64b"
   }
 }
