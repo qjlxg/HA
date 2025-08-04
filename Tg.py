@@ -8,6 +8,7 @@ import re
 from datetime import datetime, timedelta
 import json
 import hashlib
+import random
 
 async def get_v2ray_links(session, url, max_pages=1, max_retries=3):
     """从指定 Telegram 频道 URL 获取代理配置（每频道最多爬取 max_pages 页）。"""
@@ -20,7 +21,7 @@ async def get_v2ray_links(session, url, max_pages=1, max_retries=3):
         retry_count = 0
         while retry_count <= max_retries:
             try:
-                await asyncio.sleep(1 * retry_count)  # 添加动态延迟以避免触发速率限制
+                await asyncio.sleep(random.uniform(1, 3) * retry_count)  # 添加随机延迟以避免触发速率限制
                 async with session.get(current_url, timeout=15) as response:
                     if response.status == 200:
                         content = await response.text()
@@ -59,7 +60,7 @@ async def get_v2ray_links(session, url, max_pages=1, max_retries=3):
                                     for config_line in text.split('\n'):
                                         stripped_config = config_line.strip()
                                         if stripped_config.startswith(('hysteria2://', 'vmess://', 'trojan://', 'ss://', 'ssr://', 'vless://')):
-                                            if len(stripped_config) > len('vmess://') + 5:
+                                            if len(config) > len('vmess://') + 5:
                                                 page_configs.append(stripped_config)
                     
                         page_configs = list(set(page_configs))  # 移除本页重复配置
@@ -105,15 +106,23 @@ async def get_v2ray_links(session, url, max_pages=1, max_retries=3):
                         current_url = None
                         break
             except aiohttp.ClientError as e:
-                print(f"获取 URL {current_url} 时发生网络错误: {e}")
-                current_url = None
-                break
+                retry_count += 1
+                if retry_count > max_retries:
+                    print(f"在 {current_url} 重试 {max_retries} 次后失败: {type(e).__name__}: {e}")
+                    current_url = None
+                    break
+                print(f"获取 URL {current_url} 时发生网络错误: {type(e).__name__}: {e}，等待 {10 * retry_count} 秒后重试")
+                await asyncio.sleep(10 * retry_count)
             except asyncio.TimeoutError:
-                print(f"获取 URL {current_url} 超时，跳过")
-                current_url = None
-                break
+                retry_count += 1
+                if retry_count > max_retries:
+                    print(f"获取 URL {current_url} 超时 {max_retries} 次，放弃")
+                    current_url = None
+                    break
+                print(f"获取 URL {current_url} 超时，等待 {10 * retry_count} 秒后重试")
+                await asyncio.sleep(10 * retry_count)
             except Exception as e:
-                print(f"获取 URL {current_url} 时发生未知错误: {e}")
+                print(f"获取 URL {current_url} 时发生未知错误: {type(e).__name__}: {e}")
                 current_url = None
                 break
 
@@ -148,13 +157,7 @@ def is_valid_config(config):
         protocol_match = re.match(r'^(hysteria2://|vmess://|trojan://|ss://|ssr://|vless://)', config)
         if not protocol_match:
             return False
-        parts = config.split('@')
-        if len(parts) < 2:
-            return False
-        address_port = parts[1].split('?')[0]
-        if ':' not in address_port:
-            return False
-        return True
+        return True  # 放宽验证，仅检查协议头
     except:
         return False
 
@@ -290,8 +293,7 @@ def split_configs_by_protocol():
                                     outfile.write(line_stripped + '\n')
                             except Exception as e:
                                 print(f"写入协议文件 {protocol_files[protocol_prefix]} 失败: {e}")
-                            continue
-                        break
+                            break
                 else:
                     print(f"跳过无效配置: {line_stripped}")
         print("成功按协议拆分配置")
@@ -313,54 +315,6 @@ def create_stats_csv(source_stats):
         print(f"成功生成统计文件: {csv_file}")
     except Exception as e:
         print(f"生成统计文件 {csv_file} 失败: {e}")
-
-# 删除 create_sub_section 函数
-# def create_sub_section(source_name_map):
-#     """更新 README.md 的 Sub 部分，使用从配置提取的显示名称。"""
-#     readme_path = "README.md"
-#     sub_folder = "sub"
-#     existing_links = set()
-
-#     content = ""
-#     if os.path.exists(readme_path):
-#         try:
-#             with open(readme_path, 'r', encoding='utf-8') as readme_file:
-#                 content = readme_file.read()
-#                 sub_section_match = re.search(r'(## Sub\n\| Sub \|\n\|-----.*?)(?=\n##|\Z)', content, re.DOTALL)
-#                 if sub_section_match:
-#                     links = re.findall(r'\[([^\]]+)\]\(https://raw\.githubusercontent\.com/qjlxg/ClashForge/main/(sub/)?([^\)]+)\.txt\)', sub_section_match.group(1))
-#                     for link_name, _, _ in links:
-#                         existing_links.add(link_name)
-#         except Exception as e:
-#             print(f"读取 README.md 文件失败: {e}")
-
-#     new_sub_section_lines = ["## Sub", "| Sub |", "|-----|"]
-
-#     for filename in sorted(os.listdir(sub_folder)):
-#         if filename.endswith('.txt') and filename not in ['merged_configs.txt', 'vless.txt', 'vmess.txt', 'trojan.txt', 'ss.txt', 'ssr.txt', 'hysteria2.txt']:
-#             source_name = filename[:-4]
-#             display_name = source_name_map.get(source_name, urllib.parse.unquote(source_name))
-#             url = f"https://raw.githubusercontent.com/qjlxg/ClashForge/main/sub/{urllib.parse.quote(filename)}"
-#             new_sub_section_lines.append(f"| [{display_name}]({url}) |")
-
-#     new_sub_section_lines.append(f"| [merged_configs](https://raw.githubusercontent.com/qjlxg/ClashForge/main/merged_configs.txt) |")
-#     for protocol in ['hysteria2', 'vmess', 'trojan', 'ss', 'ssr', 'vless']:
-#         protocol_filename = f"{protocol}.txt"
-#         protocol_url = f"https://raw.githubusercontent.com/qjlxg/ClashForge/main/{protocol_filename}"
-#         new_sub_section_lines.append(f"| [{protocol}]({protocol_url}) |")
-
-#     new_content_section = "\n".join(new_sub_section_lines) + "\n"
-
-#     try:
-#         with open(readme_path, 'w', encoding='utf-8') as readme_file:
-#             if '## Sub' in content:
-#                 content = re.sub(r'## Sub\n\| Sub \|\n\|-----.*?(?=\n##|\Z)', new_content_section, content, flags=re.DOTALL)
-#             else:
-#                 content += "\n" + new_content_section
-#             readme_file.write(content)
-#         print(f"成功更新 README.md")
-#     except Exception as e:
-#         print(f"更新 README.md 失败: {e}")
 
 def load_channels(channels_file="channels.txt", timestamps_file="channel_timestamps.json"):
     """加载来源列表，检查时间戳以决定是否爬取。"""
@@ -484,7 +438,7 @@ def save_inactive_channels(inactive_sources, inactive_file="inactive_channels.tx
         with open(inactive_file, 'w', encoding='utf-8') as file:
             for source in inactive_sources:
                 file.write(f"{source}\n")
-        print(f"成功保存 {len(inactive_sources)} 个无配置来源到 {inactive_file}")
+        print(f"成功保存 {len(inactiveSources)} 个无配置来源到 {inactive_file}")
     except Exception as e:
         print(f"保存无配置来源列表 {inactive_file} 失败: {e}")
 
@@ -514,7 +468,7 @@ if __name__ == "__main__":
     source_stats = {name: 0 for name, _ in sources}  # 为所有来源初始化统计
     active_sources = []
     inactive_sources = []
-    source_name_map = {}  # 存储文件名到显示名称的映射 (虽然不再用于 README，但可能在其他地方有用)
+    source_name_map = {}  # 存储文件名到显示名称的映射
 
     if sources_to_fetch:
         print("开始从各来源获取配置...")
@@ -558,9 +512,6 @@ if __name__ == "__main__":
         split_configs_by_protocol()
         print("正在创建统计 CSV 文件...")
         create_stats_csv(source_stats)
-        # 移除对 create_sub_section 的调用
-        # print("正在更新 README.md...")
-        # create_sub_section(source_name_map)
-        print("所有任务完成：配置已保存，生成合并文件、协议文件、统计文件。") # 更新完成消息
+        print("所有任务完成：配置已保存，生成合并文件、协议文件、统计文件。")
     else:
-        print("\n所有来源均未获取到代理配置，未生成合并文件、统计文件。") # 更新完成消息
+        print("\n所有来源均未获取到代理配置，未生成合并文件、协议文件或统计文件。")
