@@ -1,2 +1,4 @@
-vless://10221e99-bb18-4d22-87ea-daa48470d098@www.speedtest.net:8880?host=fr2.vlessx.xyz&security=none&type=ws&path=%2F%3Fed%3D2048&encryption=none#%40configraygan+%DB%8C%D9%87+%D8%B3%D8%B1+%D8%A8%D9%87+%DA%A9%D8%A7%D9%86%D8%A7%D9%84+%D8%A8%D8%B2%D9%86
+vless://#tunnel+M-Mtest
+vless://#%40configraygan+%DB%8C%D9%87+%D8%B3%D8%B1+%D8%A8%D9%87+%DA%A9%D8%A7%D9%86%D8%A7%D9%84+%D8%A8%D8%B2%D9%86
 vless://ba5045da-9eaa-4550-ae5e-0a1b7cfa3471@mtun.atech.pw:18080?security=none&encryption=none&host=speedtest.net&headerType=http&type=tcp#tunnel+M-Mtest
+vless://10221e99-bb18-4d22-87ea-daa48470d098@www.speedtest.net:8880?host=fr2.vlessx.xyz&security=none&type=ws&path=%2F%3Fed%3D2048&encryption=none#%40configraygan+%DB%8C%D9%87+%D8%B3%D8%B1+%D8%A8%D9%87+%DA%A9%D8%A7%D9%86%D8%A7%D9%84+%D8%A8%D8%B2%D9%86

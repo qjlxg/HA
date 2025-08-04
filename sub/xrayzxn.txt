@@ -1,0 +1,15 @@
+trojan://db19fc68-c027-4641-a8eb-eed3e1065c8a@amin.karkas1.ir:443?mode=gun&security=tls&alpn=http/1.1&fp=safari&type=grpc&serviceName=6vuNVgOFnqUEvj0rcXIcStL&sni=amin.karkas1.ir#amin.karkas1.ir_tls_grpc_direct_trojan
+vmess://eyJhZGQiOiJhbWluLmthcmthczEuaXIiLCJhaWQiOiIwIiwiYWxwbiI6IiIsImZwIjoiIiwiaG9zdCI6ImFtaW4ua2Fya2FzMS5pciIsImlkIjoiMTFhZTBlZGQtMmY2My00NDk1LTg2ODMtMDM3YWJiZGE5OTg2IiwibmV0Ijoid3MiLCJwYXRoIjoiL3QxNEZFYTRUQnpMYndac05rR2t4eFc3IiwicG9ydCI6IjgwIiwicHMiOiJDZG5faHR0cF9XU19kaXJlY3Rfdm1lc3MiLCJzY3kiOiJjaGFjaGEyMC1wb2x5MTMwNSIsInNuaSI6IiIsInRscyI6IiIsInR5cGUiOiIiLCJ2IjoiMiJ9
+trojan://#amin.karkas1.ir_tls_grpc_direct_trojan
+vless://11ae0edd-2f63-4495-8683-037abbda9986@amin.karkas1.ir:443?path=%2FEJUVVd6sh0f9J6dsNkGkxxW7&security=tls&encryption=none&alpn=http/1.1&host=amin.karkas1.ir&fp=safari&type=ws&sni=amin.karkas1.ir#Cdn_tls_WS_direct_vless
+vless://#equal-eyes.org_reality_XTLS_direct_vless
+trojan://e6b506e9-2d37-40cb-aff9-35678d0e6c69@amin.karkas1.ir:443?mode=gun&security=tls&type=grpc&serviceName=6vuNVgOFnqUEvj0rcXIcStL&sni=amin.karkas1.ir#Cdn_tls_grpc_direct_trojan
+trojan://e6b506e9-2d37-40cb-aff9-35678d0e6c69@amin.karkas1.ir:443?mode=gun&security=tls&type=grpc&serviceName=6vuNVgOFnqUEvj0rcXIcStL&sni=amin.karkas1.ir#Cdn_tls_grpc_direct_trojan آخرشه
+trojan://#Cdn_tls_grpc_direct_trojan
+vless://db19fc68-c027-4641-a8eb-eed3e1065c8a@amin.karkas1.ir:443?mode=gun&security=tls&encryption=none&alpn=h2&fp=safari&type=grpc&serviceName=EJUVVd6sh0f9J6drcXIcStL&sni=amin.karkas1.ir#Cdn_tls_h2_grpc_direct_vless
+vless://11ae0edd-2f63-4495-8683-037abbda9986@amin.karkas1.ir:443?path=%2FEJUVVd6sh0f9J6dsNkGkxxW7&security=tls&encryption=none&alpn=http/1.1&host=amin.karkas1.ir&fp=safari&type=ws&sni=amin.karkas1.ir#Cdn_tls_WS_direct_vless 500 gig  8 day
+vless://#Cdn_tls_h2_grpc_direct_vless
+trojan://11ae0edd-2f63-4495-8683-037abbda9986@amin.karkas1.ir:443?path=%2F6vuNVgOFnqUEvj0sNkGkxxW7&security=tls&alpn=h2&host=amin.karkas1.ir&fp=safari&type=ws&sni=amin.karkas1.ir#Cdn_tls_h2_WS_direct_trojan
+trojan://#Cdn_tls_h2_WS_direct_trojan
+vless://00c6043f-a2c6-4b15-bd30-344378f0e5da@146.70.158.111:443?security=reality&encryption=none&alpn=h2&pbk=dgepztJbOmZaaP3xQX6K3fozDsrTL7a60w1SjN4jBTw&headerType=none&fp=chrome&type=tcp&flow=xtls-rprx-vision&sni=equal-eyes.org&sid=e120bf2fd2d7453b#equal-eyes.org_reality_XTLS_direct_vless
+vless://#Cdn_tls_WS_direct_vless

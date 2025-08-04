@@ -1,5 +1,3 @@
-vless://ca89921a-c01d-4a96-961e-fdeb52ed6513@root.configforvpn.fun:443?path=%2Fcdn&security=tls&encryption=none&alpn=h2,http/1.1&host=root.configforvpn.fun&fp=chrome&type=ws&sni=root.configforvpn.fun#%40ConfigforVPN
-vless://00f4ebcf-6bae-4eb2-9064-2a272e4d4875@cdn.melodyshopone2.ir:8080?path=%2F&security=none&encryption=none&host=cdn.melodyshopone2.ir&type=ws#%40configforVPN
-vless://08b58907-305c-4413-86bd-c8855f5bac0b@best.configforvpn.fun:443?path=%2Fcdn&security=tls&encryption=none&alpn=h2,http/1.1&fp=chrome&type=ws&sni=best.configforvpn.fun#%40ConfigforVPN
-vless://40b7d140-2ae6-4ef5-a1bd-46c430bf89ab@cdn.melodyshopone2.ir:8080?path=%2F&security=none&encryption=none&host=cdn.melodyshopone2.ir&type=ws#%40configforVPN
-vless://92669584-6357-4c04-88da-60c1b1ea953d@ips.configforvpn.fun:8080?path=%2Fh&security=none&encryption=none&host=best.configforvpn.fun&type=ws#%40ConfigforVPN
+vless://#%40configforVPN
+vless://#%40ConfigforVPN
+vless://#%40ConfigforVPN…
