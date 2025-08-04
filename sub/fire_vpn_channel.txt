@@ -1,0 +1,2 @@
+vless://ac864844-c86b-4ac5-bbe9-50fcc05123f2@[2a00:7c80:0000:0192:aaa1:bbb3:1bb8:f32e]:443?hiddify=1&sni=srhrforall.org&type=tcp&alpn=http/1.1&encryption=none&fp=chrome&headerType=None&flow=xtls-rprx-vision&security=reality&pbk=Uu4tcBEWuNn0SKnDk2Jy_o5Te2VA76M68hMlVYj9kiQ&sid=6412#srhrforallorgrealityXTLSdirectvless
+vless://694e7135-1a12-4ad0-a53f-b9217746bf9e@82.153.220.10:443?security=reality&sni=srhrforall.org&fp=chrome&pbk=Uu4tcBEWuNn0SKnDk2Jy_o5Te2VA76M68hMlVYj9kiQ&sid=6412&type=tcp&flow=xtls-rprx-vision&encryption=none#@fire_VPN_channel
