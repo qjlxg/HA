@@ -1,0 +1,1 @@
+vless://1364149f-1479-491c-830f-8bec3df43199@tls1.yoxba.sbs:8443?mode=gun&security=tls&encryption=none&fp=chrome&type=grpc&serviceName=&sni=reza.yoxba.sbs#Telegram-2ray_vpnalfa

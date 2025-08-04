@@ -1,3 +1,2 @@
 vless://c35b94f0-3057-4251-82c7-34356dc0e796@srv05.pcbot.online:1410?security=&encryption=none&host=rubika.ir%2Cigap.net%2Csplus.ir&headerType=http&type=tcp#@vpn_arta
 vless://51909ba1-3a0c-4dff-a8f1-73ce64c4b10a@2.189.85.177:53369?security=none&encryption=none&host=fast.com&headerType=http&type=tcp#@vpn_arta
-vless://#@vpn_arta

@@ -1,5 +1,2 @@
-vless://f9e5a31e-a5c2-48e0-a5e9-01461464406d@209.38.222.192:8443?path=%2FTelegram-%40FNET00&security=none&encryption=none&host=zula.ir&type=ws#Am-Amir-%40Am20094 vless://dfee545b-6087-4f13-b2a3-41cc9642d583@209.38.222.192:2096?mode=gun&security=none&encryption=none&authority=&type=grpc&serviceName=#AF-Alireza-%40Am20094
-vless://#Am-Amir-%40Am20094
+vless://f9e5a31e-a5c2-48e0-a5e9-01461464406d@209.38.222.192:8443?path=%2FTelegram-%40FNET00&security=none&encryption=none&host=zula.ir&type=ws#Am-Amir-%40Am20094 vless://dfee545b-6087-4f13-b2a3-41cc9642d583@209.38.222.192:2096?mode=gun&security=none&encryption=none&authority=&type=grpc&serviceName=#AF-Alireza-Am20094
 vless://65cd9b4b-90a1-43f4-9682-3e33c8a29b0e@82.25.101.123:34712?type=tcp&security=none#Normally-@Am20094
-vless://#Normally-@Am20094
-vless://#AF-Alireza-%40Am20094
