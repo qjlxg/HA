@@ -6,6 +6,7 @@ trojan://bpb-trojan@162.159.152.227:443?security=tls&sni=cf.090227.xyz&allowInse
 trojan://telegram-id-privatevpns@51.21.59.141:22222?security=tls&sni=trojan.burgerip.co.uk&alpn=http/1.1&type=tcp#@awlix_ir
 trojan://1e63e585ab2fef3adcc9ea75a62abc23@104.251.227.182:443?security=tls&sni=hezijiasuqi.com&allowInsecure=1&type=tcp#@awlix_ir
 trojan://bpb-trojan@104.21.30.195:443?security=tls&sni=403b3611-99BC-43B7-88D7-26eD5d0825a9-3.PagES.DEv&type=tcp#@awlix_ir
+trojan://auto@silkbook.com:443?encryption=none&security=tls&sni=azadnet1.yiwenaw435.workers.dev&fp=randomized&type=ws&host=azadnet1.yiwenaw435.workers.dev&path=%2Fazadnet1.yiwenaw435.workers.dev%2F%3Fed%3D2560#CA-SE@DeamNet_Proxy
 trojan://ZJU29smXwp@45.85.118.0:2053?path=%2F&security=tls&host=k.teama.tk&type=ws&sni=web2.teama.tk#Freedom
 trojan://ZJU29smXwp@cf1.my-cf.online:2053?path=%2F&security=tls&host=f-1.danesh-bonyan.store&type=ws&sni=damn-mci-again-3.danesh-bonyan.Store#MahsaAmini1
 trojan://ZJU29smXwp@172.67.68.87:2053?path=%2F&security=tls&host=k.teama.tk&type=ws&sni=Web2.teama.tk#Mona-Naghib
@@ -51,6 +52,7 @@ trojan://2ee85121-31de-4581-a492-eb00f606e392@198.46.152.83:443?security=tls&sni
 trojan://IM4e0ZQNPU@ru2.asc-sam.ir:443?type=tcp&security=reality&pbk=f_av3K6BFEs9abRaFgPJMKHz4ElZP7BP34ZlRtxysQ0&fp=random&sni=journalofbigdata.springeropen.com&sid=109cb5faeb6b&spx=%2FyethePcHjaf#NoForcedHeaven
 trojan://AdPYCBfMUM@ru2.asc-sam.ir:443?type=tcp&security=reality&pbk=f_av3K6BFEs9abRaFgPJMKHz4ElZP7BP34ZlRtxysQ0&fp=random&sni=journalofbigdata.springeropen.com&sid=109cb5faeb6b&spx=%2FyethePcHjaf#NoForcedHeaven
 trojan://22dxmxezsm@pouriya.cf:443?security=tls&sni=brec3xLN7Zl2.pouriya.cf&alpn=http%2F1.1%2Ch2%2Ch3&fp=chrome&type=grpc&serviceName=Amsterdam&mode=gun#-trojan-grpc-tls
+trojan://nc6f%5D39BM7%2C0@www.speedtest.net:8443?path=%2Ftr7UQgN5TKViQDtkyS%3Fed%3D2560&security=tls&alpn=http%2F1.1&host=clwuybn2xdd1s51h2v2unuk1fu0c3ux9.ireqete.workers.dev&fp=randomized&type=ws&sni=CLwuybN2xdD1S51h2v2unUK1FU0C3ux9.iReqEte.WORKERs.dEV#radiofarexTELEGRAMCHANNEL50TB
 trojan://c7f9b8f0-bfdb-11ee-a15c-1239d0255272@chatbuzzteambhm.chatbuzzt7150.workers.dev:443?security=tls&type=ws&headerType=none&path=%252Fhowdy&sni=de1.test3.net&host=de1.test3.net#@chatbuzzteam
 trojan://22f86840-bcac-11ee-abea-1239d0255272@chatbuzzteambhm.chatbuzzt7150.workers.dev:443?security=tls&type=ws&headerType=none&path=%252Fhowdy&sni=de1.test3.net&host=de1.test3.net#@chatbuzzteam
 trojan://10310a20-bbad-11ee-b279-1239d0255272@de1.test3.net:443?security=tls&headerType=none&type=tcp&sni=chatbuzzteambhm.chatbuzzt7150.workers.dev#chatbuzzteam
