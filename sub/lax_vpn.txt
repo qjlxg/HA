@@ -1,2 +1,1 @@
-vless://97dce074-7db1-4d59-99ca-0ef8311e2425@s19.speedyconnect.pro:443?path=%2Fdownloader%2F10005%3Fed%3D2048&security=tls&encryption=none&host=s19.speedyconnect.pro&type=ws&sni=s19.speedyconnect.pro#Speedyping%20Test%F0%9F%94%B5%F0%9F%87%A9%F0%9F%87%AA
-vless://#Speedyping%20Test%F0%9F%94%B5%F0%9F%87%A9%F0%9F%87%AA
+vless://97dce074-7db1-4d59-99ca-0ef8311e2425@s19.speedyconnect.pro:443?path=%2Fdownloader%2F10005%3Fed%3D2048&security=tls&encryption=none&host=s19.speedyconnect.pro&type=ws&sni=s19.speedyconnect.pro#SpeedypingTest

@@ -1,2 +1,2 @@
-vless://4188aee8-0117-445d-a51b-ec214b3318c3@78.141.233.176:8000?security=reality&encryption=none&pbk=GGlKs0cQDaQoDkiDlpeIWE-h0K3ohsHr7u9B3A9GODU&headerType=none&fp=chrome&type=tcp&flow=xtls-rprx-vision&sni=refersion.com&sid=17ce7de25d262bbe#FreeVlessVpn
 vless://4188aee8-0117-445d-a51b-ec214b3318c3@78.141.234.16:8000?security=reality&encryption=none&pbk=GGlKs0cQDaQoDkiDlpeIWE-h0K3ohsHr7u9B3A9GODU&headerType=none&fp=chrome&type=tcp&flow=xtls-rprx-vision&sni=refersion.com&sid=17ce7de25d262bbe#FreeVlessVpn
+vless://4188aee8-0117-445d-a51b-ec214b3318c3@78.141.233.176:8000?security=reality&encryption=none&pbk=GGlKs0cQDaQoDkiDlpeIWE-h0K3ohsHr7u9B3A9GODU&headerType=none&fp=chrome&type=tcp&flow=xtls-rprx-vision&sni=refersion.com&sid=17ce7de25d262bbe#FreeVlessVpn

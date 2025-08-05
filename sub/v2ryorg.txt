@@ -1,30 +1,19 @@
-vless://#%40vpn_mmdparsa%20%D8%B3%D8%B1%D9%88%D8%B1%D8%A7%DB%8C%20%D8%A8%DB%8C%D8%B4%D8%AA%D8%B1%20%D8%A8%D8%A7%20%D8%B3%D8%B1%D8%B9%D8%AA%20%D8%AE%D9%88%D8%A8%20%D8%AF%D8%A7%D8%AE%D9%84%20%DA%86%D9%86%D9%84
-vless://#%F0%9F%94%92%20VL-WS-NONE%20%F0%9F%8F%B4%E2%80%8D%E2%98%A0%EF%B8%8F%20NA-172.67.38.63%3A80
-vless://#ExpressVPNip
-vless://#%E2%99%A8%EF%B8%8F%F0%9F%87%A9%F0%9F%87%AATunnel%20:%207756952_farid
-vless://#%F0%9F%87%A8%F0%9F%87%BE%20%E3%80%8A%40V2RayTheKyo%E3%80%8B%20%D9%88%D8%B5%D9%84%20%D8%B4%D8%AF%DB%8C%20%D8%B9%D8%B6%D9%88%20%D8%B4%D9%88
-vless://#FI%20%F0%9F%87%AB%F0%9F%87%AE%20%7C%20%40v2xay
-vless://#%F0%9F%87%BA%F0%9F%87%B8%E3%80%8A%40V2RayTheKyo%E3%80%8B%20%D9%88%D8%B5%D9%84%20%D8%B4%D8%AF%DB%8C%20%D8%B9%D8%B6%D9%88%20%D8%B4%D9%88
-vless://#%E2%9C%85%D8%B3%D8%B1%D9%88%D8%B1%D9%87%D8%A7%DB%8C%D8%A8%DB%8C%D8%B4%D8%AA%D8%B1%D8%AF%D8%B1%DA%A9%D8%A7%D9%86%D8%A7%D9%84%3Aprrofile_purple%40%E2%9C%85
-trojan://#JP%20%F0%9F%87%AF%F0%9F%87%B5%20%7C%20%40v2xay
-vless://#Channel%20%3A%20%40captalvpn%20%F0%9F%8F%B4%F0%9F%8F%B3
-vless://#BE%20%F0%9F%87%A7%F0%9F%87%AA%20%7C%20%40v2xay
-vless://#%40@v2ryorg
-vless://#Mci%20249%20%28n%29%20free
-ss://#FI%20%F0%9F%87%AB%F0%9F%87%AE%20%7C%20%40v2xay
-vless://#%F0%9F%94%92%20VL-WS-NONE%20%F0%9F%8F%B4%E2%80%8D%E2%98%A0%EF%B8%8F%20NA-172.66.134.126%3A80
-ss://#NL%20%F0%9F%87%B3%F0%9F%87%B1%20%7C%20%40v2xay
-vless://#%F0%9F%94%92%20VL-WS-NONE%20%F0%9F%8F%B4%E2%80%8D%E2%98%A0%EF%B8%8F%20NA-172.67.60.197%3A80
-vless://#%D9%85%D8%B4%D8%AA%DB%8C%20%D8%AC%D9%88%DB%8C%D9%86%20%D8%A8%D8%AF%D9%87%20%D9%86%D8%A7%D9%85%D9%88%D8%B5%D8%A7%20%F0%9F%97%BF%F0%9F%98%AD%F0%9F%99%8F%20xzjinx%40
-vless://#FR%20%F0%9F%87%A8%F0%9F%87%B5%20%7C%20%40v2xay
-vless://#GB%20%F0%9F%87%AC%F0%9F%87%A7%20%7C%20%40v2xay
-ss://#GB%20%F0%9F%87%AC%F0%9F%87%A7%20%7C%20%40v2xay
-ss://#ES%20%F0%9F%87%AA%F0%9F%87%B8%20%7C%20%40v2xay
-vless://#Mci%20248%20%28%29%20free
-vless://#PL%20%F0%9F%87%B5%F0%9F%87%B1%20%7C%20%40V2xay
-ss://#%40@v2ryorg
-vless://#DE%20%F0%9F%87%A9%F0%9F%87%AA%20%7C%20%40v2xay
-vless://#Channel%3A+%40alammzar
-ss://#Channel%3A+%40alammzar
-vless://#%F0%9F%94%92%20VL-WS-NONE%20%F0%9F%8F%B4%E2%80%8D%E2%98%A0%EF%B8%8F%20NA-104.24.60.135%3A80
-vless://#Mci%20250%20%28%29%20free
+vless://a02f9251-0539-4883-a105-6c35609b794a@tun3.fastlink.cfd:43562?security=none&encryption=none&host=www.sayad.top&headerType=http&type=tcp&sni=tun3.rizaylink.ir#Channelcaptalvpn
+vless://5459f68e-d914-4b31-93a3-ecdf638b7a5b@172.66.134.126:80?path=%2F%3Fed%3D2560&security=&encryption=none&host=abcd.taraneh.dpdns.org&fp=random&type=ws&sni=abcd.taraneh.dpdns.org#%F0%9F%94%92%20VL-WS-NONE%20%F0%9F%8F%B4%E2%80%8D%E2%98%A0%EF%B8%8F%20NA-172.66.134.126%3A80 vless://dfdf1c0a-5e52-4746-88bd-19d4e4ac7853@172.67.38.63:80?path=%2FBaRAyeIran%3Fed%3D2560&security=&encryption=none&host=tannaz.juveitaly.dpdns.org&fp=random&type=ws&sni=tannaz.juveitaly.dpdns.org#%F0%9F%94%92%20VL-WS-NONE%20%F0%9F%8F%B4%E2%80%8D%E2%98%A0%EF%B8%8F%20NA-172.67.38.63%3A80 vless://cba0b35b-8943-4c70-a864-9f78145b7897@104.24.60.135:80?path=%2F%3Fed%3D2560&security=&encryption=none&host=agolna.mahsaamini.dpdns.org&fp=random&type=ws&sni=agolna.mahsaamini.dpdns.org#%F0%9F%94%92%20VL-WS-NONE%20%F0%9F%8F%B4%E2%80%8D%E2%98%A0%EF%B8%8F%20NA-104.24.60.135%3A80 vless://cba0b35b-8943-4c70-a864-9f78145b7897@172.67.60.197:80?path=%2FBaRAyeIran%3Fed%3D2560&security=&encryption=none&host=agolna.mahsaamini.dpdns.org&fp=random&type=ws&sni=agolna.mahsaamini.dpdns.org#VL-WS-NONENA-172676019780
+vless://df0680ca-e43c-498d-ed86-8e196eedd012@84.32.131.72:8880?mode=gun&security=none&encryption=none&type=grpc#%40@v2ryorg vless://df0680ca-e43c-498d-ed86-8e196eedd012@84.32.131.187:8880?mode=gun&security=none&encryption=none&type=grpc#%40@v2ryorg vless://53fa8faf-ba4b-4322-9c69-a3e5b1555049@5.10.214.157:8880?path=%2F&security=none&encryption=none&host=reedfree8mahsang2.redorg.ir&type=ws&sni=reedfree8mahsang2.redorg.ir#%40@v2ryorg ss://YWVzLTI1Ni1nY206UmV4bkJnVTdFVjVBRHhH@38.75.136.28:7001#@v2ryorg
+vless://ccd5d8c4-634c-46bc-8f7a-5be3b8649858@85.133.215.188:3311?mode=gun&security=none&encryption=none&type=grpc&serviceName=#prrofile_purple
+vless://d342d11e-d424-4583-b36e-524ab1f0afa4@141.101.121.108:8080?path=%2F%3Fed%3D2048&security=none&encryption=none&host=1750293123492.china.baidu.bilibili.china.aeko.cn&type=ws#Mci249nfree
+vless://9dd24d01-2b7a-4bd8-8c76-129d6ca89b8c@104.18.29.253:443?path=%2F%3Fed%3D2560&security=tls&encryption=none&host=kawaiifreevpn-7ds.pages.dev&fp=random&type=ws&sni=kawaiifreevpn-7ds.pages.dev#Mci248free
+vless://fab7bf9c-ddb9-4563-8a04-fb01ce6c0fbf@141.193.213.10:80?path=%2FTelegram%40V2ray_Alpha&security=none&encryption=none&host=us.laoyoutiao.link&type=ws#%F0%9F%87%BA%F0%9F%87%B8%E3%80%8A%40V2RayTheKyo%E3%80%8B%20%D9%88%D8%B5%D9%84%20%D8%B4%D8%AF%DB%8C%20%D8%B9%D8%B6%D9%88%20%D8%B4%D9%88 vless://ec8a65ad-aafc-4095-9b8c-ea10890ca629@154.92.9.176:443?path=%2FJavid-SHAH-KingRezaPahlavi%2F%3Fed&security=tls&alpn=h2%2Chttp%2F1.1&encryption=none&host=simorgh.hpcode.ir&fp=firefox&type=ws&sni=simorgh.hpcode.ir#%F0%9F%87%A8%F0%9F%87%BE%20%E3%80%8A%40V2RayTheKyo%E3%80%8B%20%D9%88%D8%B5%D9%84%20%D8%B4%D8%AF%DB%8C%20%D8%B9%D8%B6%D9%88%20%D8%B4%D9%88 ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTpXc3R1U25sdTRpZUE5TTBM@admin.c2.webramz.co:443#Channel%3A+%40alammzar vless://ccd5d8c4-634c-46bc-8f7a-5be3b8649858@85.133.215.188:3311?mode=gun&security=none&encryption=none&type=grpc&serviceName=#prrofile_purple            @v2ryorg
+ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTpXc3R1U25sdTRpZUE5TTBM@admin.c2.webramz.co:443#Channelalammzar
+vless://fab7bf9c-ddb9-4563-8a04-fb01ce6c0fbf@69.84.182.29:8880?path=%2FTelegramU0001F1E8U0001F1F3&security=none&encryption=none&host=hk.laoyoutiao.link&type=ws&sni=hk.laoyoutiao.link#%40@v2ryorg vless://432e1e8b-18ce-488f-8203-2ba54b2fb61f@172.67.196.8:443?path=%2Fswordnewnewnew&security=tls&encryption=none&host=us.cishanjichang.me&fp=chrome&type=ws&sni=us.cishanjichang.me#%40@v2ryorg vless://53fa8faf-ba4b-4322-9c69-a3e5b1555049@5.10.214.18:8880?path=%2FTelegramU0001F1E8U0001F1F3&security=none&encryption=none&host=reedfree8mahsang2.redorg.ir&type=ws&sni=reedfree8mahsang2.redorg.ir#@v2ryorg
+vless://2eaef053-5fd6-4def-b234-d760690355ff@91.99.92.95:51615?security=none&encryption=none&host=zula.ir&headerType=http&type=tcp#Channelalammzar
+vless://8dd46858-12e7-4754-fdb8-489eef2d8425@bmi.raheaiande.ir:1001?security=reality&encryption=none&pbk=wOXPafr4Gl6wXtw8c8T2juUCauBi25GVAfe4SMc4VEM&headerType=http&fp=edge&spx=%2F&type=tcp&sni=ea.com&sid=c7bc4d#xzjinx
+vless://8a13bad5-adcd-4c59-99d4-1c04cdfb0803@app.streamingpower.sbs:7035?flow=xtls-rprx-vision&type=tcp&security=reality&fp=firefox&sni=tgju.org&pbk=4X80HEtvcxcASRtuYDfGhuGlokJv3YkN1L94HJqo2QA&sid=f37098f11937f897#Tunnel7756952_farid
+vless://53fa8faf-ba4b-4322-9c69-a3e5b1555049@185.148.106.214:80?path=Telegram%3A&security=none&encryption=none&host=reedfree8mahsang2.redorg.ir&type=ws#%40@v2ryorg vless://53fa8faf-ba4b-4322-9c69-a3e5b1555049@154.197.64.20:8880?path=%2F%3Fed%3D2560&security=none&encryption=none&host=reedfree8mahsang2.redorg.ir&type=ws#%40@v2ryorg vless://53fa8faf-ba4b-4322-9c69-a3e5b1555049@5.10.214.6:8880?path=%2FTelegram&security=none&encryption=none&host=reedfree8mahsang2.redorg.ir&type=ws&sni=reedfree8mahsang2.redorg.ir#%40@v2ryorg vless://53fa8faf-ba4b-4322-9c69-a3e5b1555049@5.10.214.5:8880?path=%2FTelegramU0001F1E8U0001F1F3&security=none&encryption=none&host=reedfree8mahsang2.redorg.ir&type=ws&sni=reedfree8mahsang2.redorg.ir#@v2ryorg
+vless://75fde681-ec64-4654-86fa-30732e8e179c@104.16.243.59:443?path=%2Fassets&security=tls&encryption=none&host=NGINX.NSCl.IR&fp=chrome&type=ws&sni=NGINX.NSCl.IR#Mci250free
+vless://bda515f9-b3d8-4756-bca1-3423ac5ff9a0@194.135.46.24:443?security=none&encryption=none&headerType=none&type=tcp#vpn_mmdparsa
+vless://e9979910-79d1-4621-a93c-b2a579c44ba7@104.16.69.162:8880?path=%2FfgvtHUpS6R8Rv8s5%3Fed%3D2560&security=none&encryption=none&host=vngsupply.ip-ddns.com&type=ws#Channelcaptalvpn
+vmess://eyJhZGQiOiIxODUuMTQyLjUzLjYzIiwiYWlkIjoiMCIsImFscG4iOiIiLCJmcCI6IiIsImhvc3QiOiIiLCJpZCI6IjJiYWJmMzRhLTE2ZjUtNGUzOC1hODg1LTczOGZkZmM4ZWFiZiIsIm5ldCI6InRjcCIsInBhdGgiOiIiLCJwb3J0IjoiNDM1ODUiLCJwcyI6Itqp2KfZhtmB24zZhtqvINm+2LHYs9ix2LnYqiDZhduM2K7ZiNin24wg2qnYp9mG2KfZhCDZhdinINis2YjbjNmGINi02YggXG5AUk9GTFZQTiIsInNjeSI6ImF1dG8iLCJzbmkiOiIiLCJ0bHMiOiIiLCJ0eXBlIjoibm9uZSIsInYiOiIyIn0=
+vless://ec8a65ad-aafc-4095-9b8c-ea10890ca629@154.92.9.176:443?path=%2FJavid-SHAH-KingRezaPahlavi%2F%3Fed&security=tls&alpn=h2%2Chttp%2F1.1&encryption=none&host=simorgh.hpcode.ir&fp=firefox&type=ws&sni=simorgh.hpcode.ir#V2RayTheKyo
+vless://a36f528e-9580-433d-9027-ba780876f76d@python.org:80?mode=auto&path=%2Ffreedonlop&security=&encryption=none&host=freeconfig18c.global.ssl.fastly.net&type=xhttp#ExpressVPNip
