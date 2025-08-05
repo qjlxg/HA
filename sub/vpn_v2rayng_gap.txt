@@ -1,4 +1,2 @@
-vless://3108e0c0-2d4d-411f-b7cc-f1092b324216@s7.megaping.casa:8080?path=%2F&security=none&encryption=none&type=ws#%F0%9F%86%94%EF%B8%8F%40Vpn_V2rayNG_gap
-vless://#%F0%9F%86%94%EF%B8%8F%40Vpn_V2rayNG_gap
-vless://#%40Vpn_V2rayNG_gap
-vless://b4d5ea99-0676-4420-af83-095973c1763f@applicable-amber.king4players.com:80?path=%2Fcustom_config&security=none&encryption=none&type=ws#%40Vpn_V2rayNG_gap
+vless://3108e0c0-2d4d-411f-b7cc-f1092b324216@s7.megaping.casa:8080?path=%2F&security=none&encryption=none&type=ws#Vpn_V2rayNG_gap
+vless://b4d5ea99-0676-4420-af83-095973c1763f@applicable-amber.king4players.com:80?path=%2Fcustom_config&security=none&encryption=none&type=ws#Vpn_V2rayNG_gap

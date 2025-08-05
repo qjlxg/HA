@@ -1,5 +1,5 @@
+vless://266169d9-665f-4fed-b1a8-da29794ee3cd@berovps.masoodbiranvand-230.workers.dev:2083?path=vless-ws%2F%3Fed%3D2048&security=tls&encryption=none&alpn=h2&host=berovps.masoodbiranvand-230.workers.dev&fp=randomized&type=ws&sni=berovps.masoodbiranvand-230.workers.dev#4
 vless://266169d9-665f-4fed-b1a8-da29794ee3cd@berovps.masoodbiranvand-230.workers.dev:2053?path=vless-ws%2F%3Fed%3D2048&security=tls&encryption=none&alpn=h2&host=berovps.masoodbiranvand-230.workers.dev&fp=chrome&type=ws&sni=berovps.masoodbiranvand-230.workers.dev#8-vless-worker-berovpsmasoodbiranvand-230workersde
 vless://689f682b-7d9a-4967-82fb-775018428644@138.201.108.13:38612?security=none&encryption=none&host=www.zula.ir&headerType=http&type=tcp#Unknown
-vless://266169d9-665f-4fed-b1a8-da29794ee3cd@berovps.masoodbiranvand-230.workers.dev:2083?path=vless-ws%2F%3Fed%3D2048&security=tls&encryption=none&alpn=h2&host=berovps.masoodbiranvand-230.workers.dev&fp=randomized&type=ws&sni=berovps.masoodbiranvand-230.workers.dev#4-vless-worker-berovpsmasoodbiranvand-230workersde
 vless://600c6208-a0e4-4d49-b249-55b69ead4422@xjp.caball.link:443?path=%2F%3Fed%3D2048&security=tls&encryption=none&type=ws&sni=xjp.caball.link#Unknown
 ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTp1MTdUM0J2cFlhYWl1VzJj@series-a2-mec.samanehha.co:443#King_V2rayNG

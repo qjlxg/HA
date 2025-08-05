@@ -1,5 +1,5 @@
+vless://bc55ee1f-c1d4-4d03-b36b-1482ba586141@94.183.233.98:3801?security=none&encryption=none&headerType=http&type=tcp#kingspeedchanel
 vless://a6692211-2e09-4ef4-b614-9eea9598c9f8@91.99.222.232:5060?security=reality&encryption=none&pbk=ZHRI2OP3V_f0-MtH6h9pn3gdkVL1tmmDEJl-FQs-Tj4&headerType=none&fp=chrome&type=tcp&sni=vuejs.org&sid=ba89b613a1f2d8ad#kingspeedchanel
+vless://241f8319-e19f-412f-900f-b51c5c158c28@94.183.233.116:3801?encryption=none&security=none&type=tcp&headerType=http#kingspeedchanel
 vless://bc55ee1f-c1d4-4d03-b36b-1482ba586141@94.183.233.116:6000?encryption=none&security=none&type=tcp&headerType=http#kingspeedchanel LOCATION
 vless://a6692211-2e09-4ef4-b614-9eea9598c9f8@kingspeed.sswebhosting.ir:6000?encryption=none&security=none&type=tcp&headerType=http#kingspeedchanel
-vless://241f8319-e19f-412f-900f-b51c5c158c28@94.183.233.116:3801?encryption=none&security=none&type=tcp&headerType=http#kingspeedchanel
-vless://bc55ee1f-c1d4-4d03-b36b-1482ba586141@94.183.233.98:3801?security=none&encryption=none&headerType=http&type=tcp#kingspeedchanel
