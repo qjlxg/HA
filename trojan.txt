@@ -7,7 +7,6 @@ trojan://bpb-trojan@162.159.152.227:443?security=tls&sni=cf.090227.xyz&allowInse
 trojan://juzi@104.19.57.183:2096?security=tls&sni=juzi8186-sr1.pages.dev&type=tcp#@awlix_ir
 trojan://1e63e585ab2fef3adcc9ea75a62abc23@104.251.227.182:443?security=tls&sni=hezijiasuqi.com&allowInsecure=1&type=tcp#@awlix_ir
 trojan://trojan@104.26.12.31:8443?encryption=none&security=tls&sni=fofang.pages.dev&type=ws&host=fofang.pages.dev&path=%2F#CA-DE@DeamNet_Proxy
-trojan://auto@silkbook.com:443?encryption=none&security=tls&sni=azadnet1.yiwenaw435.workers.dev&fp=randomized&type=ws&host=azadnet1.yiwenaw435.workers.dev&path=%2Fazadnet1.yiwenaw435.workers.dev%2F%3Fed%3D2560#CA-SE@DeamNet_Proxy
 trojan://ZJU29smXwp@45.85.118.0:2053?path=%2F&security=tls&host=k.teama.tk&type=ws&sni=web2.teama.tk#Freedom
 trojan://ZJU29smXwp@45.85.118.88:2053?path=%2F&security=tls&host=k.teama.tk&type=ws&sni=omid.teama.tk#Omid
 trojan://ZJU29smXwp@cf1.danesh-bonyan.store:2053?path=%2F&security=tls&host=k.teama.tk&type=ws&sni=omid2.teama.tk#MahsaAmini1
