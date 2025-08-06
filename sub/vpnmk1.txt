@@ -1,5 +1,5 @@
 vless://80667093-33cd-4f09-9612-dd003ddfc46d@turk-mehran.mohammad420.sbs:2095?type=ws&path=%2F&host=www.mehran-net.mohammad420.sbs&security=none#-VPNMK1
-vless://d621d083-5ac0-4d26-8872-efe55cf57663@cdn827.mohammad420.sbs:2095?path=%2F&security=none&encryption=none&host=www.mehran-net.mohammad420.sbs&type=ws#-VPNMK1
 vless://e5e2814a-3fa9-4af4-9304-1249e8de88cb@all.mrmamad420.online:2087?type=grpc&serviceName=&security=tls&fp=chrome&alpn=h2%2Chttp%2F1.1&sni=turk-cdn.dns1-mamad.site#Tls82-VPNMK1
 vless://17e56dfd-7549-45f0-9495-69468ed7cbd4@all.mrmamad420.online:2087?type=grpc&serviceName=&security=tls&fp=chrome&alpn=h2%2Chttp%2F1.1&sni=turk-cdn.dns1-mamad.site#Tls82-VPNMK1
+vless://d621d083-5ac0-4d26-8872-efe55cf57663@cdn827.mohammad420.sbs:2095?path=%2F&security=none&encryption=none&host=www.mehran-net.mohammad420.sbs&type=ws#-VPNMK1
 vless://139ecf07-afb3-476c-9aeb-a9b841892c93@turk-mehran.mohammad420.sbs:28284?type=ws&path=%2F&host=fast.com&security=none#-VPNMK

@@ -1,2 +1,1 @@
-vless://89b3cbba-e6ac-485a-9481-976a0415eab9@[::ffff:3207:55dd]:443?path=%2FxUnw05Z6MV3NG29U%3Fed%3D2560&security=tls&encryption=none&alpn=h2,http/1.1&host=testbp.fibidob9775921.workers.dev&fp=randomized&type=ws&sni=tEstBp.fIBiDOB9775921.woRkeRS.DEV#%DB%8C%DA%A9+%D9%88+%DB%8C%DA%A9+%D9%88%DB%8C+%D9%BE%DB%8C+%D8%A7%D9%86
-vless://#%DB%8C%DA%A9+%D9%88+%DB%8C%DA%A9+%D9%88%DB%8C+%D9%BE%DB%8C+%D8%A7%D9%86
+vless://89b3cbba-e6ac-485a-9481-976a0415eab9@[::ffff:3207:55dd]:443?path=%2FxUnw05Z6MV3NG29U%3Fed%3D2560&security=tls&encryption=none&alpn=h2,http/1.1&host=testbp.fibidob9775921.workers.dev&fp=randomized&type=ws&sni=tEstBp.fIBiDOB9775921.woRkeRS.DEV#Unknown
