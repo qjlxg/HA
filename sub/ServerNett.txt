@@ -1,4 +1,3 @@
 vless://ServerNett-ServerNett2@5.75.201.180:14703?type=tcp&security=reality&pbk=Y9zKrv5hG5fbRdibewYRmulK0HEHX6QgaU30EbKxrAU&fp=chrome&sni=stackoverflow.com&sid=a3&spx=%2F#ServerNett-ServerNett2
 vless://SERVERNETT-SERVERNETT1@safelinevpn.afterhav.ir:8880?security=reality&encryption=none&pbk=fXy2aOmxGGfjSa31-Wi7rJj1kS9q5N-kT0P86312Wgo&host=varzesh3.com&headerType=http&fp=firefox&spx=%2F&type=tcp&sni=www.apple.com.cn&sid=32e5#SERVERNETT-SERVERNETT1
 vless://ServerNett-ServerNett1@5.75.201.180:14703?security=reality&encryption=none&pbk=Y9zKrv5hG5fbRdibewYRmulK0HEHX6QgaU30EbKxrAU&headerType=&fp=chrome&spx=%2F&type=tcp&sni=stackoverflow.com&sid=a3#Tel-ServerNett
-vless://ServerNett@fr.safeline.12.afterhav.ir:8880?security=reality&encryption=none&pbk=XetKmjWtt6D08aG4I5F9tETkO4RogFgDaqW6F-HHoyA&host=varzesh3.com&headerType=http&fp=edge&spx=%2F&type=tcp&sni=www.apple.com.cn&sid=64ede3f582de#ServerNettFreeconfig
