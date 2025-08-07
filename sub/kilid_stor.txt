@@ -1,4 +1,4 @@
-vless://ecb790d4-36ca-4dfc-a142-b3a395d1c50d@ad1.xiqpanelz.com:40200?security=&encryption=none&host=ir31.uploadboy.com&headerType=http&type=tcp#CONFIG2ping400
 vless://ecb790d4-36ca-4dfc-a142-b3a395d1c50d@codepen.io:443?path=%2Fld%3Fed%3D2048&security=tls&alpn=h2%2Chttp%2F1.1&encryption=none&host=ad1.xiqpanelz.com&fp=chrome&type=ws&sni=ad1.xiqpanelz.com#CONFIG1ping700
-vless://bf72c0c8-4309-4661-aff0-144d67db02ff@ad1.xiqpanelz.com:40200?security=&encryption=none&host=ir31.uploadboy.com&headerType=http&type=tcp#MTNRGT
+vless://ecb790d4-36ca-4dfc-a142-b3a395d1c50d@ad1.xiqpanelz.com:40200?security=&encryption=none&host=ir31.uploadboy.com&headerType=http&type=tcp#CONFIG2ping400
 vless://bf72c0c8-4309-4661-aff0-144d67db02ff@codepen.io:443?path=%2Fld%3Fed%3D2048&security=tls&alpn=h2%2Chttp%2F1.1&encryption=none&host=ad1.xiqpanelz.com&fp=chrome&type=ws&sni=ad1.xiqpanelz.com#MCIWIFI
+vless://bf72c0c8-4309-4661-aff0-144d67db02ff@ad1.xiqpanelz.com:40200?security=&encryption=none&host=ir31.uploadboy.com&headerType=http&type=tcp#MTNRGT

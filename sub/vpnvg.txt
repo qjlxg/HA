@@ -1,17 +1,17 @@
-vless://7f95f302-945c-4348-8fde-ddeb340b1f03@channel.digiv2ray.fun:443?security=none&encryption=none&host=xbox.com&headerType=http&type=tcp#vpnVG
-vless://0ca56b7e-89a6-4658-b943-1ef0978c3c00@159.69.102.125:2096?security=none&encryption=none&host=speedtest.net&headerType=http&type=tcp#vpnVG
-vless://67fff5a6-52fe-4247-969e-122a50c37df7@65.109.241.121:2053?security=none&encryption=none&host=speedtest.net&headerType=http&type=tcp#vpnVG Irancell @vpnVG
+vless://7f95f302-945c-4348-8fde-ddeb340b1f33@channel.digiv2ray.fun:443?security=none&encryption=none&host=xbox.com&headerType=http&type=tcp#vpnVG
 vmess://eyJhZGQiOiJjZG5qcy5jb20iLCJhaWQiOiIwIiwiYWxwbiI6ImgyLGh0dHAvMS4xIiwiZnAiOiJlZGdlIiwiaG9zdCI6IkFtc3RlcmRhbS5rb3RpY2suc2l0ZSIsImlkIjoiQjg1RkNBOTAtRTJDMC00OTJFLTkwNjYtOEQyMzYwN0YwMEExIiwibmV0Ijoid3MiLCJwYXRoIjoiL3NwZWVkdGVzdCIsInBvcnQiOiI0NDMiLCJwcyI6IkB2cG5WRyIsInNjeSI6ImF1dG8iLCJzbmkiOiJBbXN0ZXJkYW0ua290aWNrLnNpdGUiLCJ0bHMiOiJ0bHMiLCJ0eXBlIjoiIiwidiI6IjIifQ==
-vless://5e082e92-fce3-42d0-b015-aeec99515ca4@VpnCustomize.oyoha.site:8443?mode=gun&security=tls&encryption=none&type=grpc&serviceName=@VPNCUSTOMIZE&sni=ch.TrV2ray.cfd#vpnVG
+vless://8b9c14c3-d15e-4063-a9a2-1fdd894a49ef@vmesskhodammci1.ddns.net:2096?mode=gun&security=tls&encryption=none&type=grpc&serviceName=@vmesskhodam&sni=V2ray.Vmesskhodam.top#vpnVG
 vless://5a0beb93-56ae-4390-b5c2-8ed92f5f591d@[2a01:4f8:1c17:cadc::1]:2083?mode=gun&security=reality&encryption=none&pbk=Qa9ePuwo1TY2uVN8143Sh3YAiVqdDj9VIZcQK20DTzc&fp=firefox&spx=%2F&type=grpc&serviceName=@Digiv2ray&sni=www.speedtest.net&sid=5654bc18#vpnVG
-vless://3ae2d20d-2354-47da-9ce9-b921f8793164@tmd.digiv2ray.store:443?security=none&encryption=none&host=speedtest.net&headerType=http&type=tcp#vpnVG Irancell @vpnVG
+vless://5e082e92-fce3-42d0-b015-aeec99515ca4@VpnCustomize.oyoha.site:8443?mode=gun&security=tls&encryption=none&type=grpc&serviceName=@VPNCUSTOMIZE&sni=ch.TrV2ray.cfd#vpnVG Irancell @vpnVG
+vless://3ae2d20d-2354-47da-9ce9-b921f8793164@tmd.digiv2ray.store:443?security=none&encryption=none&host=speedtest.net&headerType=http&type=tcp#vpnVG
 vless://67fff5a6-52fe-4247-969e-122a50c37df8@116.203.0.138:2053?security=none&encryption=none&host=speedtest.net&headerType=http&type=tcp#vpnVG Irancell @vpnVG
+vless://67fff5a6-52fe-4247-969e-122a50c37df7@65.109.241.121:2053?security=none&encryption=none&host=speedtest.net&headerType=http&type=tcp#vpnVG Irancell @vpnVG
+vless://7f95f302-945c-4348-8fde-ddeb340b1f03@channel.digiv2ray.fun:443?security=none&encryption=none&host=xbox.com&headerType=http&type=tcp#vpnVG
 vless://67fff5a6-52fe-4247-969e-122a50c37df8@65.109.241.121:2053?security=none&encryption=none&host=speedtest.net&headerType=http&type=tcp#vpnVG Irancell @vpnVG
+vless://7f95f302-945c-4348-8fde-ddeb340b1f00@channel.digiv2ray.fun:443?security=none&encryption=none&host=xbox.com&headerType=http&type=tcp#vpnVG
+vless://0ca56b7e-89a6-4658-b943-1ef0978c3c00@159.69.102.125:2096?security=none&encryption=none&host=speedtest.net&headerType=http&type=tcp#vpnVG  @vpnVG
 vless://4c6fcb3d-334c-46ab-a62b-c8e56d7f776b@49.13.74.158:22069?mode=gun&security=reality&encryption=none&pbk=VeRff9ggzWtCJTGoMbOlqQ15cr1V3fu7jWpfONeV53c&fp=chrome&spx=%2F&type=grpc&serviceName=--------------telegram:funza--------------telegram:funza--------------telegram:funza--------------telegram:funza--------------telegram:funza--------------telegram:funza--------------telegram:funza--------------telegram:funza--------------telegram:funza--------------telegram:funza--------------&sni=greenpepper.ir&sid=c052cef8#vpnVG @vpnVG
 vless://7f95f302-945c-4348-8fde-ddeb340b1f39@channel.digiv2ray.fun:443?security=none&encryption=none&host=xbox.com&headerType=http&type=tcp#vpnVG
-vless://7f95f302-945c-4348-8fde-ddeb340b1f33@channel.digiv2ray.fun:443?security=none&encryption=none&host=xbox.com&headerType=http&type=tcp#vpnVG
-vless://7f95f302-945c-4348-8fde-ddeb340b1f00@channel.digiv2ray.fun:443?security=none&encryption=none&host=xbox.com&headerType=http&type=tcp#vpnVG
-vless://8b9c14c3-d15e-4063-a9a2-1fdd894a49ef@vmesskhodammci1.ddns.net:2096?mode=gun&security=tls&encryption=none&type=grpc&serviceName=@vmesskhodam&sni=V2ray.Vmesskhodam.top#vpnVG
-vless://3ae2d20d-2354-47da-9ce9-b921f8793164@65.109.241.5:443?security=none&encryption=none&host=speedtest.net&headerType=http&type=tcp#vpnVG
-vless://7f95f302-945c-4348-8fde-ddeb340b1f30@channel.digiv2ray.fun:443?security=none&encryption=none&host=xbox.com&headerType=http&type=tcp#vpnVG
-vless://7f95f302-945c-4348-8fde-ddeb340b1f38@channel.digiv2ray.fun:443?security=none&encryption=none&host=xbox.com&headerType=http&type=tcp#vpnVG
+vless://3ae2d20d-2354-47da-9ce9-b921f8793164@65.109.241.5:443?security=none&encryption=none&host=speedtest.net&headerType=http&type=tcp#vpnVG Irancell @vpnVG
+vless://7f95f302-945c-4348-8fde-ddeb340b1f30@channel.digiv2ray.fun:443?security=none&encryption=none&host=xbox.com&headerType=http&type=tcp#vpnVG Irancell @vpnVG
+vless://7f95f302-945c-4348-8fde-ddeb340b1f38@channel.digiv2ray.fun:443?security=none&encryption=none&host=xbox.com&headerType=http&type=tcp#vpnVG Irancell @vpnVG

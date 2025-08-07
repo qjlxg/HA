@@ -1,6 +1,6 @@
-vless://060b45cb-e660-4bda-8cc4-dbff626cc4ca@mci.bestv2rang.cfd:2096?path=%2F&security=tls&encryption=none&host=tm.bestv2rang.space&type=ws&sni=tm.bestv2rang.space#BestV2rangMci
+vless://979f97c1-465c-49a2-b924-6c4f7759c30f@MCI-vpncustomize.aparat.lol:2096?mode=gun&security=tls&encryption=none&type=grpc&serviceName=@VPNCUSTOMIZE&sni=yiy.TrV2ray.cfd#MCI@v2ray16
 vless://546467d9-24ae-4ede-890e-24089380f82b@all-VPNCUSOMIZE.aparat.lol:2053?path=%2F&security=tls&encryption=none&host=tel.TrV2ray.cfd&type=ws&sni=tel.TrV2ray.cfd#IOS
 vless://4d15ca67-c35f-4771-9ea2-a50241b7df9e@mtn.bestv2rang.cfd:2053?path=%2F&security=tls&encryption=none&host=tm.bestv2rang.space&type=ws&sni=tm.bestv2rang.space#BestV2rangMtn
 vless://7155cc9a-b070-45a2-9976-a575bc954fae@mtn-VpnCustomize.aparat.lol:8443?mode=gun&security=tls&encryption=none&type=grpc&serviceName=@VPNCUSTOMIZE&sni=tag.TrV2ray.cfd#MTN@v2ray16
 vless://04ff1503-222e-445f-bda0-72e10bfb60d8@tunell7.mahsa0535.sbs:54345?security=none&encryption=none&host=nobitex.ir&headerType=http&type=tcp#v2ray_vpnalfa
-vless://979f97c1-465c-49a2-b924-6c4f7759c30f@MCI-vpncustomize.aparat.lol:2096?mode=gun&security=tls&encryption=none&type=grpc&serviceName=@VPNCUSTOMIZE&sni=yiy.TrV2ray.cfd#MCI@v2ray16
+vless://060b45cb-e660-4bda-8cc4-dbff626cc4ca@mci.bestv2rang.cfd:2096?path=%2F&security=tls&encryption=none&host=tm.bestv2rang.space&type=ws&sni=tm.bestv2rang.space#BestV2rangMci
