@@ -1,2 +1,2 @@
-vless://10221e99-bb18-4d22-87ea-daa48470d098@www.speedtest.net:8880?host=fr2.vlessx.xyz&security=none&type=ws&path=%2F%3Fed%3D2048&encryption=none#configraygan
 vless://ba5045da-9eaa-4550-ae5e-0a1b7cfa3471@mtun.atech.pw:18080?security=none&encryption=none&host=speedtest.net&headerType=http&type=tcp#tunnelM-Mtest
+vless://10221e99-bb18-4d22-87ea-daa48470d098@www.speedtest.net:8880?host=fr2.vlessx.xyz&security=none&type=ws&path=%2F%3Fed%3D2048&encryption=none#configraygan

@@ -1,8 +1,8 @@
-vless://e9e437c2-1ee5-4f0d-ae09-4bfafc835e47@185.143.233.120:2086?path=%2Fwp-admin%3Fed%3D2048&security=none&encryption=none&host=getasa.ir&type=ws#goldd_v2ray
-vless://7f453ff7-fe7d-4970-ab4b-5f00bbb855ce@chanel.nilmmd.shop:443?type=tcp&path=%2F&host=fast.com&headerType=http&security=none#-goldd_v2ray
 vless://897fbabf-468d-4948-881b-dad1eb24cfe7@chanel.nilmmd.buzz:21842?type=tcp&path=%2F&host=fast.com&headerType=http&security=none#-v2rayshop_m
-vless://789ce3ce-2f17-4da8-8383-69e06cd095f8@94.130.173.189:31188?security=none&encryption=none&host=fast.com&headerType=http&type=tcp#-v2rayshop_m
-vless://c924c16b-27f8-43f7-8394-c28b875bde30@chanel.goldenteam2.shop:22304?type=tcp&path=%2F&host=fast.com&headerType=http&security=none#-goldd_v2ray
-vless://77de458b-5d58-4379-927a-7e749b2d17f8@test.gold15.ir:443?mode=multi&security=tls&encryption=none&fp=chrome&type=grpc&serviceName=fast.com&sni=test.gold15.ir#v2rayshop_m
 vless://7f453ff7-fe7d-4970-ab4b-5f00bbb855ce@chanel.nilmmd.shop:443?security=none&encryption=none&host=fast.com&headerType=http&type=tcp#-goldd_v2ray
+vless://c924c16b-27f8-43f7-8394-c28b875bde30@chanel.goldenteam2.shop:22304?type=tcp&path=%2F&host=fast.com&headerType=http&security=none#-goldd_v2ray
+vless://7f453ff7-fe7d-4970-ab4b-5f00bbb855ce@chanel.nilmmd.shop:443?type=tcp&path=%2F&host=fast.com&headerType=http&security=none#-goldd_v2ray
 vless://34dc43d7-ee19-4536-bb37-aa56178cbab4@chanel.goldenteam2.shop:443?security=none&encryption=none&host=fast.com&headerType=http&type=tcp#-goldd_v2ray
+vless://789ce3ce-2f17-4da8-8383-69e06cd095f8@94.130.173.189:31188?security=none&encryption=none&host=fast.com&headerType=http&type=tcp#-v2rayshop_m
+vless://e9e437c2-1ee5-4f0d-ae09-4bfafc835e47@185.143.233.120:2086?path=%2Fwp-admin%3Fed%3D2048&security=none&encryption=none&host=getasa.ir&type=ws#goldd_v2ray
+vless://77de458b-5d58-4379-927a-7e749b2d17f8@test.gold15.ir:443?mode=multi&security=tls&encryption=none&fp=chrome&type=grpc&serviceName=fast.com&sni=test.gold15.ir#v2rayshop_m
