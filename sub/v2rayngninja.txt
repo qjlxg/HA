@@ -1,8 +1,8 @@
 vless://c3077f1d-3b94-4a83-aecb-f4e9beb4dc7e@[::ffff:6812:cae8]:8080?path=%2F&security=none&encryption=none&host=xn--047h.iman-v2ray.sbs.&type=ws#V2rayExpressMCI
-vless://25468dd2-7fb0-478c-8ce7-3e72cf65936d@146.75.74.62:443?encryption=none&security=tls&sni=app.com&alpn=h2%2Chttp%2F1.1&fp=chrome&type=ws&host=wow-online.ir&path=%2F#V2rayngninja
-vless://97d53a59-918e-45fc-bc5d-ba487f090cc1@80.240.23.101:443?type=xhttp&path=%2FDota2%3Fed%3D2048&host=&mode=auto&security=reality&pbk=HhI0Y1IV5Vks0OqsV6N4Csvaivc1BH_IzoSbw5Ii_3o&fp=randomized&sni=hundleymechanical.com&sid=008c74&spx=%2F#RivenVpn
-vless://a8df45a4-eb57-450d-a526-43dcef46981a@78.141.221.194:8080?type=http&path=%2F&host=&security=reality&pbk=67A3nqrlKiXipqzNn9DNoWFuxRXQ6xTa-UzLFDJryVQ&fp=chrome&sni=www.speedtest.net&sid=b1938907&spx=%2F#it5itxza
-vless://c3077f1d-3b94-4a83-aecb-f4e9beb4dc7e@[::ffff:b992:ad3b]:8080?path=%2F&security=none&encryption=none&host=xn--047h.iman-v2ray.sbs.&type=ws#V2rayExpressMTN
 vless://22ebc3ad-2e41-4fb3-acdd-c6269ac9bf81@95.85.95.85:443?encryption=none&security=tls&sni=promo.worldofwarships.com&alpn=h2%2Chttp%2F1.1&fp=chrome&type=ws&host=mamadgamenetcsgoskin2.ir&path=%2F#@v2rayngninja
 vless://52b45d8f-3ab7-44fd-af91-321a27982584@2.56.220.2:443?encryption=none&security=tls&sni=promo.worldofwarships.eu&alpn=h2%2Chttp%2F1.1&fp=firefox&type=ws&host=mythstore.ir&path=%2Fws%2F%3Fed%3D2048#V2rayngninja
+vless://c3077f1d-3b94-4a83-aecb-f4e9beb4dc7e@[::ffff:b992:ad3b]:8080?path=%2F&security=none&encryption=none&host=xn--047h.iman-v2ray.sbs.&type=ws#V2rayExpressMTN
+vless://97d53a59-918e-45fc-bc5d-ba487f090cc1@80.240.23.101:443?type=xhttp&path=%2FDota2%3Fed%3D2048&host=&mode=auto&security=reality&pbk=HhI0Y1IV5Vks0OqsV6N4Csvaivc1BH_IzoSbw5Ii_3o&fp=randomized&sni=hundleymechanical.com&sid=008c74&spx=%2F#RivenVpn   450             @rivenvpn
+vless://a8df45a4-eb57-450d-a526-43dcef46981a@78.141.221.194:8080?type=http&path=%2F&host=&security=reality&pbk=67A3nqrlKiXipqzNn9DNoWFuxRXQ6xTa-UzLFDJryVQ&fp=chrome&sni=www.speedtest.net&sid=b1938907&spx=%2F#it5itxza
 vless://4cb39a2e-0aa0-43c4-bd94-5026c13e9ba3@95.85.95.85:443?encryption=none&security=tls&sni=promo.worldofwarships.com&alpn=h2%2Chttp%2F1.1&fp=chrome&type=ws&host=imarketshop.ir&path=%2F#V2rayngninja
+vless://25468dd2-7fb0-478c-8ce7-3e72cf65936d@146.75.74.62:443?encryption=none&security=tls&sni=app.com&alpn=h2%2Chttp%2F1.1&fp=chrome&type=ws&host=wow-online.ir&path=%2F#V2rayngninja

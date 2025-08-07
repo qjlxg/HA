@@ -1,4 +1,4 @@
-vless://555d8f99-edeb-4587-8d90-ada18a1c663b@85.9.108.12:9090?path=%2F&security=none&encryption=none&type=ws#Freeconfig
 vless://fae1facb-83ba-446e-bc09-744a3a2c335b@91.99.168.213:44017?type=grpc&serviceName=&authority=&security=reality&pbk=Vme9vobQvppILJfcDNT98h1WoPljwV0GXy8PAzTh-w8&fp=chrome&sni=soft98.ir&sid=e61c657a&spx=%2Flukwaehf92y38%2F#NoToTunnel
+vless://555d8f99-edeb-4587-8d90-ada18a1c663b@85.9.108.12:9090?path=%2F&security=none&encryption=none&type=ws#Freeconfig
 vless://5810d3fa-cf1a-4d88-9366-4a7d0a7bb690@speedtest.net:443?type=ws&host=85.ir&path=/?ed%3D1024&security=tls&fp=firefox&sni=speedtest.net&alpn=h2,http/1.1#Unknown
 vless://2e5573c9-d9d3-4693-9def-9ee7215da222@2.189.110.88:443?security=none&encryption=none&host=www.speedtest.net&headerType=http&type=tcp#TgAminiDev
