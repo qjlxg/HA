@@ -21,18 +21,18 @@ from playwright.async_api import async_playwright, Playwright
 # --- 配置常量 ---
 OUTPUT_DIR = "data"  # 输出目录
 CACHE_DIR = "cache"  # 缓存目录
-CACHE_EXPIRATION_HOURS = 24  # 缓存过期时间（小时）
+CACHE_EXPIRATION_HOURS = 36  # 缓存过期时间（小时）
 MAX_CONCURRENT_REQUESTS = 5  # 最大并发请求数，适配 Playwright 资源消耗
-REQUEST_TIMEOUT_SECONDS = 30  # 单次请求超时时间
+REQUEST_TIMEOUT_SECONDS = 20  # 单次请求超时时间
 RETRY_ATTEMPTS = 1  # 失败重试1次
 
 # 配置日志
 logger = logging.getLogger('proxy_scraper')
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.WARNING)
 console_handler = logging.StreamHandler()
-console_handler.setLevel(logging.INFO)
+console_handler.setLevel(logging.WARNING)
 file_handler = logging.FileHandler('proxy_scraper.log', encoding='utf-8')
-file_handler.setLevel(logging.INFO)
+file_handler.setLevel(logging.WARNING)
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 console_handler.setFormatter(formatter)
 file_handler.setFormatter(formatter)
