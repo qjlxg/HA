@@ -1,0 +1,55 @@
+name: Clash Node Scraper
+
+on:
+  schedule:
+    - cron: '0 */3 * * *'  # 每 3 小时运行
+  workflow_dispatch:  # 支持手动触发
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30  # 设置 30 分钟超时
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests google-api-python-client pyyaml aiohttp
+
+      - name: Run scraper
+        env:
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          SEARCH_ENGINE_ID: ${{ secrets.SEARCH_ENGINE_ID }}
+        run: python clash_node_scraper.py
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'GitHub Action'
+          git config --global user.email 'action@github.com'
+          git add sc/*.yaml
+          git commit -m "Update Clash proxies [skip ci]" || echo "No changes to commit"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Notify on failure
+        if: failure()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: 1,  # 替换为你的 issue 编号
+              body: 'Clash Node Scraper 运行失败，请检查日志！'
+            })
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
