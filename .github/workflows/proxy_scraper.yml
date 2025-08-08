@@ -3,7 +3,7 @@ name: Proxy Scraper
 on:
   push:
     branches:
-      - main
+      - '.github/workflows/proxy_scraper.yml'
   schedule:
     - cron: '0 */3 * * *'
   workflow_dispatch:
