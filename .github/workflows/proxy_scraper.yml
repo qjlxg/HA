@@ -7,7 +7,9 @@ on:
   schedule:
     - cron: '0 */3 * * *'
   workflow_dispatch:
-
+env:
+  TZ: Asia/Shanghai # 添加时区环境变量
+  
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
