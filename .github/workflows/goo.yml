@@ -8,7 +8,7 @@ on:
 jobs:
   scrape:
     runs-on: ubuntu-latest
-    timeout-minutes: 30  # 设置 30 分钟超时
+    timeout-minutes: 30
 
     steps:
       - name: Checkout repository
@@ -28,6 +28,7 @@ jobs:
         env:
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
           SEARCH_ENGINE_ID: ${{ secrets.SEARCH_ENGINE_ID }}
+          PYTHONUNBUFFERED: 1  # 实时输出日志
         run: python clash_node_scraper.py
 
       - name: Commit and push changes
