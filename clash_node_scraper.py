@@ -8,7 +8,7 @@ import re
 
 # 配置
 GOOGLE_API_KEY = "AIzaSyAMtL0YSMv9yU3yU31X5xDIlnflZUaw9gQ"  # 替换为你的 Google API 密钥
-SEARCH_ENGINE_ID = "cx=82b4522b9c2db4b64"  # 替换为你的 Custom Search Engine ID
+SEARCH_ENGINE_ID = "82b4522b9c2db4b64"  # 替换为你的 Custom Search Engine ID
 OUTPUT_DIR = "sc"
 SEARCH_QUERY = 'filetype:yaml "proxies:" "clash" site:github.com'
 
