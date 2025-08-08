@@ -4,7 +4,10 @@ on:
   schedule:
     - cron: '0 */6 * * *' # Run every 6 hours
   workflow_dispatch: # Allow manual triggering
-
+  
+env:
+  TZ: Asia/Shanghai # 添加时区环境变量
+  
 jobs:
   run_script:
     runs-on: ubuntu-latest
