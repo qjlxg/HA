@@ -6,7 +6,6 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 import re
 from datetime import datetime
-import time
 import urllib.parse
 from collections import deque
 
@@ -18,18 +17,20 @@ SEARCH_QUERIES = [
     'filetype:yaml | filetype:yml "proxies:" "clash" site:raw.githubusercontent.com | site:gist.github.com | site:gitlab.com',
     'filetype:yaml | filetype:yml "proxy-providers:" "clash" site:raw.githubusercontent.com | site:gist.github.com',
     '"proxies:" "clash" "ss" | "vmess" | "trojan" | "vless" | "hysteria2"',
-    '"proxy-providers:" "clash" | "subscribe" | "free node" | "free proxy" site:*.herokuapp.com | site:*.pages.dev | site:*.workers.dev',
-    '"clash" "proxypool" | "free proxy" | "node" from:lagzian from:ReaJason from:aiboboxx'
+    '"proxy-providers:" "clash" | "subscribe" | "freeclash" | "free proxy" site:*.herokuapp.com | site:*.pages.dev | site:*.workers.dev',
+    '"clash" "proxypool" | "free proxy" | "node" site:raw.githubusercontent.com from:lagzian from:ReaJason from:vxiaov'
 ]
 MAX_RESULTS_PER_QUERY = 50
 PAGE_SIZE = 10
 REQUEST_TIMEOUT = 8
 MAX_RETRIES = 3
 MAX_WORKERS = 30
-MAX_SUB_LINKS = 50
+MAX_SUB_LINKS = 100
+MAX_TOTAL_LINKS = 5000
 LINK_BLACKLIST = ['.md', '.png', '.jpg', '.pdf', '/issues/', '/wiki/', '/login', '/signup', '/readme', '/Ruleset/', '/rule/']
 LINK_PRIORITY = ['.yaml', '.yml', '/clash', '/proxies', '/proxy', '/subscribe', '/nodes', '/api']
 DOMAIN_BLACKLIST = {'raw.sevencdn.com', '192.168.1.19', 'nachoneko.azurefd.net'}
+FAILED_DOMAINS = set()
 RECURSION_DEPTH = 3
 STATS = {
     'links_processed': 0,
@@ -37,7 +38,8 @@ STATS = {
     'links_by_source': {},
     'protocol_counts': {},
     'failed_requests': 0,
-    'nodes_by_depth': {}
+    'nodes_by_depth': {},
+    'failed_domains': {}
 }
 
 def create_output_dir():
@@ -92,14 +94,18 @@ def search_links():
 
 async def fetch_content(session, url):
     """异步获取网页内容，支持预检查和多平台 raw 链接转换"""
-    if any(domain in url for domain in DOMAIN_BLACKLIST):
+    domain = urllib.parse.urlparse(url).netloc
+    if domain in DOMAIN_BLACKLIST or domain in FAILED_DOMAINS:
         STATS['failed_requests'] += 1
+        STATS['failed_domains'][domain] = STATS['failed_domains'].get(domain, 0) + 1
         return None, url
     for attempt in range(MAX_RETRIES):
         try:
             async with session.head(url, timeout=REQUEST_TIMEOUT/2) as head_response:
                 if head_response.status != 200:
                     STATS['failed_requests'] += 1
+                    STATS['failed_domains'][domain] = STATS['failed_domains'].get(domain, 0) + 1
+                    FAILED_DOMAINS.add(domain)
                     return None, url
             if "github.com" in url and "/blob/" in url:
                 url = url.replace("github.com", "raw.githubusercontent.com").replace("/blob/", "/")
@@ -112,10 +118,14 @@ async def fetch_content(session, url):
                     return await response.text(), url
                 print(f"获取 {url} 失败，状态码: {response.status}")
                 STATS['failed_requests'] += 1
+                STATS['failed_domains'][domain] = STATS['failed_domains'].get(domain, 0) + 1
+                FAILED_DOMAINS.add(domain)
                 await asyncio.sleep(2 ** attempt)
         except (aiohttp.ClientError, asyncio.TimeoutError) as e:
             print(f"获取 {url} 失败: {e}")
             STATS['failed_requests'] += 1
+            STATS['failed_domains'][domain] = STATS['failed_domains'].get(domain, 0) + 1
+            FAILED_DOMAINS.add(domain)
             await asyncio.sleep(2 ** attempt)
     return None, url
 
@@ -128,7 +138,12 @@ def extract_urls_from_content(content):
     matches = re.findall(url_pattern, content)
     for url in matches:
         if any(ext in url.lower() for ext in LINK_PRIORITY) and not any(b in url for b in LINK_BLACKLIST):
-            urls.append(url)
+            try:
+                parsed = urllib.parse.urlparse(url)
+                if parsed.scheme and parsed.netloc:
+                    urls.append(url)
+            except ValueError:
+                continue
     return urls[:MAX_SUB_LINKS]
 
 def is_valid_clash_yaml(content):
@@ -196,7 +211,7 @@ async def main_async():
     link_queue = deque(links)
 
     async with aiohttp.ClientSession() as session:
-        while link_queue:
+        while link_queue and len(processed_links) < MAX_TOTAL_LINKS:
             batch_size = min(len(link_queue), MAX_WORKERS)
             tasks = []
             for _ in range(batch_size):
@@ -212,8 +227,13 @@ async def main_async():
                 if isinstance(result, tuple):
                     proxies, new_links = result
                     all_proxies.extend(proxies)
-                    for new_link in new_links:
-                        if new_link not in processed_links:
+                    prioritized_new_links = sorted(
+                        list(set(new_links)),
+                        key=lambda x: sum(p in x for p in LINK_PRIORITY),
+                        reverse=True
+                    )[:MAX_SUB_LINKS]
+                    for new_link in prioritized_new_links:
+                        if new_link not in processed_links and len(processed_links) < MAX_TOTAL_LINKS:
                             link_queue.append(new_link)
 
     # 去重
@@ -222,7 +242,9 @@ async def main_async():
     for proxy in all_proxies:
         if not isinstance(proxy, dict):
             continue
-        key = (proxy.get("server"), proxy.get("type"))
+        if "port" not in proxy or "password" not in proxy:
+            continue
+        key = (proxy.get("name"), proxy.get("server"), proxy.get("type"))
         if key not in seen:
             seen.add(key)
             unique_proxies.append(proxy)
@@ -252,6 +274,9 @@ async def main_async():
     print("深度分布：")
     for depth, count in sorted(STATS['nodes_by_depth'].items()):
         print(f"  深度 {depth}: {count} 个节点")
+    print("失败域名分布：")
+    for domain, count in sorted(STATS['failed_domains'].items(), key=lambda x: x[1], reverse=True):
+        print(f"  {domain}: {count} 次失败")
 
 def main():
     asyncio.run(main_async())
