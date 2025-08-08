@@ -5,7 +5,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: 0 */3 * * *
+    - cron: '0 */3 * * *'
   workflow_dispatch:
 
 concurrency:
@@ -51,41 +51,38 @@ jobs:
         ls -l data/
         echo "Listing contents of cache/ directory:"
         ls -l cache/
-        echo "Listing contents of root directory after script run:" # 新增：列出根目录内容
-        ls -l ./ # 新增：列出当前目录（根目录）内容
+        echo "Listing contents of root directory after script run:"
+        ls -l ./
 
     - name: Commit and Push changes
       run: |
         git config --global user.name 'github-actions[bot]'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
-        # Always add data/ files, and the new files in the root to the staging area
         git add data/
-        git add all_unique_nodes.txt nodes_summary.csv # 修改点：添加根目录的这两个文件
+        git add all_unique_nodes.txt nodes_summary.csv
 
-        # Check if there are any staged changes. If not, skip the rest.
+        echo "Checking git status after adding files:"
+        git status
+
         if git diff --cached --exit-code --quiet; then
           echo "No changes to commit. Skipping commit."
         else
           echo "Changes detected. Attempting to commit and push."
 
-          # Commit the local changes
           git commit -m "chore: Auto-update collected proxy data [skip ci]"
 
-          # Attempt to push
           git push || (
             echo "Push rejected, pulling and attempting to merge..."
             git pull --no-rebase origin main
 
-            # Attempt to auto-resolve conflicts by preferring local changes
             git checkout --ours data/
-            git checkout --ours all_unique_nodes.txt nodes_summary.csv 
+            git checkout --ours all_unique_nodes.txt nodes_summary.csv
             git add data/
-            git add all_unique_nodes.txt nodes_summary.csv # 
+            git add all_unique_nodes.txt nodes_summary.csv
             git commit -m "chore: Resolve merge conflicts by keeping local proxy data [skip ci]"
             git push
           )
-
           echo "Process finished."
         fi
       env:
@@ -97,6 +94,6 @@ jobs:
       with:
         slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
         channel-id: 'your-channel-id'
-        text: 'Proxy Scraper workflow failed. Please check logs for details.' 
+        text: 'Proxy Scraper workflow failed. Please check logs for details.'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
