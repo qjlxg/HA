@@ -7,8 +7,8 @@ from bs4 import BeautifulSoup
 import re
 
 # 配置
-GOOGLE_API_KEY = "AIzaSyAMtL0YSMv9yU3yU31X5xDIlnflZUaw9gQ"  # 替换为你的 Google API 密钥
-SEARCH_ENGINE_ID = "82b4522b9c2db4b64"  # 替换为你的 Custom Search Engine ID
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+SEARCH_ENGINE_ID = os.getenv("SEARCH_ENGINE_ID")
 OUTPUT_DIR = "sc"
 SEARCH_QUERY = 'filetype:yaml "proxies:" "clash" site:github.com'
 
@@ -28,12 +28,16 @@ def search_github():
         return []
 
 def fetch_content(url):
-    """获取网页内容"""
+    """获取网页内容，转换为 GitHub raw 链接"""
     try:
+        # 将 GitHub blob 链接转换为 raw 链接
+        if "github.com" in url and "/blob/" in url:
+            url = url.replace("github.com", "raw.githubusercontent.com").replace("/blob/", "/")
         headers = {'User-Agent': 'Mozilla/5.0'}
         response = requests.get(url, headers=headers, timeout=10)
         if response.status_code == 200:
             return response.text
+        print(f"获取 {url} 失败，状态码: {response.status_code}")
         return None
     except requests.RequestException as e:
         print(f"获取 {url} 失败: {e}")
@@ -44,30 +48,34 @@ def is_valid_clash_yaml(content):
     try:
         # 初步检查关键词
         if "proxies:" not in content:
+            print("无效: 未找到 proxies 字段")
             return False, None
         
         # 尝试解析 YAML
         data = yaml.safe_load(content)
         if not isinstance(data, dict) or "proxies" not in data:
+            print("无效: YAML 结构不包含 proxies 字典")
             return False, None
             
         # 检查 proxies 是否为列表
         if not isinstance(data["proxies"], list):
+            print("无效: proxies 不是列表")
             return False, None
             
         # 验证每个代理是否包含必要字段
         for proxy in data["proxies"]:
             if not all(key in proxy for key in ["name", "server", "port"]):
+                print(f"无效: 代理缺少必要字段: {proxy}")
                 return False, None
                 
         return True, data["proxies"]
-    except yaml.YAMLError:
+    except yaml.YAMLError as e:
+        print(f"无效: YAML 解析错误: {e}")
         return False, None
 
 def extract_yaml_from_html(html_content):
-    """从 HTML 中提取 YAML 内容"""
+    """从 HTML 中提取 YAML 内容（备用）"""
     soup = BeautifulSoup(html_content, "html.parser")
-    # 查找可能的 YAML 内容（通常在 <pre> 或 <code> 标签中）
     code_blocks = soup.find_all(["pre", "code"])
     for block in code_blocks:
         content = block.get_text()
@@ -94,16 +102,19 @@ def main():
         if not content:
             continue
             
-        # 从 HTML 中提取 YAML 内容
-        yaml_content = extract_yaml_from_html(content)
-        if not yaml_content:
-            continue
-            
-        # 验证并解析 YAML
-        is_valid, proxies = is_valid_clash_yaml(yaml_content)
+        # 尝试直接解析为 YAML（优先 raw 链接）
+        is_valid, proxies = is_valid_clash_yaml(content)
         if is_valid:
             all_proxies.extend(proxies)
             print(f"从 {link} 提取到 {len(proxies)} 个有效节点")
+        else:
+            # 备用：尝试从 HTML 提取 YAML
+            yaml_content = extract_yaml_from_html(content)
+            if yaml_content:
+                is_valid, proxies = is_valid_clash_yaml(yaml_content)
+                if is_valid:
+                    all_proxies.extend(proxies)
+                    print(f"从 {link} 的 HTML 提取到 {len(proxies)} 个有效节点")
     
     if all_proxies:
         output_file = f"clash_proxies_{len(all_proxies)}.yaml"
