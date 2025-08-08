@@ -789,7 +789,7 @@ async def main():
                 if isinstance(result, Exception):
                     logger.error(f"处理 URL {url} 失败: {result}")
 
-    all_unique_nodes_file = all_unique_nodes.txt
+    all_unique_nodes_file = 'all_unique_nodes.txt'
     try:
         if global_unique_nodes_map:
             async with aiofiles.open(all_unique_nodes_file, 'w', encoding='utf-8') as f:
@@ -801,7 +801,7 @@ async def main():
     except Exception as e:
         logger.error(f"保存唯一节点到 {all_unique_nodes_file} 失败: {e}")
 
-    csv_file_path = nodes_summary.csv
+    csv_file_path = 'nodes_summary.csv'
     try:
         with open(csv_file_path, 'w', newline='', encoding='utf-8') as csvfile:
             fieldnames = ['URL', '节点数量']
