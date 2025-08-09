@@ -1,4 +1,4 @@
-# clash_proxy_crawler_v8.py
+# clash_proxy_crawler_v9.py
 import requests
 import yaml
 import os
@@ -136,7 +136,12 @@ def parse_yaml_content(content):
         proxy_providers = config.get('proxy-providers', {})
         if isinstance(proxy_providers, dict):
             for provider_data in proxy_providers.values():
-                provider_proxies = provider_data.get('proxies', [])
+                provider_proxies = []
+                if isinstance(provider_data, dict):
+                    provider_proxies = provider_data.get('proxies', [])
+                elif isinstance(provider_data, list):
+                    provider_proxies = provider_data
+                
                 if isinstance(provider_proxies, list):
                     valid_proxies = [p for p in provider_proxies if validate_proxy(p)]
                     all_nodes.extend(valid_proxies)
