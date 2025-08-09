@@ -21,10 +21,6 @@ jobs:
       - name: Run Clash Proxy Crawler
         env:
           GOOGLE_API_KEY_1: ${{ secrets.GOOGLE_API_KEY_1 }}
-          GOOGLE_API_KEY_2: ${{ secrets.GOOGLE_API_KEY_2 }}
-          GOOGLE_API_KEY_3: ${{ secrets.GOOGLE_API_KEY_3 }}
-          GOOGLE_API_KEY_4: ${{ secrets.GOOGLE_API_KEY_4 }}
-          GOOGLE_API_KEY_5: ${{ secrets.GOOGLE_API_KEY_5 }}
           SEARCH_ENGINE_ID: ${{ secrets.SEARCH_ENGINE_ID }}
         run: |
           python clash_proxy_crawler.py
@@ -32,6 +28,6 @@ jobs:
         run: |
           git config --global user.name 'GitHub Action'
           git config --global user.email 'action@github.com'
-          git add sc/clash_proxies.yaml
-          git commit -m "Update clash proxies" || echo "No changes to commit"
+          git add sc/clash_proxies.yaml sc/search_cache.txt sc/query_stats.csv
+          git commit -m "Update clash proxies and stats" || echo "No changes to commit"
           git push
