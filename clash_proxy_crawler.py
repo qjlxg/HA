@@ -7,9 +7,9 @@ import hashlib
 import time
 
 # --- 配置部分 ---
-GITHUB_API_TOKEN = os.getenv("GITHUB_API_TOKEN") # 从环境变量中获取API令牌
+GITHUB_API_TOKEN = os.getenv("BOT_TOKEN")  # 从环境变量中获取API令牌
 if not GITHUB_API_TOKEN:
-    raise ValueError("请在环境变量中设置 GITHUB_API_TOKEN")
+    raise ValueError("请在环境变量中设置 BOT_TOKEN")
 
 GITHUB_API_URL = "https://api.github.com/search/code"
 HEADERS = {
@@ -79,13 +79,13 @@ def crawl():
         while has_more_results:
             params = {
                 "q": query,
-                "per_page": 100,  # 每页最多100个结果
+                "per_page": 100,
                 "page": page
             }
             
             try:
                 response = requests.get(GITHUB_API_URL, headers=HEADERS, params=params)
-                response.raise_for_status() # 检查HTTP请求是否成功
+                response.raise_for_status()
                 
                 results = response.json()
                 items = results.get("items", [])
@@ -130,11 +130,10 @@ def crawl():
                     except requests.exceptions.RequestException as e:
                         print(f" - 下载原始文件 {raw_url} 时出错: {e}")
                 
-                # 检查是否还有下一页结果
                 next_link = response.links.get('next', None)
                 if next_link:
                     page += 1
-                    time.sleep(2) # 遵守API速率限制，暂停2秒
+                    time.sleep(2)
                 else:
                     has_more_results = False
 
@@ -148,7 +147,7 @@ def crawl():
                 has_more_results = False
 
         append_stats(query, current_query_nodes_count)
-        time.sleep(5) # 在下一个查询前暂停，避免触发API速率限制
+        time.sleep(5)
 
     cached_links.update(new_cache_entries)
     save_cache(cached_links)
