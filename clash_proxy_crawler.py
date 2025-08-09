@@ -13,7 +13,6 @@ import pytz
 import sys
 
 # 核心配置
-# 从环境变量中读取多个 Google API 密钥
 GOOGLE_API_KEYS = [
     os.getenv("GOOGLE_API_KEY_1"),
     os.getenv("GOOGLE_API_KEY_2"),
@@ -78,31 +77,43 @@ def create_output_dir():
 def search_with_google(query):
     """使用 Google Custom Search API 搜索，并轮换密钥"""
     links = []
-    key = get_next_key()
-    if not key:
-        return []
-    try:
-        service = build("customsearch", "v1", developerKey=key)
-        for start_index in range(1, MAX_RESULTS_PER_QUERY + 1, PAGE_SIZE):
-            try:
-                result = service.cse().list(
-                    q=query,
-                    cx=SEARCH_ENGINE_ID,
-                    num=PAGE_SIZE,
-                    start=start_index
-                ).execute()
-                items = result.get("items", [])
-                filtered_links = [item["link"] for item in items if not any(b in item["link"] for b in LINK_BLACKLIST)]
-                links.extend(filtered_links)
-                if len(items) < PAGE_SIZE:
+    num_keys = len(GOOGLE_API_KEYS)
+    for _ in range(num_keys):  # 尝试所有可用的密钥
+        key = get_next_key()
+        if not key:
+            return []
+        
+        try:
+            service = build("customsearch", "v1", developerKey=key)
+            for start_index in range(1, MAX_RESULTS_PER_QUERY + 1, PAGE_SIZE):
+                try:
+                    result = service.cse().list(
+                        q=query,
+                        cx=SEARCH_ENGINE_ID,
+                        num=PAGE_SIZE,
+                        start=start_index
+                    ).execute()
+                    items = result.get("items", [])
+                    filtered_links = [item["link"] for item in items if not any(b in item["link"] for b in LINK_BLACKLIST)]
+                    links.extend(filtered_links)
+                    if len(items) < PAGE_SIZE:
+                        break
+                except HttpError as e:
+                    if e.resp.status == 429:
+                        print(f"警告: 密钥配额已用尽，正在切换到下一个密钥...", file=sys.stderr)
+                        raise e # 抛出异常，触发外部的 except 块
+                    print(f"Google API 搜索失败 (query={query}, start={start_index}): {e}", file=sys.stderr)
                     break
-            except HttpError as e:
-                print(f"Google API 搜索失败 (query={query}, start={start_index}): {e}", file=sys.stderr)
-                break
-        return links
-    except HttpError as e:
-        print(f"Google API 初始化失败: {e}", file=sys.stderr)
-        return []
+            return links
+        except HttpError as e:
+            if e.resp.status == 429:
+                continue # 继续尝试下一个密钥
+            print(f"Google API 初始化失败: {e}", file=sys.stderr)
+            return []
+    
+    print("错误: 所有 Google API 密钥配额都已用尽。", file=sys.stderr)
+    return []
+
 
 def search_links():
     """执行所有搜索查询，合并结果并按优先级排序"""
