@@ -2,7 +2,8 @@ name: Clash Proxy Crawler
 
 on:
   push:
-    branches: [ main ]
+    paths:
+    - 'clash_proxy_crawler.py'
   schedule:
     # 每周一上午 3:00 UTC 运行
     - cron: '0 3 * * 1'
