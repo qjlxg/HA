@@ -1,4 +1,4 @@
-# clash_proxy_crawler_v7.py
+# clash_proxy_crawler_v8.py
 import requests
 import yaml
 import os
@@ -121,32 +121,41 @@ def validate_proxy(proxy):
 def parse_yaml_content(content):
     try:
         config = yaml.safe_load(content)
-        if isinstance(config, dict):
-            # 优先从 proxies 键获取
-            proxies = config.get('proxies', [])
-            if isinstance(proxies, list):
-                valid_proxies = [p for p in proxies if validate_proxy(p)]
-                return valid_proxies if valid_proxies else []
-            # 如果是 proxy-providers，尝试从其中提取
-            elif 'proxy-providers' in config:
-                all_providers = []
-                for provider_name, provider_data in config['proxy-providers'].items():
-                    if 'proxies' in provider_data and isinstance(provider_data['proxies'], list):
-                        all_providers.extend(provider_data['proxies'])
-                valid_proxies = [p for p in all_providers if validate_proxy(p)]
-                return valid_proxies if valid_proxies else []
-            # 对于只包含 proxy-groups 的文件，我们尝试从其中提取节点
-            elif 'proxy-groups' in config:
-                all_nodes = []
-                for group in config['proxy-groups']:
-                    if isinstance(group, dict) and 'proxies' in group and isinstance(group['proxies'], list):
-                        # 这里我们只检查 proxy-groups 中是否有内嵌的代理配置
-                        for proxy_item in group['proxies']:
+        if not isinstance(config, dict):
+            return []
+
+        all_nodes = []
+
+        # 优先从 'proxies' 键获取
+        proxies_list = config.get('proxies', [])
+        if isinstance(proxies_list, list):
+            valid_proxies = [p for p in proxies_list if validate_proxy(p)]
+            all_nodes.extend(valid_proxies)
+
+        # 其次从 'proxy-providers' 键获取
+        proxy_providers = config.get('proxy-providers', {})
+        if isinstance(proxy_providers, dict):
+            for provider_data in proxy_providers.values():
+                provider_proxies = provider_data.get('proxies', [])
+                if isinstance(provider_proxies, list):
+                    valid_proxies = [p for p in provider_proxies if validate_proxy(p)]
+                    all_nodes.extend(valid_proxies)
+        
+        # 最后从 'proxy-groups' 键获取
+        proxy_groups = config.get('proxy-groups', [])
+        if isinstance(proxy_groups, list):
+            for group in proxy_groups:
+                if isinstance(group, dict):
+                    group_proxies = group.get('proxies', [])
+                    if isinstance(group_proxies, list):
+                        for proxy_item in group_proxies:
                             if isinstance(proxy_item, dict):
                                 all_nodes.append(proxy_item)
-                valid_proxies = [p for p in all_nodes if validate_proxy(p)]
-                return valid_proxies if valid_proxies else []
-        return []
+        
+        # 对所有收集到的节点进行最终验证
+        final_valid_nodes = [node for node in all_nodes if validate_proxy(node)]
+        return final_valid_nodes
+
     except yaml.YAMLError:
         print(f" - 内容不是有效的 YAML 格式，跳过。")
         return []
