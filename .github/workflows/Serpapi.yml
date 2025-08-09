@@ -1,50 +1,39 @@
 name: Clash Proxy Crawler
 
 on:
+  push:
+    paths:
+      - 'clash_proxy_crawler.py'
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '0 3 * * 1'
   workflow_dispatch:
 
 jobs:
-  crawl:
+  run-crawler:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install requests pyyaml beautifulsoup4 selenium
+      - name: Install dependencies
+        run: |
+          pip install requests pyyaml
 
-    - name: Install Chromium and ChromeDriver
-      run: |
-        sudo apt-get update
-        sudo snap install chromium
-        # 检查 ChromeDriver 是否已存在，若存在则删除
-        if [ -f /usr/bin/chromedriver ]; then
-          sudo rm /usr/bin/chromedriver
-        fi
-        # 创建符号链接
-        sudo ln -s /snap/chromium/current/chromedriver /usr/bin/chromedriver
-        # 验证 ChromeDriver
-        chromedriver --version
+      - name: Run crawler script
+        env:
+          # 将你的新令牌名称 'BOT' 传入名为 'BOT_TOKEN' 的环境变量
+          BOT_TOKEN: ${{ secrets.BOT }}
+        run: |
+          python clash_proxy_crawler.py
 
-    - name: Run crawler
-      run: python clash_proxy_crawler.py
-
-    - name: Commit and push results
-      run: |
-        git config --global user.name 'github-actions'
-        git config --global user.email 'github-actions@github.com'
-        git add sc/
-        git commit -m "Update proxy data and stats" || echo "No changes to commit"
-        git push
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "feat: 更新 Clash 代理节点和统计数据"
+          file_pattern: sc/*
