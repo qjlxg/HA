@@ -1,11 +1,9 @@
+
 import os
 import asyncio
 import aiohttp
 import yaml
-from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
 import re
-import time
 import json
 import logging
 from datetime import datetime
@@ -26,16 +24,9 @@ logging.basicConfig(
 )
 
 # 配置
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
-SEARCH_ENGINE_ID = os.getenv("SEARCH_ENGINE_ID")
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 OUTPUT_DIR = "sc"
-SEARCH_QUERIES = [
-    'filetype:yaml | filetype:yml "proxies:" | "proxy-providers:" "clash" -site:github.com site:*.herokuapp.com | site:*.pages.dev | site:*.workers.dev',
-    '"clash" "subscription" | "proxy" -site:github.com site:*.github.io | site:pastebin.com'
-]
 MAX_RESULTS_PER_QUERY = 50
-PAGE_SIZE = 10
 REQUEST_TIMEOUT = 30
 MAX_RETRIES = 3
 MAX_WORKERS = 5
@@ -81,39 +72,7 @@ def save_cached_links(links, cache_file="output/cached_links.json"):
     with open(cache_file, "w", encoding="utf-8") as f:
         json.dump(links, f, ensure_ascii=False)
 
-def search_with_google(query):
-    """使用 Google Custom Search API 搜索"""
-    logging.info(f"执行 Google 搜索: {query}")
-    links = []
-    try:
-        service = build("customsearch", "v1", developerKey=GOOGLE_API_KEY)
-        for start_index in range(1, MAX_RESULTS_PER_QUERY + 1, PAGE_SIZE):
-            logging.info(f"Google API 请求: query={query}, start={start_index}")
-            try:
-                result = service.cse().list(
-                    q=query,
-                    cx=SEARCH_ENGINE_ID,
-                    num=PAGE_SIZE,
-                    start=start_index
-                ).execute()
-                items = result.get("items", [])
-                filtered_links = [item["link"] for item in items if not any(b in item["link"] for b in LINK_BLACKLIST)]
-                links.extend(filtered_links)
-                logging.info(f"获取 {len(filtered_links)} 个链接 (start={start_index})")
-                if len(items) < PAGE_SIZE:
-                    break
-            except HttpError as e:
-                if e.resp.status == 429:
-                    logging.warning(f"Google API 配额超限，跳过搜索 (query={query})")
-                    return []
-                logging.error(f"Google API 搜索失败 (query={query}, start={start_index}): {e}")
-                return []
-        return links
-    except HttpError as e:
-        logging.error(f"Google API 初始化失败: {e}")
-        return []
-
-async def search_with_github_api(session, queries=["proxies: clash", "proxy-providers: clash"]):
+async def search_with_github_api(session, queries=["proxies: clash", "proxy-providers: clash", "subscription: clash"]):
     """使用 GitHub API 搜索代码"""
     links = []
     headers = {"Authorization": f"token {GITHUB_TOKEN}"}
@@ -159,18 +118,9 @@ async def search_links(session):
     """执行所有搜索查询，合并结果并按优先级排序"""
     logging.info("开始搜索链接")
     all_links = set(load_cached_links())
-    query_results = []
-    for query in SEARCH_QUERIES:
-        links = search_with_google(query)
-        all_links.update(links)
-        query_results.append((query, len(links)))
-    if not all_links:
-        logging.info("Google API 搜索失败，切换到 GitHub API 和缓存链接")
     github_links = await search_with_github_api(session)
     all_links.update(github_links)
-    query_results.append(("GitHub API", len(github_links)))
-    for query, count in sorted(query_results, key=lambda x: x[1]):
-        logging.info(f"查询 {query} 获取 {count} 个链接")
+    logging.info(f"GitHub API 查询获取 {len(github_links)} 个链接")
     prioritized_links = sorted(
         list(all_links),
         key=lambda x: sum(p in x for p in LINK_PRIORITY),
@@ -178,7 +128,7 @@ async def search_links(session):
     )
     save_cached_links(prioritized_links)
     if len(all_links) < 50:
-        logging.warning(f"搜索结果不足 ({len(all_links)} 个链接)，请检查 API 配置或缓存文件")
+        logging.warning(f"搜索结果不足 ({len(all_links)} 个链接)，请检查 GITHUB_TOKEN 或缓存文件 output/cached_links.json")
     logging.info(f"共获取 {len(all_links)} 个唯一链接")
     return prioritized_links[:500]
 
