@@ -9,6 +9,7 @@ import logging
 from datetime import datetime
 import urllib.parse
 from collections import deque
+import pytz
 
 # 配置日志
 try:
@@ -20,8 +21,11 @@ except Exception as e:
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S %Z',
     handlers=[logging.StreamHandler(), log_handler]
 )
+# 设置上海时间
+logging.Formatter.converter = lambda *args: datetime.now(pytz.timezone('Asia/Shanghai')).timetuple()
 
 # 配置
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
@@ -32,7 +36,6 @@ MAX_RETRIES = 3
 MAX_WORKERS = 5
 MAX_SUB_LINKS = 100
 MAX_TOTAL_LINKS = 5000
-MAX_TEST_NODES = 50
 LINK_BLACKLIST = ['.md', '.png', '.jpg', '.pdf', '/issues/', '/wiki/', '/login', '/signup', '/readme', '/Ruleset/', '/rule/']
 LINK_PRIORITY = ['.yaml', '.yml', '/clash', '/proxies', '/proxy', '/subscribe', '/nodes', '/api']
 DOMAIN_BLACKLIST = {'raw.sevencdn.com', '192.168.1.19', 'nachoneko.azurefd.net'}
@@ -230,24 +233,6 @@ def is_valid_clash_yaml(content):
         logging.error(f"YAML 解析错误: {e}")
         return False, None, []
 
-async def test_proxy(session, proxy, index):
-    """测试代理节点的连接性"""
-    if index >= MAX_TEST_NODES:
-        logging.warning(f"超过最大测试节点数 ({MAX_TEST_NODES})，跳过测试")
-        return False
-    if not isinstance(proxy, dict) or 'server' not in proxy or 'port' not in proxy:
-        logging.warning(f"无效代理格式: {proxy.get('name', '未知')}")
-        return False
-    logging.info(f"测试代理: {proxy['name']}")
-    try:
-        if proxy['type'] in ["ss", "trojan"]:
-            async with session.get('http://www.google.com', proxy=f"{proxy['type']}://{proxy['server']}:{proxy['port']}", timeout=5) as response:
-                logging.info(f"测试代理 {proxy['name']} 成功，状态码: {response.status}")
-                return response.status == 200
-    except (aiohttp.ClientError, asyncio.TimeoutError) as e:
-        logging.warning(f"测试代理 {proxy['name']} 失败: {e}")
-    return False
-
 async def process_link(session, link, depth=0):
     """异步处理单个链接，提取代理节点和订阅链接"""
     logging.info(f"处理链接: {link} (深度: {depth})")
@@ -264,13 +249,11 @@ async def process_link(session, link, depth=0):
             valid_proxies = []
             if is_valid:
                 domain = urllib.parse.urlparse(url).netloc
-                for i, proxy in enumerate(proxies):
-                    if await test_proxy(session, proxy, i):
-                        valid_proxies.append(proxy)
-                        STATS['nodes_found'] += 1
-                        STATS['links_by_source'][domain] = STATS['links_by_source'].get(domain, 0) + 1
-                        STATS['nodes_by_depth'][depth] = STATS['nodes_by_depth'].get(depth, 0) + 1
-                        logging.info(f"从 {url} 提取到有效节点 {proxy['name']} (深度: {depth})")
+                valid_proxies.extend(proxies)  # 直接添加，无需测试
+                STATS['nodes_found'] += len(proxies)
+                STATS['links_by_source'][domain] = STATS['links_by_source'].get(domain, 0) + len(proxies)
+                STATS['nodes_by_depth'][depth] = STATS['nodes_by_depth'].get(depth, 0) + len(proxies)
+                logging.info(f"从 {url} 提取到 {len(proxies)} 个节点 (深度: {depth})")
             additional_urls = extract_urls_from_content(content)
             sub_proxies = []
             if additional_urls and depth < RECURSION_DEPTH:
