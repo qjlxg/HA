@@ -17,10 +17,19 @@ def write_proxies_to_yaml(all_proxies, output_file):
 def get_node_key(proxy):
     """
     根据代理节点的关键信息生成一个唯一的哈希键。
+    这里已修改为对 VLESS/VMess 节点使用 UUID 作为主要键。
     """
     if not isinstance(proxy, dict):
         return None
     
+    # 对于 VLESS 和 VMess 节点，使用 UUID 作为去重的主要依据
+    if proxy.get('type') in ['vless', 'vmess']:
+        uuid = proxy.get('uuid')
+        if uuid:
+            # 使用UUID和type作为唯一键，确保不同协议但相同UUID的节点不会冲突
+            return f"{proxy.get('type')}:{uuid}"
+    
+    # 对于其他节点类型 (SS, Trojan 等)，使用原有的去重逻辑
     key_components = [
         proxy.get('server'),
         str(proxy.get('port')),
@@ -35,11 +44,7 @@ def get_node_key(proxy):
         if proxy.get('plugin'):
             key_components.append(proxy.get('plugin'))
             key_components.append(str(proxy.get('plugin-opts')))
-    elif proxy.get('type') == 'vmess':
-        key_components.append(proxy.get('uuid'))
-    elif proxy.get('type') == 'vless':
-        key_components.append(proxy.get('uuid'))
-
+    
     key_string = ":".join(str(c) for c in key_components if c is not None)
     
     return hashlib.sha256(key_string.encode('utf-8')).hexdigest()
