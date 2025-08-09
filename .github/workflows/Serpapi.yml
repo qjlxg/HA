@@ -1,33 +1,35 @@
-name: Github_proxy_crawler
+# .github/workflows/Serpapi.yml
+name: Clash Proxy Crawler
+
 on:
-  push:
-    branches: [ main ]
   schedule:
-    - cron: '0 0 * * *'
-  workflow_dispatch:
+    # 每周一上午 3:00 UTC 运行
+    - cron: '0 3 * * 1'
+  workflow_dispatch: # 允许手动触发
 
 jobs:
-  check-proxies:
+  run-crawler:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - name: 检出代码
+        uses: actions/checkout@v2
+
+      - name: 设置 Python
+        uses: actions/setup-python@v2
         with:
-          python-version: '3.9'
-      - name: Install dependencies
+          python-version: '3.x'
+
+      - name: 安装依赖
         run: |
-          pip install aiohttp pyyaml requests
-      - name: Run Clash Proxy Crawler
-        env:
-          BOT: ${{ secrets.BOT }}
-          
+          pip install selenium webdriver-manager pyyaml
+
+      - name: 运行爬虫脚本
         run: |
-          python Github_proxy_crawler.py
-      - name: Commit results
-        run: |
-          git config --global user.name 'GitHub Action'
-          git config --global user.email 'action@github.com'
-          git add sc/clash_proxies.yaml sc/search_cache.txt sc/query_stats.csv
-          git commit -m "Update clash proxies and stats" || echo "No changes to commit"
-          git push
+          python clash_proxy_crawler.py
+
+      - name: 提交更改
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "feat: 更新 Clash 代理节点和统计数据"
+          file_pattern: sc/*
