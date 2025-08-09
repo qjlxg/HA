@@ -27,7 +27,7 @@ logging.basicConfig(
 logging.Formatter.converter = lambda *args: datetime.now(pytz.timezone('Asia/Shanghai')).timetuple()
 
 # 配置
-GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
+GITHUB_TOKEN = os.getenv("TOKEN") 
 OUTPUT_DIR = "sc"
 MAX_RESULTS_PER_QUERY = 50
 REQUEST_TIMEOUT = 30
