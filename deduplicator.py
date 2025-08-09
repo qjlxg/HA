@@ -20,6 +20,28 @@ def write_proxies_to_yaml(all_proxies, output_file):
             dumped_proxy = yaml.dump(proxy, default_flow_style=True, allow_unicode=True).strip()
             f.write(f' - {dumped_proxy}\n')
             
+# --- 新增数据清洗函数 ---
+def clean_vless_data(proxy):
+    """
+    清洗VLESS/VMess节点中的冗余数据，以确保去重逻辑的准确性。
+    """
+    if 'ws-path' in proxy and isinstance(proxy['ws-path'], str):
+        # 移除ws-path中的动态参数，如 ?ed=2048
+        proxy['ws-path'] = re.sub(r'\?ed=\d+', '', proxy['ws-path'])
+        # 移除重复的、用于混淆的路径名
+        parts = proxy['ws-path'].split(',')
+        if len(parts) > 1 and len(set(parts)) == 1:
+            proxy['ws-path'] = parts[0]
+            
+    if 'ws-headers' in proxy and 'Host' in proxy['ws-headers'] and isinstance(proxy['ws-headers']['Host'], str):
+        # 清理ws-headers中的主机名
+        proxy['ws-headers']['Host'] = proxy['ws-headers']['Host'].strip().lower()
+        
+    if 'servername' in proxy and isinstance(proxy['servername'], str):
+        proxy['servername'] = proxy['servername'].strip().lower()
+    
+    return proxy
+
 # --- 核心去重逻辑 ---
 def get_node_key(proxy):
     """
@@ -31,6 +53,9 @@ def get_node_key(proxy):
     
     # 针对 VLESS 和 VMess 节点，使用一个综合的哈希键来处理去重
     if proxy.get('type') in ['vless', 'vmess']:
+        # 在生成哈希键前先清洗数据
+        proxy = clean_vless_data(proxy.copy())
+        
         key_components = [
             proxy.get('type'),
             proxy.get('server'),
