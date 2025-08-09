@@ -31,3 +31,35 @@ query,node_count,timestamp
 "filename:clash.yml ""proxies:"" language:YAML",0,2025-08-09T07:32:00.458124
 "filename:clash.yaml ""proxy-providers:"" language:YAML",0,2025-08-09T07:32:09.097141
 "filename:clash.yml ""proxy-providers:"" language:YAML",0,2025-08-09T07:32:14.315838
+"filename:clash.yaml ""proxies:"" language:YAML",33174,2025-08-09T08:06:43.009719
+"filename:clash.yml ""proxies:"" language:YAML",0,2025-08-09T08:06:58.842888
+"filename:clash-config.yaml ""proxies:"" language:YAML",5,2025-08-09T08:07:05.609226
+"filename:clash-config.yml ""proxies:"" language:YAML",0,2025-08-09T08:07:10.946942
+"filename:config.yaml ""proxies:"" ""clash"" language:YAML",2647,2025-08-09T08:08:14.308713
+"filename:config.yml ""proxies:"" ""clash"" language:YAML",3,2025-08-09T08:08:37.473504
+"filename:clash.yaml ""proxy-providers:"" language:YAML",0,2025-08-09T08:08:47.058407
+"filename:clash.yml ""proxy-providers:"" language:YAML",0,2025-08-09T08:08:52.559969
+"filename:clash.yaml ""providers:"" language:YAML",83,2025-08-09T08:09:05.677421
+"filename:config.yaml ""proxy-providers:"" language:YAML",413,2025-08-09T08:09:46.751019
+"filename:clash.yaml ""proxy-groups:"" language:YAML",596,2025-08-09T08:10:21.389003
+"filename:clash.yaml ""rules:"" ""proxies:"" language:YAML",596,2025-08-09T08:10:40.683656
+"filename:clash.yaml ""proxy-groups:"" ""proxies:"" language:YAML",596,2025-08-09T08:11:36.427757
+"filename:clash.yml ""proxy-groups:"" language:YAML",0,2025-08-09T08:11:49.876495
+"extension:yaml ""proxies:"" ""clash"" path:/",9196,2025-08-09T08:14:27.442510
+"extension:yml ""proxies:"" ""clash"" path:/",2096,2025-08-09T08:15:05.742700
+"path:clash/config.yaml ""proxies:"" language:YAML",0,2025-08-09T08:15:10.969837
+"path:configs/clash.yaml ""proxies:"" language:YAML",0,2025-08-09T08:15:16.115150
+"path:sub/clash.yaml ""proxies:"" language:YAML",0,2025-08-09T08:15:21.279507
+"filename:clash.yaml ""proxies:"" site:raw.githubusercontent.com",0,2025-08-09T08:15:26.422041
+"filename:clash.yaml ""proxies:"" site:github.com language:YAML",0,2025-08-09T08:15:31.576804
+"filename:clash.yml ""proxies:"" site:raw.githubusercontent.com",0,2025-08-09T08:15:36.743262
+"clash.yaml ""proxies:"" filetype:yaml site:github.com",0,2025-08-09T08:15:42.243460
+"filename:clash.yaml OR filename:clash.yml ""proxies:"" language:YAML",33257,2025-08-09T08:17:10.217184
+"extension:yaml OR extension:yml ""proxies:"" ""clash"" path:/",9383,2025-08-09T08:18:47.652397
+"filename:clash.yaml OR config.yaml ""proxies:"" language:YAML",0,2025-08-09T08:18:52.909367
+"filename:clash.yaml ""proxies:"" OR ""proxy-providers:"" language:YAML",0,2025-08-09T08:19:02.468337
+"filename:clash.yaml ""proxies:"" OR ""proxy-groups:"" language:YAML",596,2025-08-09T08:19:38.042798
+"clash ""proxies:"" filetype:yaml",0,2025-08-09T08:19:43.930892
+"clash-sub ""proxies:"" language:YAML",0,2025-08-09T08:19:49.265815
+"premium-clash.yaml ""proxies:"" language:YAML",0,2025-08-09T08:19:54.422218
+"clash-meta.yaml ""proxies:"" language:YAML",33,2025-08-09T08:20:01.777088
