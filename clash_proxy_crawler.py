@@ -13,7 +13,7 @@ import time
 
 # --- 核心配置 ---
 # 推荐设置，用于提高 GitHub API 速率限制
-GITHUB_TOKEN = os.getenv("GITHUB_TOKEN") 
+GITHUB_TOKEN = os.getenv("BOT") 
 
 OUTPUT_DIR = "sc"
 OUTPUT_FILE = "clash_proxies.yaml"
