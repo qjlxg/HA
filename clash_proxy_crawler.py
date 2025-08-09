@@ -27,7 +27,7 @@ logging.basicConfig(
 logging.Formatter.converter = lambda *args: datetime.now(pytz.timezone('Asia/Shanghai')).timetuple()
 
 # 配置
-GITHUB_TOKEN = os.getenv("GITHUB_TOKEN") 
+GITHUB_TOKEN = os.getenv("TOKEN")  # 确保这里读取的是名为 'TOKEN' 的环境变量
 OUTPUT_DIR = "sc"
 MAX_RESULTS_PER_QUERY = 50
 REQUEST_TIMEOUT = 30
@@ -61,16 +61,13 @@ def load_cached_links(cache_file="output/cached_links.json"):
     """加载缓存的链接"""
     logging.info(f"加载缓存链接: {cache_file}")
     try:
-        # 检查文件是否存在且不为空
         if os.path.exists(cache_file) and os.path.getsize(cache_file) > 0:
             with open(cache_file, "r", encoding="utf-8") as f:
                 return json.load(f)
         else:
-            # 文件不存在或为空，返回空列表
             logging.warning(f"缓存文件 {cache_file} 不存在或为空")
             return []
     except Exception as e:
-        # 捕获所有潜在的解析错误，包括 JSONDecodeError
         logging.error(f"加载缓存文件 {cache_file} 失败: {e}")
         return []
 
@@ -84,7 +81,7 @@ def save_cached_links(links, cache_file="output/cached_links.json"):
 async def search_with_github_api(session, queries=["proxies: clash", "proxy-providers: clash", "subscription: clash"]):
     """使用 GitHub API 搜索代码"""
     links = []
-    headers = {"Authorization": f"token {GITHUB_TOKEN}"}
+    headers = {"Authorization": f"token {GITHUB_TOKEN}"} if GITHUB_TOKEN else {}
     for query in queries:
         logging.info(f"执行 GitHub API 搜索: {query}")
         page = 1
@@ -210,31 +207,34 @@ def is_valid_clash_yaml(content):
     """验证是否为有效的 Clash YAML 配置，统计协议类型"""
     logging.info("验证 Clash YAML 配置")
     try:
-        if "proxies:" not in content:
-            logging.warning("未找到 proxies: 字段")
-            return False, None, []
         data = yaml.safe_load(content)
         if not isinstance(data, dict):
             logging.warning("YAML 解析失败: 非字典格式")
             return False, None, []
+        
         proxies = data.get("proxies", [])
         if not isinstance(proxies, list):
             logging.warning("proxies 字段非列表")
-            return False, None, []
+            proxies = [] # 将其视为空列表
+            
         valid_proxies = []
+        supported_protocols = ["ss", "trojan", "vmess", "vless", "http", "https", "snell", "hysteria2"]
         for proxy in proxies:
             if isinstance(proxy, dict) and "name" in proxy and "server" in proxy:
                 protocol = proxy.get("type", "unknown")
-                if protocol in ["ss", "trojan"]:
+                if protocol in supported_protocols:
                     valid_proxies.append(proxy)
                     STATS['protocol_counts'][protocol] = STATS['protocol_counts'].get(protocol, 0) + 1
+        
         provider_urls = []
         if "proxy-providers" in data:
             for provider in data.get("proxy-providers", {}).values():
                 if isinstance(provider, dict) and "url" in provider:
                     provider_urls.append(provider["url"])
+                    
         logging.info(f"找到 {len(valid_proxies)} 个有效代理，{len(provider_urls)} 个订阅链接")
-        return bool(valid_proxies), valid_proxies, provider_urls
+        return bool(valid_proxies) or bool(provider_urls), valid_proxies, provider_urls
+        
     except yaml.YAMLError as e:
         logging.error(f"YAML 解析错误: {e}")
         return False, None, []
@@ -251,30 +251,35 @@ async def process_link(session, link, depth=0):
             content, url = await fetch_content(session, link)
             if not content:
                 return [], []
+            
             is_valid, proxies, provider_urls = is_valid_clash_yaml(content)
             valid_proxies = []
+            
             if is_valid:
                 domain = urllib.parse.urlparse(url).netloc
-                valid_proxies.extend(proxies)  # 直接添加，无需测试
+                valid_proxies.extend(proxies)
                 STATS['nodes_found'] += len(proxies)
                 STATS['links_by_source'][domain] = STATS['links_by_source'].get(domain, 0) + len(proxies)
                 STATS['nodes_by_depth'][depth] = STATS['nodes_by_depth'].get(depth, 0) + len(proxies)
                 logging.info(f"从 {url} 提取到 {len(proxies)} 个节点 (深度: {depth})")
+            
             additional_urls = extract_urls_from_content(content)
+            all_new_urls = list(set(additional_urls + provider_urls))
+            
             sub_proxies = []
-            if additional_urls and depth < RECURSION_DEPTH:
+            if all_new_urls and depth < RECURSION_DEPTH:
                 prioritized_urls = sorted(
-                    list(set(additional_urls)),
+                    all_new_urls,
                     key=lambda x: sum(p in x for p in LINK_PRIORITY),
                     reverse=True
                 )[:MAX_SUB_LINKS]
-                tasks = [process_link(session, url, depth + 1) for url in prioritized_urls]
+                tasks = [process_link(session, sub_url, depth + 1) for sub_url in prioritized_urls]
                 results = await asyncio.gather(*tasks, return_exceptions=True)
                 for result in results:
                     if isinstance(result, tuple):
                         sub_prox, sub_urls = result
                         sub_proxies.extend(sub_prox)
-            return valid_proxies + sub_proxies, provider_urls + additional_urls
+            return valid_proxies + sub_proxies, all_new_urls
     except asyncio.TimeoutError:
         logging.error(f"处理链接 {link} 超时")
         return [], []
@@ -319,7 +324,6 @@ async def main_async():
                         failed_links.append((link, str(result)))
                 logging.info(f"批次处理完成，当前处理链接总数: {len(processed_links)}")
 
-        # 去重
         logging.info("开始去重代理")
         unique_proxies = []
         seen = set()
@@ -334,7 +338,6 @@ async def main_async():
                 unique_proxies.append(proxy)
         logging.info(f"去重后保留 {len(unique_proxies)} 个代理")
 
-        # 保存结果
         output_file = "clash_proxies.yaml"
         output_path = os.path.join(OUTPUT_DIR, output_file)
         if unique_proxies:
@@ -345,7 +348,6 @@ async def main_async():
         else:
             logging.warning("未找到任何有效的 Clash 代理配置")
 
-        # 保存失败链接
         failed_path = "output/clash_failed.txt"
         with open(failed_path, "w", encoding="utf-8") as f:
             f.write("失败链接,#genre#\n")
@@ -353,7 +355,6 @@ async def main_async():
                 f.write(f"{link},{error}\n")
         logging.info(f"已保存 {len(failed_links)} 个失败链接到 {failed_path}")
 
-        # 打印统计信息
         logging.info("\n统计信息：")
         logging.info(f"处理链接总数: {STATS['links_processed']}")
         logging.info(f"失败请求数: {STATS['failed_requests']}")
