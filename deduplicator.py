@@ -7,18 +7,10 @@ import base64
 import json
 import re
 
-# 为了保持键的顺序，我们需要一个自定义的代表器。
-# 或者使用ruamel.yaml，但为了兼容性，我们直接修改yaml.dump的默认行为。
-# 对于PyYAML，最简单的解决方案是确保Python 3.7+ 的dict默认保持插入顺序。
-# 或者我们可以使用一个自定义的Dumper。
-# 这里，我们假设Python版本>=3.7，默认字典保持顺序。
-# 如果你想在更老的Python版本中保证顺序，可以使用OrderedDict。
 def write_proxies_to_yaml(all_proxies, output_file):
     """将代理节点列表写入YAML文件，并保持键的原始顺序"""
     final_config = {'proxies': all_proxies}
     with open(output_file, 'w', encoding='utf-8') as f:
-        # 使用PyYAML的默认dump，它在Python 3.7+中会保持字典顺序
-        # 如果需要更严格的控制，可考虑使用 ruamel.yaml
         yaml.dump(final_config, f, allow_unicode=True, sort_keys=False, default_flow_style=False)
 
 # --- 核心去重逻辑 ---
@@ -40,7 +32,6 @@ def get_node_key(proxy):
     elif proxy.get('type') == 'ss':
         key_components.append(proxy.get('cipher'))
         key_components.append(proxy.get('password'))
-        # 增加对插件的考量
         if proxy.get('plugin'):
             key_components.append(proxy.get('plugin'))
             key_components.append(str(proxy.get('plugin-opts')))
@@ -62,7 +53,6 @@ def parse_ss_link(link):
         return None
     
     try:
-        # 使用正则表达式匹配SS链接的各个部分
         pattern = re.compile(r'ss://(?P<base64_part>[^#?]+)(?:\?plugin=(?P<plugin>[^#]+))?(?:#(?P<name>.+))?')
         match = pattern.match(link)
         if not match:
@@ -72,14 +62,12 @@ def parse_ss_link(link):
         plugin_part = match.group('plugin')
         name_part = match.group('name')
 
-        # 解码base64部分
         b64_content = b64_part.encode('utf-8')
         decoded = base64.b64decode(b64_content + b'==').decode('utf-8')
         cipher_password, server_port = decoded.split('@')
         cipher, password = cipher_password.split(':')
         server, port = server_port.split(':')
 
-        # 构建基础节点字典
         proxy_node = {
             'name': urllib.parse.unquote(name_part) if name_part else f"ss-{server}-{port}",
             'type': 'ss',
@@ -89,16 +77,13 @@ def parse_ss_link(link):
             'password': password
         }
 
-        # 解析插件部分
         if plugin_part:
             proxy_node['plugin'] = plugin_part.split(';')[0]
-            
             plugin_opts = {}
             for opt in plugin_part.split(';')[1:]:
                 if '=' in opt:
                     key, value = opt.split('=', 1)
                     plugin_opts[key] = value
-            
             if plugin_opts:
                 proxy_node['plugin-opts'] = plugin_opts
                 
@@ -106,7 +91,6 @@ def parse_ss_link(link):
     except Exception as e:
         print(f"解析ss链接失败: {link}, 错误: {e}")
         return None
-
 
 def parse_vless_link(link):
     """
@@ -116,20 +100,16 @@ def parse_vless_link(link):
         return None
     
     try:
-        # 提取UUID
         uuid = link[8:].split('@')[0]
-        # 提取其余部分
         parts = link.split('?')
         server_info = parts[0].split('@')[1]
         server, port = server_info.split(':')
         
-        # 提取节点名称
         name_part = parts[-1].split('#')
         name = urllib.parse.unquote(name_part[-1]) if len(name_part) > 1 else f"VLESS-{server}-{port}"
         
         query_params = urllib.parse.parse_qs(parts[1].split('#')[0])
 
-        # 组装代理字典
         proxy_node = {
             'name': name,
             'type': 'vless',
@@ -140,7 +120,6 @@ def parse_vless_link(link):
             'udp': True,
         }
 
-        # 处理可选参数
         if 'security' in query_params:
             security = query_params['security'][0]
             if security == 'tls':
@@ -161,7 +140,6 @@ def parse_vless_link(link):
         if 'type' in query_params and query_params['type'][0] == 'ws':
             proxy_node['network'] = 'ws'
             proxy_node['ws-path'] = query_params['path'][0]
-            # 确保host参数存在
             if 'host' in query_params:
                 proxy_node['ws-headers'] = {'Host': query_params['host'][0]}
             
@@ -170,15 +148,15 @@ def parse_vless_link(link):
         print(f"解析vless链接失败: {link}, 错误: {e}")
         return None
         
-def process_file(file_path, all_proxies, seen_nodes):
+def process_link_file(file_path, all_proxies, seen_nodes):
     """
-    读取文件，解析链接，并添加不重复的节点。
+    读取包含链接的文件，解析链接，并添加不重复的节点。
     """
     if not os.path.exists(file_path):
-        print(f"文件不存在: {file_path}")
+        print(f"文件不存在，跳过: {file_path}")
         return
 
-    print(f"正在处理文件: {file_path}")
+    print(f"正在处理链接文件: {file_path}")
     with open(file_path, 'r', encoding='utf-8') as f:
         for line in f:
             line = line.strip()
@@ -196,14 +174,41 @@ def process_file(file_path, all_proxies, seen_nodes):
                 if key and key not in seen_nodes:
                     all_proxies.append(node)
                     seen_nodes.add(key)
-                    print(f"  - 添加新节点: {node['name']}")
+                    # print(f"  - 添加新节点: {node['name']}")
                 else:
-                    print(f"  - 跳过重复节点: {node['name']}")
+                    # print(f"  - 跳过重复节点: {node['name']}")
+                    pass # 不再打印重复节点，让日志更简洁
+
+def process_yaml_file(file_path, all_proxies, seen_nodes):
+    """
+    读取包含YAML格式节点的文件，解析并添加不重复的节点。
+    """
+    if not os.path.exists(file_path):
+        print(f"文件不存在，跳过: {file_path}")
+        return
+
+    print(f"正在处理YAML文件: {file_path}")
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            config = yaml.safe_load(f)
+            if config and 'proxies' in config and isinstance(config['proxies'], list):
+                for node in config['proxies']:
+                    key = get_node_key(node)
+                    if key and key not in seen_nodes:
+                        all_proxies.append(node)
+                        seen_nodes.add(key)
+                        # print(f"  - 添加新节点: {node['name']}")
+                    else:
+                        # print(f"  - 跳过重复节点: {node['name']}")
+                        pass # 不再打印重复节点
+    except Exception as e:
+        print(f"处理YAML文件 {file_path} 时出错: {e}")
 
 
 def main():
     merged_file = 'merged_configs.txt'
     unique_file = 'all_unique_nodes.txt'
+    clash_proxies_file = 'sc/clash_proxies.yaml'
     output_dir = 'sc'
     output_file = os.path.join(output_dir, 'all.yaml')
 
@@ -212,11 +217,10 @@ def main():
     all_proxies = []
     seen_nodes = set()
     
-    # 处理第一个文件
-    process_file(merged_file, all_proxies, seen_nodes)
-    
-    # 处理第二个文件
-    process_file(unique_file, all_proxies, seen_nodes)
+    # 按照指定的优先级处理三个文件
+    process_link_file(merged_file, all_proxies, seen_nodes)
+    process_link_file(unique_file, all_proxies, seen_nodes)
+    process_yaml_file(clash_proxies_file, all_proxies, seen_nodes)
 
     if all_proxies:
         write_proxies_to_yaml(all_proxies, output_file)
