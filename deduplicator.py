@@ -8,44 +8,68 @@ import json
 import re
 
 def write_proxies_to_yaml(all_proxies, output_file):
-    """将代理节点列表写入YAML文件，并保持键的原始顺序"""
-    final_config = {'proxies': all_proxies}
+    """
+    将代理节点列表写入YAML文件。
+    已修改为以更紧凑的单行流式格式输出每个节点。
+    """
     with open(output_file, 'w', encoding='utf-8') as f:
-        yaml.dump(final_config, f, allow_unicode=True, sort_keys=False, default_flow_style=False)
-
+        f.write('proxies:\n')
+        # 遍历所有代理节点，并以单行流式格式写入
+        for proxy in all_proxies:
+            # 强制使用流式风格 (flow style) 输出字典，即单行
+            dumped_proxy = yaml.dump(proxy, default_flow_style=True, allow_unicode=True).strip()
+            f.write(f' - {dumped_proxy}\n')
+            
 # --- 核心去重逻辑 ---
 def get_node_key(proxy):
     """
     根据代理节点的关键信息生成一个唯一的哈希键。
-    这里已修改为对 VLESS/VMess 节点使用 UUID 作为主要键。
+    已优化，综合考虑VLESS/VMess节点的多个核心参数进行去重。
     """
     if not isinstance(proxy, dict):
         return None
     
-    # 对于 VLESS 和 VMess 节点，使用 UUID 作为去重的主要依据
+    # 针对 VLESS 和 VMess 节点，使用一个综合的哈希键来处理去重
     if proxy.get('type') in ['vless', 'vmess']:
-        uuid = proxy.get('uuid')
-        if uuid:
-            # 使用UUID和type作为唯一键，确保不同协议但相同UUID的节点不会冲突
-            return f"{proxy.get('type')}:{uuid}"
+        key_components = [
+            proxy.get('type'),
+            proxy.get('server'),
+            str(proxy.get('port')),
+            proxy.get('uuid'),
+            proxy.get('network'),
+        ]
+
+        if proxy.get('tls'):
+            key_components.append('tls')
+            key_components.append(proxy.get('servername', ''))
+            key_components.append(proxy.get('flow', ''))
+        
+        if proxy.get('network') == 'ws':
+            ws_path = proxy.get('ws-path', '')
+            ws_headers = proxy.get('ws-headers', {}).get('Host', '')
+            key_components.append(ws_path)
+            key_components.append(ws_headers)
+        
+        key_string = ":".join(str(c) for c in key_components if c is not None)
     
     # 对于其他节点类型 (SS, Trojan 等)，使用原有的去重逻辑
-    key_components = [
-        proxy.get('server'),
-        str(proxy.get('port')),
-        proxy.get('type')
-    ]
-    
-    if proxy.get('type') == 'trojan':
-        key_components.append(proxy.get('password'))
-    elif proxy.get('type') == 'ss':
-        key_components.append(proxy.get('cipher'))
-        key_components.append(proxy.get('password'))
-        if proxy.get('plugin'):
-            key_components.append(proxy.get('plugin'))
-            key_components.append(str(proxy.get('plugin-opts')))
-    
-    key_string = ":".join(str(c) for c in key_components if c is not None)
+    else:
+        key_components = [
+            proxy.get('server'),
+            str(proxy.get('port')),
+            proxy.get('type')
+        ]
+        
+        if proxy.get('type') == 'trojan':
+            key_components.append(proxy.get('password'))
+        elif proxy.get('type') == 'ss':
+            key_components.append(proxy.get('cipher'))
+            key_components.append(proxy.get('password'))
+            if proxy.get('plugin'):
+                key_components.append(proxy.get('plugin'))
+                key_components.append(str(proxy.get('plugin-opts')))
+        
+        key_string = ":".join(str(c) for c in key_components if c is not None)
     
     return hashlib.sha256(key_string.encode('utf-8')).hexdigest()
 
@@ -179,10 +203,8 @@ def process_link_file(file_path, all_proxies, seen_nodes):
                 if key and key not in seen_nodes:
                     all_proxies.append(node)
                     seen_nodes.add(key)
-                    # print(f"  - 添加新节点: {node['name']}")
                 else:
-                    # print(f"  - 跳过重复节点: {node['name']}")
-                    pass # 不再打印重复节点，让日志更简洁
+                    pass
 
 def process_yaml_file(file_path, all_proxies, seen_nodes):
     """
@@ -202,13 +224,10 @@ def process_yaml_file(file_path, all_proxies, seen_nodes):
                     if key and key not in seen_nodes:
                         all_proxies.append(node)
                         seen_nodes.add(key)
-                        # print(f"  - 添加新节点: {node['name']}")
                     else:
-                        # print(f"  - 跳过重复节点: {node['name']}")
-                        pass # 不再打印重复节点
+                        pass
     except Exception as e:
         print(f"处理YAML文件 {file_path} 时出错: {e}")
-
 
 def main():
     merged_file = 'merged_configs.txt'
@@ -222,7 +241,6 @@ def main():
     all_proxies = []
     seen_nodes = set()
     
-    # 按照指定的优先级处理三个文件
     process_link_file(merged_file, all_proxies, seen_nodes)
     process_link_file(unique_file, all_proxies, seen_nodes)
     process_yaml_file(clash_proxies_file, all_proxies, seen_nodes)
