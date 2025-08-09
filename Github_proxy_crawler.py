@@ -11,15 +11,15 @@ import requests
 import json
 import time
 
-# 核心配置
-GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
+# --- 核心配置 ---
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN") # 可选，但强烈推荐，以提高搜索速率限制
 
 OUTPUT_DIR = "sc"
 OUTPUT_FILE = "clash_proxies.yaml"
 CACHE_FILE = os.path.join(OUTPUT_DIR, "search_cache.txt")
 STATS_FILE = os.path.join(OUTPUT_DIR, "query_stats.csv")
 
-# 使用 GitHub 搜索语法
+# 使用 GitHub 搜索语法，更有效
 SEARCH_QUERIES = [
     'filename:clash.yaml OR filename:clash.yml "proxies:" language:YAML',
     'filename:clash.yaml OR filename:clash.yml "proxy-providers:" language:YAML',
@@ -27,7 +27,6 @@ SEARCH_QUERIES = [
     'extension:yaml OR extension:yml "proxy-providers:" "clash" path:/'
 ]
 
-# GitHub 的搜索限制：最多 1000 个结果
 MAX_RESULTS_PER_QUERY = 1000
 MAX_SEARCH_PAGES = 10 
 REQUEST_TIMEOUT = 30
@@ -50,6 +49,8 @@ STATS = {
     'failed_domains': {},
     'query_results': {}
 }
+
+# --- 函数定义 ---
 
 def create_output_dir():
     """创建输出目录"""
@@ -217,7 +218,6 @@ def is_valid_clash_yaml(content):
         valid_proxies = []
         supported_protocols = ["ss", "trojan", "vmess", "vless", "http", "https", "snell", "hysteria2"]
         for proxy in proxies:
-            # 兼容处理 JSON 格式的代理节点
             if isinstance(proxy, str):
                 try:
                     proxy = json.loads(proxy)
@@ -377,4 +377,28 @@ async def main_async():
         print("\n统计信息：")
         print(f"处理链接总数: {STATS['links_processed']}")
         print(f"失败请求数: {STATS['failed_requests']}")
-        print(f"发现节点总数: {STATS['nodes
+        print(f"发现节点总数: {STATS['nodes_found']}")
+        print("节点来源分布：")
+        for domain, count in sorted(STATS['links_by_source'].items(), key=lambda x: x[1], reverse=True):
+            print(f"  {domain}: {count} 个节点")
+        print("协议分布：")
+        for protocol, count in sorted(STATS['protocol_counts'].items(), key=lambda x: x[1], reverse=True):
+            print(f"  {protocol}: {count} 个节点")
+        print("深度分布：")
+        for depth, count in sorted(STATS['nodes_by_depth'].items()):
+            print(f"  深度 {depth}: {count} 个节点")
+        print("失败域名分布：")
+        for domain, count in sorted(STATS['failed_domains'].items(), key=lambda x: x[1], reverse=True):
+            print(f"  {domain}: {count} 次失败")
+    except Exception as e:
+        print(f"主程序发生错误: {e}", file=sys.stderr)
+        raise
+
+def main():
+    try:
+        asyncio.run(main_async())
+    except Exception as e:
+        print(f"脚本执行失败: {e}", file=sys.stderr)
+
+if __name__ == "__main__":
+    main()
