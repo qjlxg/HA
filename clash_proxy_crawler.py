@@ -1,4 +1,4 @@
-# clash_proxy_crawler_v12.py
+# clash_proxy_crawler_v13.py
 import requests
 import yaml
 import os
@@ -201,8 +201,8 @@ def crawl():
                             print(f" - 跳过旧文件 ({repo_pushed_at_str}): {html_url}")
                             continue
                     else:
-                        print(f" - 无法获取文件更新时间，跳过: {html_url}")
-                        continue
+                        print(f" - 无法获取文件更新时间，继续下载: {html_url}")
+                        # 如果无法获取时间，则不跳过，继续执行下面的下载逻辑
                     # --- 结束文件年龄检查 ---
                     
                     repo_full_name = item['repository']['full_name']
