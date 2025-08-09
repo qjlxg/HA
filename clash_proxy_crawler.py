@@ -1,4 +1,4 @@
-# clash_proxy_crawler_v3.py
+# clash_proxy_crawler_v4.py
 import requests
 import yaml
 import os
@@ -51,7 +51,7 @@ def load_cache():
 def save_cache(cache):
     with open(CACHE_FILE, 'w', encoding='utf-8') as f:
         for url, hash_val in cache.items():
-            f.write(f"{url},{hash_val}\n")
+            f.write(f"{url},{content_hash}\n")
 
 def get_content_hash(content):
     return hashlib.sha256(content.encode('utf-8')).hexdigest()
@@ -74,7 +74,7 @@ def append_stats(query, count):
 def validate_proxy(proxy):
     if isinstance(proxy, dict):
         required_keys = ['server', 'port', 'type']
-        valid_types = ['ss', 'vmess', 'trojan']
+        valid_types = ['ss', 'vmess', 'trojan', 'snell', 'http']
         return all(key in proxy for key in required_keys) and proxy['type'] in valid_types
     return False
 
@@ -99,11 +99,41 @@ def parse_yaml_content(content):
         print(f" - 内容不是有效的 YAML 格式，跳过。")
         return []
 
+# --- 核心去重逻辑 ---
+def get_node_key(proxy):
+    """
+    为代理节点生成一个唯一的键，用于去重。
+    这里使用节点的服务器地址、端口、类型和部分密码信息来创建哈希。
+    """
+    if not isinstance(proxy, dict):
+        return None
+    
+    key_components = [
+        proxy.get('server'),
+        str(proxy.get('port')),
+        proxy.get('type'),
+        proxy.get('name') # name可能会重复，但作为一个附加键可以增加唯一性
+    ]
+    
+    # 针对不同类型代理，添加特有的关键信息
+    if proxy.get('type') == 'trojan':
+        key_components.append(proxy.get('password'))
+    elif proxy.get('type') in ['ss', 'vmess']:
+        key_components.append(proxy.get('cipher'))
+        key_components.append(proxy.get('password'))
+    
+    # 移除空值并拼接成字符串
+    key_string = ":".join(str(c) for c in key_components if c is not None)
+    
+    # 使用SHA256哈希来确保键的唯一性
+    return hashlib.sha256(key_string.encode('utf-8')).hexdigest()
+
 # --- 主要爬取逻辑 ---
 def crawl():
     cached_links = load_cache()
     new_cache_entries = {}
     all_found_proxies = []
+    seen_nodes = set()
 
     for query in search_queries:
         print(f"正在搜索: {query}")
@@ -134,10 +164,7 @@ def crawl():
                     
                     repo_full_name = item['repository']['full_name']
                     file_path = item['path']
-                    # 从API响应中获取默认分支名，如果没有则默认使用 'main'
                     repo_branch = item['repository'].get('default_branch', 'main')
-
-                    # 构建正确的原始文件下载链接
                     raw_url = f"https://raw.githubusercontent.com/{repo_full_name}/{repo_branch}/{file_path}"
                     
                     if html_url in cached_links:
@@ -153,7 +180,11 @@ def crawl():
                             proxies = parse_yaml_content(page_content)
                             if proxies:
                                 print(f" - 在 {html_url} 找到有效的 Clash 配置文件！")
-                                all_found_proxies.extend(proxies)
+                                for proxy in proxies:
+                                    node_key = get_node_key(proxy)
+                                    if node_key and node_key not in seen_nodes:
+                                        all_found_proxies.append(proxy)
+                                        seen_nodes.add(node_key)
                                 
                                 node_count = len(proxies)
                                 current_query_nodes_count += node_count
@@ -192,7 +223,8 @@ def crawl():
     # 将所有收集到的代理节点写入最终文件
     if all_found_proxies:
         write_proxies_to_yaml(all_found_proxies)
-        print(f"\n✅ 所有找到的代理节点已成功合并并写入 {PROXIES_FILE}")
+        print(f"\n✅ 所有找到的代理节点（已去重）已成功合并并写入 {PROXIES_FILE}")
+        print(f"   最终节点总数：{len(all_found_proxies)}")
     else:
         print("\n⚠️ 未找到任何有效的代理节点。")
 
