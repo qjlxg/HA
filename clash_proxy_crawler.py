@@ -2,33 +2,34 @@ import os
 import asyncio
 import aiohttp
 import yaml
-from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
 import re
 import csv
-from datetime import datetime
 import urllib.parse
 from collections import deque
 import sys
-import pytz
+import requests
+import json
+import time
 
-# 核心配置
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY_1")
-SEARCH_ENGINE_ID = os.getenv("SEARCH_ENGINE_ID")
+# --- 核心配置 ---
+# 推荐设置，用于提高 GitHub API 速率限制
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN") 
 
 OUTPUT_DIR = "sc"
 OUTPUT_FILE = "clash_proxies.yaml"
 CACHE_FILE = os.path.join(OUTPUT_DIR, "search_cache.txt")
 STATS_FILE = os.path.join(OUTPUT_DIR, "query_stats.csv")
+
+# 使用 GitHub 搜索语法，更有效
 SEARCH_QUERIES = [
-    'filetype:yaml | filetype:yml "proxies:" "clash" site:raw.githubusercontent.com | site:gist.github.com | site:gitlab.com',
-    'filetype:yaml | filetype:yml "proxy-providers:" "clash" site:raw.githubusercontent.com | site:gist.github.com',
-    '"proxies:" "clash" "ss" | "vmess" | "trojan" | "vless" | "hysteria2" | "http"',
-    '"proxy-providers:" "clash" | "subscribe" | "freeclash" | "free proxy" site:*.herokuapp.com | site:*.pages.dev | site:*.workers.dev',
-    '"clash" "proxypool" | "free proxy" | "node" site:raw.githubusercontent.com from:lagzian from:ReaJason from:vxiaov'
+    'filename:clash.yaml OR filename:clash.yml "proxies:" language:YAML',
+    'filename:clash.yaml OR filename:clash.yml "proxy-providers:" language:YAML',
+    'extension:yaml OR extension:yml "proxies:" "clash" path:/',
+    'extension:yaml OR extension:yml "proxy-providers:" "clash" path:/'
 ]
-MAX_RESULTS_PER_QUERY = 10  # 调整为更保守的配额
-PAGE_SIZE = 10
+
+MAX_RESULTS_PER_QUERY = 1000
+MAX_SEARCH_PAGES = 10 
 REQUEST_TIMEOUT = 30
 MAX_RETRIES = 3
 MAX_WORKERS = 30
@@ -49,6 +50,8 @@ STATS = {
     'failed_domains': {},
     'query_results': {}
 }
+
+# --- 函数定义 ---
 
 def create_output_dir():
     """创建输出目录"""
@@ -78,35 +81,45 @@ def save_query_stats():
         for query, count in STATS['query_results'].items():
             writer.writerow([query, count])
 
-def search_with_google(query):
-    """使用 Google Custom Search API 搜索"""
+def search_with_github(query):
+    """使用 GitHub API 搜索代码文件"""
     links = []
-    if not GOOGLE_API_KEY:
-        print("错误: 未配置 Google API 密钥", file=sys.stderr)
-        return []
+    headers = {
+        "Accept": "application/vnd.github.v3.text-match+json",
+        "Authorization": f"token {GITHUB_TOKEN}" if GITHUB_TOKEN else None
+    }
     
-    try:
-        service = build("customsearch", "v1", developerKey=GOOGLE_API_KEY)
-        for start_index in range(1, MAX_RESULTS_PER_QUERY + 1, PAGE_SIZE):
-            try:
-                result = service.cse().list(
-                    q=query,
-                    cx=SEARCH_ENGINE_ID,
-                    num=PAGE_SIZE,
-                    start=start_index
-                ).execute()
-                items = result.get("items", [])
-                filtered_links = [item["link"] for item in items if not any(b in item["link"] for b in LINK_BLACKLIST)]
-                links.extend(filtered_links)
-                if len(items) < PAGE_SIZE:
-                    break
-            except HttpError as e:
-                print(f"Google API 搜索失败 (query={query}, start={start_index}): {e}", file=sys.stderr)
+    url = "https://api.github.com/search/code"
+    
+    for page in range(1, MAX_SEARCH_PAGES + 1):
+        params = {
+            "q": query,
+            "per_page": 100,
+            "page": page
+        }
+        
+        try:
+            response = requests.get(url, headers=headers, params=params)
+            response.raise_for_status()
+            search_results = response.json()
+            
+            items = search_results.get("items", [])
+            for item in items:
+                # 构造 raw.githubusercontent.com 链接
+                raw_url = item['html_url'].replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/')
+                if not any(b in raw_url for b in LINK_BLACKLIST):
+                    links.append(raw_url)
+            
+            # 如果结果少于 per_page，说明没有更多了
+            if len(items) < 100:
                 break
-        return links
-    except HttpError as e:
-        print(f"Google API 初始化失败: {e}", file=sys.stderr)
-        return []
+            
+            time.sleep(2) # 遵守 GitHub API 速率限制
+        except requests.exceptions.RequestException as e:
+            print(f"GitHub API 搜索失败 (query={query}): {e}", file=sys.stderr)
+            break
+            
+    return links
 
 def search_links():
     """执行所有搜索查询，合并结果并按优先级排序"""
@@ -114,7 +127,7 @@ def search_links():
     all_links = set()
     for query in SEARCH_QUERIES:
         print(f"执行搜索: {query}")
-        links = search_with_google(query)
+        links = search_with_github(query)
         all_links.update(links)
         STATS['query_results'][query] = len(links)
     
@@ -206,11 +219,20 @@ def is_valid_clash_yaml(content):
         valid_proxies = []
         supported_protocols = ["ss", "trojan", "vmess", "vless", "http", "https", "snell", "hysteria2"]
         for proxy in proxies:
+            if isinstance(proxy, str):
+                try:
+                    proxy = json.loads(proxy)
+                except json.JSONDecodeError:
+                    print(f"警告: 无法解析代理节点为JSON: {proxy[:50]}...", file=sys.stderr)
+                    continue
+
             if isinstance(proxy, dict) and "name" in proxy and "server" in proxy:
                 protocol = proxy.get("type", "unknown")
                 if protocol in supported_protocols:
                     valid_proxies.append(proxy)
                     STATS['protocol_counts'][protocol] = STATS['protocol_counts'].get(protocol, 0) + 1
+            else:
+                print(f"警告: 跳过无效代理格式: {proxy}", file=sys.stderr)
         
         provider_urls = []
         if "proxy-providers" in data:
@@ -254,17 +276,19 @@ async def process_link(session, link, depth=0):
             
             sub_proxies = []
             if all_new_urls and depth < RECURSION_DEPTH:
-                prioritized_urls = sorted(
+                prioritized_new_links = sorted(
                     all_new_urls,
                     key=lambda x: sum(p in x for p in LINK_PRIORITY),
                     reverse=True
                 )[:MAX_SUB_LINKS]
-                tasks = [process_link(session, sub_url, depth + 1) for sub_url in prioritized_urls]
+                tasks = [process_link(session, sub_url, depth + 1) for sub_url in prioritized_new_links]
                 results = await asyncio.gather(*tasks, return_exceptions=True)
                 for result in results:
                     if isinstance(result, tuple):
-                        sub_prox, sub_urls = result
-                        sub_proxies.extend(sub_prox)
+                        proxies_from_sub, _ = result
+                        sub_proxies.extend(proxies_from_sub)
+                    else:
+                        print(f"警告: 处理子链接失败: {result}", file=sys.stderr)
             return valid_proxies + sub_proxies, all_new_urls
     except asyncio.TimeoutError:
         print(f"错误: 处理链接 {link} 超时", file=sys.stderr)
@@ -292,17 +316,21 @@ async def main_async():
 
             while links_to_process and len(processed_links) < MAX_TOTAL_LINKS:
                 batch_size = min(len(links_to_process), MAX_WORKERS)
+                if batch_size == 0:
+                    break
                 tasks = []
+                current_batch_links = []
                 for _ in range(batch_size):
                     if not links_to_process:
                         break
                     link = links_to_process.popleft()
                     processed_links.add(link)
                     newly_found_links.add(link)
+                    current_batch_links.append(link)
                     tasks.append(process_link(session, link))
                 print(f"处理批量链接，批次大小: {len(tasks)}")
                 results = await asyncio.gather(*tasks, return_exceptions=True)
-                for result in results:
+                for i, result in enumerate(results):
                     if isinstance(result, tuple):
                         proxies, new_links = result
                         all_proxies.extend(proxies)
@@ -315,7 +343,7 @@ async def main_async():
                             if new_link not in processed_links and len(processed_links) < MAX_TOTAL_LINKS:
                                 links_to_process.append(new_link)
                     else:
-                        failed_links.append(("URL未记录", str(result)))
+                        failed_links.append((current_batch_links[i], str(result)))
                 print(f"批次处理完成，当前处理链接总数: {len(processed_links)}")
         
         save_cache(newly_found_links)
@@ -339,11 +367,10 @@ async def main_async():
                 yaml.safe_dump(output_data, f, allow_unicode=True)
             print(f"已保存 {len(unique_proxies)} 个节点到 {output_path}")
         else:
-            print("警告: 未找到任何有效的 Clash 代理配置", file=sys.stderr)
-
+            print("警告: 未找到任何有效的 Clash 代理配置，不生成输出文件", file=sys.stderr)
+            
         failed_path = "output/clash_failed.txt"
         with open(failed_path, "w", encoding="utf-8") as f:
-            f.write("失败链接,#genre#\n")
             for link, error in failed_links:
                 f.write(f"{link},{error}\n")
         print(f"已保存 {len(failed_links)} 个失败链接到 {failed_path}")
@@ -369,7 +396,10 @@ async def main_async():
         raise
 
 def main():
-    asyncio.run(main_async())
+    try:
+        asyncio.run(main_async())
+    except Exception as e:
+        print(f"脚本执行失败: {e}", file=sys.stderr)
 
 if __name__ == "__main__":
     main()
