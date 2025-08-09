@@ -63,3 +63,13 @@ query,node_count,timestamp
 "clash-sub ""proxies:"" language:YAML",0,2025-08-09T08:19:49.265815
 "premium-clash.yaml ""proxies:"" language:YAML",0,2025-08-09T08:19:54.422218
 "clash-meta.yaml ""proxies:"" language:YAML",33,2025-08-09T08:20:01.777088
+"extension:yml ""proxies:"" ""clash"" path:/",0,2025-08-09T08:29:40.075340
+"extension:yaml ""proxies:"" ""clash"" path:/",10,2025-08-09T08:31:06.699002
+"filename:clash.yaml ""proxies:"" language:YAML",1067,2025-08-09T08:31:52.172053
+"filename:clash.yml ""proxies:"" language:YAML",38,2025-08-09T08:32:05.994129
+"filename:clash.yaml ""proxy-providers:"" language:YAML",0,2025-08-09T08:32:14.203636
+"filename:clash.yml ""proxy-providers:"" language:YAML",15,2025-08-09T08:32:19.426879
+"filename:clash.yaml ""proxies:"" OR filename:clash.yml ""proxies:"" language:YAML",1556,2025-08-09T08:33:27.047428
+"filename:clash.yaml ""proxies:"" OR ""proxy-providers:"" language:YAML",0,2025-08-09T08:34:06.624601
+"filename:clash.yaml ""proxies:"" OR ""proxy-groups:"" language:YAML",538,2025-08-09T08:34:26.363837
+"extension:yaml OR extension:yml ""proxies:"" ""clash"" path:/",9,2025-08-09T08:36:01.400103
