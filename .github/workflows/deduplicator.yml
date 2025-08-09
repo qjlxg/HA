@@ -8,6 +8,7 @@ on:
       - 'merged_configs.txt'
       - 'all_unique_nodes.txt'
       - 'deduplicator.py'
+      - 'sc/clash_proxies.yaml' 
 
 jobs:
   deduplicate:
@@ -31,7 +32,7 @@ jobs:
           python deduplicator.py
 
       - name: Upload merged config as artifact
-        uses: actions/upload-artifact@v4  # 这里已更新为 v4
+        uses: actions/upload-artifact@v4
         with:
           name: all-proxies-yaml
           path: sc/all.yaml
