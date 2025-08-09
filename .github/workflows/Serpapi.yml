@@ -1,4 +1,4 @@
-name: Serpapi Check
+name: Clash Proxy Check
 on:
   push:
     branches: [ main ]
@@ -20,9 +20,9 @@ jobs:
           pip install aiohttp pyyaml requests
       - name: Run Clash Proxy Crawler
         env:
-          SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          python Serpapi_proxy_crawler.py
+          python Github_proxy_crawler.py
       - name: Commit results
         run: |
           git config --global user.name 'GitHub Action'
