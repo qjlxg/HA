@@ -3,29 +3,31 @@ import time
 import yaml
 import os
 import csv
+import hashlib
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
-from urllib.parse import urlparse, parse_qs
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
 
 # --- 配置部分 ---
-SEARCH_ENGINE_URL = "https://www.google.com"  # 或 "https://www.bing.com"
-SEARCH_INPUT_NAME = "q"  # Google 和 Bing 的搜索框 input name 都是 'q'
-SEARCH_RESULT_SELECTOR = "a[href]" # 搜索结果链接的CSS选择器
+SEARCH_ENGINE_URL = "https://www.google.com"
+SEARCH_INPUT_NAME = "q"
+SEARCH_RESULT_SELECTOR = "h3 > a"  # Google搜索结果链接的CSS选择器
 
 # 文件路径
 CACHE_FILE = 'sc/search_cache.txt'
 PROXIES_FILE = 'sc/clash_proxies.yaml'
 STATS_FILE = 'sc/query_stats.csv'
 
+# 优化后的搜索关键词，专注于 GitHub
 search_queries = [
-    'clash.yaml "proxies:" filetype:yaml',
-    'clash.yml "proxies:" filetype:yml',
-    'clash.yaml "proxy-providers:" filetype:yaml',
-    'clash.yml "proxy-providers:" filetype:yml'
+    'clash.yaml "proxies:" site:github.com',
+    'clash.yml "proxies:" site:github.com',
+    'clash.yaml "proxy-providers:" site:github.com',
+    'clash.yml "proxy-providers:" site:github.com'
 ]
 
 # 创建所需的目录
@@ -45,11 +47,12 @@ def initialize_driver():
     
     service = Service(ChromeDriverManager().install())
     driver = webdriver.Chrome(service=service, options=chrome_options)
+    driver.set_page_load_timeout(30) # 设置页面加载超时时间
     return driver
 
 # --- 文件操作函数 ---
 def load_cache():
-    """加载已缓存的链接"""
+    """加载已缓存的链接及其内容哈希值"""
     if not os.path.exists(CACHE_FILE):
         return {}
     with open(CACHE_FILE, 'r') as f:
@@ -63,13 +66,12 @@ def save_cache(cache):
 
 def get_content_hash(content):
     """计算内容的哈希值以判断是否更新"""
-    import hashlib
     return hashlib.sha256(content.encode('utf-8')).hexdigest()
 
 def append_to_yaml(content):
-    """将新的代理节点内容追加到 YAML 文件"""
+    """将新的代理节点内容追加到 YAML 文件，并使用 --- 分隔"""
     with open(PROXIES_FILE, 'a', encoding='utf-8') as f:
-        f.write(content + '\n')
+        f.write(content + '\n---\n')
 
 def append_stats(query, count):
     """追加统计数据到 CSV 文件"""
@@ -89,73 +91,85 @@ def crawl():
     try:
         for query in search_queries:
             print(f"正在搜索: {query}")
-            driver.get(SEARCH_ENGINE_URL)
             
-            # 定位搜索框并输入关键词
-            search_input = driver.find_element(By.NAME, SEARCH_INPUT_NAME)
-            search_input.send_keys(query)
-            search_input.send_keys(Keys.RETURN)
-            
-            time.sleep(5) # 给予页面加载时间
-            
-            # 提取搜索结果中的链接
+            try:
+                driver.get(SEARCH_ENGINE_URL)
+                search_input = driver.find_element(By.NAME, SEARCH_INPUT_NAME)
+                search_input.send_keys(query)
+                search_input.send_keys(Keys.RETURN)
+                time.sleep(5)  # 给予页面加载时间
+            except NoSuchElementException:
+                print(" - 找不到搜索框，可能页面结构已改变。跳过此查询。")
+                continue
+            except TimeoutException:
+                print(" - 页面加载超时，跳过此查询。")
+                continue
+
             links = driver.find_elements(By.CSS_SELECTOR, SEARCH_RESULT_SELECTOR)
-            
             current_query_nodes_count = 0
             
             for link in links:
                 url = link.get_attribute('href')
                 
-                # 过滤掉无效链接和搜索引擎内部链接
-                if not url or url.startswith(SEARCH_ENGINE_URL) or not url.startswith('http'):
+                # 严格过滤链接：只处理来自 GitHub 的链接
+                if not url or 'github.com' not in url:
                     continue
                 
-                # 特殊处理Google的重定向链接
-                if url.startswith('https://www.google.com/url?'):
-                    parsed_url = parse_qs(urlparse(url).query)
-                    url = parsed_url.get('q', [None])[0]
-                    if not url:
-                        continue
-                
-                # 检查缓存，如果已缓存且内容未更新，则跳过
+                # 检查缓存
                 if url in cached_links:
                     print(f" - 链接已缓存: {url}")
                     continue
                 
                 try:
-                    # 访问链接并提取内容
+                    # 访问链接并尝试获取内容
                     driver.get(url)
-                    time.sleep(3) # 给予页面加载时间
+                    time.sleep(3)  # 给予页面加载时间
                     
-                    # 获取页面的原始文本内容
-                    page_content = driver.find_element(By.TAG_NAME, 'pre').text # 假设文件内容在 <pre> 标签中
+                    page_content = None
+                    # 特别处理 GitHub 的 'blob' 页面，尝试访问其原始文件链接
+                    if 'github.com' in url and '/blob/' in url:
+                        raw_url = url.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/')
+                        print(f" - 这是一个GitHub页面，尝试访问原始文件链接: {raw_url}")
+                        driver.get(raw_url)
+                        time.sleep(2)
+                        page_content = driver.page_source
+                    else:
+                        # 否则，尝试从 <pre> 标签获取内容
+                        try:
+                            pre_element = driver.find_element(By.TAG_NAME, 'pre')
+                            page_content = pre_element.text
+                        except NoSuchElementException:
+                            print(f" - 在 {url} 找不到 <pre> 标签，跳过此链接。")
+                            continue
                     
-                    # 验证是否为 YAML 内容并提取节点
-                    config = yaml.safe_load(page_content)
-                    
-                    # 检查 'proxies' 或 'proxy-providers'
-                    if 'proxies' in config:
-                        # TODO: 这里需要根据 YAML 格式提取代理节点
-                        print(f" - 找到代理节点在 {url}")
-                        append_to_yaml(page_content)
-                        current_query_nodes_count += len(config['proxies']) # 假设 proxies 是列表
-                        new_cache_entries[url] = get_content_hash(page_content)
-                    elif 'proxy-providers' in config:
-                        # TODO: 这里需要根据 YAML 格式提取代理提供者
-                        print(f" - 找到代理提供者在 {url}")
-                        # 暂时只记录，如果您有需要，可以自行解析 proxy-providers
-                        current_query_nodes_count += len(config['proxy-providers'])
-                        new_cache_entries[url] = get_content_hash(page_content)
-                        
+                    if page_content:
+                        try:
+                            # 严格验证是否为有效的 YAML，并检查是否包含 Clash 节点
+                            config = yaml.safe_load(page_content)
+                            
+                            if isinstance(config, dict) and ('proxies' in config or 'proxy-providers' in config):
+                                print(f" - 在 {url} 找到有效的 Clash 配置文件！")
+                                append_to_yaml(page_content)
+                                
+                                node_count = 0
+                                if 'proxies' in config and isinstance(config['proxies'], list):
+                                    node_count += len(config['proxies'])
+                                if 'proxy-providers' in config and isinstance(config['proxy-providers'], dict):
+                                    node_count += len(config['proxy-providers'])
+                                
+                                current_query_nodes_count += node_count
+                                new_cache_entries[url] = get_content_hash(page_content)
+                            else:
+                                print(f" - {url} 是有效的 YAML，但不是 Clash 配置文件，跳过。")
+                        except yaml.YAMLError:
+                            print(f" - {url} 的内容不是有效的 YAML 格式，跳过。")
+                
                 except Exception as e:
                     print(f" - 处理链接 {url} 时出错: {e}")
-                    continue
             
-            # 记录本次搜索的统计数据
             append_stats(query, current_query_nodes_count)
             
     finally:
-        # 保存新的缓存条目，并关闭浏览器
         cached_links.update(new_cache_entries)
         save_cache(cached_links)
         driver.quit()
