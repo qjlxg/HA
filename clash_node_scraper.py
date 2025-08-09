@@ -2,40 +2,30 @@ import os
 import asyncio
 import aiohttp
 import yaml
-import requests
-import re
-import urllib.parse
-from datetime import datetime
-from collections import deque
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
-from telethon.sync import TelegramClient
+import re
+from datetime import datetime
+import urllib.parse
+from collections import deque
 
 # 配置
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 SEARCH_ENGINE_ID = os.getenv("SEARCH_ENGINE_ID")
-FOFA_API_KEY = os.getenv("FOFA_API_KEY")
-ONYPHE_API_KEY = os.getenv("ONYPHE_API_KEY")
-TELEGRAM_API_ID = os.getenv("TELEGRAM_API_ID")
-TELEGRAM_API_HASH = os.getenv("TELEGRAM_API_HASH")
 OUTPUT_DIR = "sc"
 SEARCH_QUERIES = [
     'filetype:yaml | filetype:yml "proxies:" "clash" site:raw.githubusercontent.com | site:gist.github.com | site:gitlab.com',
     'filetype:yaml | filetype:yml "proxy-providers:" "clash" site:raw.githubusercontent.com | site:gist.github.com',
     '"proxies:" "clash" "ss" | "vmess" | "trojan" | "vless" | "hysteria2"',
     '"proxy-providers:" "clash" | "subscribe" | "freeclash" | "free proxy" site:*.herokuapp.com | site:*.pages.dev | site:*.workers.dev',
-    '"clash" "free proxy" | "node" | "subscribe" site:reddit.com | site:v2ex.com | site:ngabbs.com | site:hostloc.com',
-    '"free trial" "clash" | "proxy" | "subscribe" site:*.herokuapp.com | site:*.pages.dev | site:*.workers.dev | site:*.vercel.app'
+    '"clash" "proxypool" | "free proxy" | "node" site:raw.githubusercontent.com from:lagzian from:ReaJason from:vxiaov'
 ]
-FOFA_QUERIES = ['"clash" && "proxies" && protocol=="http"', 'app="clash" && country="CN"']
-ONYPHE_QUERIES = ['category:datascan protocol:http clash', 'clash subscribe']
-TELEGRAM_CHANNELS = ['@freeproxies', '@clashnodes', '@proxysharing']
 MAX_RESULTS_PER_QUERY = 50
 PAGE_SIZE = 10
 REQUEST_TIMEOUT = 8
 MAX_RETRIES = 3
 MAX_WORKERS = 30
-MAX_SUB_LINKS = 200
+MAX_SUB_LINKS = 100
 MAX_TOTAL_LINKS = 5000
 LINK_BLACKLIST = ['.md', '.png', '.jpg', '.pdf', '/issues/', '/wiki/', '/login', '/signup', '/readme', '/Ruleset/', '/rule/']
 LINK_PRIORITY = ['.yaml', '.yml', '/clash', '/proxies', '/proxy', '/subscribe', '/nodes', '/api']
@@ -83,73 +73,15 @@ def search_with_google(query):
         print(f"Google API 初始化失败: {e}")
         return []
 
-def search_fofa(query):
-    """使用 FOFA API 搜索"""
-    try:
-        url = f"https://fofa.info/api/v1/search/all?api_key={FOFA_API_KEY}&q={query}&size=50"
-        response = requests.get(url, timeout=10)
-        if response.status_code == 200:
-            data = response.json()
-            return [item["url"] for item in data.get("results", []) if "yaml" in item["url"] or "subscribe" in item["url"]]
-        print(f"FOFA 搜索失败: {response.status_code}")
-        return []
-    except Exception as e:
-        print(f"FOFA 搜索异常: {e}")
-        return []
-
-def search_onyphe(query):
-    """使用 ONYPHE API 搜索"""
-    try:
-        url = f"https://search.onyphe.io/api/v2/search?query={query}&api_key={ONYPHE_API_KEY}"
-        response = requests.get(url, timeout=10)
-        if response.status_code == 200:
-            data = response.json()
-            return [item["url"] for item in data.get("results", []) if "yaml" in item["url"] or "clash" in item["url"]]
-        print(f"ONYPHE 搜索失败: {response.status_code}")
-        return []
-    except Exception as e:
-        print(f"ONYPHE 搜索异常: {e}")
-        return []
-
-async def search_telegram():
-    """使用 Telegram API 搜索"""
-    links = []
-    try:
-        async with TelegramClient('scraper', TELEGRAM_API_ID, TELEGRAM_API_HASH) as client:
-            for channel in TELEGRAM_CHANNELS:
-                async for message in client.iter_messages(channel, limit=100):
-                    if message.text:
-                        urls = re.findall(r'https?://[^\s<>"]+|www\.[^\s<>"]+', message.text)
-                        for url in urls:
-                            if any(ext in url.lower() for ext in LINK_PRIORITY) and not any(b in url for b in LINK_BLACKLIST):
-                                links.append(url)
-    except Exception as e:
-        print(f"Telegram 搜索异常: {e}")
-    return links
-
 def search_links():
     """执行所有搜索查询，合并结果并按优先级排序"""
     all_links = set()
     query_results = []
     for query in SEARCH_QUERIES:
-        print(f"执行 Google 搜索: {query}")
+        print(f"执行搜索: {query}")
         links = search_with_google(query)
         all_links.update(links)
         query_results.append((query, len(links)))
-    for query in FOFA_QUERIES:
-        print(f"执行 FOFA 搜索: {query}")
-        links = search_fofa(query)
-        all_links.update(links)
-        query_results.append((query, len(links)))
-    for query in ONYPHE_QUERIES:
-        print(f"执行 ONYPHE 搜索: {query}")
-        links = search_onyphe(query)
-        all_links.update(links)
-        query_results.append((query, len(links)))
-    print(f"执行 Telegram 搜索: {TELEGRAM_CHANNELS}")
-    telegram_links = asyncio.run(search_telegram())
-    all_links.update(telegram_links)
-    query_results.append(("Telegram", len(telegram_links)))
     for query, count in sorted(query_results, key=lambda x: x[1]):
         print(f"查询 {query} 获取 {count} 个链接")
     prioritized_links = sorted(
@@ -208,7 +140,7 @@ def extract_urls_from_content(content):
         if any(ext in url.lower() for ext in LINK_PRIORITY) and not any(b in url for b in LINK_BLACKLIST):
             try:
                 parsed = urllib.parse.urlparse(url)
-                if parsed.scheme and parsed.netloc and not re.match(r'.*%\w+', url):
+                if parsed.scheme and parsed.netloc:
                     urls.append(url)
             except ValueError:
                 continue
@@ -259,8 +191,8 @@ async def process_link(session, link, depth=0):
     sub_proxies = []
     if additional_urls and depth < RECURSION_DEPTH:
         prioritized_urls = sorted(
-            list(set(provider_urls + additional_urls)),
-            key=lambda x: (sum(p in x for p in LINK_PRIORITY) + ('proxy-providers' in content) * 2),
+            list(set(additional_urls)),
+            key=lambda x: sum(p in x for p in LINK_PRIORITY),
             reverse=True
         )[:MAX_SUB_LINKS]
         tasks = [process_link(session, url, depth + 1) for url in prioritized_urls]
