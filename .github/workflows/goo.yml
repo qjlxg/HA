@@ -19,7 +19,7 @@ jobs:
         pip install aiohttp pyyaml pytz
     - name: Run Clash Proxy Crawler
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.TOKEN }}
       run: |
         python clash_proxy_crawler.py
     - name: Commit results
