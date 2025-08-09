@@ -5,26 +5,21 @@ import yaml
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 import re
-import json
+import csv
 from datetime import datetime
 import urllib.parse
 from collections import deque
-import pytz
 import sys
+import pytz
 
 # 核心配置
-GOOGLE_API_KEYS = [
-    os.getenv("GOOGLE_API_KEY_1"),
-    os.getenv("GOOGLE_API_KEY_2"),
-    os.getenv("GOOGLE_API_KEY_3"),
-    os.getenv("GOOGLE_API_KEY_4"),
-    os.getenv("GOOGLE_API_KEY_5")
-]
-GOOGLE_API_KEYS = [key for key in GOOGLE_API_KEYS if key]
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY_1")
 SEARCH_ENGINE_ID = os.getenv("SEARCH_ENGINE_ID")
 
 OUTPUT_DIR = "sc"
 OUTPUT_FILE = "clash_proxies.yaml"
+CACHE_FILE = os.path.join(OUTPUT_DIR, "search_cache.txt")
+STATS_FILE = os.path.join(OUTPUT_DIR, "query_stats.csv")
 SEARCH_QUERIES = [
     'filetype:yaml | filetype:yml "proxies:" "clash" site:raw.githubusercontent.com | site:gist.github.com | site:gitlab.com',
     'filetype:yaml | filetype:yml "proxy-providers:" "clash" site:raw.githubusercontent.com | site:gist.github.com',
@@ -32,7 +27,7 @@ SEARCH_QUERIES = [
     '"proxy-providers:" "clash" | "subscribe" | "freeclash" | "free proxy" site:*.herokuapp.com | site:*.pages.dev | site:*.workers.dev',
     '"clash" "proxypool" | "free proxy" | "node" site:raw.githubusercontent.com from:lagzian from:ReaJason from:vxiaov'
 ]
-MAX_RESULTS_PER_QUERY = 50
+MAX_RESULTS_PER_QUERY = 10  # 调整为更保守的配额
 PAGE_SIZE = 10
 REQUEST_TIMEOUT = 30
 MAX_RETRIES = 3
@@ -51,21 +46,9 @@ STATS = {
     'protocol_counts': {},
     'failed_requests': 0,
     'nodes_by_depth': {},
-    'failed_domains': {}
+    'failed_domains': {},
+    'query_results': {}
 }
-
-KEY_INDEX = 0
-
-def get_next_key():
-    """轮换获取下一个可用的 API 密钥"""
-    global KEY_INDEX
-    if not GOOGLE_API_KEYS:
-        print("错误: 未配置任何 Google API 密钥", file=sys.stderr)
-        return None
-    
-    key = GOOGLE_API_KEYS[KEY_INDEX]
-    KEY_INDEX = (KEY_INDEX + 1) % len(GOOGLE_API_KEYS)
-    return key
 
 def create_output_dir():
     """创建输出目录"""
@@ -74,46 +57,56 @@ def create_output_dir():
         os.makedirs(OUTPUT_DIR)
     os.makedirs('output', exist_ok=True)
 
-def search_with_google(query):
-    """使用 Google Custom Search API 搜索，并轮换密钥"""
-    links = []
-    num_keys = len(GOOGLE_API_KEYS)
-    for _ in range(num_keys):  # 尝试所有可用的密钥
-        key = get_next_key()
-        if not key:
-            return []
-        
-        try:
-            service = build("customsearch", "v1", developerKey=key)
-            for start_index in range(1, MAX_RESULTS_PER_QUERY + 1, PAGE_SIZE):
-                try:
-                    result = service.cse().list(
-                        q=query,
-                        cx=SEARCH_ENGINE_ID,
-                        num=PAGE_SIZE,
-                        start=start_index
-                    ).execute()
-                    items = result.get("items", [])
-                    filtered_links = [item["link"] for item in items if not any(b in item["link"] for b in LINK_BLACKLIST)]
-                    links.extend(filtered_links)
-                    if len(items) < PAGE_SIZE:
-                        break
-                except HttpError as e:
-                    if e.resp.status == 429:
-                        print(f"警告: 密钥配额已用尽，正在切换到下一个密钥...", file=sys.stderr)
-                        raise e # 抛出异常，触发外部的 except 块
-                    print(f"Google API 搜索失败 (query={query}, start={start_index}): {e}", file=sys.stderr)
-                    break
-            return links
-        except HttpError as e:
-            if e.resp.status == 429:
-                continue # 继续尝试下一个密钥
-            print(f"Google API 初始化失败: {e}", file=sys.stderr)
-            return []
-    
-    print("错误: 所有 Google API 密钥配额都已用尽。", file=sys.stderr)
-    return []
+def load_cache():
+    """从缓存文件加载已处理的链接"""
+    if os.path.exists(CACHE_FILE):
+        with open(CACHE_FILE, 'r', encoding='utf-8') as f:
+            return set(line.strip() for line in f)
+    return set()
 
+def save_cache(links):
+    """将新链接追加到缓存文件"""
+    with open(CACHE_FILE, 'a', encoding='utf-8') as f:
+        for link in links:
+            f.write(link + '\n')
+            
+def save_query_stats():
+    """保存关键词统计结果到 CSV 文件"""
+    with open(STATS_FILE, 'w', encoding='utf-8', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(['Query', 'Results'])
+        for query, count in STATS['query_results'].items():
+            writer.writerow([query, count])
+
+def search_with_google(query):
+    """使用 Google Custom Search API 搜索"""
+    links = []
+    if not GOOGLE_API_KEY:
+        print("错误: 未配置 Google API 密钥", file=sys.stderr)
+        return []
+    
+    try:
+        service = build("customsearch", "v1", developerKey=GOOGLE_API_KEY)
+        for start_index in range(1, MAX_RESULTS_PER_QUERY + 1, PAGE_SIZE):
+            try:
+                result = service.cse().list(
+                    q=query,
+                    cx=SEARCH_ENGINE_ID,
+                    num=PAGE_SIZE,
+                    start=start_index
+                ).execute()
+                items = result.get("items", [])
+                filtered_links = [item["link"] for item in items if not any(b in item["link"] for b in LINK_BLACKLIST)]
+                links.extend(filtered_links)
+                if len(items) < PAGE_SIZE:
+                    break
+            except HttpError as e:
+                print(f"Google API 搜索失败 (query={query}, start={start_index}): {e}", file=sys.stderr)
+                break
+        return links
+    except HttpError as e:
+        print(f"Google API 初始化失败: {e}", file=sys.stderr)
+        return []
 
 def search_links():
     """执行所有搜索查询，合并结果并按优先级排序"""
@@ -123,6 +116,7 @@ def search_links():
         print(f"执行搜索: {query}")
         links = search_with_google(query)
         all_links.update(links)
+        STATS['query_results'][query] = len(links)
     
     prioritized_links = sorted(
         list(all_links),
@@ -280,23 +274,31 @@ async def main_async():
     try:
         create_output_dir()
         all_proxies = []
-        processed_links = set()
+        processed_links = load_cache()
+        newly_found_links = set()
         failed_links = []
+        
+        print(f"已从缓存加载 {len(processed_links)} 个链接")
+        
         async with aiohttp.ClientSession() as session:
             print("开始搜索链接")
-            links = search_links()
-            print(f"搜索完成，获取 {len(links)} 个初始链接")
-            link_queue = deque(links)
-            while link_queue and len(processed_links) < MAX_TOTAL_LINKS:
-                batch_size = min(len(link_queue), MAX_WORKERS)
+            links_from_search = search_links()
+            save_query_stats()
+            print(f"搜索完成，获取 {len(links_from_search)} 个初始链接")
+            
+            links_to_process = deque(link for link in links_from_search if link not in processed_links)
+            
+            print(f"需要处理 {len(links_to_process)} 个新链接")
+
+            while links_to_process and len(processed_links) < MAX_TOTAL_LINKS:
+                batch_size = min(len(links_to_process), MAX_WORKERS)
                 tasks = []
                 for _ in range(batch_size):
-                    if not link_queue:
+                    if not links_to_process:
                         break
-                    link = link_queue.popleft()
-                    if link in processed_links:
-                        continue
+                    link = links_to_process.popleft()
                     processed_links.add(link)
+                    newly_found_links.add(link)
                     tasks.append(process_link(session, link))
                 print(f"处理批量链接，批次大小: {len(tasks)}")
                 results = await asyncio.gather(*tasks, return_exceptions=True)
@@ -311,11 +313,13 @@ async def main_async():
                         )[:MAX_SUB_LINKS]
                         for new_link in prioritized_new_links:
                             if new_link not in processed_links and len(processed_links) < MAX_TOTAL_LINKS:
-                                link_queue.append(new_link)
+                                links_to_process.append(new_link)
                     else:
                         failed_links.append(("URL未记录", str(result)))
                 print(f"批次处理完成，当前处理链接总数: {len(processed_links)}")
-
+        
+        save_cache(newly_found_links)
+        
         print("开始去重代理")
         unique_proxies = []
         seen = set()
