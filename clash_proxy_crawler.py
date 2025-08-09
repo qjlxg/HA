@@ -7,7 +7,7 @@ import hashlib
 import time
 
 # --- 配置部分 ---
-GITHUB_API_TOKEN = os.getenv("BOT")  # 直接从名为 "BOT" 的环境变量中获取API令牌
+GITHUB_API_TOKEN = os.getenv("BOT")
 if not GITHUB_API_TOKEN:
     raise ValueError("请在环境变量中设置 BOT")
 
@@ -96,7 +96,11 @@ def crawl():
 
                 for item in items:
                     html_url = item.get("html_url")
-                    raw_url = item.get("url").replace("api.github.com/repos", "raw.githubusercontent.com").replace("/contents/", "/")
+                    
+                    # 修复 URL 拼接错误
+                    raw_url = item.get("url")
+                    raw_url = raw_url.replace("api.github.com/repos/", "raw.githubusercontent.com/")
+                    raw_url = raw_url.replace("/contents/", "/")
                     
                     if html_url in cached_links:
                         print(f" - 链接已缓存: {html_url}")
