@@ -2,37 +2,42 @@ import os
 import asyncio
 import aiohttp
 import yaml
+from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
 import re
 import json
-import logging
 from datetime import datetime
 import urllib.parse
 from collections import deque
 import pytz
+import sys
 
-# 配置日志
-try:
-    os.makedirs('logs', exist_ok=True)
-    log_handler = logging.FileHandler('logs/clash_crawler.log', encoding='utf-8')
-except Exception as e:
-    logging.warning(f"无法创建日志文件: {e}，回退到控制台输出")
-    log_handler = logging.StreamHandler()
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S %Z',
-    handlers=[logging.StreamHandler(), log_handler]
-)
-# 设置上海时间
-logging.Formatter.converter = lambda *args: datetime.now(pytz.timezone('Asia/Shanghai')).timetuple()
+# 核心配置
+# 从环境变量中读取多个 Google API 密钥
+GOOGLE_API_KEYS = [
+    os.getenv("GOOGLE_API_KEY_1"),
+    os.getenv("GOOGLE_API_KEY_2"),
+    os.getenv("GOOGLE_API_KEY_3"),
+    os.getenv("GOOGLE_API_KEY_4"),
+    os.getenv("GOOGLE_API_KEY_5")
+]
+GOOGLE_API_KEYS = [key for key in GOOGLE_API_KEYS if key]
+SEARCH_ENGINE_ID = os.getenv("SEARCH_ENGINE_ID")
 
-# 配置
-GITHUB_TOKEN = os.getenv("TOKEN")  # 确保这里读取的是名为 'TOKEN' 的环境变量
 OUTPUT_DIR = "sc"
+OUTPUT_FILE = "clash_proxies.yaml"
+SEARCH_QUERIES = [
+    'filetype:yaml | filetype:yml "proxies:" "clash" site:raw.githubusercontent.com | site:gist.github.com | site:gitlab.com',
+    'filetype:yaml | filetype:yml "proxy-providers:" "clash" site:raw.githubusercontent.com | site:gist.github.com',
+    '"proxies:" "clash" "ss" | "vmess" | "trojan" | "vless" | "hysteria2" | "http"',
+    '"proxy-providers:" "clash" | "subscribe" | "freeclash" | "free proxy" site:*.herokuapp.com | site:*.pages.dev | site:*.workers.dev',
+    '"clash" "proxypool" | "free proxy" | "node" site:raw.githubusercontent.com from:lagzian from:ReaJason from:vxiaov'
+]
 MAX_RESULTS_PER_QUERY = 50
+PAGE_SIZE = 10
 REQUEST_TIMEOUT = 30
 MAX_RETRIES = 3
-MAX_WORKERS = 5
+MAX_WORKERS = 30
 MAX_SUB_LINKS = 100
 MAX_TOTAL_LINKS = 5000
 LINK_BLACKLIST = ['.md', '.png', '.jpg', '.pdf', '/issues/', '/wiki/', '/login', '/signup', '/readme', '/Ruleset/', '/rule/']
@@ -50,102 +55,80 @@ STATS = {
     'failed_domains': {}
 }
 
+KEY_INDEX = 0
+
+def get_next_key():
+    """轮换获取下一个可用的 API 密钥"""
+    global KEY_INDEX
+    if not GOOGLE_API_KEYS:
+        print("错误: 未配置任何 Google API 密钥", file=sys.stderr)
+        return None
+    
+    key = GOOGLE_API_KEYS[KEY_INDEX]
+    KEY_INDEX = (KEY_INDEX + 1) % len(GOOGLE_API_KEYS)
+    return key
+
 def create_output_dir():
     """创建输出目录"""
-    logging.info(f"创建输出目录: {OUTPUT_DIR}")
+    print(f"创建输出目录: {OUTPUT_DIR}")
     if not os.path.exists(OUTPUT_DIR):
         os.makedirs(OUTPUT_DIR)
     os.makedirs('output', exist_ok=True)
 
-def load_cached_links(cache_file="output/cached_links.json"):
-    """加载缓存的链接"""
-    logging.info(f"加载缓存链接: {cache_file}")
+def search_with_google(query):
+    """使用 Google Custom Search API 搜索，并轮换密钥"""
+    links = []
+    key = get_next_key()
+    if not key:
+        return []
     try:
-        if os.path.exists(cache_file) and os.path.getsize(cache_file) > 0:
-            with open(cache_file, "r", encoding="utf-8") as f:
-                return json.load(f)
-        else:
-            logging.warning(f"缓存文件 {cache_file} 不存在或为空")
-            return []
-    except Exception as e:
-        logging.error(f"加载缓存文件 {cache_file} 失败: {e}")
+        service = build("customsearch", "v1", developerKey=key)
+        for start_index in range(1, MAX_RESULTS_PER_QUERY + 1, PAGE_SIZE):
+            try:
+                result = service.cse().list(
+                    q=query,
+                    cx=SEARCH_ENGINE_ID,
+                    num=PAGE_SIZE,
+                    start=start_index
+                ).execute()
+                items = result.get("items", [])
+                filtered_links = [item["link"] for item in items if not any(b in item["link"] for b in LINK_BLACKLIST)]
+                links.extend(filtered_links)
+                if len(items) < PAGE_SIZE:
+                    break
+            except HttpError as e:
+                print(f"Google API 搜索失败 (query={query}, start={start_index}): {e}", file=sys.stderr)
+                break
+        return links
+    except HttpError as e:
+        print(f"Google API 初始化失败: {e}", file=sys.stderr)
         return []
 
-def save_cached_links(links, cache_file="output/cached_links.json"):
-    """保存链接到缓存"""
-    logging.info(f"保存缓存链接到: {cache_file}")
-    os.makedirs(os.path.dirname(cache_file), exist_ok=True)
-    with open(cache_file, "w", encoding="utf-8") as f:
-        json.dump(links, f, ensure_ascii=False)
-
-async def search_with_github_api(session, queries=["proxies: clash", "proxy-providers: clash", "subscription: clash"]):
-    """使用 GitHub API 搜索代码"""
-    links = []
-    headers = {"Authorization": f"token {GITHUB_TOKEN}"} if GITHUB_TOKEN else {}
-    for query in queries:
-        logging.info(f"执行 GitHub API 搜索: {query}")
-        page = 1
-        per_page = 100
-        while True:
-            api_url = f"https://api.github.com/search/code?q={urllib.parse.quote(query)}+extension:yaml+extension:yml&per_page={per_page}&page={page}"
-            logging.info(f"GitHub API 请求: {api_url}")
-            try:
-                async with session.get(api_url, headers=headers, timeout=REQUEST_TIMEOUT) as response:
-                    if response.status == 200:
-                        data = await response.json()
-                        items = data.get("items", [])
-                        if not items:
-                            break
-                        for item in items:
-                            repo = item["repository"]["full_name"]
-                            path = item["path"]
-                            if "gist.github.com" in item["html_url"]:
-                                gist_id = item["html_url"].split("/")[-1]
-                                raw_url = f"https://gist.githubusercontent.com/{repo}/{gist_id}/raw/{path}"
-                            else:
-                                raw_url = f"https://raw.githubusercontent.com/{repo}/main/{path}"
-                            if not any(b in raw_url for b in LINK_BLACKLIST):
-                                links.append(raw_url)
-                        logging.info(f"GitHub API 获取 {len(items)} 个链接 (page={page})")
-                        page += 1
-                    elif response.status == 403:
-                        logging.warning("GitHub API 配额超限，等待 60 秒")
-                        await asyncio.sleep(60)
-                    else:
-                        logging.error(f"GitHub API 搜索失败，状态码: {response.status}")
-                        break
-            except (aiohttp.ClientError, asyncio.TimeoutError) as e:
-                logging.error(f"GitHub API 搜索失败: {e}")
-                break
-    logging.info(f"GitHub API 搜索完成，获取 {len(links)} 个链接")
-    return links
-
-async def search_links(session):
+def search_links():
     """执行所有搜索查询，合并结果并按优先级排序"""
-    logging.info("开始搜索链接")
-    all_links = set(load_cached_links())
-    github_links = await search_with_github_api(session)
-    all_links.update(github_links)
-    logging.info(f"GitHub API 查询获取 {len(github_links)} 个链接")
+    print("开始搜索链接")
+    all_links = set()
+    for query in SEARCH_QUERIES:
+        print(f"执行搜索: {query}")
+        links = search_with_google(query)
+        all_links.update(links)
+    
     prioritized_links = sorted(
         list(all_links),
         key=lambda x: sum(p in x for p in LINK_PRIORITY),
         reverse=True
     )
-    save_cached_links(prioritized_links)
-    if len(all_links) < 50:
-        logging.warning(f"搜索结果不足 ({len(all_links)} 个链接)，请检查 GITHUB_TOKEN 或缓存文件 output/cached_links.json")
-    logging.info(f"共获取 {len(all_links)} 个唯一链接")
+    print(f"共获取 {len(all_links)} 个唯一链接")
     return prioritized_links[:500]
 
 async def fetch_content(session, url):
     """异步获取网页内容，支持预检查和多平台 raw 链接转换"""
-    logging.info(f"获取内容: {url}")
+    print(f"获取内容: {url}")
     domain = urllib.parse.urlparse(url).netloc
     if domain in DOMAIN_BLACKLIST or domain in FAILED_DOMAINS:
         STATS['failed_requests'] += 1
         STATS['failed_domains'][domain] = STATS['failed_domains'].get(domain, 0) + 1
-        logging.warning(f"跳过黑名单域名: {domain}")
+        print(f"警告: 跳过黑名单域名: {domain}", file=sys.stderr)
         return None, url
     for attempt in range(MAX_RETRIES):
         try:
@@ -154,11 +137,11 @@ async def fetch_content(session, url):
                     STATS['failed_requests'] += 1
                     STATS['failed_domains'][domain] = STATS['failed_domains'].get(domain, 0) + 1
                     FAILED_DOMAINS.add(domain)
-                    logging.warning(f"HEAD 请求失败: {url}, 状态码: {head_response.status}")
+                    print(f"警告: HEAD 请求失败: {url}, 状态码: {head_response.status}", file=sys.stderr)
                     return None, url
                 content_type = head_response.headers.get('content-type', '').lower()
                 if not ('yaml' in content_type or 'octet-stream' in content_type or 'text/plain' in content_type):
-                    logging.warning(f"跳过 {url}，无效内容类型: {content_type}")
+                    print(f"警告: 跳过 {url}，无效内容类型: {content_type}", file=sys.stderr)
                     return None, url
             if "github.com" in url and "/blob/" in url:
                 url = url.replace("github.com", "raw.githubusercontent.com").replace("/blob/", "/")
@@ -168,25 +151,24 @@ async def fetch_content(session, url):
                 url = url.replace("/src/", "/raw/")
             async with session.get(url, timeout=REQUEST_TIMEOUT) as response:
                 if response.status == 200:
-                    logging.info(f"成功获取内容: {url}")
+                    print(f"成功获取内容: {url}")
                     return await response.text(), url
-                logging.warning(f"获取 {url} 失败，状态码: {response.status}")
+                print(f"警告: 获取 {url} 失败，状态码: {response.status}", file=sys.stderr)
                 STATS['failed_requests'] += 1
                 STATS['failed_domains'][domain] = STATS['failed_domains'].get(domain, 0) + 1
                 FAILED_DOMAINS.add(domain)
                 await asyncio.sleep(2 ** attempt)
         except (aiohttp.ClientError, asyncio.TimeoutError) as e:
-            logging.warning(f"获取 {url} 失败 (尝试 {attempt + 1}/{MAX_RETRIES}): {e}")
+            print(f"警告: 获取 {url} 失败 (尝试 {attempt + 1}/{MAX_RETRIES}): {e}", file=sys.stderr)
             STATS['failed_requests'] += 1
             STATS['failed_domains'][domain] = STATS['failed_domains'].get(domain, 0) + 1
             FAILED_DOMAINS.add(domain)
             await asyncio.sleep(2 ** attempt)
-    logging.error(f"获取 {url} 失败，已达最大重试次数")
+    print(f"错误: 获取 {url} 失败，已达最大重试次数", file=sys.stderr)
     return None, url
 
 def extract_urls_from_content(content):
     """从内容中提取潜在的订阅链接"""
-    logging.info("提取订阅链接")
     urls = []
     if not content:
         return urls
@@ -200,22 +182,21 @@ def extract_urls_from_content(content):
                     urls.append(url)
             except ValueError:
                 continue
-    logging.info(f"提取到 {len(urls)} 个订阅链接")
+    print(f"提取到 {len(urls)} 个订阅链接")
     return urls[:MAX_SUB_LINKS]
 
 def is_valid_clash_yaml(content):
     """验证是否为有效的 Clash YAML 配置，统计协议类型"""
-    logging.info("验证 Clash YAML 配置")
     try:
         data = yaml.safe_load(content)
         if not isinstance(data, dict):
-            logging.warning("YAML 解析失败: 非字典格式")
+            print("警告: YAML 解析失败: 非字典格式", file=sys.stderr)
             return False, None, []
         
         proxies = data.get("proxies", [])
         if not isinstance(proxies, list):
-            logging.warning("proxies 字段非列表")
-            proxies = [] # 将其视为空列表
+            print("警告: proxies 字段非列表", file=sys.stderr)
+            proxies = []
             
         valid_proxies = []
         supported_protocols = ["ss", "trojan", "vmess", "vless", "http", "https", "snell", "hysteria2"]
@@ -232,18 +213,18 @@ def is_valid_clash_yaml(content):
                 if isinstance(provider, dict) and "url" in provider:
                     provider_urls.append(provider["url"])
                     
-        logging.info(f"找到 {len(valid_proxies)} 个有效代理，{len(provider_urls)} 个订阅链接")
+        print(f"找到 {len(valid_proxies)} 个有效代理，{len(provider_urls)} 个订阅链接")
         return bool(valid_proxies) or bool(provider_urls), valid_proxies, provider_urls
         
     except yaml.YAMLError as e:
-        logging.error(f"YAML 解析错误: {e}")
+        print(f"错误: YAML 解析错误: {e}", file=sys.stderr)
         return False, None, []
 
 async def process_link(session, link, depth=0):
     """异步处理单个链接，提取代理节点和订阅链接"""
-    logging.info(f"处理链接: {link} (深度: {depth})")
+    print(f"处理链接: {link} (深度: {depth})")
     if depth > RECURSION_DEPTH:
-        logging.warning(f"超过最大递归深度 ({RECURSION_DEPTH})，跳过: {link}")
+        print(f"警告: 超过最大递归深度 ({RECURSION_DEPTH})，跳过: {link}", file=sys.stderr)
         return [], []
     STATS['links_processed'] += 1
     try:
@@ -261,7 +242,7 @@ async def process_link(session, link, depth=0):
                 STATS['nodes_found'] += len(proxies)
                 STATS['links_by_source'][domain] = STATS['links_by_source'].get(domain, 0) + len(proxies)
                 STATS['nodes_by_depth'][depth] = STATS['nodes_by_depth'].get(depth, 0) + len(proxies)
-                logging.info(f"从 {url} 提取到 {len(proxies)} 个节点 (深度: {depth})")
+                print(f"从 {url} 提取到 {len(proxies)} 个节点 (深度: {depth})")
             
             additional_urls = extract_urls_from_content(content)
             all_new_urls = list(set(additional_urls + provider_urls))
@@ -281,7 +262,7 @@ async def process_link(session, link, depth=0):
                         sub_proxies.extend(sub_prox)
             return valid_proxies + sub_proxies, all_new_urls
     except asyncio.TimeoutError:
-        logging.error(f"处理链接 {link} 超时")
+        print(f"错误: 处理链接 {link} 超时", file=sys.stderr)
         return [], []
 
 async def main_async():
@@ -291,9 +272,9 @@ async def main_async():
         processed_links = set()
         failed_links = []
         async with aiohttp.ClientSession() as session:
-            logging.info("开始搜索链接")
-            links = await search_links(session)
-            logging.info(f"搜索完成，获取 {len(links)} 个初始链接")
+            print("开始搜索链接")
+            links = search_links()
+            print(f"搜索完成，获取 {len(links)} 个初始链接")
             link_queue = deque(links)
             while link_queue and len(processed_links) < MAX_TOTAL_LINKS:
                 batch_size = min(len(link_queue), MAX_WORKERS)
@@ -306,9 +287,9 @@ async def main_async():
                         continue
                     processed_links.add(link)
                     tasks.append(process_link(session, link))
-                logging.info(f"处理批量链接，批次大小: {len(tasks)}")
+                print(f"处理批量链接，批次大小: {len(tasks)}")
                 results = await asyncio.gather(*tasks, return_exceptions=True)
-                for i, result in enumerate(results):
+                for result in results:
                     if isinstance(result, tuple):
                         proxies, new_links = result
                         all_proxies.extend(proxies)
@@ -321,58 +302,55 @@ async def main_async():
                             if new_link not in processed_links and len(processed_links) < MAX_TOTAL_LINKS:
                                 link_queue.append(new_link)
                     else:
-                        failed_links.append((link, str(result)))
-                logging.info(f"批次处理完成，当前处理链接总数: {len(processed_links)}")
+                        failed_links.append(("URL未记录", str(result)))
+                print(f"批次处理完成，当前处理链接总数: {len(processed_links)}")
 
-        logging.info("开始去重代理")
+        print("开始去重代理")
         unique_proxies = []
         seen = set()
         for proxy in all_proxies:
             if not isinstance(proxy, dict):
                 continue
-            if "port" not in proxy or "password" not in proxy:
-                continue
-            key = (proxy.get("name"), proxy.get("server"), proxy.get("type"))
+            key = (proxy.get("name"), proxy.get("server"), proxy.get("port"), proxy.get("type"))
             if key not in seen:
                 seen.add(key)
                 unique_proxies.append(proxy)
-        logging.info(f"去重后保留 {len(unique_proxies)} 个代理")
+        print(f"去重后保留 {len(unique_proxies)} 个代理")
 
-        output_file = "clash_proxies.yaml"
-        output_path = os.path.join(OUTPUT_DIR, output_file)
+        output_path = os.path.join(OUTPUT_DIR, OUTPUT_FILE)
         if unique_proxies:
             output_data = {"proxies": unique_proxies}
             with open(output_path, "w", encoding="utf-8") as f:
                 yaml.safe_dump(output_data, f, allow_unicode=True)
-            logging.info(f"已保存 {len(unique_proxies)} 个节点到 {output_path}")
+            print(f"已保存 {len(unique_proxies)} 个节点到 {output_path}")
         else:
-            logging.warning("未找到任何有效的 Clash 代理配置")
+            print("警告: 未找到任何有效的 Clash 代理配置", file=sys.stderr)
 
         failed_path = "output/clash_failed.txt"
         with open(failed_path, "w", encoding="utf-8") as f:
             f.write("失败链接,#genre#\n")
             for link, error in failed_links:
                 f.write(f"{link},{error}\n")
-        logging.info(f"已保存 {len(failed_links)} 个失败链接到 {failed_path}")
+        print(f"已保存 {len(failed_links)} 个失败链接到 {failed_path}")
 
-        logging.info("\n统计信息：")
-        logging.info(f"处理链接总数: {STATS['links_processed']}")
-        logging.info(f"失败请求数: {STATS['failed_requests']}")
-        logging.info(f"发现节点总数: {STATS['nodes_found']}")
-        logging.info("节点来源分布：")
+        print("\n统计信息：")
+        print(f"处理链接总数: {STATS['links_processed']}")
+        print(f"失败请求数: {STATS['failed_requests']}")
+        print(f"发现节点总数: {STATS['nodes_found']}")
+        print("节点来源分布：")
         for domain, count in sorted(STATS['links_by_source'].items(), key=lambda x: x[1], reverse=True):
-            logging.info(f"  {domain}: {count} 个节点")
-        logging.info("协议分布：")
+            print(f"  {domain}: {count} 个节点")
+        print("协议分布：")
         for protocol, count in sorted(STATS['protocol_counts'].items(), key=lambda x: x[1], reverse=True):
-            logging.info(f"  {protocol}: {count} 个节点")
-        logging.info("深度分布：")
+            print(f"  {protocol}: {count} 个节点")
+        print("深度分布：")
         for depth, count in sorted(STATS['nodes_by_depth'].items()):
-            logging.info(f"  深度 {depth}: {count} 个节点")
-        logging.info("失败域名分布：")
+            print(f"  深度 {depth}: {count} 个节点")
+        print("失败域名分布：")
         for domain, count in sorted(STATS['failed_domains'].items(), key=lambda x: x[1], reverse=True):
-            logging.info(f"  {domain}: {count} 次失败")
+            print(f"  {domain}: {count} 次失败")
     except Exception as e:
-        logging.error(f"主程序发生错误: {e}")
+        print(f"主程序发生错误: {e}", file=sys.stderr)
         raise
 
 def main():
