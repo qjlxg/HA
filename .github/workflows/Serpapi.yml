@@ -1,4 +1,4 @@
-name: Clash Proxy Check
+name: Github_proxy_crawler
 on:
   push:
     branches: [ main ]
@@ -20,7 +20,8 @@ jobs:
           pip install aiohttp pyyaml requests
       - name: Run Clash Proxy Crawler
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
         run: |
           python Github_proxy_crawler.py
       - name: Commit results
