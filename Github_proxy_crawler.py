@@ -4,7 +4,6 @@ import aiohttp
 import yaml
 import re
 import csv
-from datetime import datetime
 import urllib.parse
 from collections import deque
 import sys
@@ -13,20 +12,23 @@ import json
 import time
 
 # 核心配置
-SERPAPI_KEY = os.getenv("SERPAPI_KEY")
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN") # 可选，但强烈建议使用以增加速率限制
 
 OUTPUT_DIR = "sc"
 OUTPUT_FILE = "clash_proxies.yaml"
 CACHE_FILE = os.path.join(OUTPUT_DIR, "search_cache.txt")
 STATS_FILE = os.path.join(OUTPUT_DIR, "query_stats.csv")
+
 SEARCH_QUERIES = [
-    'filetype:yaml | filetype:yml "proxies:" "clash" site:raw.githubusercontent.com | site:gist.github.com | site:gitlab.com',
-    'filetype:yaml | filetype:yml "proxy-providers:" "clash" site:raw.githubusercontent.com | site:gist.github.com',
-    '"proxies:" "clash" "ss" | "vmess" | "trojan" | "vless" | "hysteria2" | "http"',
-    '"proxy-providers:" "clash" | "subscribe" | "freeclash" | "free proxy" site:*.herokuapp.com | site:*.pages.dev | site:*.workers.dev',
-    '"clash" "proxypool" | "free proxy" | "node" site:raw.githubusercontent.com from:lagzian from:ReaJason from:vxiaov'
+    'filename:clash.yaml OR filename:clash.yml "proxies:" language:YAML',
+    'filename:clash.yaml OR filename:clash.yml "proxy-providers:" language:YAML',
+    'extension:yaml OR extension:yml "proxies:" "clash" path:/',
+    'extension:yaml OR extension:yml "proxy-providers:" "clash" path:/'
 ]
-MAX_RESULTS_PER_QUERY = 50 
+
+# GitHub 的搜索限制：最多 1000 个结果
+MAX_RESULTS_PER_QUERY = 1000
+MAX_SEARCH_PAGES = 10 
 REQUEST_TIMEOUT = 30
 MAX_RETRIES = 3
 MAX_WORKERS = 30
@@ -76,32 +78,44 @@ def save_query_stats():
         for query, count in STATS['query_results'].items():
             writer.writerow([query, count])
 
-def search_with_serpapi(query):
-    """使用 Serpapi 搜索"""
+def search_with_github(query):
+    """使用 GitHub API 搜索代码文件"""
     links = []
-    if not SERPAPI_KEY:
-        print("错误: 未配置 Serpapi 密钥", file=sys.stderr)
-        return []
-    
-    params = {
-        "api_key": SERPAPI_KEY,
-        "engine": "google",  # 你可以选择其他搜索引擎, 例如 "bing" 或 "duckduckgo"
-        "q": query,
-        "num": 10, # Serpapi 默认返回10个结果，可以增加
+    headers = {
+        "Accept": "application/vnd.github.v3.text-match+json",
+        "Authorization": f"token {GITHUB_TOKEN}" if GITHUB_TOKEN else None
     }
     
-    try:
-        response = requests.get("https://serpapi.com/search", params=params)
-        response.raise_for_status()
-        search_results = response.json()
-        
-        organic_results = search_results.get("organic_results", [])
-        if organic_results:
-            filtered_links = [item["link"] for item in organic_results if "link" in item and not any(b in item["link"] for b in LINK_BLACKLIST)]
-            links.extend(filtered_links)
-    except requests.exceptions.RequestException as e:
-        print(f"Serpapi 搜索失败 (query={query}): {e}", file=sys.stderr)
+    url = "https://api.github.com/search/code"
     
+    for page in range(1, MAX_SEARCH_PAGES + 1):
+        params = {
+            "q": query,
+            "per_page": 100,
+            "page": page
+        }
+        
+        try:
+            response = requests.get(url, headers=headers, params=params)
+            response.raise_for_status()
+            search_results = response.json()
+            
+            items = search_results.get("items", [])
+            for item in items:
+                # 构造 raw.githubusercontent.com 链接
+                raw_url = item['html_url'].replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/')
+                if not any(b in raw_url for b in LINK_BLACKLIST):
+                    links.append(raw_url)
+            
+            # 如果结果少于 per_page，说明没有更多了
+            if len(items) < 100:
+                break
+            
+            time.sleep(2) # 遵守 GitHub API 速率限制
+        except requests.exceptions.RequestException as e:
+            print(f"GitHub API 搜索失败 (query={query}): {e}", file=sys.stderr)
+            break
+            
     return links
 
 def search_links():
@@ -110,10 +124,9 @@ def search_links():
     all_links = set()
     for query in SEARCH_QUERIES:
         print(f"执行搜索: {query}")
-        links = search_with_serpapi(query)
+        links = search_with_github(query)
         all_links.update(links)
         STATS['query_results'][query] = len(links)
-        time.sleep(2) # 增加延迟，避免触发 Serpapi 的速率限制
     
     prioritized_links = sorted(
         list(all_links),
