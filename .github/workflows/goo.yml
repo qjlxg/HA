@@ -28,6 +28,6 @@ jobs:
       run: |
         git config --global user.name 'GitHub Action'
         git config --global user.email 'action@github.com'
-        git add sc/clash_proxies.yaml output/clash_failed.txt
-        git commit -m "Update clash proxies and failed links" || echo "No changes to commit"
+        git add sc/clash_proxies.yaml output/clash_failed.txt logs/clash_crawler.log
+        git commit -m "Update clash proxies and logs" || echo "No changes to commit"
         git push
