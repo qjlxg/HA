@@ -104,54 +104,54 @@ def search_with_google(query):
                     break
             except HttpError as e:
                 if e.resp.status == 429:
-                    logging.warning(f"Google API 配额超限，等待 60 秒 (query={query}, start={start_index})")
-                    time.sleep(60)
-                    continue
+                    logging.warning(f"Google API 配额超限，跳过搜索 (query={query})")
+                    return []
                 logging.error(f"Google API 搜索失败 (query={query}, start={start_index}): {e}")
-                break
+                return []
         return links
     except HttpError as e:
         logging.error(f"Google API 初始化失败: {e}")
         return []
 
-async def search_with_github_api(session, query="proxies: clash"):
+async def search_with_github_api(session, queries=["proxies: clash", "proxy-providers: clash"]):
     """使用 GitHub API 搜索代码"""
-    logging.info(f"执行 GitHub API 搜索: {query}")
     links = []
     headers = {"Authorization": f"token {GITHUB_TOKEN}"}
-    page = 1
-    per_page = 100
-    while True:
-        api_url = f"https://api.github.com/search/code?q={urllib.parse.quote(query)}+extension:yaml+extension:yml&per_page={per_page}&page={page}"
-        logging.info(f"GitHub API 请求: {api_url}")
-        try:
-            async with session.get(api_url, headers=headers, timeout=REQUEST_TIMEOUT) as response:
-                if response.status == 200:
-                    data = await response.json()
-                    items = data.get("items", [])
-                    if not items:
+    for query in queries:
+        logging.info(f"执行 GitHub API 搜索: {query}")
+        page = 1
+        per_page = 100
+        while True:
+            api_url = f"https://api.github.com/search/code?q={urllib.parse.quote(query)}+extension:yaml+extension:yml&per_page={per_page}&page={page}"
+            logging.info(f"GitHub API 请求: {api_url}")
+            try:
+                async with session.get(api_url, headers=headers, timeout=REQUEST_TIMEOUT) as response:
+                    if response.status == 200:
+                        data = await response.json()
+                        items = data.get("items", [])
+                        if not items:
+                            break
+                        for item in items:
+                            repo = item["repository"]["full_name"]
+                            path = item["path"]
+                            if "gist.github.com" in item["html_url"]:
+                                gist_id = item["html_url"].split("/")[-1]
+                                raw_url = f"https://gist.githubusercontent.com/{repo}/{gist_id}/raw/{path}"
+                            else:
+                                raw_url = f"https://raw.githubusercontent.com/{repo}/main/{path}"
+                            if not any(b in raw_url for b in LINK_BLACKLIST):
+                                links.append(raw_url)
+                        logging.info(f"GitHub API 获取 {len(items)} 个链接 (page={page})")
+                        page += 1
+                    elif response.status == 403:
+                        logging.warning("GitHub API 配额超限，等待 60 秒")
+                        await asyncio.sleep(60)
+                    else:
+                        logging.error(f"GitHub API 搜索失败，状态码: {response.status}")
                         break
-                    for item in items:
-                        repo = item["repository"]["full_name"]
-                        path = item["path"]
-                        if "gist.github.com" in item["html_url"]:
-                            gist_id = item["html_url"].split("/")[-1]
-                            raw_url = f"https://gist.githubusercontent.com/{repo}/{gist_id}/raw/{path}"
-                        else:
-                            raw_url = f"https://raw.githubusercontent.com/{repo}/main/{path}"
-                        if not any(b in raw_url for b in LINK_BLACKLIST):
-                            links.append(raw_url)
-                    logging.info(f"GitHub API 获取 {len(items)} 个链接 (page={page})")
-                    page += 1
-                elif response.status == 403:
-                    logging.warning("GitHub API 配额超限，等待 60 秒")
-                    await asyncio.sleep(60)
-                else:
-                    logging.error(f"GitHub API 搜索失败，状态码: {response.status}")
-                    break
-        except (aiohttp.ClientError, asyncio.TimeoutError) as e:
-            logging.error(f"GitHub API 搜索失败: {e}")
-            break
+            except (aiohttp.ClientError, asyncio.TimeoutError) as e:
+                logging.error(f"GitHub API 搜索失败: {e}")
+                break
     logging.info(f"GitHub API 搜索完成，获取 {len(links)} 个链接")
     return links
 
@@ -164,9 +164,11 @@ async def search_links(session):
         links = search_with_google(query)
         all_links.update(links)
         query_results.append((query, len(links)))
-    github_links = await search_with_github_api(session, "proxies: clash")
+    if not all_links:
+        logging.info("Google API 搜索失败，切换到 GitHub API 和缓存链接")
+    github_links = await search_with_github_api(session)
     all_links.update(github_links)
-    query_results.append(("GitHub API: proxies: clash", len(github_links)))
+    query_results.append(("GitHub API", len(github_links)))
     for query, count in sorted(query_results, key=lambda x: x[1]):
         logging.info(f"查询 {query} 获取 {count} 个链接")
     prioritized_links = sorted(
@@ -175,6 +177,8 @@ async def search_links(session):
         reverse=True
     )
     save_cached_links(prioritized_links)
+    if len(all_links) < 50:
+        logging.warning(f"搜索结果不足 ({len(all_links)} 个链接)，请检查 API 配置或缓存文件")
     logging.info(f"共获取 {len(all_links)} 个唯一链接")
     return prioritized_links[:500]
 
