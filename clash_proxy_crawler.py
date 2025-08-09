@@ -1,4 +1,4 @@
-# clash_proxy_crawler.py
+# clash_proxy_crawler_v3.py
 import requests
 import yaml
 import os
@@ -56,10 +56,11 @@ def save_cache(cache):
 def get_content_hash(content):
     return hashlib.sha256(content.encode('utf-8')).hexdigest()
 
-def append_to_yaml(proxies):
-    with open(PROXIES_FILE, 'a', encoding='utf-8') as f:
-        yaml.dump(proxies, f, allow_unicode=True, sort_keys=False)
-        f.write('\n---\n')
+def write_proxies_to_yaml(all_proxies):
+    # 将所有代理节点写入一个单一的 YAML 文件
+    final_config = {'proxies': all_proxies}
+    with open(PROXIES_FILE, 'w', encoding='utf-8') as f:
+        yaml.dump(final_config, f, allow_unicode=True, sort_keys=False)
 
 def append_stats(query, count):
     file_exists = os.path.exists(STATS_FILE)
@@ -81,21 +82,28 @@ def parse_yaml_content(content):
     try:
         config = yaml.safe_load(content)
         if isinstance(config, dict):
-            proxies = config.get('proxies', []) or config.get('proxy-providers', {})
+            proxies = config.get('proxies', [])
             if isinstance(proxies, list):
                 valid_proxies = [p for p in proxies if validate_proxy(p)]
-                return valid_proxies if valid_proxies else None
-            elif isinstance(proxies, dict):
-                return proxies
-        return None
+                return valid_proxies if valid_proxies else []
+            # 如果是 proxy-providers，我们只获取值（即节点列表）
+            elif 'proxy-providers' in config:
+                all_providers = []
+                for provider_name, provider_data in config['proxy-providers'].items():
+                    if 'proxies' in provider_data and isinstance(provider_data['proxies'], list):
+                        all_providers.extend(provider_data['proxies'])
+                valid_proxies = [p for p in all_providers if validate_proxy(p)]
+                return valid_proxies if valid_proxies else []
+        return []
     except yaml.YAMLError:
         print(f" - 内容不是有效的 YAML 格式，跳过。")
-        return None
+        return []
 
 # --- 主要爬取逻辑 ---
 def crawl():
     cached_links = load_cache()
     new_cache_entries = {}
+    all_found_proxies = []
 
     for query in search_queries:
         print(f"正在搜索: {query}")
@@ -145,9 +153,9 @@ def crawl():
                             proxies = parse_yaml_content(page_content)
                             if proxies:
                                 print(f" - 在 {html_url} 找到有效的 Clash 配置文件！")
-                                append_to_yaml(proxies)
+                                all_found_proxies.extend(proxies)
                                 
-                                node_count = len(proxies) if isinstance(proxies, list) else len(proxies.keys())
+                                node_count = len(proxies)
                                 current_query_nodes_count += node_count
                                 new_cache_entries[html_url] = get_content_hash(page_content)
                             else:
@@ -180,6 +188,13 @@ def crawl():
 
     cached_links.update(new_cache_entries)
     save_cache(cached_links)
+
+    # 将所有收集到的代理节点写入最终文件
+    if all_found_proxies:
+        write_proxies_to_yaml(all_found_proxies)
+        print(f"\n✅ 所有找到的代理节点已成功合并并写入 {PROXIES_FILE}")
+    else:
+        print("\n⚠️ 未找到任何有效的代理节点。")
 
 if __name__ == '__main__':
     crawl()
