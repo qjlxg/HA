@@ -16,11 +16,9 @@ jobs:
         python-version: '3.9'
     - name: Install dependencies
       run: |
-        pip install aiohttp pyyaml google-api-python-client
+        pip install aiohttp pyyaml pytz
     - name: Run Clash Proxy Crawler
       env:
-        GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
-        SEARCH_ENGINE_ID: ${{ secrets.SEARCH_ENGINE_ID }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         python clash_proxy_crawler.py
