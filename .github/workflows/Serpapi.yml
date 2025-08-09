@@ -27,8 +27,8 @@ jobs:
 
       - name: Run crawler script
         env:
-          # 将你的新令牌名称 'BOT' 传入名为 'BOT_TOKEN' 的环境变量
-          BOT_TOKEN: ${{ secrets.BOT }}
+          # 将你的 Secret 'BOT' 的值直接赋给同名的环境变量
+          BOT: ${{ secrets.BOT }}
         run: |
           python clash_proxy_crawler.py
 
