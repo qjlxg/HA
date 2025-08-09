@@ -1,4 +1,3 @@
-
 import os
 import asyncio
 import aiohttp
@@ -62,10 +61,17 @@ def load_cached_links(cache_file="output/cached_links.json"):
     """加载缓存的链接"""
     logging.info(f"加载缓存链接: {cache_file}")
     try:
-        with open(cache_file, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except FileNotFoundError:
-        logging.warning(f"缓存文件 {cache_file} 不存在")
+        # 检查文件是否存在且不为空
+        if os.path.exists(cache_file) and os.path.getsize(cache_file) > 0:
+            with open(cache_file, "r", encoding="utf-8") as f:
+                return json.load(f)
+        else:
+            # 文件不存在或为空，返回空列表
+            logging.warning(f"缓存文件 {cache_file} 不存在或为空")
+            return []
+    except Exception as e:
+        # 捕获所有潜在的解析错误，包括 JSONDecodeError
+        logging.error(f"加载缓存文件 {cache_file} 失败: {e}")
         return []
 
 def save_cached_links(links, cache_file="output/cached_links.json"):
