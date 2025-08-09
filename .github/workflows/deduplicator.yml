@@ -7,7 +7,7 @@ on:
     paths:
       - 'merged_configs.txt'
       - 'all_unique_nodes.txt'
-
+      - 'deduplicator.py'
 jobs:
   deduplicate:
     runs-on: ubuntu-latest
