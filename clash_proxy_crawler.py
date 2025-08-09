@@ -5,6 +5,7 @@ import os
 import csv
 import hashlib
 import time
+from datetime import datetime
 
 # --- 配置部分 ---
 GITHUB_API_TOKEN = os.getenv("BOT")
@@ -35,22 +36,30 @@ os.makedirs('sc', exist_ok=True)
 
 # --- 文件操作函数 ---
 def load_cache():
-    if not os.path.exists(CACHE_FILE):
-        return {}
-    with open(CACHE_FILE, 'r') as f:
-        return {line.strip().split(',')[0]: line.strip().split(',')[1] for line in f if ',' in line}
+    cache = {}
+    if os.path.exists(CACHE_FILE):
+        with open(CACHE_FILE, 'r', encoding='utf-8') as f:
+            for line in f:
+                try:
+                    if ',' in line:
+                        url, hash_val = line.strip().split(',', 1)
+                        cache[url] = hash_val
+                except ValueError:
+                    print(f" - 跳过无效缓存行: {line.strip()}")
+    return cache
 
 def save_cache(cache):
-    with open(CACHE_FILE, 'w') as f:
-        for url, content_hash in cache.items():
-            f.write(f"{url},{content_hash}\n")
+    with open(CACHE_FILE, 'w', encoding='utf-8') as f:
+        for url, hash_val in cache.items():
+            f.write(f"{url},{hash_val}\n")
 
 def get_content_hash(content):
     return hashlib.sha256(content.encode('utf-8')).hexdigest()
 
-def append_to_yaml(content):
+def append_to_yaml(proxies):
     with open(PROXIES_FILE, 'a', encoding='utf-8') as f:
-        f.write(content + '\n---\n')
+        yaml.dump(proxies, f, allow_unicode=True, sort_keys=False)
+        f.write('\n---\n')
 
 def append_stats(query, count):
     file_exists = os.path.exists(STATS_FILE)
@@ -58,7 +67,30 @@ def append_stats(query, count):
         writer = csv.writer(f)
         if not file_exists:
             writer.writerow(['query', 'node_count', 'timestamp'])
-        writer.writerow([query, count, time.strftime('%Y-%m-%d %H:%M:%S')])
+        writer.writerow([query, count, datetime.now().isoformat()])
+
+# --- 节点验证和解析 ---
+def validate_proxy(proxy):
+    if isinstance(proxy, dict):
+        required_keys = ['server', 'port', 'type']
+        valid_types = ['ss', 'vmess', 'trojan']
+        return all(key in proxy for key in required_keys) and proxy['type'] in valid_types
+    return False
+
+def parse_yaml_content(content):
+    try:
+        config = yaml.safe_load(content)
+        if isinstance(config, dict):
+            proxies = config.get('proxies', []) or config.get('proxy-providers', {})
+            if isinstance(proxies, list):
+                valid_proxies = [p for p in proxies if validate_proxy(p)]
+                return valid_proxies if valid_proxies else None
+            elif isinstance(proxies, dict):
+                return proxies
+        return None
+    except yaml.YAMLError:
+        print(f" - 内容不是有效的 YAML 格式，跳过。")
+        return None
 
 # --- 主要爬取逻辑 ---
 def crawl():
@@ -91,10 +123,14 @@ def crawl():
 
                 for item in items:
                     html_url = item.get("html_url")
+                    
                     repo_full_name = item['repository']['full_name']
                     file_path = item['path']
+                    # 从API响应中获取默认分支名，如果没有则默认使用 'main'
+                    repo_branch = item['repository'].get('default_branch', 'main')
+
                     # 构建正确的原始文件下载链接
-                    raw_url = f"https://raw.githubusercontent.com/{repo_full_name}/main/{file_path}"
+                    raw_url = f"https://raw.githubusercontent.com/{repo_full_name}/{repo_branch}/{file_path}"
                     
                     if html_url in cached_links:
                         print(f" - 链接已缓存: {html_url}")
@@ -106,24 +142,16 @@ def crawl():
                         page_content = raw_response.text
 
                         if page_content:
-                            try:
-                                config = yaml.safe_load(page_content)
-                                if isinstance(config, dict) and ('proxies' in config or 'proxy-providers' in config):
-                                    print(f" - 在 {html_url} 找到有效的 Clash 配置文件！")
-                                    append_to_yaml(page_content)
-                                    
-                                    node_count = 0
-                                    if 'proxies' in config and isinstance(config['proxies'], list):
-                                        node_count += len(config['proxies'])
-                                    if 'proxy-providers' in config and isinstance(config['proxy-providers'], dict):
-                                        node_count += len(config['proxy-providers'])
-                                    
-                                    current_query_nodes_count += node_count
-                                    new_cache_entries[html_url] = get_content_hash(page_content)
-                                else:
-                                    print(f" - {html_url} 是有效的 YAML，但不是 Clash 配置文件，跳过。")
-                            except yaml.YAMLError:
-                                print(f" - {html_url} 的内容不是有效的 YAML 格式，跳过。")
+                            proxies = parse_yaml_content(page_content)
+                            if proxies:
+                                print(f" - 在 {html_url} 找到有效的 Clash 配置文件！")
+                                append_to_yaml(proxies)
+                                
+                                node_count = len(proxies) if isinstance(proxies, list) else len(proxies.keys())
+                                current_query_nodes_count += node_count
+                                new_cache_entries[html_url] = get_content_hash(page_content)
+                            else:
+                                print(f" - {html_url} 是有效的 YAML，但不是有效 Clash 配置文件，跳过。")
                     
                     except requests.exceptions.RequestException as e:
                         print(f" - 下载原始文件 {raw_url} 时出错: {e}")
@@ -138,7 +166,10 @@ def crawl():
             except requests.exceptions.HTTPError as e:
                 print(f" - API请求失败: {e.response.status_code} {e.response.reason}")
                 if e.response.status_code == 403 and "rate limit exceeded" in e.response.text:
-                    print(" - 达到API速率限制。请等待或检查你的令牌。")
+                    wait_time = int(e.response.headers.get('X-RateLimit-Reset', 0)) - time.time() + 10
+                    print(f" - 速率限制，等待 {wait_time} 秒...")
+                    time.sleep(max(wait_time, 0))
+                    continue
                 has_more_results = False
             except requests.exceptions.RequestException as e:
                 print(f" - API请求发生其他错误: {e}")
