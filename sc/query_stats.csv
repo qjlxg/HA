@@ -1,0 +1,5 @@
+query,node_count,timestamp
+"clash.yaml ""proxies:"" filetype:yaml",0,2025-08-09 06:25:29
+"clash.yml ""proxies:"" filetype:yml",0,2025-08-09 06:25:38
+"clash.yaml ""proxy-providers:"" filetype:yaml",0,2025-08-09 06:25:47
+"clash.yml ""proxy-providers:"" filetype:yml",0,2025-08-09 06:25:56
