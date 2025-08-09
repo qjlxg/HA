@@ -12,13 +12,14 @@ import json
 import time
 
 # 核心配置
-GITHUB_TOKEN = os.getenv("GITHUB_TOKEN") # 可选，但强烈建议使用以增加速率限制
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 
 OUTPUT_DIR = "sc"
 OUTPUT_FILE = "clash_proxies.yaml"
 CACHE_FILE = os.path.join(OUTPUT_DIR, "search_cache.txt")
 STATS_FILE = os.path.join(OUTPUT_DIR, "query_stats.csv")
 
+# 使用 GitHub 搜索语法
 SEARCH_QUERIES = [
     'filename:clash.yaml OR filename:clash.yml "proxies:" language:YAML',
     'filename:clash.yaml OR filename:clash.yml "proxy-providers:" language:YAML',
@@ -216,11 +217,21 @@ def is_valid_clash_yaml(content):
         valid_proxies = []
         supported_protocols = ["ss", "trojan", "vmess", "vless", "http", "https", "snell", "hysteria2"]
         for proxy in proxies:
+            # 兼容处理 JSON 格式的代理节点
+            if isinstance(proxy, str):
+                try:
+                    proxy = json.loads(proxy)
+                except json.JSONDecodeError:
+                    print(f"警告: 无法解析代理节点为JSON: {proxy[:50]}...", file=sys.stderr)
+                    continue
+
             if isinstance(proxy, dict) and "name" in proxy and "server" in proxy:
                 protocol = proxy.get("type", "unknown")
                 if protocol in supported_protocols:
                     valid_proxies.append(proxy)
                     STATS['protocol_counts'][protocol] = STATS['protocol_counts'].get(protocol, 0) + 1
+            else:
+                print(f"警告: 跳过无效代理格式: {proxy}", file=sys.stderr)
         
         provider_urls = []
         if "proxy-providers" in data:
