@@ -1,4 +1,4 @@
-# clash_proxy_crawler_v11.py
+# clash_proxy_crawler_v12.py
 import requests
 import yaml
 import os
@@ -228,11 +228,15 @@ def crawl():
                 for item in items:
                     html_url = item.get("html_url")
                     
-                    # --- 新增文件年龄检查 ---
-                    repo_pushed_at_str = item['repository']['pushed_at']
-                    repo_pushed_at = datetime.strptime(repo_pushed_at_str, "%Y-%m-%dT%H:%M:%SZ")
-                    if datetime.utcnow() - repo_pushed_at > timedelta(days=MAX_FILE_AGE_DAYS):
-                        print(f" - 跳过旧文件 ({repo_pushed_at_str}): {html_url}")
+                    # --- 修复文件年龄检查 ---
+                    repo_pushed_at_str = item.get('repository', {}).get('pushed_at')
+                    if repo_pushed_at_str:
+                        repo_pushed_at = datetime.strptime(repo_pushed_at_str, "%Y-%m-%dT%H:%M:%SZ")
+                        if datetime.utcnow() - repo_pushed_at > timedelta(days=MAX_FILE_AGE_DAYS):
+                            print(f" - 跳过旧文件 ({repo_pushed_at_str}): {html_url}")
+                            continue
+                    else:
+                        print(f" - 无法获取文件更新时间，跳过: {html_url}")
                         continue
                     # --- 结束文件年龄检查 ---
                     
