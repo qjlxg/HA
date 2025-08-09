@@ -23,11 +23,18 @@ jobs:
         python -m pip install --upgrade pip
         pip install requests pyyaml beautifulsoup4 selenium
 
-    - name: Install ChromeDriver
+    - name: Install Chromium and ChromeDriver
       run: |
         sudo apt-get update
-        sudo apt-get install -y chromium-chromedriver
-        ln -s /usr/lib/chromium-browser/chromedriver /usr/bin/chromedriver
+        sudo snap install chromium
+        # 检查 ChromeDriver 是否已存在，若存在则删除
+        if [ -f /usr/bin/chromedriver ]; then
+          sudo rm /usr/bin/chromedriver
+        fi
+        # 创建符号链接
+        sudo ln -s /snap/chromium/current/chromedriver /usr/bin/chromedriver
+        # 验证 ChromeDriver
+        chromedriver --version
 
     - name: Run crawler
       run: python clash_proxy_crawler.py
