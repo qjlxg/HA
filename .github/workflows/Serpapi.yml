@@ -21,7 +21,7 @@ jobs:
       - name: Run Clash Proxy Crawler
         env:
           
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           python Github_proxy_crawler.py
       - name: Commit results
