@@ -1,4 +1,4 @@
-# clash_proxy_crawler_v6.py
+# clash_proxy_crawler_v7.py
 import requests
 import yaml
 import os
@@ -25,16 +25,51 @@ STATS_FILE = 'sc/query_stats.csv'
 
 # 优化和扩展后的搜索关键词
 search_queries = [
+    # 1. 基本文件名变体（聚焦clash.yaml/yml）
     'filename:clash.yaml "proxies:" language:YAML',
     'filename:clash.yml "proxies:" language:YAML',
+    'filename:clash-config.yaml "proxies:" language:YAML',
+    'filename:clash-config.yml "proxies:" language:YAML',
+    'filename:config.yaml "proxies:" "clash" language:YAML',
+    'filename:config.yml "proxies:" "clash" language:YAML',
+
+    # 2. Proxy-Providers变体（针对providers部分，可能包含节点URL）
+    'filename:clash.yaml "proxy-providers:" language:YAML',
+    'filename:clash.yml "proxy-providers:" language:YAML',
+    'filename:clash.yaml "providers:" language:YAML',  # 简写变体
+    'filename:config.yaml "proxy-providers:" language:YAML',
+
+    # 3. 扩展锚点（包括proxy-groups和rules，常与proxies关联）
     'filename:clash.yaml "proxy-groups:" language:YAML',
+    'filename:clash.yaml "rules:" "proxies:" language:YAML',
+    'filename:clash.yaml "proxy-groups:" "proxies:" language:YAML',
     'filename:clash.yml "proxy-groups:" language:YAML',
-    'filename:config.yaml "proxies:" language:YAML',
-    'filename:config.yml "proxies:" language:YAML',
-    'filename:openclash.yaml "proxies:" language:YAML',
-    'filename:openclash.yml "proxies:" language:YAML',
-    'filename:clash.yaml "rules:" language:YAML',
-    'filename:clash.yml "rules:" language:YAML',
+
+    # 4. 路径和扩展限制（针对仓库结构）
+    'extension:yaml "proxies:" "clash" path:/',
+    'extension:yml "proxies:" "clash" path:/',
+    'path:clash/config.yaml "proxies:" language:YAML',
+    'path:configs/clash.yaml "proxies:" language:YAML',
+    'path:sub/clash.yaml "proxies:" language:YAML',  # 常见订阅路径
+
+    # 5. 站点和原始文件限制（聚焦GitHub raw内容）
+    'filename:clash.yaml "proxies:" site:raw.githubusercontent.com',
+    'filename:clash.yaml "proxies:" site:github.com language:YAML',
+    'filename:clash.yml "proxies:" site:raw.githubusercontent.com',
+    'clash.yaml "proxies:" filetype:yaml site:github.com',
+
+    # 6. 高级组合（OR运算符，覆盖更多变体）
+    'filename:clash.yaml OR filename:clash.yml "proxies:" language:YAML',
+    'extension:yaml OR extension:yml "proxies:" "clash" path:/',
+    'filename:clash.yaml OR config.yaml "proxies:" language:YAML',
+    'filename:clash.yaml "proxies:" OR "proxy-providers:" language:YAML',
+    'filename:clash.yaml "proxies:" OR "proxy-groups:" language:YAML',
+
+    # 7. 其他常见变体（基于Clash社区模式）
+    'clash "proxies:" filetype:yaml',
+    'clash-sub "proxies:" language:YAML',  # 订阅相关
+    'premium-clash.yaml "proxies:" language:YAML',  # Premium版本
+    'clash-meta.yaml "proxies:" language:YAML',  # Meta内核变体
 ]
 
 # 创建所需的目录
@@ -87,10 +122,12 @@ def parse_yaml_content(content):
     try:
         config = yaml.safe_load(content)
         if isinstance(config, dict):
+            # 优先从 proxies 键获取
             proxies = config.get('proxies', [])
             if isinstance(proxies, list):
                 valid_proxies = [p for p in proxies if validate_proxy(p)]
                 return valid_proxies if valid_proxies else []
+            # 如果是 proxy-providers，尝试从其中提取
             elif 'proxy-providers' in config:
                 all_providers = []
                 for provider_name, provider_data in config['proxy-providers'].items():
@@ -103,9 +140,10 @@ def parse_yaml_content(content):
                 all_nodes = []
                 for group in config['proxy-groups']:
                     if isinstance(group, dict) and 'proxies' in group and isinstance(group['proxies'], list):
-                        for proxy_name in group['proxies']:
-                            if isinstance(proxy_name, dict):
-                                all_nodes.append(proxy_name)
+                        # 这里我们只检查 proxy-groups 中是否有内嵌的代理配置
+                        for proxy_item in group['proxies']:
+                            if isinstance(proxy_item, dict):
+                                all_nodes.append(proxy_item)
                 valid_proxies = [p for p in all_nodes if validate_proxy(p)]
                 return valid_proxies if valid_proxies else []
         return []
