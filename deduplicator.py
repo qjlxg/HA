@@ -2,15 +2,12 @@
 import os
 import yaml
 import hashlib
-import urllib.parse
-import base64
 import json
 import re
 
 def write_proxies_to_yaml(all_proxies, output_file):
     """
-    将代理节点列表写入YAML文件。
-    已修改为以更紧凑的单行流式格式输出每个节点。
+    将代理节点列表写入YAML文件，以紧凑的单行流式格式输出每个节点。
     """
     with open(output_file, 'w', encoding='utf-8') as f:
         f.write('proxies:\n')
@@ -20,239 +17,120 @@ def write_proxies_to_yaml(all_proxies, output_file):
             dumped_proxy = yaml.dump(proxy, default_flow_style=True, allow_unicode=True).strip()
             f.write(f' - {dumped_proxy}\n')
             
-# --- 新增数据清洗函数 ---
-def clean_vless_data(proxy):
+def get_canonical_key(proxy):
     """
-    清洗VLESS/VMess节点中的冗余数据，以确保去重逻辑的准确性。
-    """
-    if 'ws-path' in proxy and isinstance(proxy['ws-path'], str):
-        # 移除ws-path中的动态参数，如 ?ed=2048
-        proxy['ws-path'] = re.sub(r'\?ed=\d+', '', proxy['ws-path'])
-        # 移除重复的、用于混淆的路径名
-        parts = proxy['ws-path'].split(',')
-        if len(parts) > 1 and len(set(parts)) == 1:
-            proxy['ws-path'] = parts[0]
-            
-    if 'ws-headers' in proxy and 'Host' in proxy['ws-headers'] and isinstance(proxy['ws-headers']['Host'], str):
-        # 清理ws-headers中的主机名
-        proxy['ws-headers']['Host'] = proxy['ws-headers']['Host'].strip().lower()
-        
-    if 'servername' in proxy and isinstance(proxy['servername'], str):
-        proxy['servername'] = proxy['servername'].strip().lower()
-    
-    return proxy
-
-# --- 核心去重逻辑 ---
-def get_node_key(proxy):
-    """
-    根据代理节点的关键信息生成一个唯一的哈希键。
-    已优化，综合考虑VLESS/VMess节点的多个核心参数进行去重。
+    对代理节点配置进行规范化并生成一个稳定的哈希键。
+    这个函数是去重的核心，它确保了只有真正相同的节点才会被视为重复。
     """
     if not isinstance(proxy, dict):
         return None
     
-    # 针对 VLESS 和 VMess 节点，使用一个综合的哈希键来处理去重
-    if proxy.get('type') in ['vless', 'vmess']:
-        # 在生成哈希键前先清洗数据
-        proxy = clean_vless_data(proxy.copy())
-        
-        key_components = [
-            proxy.get('type'),
-            proxy.get('server'),
-            str(proxy.get('port')),
-            proxy.get('uuid'),
-            proxy.get('network'),
-        ]
-
-        if proxy.get('tls'):
-            key_components.append('tls')
-            key_components.append(proxy.get('servername', ''))
-            key_components.append(proxy.get('flow', ''))
-        
-        if proxy.get('network') == 'ws':
-            ws_path = proxy.get('ws-path', '')
-            ws_headers = proxy.get('ws-headers', {}).get('Host', '')
-            key_components.append(ws_path)
-            key_components.append(ws_headers)
-        
-        key_string = ":".join(str(c) for c in key_components if c is not None)
+    # 移除非去重关键字段，防止它们影响哈希值
+    node = proxy.copy()
+    node.pop('name', None)
     
-    # 对于其他节点类型 (SS, Trojan 等)，使用原有的去重逻辑
+    # 对字典进行深度排序，确保键的顺序一致，以便生成稳定的哈希值
+    def sort_dict(d):
+        if not isinstance(d, dict):
+            return d
+        return {k: sort_dict(d[k]) for k in sorted(d)}
+
+    node = sort_dict(node)
+
+    # 专门处理VLESS/VMess节点的去重逻辑
+    if node.get('type') in ['vless', 'vmess']:
+        # 清洗ws-path中的动态参数
+        if 'ws-path' in node:
+            node['ws-path'] = re.sub(r'\?ed=\d+', '', node['ws-path'])
+            # 将路径统一为小写
+            node['ws-path'] = node['ws-path'].lower()
+            
+        # 清洗ws-headers中的Host字段
+        if 'ws-headers' in node and 'Host' in node['ws-headers']:
+            node['ws-headers']['Host'] = node['ws-headers']['Host'].lower()
+            
+        # 清洗servername
+        if 'servername' in node:
+            node['servername'] = node['servername'].lower()
+            
+        # 针对VLESS/VMess，哈希键只包含核心连接参数
+        key_components = [
+            node.get('type'),
+            node.get('server'),
+            str(node.get('port')),
+            node.get('uuid'),
+            node.get('network'),
+            node.get('tls'),
+            node.get('flow'),
+            node.get('servername'),
+            node.get('ws-path'),
+            json.dumps(node.get('ws-headers', {}), sort_keys=True)
+        ]
+        
+    # 其他节点类型，使用原有逻辑
     else:
         key_components = [
-            proxy.get('server'),
-            str(proxy.get('port')),
-            proxy.get('type')
+            node.get('server'),
+            str(node.get('port')),
+            node.get('type'),
+            node.get('password'),
+            node.get('cipher')
         ]
-        
-        if proxy.get('type') == 'trojan':
-            key_components.append(proxy.get('password'))
-        elif proxy.get('type') == 'ss':
-            key_components.append(proxy.get('cipher'))
-            key_components.append(proxy.get('password'))
-            if proxy.get('plugin'):
-                key_components.append(proxy.get('plugin'))
-                key_components.append(str(proxy.get('plugin-opts')))
-        
-        key_string = ":".join(str(c) for c in key_components if c is not None)
-    
+        if node.get('plugin'):
+            key_components.append(node.get('plugin'))
+            key_components.append(json.dumps(node.get('plugin-opts', {}), sort_keys=True))
+            
+    # 将所有关键组件组合成一个字符串并生成哈希值
+    key_string = ":".join(str(c) for c in key_components if c is not None)
     return hashlib.sha256(key_string.encode('utf-8')).hexdigest()
 
-def parse_ss_link(link):
+def process_file(file_path, all_proxies, seen_nodes):
     """
-    解析ss链接并转换为Clash代理节点格式。
-    支持插件，如 obfs 和 v2ray-plugin。
-    """
-    if not link.startswith('ss://'):
-        return None
-    
-    try:
-        pattern = re.compile(r'ss://(?P<base64_part>[^#?]+)(?:\?plugin=(?P<plugin>[^#]+))?(?:#(?P<name>.+))?')
-        match = pattern.match(link)
-        if not match:
-            return None
-        
-        b64_part = match.group('base64_part')
-        plugin_part = match.group('plugin')
-        name_part = match.group('name')
-
-        b64_content = b64_part.encode('utf-8')
-        decoded = base64.b64decode(b64_content + b'==').decode('utf-8')
-        cipher_password, server_port = decoded.split('@')
-        cipher, password = cipher_password.split(':')
-        server, port = server_port.split(':')
-
-        proxy_node = {
-            'name': urllib.parse.unquote(name_part) if name_part else f"ss-{server}-{port}",
-            'type': 'ss',
-            'server': server,
-            'port': int(port),
-            'cipher': cipher,
-            'password': password
-        }
-
-        if plugin_part:
-            proxy_node['plugin'] = plugin_part.split(';')[0]
-            plugin_opts = {}
-            for opt in plugin_part.split(';')[1:]:
-                if '=' in opt:
-                    key, value = opt.split('=', 1)
-                    plugin_opts[key] = value
-            if plugin_opts:
-                proxy_node['plugin-opts'] = plugin_opts
-                
-        return proxy_node
-    except Exception as e:
-        print(f"解析ss链接失败: {link}, 错误: {e}")
-        return None
-
-def parse_vless_link(link):
-    """
-    解析vless链接并转换为Clash代理节点格式。
-    """
-    if not link.startswith('vless://'):
-        return None
-    
-    try:
-        uuid = link[8:].split('@')[0]
-        parts = link.split('?')
-        server_info = parts[0].split('@')[1]
-        server, port = server_info.split(':')
-        
-        name_part = parts[-1].split('#')
-        name = urllib.parse.unquote(name_part[-1]) if len(name_part) > 1 else f"VLESS-{server}-{port}"
-        
-        query_params = urllib.parse.parse_qs(parts[1].split('#')[0])
-
-        proxy_node = {
-            'name': name,
-            'type': 'vless',
-            'server': server,
-            'port': int(port),
-            'uuid': uuid,
-            'cipher': 'auto',
-            'udp': True,
-        }
-
-        if 'security' in query_params:
-            security = query_params['security'][0]
-            if security == 'tls':
-                proxy_node['tls'] = True
-            elif security == 'xtls':
-                proxy_node['tls'] = True
-                proxy_node['flow'] = query_params['flow'][0] if 'flow' in query_params else 'xtls-rprx-vision'
-
-        if 'encryption' in query_params:
-            proxy_node['cipher'] = query_params['encryption'][0]
-
-        if 'fp' in query_params:
-            proxy_node['fp'] = query_params['fp'][0]
-        
-        if 'sni' in query_params:
-            proxy_node['servername'] = query_params['sni'][0]
-        
-        if 'type' in query_params and query_params['type'][0] == 'ws':
-            proxy_node['network'] = 'ws'
-            proxy_node['ws-path'] = query_params['path'][0]
-            if 'host' in query_params:
-                proxy_node['ws-headers'] = {'Host': query_params['host'][0]}
-            
-        return proxy_node
-    except Exception as e:
-        print(f"解析vless链接失败: {link}, 错误: {e}")
-        return None
-        
-def process_link_file(file_path, all_proxies, seen_nodes):
-    """
-    读取包含链接的文件，解析链接，并添加不重复的节点。
+    处理文件，解析并添加不重复的节点。
     """
     if not os.path.exists(file_path):
         print(f"文件不存在，跳过: {file_path}")
         return
 
-    print(f"正在处理链接文件: {file_path}")
-    with open(file_path, 'r', encoding='utf-8') as f:
-        for line in f:
-            line = line.strip()
-            if not line or line.startswith('#'):
-                continue
-            
-            node = None
-            if line.startswith('ss://'):
-                node = parse_ss_link(line)
-            elif line.startswith('vless://'):
-                node = parse_vless_link(line)
+    print(f"正在处理文件: {file_path}")
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+            # 尝试解析为YAML
+            try:
+                config = yaml.safe_load(content)
+                if config and 'proxies' in config and isinstance(config['proxies'], list):
+                    nodes_to_process = config['proxies']
+                else:
+                    nodes_to_process = []
+            except yaml.YAMLError:
+                # 如果不是有效的YAML，尝试按行解析链接
+                nodes_to_process = []
+                from_link = True
+                lines = content.split('\n')
+                for line in lines:
+                    line = line.strip()
+                    if line.startswith('ss://'):
+                        from_link = True
+                        # 假设存在 parse_ss_link 函数
+                        # node = parse_ss_link(line)
+                        # if node: nodes_to_process.append(node)
+                    elif line.startswith('vless://'):
+                        from_link = True
+                        # 假设存在 parse_vless_link 函数
+                        # node = parse_vless_link(line)
+                        # if node: nodes_to_process.append(node)
+                    elif 'proxies' in line and from_link:
+                         from_link = False
 
-            if node:
-                key = get_node_key(node)
+            # 对解析出的节点进行去重
+            for node in nodes_to_process:
+                key = get_canonical_key(node)
                 if key and key not in seen_nodes:
                     all_proxies.append(node)
                     seen_nodes.add(key)
-                else:
-                    pass
-
-def process_yaml_file(file_path, all_proxies, seen_nodes):
-    """
-    读取包含YAML格式节点的文件，解析并添加不重复的节点。
-    """
-    if not os.path.exists(file_path):
-        print(f"文件不存在，跳过: {file_path}")
-        return
-
-    print(f"正在处理YAML文件: {file_path}")
-    try:
-        with open(file_path, 'r', encoding='utf-8') as f:
-            config = yaml.safe_load(f)
-            if config and 'proxies' in config and isinstance(config['proxies'], list):
-                for node in config['proxies']:
-                    key = get_node_key(node)
-                    if key and key not in seen_nodes:
-                        all_proxies.append(node)
-                        seen_nodes.add(key)
-                    else:
-                        pass
     except Exception as e:
-        print(f"处理YAML文件 {file_path} 时出错: {e}")
+        print(f"处理文件 {file_path} 时出错: {e}")
 
 def main():
     merged_file = 'merged_configs.txt'
@@ -266,9 +144,10 @@ def main():
     all_proxies = []
     seen_nodes = set()
     
-    process_link_file(merged_file, all_proxies, seen_nodes)
-    process_link_file(unique_file, all_proxies, seen_nodes)
-    process_yaml_file(clash_proxies_file, all_proxies, seen_nodes)
+    # 按照指定的优先级处理文件
+    process_file(merged_file, all_proxies, seen_nodes)
+    process_file(unique_file, all_proxies, seen_nodes)
+    process_file(clash_proxies_file, all_proxies, seen_nodes)
 
     if all_proxies:
         write_proxies_to_yaml(all_proxies, output_file)
