@@ -275,17 +275,19 @@ async def process_link(session, link, depth=0):
             
             sub_proxies = []
             if all_new_urls and depth < RECURSION_DEPTH:
-                prioritized_urls = sorted(
+                prioritized_new_links = sorted(
                     all_new_urls,
                     key=lambda x: sum(p in x for p in LINK_PRIORITY),
                     reverse=True
                 )[:MAX_SUB_LINKS]
-                tasks = [process_link(session, sub_url, depth + 1) for sub_url in prioritized_urls]
+                tasks = [process_link(session, sub_url, depth + 1) for sub_url in prioritized_new_links]
                 results = await asyncio.gather(*tasks, return_exceptions=True)
                 for result in results:
                     if isinstance(result, tuple):
-                        sub_prox, sub_urls = result
-                        sub_proxies.extend(sub_prox)
+                        proxies_from_sub, _ = result
+                        sub_proxies.extend(proxies_from_sub)
+                    else:
+                        print(f"警告: 处理子链接失败: {result}", file=sys.stderr)
             return valid_proxies + sub_proxies, all_new_urls
     except asyncio.TimeoutError:
         print(f"错误: 处理链接 {link} 超时", file=sys.stderr)
@@ -313,17 +315,21 @@ async def main_async():
 
             while links_to_process and len(processed_links) < MAX_TOTAL_LINKS:
                 batch_size = min(len(links_to_process), MAX_WORKERS)
+                if batch_size == 0:
+                    break
                 tasks = []
+                current_batch_links = []
                 for _ in range(batch_size):
                     if not links_to_process:
                         break
                     link = links_to_process.popleft()
                     processed_links.add(link)
                     newly_found_links.add(link)
+                    current_batch_links.append(link)
                     tasks.append(process_link(session, link))
                 print(f"处理批量链接，批次大小: {len(tasks)}")
                 results = await asyncio.gather(*tasks, return_exceptions=True)
-                for result in results:
+                for i, result in enumerate(results):
                     if isinstance(result, tuple):
                         proxies, new_links = result
                         all_proxies.extend(proxies)
@@ -336,7 +342,7 @@ async def main_async():
                             if new_link not in processed_links and len(processed_links) < MAX_TOTAL_LINKS:
                                 links_to_process.append(new_link)
                     else:
-                        failed_links.append(("URL未记录", str(result)))
+                        failed_links.append((current_batch_links[i], str(result)))
                 print(f"批次处理完成，当前处理链接总数: {len(processed_links)}")
         
         save_cache(newly_found_links)
@@ -360,11 +366,10 @@ async def main_async():
                 yaml.safe_dump(output_data, f, allow_unicode=True)
             print(f"已保存 {len(unique_proxies)} 个节点到 {output_path}")
         else:
-            print("警告: 未找到任何有效的 Clash 代理配置", file=sys.stderr)
-
+            print("警告: 未找到任何有效的 Clash 代理配置，不生成输出文件", file=sys.stderr)
+            
         failed_path = "output/clash_failed.txt"
         with open(failed_path, "w", encoding="utf-8") as f:
-            f.write("失败链接,#genre#\n")
             for link, error in failed_links:
                 f.write(f"{link},{error}\n")
         print(f"已保存 {len(failed_links)} 个失败链接到 {failed_path}")
@@ -372,25 +377,4 @@ async def main_async():
         print("\n统计信息：")
         print(f"处理链接总数: {STATS['links_processed']}")
         print(f"失败请求数: {STATS['failed_requests']}")
-        print(f"发现节点总数: {STATS['nodes_found']}")
-        print("节点来源分布：")
-        for domain, count in sorted(STATS['links_by_source'].items(), key=lambda x: x[1], reverse=True):
-            print(f"  {domain}: {count} 个节点")
-        print("协议分布：")
-        for protocol, count in sorted(STATS['protocol_counts'].items(), key=lambda x: x[1], reverse=True):
-            print(f"  {protocol}: {count} 个节点")
-        print("深度分布：")
-        for depth, count in sorted(STATS['nodes_by_depth'].items()):
-            print(f"  深度 {depth}: {count} 个节点")
-        print("失败域名分布：")
-        for domain, count in sorted(STATS['failed_domains'].items(), key=lambda x: x[1], reverse=True):
-            print(f"  {domain}: {count} 次失败")
-    except Exception as e:
-        print(f"主程序发生错误: {e}", file=sys.stderr)
-        raise
-
-def main():
-    asyncio.run(main_async())
-
-if __name__ == "__main__":
-    main()
+        print(f"发现节点总数: {STATS['nodes
