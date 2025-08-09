@@ -12,15 +12,13 @@ import json
 import time
 
 # --- 核心配置 ---
-# 推荐设置，用于提高 GitHub API 速率限制
-GITHUB_TOKEN = os.getenv("BOT") 
+GITHUB_TOKEN = os.getenv("BOT")  # 使用 BOT 环境变量，与 Actions Secrets 匹配
 
 OUTPUT_DIR = "sc"
 OUTPUT_FILE = "clash_proxies.yaml"
 CACHE_FILE = os.path.join(OUTPUT_DIR, "search_cache.txt")
 STATS_FILE = os.path.join(OUTPUT_DIR, "query_stats.csv")
 
-# 使用 GitHub 搜索语法，更有效
 SEARCH_QUERIES = [
     'filename:clash.yaml OR filename:clash.yml "proxies:" language:YAML',
     'filename:clash.yaml OR filename:clash.yml "proxy-providers:" language:YAML',
@@ -29,7 +27,7 @@ SEARCH_QUERIES = [
 ]
 
 MAX_RESULTS_PER_QUERY = 1000
-MAX_SEARCH_PAGES = 10 
+MAX_SEARCH_PAGES = 5  # 减少分页以降低速率限制风险
 REQUEST_TIMEOUT = 30
 MAX_RETRIES = 3
 MAX_WORKERS = 30
@@ -72,7 +70,7 @@ def save_cache(links):
     with open(CACHE_FILE, 'a', encoding='utf-8') as f:
         for link in links:
             f.write(link + '\n')
-            
+
 def save_query_stats():
     """保存关键词统计结果到 CSV 文件"""
     with open(STATS_FILE, 'w', encoding='utf-8', newline='') as f:
@@ -88,37 +86,54 @@ def search_with_github(query):
         "Accept": "application/vnd.github.v3.text-match+json",
         "Authorization": f"token {GITHUB_TOKEN}" if GITHUB_TOKEN else None
     }
-    
+
+    if not GITHUB_TOKEN:
+        print("错误: BOT 环境变量未设置", file=sys.stderr)
+        return links
+
+    print(f"使用 GITHUB_TOKEN: {'*' * len(GITHUB_TOKEN)}")  # 隐藏 token，仅显示长度
     url = "https://api.github.com/search/code"
-    
+
     for page in range(1, MAX_SEARCH_PAGES + 1):
         params = {
             "q": query,
             "per_page": 100,
             "page": page
         }
-        
-        try:
-            response = requests.get(url, headers=headers, params=params)
-            response.raise_for_status()
-            search_results = response.json()
-            
-            items = search_results.get("items", [])
-            for item in items:
-                # 构造 raw.githubusercontent.com 链接
-                raw_url = item['html_url'].replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/')
-                if not any(b in raw_url for b in LINK_BLACKLIST):
-                    links.append(raw_url)
-            
-            # 如果结果少于 per_page，说明没有更多了
-            if len(items) < 100:
-                break
-            
-            time.sleep(2) # 遵守 GitHub API 速率限制
-        except requests.exceptions.RequestException as e:
-            print(f"GitHub API 搜索失败 (query={query}): {e}", file=sys.stderr)
-            break
-            
+
+        for attempt in range(MAX_RETRIES):
+            try:
+                response = requests.get(url, headers=headers, params=params, timeout=REQUEST_TIMEOUT)
+                print(f"API 请求: {url}, 参数: {params}, 状态码: {response.status_code}")
+                print(f"响应头: {response.headers}")
+                if response.status_code == 403 and "X-RateLimit-Remaining" in response.headers:
+                    if int(response.headers["X-RateLimit-Remaining"]) == 0:
+                        reset_time = int(response.headers["X-RateLimit-Reset"])
+                        sleep_time = max(1, reset_time - time.time() + 5)
+                        print(f"达到速率限制，将等待 {sleep_time} 秒后重试")
+                        time.sleep(sleep_time)
+                        continue
+                response.raise_for_status()
+                search_results = response.json()
+
+                items = search_results.get("items", [])
+                for item in items:
+                    raw_url = item['html_url'].replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/')
+                    if not any(b in raw_url for b in LINK_BLACKLIST):
+                        links.append(raw_url)
+
+                if len(items) < 100:
+                    break
+
+                time.sleep(2)  # 遵守速率限制
+                break  # 成功后退出重试循环
+            except requests.exceptions.RequestException as e:
+                print(f"GitHub API 搜索失败 (query={query}, 尝试 {attempt + 1}/{MAX_RETRIES}): {e}", file=sys.stderr)
+                if attempt == MAX_RETRIES - 1:
+                    break
+                time.sleep(2 ** attempt)
+
+    print(f"查询 {query} 返回 {len(links)} 个链接")
     return links
 
 def search_links():
@@ -130,7 +145,7 @@ def search_links():
         links = search_with_github(query)
         all_links.update(links)
         STATS['query_results'][query] = len(links)
-    
+
     prioritized_links = sorted(
         list(all_links),
         key=lambda x: sum(p in x for p in LINK_PRIORITY),
@@ -148,6 +163,7 @@ async def fetch_content(session, url):
         STATS['failed_domains'][domain] = STATS['failed_domains'].get(domain, 0) + 1
         print(f"警告: 跳过黑名单域名: {domain}", file=sys.stderr)
         return None, url
+
     for attempt in range(MAX_RETRIES):
         try:
             async with session.head(url, timeout=REQUEST_TIMEOUT/2) as head_response:
@@ -161,12 +177,14 @@ async def fetch_content(session, url):
                 if not ('yaml' in content_type or 'octet-stream' in content_type or 'text/plain' in content_type):
                     print(f"警告: 跳过 {url}，无效内容类型: {content_type}", file=sys.stderr)
                     return None, url
+
             if "github.com" in url and "/blob/" in url:
                 url = url.replace("github.com", "raw.githubusercontent.com").replace("/blob/", "/")
             elif "gitlab.com" in url and "/blob/" in url:
                 url = url.replace("/blob/", "/-/raw/")
             elif "bitbucket.org" in url and "/src/" in url:
                 url = url.replace("/src/", "/raw/")
+
             async with session.get(url, timeout=REQUEST_TIMEOUT) as response:
                 if response.status == 200:
                     print(f"成功获取内容: {url}")
@@ -206,24 +224,32 @@ def extract_urls_from_content(content):
 def is_valid_clash_yaml(content):
     """验证是否为有效的 Clash YAML 配置，统计协议类型"""
     try:
+        if not content:
+            print("警告: 内容为空", file=sys.stderr)
+            return False, [], []
+
         data = yaml.safe_load(content)
-        if not isinstance(data, dict):
-            print("警告: YAML 解析失败: 非字典格式", file=sys.stderr)
-            return False, None, []
+        print(f"YAML 解析结果类型: {type(data)}")
         
+        if not isinstance(data, dict):
+            print(f"警告: YAML 解析失败: 非字典格式，内容: {content[:100]}...", file=sys.stderr)
+            return False, [], []
+
         proxies = data.get("proxies", [])
+        print(f"proxies 字段: {proxies[:100]}...")  # 打印前100字符
         if not isinstance(proxies, list):
-            print("警告: proxies 字段非列表", file=sys.stderr)
+            print(f"警告: proxies 字段非列表: {type(proxies)}", file=sys.stderr)
             proxies = []
-            
+
         valid_proxies = []
         supported_protocols = ["ss", "trojan", "vmess", "vless", "http", "https", "snell", "hysteria2"]
         for proxy in proxies:
             if isinstance(proxy, str):
                 try:
                     proxy = json.loads(proxy)
-                except json.JSONDecodeError:
-                    print(f"警告: 无法解析代理节点为JSON: {proxy[:50]}...", file=sys.stderr)
+                    print(f"解析字符串代理为 JSON: {proxy}")
+                except json.JSONDecodeError as e:
+                    print(f"警告: 无法解析代理节点为 JSON: {proxy[:50]}... 错误: {e}", file=sys.stderr)
                     continue
 
             if isinstance(proxy, dict) and "name" in proxy and "server" in proxy:
@@ -231,21 +257,26 @@ def is_valid_clash_yaml(content):
                 if protocol in supported_protocols:
                     valid_proxies.append(proxy)
                     STATS['protocol_counts'][protocol] = STATS['protocol_counts'].get(protocol, 0) + 1
+                else:
+                    print(f"警告: 跳过不支持的协议: {protocol}", file=sys.stderr)
             else:
                 print(f"警告: 跳过无效代理格式: {proxy}", file=sys.stderr)
-        
+
         provider_urls = []
         if "proxy-providers" in data:
             for provider in data.get("proxy-providers", {}).values():
                 if isinstance(provider, dict) and "url" in provider:
                     provider_urls.append(provider["url"])
-                    
+
         print(f"找到 {len(valid_proxies)} 个有效代理，{len(provider_urls)} 个订阅链接")
         return bool(valid_proxies) or bool(provider_urls), valid_proxies, provider_urls
-        
+
     except yaml.YAMLError as e:
         print(f"错误: YAML 解析错误: {e}", file=sys.stderr)
-        return False, None, []
+        return False, [], []
+    except Exception as e:
+        print(f"错误: 未知解析错误: {e}", file=sys.stderr)
+        return False, [], []
 
 async def process_link(session, link, depth=0):
     """异步处理单个链接，提取代理节点和订阅链接"""
@@ -253,16 +284,17 @@ async def process_link(session, link, depth=0):
     if depth > RECURSION_DEPTH:
         print(f"警告: 超过最大递归深度 ({RECURSION_DEPTH})，跳过: {link}", file=sys.stderr)
         return [], []
+
     STATS['links_processed'] += 1
     try:
         async with asyncio.timeout(60):
             content, url = await fetch_content(session, link)
             if not content:
                 return [], []
-            
+
             is_valid, proxies, provider_urls = is_valid_clash_yaml(content)
             valid_proxies = []
-            
+
             if is_valid:
                 domain = urllib.parse.urlparse(url).netloc
                 valid_proxies.extend(proxies)
@@ -270,14 +302,14 @@ async def process_link(session, link, depth=0):
                 STATS['links_by_source'][domain] = STATS['links_by_source'].get(domain, 0) + len(proxies)
                 STATS['nodes_by_depth'][depth] = STATS['nodes_by_depth'].get(depth, 0) + len(proxies)
                 print(f"从 {url} 提取到 {len(proxies)} 个节点 (深度: {depth})")
-            
+
             additional_urls = extract_urls_from_content(content)
             all_new_urls = list(set(additional_urls + provider_urls))
-            
+
             sub_proxies = []
             if all_new_urls and depth < RECURSION_DEPTH:
                 prioritized_new_links = sorted(
-                    list(set(new_links)),
+                    list(set(all_new_urls)),
                     key=lambda x: sum(p in x for p in LINK_PRIORITY),
                     reverse=True
                 )[:MAX_SUB_LINKS]
@@ -293,6 +325,9 @@ async def process_link(session, link, depth=0):
     except asyncio.TimeoutError:
         print(f"错误: 处理链接 {link} 超时", file=sys.stderr)
         return [], []
+    except Exception as e:
+        print(f"错误: 处理链接 {link} 失败: {e}", file=sys.stderr)
+        return [], []
 
 async def main_async():
     try:
@@ -301,17 +336,20 @@ async def main_async():
         processed_links = load_cache()
         newly_found_links = set()
         failed_links = []
-        
+
         print(f"已从缓存加载 {len(processed_links)} 个链接")
-        
+
         async with aiohttp.ClientSession() as session:
             print("开始搜索链接")
             links_from_search = search_links()
             save_query_stats()
             print(f"搜索完成，获取 {len(links_from_search)} 个初始链接")
-            
+
+            if not links_from_search:
+                print("警告: 未获取到任何搜索结果，请检查查询或 token", file=sys.stderr)
+
             links_to_process = deque(link for link in links_from_search if link not in processed_links)
-            
+
             print(f"需要处理 {len(links_to_process)} 个新链接")
 
             while links_to_process and len(processed_links) < MAX_TOTAL_LINKS:
@@ -345,9 +383,9 @@ async def main_async():
                     else:
                         failed_links.append((current_batch_links[i], str(result)))
                 print(f"批次处理完成，当前处理链接总数: {len(processed_links)}")
-        
+
         save_cache(newly_found_links)
-        
+
         print("开始去重代理")
         unique_proxies = []
         seen = set()
@@ -368,7 +406,7 @@ async def main_async():
             print(f"已保存 {len(unique_proxies)} 个节点到 {output_path}")
         else:
             print("警告: 未找到任何有效的 Clash 代理配置，不生成输出文件", file=sys.stderr)
-            
+
         failed_path = "output/clash_failed.txt"
         with open(failed_path, "w", encoding="utf-8") as f:
             for link, error in failed_links:
@@ -391,8 +429,11 @@ async def main_async():
         print("失败域名分布：")
         for domain, count in sorted(STATS['failed_domains'].items(), key=lambda x: x[1], reverse=True):
             print(f"  {domain}: {count} 次失败")
+
     except Exception as e:
         print(f"主程序发生错误: {e}", file=sys.stderr)
+        with open("output/error_log.txt", "w", encoding="utf-8") as f:
+            f.write(f"主程序错误: {e}\n")
         raise
 
 def main():
