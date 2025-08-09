@@ -277,7 +277,7 @@ async def process_link(session, link, depth=0):
             sub_proxies = []
             if all_new_urls and depth < RECURSION_DEPTH:
                 prioritized_new_links = sorted(
-                    all_new_urls,
+                    list(set(new_links)),
                     key=lambda x: sum(p in x for p in LINK_PRIORITY),
                     reverse=True
                 )[:MAX_SUB_LINKS]
