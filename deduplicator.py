@@ -7,14 +7,28 @@ import re
 
 def write_proxies_to_yaml(all_proxies, output_file):
     """
-    将代理节点列表写入YAML文件，以紧凑的单行流式格式输出每个节点。
+    将代理节点列表写入YAML文件，确保每个节点以紧凑的单行流式格式输出。
     """
-    final_config = {'proxies': all_proxies}
-    
     with open(output_file, 'w', encoding='utf-8') as f:
-        # 使用 default_flow_style=False 确保顶层列表是分行的
-        # 使用 width=4096 强制所有字典都以单行紧凑格式输出
-        yaml.dump(final_config, f, allow_unicode=True, sort_keys=False, default_flow_style=False, width=4096)
+        # 写入顶层 'proxies' 键
+        f.write('proxies:\n')
+        
+        # 逐个代理节点写入，并强制单行流式输出
+        for proxy in all_proxies:
+            # 使用 yaml.dump 将单个字典转换为单行字符串
+            # default_flow_style=True 强制流式输出
+            # width 参数设置一个足够大的值以防止自动换行
+            # indent=2 和 ---\n 确保格式兼容，但这里我们只取一行
+            proxy_yaml_string = yaml.dump(
+                proxy, 
+                allow_unicode=True, 
+                sort_keys=False, 
+                default_flow_style=True, 
+                width=4096
+            ).strip()
+            
+            # 写入 YAML 列表项的标志 '- ' 和格式化后的字符串
+            f.write(f'- {proxy_yaml_string}\n')
 
 def get_canonical_key(proxy):
     """
@@ -91,7 +105,6 @@ def process_file(file_path, all_proxies, seen_nodes):
                 if config and 'proxies' in config and isinstance(config['proxies'], list):
                     nodes_to_process = config['proxies']
             except yaml.YAMLError:
-                # 假设此部分由其他解析函数处理，这里保留原有的去重逻辑调用
                 pass
 
             for node in nodes_to_process:
