@@ -49,9 +49,10 @@ def load_cache():
     return cache
 
 def save_cache(cache):
+    # 修复了变量名错误
     with open(CACHE_FILE, 'w', encoding='utf-8') as f:
         for url, hash_val in cache.items():
-            f.write(f"{url},{content_hash}\n")
+            f.write(f"{url},{hash_val}\n")
 
 def get_content_hash(content):
     return hashlib.sha256(content.encode('utf-8')).hexdigest()
@@ -86,7 +87,6 @@ def parse_yaml_content(content):
             if isinstance(proxies, list):
                 valid_proxies = [p for p in proxies if validate_proxy(p)]
                 return valid_proxies if valid_proxies else []
-            # 如果是 proxy-providers，我们只获取值（即节点列表）
             elif 'proxy-providers' in config:
                 all_providers = []
                 for provider_name, provider_data in config['proxy-providers'].items():
@@ -103,7 +103,7 @@ def parse_yaml_content(content):
 def get_node_key(proxy):
     """
     为代理节点生成一个唯一的键，用于去重。
-    这里使用节点的服务器地址、端口、类型和部分密码信息来创建哈希。
+    这里使用节点的服务器地址、端口、类型和部分关键信息来创建哈希。
     """
     if not isinstance(proxy, dict):
         return None
@@ -111,8 +111,7 @@ def get_node_key(proxy):
     key_components = [
         proxy.get('server'),
         str(proxy.get('port')),
-        proxy.get('type'),
-        proxy.get('name') # name可能会重复，但作为一个附加键可以增加唯一性
+        proxy.get('type')
     ]
     
     # 针对不同类型代理，添加特有的关键信息
