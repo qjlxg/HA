@@ -20,7 +20,7 @@ jobs:
           pip install aiohttp pyyaml requests
       - name: Run Clash Proxy Crawler
         env:
-          TOKEN: ${{ secrets.TOKEN }}
+          BOT: ${{ secrets.BOT }}
           
         run: |
           python Github_proxy_crawler.py
