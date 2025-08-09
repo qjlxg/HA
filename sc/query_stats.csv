@@ -19,3 +19,7 @@ query,node_count,timestamp
 "filename:clash.yml ""proxies:"" language:YAML",0,2025-08-09 07:02:00
 "filename:clash.yaml ""proxy-providers:"" language:YAML",0,2025-08-09 07:02:05
 "filename:clash.yml ""proxy-providers:"" language:YAML",0,2025-08-09 07:02:10
+"filename:clash.yaml ""proxies:"" language:YAML",9604,2025-08-09T07:04:01.349522
+"filename:clash.yml ""proxies:"" language:YAML",12854,2025-08-09T07:05:12.461378
+"filename:clash.yaml ""proxy-providers:"" language:YAML",1,2025-08-09T07:06:01.146109
+"filename:clash.yml ""proxy-providers:"" language:YAML",318,2025-08-09T07:07:03.146034
