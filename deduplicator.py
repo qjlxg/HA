@@ -5,6 +5,21 @@ import hashlib
 import urllib.parse
 import base64
 import json
+import re
+
+# 为了保持键的顺序，我们需要一个自定义的代表器。
+# 或者使用ruamel.yaml，但为了兼容性，我们直接修改yaml.dump的默认行为。
+# 对于PyYAML，最简单的解决方案是确保Python 3.7+ 的dict默认保持插入顺序。
+# 或者我们可以使用一个自定义的Dumper。
+# 这里，我们假设Python版本>=3.7，默认字典保持顺序。
+# 如果你想在更老的Python版本中保证顺序，可以使用OrderedDict。
+def write_proxies_to_yaml(all_proxies, output_file):
+    """将代理节点列表写入YAML文件，并保持键的原始顺序"""
+    final_config = {'proxies': all_proxies}
+    with open(output_file, 'w', encoding='utf-8') as f:
+        # 使用PyYAML的默认dump，它在Python 3.7+中会保持字典顺序
+        # 如果需要更严格的控制，可考虑使用 ruamel.yaml
+        yaml.dump(final_config, f, allow_unicode=True, sort_keys=False, default_flow_style=False)
 
 # --- 核心去重逻辑 ---
 def get_node_key(proxy):
@@ -25,8 +40,11 @@ def get_node_key(proxy):
     elif proxy.get('type') == 'ss':
         key_components.append(proxy.get('cipher'))
         key_components.append(proxy.get('password'))
+        # 增加对插件的考量
+        if proxy.get('plugin'):
+            key_components.append(proxy.get('plugin'))
+            key_components.append(str(proxy.get('plugin-opts')))
     elif proxy.get('type') == 'vmess':
-        # Vmess key can be more complex, we'll use a simpler one for this example
         key_components.append(proxy.get('uuid'))
     elif proxy.get('type') == 'vless':
         key_components.append(proxy.get('uuid'))
@@ -38,35 +56,57 @@ def get_node_key(proxy):
 def parse_ss_link(link):
     """
     解析ss链接并转换为Clash代理节点格式。
+    支持插件，如 obfs 和 v2ray-plugin。
     """
     if not link.startswith('ss://'):
         return None
     
     try:
-        # 去除 'ss://' 并解码 base64
-        b64_content = link[5:].split('#')[0]
-        decoded = base64.b64decode(b64_content + '==').decode('utf-8')
+        # 使用正则表达式匹配SS链接的各个部分
+        pattern = re.compile(r'ss://(?P<base64_part>[^#?]+)(?:\?plugin=(?P<plugin>[^#]+))?(?:#(?P<name>.+))?')
+        match = pattern.match(link)
+        if not match:
+            return None
         
-        # 提取密码、加密方式、服务器和端口
-        password, rest = decoded.split('@')
-        cipher, password = password.split(':')
-        server, port = rest.split(':')
+        b64_part = match.group('base64_part')
+        plugin_part = match.group('plugin')
+        name_part = match.group('name')
 
-        # 尝试获取节点名称
-        name = link.split('#')[-1]
-        name = urllib.parse.unquote(name)
+        # 解码base64部分
+        b64_content = b64_part.encode('utf-8')
+        decoded = base64.b64decode(b64_content + b'==').decode('utf-8')
+        cipher_password, server_port = decoded.split('@')
+        cipher, password = cipher_password.split(':')
+        server, port = server_port.split(':')
 
-        return {
-            'name': name if name != link else f"{cipher}-{server}-{port}",
+        # 构建基础节点字典
+        proxy_node = {
+            'name': urllib.parse.unquote(name_part) if name_part else f"ss-{server}-{port}",
             'type': 'ss',
             'server': server,
             'port': int(port),
             'cipher': cipher,
             'password': password
         }
+
+        # 解析插件部分
+        if plugin_part:
+            proxy_node['plugin'] = plugin_part.split(';')[0]
+            
+            plugin_opts = {}
+            for opt in plugin_part.split(';')[1:]:
+                if '=' in opt:
+                    key, value = opt.split('=', 1)
+                    plugin_opts[key] = value
+            
+            if plugin_opts:
+                proxy_node['plugin-opts'] = plugin_opts
+                
+        return proxy_node
     except Exception as e:
         print(f"解析ss链接失败: {link}, 错误: {e}")
         return None
+
 
 def parse_vless_link(link):
     """
@@ -82,11 +122,12 @@ def parse_vless_link(link):
         parts = link.split('?')
         server_info = parts[0].split('@')[1]
         server, port = server_info.split(':')
-        query_params = urllib.parse.parse_qs(parts[1])
-
-        # 尝试获取节点名称
+        
+        # 提取节点名称
         name_part = parts[-1].split('#')
         name = urllib.parse.unquote(name_part[-1]) if len(name_part) > 1 else f"VLESS-{server}-{port}"
+        
+        query_params = urllib.parse.parse_qs(parts[1].split('#')[0])
 
         # 组装代理字典
         proxy_node = {
@@ -120,13 +161,15 @@ def parse_vless_link(link):
         if 'type' in query_params and query_params['type'][0] == 'ws':
             proxy_node['network'] = 'ws'
             proxy_node['ws-path'] = query_params['path'][0]
-            proxy_node['ws-headers'] = {'Host': query_params['host'][0]}
+            # 确保host参数存在
+            if 'host' in query_params:
+                proxy_node['ws-headers'] = {'Host': query_params['host'][0]}
             
         return proxy_node
     except Exception as e:
         print(f"解析vless链接失败: {link}, 错误: {e}")
         return None
-
+        
 def process_file(file_path, all_proxies, seen_nodes):
     """
     读取文件，解析链接，并添加不重复的节点。
@@ -176,9 +219,7 @@ def main():
     process_file(unique_file, all_proxies, seen_nodes)
 
     if all_proxies:
-        final_config = {'proxies': all_proxies}
-        with open(output_file, 'w', encoding='utf-8') as f:
-            yaml.dump(final_config, f, allow_unicode=True, sort_keys=False)
+        write_proxies_to_yaml(all_proxies, output_file)
         print(f"\n✅ 所有找到的代理节点（已去重）已成功合并并写入 {output_file}")
         print(f"   最终节点总数：{len(all_proxies)}")
     else:
