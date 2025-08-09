@@ -7,9 +7,9 @@ import hashlib
 import time
 
 # --- 配置部分 ---
-GITHUB_API_TOKEN = os.getenv("BOT_TOKEN")  # 从环境变量中获取API令牌
+GITHUB_API_TOKEN = os.getenv("BOT")  # 直接从名为 "BOT" 的环境变量中获取API令牌
 if not GITHUB_API_TOKEN:
-    raise ValueError("请在环境变量中设置 BOT_TOKEN")
+    raise ValueError("请在环境变量中设置 BOT")
 
 GITHUB_API_URL = "https://api.github.com/search/code"
 HEADERS = {
