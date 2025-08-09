@@ -35,29 +35,24 @@ os.makedirs('sc', exist_ok=True)
 
 # --- 文件操作函数 ---
 def load_cache():
-    """加载已缓存的链接及其内容哈希值"""
     if not os.path.exists(CACHE_FILE):
         return {}
     with open(CACHE_FILE, 'r') as f:
         return {line.strip().split(',')[0]: line.strip().split(',')[1] for line in f if ',' in line}
 
 def save_cache(cache):
-    """保存缓存的链接及其哈希值"""
     with open(CACHE_FILE, 'w') as f:
         for url, content_hash in cache.items():
             f.write(f"{url},{content_hash}\n")
 
 def get_content_hash(content):
-    """计算内容的哈希值以判断是否更新"""
     return hashlib.sha256(content.encode('utf-8')).hexdigest()
 
 def append_to_yaml(content):
-    """将新的代理节点内容追加到 YAML 文件，并使用 --- 分隔"""
     with open(PROXIES_FILE, 'a', encoding='utf-8') as f:
         f.write(content + '\n---\n')
 
 def append_stats(query, count):
-    """追加统计数据到 CSV 文件"""
     file_exists = os.path.exists(STATS_FILE)
     with open(STATS_FILE, 'a', newline='', encoding='utf-8') as f:
         writer = csv.writer(f)
@@ -96,11 +91,10 @@ def crawl():
 
                 for item in items:
                     html_url = item.get("html_url")
-                    
-                    # 修复 URL 拼接错误
-                    raw_url = item.get("url")
-                    raw_url = raw_url.replace("api.github.com/repos/", "raw.githubusercontent.com/")
-                    raw_url = raw_url.replace("/contents/", "/")
+                    repo_full_name = item['repository']['full_name']
+                    file_path = item['path']
+                    # 构建正确的原始文件下载链接
+                    raw_url = f"https://raw.githubusercontent.com/{repo_full_name}/main/{file_path}"
                     
                     if html_url in cached_links:
                         print(f" - 链接已缓存: {html_url}")
