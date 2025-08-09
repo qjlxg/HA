@@ -1,11 +1,11 @@
-# clash_proxy_crawler_v9.py
+# clash_proxy_crawler_v11.py
 import requests
 import yaml
 import os
 import csv
 import hashlib
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 
 # --- 配置部分 ---
 GITHUB_API_TOKEN = os.getenv("BOT")
@@ -72,6 +72,9 @@ search_queries = [
     'clash-meta.yaml "proxies:" language:YAML',  # Meta内核变体
 ]
 
+# 新增文件年龄配置项，单位：天
+MAX_FILE_AGE_DAYS = 90
+
 # 创建所需的目录
 os.makedirs('sc', exist_ok=True)
 
@@ -121,41 +124,46 @@ def validate_proxy(proxy):
 def parse_yaml_content(content):
     try:
         config = yaml.safe_load(content)
-        if not isinstance(config, dict):
-            return []
-
+        
         all_nodes = []
 
-        # 优先从 'proxies' 键获取
-        proxies_list = config.get('proxies', [])
-        if isinstance(proxies_list, list):
-            valid_proxies = [p for p in proxies_list if validate_proxy(p)]
+        # 情况1: 文件本身就是一个代理节点列表 (list)
+        if isinstance(config, list):
+            valid_proxies = [p for p in config if validate_proxy(p)]
             all_nodes.extend(valid_proxies)
-
-        # 其次从 'proxy-providers' 键获取
-        proxy_providers = config.get('proxy-providers', {})
-        if isinstance(proxy_providers, dict):
-            for provider_data in proxy_providers.values():
-                provider_proxies = []
-                if isinstance(provider_data, dict):
-                    provider_proxies = provider_data.get('proxies', [])
-                elif isinstance(provider_data, list):
-                    provider_proxies = provider_data
-                
-                if isinstance(provider_proxies, list):
-                    valid_proxies = [p for p in provider_proxies if validate_proxy(p)]
-                    all_nodes.extend(valid_proxies)
         
-        # 最后从 'proxy-groups' 键获取
-        proxy_groups = config.get('proxy-groups', [])
-        if isinstance(proxy_groups, list):
-            for group in proxy_groups:
-                if isinstance(group, dict):
-                    group_proxies = group.get('proxies', [])
-                    if isinstance(group_proxies, list):
-                        for proxy_item in group_proxies:
-                            if isinstance(proxy_item, dict):
-                                all_nodes.append(proxy_item)
+        # 情况2: 文件是一个包含顶级键的字典 (dict)
+        elif isinstance(config, dict):
+            # 优先从 'proxies' 键获取
+            proxies_list = config.get('proxies', [])
+            if isinstance(proxies_list, list):
+                valid_proxies = [p for p in proxies_list if validate_proxy(p)]
+                all_nodes.extend(valid_proxies)
+
+            # 其次从 'proxy-providers' 键获取
+            proxy_providers = config.get('proxy-providers', {})
+            if isinstance(proxy_providers, dict):
+                for provider_data in proxy_providers.values():
+                    provider_proxies = []
+                    if isinstance(provider_data, dict):
+                        provider_proxies = provider_data.get('proxies', [])
+                    elif isinstance(provider_data, list):
+                        provider_proxies = provider_data
+                    
+                    if isinstance(provider_proxies, list):
+                        valid_proxies = [p for p in provider_proxies if validate_proxy(p)]
+                        all_nodes.extend(valid_proxies)
+            
+            # 最后从 'proxy-groups' 键获取
+            proxy_groups = config.get('proxy-groups', [])
+            if isinstance(proxy_groups, list):
+                for group in proxy_groups:
+                    if isinstance(group, dict):
+                        group_proxies = group.get('proxies', [])
+                        if isinstance(group_proxies, list):
+                            for proxy_item in group_proxies:
+                                if isinstance(proxy_item, dict):
+                                    all_nodes.append(proxy_item)
         
         # 对所有收集到的节点进行最终验证
         final_valid_nodes = [node for node in all_nodes if validate_proxy(node)]
@@ -219,6 +227,14 @@ def crawl():
 
                 for item in items:
                     html_url = item.get("html_url")
+                    
+                    # --- 新增文件年龄检查 ---
+                    repo_pushed_at_str = item['repository']['pushed_at']
+                    repo_pushed_at = datetime.strptime(repo_pushed_at_str, "%Y-%m-%dT%H:%M:%SZ")
+                    if datetime.utcnow() - repo_pushed_at > timedelta(days=MAX_FILE_AGE_DAYS):
+                        print(f" - 跳过旧文件 ({repo_pushed_at_str}): {html_url}")
+                        continue
+                    # --- 结束文件年龄检查 ---
                     
                     repo_full_name = item['repository']['full_name']
                     file_path = item['path']
