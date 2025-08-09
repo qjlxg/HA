@@ -22,7 +22,7 @@ jobs:
         env:
           SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}
         run: |
-          python clash_proxy_crawler.py
+          python Serpapi_proxy_crawler.py
       - name: Commit results
         run: |
           git config --global user.name 'GitHub Action'
