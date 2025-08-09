@@ -1,4 +1,4 @@
-# clash_proxy_crawler_v13.py
+# clash_proxy_crawler_v14.py
 import requests
 import yaml
 import os
@@ -23,7 +23,7 @@ CACHE_FILE = 'sc/search_cache.txt'
 PROXIES_FILE = 'sc/clash_proxies.yaml'
 STATS_FILE = 'sc/query_stats.csv'
 
-# 优化和扩展后的搜索关键词
+# 优化后的搜索关键字列表
 search_queries = [
     'extension:yml "proxies:" "clash" path:/',
     'extension:yaml "proxies:" "clash" path:/',
