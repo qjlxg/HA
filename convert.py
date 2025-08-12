@@ -293,6 +293,10 @@ def parse_ssr(uri):
         password_decoded = base64.b64decode(password + '=' * (-len(password) % 4)).decode('utf-8')
         if method.lower() not in SS_SUPPORTED_CIPHERS: return None
         
+        # 修复：SSR 不支持 ss-aead 相关的加密方法
+        if 'gcm' in method.lower() or 'poly1305' in method.lower() or 'xchacha' in method.lower():
+            return None
+
         node_data = {
             "type": "ssr", "server": server, "port": port, "cipher": method, 
             "password": password_decoded, "protocol": protocol, "obfs": obfs
@@ -370,17 +374,15 @@ def get_yaml_fingerprint(node):
     return None
 
 def parse_yaml_proxies(filepath, proxies_list):
-    """
-    修改了此函数，以正确解析 YAML 文件。
-    它现在读取整个文件内容，而不是逐行读取。
-    """
     global used_node_fingerprints, used_names
     current_file_proxies = []
     current_duplicates = 0
+    yaml_data = {}
     
     try:
         with open(filepath, "r", encoding="utf-8") as f:
-            yaml_data = yaml.safe_load(f) # 修复: 读取整个文件内容
+            content = f.read()
+        yaml_data = yaml.safe_load(content)
             
         if not isinstance(yaml_data, dict) or "proxies" not in yaml_data or not isinstance(yaml_data["proxies"], list):
             print(f"警告：文件 {filepath} 格式不正确或缺少 'proxies' 列表。")
@@ -398,6 +400,11 @@ def parse_yaml_proxies(filepath, proxies_list):
             
             used_node_fingerprints.add(fingerprint)
             
+            node_type = node.get("type")
+            # 修复：对从YAML文件加载的节点也进行参数有效性检查
+            if node_type == "ss" and node.get("cipher") not in SS_SUPPORTED_CIPHERS:
+                continue
+            
             # 规范化节点名称
             node["name"] = normalize_name(node.get("name", "Unnamed YAML Node"))
             current_file_proxies.append(node)
@@ -412,7 +419,6 @@ def parse_yaml_proxies(filepath, proxies_list):
 def main():
     global used_names, used_node_fingerprints
     
-    # 输入文件列表
     input_files = ["merged_configs.txt", "all_unique_nodes.txt", "clash_proxies.yaml", "base64_list.txt", "sc/clash_proxies.yaml"]
     output_file = "config.yaml"
 
