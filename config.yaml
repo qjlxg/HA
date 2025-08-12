@@ -21658,7 +21658,7 @@ proxies:
   port: 51896
   uuid: cc8c0ddd-8486-448a-829e-c700f6a58ef9
   alterId: 0
-  cipher: auto
+  cipher: ''
   network: tcp
   tls: false
 - name: NIM-11
