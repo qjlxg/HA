@@ -10,28 +10,39 @@ from tqdm import tqdm
 used_names = set()
 used_node_fingerprints = set()
 
-# 支持的 ShadowSocks 和 ShadowsocksR 加密方法列表
+# 支持的 Shadowsocks 加密方法列表
 SS_SUPPORTED_CIPHERS = [
-    "aes-够256-gcm", "aes-192-gcm", "aes-128-gcm",
+    "aes-256-gcm", "aes-192-gcm", "aes-128-gcm",
     "aes-256-cfb", "aes-192-cfb", "aes-128-cfb",
     "chacha20-poly1305", "chacha20-ietf-poly1305",
     "xchacha20-ietf-poly1305", "xchacha20",
     "aes-256-ctr", "aes-192-ctr", "aes-128-ctr",
     "camellia-256-cfb", "camellia-192-cfb", "camellia-128-cfb",
-    "rc4-md5",  # 新增支持
-    "chacha20-ietf"  # 新增支持
+    "rc4-md5",
+    "chacha20-ietf"
+]
+
+# 为 ShadowsocksR 单独定义支持的加密方法，因为它不支持 ss-aead 相关的加密方法
+SSR_SUPPORTED_CIPHERS = [
+    "aes-256-cfb", "aes-192-cfb", "aes-128-cfb",
+    "chacha20-ietf",
+    "camellia-256-cfb", "camellia-192-cfb", "camellia-128-cfb",
+    "rc4-md5"
 ]
 
 def normalize_name(name):
     """
     规范化节点名称：
-    1. 移除表情符号和特殊字符
-    2. 保留前3个字符
-    3. 如果名称重复，添加序号
+    1. 移除表情符号和特殊字符。
+    2. 保留前3个字符作为基础名称。
+    3. 如果名称重复，添加序号以确保唯一性。
     """
+    # 移除表情符号和换行符
     name = re.sub(r'[\U00010000-\U0010ffff]', '', name)
     name = name.replace('<br/>', '').replace('\n', '').strip()
+    # 移除除中文、英文、数字、空格和横杠外的所有字符
     name = re.sub(r'[^\u4e00-\u9fa5\w\s-]', '', name)
+    # 将多个空格替换为单个空格
     name = re.sub(r'\s+', ' ', name).strip()
     
     truncated_name = name[:3] if len(name) >= 3 else name
@@ -45,7 +56,7 @@ def normalize_name(name):
     return truncated_name
 
 def get_vmess_fingerprint(data):
-    """为 Vmess 节点生成唯一指纹"""
+    """为 Vmess 节点生成唯一指纹，用于去重。"""
     return (
         data.get("type", "vmess"),
         data.get("server"),
@@ -56,7 +67,7 @@ def get_vmess_fingerprint(data):
     )
 
 def get_vless_fingerprint(data):
-    """为 Vless 节点生成唯一指纹"""
+    """为 Vless 节点生成唯一指纹，用于去重。"""
     return (
         "vless",
         data.get("server"),
@@ -68,7 +79,7 @@ def get_vless_fingerprint(data):
     )
 
 def get_ss_fingerprint(data):
-    """为 ShadowSocks 节点生成唯一指纹"""
+    """为 Shadowsocks 节点生成唯一指纹，用于去重。"""
     return (
         "ss",
         data.get("server"),
@@ -78,7 +89,7 @@ def get_ss_fingerprint(data):
     )
 
 def get_trojan_fingerprint(data):
-    """为 Trojan 节点生成唯一指纹"""
+    """为 Trojan 节点生成唯一指纹，用于去重。"""
     return (
         "trojan",
         data.get("server"),
@@ -88,7 +99,7 @@ def get_trojan_fingerprint(data):
     )
     
 def get_ssr_fingerprint(data):
-    """为 ShadowsocksR 节点生成唯一指纹"""
+    """为 ShadowsocksR 节点生成唯一指纹，用于去重。"""
     return (
         "ssr",
         data.get("server"),
@@ -100,7 +111,7 @@ def get_ssr_fingerprint(data):
     )
     
 def get_hysteria2_fingerprint(data):
-    """为 Hysteria2 节点生成唯一指纹"""
+    """为 Hysteria2 节点生成唯一指纹，用于去重。"""
     return (
         "hysteria2",
         data.get("server"),
@@ -111,9 +122,9 @@ def get_hysteria2_fingerprint(data):
     )
 
 def parse_vmess(uri):
+    """解析 Vmess 链接，返回节点配置字典或 None。"""
     try:
-        if not uri.startswith("vmess://"):
-            return None
+        if not uri.startswith("vmess://"): return None
         encoded_data = uri[8:]
         encoded_data = encoded_data.replace('<br/>', '').replace('\n', '').strip()
         data = json.loads(base64.b64decode(encoded_data + '=' * (-len(encoded_data) % 4)).decode('utf-8'))
@@ -163,6 +174,7 @@ def parse_vmess(uri):
     except Exception: return None
 
 def parse_vless(uri):
+    """解析 Vless 链接，返回节点配置字典或 None。"""
     try:
         if not uri.startswith("vless://"): return None
         uri = uri.replace('<br/>', '').replace('\n', '').strip()
@@ -209,6 +221,7 @@ def parse_vless(uri):
     except Exception: return None
 
 def parse_ss(uri):
+    """解析 ShadowSocks 链接，返回节点配置字典或 None。"""
     try:
         if not uri.startswith("ss://"): return None
         uri = uri.replace('<br/>', '').replace('\n', '').strip()
@@ -241,6 +254,7 @@ def parse_ss(uri):
     except Exception: return None
 
 def parse_trojan(uri):
+    """解析 Trojan 链接，返回节点配置字典或 None。"""
     try:
         if not uri.startswith("trojan://"): return None
         uri = uri.replace('<br/>', '').replace('\n', '').strip()
@@ -279,6 +293,7 @@ def parse_trojan(uri):
     except Exception: return None
 
 def parse_ssr(uri):
+    """解析 ShadowsocksR 链接，返回节点配置字典或 None。"""
     try:
         if not uri.startswith("ssr://"): return None
         uri = uri.replace('<br/>', '').replace('\n', '').strip()
@@ -293,10 +308,10 @@ def parse_ssr(uri):
         except (ValueError, TypeError): return None
         
         password_decoded = base64.b64decode(password + '=' * (-len(password) % 4)).decode('utf-8')
-        if method.lower() not in SS_SUPPORTED_CIPHERS: return None
         
-        # 修复：SSR 不支持 ss-aead 相关的加密方法
-        if 'gcm' in method.lower() or 'poly1305' in method.lower() or 'xchacha' in method.lower():
+        # 检查加密方法是否在SSR支持列表中
+        if method.lower() not in SSR_SUPPORTED_CIPHERS:
+            print(f"警告：跳过不支持的 SSR 加密方法：{method}")
             return None
 
         node_data = {
@@ -323,6 +338,7 @@ def parse_ssr(uri):
     except Exception: return None
 
 def parse_hysteria2(uri):
+    """解析 Hysteria2 链接，返回节点配置字典或 None。"""
     try:
         if not uri.startswith("hysteria2://"): return None
         uri = uri.replace('<br/>', '').replace('\n', '').strip()
@@ -344,7 +360,6 @@ def parse_hysteria2(uri):
             "sni": params.get("sni", [parsed.hostname])[0]
         }
         fingerprint = get_hysteria2_fingerprint(node_data)
-        Heading: Modified Script
         if fingerprint in used_node_fingerprints: return "duplicate"
         used_node_fingerprints.add(fingerprint)
         
@@ -360,7 +375,7 @@ def parse_hysteria2(uri):
     except Exception: return None
 
 def get_yaml_fingerprint(node):
-    """根据节点类型，为 YAML 节点生成唯一指纹"""
+    """根据节点类型，为 YAML 节点生成唯一指纹，用于去重。"""
     node_type = node.get("type")
     if node_type == "vmess":
         return get_vmess_fingerprint(node)
@@ -376,33 +391,27 @@ def get_yaml_fingerprint(node):
         return get_hysteria2_fingerprint(node)
     return None
 
-def parse_yaml_proxies(filepath, proxies_list):
-    global used_node_fingerprints, used_names
+def process_yaml_file(filepath, proxies_list, encoding):
+    """
+    一个内部使用的辅助函数，用于处理 YAML 文件的核心逻辑。
+    将解析和节点处理的逻辑从主函数中提取出来，以减少代码重复。
+    """
     current_file_proxies = []
     current_duplicates = 0
+    total_file_nodes = 0
     yaml_data = {}
     
     try:
-        # 尝试以 UTF-8 编码读取文件，忽略无效字符
-        with open(filepath, "r", encoding="utf-8", errors='ignore') as f:
+        with open(filepath, "r", encoding=encoding, errors='ignore') as f:
             content = f.read().strip()
             if not content:
                 print(f"错误：文件 {filepath} 为空，跳过处理。")
                 return 0, 0, 0
         
-        # 打印文件内容信息以便调试
-        print(f"正在解析 {filepath}，文件内容长度：{len(content)} 字节")
-        print(f"文件前几行内容预览（最多5行）：")
-        preview_lines = content.splitlines()[:5]
-        for i, line in enumerate(preview_lines, 1):
-            print(f"  行 {i}: {line}")
-        
-        # 尝试解析 YAML
         try:
             yaml_data = yaml.safe_load(content)
         except yaml.YAMLError as ye:
-            print(f"YAML 解析错误 ({filepath})：{ye}")
-            # 打印错误附近的行以便调试
+            print(f"YAML 解析错误 ({filepath}, 编码: {encoding})：{ye}")
             lines = content.splitlines()
             error_line = getattr(ye, 'problem_mark', None)
             if error_line:
@@ -414,7 +423,6 @@ def parse_yaml_proxies(filepath, proxies_list):
                     print(f"  行 {i + 1}: {lines[i]}")
             return 0, 0, 0
         
-        # 检查 YAML 数据是否有效
         if not isinstance(yaml_data, dict) or "proxies" not in yaml_data or not isinstance(yaml_data["proxies"], list):
             print(f"警告：文件 {filepath} 格式不正确或缺少 'proxies' 列表。")
             return 0, 0, 0
@@ -433,80 +441,35 @@ def parse_yaml_proxies(filepath, proxies_list):
             used_node_fingerprints.add(fingerprint)
             
             node_type = node.get("type")
-            # 检查 Shadowsocks 节点的加密方法
             if node_type == "ss":
                 cipher = node.get("cipher")
                 if cipher not in SS_SUPPORTED_CIPHERS:
-                    print(f"警告：跳过不支持的加密方法，节点：{node.get('name', '未知')}，加密方法：{cipher}")
+                    print(f"警告：跳过不支持的SS加密方法，节点：{node.get('name', '未知')}，加密方法：{cipher}")
                     continue
             
-            # 规范化节点名称
             node["name"] = normalize_name(node.get("name", "Unnamed YAML Node"))
             current_file_proxies.append(node)
-            
-    except UnicodeDecodeError as ude:
-        print(f"编码错误 ({filepath})：{ude}")
-        print(f"尝试以 latin1 编码重新读取文件...")
-        try:
-            with open(filepath, "r", encoding="latin1") as f:
-                content = f.read().strip()
-                if not content:
-                    print(f"错误：文件 {filepath} 为空，跳过处理。")
-                    return 0, 0, 0
-                print(f"正在解析 {filepath}，文件内容长度：{len(content)} 字节")
-                print(f"文件前几行内容预览（最多5行）：")
-                preview_lines = content.splitlines()[:5]
-                for i, line in enumerate(preview_lines, 1):
-                    print(f"  行 {i}: {line}")
-                
-                try:
-                    yaml_data = yaml.safe_load(content)
-                except yaml.YAMLError as ye:
-                    print(f"YAML 解析错误 ({filepath})：{ye}")
-                    lines = content.splitlines()
-                    error_line = getattr(ye, 'problem_mark', None)
-                    if error_line:
-                        line_number = error_line.line + 1
-                        start_line = max(0, line_number - 3)
-                        end_line = min(len(lines), line_number + 2)
-                        print(f"错误发生在第 {line_number} 行附近，以下是相关内容：")
-                        for i in range(start_line, end_line):
-                            print(f"  行 {i + 1}: {lines[i]}")
-                    return 0, 0, 0
-                
-                if not isinstance(yaml_data, dict) or "proxies" not in yaml_data or not isinstance(yaml_data["proxies"], list):
-                    print(f"警告：文件 {filepath} 格式不正确或缺少 'proxies' 列表。")
-                    return 0, 0, 0
-                
-                total_file_nodes = len(yaml_data["proxies"])
-                for node in tqdm(yaml_data["proxies"], desc=f"解析 {filepath}"):
-                    if not isinstance(node, dict) or "type" not in node:
-                        print(f"警告：跳过无效节点，节点内容：{node}")
-                        continue
-                    fingerprint = get_yaml_fingerprint(node)
-                    if fingerprint and fingerprint in used_node_fingerprints:
-                        current_duplicates += 1
-                        continue
-                    used_node_fingerprints.add(fingerprint)
-                    node_type = node.get("type")
-                    if node_type == "ss":
-                        cipher = node.get("cipher")
-                        if cipher not in SS_SUPPORTED_CIPHERS:
-                            print(f"警告：跳过不支持的加密方法，节点：{node.get('name', '未知')}，加密方法：{cipher}")
-                            continue
-                    node["name"] = normalize_name(node.get("name", "Unnamed YAML Node"))
-                    current_file_proxies.append(node)
-        except Exception as e:
-            print(f"使用 latin1 编码解析文件 {filepath} 失败：{e}")
-            return 0, 0, 0
+    
     except Exception as e:
-        print(f"解析文件 {filepath} 时出错：{e}")
-        return 0, 0, len(yaml_data.get("proxies", [])) if 'yaml_data' in locals() else 0
+        print(f"处理文件 {filepath} 时出错：{e}")
+        return 0, 0, total_file_nodes
     
     proxies_list.extend(current_file_proxies)
     return len(current_file_proxies), current_duplicates, total_file_nodes
 
+def parse_yaml_proxies(filepath, proxies_list):
+    """尝试使用不同编码解析 YAML 文件。"""
+    success_count, duplicates, total_file_nodes = process_yaml_file(filepath, proxies_list, "utf-8")
+    
+    if success_count == 0 and total_file_nodes == 0:
+        # 如果 UTF-8 解析失败，尝试 latin1
+        print(f"UTF-8 解析失败，尝试以 latin1 编码重新读取文件 {filepath}...")
+        return process_yaml_file(filepath, proxies_list, "latin1")
+    
+    return success_count, duplicates, total_file_nodes
+
 def main():
+    """主函数，负责文件处理流程和结果输出。"""
     global used_names, used_node_fingerprints
     
     input_files = ["merged_configs.txt", "all_unique_nodes.txt", "clash_proxies.yaml", "base64_list.txt", "sc/clash_proxies.yaml"]
@@ -520,15 +483,15 @@ def main():
     used_names.clear()
     used_node_fingerprints.clear()
 
-    print(f"将要处理以下文件: {input_files}")
+    print("--- 启动节点转换工具 ---")
+    print(f"将处理以下文件: {input_files}")
 
     for input_file in input_files:
         if not os.path.exists(input_file):
             print(f"文件 {input_file} 不存在，跳过处理。")
             continue
         
-        lines_to_process = []
-        
+        # 处理 YAML 文件
         if input_file.endswith(('.yaml', '.yml')):
             success_count, duplicates, total_file_nodes = parse_yaml_proxies(input_file, proxies)
             total_lines += total_file_nodes
@@ -536,18 +499,20 @@ def main():
             failed_count += (total_file_nodes - success_count - duplicates)
             continue
         
-        # 尝试解码 Base64 格式
+        # 处理非 YAML 文件
+        lines_to_process = []
         try:
             with open(input_file, "r", encoding="utf-8", errors='ignore') as f:
                 content = f.read().strip()
+                # 检查是否为 Base64 编码
                 if not content.startswith(('vmess://', 'vless://', 'ss://', 'trojan://', 'ssr://', 'hysteria2://')):
                     decoded_content = base64.b64decode(content + '=' * (-len(content) % 4)).decode('utf-8')
                     lines_to_process = decoded_content.splitlines()
                     print(f"\n文件 {input_file} 似乎是 Base64 编码，已成功解码。")
                 else:
                     lines_to_process = content.splitlines()
-        except Exception:
-            print(f"警告：文件 {input_file} 不是有效的 Base64 或链接格式，按普通文本处理。")
+        except Exception as e:
+            print(f"警告：文件 {input_file} 不是有效的 Base64 或链接格式，按普通文本处理。错误：{e}")
             with open(input_file, "r", encoding="utf-8", errors='ignore') as f:
                 lines_to_process = f.readlines()
         
@@ -602,16 +567,17 @@ def main():
         
         with open(output_file, "w", encoding="utf-8") as f:
             yaml.dump(config_data, f, allow_unicode=True, sort_keys=False)
-        print("\n" + "="*30)
-        print("转换完成！")
-        print(f"成功转换并去重后节点数量: {len(proxies)}")
-        print(f"因节点内容重复被跳过数量: {duplicate_count}")
-        print(f"解析失败或不符合格式的行数: {failed_count}")
-        print(f"总计处理行数: {total_lines}")
-        print(f"配置文件已保存到 {output_file}")
+        
+        print("\n" + "="*40)
+        print("✅ 转换完成！")
+        print(f"📝 成功转换并去重后节点数量: {len(proxies)}")
+        print(f"🔄 因节点内容重复被跳过数量: {duplicate_count}")
+        print(f"❌ 解析失败或不符合格式的行数: {failed_count}")
+        print(f"📊 总计处理行数: {total_lines}")
+        print(f"📄 配置文件已保存到 {output_file}")
     else:
-        print("\n" + "="*30)
-        print("未找到任何有效节点，未生成配置文件。")
+        print("\n" + "="*40)
+        print("⚠️ 未找到任何有效节点，未生成配置文件。")
 
 if __name__ == "__main__":
     main()
