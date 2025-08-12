@@ -83,3 +83,13 @@ query,node_count,timestamp
 "filename:clash.yaml ""proxies:"" OR ""proxy-providers:"" language:YAML",71,2025-08-11T04:07:40.121180
 "filename:clash.yaml ""proxies:"" OR ""proxy-groups:"" language:YAML",2012,2025-08-11T04:08:08.882030
 "extension:yaml OR extension:yml ""proxies:"" ""clash"" path:/",1457,2025-08-11T04:09:24.096389
+"extension:yml ""proxies:"" ""clash"" path:/",41,2025-08-12T06:07:30.379604
+"extension:yaml ""proxies:"" ""clash"" path:/",1850,2025-08-12T06:10:18.495004
+"filename:clash.yaml ""proxies:"" language:YAML",69433,2025-08-12T06:12:33.192826
+"filename:clash.yml ""proxies:"" language:YAML",136,2025-08-12T06:12:55.462984
+"filename:clash.yaml ""proxy-providers:"" language:YAML",128,2025-08-12T06:13:08.414297
+"filename:clash.yml ""proxy-providers:"" language:YAML",45,2025-08-12T06:13:14.329797
+"filename:clash.yaml ""proxies:"" OR filename:clash.yml ""proxies:"" language:YAML",69569,2025-08-12T06:15:14.453761
+"filename:clash.yaml ""proxies:"" OR ""proxy-providers:"" language:YAML",128,2025-08-12T06:15:26.350542
+"filename:clash.yaml ""proxies:"" OR ""proxy-groups:"" language:YAML",1928,2025-08-12T06:16:09.524213
+"extension:yaml OR extension:yml ""proxies:"" ""clash"" path:/",1703,2025-08-12T06:18:31.433207
