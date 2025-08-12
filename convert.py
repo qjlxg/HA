@@ -5,6 +5,8 @@ import base64
 import json
 from urllib.parse import urlparse, parse_qs, unquote
 from tqdm import tqdm
+import geoip2.database
+from collections import defaultdict
 
 # 全局变量用于存储已使用的节点名称和节点指纹，以便去重
 used_names = set()
@@ -158,17 +160,19 @@ def parse_vmess(uri):
             "uuid": data.get("id"),
             "alterId": int(data.get("aid", 0)),
             "cipher": data.get("scy", "auto"),
-            "network": data.get("net", "tcp"),
-            "tls": data.get("tls", "") == "tls"
+            "network": data.get("net", "tcp")
         }
         
+        if data.get("tls", "") == "tls":
+            node["tls"] = True
+            if "sni" in data:
+                node["servername"] = data["sni"]
+
         if node["network"] == "ws":
             node["ws-opts"] = {
                 "path": data.get("path", "/"),
                 "headers": {"Host": data.get("host", node["server"])}
             }
-        if node["tls"] and "sni" in data:
-            node["servername"] = data["sni"]
         
         return node
     except Exception: return None
@@ -468,11 +472,22 @@ def parse_yaml_proxies(filepath, proxies_list):
     
     return success_count, duplicates, total_file_nodes
 
+def get_country_name(ip_address, reader):
+    """使用 geoip2 获取给定 IP 地址的国家/地区 ISO 代码。"""
+    try:
+        response = reader.country(ip_address)
+        return response.country.iso_code
+    except geoip2.errors.AddressNotFoundError:
+        return None
+    except Exception as e:
+        print(f"错误：查询 IP {ip_address} 时出错：{e}")
+        return None
+
 def main():
-    """主函数，负责文件处理流程和结果输出。"""
+    """主函数，负责文件处理流程、GeoIP 查询和结果输出。"""
     global used_names, used_node_fingerprints
     
-    input_files = ["merged_configs.txt", "all_unique_nodes.txt","base.txt"]
+    input_files = ["merged_configs.txt", "all_unique_nodes.txt", "base.txt"]
     output_file = "config.yaml"
 
     proxies = []
@@ -551,6 +566,34 @@ def main():
                 failed_count += 1
 
     if proxies:
+        # GeoIP2 查询和重命名
+        print("\n--- 正在使用 GeoLite2-Country.mmdb 进行节点地理位置查询和重命名 ---")
+        try:
+            reader = geoip2.database.Reader('GeoLite2-Country.mmdb')
+        except Exception as e:
+            print(f"错误：加载 GeoLite2-Country.mmdb 失败：{e}")
+            print("将使用原始节点名称。")
+            reader = None
+        
+        if reader:
+            country_counts = defaultdict(int)
+            renamed_proxies = []
+            for proxy in tqdm(proxies, desc="重命名节点"):
+                ip = proxy.get('server')
+                if not ip:
+                    renamed_proxies.append(proxy)
+                    continue
+                
+                country_code = get_country_name(ip, reader)
+                
+                if country_code:
+                    country_counts[country_code] += 1
+                    new_name = f"{country_code}-{country_counts[country_code]:02d}"
+                    proxy['name'] = new_name
+                
+                renamed_proxies.append(proxy)
+            proxies = renamed_proxies
+
         config_data = {
             "proxies": proxies,
             "proxy-groups": [
