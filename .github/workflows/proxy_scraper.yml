@@ -1,15 +1,13 @@
 name: Proxy Scraper
 
 on:
-  push:
-    branches:
-      - '.github/workflows/proxy_scraper.yml'
   schedule:
     - cron: '0 */3 * * *'
   workflow_dispatch:
+
 env:
-  TZ: Asia/Shanghai # 添加时区环境变量
-  
+  TZ: Asia/Shanghai # 设置时区为上海
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -23,7 +21,6 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
-        persist-credentials: true
         fetch-depth: 0
 
     - name: Set up Python
@@ -71,31 +68,25 @@ jobs:
           echo "No changes to commit. Skipping commit."
         else
           echo "Changes detected. Attempting to commit and push."
-
+          
+          # 尝试直接推送，如果失败则进入后备方案
           git commit -m "chore: Auto-update collected proxy data [skip ci]"
-
           git push || (
-            echo "Push rejected, pulling and attempting to merge..."
+            echo "Push rejected. Pulling and attempting to merge..."
             git pull --no-rebase origin main
-
+            
+            # 解决冲突：总是保留我们本地最新的爬取结果
             git checkout --ours data/
             git checkout --ours all_unique_nodes.txt nodes_summary.csv
+            
+            # 将解决后的冲突标记为已解决，并创建合并提交
             git add data/
             git add all_unique_nodes.txt nodes_summary.csv
             git commit -m "chore: Resolve merge conflicts by keeping local proxy data [skip ci]"
+            
+            # 最后，再次尝试推送
             git push
           )
-          echo "Process finished."
         fi
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Notify on failure
-      if: failure()
-      uses: slackapi/slack-github-action@v1.27.0
-      with:
-        slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
-        channel-id: 'your-channel-id'
-        text: 'Proxy Scraper workflow failed. Please check logs for details.'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
