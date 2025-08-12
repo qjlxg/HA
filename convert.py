@@ -370,19 +370,23 @@ def get_yaml_fingerprint(node):
     return None
 
 def parse_yaml_proxies(filepath, proxies_list):
-    """解析 YAML 格式的 Clash 配置文件"""
+    """
+    修改了此函数，以正确解析 YAML 文件。
+    它现在读取整个文件内容，而不是逐行读取。
+    """
     global used_node_fingerprints, used_names
     current_file_proxies = []
     current_duplicates = 0
     
     try:
         with open(filepath, "r", encoding="utf-8") as f:
-            yaml_data = yaml.safe_load(f)
+            yaml_data = yaml.safe_load(f) # 修复: 读取整个文件内容
             
         if not isinstance(yaml_data, dict) or "proxies" not in yaml_data or not isinstance(yaml_data["proxies"], list):
             print(f"警告：文件 {filepath} 格式不正确或缺少 'proxies' 列表。")
             return 0, 0, 0
 
+        total_file_nodes = len(yaml_data["proxies"])
         for node in tqdm(yaml_data["proxies"], desc=f"解析 {filepath}"):
             if not isinstance(node, dict) or "type" not in node:
                 continue
@@ -400,16 +404,16 @@ def parse_yaml_proxies(filepath, proxies_list):
             
     except Exception as e:
         print(f"解析文件 {filepath} 时出错：{e}")
-        return 0, 0, len(yaml_data.get("proxies", []))
+        return 0, 0, len(yaml_data.get("proxies", [])) if 'yaml_data' in locals() else 0
     
     proxies_list.extend(current_file_proxies)
-    return len(current_file_proxies), current_duplicates, len(yaml_data.get("proxies", []))
+    return len(current_file_proxies), current_duplicates, total_file_nodes
 
 def main():
     global used_names, used_node_fingerprints
     
-    # 修改后的输入文件列表，包含YAML文件和Base64编码文件
-    input_files = ["merged_configs.txt", "all_unique_nodes.txt", "sc/clash_proxies.yaml" ]
+    # 输入文件列表
+    input_files = ["merged_configs.txt", "all_unique_nodes.txt", "clash_proxies.yaml", "base64_list.txt", "sc/clash_proxies.yaml"]
     output_file = "config.yaml"
 
     proxies = []
