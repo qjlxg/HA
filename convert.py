@@ -10,6 +10,16 @@ from tqdm import tqdm
 used_names = set()
 used_node_fingerprints = set()
 
+# 支持的 ShadowSocks 和 ShadowsocksR 加密方法列表
+SS_SUPPORTED_CIPHERS = [
+    "aes-256-gcm", "aes-192-gcm", "aes-128-gcm",
+    "aes-256-cfb", "aes-192-cfb", "aes-128-cfb",
+    "chacha20-poly1305", "chacha20-ietf-poly1305",
+    "xchacha20-ietf-poly1305", "xchacha20",
+    "aes-256-ctr", "aes-192-ctr", "aes-128-ctr",
+    "camellia-256-cfb", "camellia-192-cfb", "camellia-128-cfb",
+]
+
 def normalize_name(name):
     """规范化节点名称，移除表情符号和特殊字符，并处理名称去重"""
     name = re.sub(r'[\U00010000-\U0010ffff]', '', name)
@@ -100,46 +110,50 @@ def parse_vmess(uri):
         encoded_data = encoded_data.replace('<br/>', '').replace('\n', '').strip()
         data = json.loads(base64.b64decode(encoded_data + '=' * (-len(encoded_data) % 4)).decode('utf-8'))
         
-        if isinstance(data, dict):
-            fingerprint = get_vmess_fingerprint(data)
-            if fingerprint in used_node_fingerprints:
-                return "duplicate"
-            used_node_fingerprints.add(fingerprint)
-            
-            name = normalize_name(data.get("ps", "Unnamed Vmess Node"))
-            server = data.get("add")
-            port = int(data.get("port"))
-            uuid = data.get("id")
-            alterId = int(data.get("aid", 0))
-            cipher = data.get("scy", "auto")
-            tls = data.get("tls", "") == "tls"
-            network = data.get("net", "tcp")
-            
-            node = {
-                "name": name,
-                "type": "vmess",
-                "server": server,
-                "port": port,
-                "uuid": uuid,
-                "alterId": alterId,
-                "cipher": cipher,
-                "tls": tls,
-                "network": network,
-            }
-            
-            if network == "ws":
-                node["ws-opts"] = {
-                    "path": data.get("path", "/"),
-                    "headers": {
-                        "Host": data.get("host", server)
-                    }
-                }
-            if tls and "sni" in data:
-                node["servername"] = data["sni"]
-            
-            return node
-        else:
+        if not isinstance(data, dict):
             return None
+
+        # 检查关键字段
+        if not all(key in data for key in ["add", "port", "id"]):
+            return None
+
+        fingerprint = get_vmess_fingerprint(data)
+        if fingerprint in used_node_fingerprints:
+            return "duplicate"
+        used_node_fingerprints.add(fingerprint)
+        
+        name = normalize_name(data.get("ps", "Unnamed Vmess Node"))
+        server = data.get("add")
+        port = int(data.get("port"))
+        uuid = data.get("id")
+        alterId = int(data.get("aid", 0))
+        cipher = data.get("scy", "auto")
+        tls = data.get("tls", "") == "tls"
+        network = data.get("net", "tcp")
+        
+        node = {
+            "name": name,
+            "type": "vmess",
+            "server": server,
+            "port": port,
+            "uuid": uuid,
+            "alterId": alterId,
+            "cipher": cipher,
+            "tls": tls,
+            "network": network,
+        }
+        
+        if network == "ws":
+            node["ws-opts"] = {
+                "path": data.get("path", "/"),
+                "headers": {
+                    "Host": data.get("host", server)
+                }
+            }
+        if tls and "sni" in data:
+            node["servername"] = data["sni"]
+        
+        return node
     except Exception:
         return None
 
@@ -151,6 +165,10 @@ def parse_vless(uri):
         uri = uri.replace('<br/>', '').replace('\n', '').strip()
         parsed = urlparse(uri)
         params = parse_qs(parsed.query)
+
+        # 检查关键字段
+        if not all([parsed.hostname, parsed.port, parsed.username]):
+            return None
 
         fingerprint = get_vless_fingerprint(parsed, params)
         if fingerprint in used_node_fingerprints:
@@ -197,10 +215,18 @@ def parse_ss(uri):
         if '@' not in uri:
             return None
         
+        # 检查关键字段
+        if not all([parsed.hostname, parsed.port]):
+            return None
+        
         core_part = parsed.netloc.split('@')[0]
         decoded_core = base64.b64decode(core_part + '=' * (-len(core_part) % 4)).decode('utf-8')
         method, password = decoded_core.split(':', 1)
         
+        # 检查加密方法是否支持
+        if method.lower() not in SS_SUPPORTED_CIPHERS:
+            return None
+
         fingerprint = get_ss_fingerprint(parsed, method, password)
         if fingerprint in used_node_fingerprints:
             return "duplicate"
@@ -227,6 +253,10 @@ def parse_trojan(uri):
         uri = uri.replace('<br/>', '').replace('\n', '').strip()
         parsed = urlparse(uri)
         params = parse_qs(parsed.query)
+
+        # 检查关键字段
+        if not all([parsed.hostname, parsed.port, parsed.username]):
+            return None
 
         fingerprint = get_trojan_fingerprint(parsed, params)
         if fingerprint in used_node_fingerprints:
@@ -264,6 +294,10 @@ def parse_ssr(uri):
         server, port, protocol, method, obfs, password = main_part.split(':')
         
         password_decoded = base64.b64decode(password + '=' * (-len(password) % 4)).decode('utf-8')
+
+        # 检查加密方法是否支持
+        if method.lower() not in SS_SUPPORTED_CIPHERS:
+            return None
 
         fingerprint = get_ssr_fingerprint(server, port, method, password_decoded, protocol, obfs)
         if fingerprint in used_node_fingerprints:
@@ -305,6 +339,16 @@ def parse_hysteria2(uri):
         password = parsed.username
         params = parse_qs(parsed.query)
 
+        # 检查关键字段
+        if not all([parsed.hostname, parsed.port, password]):
+            return None
+
+        # 检查混淆密码
+        obfs_type = params.get("obfs", ["none"])[0]
+        obfs_password = params.get("obfs-password", [""])[0]
+        if obfs_type != "none" and not obfs_password:
+            return None
+
         fingerprint = get_hysteria2_fingerprint(parsed, params)
         if fingerprint in used_node_fingerprints:
             return "duplicate"
@@ -319,8 +363,8 @@ def parse_hysteria2(uri):
             "port": parsed.port,
             "password": password,
             "alpn": [ "h3" ],
-            "obfs": params.get("obfs", ["none"])[0],
-            "obfs-password": params.get("obfs-password", [""])[0],
+            "obfs": obfs_type,
+            "obfs-password": obfs_password,
             "sni": params.get("sni", [parsed.hostname])[0],
             "skip-cert-verify": params.get('insecure', ['0'])[0] == '1',
             "up": "100mbps",
