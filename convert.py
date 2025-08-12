@@ -21,19 +21,27 @@ SS_SUPPORTED_CIPHERS = [
 ]
 
 def normalize_name(name):
-    """规范化节点名称，移除表情符号和特殊字符，并处理名称去重"""
+    """
+    规范化节点名称：
+    1. 移除表情符号和特殊字符
+    2. 保留前3个字符
+    3. 如果名称重复，添加序号
+    """
     name = re.sub(r'[\U00010000-\U0010ffff]', '', name)
     name = name.replace('<br/>', '').replace('\n', '').strip()
     name = re.sub(r'[^\u4e00-\u9fa5\w\s-]', '', name)
     name = re.sub(r'\s+', ' ', name).strip()
     
-    original_name = name
+    # 保留前3个字符
+    truncated_name = name[:3] if len(name) >= 3 else name
+    
+    original_name = truncated_name
     counter = 1
-    while name in used_names:
-        name = f"{original_name}-{counter}"
+    while truncated_name in used_names:
+        truncated_name = f"{original_name}-{counter}"
         counter += 1
-    used_names.add(name)
-    return name
+    used_names.add(truncated_name)
+    return truncated_name
 
 def get_vmess_fingerprint(data):
     """为 Vmess 节点生成唯一指纹"""
