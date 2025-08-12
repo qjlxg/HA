@@ -380,8 +380,12 @@ def parse_yaml_proxies(filepath, proxies_list):
     yaml_data = {}
     
     try:
-        with open(filepath, "r", encoding="utf-8") as f:
-            content = f.read()
+        with open(filepath, "r", encoding="utf-8", errors='ignore') as f:
+            content = f.read().strip()
+            if not content:
+                print(f"错误：文件 {filepath} 为空，跳过处理。")
+                return 0, 0, 0
+        print(f"正在解析 {filepath}，文件内容长度：{len(content)} 字节")
         yaml_data = yaml.safe_load(content)
             
         if not isinstance(yaml_data, dict) or "proxies" not in yaml_data or not isinstance(yaml_data["proxies"], list):
@@ -391,6 +395,7 @@ def parse_yaml_proxies(filepath, proxies_list):
         total_file_nodes = len(yaml_data["proxies"])
         for node in tqdm(yaml_data["proxies"], desc=f"解析 {filepath}"):
             if not isinstance(node, dict) or "type" not in node:
+                print(f"警告：跳过无效节点，节点内容：{node}")
                 continue
 
             fingerprint = get_yaml_fingerprint(node)
@@ -403,12 +408,16 @@ def parse_yaml_proxies(filepath, proxies_list):
             node_type = node.get("type")
             # 修复：对从YAML文件加载的节点也进行参数有效性检查
             if node_type == "ss" and node.get("cipher") not in SS_SUPPORTED_CIPHERS:
+                print(f"警告：跳过不支持的加密方法，节点：{node.get('name', '未知')}")
                 continue
             
             # 规范化节点名称
             node["name"] = normalize_name(node.get("name", "Unnamed YAML Node"))
             current_file_proxies.append(node)
             
+    except yaml.YAMLError as ye:
+        print(f"YAML 解析错误 ({filepath})：{ye}")
+        return 0, 0, 0
     except Exception as e:
         print(f"解析文件 {filepath} 时出错：{e}")
         return 0, 0, len(yaml_data.get("proxies", [])) if 'yaml_data' in locals() else 0
