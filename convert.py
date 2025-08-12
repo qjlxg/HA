@@ -1,50 +1,238 @@
+import os
+import re
 import yaml
-import sys
+import base64
+import json
+from urllib.parse import urlparse, parse_qs, unquote
 
-def load_yaml(path):
-    with open(path, 'r', encoding='utf-8') as f:
-        return yaml.safe_load(f)
+def parse_vmess(uri):
+    """解析 Vmess 节点"""
+    try:
+        if not uri.startswith("vmess://"):
+            return None
+        encoded_data = uri[8:]
+        data = json.loads(base64.b64decode(encoded_data).decode('utf-8'))
+        return {
+            "name": data.get("ps", "Unnamed Vmess Node"),
+            "type": "vmess",
+            "server": data.get("add"),
+            "port": int(data.get("port")),
+            "uuid": data.get("id"),
+            "alterId": int(data.get("aid", 0)),
+            "cipher": "auto",
+            "tls": data.get("tls", "") == "tls",
+            "network": data.get("net", "tcp"),
+            "ws-opts": {
+                "path": data.get("path", "/"),
+                "headers": {
+                    "Host": data.get("host", data.get("add"))
+                }
+            }
+        }
+    except Exception as e:
+        print(f"解析 Vmess 节点失败: {uri}, 错误: {e}")
+        return None
+
+def parse_vless(uri):
+    """解析 Vless 节点"""
+    try:
+        if not uri.startswith("vless://"):
+            return None
+        parsed = urlparse(uri)
+        name = unquote(parsed.fragment) if parsed.fragment else "Unnamed Vless Node"
+        params = parse_qs(parsed.query)
+
+        vless_node = {
+            "name": name,
+            "type": "vless",
+            "server": parsed.hostname,
+            "port": parsed.port,
+            "uuid": parsed.username,
+            "network": params.get('type', ['tcp'])[0],
+            "tls": params.get('security', [''])[0] == 'tls'
+        }
+
+        if vless_node['network'] == 'ws':
+            vless_node['ws-opts'] = {
+                "path": params.get("path", ["/"])[0],
+                "headers": {
+                    "Host": params.get("host", [parsed.hostname])[0]
+                }
+            }
+        
+        if vless_node['tls']:
+            vless_node['servername'] = params.get('sni', [parsed.hostname])[0]
+            vless_node['flow'] = params.get('flow', [''])[0]
+            vless_node['skip-cert-verify'] = params.get('allowInsecure', ['0'])[0] == '1'
+        
+        return vless_node
+    except Exception as e:
+        print(f"解析 Vless 节点失败: {uri}, 错误: {e}")
+        return None
+
+def parse_ss(uri):
+    """解析 ShadowSocks 节点"""
+    try:
+        if not uri.startswith("ss://"):
+            return None
+        parsed = urlparse(uri)
+        name = unquote(parsed.fragment) if parsed.fragment else "Unnamed SS Node"
+        if '@' not in uri:
+            return None
+        
+        core_part = parsed.netloc.split('@')[0]
+        decoded_core = base64.b64decode(core_part + '=' * (-len(core_part) % 4)).decode('utf-8')
+        method, password = decoded_core.split(':', 1)
+        
+        return {
+            "name": name,
+            "type": "ss",
+            "server": parsed.hostname,
+            "port": parsed.port,
+            "cipher": method,
+            "password": password
+        }
+    except Exception as e:
+        print(f"解析 SS 节点失败: {uri}, 错误: {e}")
+        return None
+
+def parse_trojan(uri):
+    """解析 Trojan 节点"""
+    try:
+        if not uri.startswith("trojan://"):
+            return None
+        parsed = urlparse(uri)
+        name = unquote(parsed.fragment) if parsed.fragment else "Unnamed Trojan Node"
+        params = parse_qs(parsed.query)
+
+        return {
+            "name": name,
+            "type": "trojan",
+            "server": parsed.hostname,
+            "port": parsed.port,
+            "password": parsed.username,
+            "network": params.get("type", ["tcp"])[0],
+            "sni": params.get("sni", [parsed.hostname])[0],
+            "skip-cert-verify": params.get('allowInsecure', ['0'])[0] == '1',
+            "grpc-opts": {
+                "serviceName": params.get('serviceName', [''])[0]
+            } if params.get('type', [''])[0] == 'grpc' else None
+        }
+    except Exception as e:
+        print(f"解析 Trojan 节点失败: {uri}, 错误: {e}")
+        return None
+
+def parse_ssr(uri):
+    """解析 ShadowsocksR 节点"""
+    try:
+        if not uri.startswith("ssr://"):
+            return None
+        encoded_data = uri[6:]
+        decoded_data = base64.b64decode(encoded_data + '=' * (-len(encoded_data) % 4)).decode('utf-8')
+        
+        main_part, params_part = decoded_data.split('/?', 1)
+        server, port, protocol, method, obfs, password = main_part.split(':')
+        
+        params = parse_qs(params_part)
+        name = unquote(base64.b64decode(params.get('remarks', [''])[0] + '=' * (-len(params.get('remarks', [''])[0]) % 4)).decode('utf-8')) if params.get('remarks') else "Unnamed SSR Node"
+
+        return {
+            "name": name,
+            "type": "ssr",
+            "server": server,
+            "port": int(port),
+            "password": base64.b64decode(password + '=' * (-len(password) % 4)).decode('utf-8'),
+            "cipher": method,
+            "protocol": protocol,
+            "obfs": obfs,
+            "obfs-param": base64.b64decode(params.get('obfsparam', [''])[0] + '=' * (-len(params.get('obfsparam', [''])[0]) % 4)).decode('utf-8'),
+            "protocol-param": base64.b64decode(params.get('protoparam', [''])[0] + '=' * (-len(params.get('protoparam', [''])[0]) % 4)).decode('utf-8')
+        }
+    except Exception as e:
+        print(f"解析 SSR 节点失败: {uri}, 错误: {e}")
+        return None
+
+def parse_hysteria2(uri):
+    """解析 Hysteria2 节点"""
+    try:
+        if not uri.startswith("hysteria2://"):
+            return None
+        parsed = urlparse(uri)
+        password = parsed.username
+        name = unquote(parsed.fragment) if parsed.fragment else "Unnamed Hysteria2 Node"
+        params = parse_qs(parsed.query)
+        
+        return {
+            "name": name,
+            "type": "hysteria2",
+            "server": parsed.hostname,
+            "port": parsed.port,
+            "password": password,
+            "alpn": [ "h3" ],
+            "obfs": params.get("obfs", ["none"])[0],
+            "obfs-password": params.get("obfs-password", [""])[0],
+            "sni": params.get("sni", [parsed.hostname])[0],
+            "skip-cert-verify": params.get('insecure', ['0'])[0] == '1',
+            "up": "100mbps",
+            "down": "100mbps"
+        }
+    except Exception as e:
+        print(f"解析 Hysteria2 节点失败: {uri}, 错误: {e}")
+        return None
 
 def main():
-    if len(sys.argv) != 3:
-        print("用法: python convert.py <测速结果.yaml> <原始config.yaml>")
+    if not os.path.exists("ss.txt"):
+        print("ss.txt 文件不存在，跳过转换。")
         return
 
-    result_file = sys.argv[1]
-    original_file = sys.argv[2]
+    proxies = []
+    
+    with open("ss.txt", "r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
 
-    results = load_yaml(result_file)
-    original = load_yaml(original_file)
+            parsed_node = None
+            if line.startswith("vmess://"):
+                parsed_node = parse_vmess(line)
+            elif line.startswith("vless://"):
+                parsed_node = parse_vless(line)
+            elif line.startswith("ss://"):
+                parsed_node = parse_ss(line)
+            elif line.startswith("trojan://"):
+                parsed_node = parse_trojan(line)
+            elif line.startswith("ssr://"):
+                parsed_node = parse_ssr(line)
+            elif line.startswith("hysteria2://"):
+                parsed_node = parse_hysteria2(line)
+            else:
+                print(f"未知或不支持的协议，已跳过: {line}")
+                continue
 
-    name_map = {node['name']: node for node in original.get('proxies', [])}
-    output_proxies = []
+            if parsed_node:
+                proxies.append(parsed_node)
 
-    for r in results:
-        original_node = name_map.get(r['name'])
-        if original_node:
-            original_node['name'] = r['name']  # 保留测速结果里的名字
-            output_proxies.append(original_node)
+    if proxies:
+        config_data = {
+            "proxies": proxies,
+            "proxy-groups": [
+                {
+                    "name": "Proxy",
+                    "type": "select",
+                    "proxies": [p["name"] for p in proxies]
+                }
+            ],
+            "rules": [
+                "MATCH,Proxy"
+            ]
+        }
+        
+        with open("config.yaml", "w", encoding="utf-8") as f:
+            yaml.dump(config_data, f, allow_unicode=True, sort_keys=False)
+        print(f"成功将 {len(proxies)} 个节点转换并保存到 config.yaml。")
+    else:
+        print("未找到任何有效节点，未生成 config.yaml。")
 
-    output = {
-        'proxies': output_proxies,
-        'proxy-groups': [
-            {
-                'name': '自动选择',
-                'type': 'url-test',
-                'proxies': [p['name'] for p in output_proxies],
-                'url': 'http://www.gstatic.com/generate_204',
-                'interval': 300
-            }
-        ],
-        'rules': [
-            'MATCH,自动选择'
-        ]
-    }
-
-    with open('clash-use.yaml', 'w', encoding='utf-8') as f:
-        yaml.dump(output, f, allow_unicode=True, sort_keys=False)
-
-    print("✅ 已生成 clash-use.yaml，节点名已替换为测速结果中的格式")
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
