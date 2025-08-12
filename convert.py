@@ -4,6 +4,7 @@ import yaml
 import base64
 import json
 from urllib.parse import urlparse, parse_qs, unquote
+from tqdm import tqdm
 
 def parse_vmess(uri):
     """解析 Vmess 节点"""
@@ -11,7 +12,7 @@ def parse_vmess(uri):
         if not uri.startswith("vmess://"):
             return None
         encoded_data = uri[8:]
-        data = json.loads(base64.b64decode(encoded_data).decode('utf-8'))
+        data = json.loads(base64.b64decode(encoded_data + '=' * (-len(encoded_data) % 4)).decode('utf-8'))
         return {
             "name": data.get("ps", "Unnamed Vmess Node"),
             "type": "vmess",
@@ -29,8 +30,7 @@ def parse_vmess(uri):
                 }
             }
         }
-    except Exception as e:
-        print(f"解析 Vmess 节点失败: {uri}, 错误: {e}")
+    except Exception:
         return None
 
 def parse_vless(uri):
@@ -66,8 +66,7 @@ def parse_vless(uri):
             vless_node['skip-cert-verify'] = params.get('allowInsecure', ['0'])[0] == '1'
         
         return vless_node
-    except Exception as e:
-        print(f"解析 Vless 节点失败: {uri}, 错误: {e}")
+    except Exception:
         return None
 
 def parse_ss(uri):
@@ -92,8 +91,7 @@ def parse_ss(uri):
             "cipher": method,
             "password": password
         }
-    except Exception as e:
-        print(f"解析 SS 节点失败: {uri}, 错误: {e}")
+    except Exception:
         return None
 
 def parse_trojan(uri):
@@ -118,8 +116,7 @@ def parse_trojan(uri):
                 "serviceName": params.get('serviceName', [''])[0]
             } if params.get('type', [''])[0] == 'grpc' else None
         }
-    except Exception as e:
-        print(f"解析 Trojan 节点失败: {uri}, 错误: {e}")
+    except Exception:
         return None
 
 def parse_ssr(uri):
@@ -134,22 +131,30 @@ def parse_ssr(uri):
         server, port, protocol, method, obfs, password = main_part.split(':')
         
         params = parse_qs(params_part)
-        name = unquote(base64.b64decode(params.get('remarks', [''])[0] + '=' * (-len(params.get('remarks', [''])[0]) % 4)).decode('utf-8')) if params.get('remarks') else "Unnamed SSR Node"
+        name_encoded = params.get('remarks', [''])[0]
+        name = unquote(base64.b64decode(name_encoded + '=' * (-len(name_encoded) % 4)).decode('utf-8')) if name_encoded else "Unnamed SSR Node"
+
+        obfs_param_encoded = params.get('obfsparam', [''])[0]
+        obfs_param = base64.b64decode(obfs_param_encoded + '=' * (-len(obfs_param_encoded) % 4)).decode('utf-8') if obfs_param_encoded else ""
+
+        protocol_param_encoded = params.get('protoparam', [''])[0]
+        protocol_param = base64.b64decode(protocol_param_encoded + '=' * (-len(protocol_param_encoded) % 4)).decode('utf-8') if protocol_param_encoded else ""
+
+        password_decoded = base64.b64decode(password + '=' * (-len(password) % 4)).decode('utf-8')
 
         return {
             "name": name,
             "type": "ssr",
             "server": server,
             "port": int(port),
-            "password": base64.b64decode(password + '=' * (-len(password) % 4)).decode('utf-8'),
+            "password": password_decoded,
             "cipher": method,
             "protocol": protocol,
             "obfs": obfs,
-            "obfs-param": base64.b64decode(params.get('obfsparam', [''])[0] + '=' * (-len(params.get('obfsparam', [''])[0]) % 4)).decode('utf-8'),
-            "protocol-param": base64.b64decode(params.get('protoparam', [''])[0] + '=' * (-len(params.get('protoparam', [''])[0]) % 4)).decode('utf-8')
+            "obfs-param": obfs_param,
+            "protocol-param": protocol_param
         }
-    except Exception as e:
-        print(f"解析 SSR 节点失败: {uri}, 错误: {e}")
+    except Exception:
         return None
 
 def parse_hysteria2(uri):
@@ -176,42 +181,48 @@ def parse_hysteria2(uri):
             "up": "100mbps",
             "down": "100mbps"
         }
-    except Exception as e:
-        print(f"解析 Hysteria2 节点失败: {uri}, 错误: {e}")
+    except Exception:
         return None
 
 def main():
-    if not os.path.exists("ss.txt"):
-        print("ss.txt 文件不存在，跳过转换。")
+    input_file = "ss.txt"
+    output_file = "config.yaml"
+
+    if not os.path.exists(input_file):
+        print(f"文件 {input_file} 不存在，跳过转换。")
         return
 
-    proxies = []
+    with open(input_file, "r", encoding="utf-8") as f:
+        lines = f.readlines()
     
-    with open("ss.txt", "r", encoding="utf-8") as f:
-        for line in f:
-            line = line.strip()
-            if not line:
-                continue
+    proxies = []
+    failed_count = 0
 
-            parsed_node = None
-            if line.startswith("vmess://"):
-                parsed_node = parse_vmess(line)
-            elif line.startswith("vless://"):
-                parsed_node = parse_vless(line)
-            elif line.startswith("ss://"):
-                parsed_node = parse_ss(line)
-            elif line.startswith("trojan://"):
-                parsed_node = parse_trojan(line)
-            elif line.startswith("ssr://"):
-                parsed_node = parse_ssr(line)
-            elif line.startswith("hysteria2://"):
-                parsed_node = parse_hysteria2(line)
-            else:
-                print(f"未知或不支持的协议，已跳过: {line}")
-                continue
+    print(f"开始处理 {len(lines)} 行节点...")
+    
+    for line in tqdm(lines, desc="解析节点"):
+        line = line.strip()
+        if not line:
+            continue
 
-            if parsed_node:
-                proxies.append(parsed_node)
+        parsed_node = None
+        if line.startswith("vmess://"):
+            parsed_node = parse_vmess(line)
+        elif line.startswith("vless://"):
+            parsed_node = parse_vless(line)
+        elif line.startswith("ss://"):
+            parsed_node = parse_ss(line)
+        elif line.startswith("trojan://"):
+            parsed_node = parse_trojan(line)
+        elif line.startswith("ssr://"):
+            parsed_node = parse_ssr(line)
+        elif line.startswith("hysteria2://"):
+            parsed_node = parse_hysteria2(line)
+        
+        if parsed_node:
+            proxies.append(parsed_node)
+        else:
+            failed_count += 1
 
     if proxies:
         config_data = {
@@ -228,11 +239,17 @@ def main():
             ]
         }
         
-        with open("config.yaml", "w", encoding="utf-8") as f:
+        with open(output_file, "w", encoding="utf-8") as f:
             yaml.dump(config_data, f, allow_unicode=True, sort_keys=False)
-        print(f"成功将 {len(proxies)} 个节点转换并保存到 config.yaml。")
+        print("\n" + "="*30)
+        print("转换完成！")
+        print(f"成功转换节点数量: {len(proxies)}")
+        print(f"跳过或失败节点数量: {failed_count}")
+        print(f"总计处理行数: {len(lines)}")
+        print(f"配置文件已保存到 {output_file}")
     else:
-        print("未找到任何有效节点，未生成 config.yaml。")
+        print("\n" + "="*30)
+        print("未找到任何有效节点，未生成配置文件。")
 
 if __name__ == "__main__":
     main()
