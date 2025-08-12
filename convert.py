@@ -472,7 +472,7 @@ def main():
     """主函数，负责文件处理流程和结果输出。"""
     global used_names, used_node_fingerprints
     
-    input_files = ["merged_configs.txt", "all_unique_nodes.txt", "clash_proxies.yaml", "base64_list.txt", "sc/clash_proxies.yaml"]
+    input_files = ["merged_configs.txt", "all_unique_nodes.txt"]
     output_file = "config.yaml"
 
     proxies = []
