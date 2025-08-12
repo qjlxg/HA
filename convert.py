@@ -3,9 +3,10 @@ import re
 import yaml
 import base64
 import json
+import socket
+import geoip2.database
 from urllib.parse import urlparse, parse_qs, unquote
 from tqdm import tqdm
-import geoip2.database
 from collections import defaultdict
 
 # 全局变量用于存储已使用的节点名称和节点指纹，以便去重
@@ -24,7 +25,7 @@ SS_SUPPORTED_CIPHERS = [
     "chacha20-ietf"
 ]
 
-# 为 ShadowsocksR 单独定义支持的加密方法，因为它不支持 ss-aead 相关的加密方法
+# 为 ShadowsocksR 单独定义支持的加密方法
 SSR_SUPPORTED_CIPHERS = [
     "aes-256-cfb", "aes-192-cfb", "aes-128-cfb",
     "chacha20-ietf",
@@ -36,19 +37,14 @@ def normalize_name(name):
     """
     规范化节点名称：
     1. 移除表情符号和特殊字符。
-    2. 保留前3个字符作为基础名称。
-    3. 如果名称重复，添加序号以确保唯一性。
+    2. 如果名称重复，添加序号以确保唯一性。
     """
-    # 移除表情符号和换行符
     name = re.sub(r'[\U00010000-\U0010ffff]', '', name)
     name = name.replace('<br/>', '').replace('\n', '').strip()
-    # 移除除中文、英文、数字、空格和横杠外的所有字符
     name = re.sub(r'[^\u4e00-\u9fa5\w\s-]', '', name)
-    # 将多个空格替换为单个空格
     name = re.sub(r'\s+', ' ', name).strip()
     
-    truncated_name = name[:3] if len(name) >= 3 else name
-    
+    truncated_name = name
     original_name = truncated_name
     counter = 1
     while truncated_name in used_names:
@@ -313,7 +309,6 @@ def parse_ssr(uri):
         
         password_decoded = base64.b64decode(password + '=' * (-len(password) % 4)).decode('utf-8')
         
-        # 检查加密方法是否在SSR支持列表中
         if method.lower() not in SSR_SUPPORTED_CIPHERS:
             print(f"警告：跳过不支持的 SSR 加密方法：{method}")
             return None
@@ -398,12 +393,10 @@ def get_yaml_fingerprint(node):
 def process_yaml_file(filepath, proxies_list, encoding):
     """
     一个内部使用的辅助函数，用于处理 YAML 文件的核心逻辑。
-    将解析和节点处理的逻辑从主函数中提取出来，以减少代码重复。
     """
     current_file_proxies = []
     current_duplicates = 0
     total_file_nodes = 0
-    yaml_data = {}
     
     try:
         with open(filepath, "r", encoding=encoding, errors='ignore') as f:
@@ -416,15 +409,6 @@ def process_yaml_file(filepath, proxies_list, encoding):
             yaml_data = yaml.safe_load(content)
         except yaml.YAMLError as ye:
             print(f"YAML 解析错误 ({filepath}, 编码: {encoding})：{ye}")
-            lines = content.splitlines()
-            error_line = getattr(ye, 'problem_mark', None)
-            if error_line:
-                line_number = error_line.line + 1
-                start_line = max(0, line_number - 3)
-                end_line = min(len(lines), line_number + 2)
-                print(f"错误发生在第 {line_number} 行附近，以下是相关内容：")
-                for i in range(start_line, end_line):
-                    print(f"  行 {i + 1}: {lines[i]}")
             return 0, 0, 0
         
         if not isinstance(yaml_data, dict) or "proxies" not in yaml_data or not isinstance(yaml_data["proxies"], list):
@@ -466,27 +450,36 @@ def parse_yaml_proxies(filepath, proxies_list):
     success_count, duplicates, total_file_nodes = process_yaml_file(filepath, proxies_list, "utf-8")
     
     if success_count == 0 and total_file_nodes == 0:
-        # 如果 UTF-8 解析失败，尝试 latin1
         print(f"UTF-8 解析失败，尝试以 latin1 编码重新读取文件 {filepath}...")
         return process_yaml_file(filepath, proxies_list, "latin1")
     
     return success_count, duplicates, total_file_nodes
 
-def get_country_name(ip_address, reader):
-    """使用 geoip2 获取给定 IP 地址的国家/地区 ISO 代码。"""
+def get_country_name(host, reader):
+    """
+    使用 geoip2 获取给定 IP 地址或域名的国家/地区 ISO 代码。
+    首先尝试解析域名，然后用解析出的 IP 进行查询。
+    """
     try:
+        ip_address = socket.gethostbyname(host)
         response = reader.country(ip_address)
         return response.country.iso_code
+    except socket.gaierror:
+        # 捕获域名解析错误
+        return None
     except geoip2.errors.AddressNotFoundError:
+        # 捕获在数据库中找不到IP地址的错误
         return None
     except Exception as e:
-        print(f"错误：查询 IP {ip_address} 时出错：{e}")
+        # 捕获其他可能的错误
+        print(f"错误：查询 IP {host} 时出错：{e}")
         return None
 
 def main():
     """主函数，负责文件处理流程、GeoIP 查询和结果输出。"""
     global used_names, used_node_fingerprints
     
+    # 你可以修改这里的文件列表，支持 .yaml, .yml, .txt 等文件
     input_files = ["merged_configs.txt", "all_unique_nodes.txt", "base.txt"]
     output_file = "config.yaml"
 
@@ -519,7 +512,6 @@ def main():
         try:
             with open(input_file, "r", encoding="utf-8", errors='ignore') as f:
                 content = f.read().strip()
-                # 检查是否为 Base64 编码
                 if not content.startswith(('vmess://', 'vless://', 'ss://', 'trojan://', 'ssr://', 'hysteria2://')):
                     decoded_content = base64.b64decode(content + '=' * (-len(content) % 4)).decode('utf-8')
                     lines_to_process = decoded_content.splitlines()
@@ -579,12 +571,12 @@ def main():
             country_counts = defaultdict(int)
             renamed_proxies = []
             for proxy in tqdm(proxies, desc="重命名节点"):
-                ip = proxy.get('server')
-                if not ip:
+                host = proxy.get('server')
+                if not host:
                     renamed_proxies.append(proxy)
                     continue
                 
-                country_code = get_country_name(ip, reader)
+                country_code = get_country_name(host, reader)
                 
                 if country_code:
                     country_counts[country_code] += 1
