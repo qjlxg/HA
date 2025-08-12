@@ -41382,6 +41382,7135 @@ proxies:
     path: /clo
     headers:
       Host: ava.game.naver.com.yaya.web.id
+- name: 剩余流
+  type: vmess
+  server: 1.example.com
+  port: 1234
+  uuid: fixed-uuid-for-expired-users
+  alterId: 0
+  cipher: auto
+  network: ws
+  tls: true
+  ws-opts:
+    path: /ws-node1
+    headers:
+      Host: ''
+- name: 最新地
+  type: vmess
+  server: 2.example2.com
+  port: 456
+  uuid: 2523445-uuid-for-expired2-users
+  alterId: 0
+  cipher: auto
+  network: ws
+  tls: true
+  ws-opts:
+    path: /ws-node2
+    headers:
+      Host: ''
+- name: Lit
+  type: vless
+  server: 162.159.250.71
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-1
+  type: vless
+  server: 104.16.143.26
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-2
+  type: vless
+  server: 103.21.244.159
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-3
+  type: vless
+  server: 152.70.155.147
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-4
+  type: vless
+  server: 190.93.246.188
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-5
+  type: vless
+  server: 173.245.49.64
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-6
+  type: vless
+  server: 104.16.53.41
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-7
+  type: vless
+  server: 141.147.147.180
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-8
+  type: vless
+  server: 185.133.35.223
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-9
+  type: vless
+  server: 104.19.56.151
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=proxyip.oracle.fxxk.dedyn.io
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-10
+  type: vless
+  server: 129.151.198.3
+  port: 2053
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=proxyip.oracle.fxxk.dedyn.io
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-11
+  type: vless
+  server: 162.159.152.138
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=proxyip.oracle.fxxk.dedyn.io
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-12
+  type: vless
+  server: 206.238.236.167
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=206.238.236.167:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-13
+  type: vless
+  server: 104.27.103.133
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-14
+  type: vless
+  server: 104.19.59.127
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=proxyip.oracle.fxxk.dedyn.io
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-15
+  type: vless
+  server: 160.79.105.148
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-16
+  type: vless
+  server: 188.114.99.12
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-17
+  type: vless
+  server: 140.238.212.95
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-18
+  type: vless
+  server: 173.245.58.162
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-19
+  type: vless
+  server: 147.135.1.195
+  port: 443
+  uuid: ea286109-d20f-415e-849e-4af20ab04b65
+  network: tcp
+  tls: true
+  servername: 147135001195.sec22org.com
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-20
+  type: vless
+  server: 162.159.62.99
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-21
+  type: vless
+  server: 173.245.59.146
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-22
+  type: vless
+  server: 216.24.57.14
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-23
+  type: vless
+  server: 206.238.237.208
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-24
+  type: vless
+  server: 185.133.35.208
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.208:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-25
+  type: vless
+  server: 162.159.152.62
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-26
+  type: vless
+  server: 104.19.133.92
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-27
+  type: vless
+  server: 160.79.105.97
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-28
+  type: vless
+  server: 162.159.141.244
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-29
+  type: vless
+  server: 104.25.70.220
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-30
+  type: vless
+  server: 217.163.76.35
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-31
+  type: vless
+  server: 104.24.13.6
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-32
+  type: vless
+  server: 172.64.196.127
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-33
+  type: vless
+  server: 129.159.34.122
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=129.159.34.122:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-34
+  type: vless
+  server: 217.163.76.195
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=217.163.76.195:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-35
+  type: vless
+  server: 162.159.153.3
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-36
+  type: vless
+  server: 173.245.49.138
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-37
+  type: vless
+  server: 104.23.105.241
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-38
+  type: vless
+  server: 104.16.255.100
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-39
+  type: vless
+  server: 141.101.122.50
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-40
+  type: vless
+  server: 104.17.28.98
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-41
+  type: vless
+  server: 104.18.97.147
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-42
+  type: vless
+  server: 103.21.244.38
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-43
+  type: vless
+  server: 104.17.37.211
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-44
+  type: vless
+  server: 141.101.123.171
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-45
+  type: vless
+  server: 103.21.244.153
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-46
+  type: vless
+  server: 63.141.128.201
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=63.141.128.201:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-47
+  type: vless
+  server: 162.159.153.182
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=proxyip.oracle.fxxk.dedyn.io
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-48
+  type: vless
+  server: 185.133.35.161
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.161:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-49
+  type: vless
+  server: 104.20.142.160
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-50
+  type: vless
+  server: 198.41.208.176
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-51
+  type: vless
+  server: 173.245.59.19
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-52
+  type: vless
+  server: 104.19.9.121
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-53
+  type: vless
+  server: 162.159.253.208
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-54
+  type: vless
+  server: 104.19.32.81
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=proxyip.oracle.fxxk.dedyn.io
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-55
+  type: vless
+  server: 108.162.196.146
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-56
+  type: vless
+  server: 103.21.244.63
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-57
+  type: vless
+  server: 162.159.152.29
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-58
+  type: vless
+  server: 198.41.215.52
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-59
+  type: vless
+  server: 190.93.244.236
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-60
+  type: vless
+  server: 129.146.46.164
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=129.146.46.164:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-61
+  type: vless
+  server: 104.16.190.96
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-62
+  type: vless
+  server: 162.159.207.150
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-63
+  type: vless
+  server: 104.19.46.158
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=proxyip.oracle.fxxk.dedyn.io
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-64
+  type: vless
+  server: 151.101.194.219
+  port: 80
+  uuid: 8f6f8193-0f0b-5933-9346-718542befff9
+  network: ws
+  tls: false
+  ws-opts:
+    path: /
+    headers:
+      Host: ELiV2--ELENA.COM
+- name: Lit-65
+  type: vless
+  server: 162.159.152.110
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=proxyip.oracle.fxxk.dedyn.io
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-66
+  type: vless
+  server: 206.238.237.97
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-67
+  type: vless
+  server: 162.159.152.14
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-68
+  type: vless
+  server: 141.148.187.195
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-69
+  type: vless
+  server: 104.16.73.120
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-70
+  type: vless
+  server: 194.76.18.113
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=194.76.18.113:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-71
+  type: vless
+  server: 190.93.247.129
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-72
+  type: vless
+  server: 108.162.195.198
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-73
+  type: vless
+  server: 108.162.196.172
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-74
+  type: vless
+  server: 104.19.47.223
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=proxyip.oracle.fxxk.dedyn.io
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-75
+  type: vless
+  server: 199.232.192.204
+  port: 80
+  uuid: 913cdacd-2501-531a-8390-d2fcda924944
+  network: ws
+  tls: false
+  ws-opts:
+    path: /ProxyIP=ProxyIP.US.fxxk.dedyn.io
+    headers:
+      Host: JOiN--E-L-i-V-2-R-A-Y.net
+- name: Lit-76
+  type: vless
+  server: 198.41.220.186
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-77
+  type: vless
+  server: 162.159.36.155
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-78
+  type: vless
+  server: 190.93.247.86
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-79
+  type: vless
+  server: 162.159.152.245
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-80
+  type: vless
+  server: 198.41.196.11
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-81
+  type: vless
+  server: 63.141.128.97
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-82
+  type: vless
+  server: 152.67.231.219
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-83
+  type: vless
+  server: 104.19.49.226
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=proxyip.oracle.fxxk.dedyn.io
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-84
+  type: vless
+  server: 190.93.245.198
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-85
+  type: vless
+  server: 188.114.97.11
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-86
+  type: vless
+  server: 172.67.253.241
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-87
+  type: vless
+  server: 172.67.144.144
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-88
+  type: vless
+  server: 104.24.196.104
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-89
+  type: vless
+  server: join.my.telegram.channel.cmliussss.to.unlock.more.premium.nodes.cf.090227.xyz
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=proxyip.us.fxxk.dedyn.io
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-90
+  type: vless
+  server: 151.101.1.6
+  port: 80
+  uuid: d85346a9-ba7b-5c83-8c84-c3d54e42e9d1
+  network: ws
+  tls: false
+  ws-opts:
+    path: /
+    headers:
+      Host: PABLOO-MOSTAFA.COM
+- name: Lit-91
+  type: vless
+  server: 162.159.137.244
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-92
+  type: vless
+  server: 104.17.208.133
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-93
+  type: vless
+  server: 190.93.246.3
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-94
+  type: vless
+  server: 104.21.237.200
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-95
+  type: vless
+  server: 151.101.65.6
+  port: 80
+  uuid: d85346a9-ba7b-5c83-8c84-c3d54e42e9d1
+  network: ws
+  tls: false
+  ws-opts:
+    path: /ProxyIP=ProxyIP.US.fxxk.dedyn.io
+    headers:
+      Host: PABLOO-MOSTAFA.COM
+- name: Lit-96
+  type: vless
+  server: 162.159.153.128
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-97
+  type: vless
+  server: 188.114.96.122
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-98
+  type: vless
+  server: 103.21.244.26
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-99
+  type: vless
+  server: 108.162.194.240
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-100
+  type: vless
+  server: 135.84.76.97
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=135.84.76.97:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-101
+  type: vless
+  server: 173.245.49.17
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-102
+  type: vless
+  server: 188.114.96.9
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-103
+  type: vless
+  server: 63.141.128.27
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-104
+  type: vless
+  server: 162.159.153.219
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-105
+  type: vless
+  server: 173.245.49.244
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-106
+  type: vless
+  server: 192.0.54.104
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=192.0.54.104:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-107
+  type: vless
+  server: 104.17.170.91
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-108
+  type: vless
+  server: 162.159.243.29
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-109
+  type: vless
+  server: 194.76.18.50
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=194.76.18.50:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-110
+  type: vless
+  server: 188.114.96.183
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-111
+  type: vless
+  server: 103.21.244.94
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-112
+  type: vless
+  server: 172.67.201.198
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-113
+  type: vless
+  server: 162.159.153.163
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-114
+  type: vless
+  server: 104.16.125.170
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-115
+  type: vless
+  server: 103.21.244.83
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-116
+  type: vless
+  server: 47.57.14.118
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=47.57.14.118:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-117
+  type: vless
+  server: 129.146.254.39
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-118
+  type: vless
+  server: 173.245.49.1
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-119
+  type: vless
+  server: 104.18.128.229
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-120
+  type: vless
+  server: 170.39.66.155
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-121
+  type: vless
+  server: 194.76.18.103
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-122
+  type: vless
+  server: 160.79.105.138
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-123
+  type: vless
+  server: 162.159.152.232
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=proxyip.oracle.fxxk.dedyn.io
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-124
+  type: vless
+  server: 162.159.130.206
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-125
+  type: vless
+  server: 162.159.19.174
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-126
+  type: vless
+  server: 206.238.237.239
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-127
+  type: vless
+  server: 103.21.244.164
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-128
+  type: vless
+  server: 206.238.237.189
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-129
+  type: vless
+  server: 190.93.247.171
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-130
+  type: vless
+  server: 129.153.223.37
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-131
+  type: vless
+  server: 190.93.245.76
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-132
+  type: vless
+  server: 198.41.207.43
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-133
+  type: vless
+  server: 206.238.237.149
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=206.238.237.149:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-134
+  type: vless
+  server: 149.129.8.215
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=149.129.8.215:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-135
+  type: vless
+  server: 140.238.158.238
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=140.238.158.238:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-136
+  type: vless
+  server: 190.93.246.15
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-137
+  type: vless
+  server: 108.162.192.203
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-138
+  type: vless
+  server: 129.159.84.71
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-139
+  type: vless
+  server: 104.19.135.201
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-140
+  type: vless
+  server: 162.159.43.71
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-141
+  type: vless
+  server: 162.159.35.242
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-142
+  type: vless
+  server: 129.213.136.180
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=129.213.136.180:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-143
+  type: vless
+  server: 198.41.195.166
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-144
+  type: vless
+  server: 198.41.221.205
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-145
+  type: vless
+  server: 104.18.193.129
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-146
+  type: vless
+  server: 217.163.76.102
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-147
+  type: vless
+  server: 210.61.97.241
+  port: 81
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-148
+  type: vless
+  server: 108.162.192.160
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-149
+  type: vless
+  server: 104.25.188.192
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-150
+  type: vless
+  server: 104.24.82.132
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-151
+  type: vless
+  server: 104.23.129.119
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-152
+  type: vless
+  server: 188.114.99.164
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-153
+  type: vless
+  server: 144.24.200.164
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-154
+  type: vless
+  server: 152.70.57.182
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-155
+  type: vless
+  server: 104.25.140.108
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-156
+  type: vless
+  server: qaa.zhuk.us.kg
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-157
+  type: vless
+  server: 103.21.244.192
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-158
+  type: vless
+  server: 180.64.64.201
+  port: 50000
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-159
+  type: vless
+  server: 141.101.113.42
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-160
+  type: vless
+  server: 107.174.247.25
+  port: 54021
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=107.174.247.25:54021
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-161
+  type: vmess
+  server: 163.5.159.231
+  port: 443
+  uuid: e537f2f5-2a0c-4f59-92c9-832ca6433bf3
+  alterId: 0
+  cipher: auto
+  network: ws
+  tls: true
+  ws-opts:
+    path: /linkws
+    headers:
+      Host: irvideo.cfd
+  servername: ''
+- name: Lit-162
+  type: vmess
+  server: irvideo.cfd
+  port: 443
+  uuid: e537f2f5-2a0c-4f59-92c9-832ca6433bf3
+  alterId: 0
+  cipher: auto
+  network: ws
+  tls: true
+  ws-opts:
+    path: /linkws
+    headers:
+      Host: irvideo.cfd
+  servername: ''
+- name: Lit-163
+  type: vless
+  server: 47.90.141.204
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=47.90.141.204:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-164
+  type: vless
+  server: 188.114.96.32
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-165
+  type: vless
+  server: 104.26.11.3
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-166
+  type: vless
+  server: 104.25.21.207
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-167
+  type: vless
+  server: 192.0.54.0
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-168
+  type: vless
+  server: 195.133.11.229
+  port: 443
+  uuid: daa8ddb5-9b88-417d-a6a8-c396c6215f26
+  network: ws
+  tls: true
+  ws-opts:
+    path: /getupdates
+    headers:
+      Host: cookies.oops.wtf
+  servername: cookies.oops.wtf
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-169
+  type: vless
+  server: 190.93.245.3
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-170
+  type: vless
+  server: 143.47.243.144
+  port: 2053
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=proxyip.oracle.fxxk.dedyn.io
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-171
+  type: vless
+  server: 172.64.35.129
+  port: 80
+  uuid: b5cdabf0-e048-4fa2-90da-9379b1a4926e
+  network: ws
+  tls: false
+  ws-opts:
+    path: /b5cdabf0-e04
+    headers:
+      Host: cc.ailicf.us.kg
+- name: Lit-172
+  type: vless
+  server: 162.159.152.255
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=proxyip.oracle.fxxk.dedyn.io
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-173
+  type: vless
+  server: 45.67.215.112
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=45.67.215.112:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-174
+  type: vless
+  server: 45.131.210.91
+  port: 80
+  uuid: 7f037831-591d-4067-9c8c-39f07d12858a
+  network: ws
+  tls: false
+  ws-opts:
+    path: Telegram@WangCai2/?ed=2048
+    headers:
+      Host: yuming.kkllllkkkk95.workers.dev
+- name: Lit-175
+  type: vless
+  server: 206.238.236.245
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=206.238.236.245:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-176
+  type: vless
+  server: 151.101.193.6
+  port: 80
+  uuid: d85346a9-ba7b-5c83-8c84-c3d54e42e9d1
+  network: ws
+  tls: false
+  ws-opts:
+    path: /ProxyIP=ProxyIP.US.fxxk.dedyn.io
+    headers:
+      Host: PABLOO-MOSTAFA.COM
+- name: Lit-177
+  type: vless
+  server: 45.131.211.223
+  port: 80
+  uuid: c1d22711-2adf-4ffa-a5d8-439e665bb951
+  network: ws
+  tls: false
+  ws-opts:
+    path: Telegram@WangCai2/?ed=2048
+    headers:
+      Host: 656654647567245851483768538765962936476541237567854816545176587.11feea65a1d70a.workers.dev
+- name: Lit-178
+  type: vless
+  server: 206.238.236.4
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-179
+  type: vless
+  server: 151.101.130.133
+  port: 443
+  uuid: bca5c473-b731-55a3-b672-7e734b641fd0
+  network: ws
+  tls: true
+  ws-opts:
+    path: /ProxyIP=ProxyIP.US.fxxk.dedyn.io
+    headers:
+      Host: Join-E.L.i.V.2.R.A.Y.net
+  servername: clearcreditrepair.com
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-180
+  type: vless
+  server: 104.21.65.233
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-181
+  type: vless
+  server: 185.133.35.25
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-182
+  type: vless
+  server: 104.27.59.176
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-183
+  type: vless
+  server: 135.84.76.98
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=135.84.76.98:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-184
+  type: vless
+  server: 173.245.49.194
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-185
+  type: vless
+  server: 206.238.236.154
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=206.238.236.154:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-186
+  type: vless
+  server: 104.25.188.199
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-187
+  type: vless
+  server: 104.20.157.212
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-188
+  type: vless
+  server: 63.141.128.100
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-189
+  type: vless
+  server: 104.24.44.164
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-190
+  type: vless
+  server: 104.24.188.28
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-191
+  type: vless
+  server: 185.133.35.21
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-192
+  type: vless
+  server: 193.123.81.105
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=193.123.81.105:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-193
+  type: vless
+  server: 104.24.168.52
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-194
+  type: vless
+  server: 141.145.217.226
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-195
+  type: vless
+  server: 45.131.7.122
+  port: 80
+  uuid: 7f037831-591d-4067-9c8c-39f07d12858a
+  network: ws
+  tls: false
+  ws-opts:
+    path: Telegram@WangCai2/?ed=2048
+    headers:
+      Host: yuming.kkllllkkkk95.workers.dev
+- name: Lit-196
+  type: vless
+  server: 45.131.6.205
+  port: 80
+  uuid: c1d22711-2adf-4ffa-a5d8-439e665bb951
+  network: ws
+  tls: false
+  ws-opts:
+    path: Telegram@WangCai2/?ed=2048
+    headers:
+      Host: 656654647567245851483768538765962936476541237567854816545176587.11feea65a1d70a.workers.dev
+- name: Lit-197
+  type: vless
+  server: 104.19.100.186
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-198
+  type: vless
+  server: 104.19.34.155
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-199
+  type: vless
+  server: 45.67.215.127
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-200
+  type: vless
+  server: 103.21.244.57
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-201
+  type: vless
+  server: 104.19.34.110
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=proxyip.oracle.fxxk.dedyn.io
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-202
+  type: vless
+  server: 172.64.97.73
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-203
+  type: vless
+  server: 104.17.237.233
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-204
+  type: vless
+  server: 141.101.113.226
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-205
+  type: vless
+  server: 104.19.38.43
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-206
+  type: vless
+  server: 198.41.194.251
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-207
+  type: vless
+  server: 129.151.204.91
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=129.151.204.91:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-208
+  type: vless
+  server: 104.25.12.74
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-209
+  type: vless
+  server: 188.114.98.132
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-210
+  type: vless
+  server: 104.27.72.160
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-211
+  type: vless
+  server: 206.238.237.183
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=206.238.237.183:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-212
+  type: vless
+  server: 104.19.36.116
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-213
+  type: vless
+  server: 104.17.167.200
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-214
+  type: vless
+  server: 104.20.241.202
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-215
+  type: vless
+  server: 104.16.116.22
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-216
+  type: vless
+  server: 45.131.210.83
+  port: 80
+  uuid: cdb15365-1ccb-4d5a-a5d9-6fb08d3c75ac
+  network: ws
+  tls: false
+  ws-opts:
+    path: Telegram@WangCai2/?ed=2048
+    headers:
+      Host: mahdihector.kewojod243.workers.dev
+- name: Lit-217
+  type: vless
+  server: 47.91.18.127
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-218
+  type: vless
+  server: 104.27.97.99
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-219
+  type: vless
+  server: 45.131.6.131
+  port: 80
+  uuid: c1d22711-2adf-4ffa-a5d8-439e665bb951
+  network: ws
+  tls: false
+  ws-opts:
+    path: Telegram@WangCai2/?ed=2048
+    headers:
+      Host: 656654647567245851483768538765962936476541237567854816545176587.11feea65a1d70a.workers.dev
+- name: Lit-220
+  type: vless
+  server: 104.25.223.156
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-221
+  type: vless
+  server: 45.131.5.80
+  port: 80
+  uuid: c1d22711-2adf-4ffa-a5d8-439e665bb951
+  network: ws
+  tls: false
+  ws-opts:
+    path: Telegram@WangCai2/?ed=2048
+    headers:
+      Host: 656654647567245851483768538765962936476541237567854816545176587.11feea65a1d70a.workers.dev
+- name: Lit-222
+  type: vless
+  server: 45.131.210.230
+  port: 80
+  uuid: 7f037831-591d-4067-9c8c-39f07d12858a
+  network: ws
+  tls: false
+  ws-opts:
+    path: Telegram@WangCai2/?ed=2048
+    headers:
+      Host: yuming.kkllllkkkk95.workers.dev
+- name: Lit-223
+  type: vless
+  server: 45.131.209.40
+  port: 80
+  uuid: 8334979f-2f04-4f49-8ead-bbceed373ecb
+  network: ws
+  tls: false
+  ws-opts:
+    path: Telegram@WangCai2/?ed=2048
+    headers:
+      Host: esetsecuritylicense.roobdi.workers.dev
+- name: Lit-224
+  type: trojan
+  server: 168.138.142.53
+  port: 443
+  password: 9d0a75d2-f747-4afa-b43f-d208af9e8f9a
+  network: tcp
+  sni: bz02.ssr.ee
+  skip-cert-verify: false
+  grpc-opts: null
+- name: Lit-225
+  type: vless
+  server: 45.131.209.117
+  port: 80
+  uuid: 9ce5dc57-bfa3-4e9e-be9b-ca685d826feb
+  network: ws
+  tls: false
+  ws-opts:
+    path: Telegram@WangCai2/?ed=2048
+    headers:
+      Host: worker-soft-mouse-6965.hevapey267.workers.Dev
+- name: Lit-226
+  type: vless
+  server: 45.131.6.236
+  port: 80
+  uuid: c1d22711-2adf-4ffa-a5d8-439e665bb951
+  network: ws
+  tls: false
+  ws-opts:
+    path: Telegram@WangCai2/?ed=2048
+    headers:
+      Host: 656654647567245851483768538765962936476541237567854816545176587.11feea65a1d70a.workers.dev
+- name: Lit-227
+  type: vless
+  server: 45.131.211.190
+  port: 80
+  uuid: 7f037831-591d-4067-9c8c-39f07d12858a
+  network: ws
+  tls: false
+  ws-opts:
+    path: Telegram@WangCai2/?ed=2048
+    headers:
+      Host: yuming.kkllllkkkk95.workers.dev
+- name: Lit-228
+  type: vless
+  server: 104.24.231.62
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-229
+  type: vless
+  server: 188.114.98.57
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-230
+  type: vless
+  server: 104.20.206.215
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-231
+  type: vless
+  server: 45.131.210.48
+  port: 80
+  uuid: 7f037831-591d-4067-9c8c-39f07d12858a
+  network: ws
+  tls: false
+  ws-opts:
+    path: Telegram@WangCai2/?ed=2048
+    headers:
+      Host: yuming.kkllllkkkk95.workers.dev
+- name: Lit-232
+  type: vless
+  server: 45.131.208.111
+  port: 80
+  uuid: 7f037831-591d-4067-9c8c-39f07d12858a
+  network: ws
+  tls: false
+  ws-opts:
+    path: Telegram@WangCai2/?ed=2048
+    headers:
+      Host: yuming.kkllllkkkk95.workers.dev
+- name: Lit-233
+  type: vless
+  server: 45.131.4.185
+  port: 80
+  uuid: 7f037831-591d-4067-9c8c-39f07d12858a
+  network: ws
+  tls: false
+  ws-opts:
+    path: Telegram@WangCai2/?ed=2048
+    headers:
+      Host: yuming.kkllllkkkk95.workers.dev
+- name: Lit-234
+  type: vless
+  server: 104.19.70.201
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-235
+  type: vless
+  server: 104.24.254.222
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-236
+  type: vless
+  server: 190.93.247.237
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-237
+  type: vless
+  server: 190.93.247.247
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-238
+  type: vless
+  server: 172.64.203.125
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-239
+  type: vless
+  server: 104.27.126.176
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-240
+  type: vless
+  server: 162.159.38.212
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-241
+  type: vless
+  server: 45.131.209.41
+  port: 80
+  uuid: cdb15365-1ccb-4d5a-a5d9-6fb08d3c75ac
+  network: ws
+  tls: false
+  ws-opts:
+    path: Telegram@WangCai2/?ed=2048
+    headers:
+      Host: mahdihector.kewojod243.workers.dev
+- name: Lit-242
+  type: vless
+  server: 45.131.5.65
+  port: 80
+  uuid: 9ce5dc57-bfa3-4e9e-be9b-ca685d826feb
+  network: ws
+  tls: false
+  ws-opts:
+    path: Telegram@WangCai2/?ed=2048
+    headers:
+      Host: worker-soft-mouse-6965.hevapey267.workers.Dev
+- name: Lit-243
+  type: vless
+  server: 45.131.208.139
+  port: 80
+  uuid: c1d22711-2adf-4ffa-a5d8-439e665bb951
+  network: ws
+  tls: false
+  ws-opts:
+    path: Telegram@WangCai2/?ed=2048
+    headers:
+      Host: 656654647567245851483768538765962936476541237567854816545176587.11feea65a1d70a.workers.dev
+- name: Lit-244
+  type: vless
+  server: 194.76.18.99
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-245
+  type: vless
+  server: 129.151.225.228
+  port: 2053
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-246
+  type: vless
+  server: 190.93.246.132
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-247
+  type: vless
+  server: 141.148.203.6
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-248
+  type: vless
+  server: 45.131.209.84
+  port: 80
+  uuid: cdb15365-1ccb-4d5a-a5d9-6fb08d3c75ac
+  network: ws
+  tls: false
+  ws-opts:
+    path: Telegram@WangCai2/?ed=2048
+    headers:
+      Host: mahdihector.kewojod243.workers.dev
+- name: Lit-249
+  type: vless
+  server: 45.131.208.201
+  port: 80
+  uuid: cdb15365-1ccb-4d5a-a5d9-6fb08d3c75ac
+  network: ws
+  tls: false
+  ws-opts:
+    path: Telegram@WangCai2/?ed=2048
+    headers:
+      Host: mahdihector.kewojod243.workers.dev
+- name: Lit-250
+  type: vless
+  server: 45.131.210.59
+  port: 80
+  uuid: 8334979f-2f04-4f49-8ead-bbceed373ecb
+  network: ws
+  tls: false
+  ws-opts:
+    path: Telegram@WangCai2/?ed=2048
+    headers:
+      Host: esetsecuritylicense.roobdi.workers.dev
+- name: Lit-251
+  type: vless
+  server: 104.25.232.233
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-252
+  type: vless
+  server: 45.131.6.247
+  port: 80
+  uuid: 8334979f-2f04-4f49-8ead-bbceed373ecb
+  network: ws
+  tls: false
+  ws-opts:
+    path: Telegram@WangCai2/?ed=2048
+    headers:
+      Host: esetsecuritylicense.roobdi.workers.dev
+- name: Lit-253
+  type: vless
+  server: 8.218.120.79
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-254
+  type: vless
+  server: 154.17.21.134
+  port: 18446
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-255
+  type: vless
+  server: 45.131.5.143
+  port: 80
+  uuid: 9ce5dc57-bfa3-4e9e-be9b-ca685d826feb
+  network: ws
+  tls: false
+  ws-opts:
+    path: Telegram@WangCai2/?ed=2048
+    headers:
+      Host: worker-soft-mouse-6965.hevapey267.workers.Dev
+- name: Lit-256
+  type: vless
+  server: 104.25.176.176
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-257
+  type: vless
+  server: 185.18.250.12
+  port: 80
+  uuid: 89b3cbba-e6ac-485a-9481-976a0415eab9
+  network: ws
+  tls: false
+  ws-opts:
+    path: /1Y6MN5DFV8zB82Ai?ed=2560
+    headers:
+      Host: ana-SErVICe.xAbjCDZ.wORkErs.deV
+- name: Lit-258
+  type: vless
+  server: 104.24.168.9
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-259
+  type: vless
+  server: 45.131.208.177
+  port: 80
+  uuid: 9ce5dc57-bfa3-4e9e-be9b-ca685d826feb
+  network: ws
+  tls: false
+  ws-opts:
+    path: Telegram@WangCai2/?ed=2048
+    headers:
+      Host: worker-soft-mouse-6965.hevapey267.workers.Dev
+- name: Lit-260
+  type: vless
+  server: 45.131.211.129
+  port: 80
+  uuid: 8334979f-2f04-4f49-8ead-bbceed373ecb
+  network: ws
+  tls: false
+  ws-opts:
+    path: Telegram@WangCai2/?ed=2048
+    headers:
+      Host: esetsecuritylicense.roobdi.workers.dev
+- name: Lit-261
+  type: vless
+  server: 45.131.6.222
+  port: 80
+  uuid: 7f037831-591d-4067-9c8c-39f07d12858a
+  network: ws
+  tls: false
+  ws-opts:
+    path: Telegram@WangCai2/?ed=2048
+    headers:
+      Host: yuming.kkllllkkkk95.workers.dev
+- name: Lit-262
+  type: vless
+  server: 104.20.59.49
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-263
+  type: vless
+  server: 104.17.74.34
+  port: 8080
+  uuid: 89b3cbba-e6ac-485a-9481-976a0415eab9
+  network: ws
+  tls: false
+  ws-opts:
+    path: /ProxyIP=ProxyIP.US.fxxk.dedyn.io
+    headers:
+      Host: extERnAlnEt.EXTeRNAL-net.WorKers.DeV
+- name: Lit-264
+  type: vless
+  server: 172.67.61.15
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-265
+  type: vless
+  server: 45.131.6.3
+  port: 80
+  uuid: 9ce5dc57-bfa3-4e9e-be9b-ca685d826feb
+  network: ws
+  tls: false
+  ws-opts:
+    path: Telegram@WangCai2/?ed=2048
+    headers:
+      Host: worker-soft-mouse-6965.hevapey267.workers.Dev
+- name: Lit-266
+  type: vless
+  server: 45.131.210.46
+  port: 80
+  uuid: 7f037831-591d-4067-9c8c-39f07d12858a
+  network: ws
+  tls: false
+  ws-opts:
+    path: Telegram@WangCai2/?ed=2048
+    headers:
+      Host: yuming.kkllllkkkk95.workers.dev
+- name: Lit-267
+  type: vless
+  server: 198.41.217.94
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-268
+  type: vless
+  server: 45.131.210.99
+  port: 80
+  uuid: 7f037831-591d-4067-9c8c-39f07d12858a
+  network: ws
+  tls: false
+  ws-opts:
+    path: Telegram@WangCai2/?ed=2048
+    headers:
+      Host: yuming.kkllllkkkk95.workers.dev
+- name: Lit-269
+  type: vless
+  server: 104.19.238.47
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-270
+  type: vless
+  server: 104.18.208.243
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-271
+  type: vless
+  server: 45.131.208.16
+  port: 80
+  uuid: 8334979f-2f04-4f49-8ead-bbceed373ecb
+  network: ws
+  tls: false
+  ws-opts:
+    path: Telegram@WangCai2/?ed=2048
+    headers:
+      Host: esetsecuritylicense.roobdi.workers.dev
+- name: Lit-272
+  type: vless
+  server: 185.133.35.236
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-273
+  type: vless
+  server: 198.41.218.230
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-274
+  type: vless
+  server: 45.81.58.145
+  port: 80
+  uuid: 2c79b667-b103-4d22-86d0-5ef23f303c06
+  network: ws
+  tls: false
+  ws-opts:
+    path: Telegram@WangCai2/?ed=2048
+    headers:
+      Host: japan.freenods-8d6.workers.dev
+- name: Lit-275
+  type: vless
+  server: 45.131.211.44
+  port: 80
+  uuid: c1d22711-2adf-4ffa-a5d8-439e665bb951
+  network: ws
+  tls: false
+  ws-opts:
+    path: Telegram@WangCai2/?ed=2048
+    headers:
+      Host: 656654647567245851483768538765962936476541237567854816545176587.11feea65a1d70a.workers.dev
+- name: Lit-276
+  type: vless
+  server: 190.93.244.0
+  port: 2086
+  uuid: 636b1684-b26c-4a9c-bc6e-8e1197a36d74
+  network: ws
+  tls: false
+  ws-opts:
+    path: /
+    headers:
+      Host: workerr.hashdiler.workers.dev
+- name: Lit-277
+  type: vless
+  server: 162.159.128.165
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-278
+  type: vless
+  server: 172.64.128.36
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-279
+  type: vless
+  server: 190.93.246.185
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-280
+  type: vless
+  server: 45.131.5.174
+  port: 80
+  uuid: 7f037831-591d-4067-9c8c-39f07d12858a
+  network: ws
+  tls: false
+  ws-opts:
+    path: Telegram@WangCai2/?ed=2048
+    headers:
+      Host: yuming.kkllllkkkk95.workers.dev
+- name: Lit-281
+  type: vless
+  server: 190.93.245.82
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-282
+  type: vless
+  server: 45.131.209.155
+  port: 80
+  uuid: 8334979f-2f04-4f49-8ead-bbceed373ecb
+  network: ws
+  tls: false
+  ws-opts:
+    path: Telegram@WangCai2/?ed=2048
+    headers:
+      Host: esetsecuritylicense.roobdi.workers.dev
+- name: Lit-283
+  type: vless
+  server: 104.19.35.252
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=proxyip.oracle.fxxk.dedyn.io
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-284
+  type: vless
+  server: 103.21.244.3
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-285
+  type: vless
+  server: 188.114.96.3
+  port: 80
+  uuid: e927c61f-8a00-45a5-9d43-06ac4f1b8b0e
+  network: ws
+  tls: false
+  ws-opts:
+    path: /QyAbjEiGvmffRF36?ed=2560
+    headers:
+      Host: VpNkenZo7.vpnKeNzO0.wORKerS.DeV
+- name: Lit-286
+  type: vless
+  server: 104.17.30.230
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-287
+  type: vless
+  server: 104.16.166.249
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-288
+  type: vless
+  server: 45.131.211.153
+  port: 80
+  uuid: c1d22711-2adf-4ffa-a5d8-439e665bb951
+  network: ws
+  tls: false
+  ws-opts:
+    path: Telegram@WangCai2/?ed=2048
+    headers:
+      Host: 656654647567245851483768538765962936476541237567854816545176587.11feea65a1d70a.workers.dev
+- name: Lit-289
+  type: vless
+  server: 45.131.209.232
+  port: 80
+  uuid: c1d22711-2adf-4ffa-a5d8-439e665bb951
+  network: ws
+  tls: false
+  ws-opts:
+    path: Telegram@WangCai2/?ed=2048
+    headers:
+      Host: 656654647567245851483768538765962936476541237567854816545176587.11feea65a1d70a.workers.dev
+- name: Lit-290
+  type: vless
+  server: 162.159.43.145
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-291
+  type: vless
+  server: 185.16.110.107
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.16.110.107:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-292
+  type: vless
+  server: 45.131.208.247
+  port: 80
+  uuid: c1d22711-2adf-4ffa-a5d8-439e665bb951
+  network: ws
+  tls: false
+  ws-opts:
+    path: Telegram@WangCai2/?ed=2048
+    headers:
+      Host: 656654647567245851483768538765962936476541237567854816545176587.11feea65a1d70a.workers.dev
+- name: Lit-293
+  type: vless
+  server: 162.159.153.111
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=proxyip.oracle.fxxk.dedyn.io
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-294
+  type: vless
+  server: 45.131.210.7
+  port: 80
+  uuid: 7f037831-591d-4067-9c8c-39f07d12858a
+  network: ws
+  tls: false
+  ws-opts:
+    path: Telegram@WangCai2/?ed=2048
+    headers:
+      Host: yuming.kkllllkkkk95.workers.dev
+- name: Lit-295
+  type: vless
+  server: 104.16.234.14
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-296
+  type: vless
+  server: 45.131.211.97
+  port: 80
+  uuid: 9ce5dc57-bfa3-4e9e-be9b-ca685d826feb
+  network: ws
+  tls: false
+  ws-opts:
+    path: Telegram@WangCai2/?ed=2048
+    headers:
+      Host: worker-soft-mouse-6965.hevapey267.workers.Dev
+- name: Lit-297
+  type: vless
+  server: 199.232.196.204
+  port: 80
+  uuid: 913cdacd-2501-531a-8390-d2fcda924944
+  network: ws
+  tls: false
+  ws-opts:
+    path: /Telegram,@ELiV2RAY-Telegram,@ELiV2RAY-Telegram,@ELiV2RAY-?ed=2560
+    headers:
+      Host: JOiN--E-L-i-V-2-R-A-Y.net
+- name: Lit-298
+  type: vless
+  server: 198.41.196.234
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-299
+  type: vless
+  server: 198.41.216.205
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-300
+  type: vless
+  server: 45.131.6.243
+  port: 80
+  uuid: 7f037831-591d-4067-9c8c-39f07d12858a
+  network: ws
+  tls: false
+  ws-opts:
+    path: Telegram@WangCai2/?ed=2048
+    headers:
+      Host: yuming.kkllllkkkk95.workers.dev
+- name: Lit-301
+  type: vless
+  server: 104.16.105.66
+  port: 80
+  uuid: 89b3cbba-e6ac-485a-9481-976a0415eab9
+  network: ws
+  tls: false
+  ws-opts:
+    path: /ProxyIP=ProxyIP.US.fxxk.dedyn.io
+    headers:
+      Host: plain-thunder-a1d0-ppal03.dakox63637.workers.dev
+- name: Lit-302
+  type: vless
+  server: 104.19.40.18
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=proxyip.oracle.fxxk.dedyn.io
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-303
+  type: vless
+  server: 45.131.4.68
+  port: 80
+  uuid: 9ce5dc57-bfa3-4e9e-be9b-ca685d826feb
+  network: ws
+  tls: false
+  ws-opts:
+    path: Telegram@WangCai2/?ed=2048
+    headers:
+      Host: worker-soft-mouse-6965.hevapey267.workers.Dev
+- name: Lit-304
+  type: vless
+  server: 162.159.135.186
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-305
+  type: vless
+  server: 103.21.244.152
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-306
+  type: vless
+  server: 185.133.35.106
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.106:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-307
+  type: vless
+  server: 188.114.98.166
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-308
+  type: vless
+  server: 103.21.244.161
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-309
+  type: vless
+  server: 45.67.214.100
+  port: 80
+  uuid: 2c79b667-b103-4d22-86d0-5ef23f303c06
+  network: ws
+  tls: false
+  ws-opts:
+    path: Telegram@WangCai2/?ed=2048
+    headers:
+      Host: japan.freenods-8d6.workers.dev
+- name: Lit-310
+  type: vless
+  server: www.ipget.net
+  port: 8080
+  uuid: 4c9541c7-5fa1-403c-84af-175e3b25a27f
+  network: ws
+  tls: false
+  ws-opts:
+    path: /ProxyIP=ProxyIP.US.fxxk.dedyn.io
+    headers:
+      Host: 201.58vtg99l.workers.dev
+- name: Lit-311
+  type: vless
+  server: 104.19.79.157
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-312
+  type: vless
+  server: 103.116.7.231
+  port: 80
+  uuid: 2c79b667-b103-4d22-86d0-5ef23f303c06
+  network: ws
+  tls: false
+  ws-opts:
+    path: Telegram@WangCai2/?ed=2048
+    headers:
+      Host: japan.freenods-8d6.workers.dev
+- name: Lit-313
+  type: vless
+  server: 190.93.245.65
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-314
+  type: vless
+  server: 162.159.142.65
+  port: 80
+  uuid: d663fecc-1f02-4e9e-8157-c33cdb30da23
+  network: ws
+  tls: false
+  ws-opts:
+    path: /
+    headers:
+      Host: sUB.veBoBE2961.WoRKeRs.dev
+- name: Lit-315
+  type: vless
+  server: 104.27.61.109
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-316
+  type: vless
+  server: 129.154.46.115
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-317
+  type: vless
+  server: 150.109.24.233
+  port: 6666
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=150.109.24.233:6666
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-318
+  type: vless
+  server: 160.79.105.144
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-319
+  type: vless
+  server: 45.131.4.138
+  port: 80
+  uuid: 7f037831-591d-4067-9c8c-39f07d12858a
+  network: ws
+  tls: false
+  ws-opts:
+    path: Telegram@WangCai2/?ed=2048
+    headers:
+      Host: yuming.kkllllkkkk95.workers.dev
+- name: Lit-320
+  type: vless
+  server: 173.245.58.81
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-321
+  type: vless
+  server: 190.93.244.199
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-322
+  type: vless
+  server: pscresearch.faculty.ucdavis.edu
+  port: 443
+  uuid: 7f72b445-2293-416b-b036-d6cd2fc7fa39
+  network: ws
+  tls: true
+  ws-opts:
+    path: ws/?ed=2048
+    headers:
+      Host: jbtvtcrcd.com
+  servername: pscresearch.faculty.ucdavis.edu
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-323
+  type: vless
+  server: 206.238.236.216
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=206.238.236.216:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-324
+  type: vless
+  server: 206.238.236.147
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=206.238.236.147:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-325
+  type: vless
+  server: 104.19.34.226
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=proxyip.oracle.fxxk.dedyn.io
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-326
+  type: vless
+  server: 162.159.153.215
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=proxyip.oracle.fxxk.dedyn.io
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-327
+  type: vless
+  server: 198.41.223.246
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-328
+  type: vless
+  server: 63.141.128.211
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=63.141.128.211:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-329
+  type: vless
+  server: 104.19.56.137
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=proxyip.oracle.fxxk.dedyn.io
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-330
+  type: vless
+  server: 206.238.236.175
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-331
+  type: vless
+  server: 103.21.244.197
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-332
+  type: vless
+  server: 141.101.121.105
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-333
+  type: vless
+  server: 188.114.99.215
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-334
+  type: vless
+  server: 141.101.113.93
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-335
+  type: vless
+  server: www.ipget.net
+  port: 8080
+  uuid: b6cea380-cc8c-4e33-ab32-fc4d284ab5db
+  network: ws
+  tls: false
+  ws-opts:
+    path: /ProxyIP=ProxyIP.US.fxxk.dedyn.io
+    headers:
+      Host: bei2.8l-0dfay.workers.dev
+- name: Lit-336
+  type: vless
+  server: 104.19.46.229
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-337
+  type: vless
+  server: 190.93.245.100
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-338
+  type: vless
+  server: 188.114.99.181
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-339
+  type: vless
+  server: 104.21.112.147
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-340
+  type: vless
+  server: 188.245.215.46
+  port: 19984
+  uuid: 13e15bfe-73f7-4bfe-a386-136451137fc3
+  network: tcp
+  tls: false
+- name: Lit-341
+  type: vless
+  server: 206.238.237.135
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=206.238.237.135:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-342
+  type: vless
+  server: xn--b6gac.eu.org
+  port: 8080
+  uuid: 464d644c-9c10-4c02-9117-4c75b0c347cd
+  network: ws
+  tls: false
+  ws-opts:
+    path: /?ed=2048fp=randomized
+    headers:
+      Host: wwwvisacomsg.mshcgb8q.workers.dev
+- name: Lit-343
+  type: vless
+  server: 190.93.244.127
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-344
+  type: vless
+  server: 173.245.58.45
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-345
+  type: vless
+  server: 104.19.32.79
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-346
+  type: vless
+  server: 104.25.106.212
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-347
+  type: vless
+  server: 185.16.110.80
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.16.110.80:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-348
+  type: vless
+  server: 185.133.35.99
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.99:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-349
+  type: vless
+  server: 206.238.237.157
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=206.238.237.157:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-350
+  type: vless
+  server: 104.24.154.144
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-351
+  type: vless
+  server: 188.114.98.118
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-352
+  type: vless
+  server: 104.22.41.57
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-353
+  type: vless
+  server: xn--b6gac.eu.org
+  port: 8080
+  uuid: 77f2d54c-f1bd-46ff-af4c-cc44c72fd25e
+  network: ws
+  tls: false
+  ws-opts:
+    path: /?ed=2048fp=randomized
+    headers:
+      Host: feng2.vfl83lnn.workers.dev
+- name: Lit-354
+  type: vless
+  server: 104.16.26.245
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-355
+  type: vless
+  server: 190.93.247.74
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-356
+  type: vless
+  server: 160.79.105.187
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=160.79.105.187:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-357
+  type: vless
+  server: 147.135.4.2
+  port: 443
+  uuid: 54694a33-a8dc-47dd-bc38-acd3971e0055
+  network: tcp
+  tls: true
+  servername: 147135004002.sec20org.com
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-358
+  type: vless
+  server: speedtest.net
+  port: 80
+  uuid: beb850bc-5567-5da8-9b3d-183b2a6d2a37
+  network: ws
+  tls: false
+  ws-opts:
+    path: /@ELiV2RAY--@ELiV2RAY--@ELiV2RAY--@ELiV2RAY--@ELiV2RAY--@ELiV2RAY?ed=2560
+    headers:
+      Host: ELeNa.iR-dDoss.iR
+- name: Lit-359
+  type: vless
+  server: 104.19.37.193
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-360
+  type: vless
+  server: 188.114.97.254
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-361
+  type: vless
+  server: 162.159.207.28
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-362
+  type: vless
+  server: 103.21.244.0
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-363
+  type: vless
+  server: 151.101.2.219
+  port: 80
+  uuid: d6ef62e3-4a1a-57f5-b851-3151a124d85e
+  network: ws
+  tls: false
+  ws-opts:
+    path: /
+    headers:
+      Host: ELIV2-ELENA.COM
+- name: Lit-364
+  type: vless
+  server: 188.114.97.45
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-365
+  type: vless
+  server: 151.101.193.6
+  port: 80
+  uuid: bca5c473-b731-55a3-b672-7e734b641fd0
+  network: ws
+  tls: false
+  ws-opts:
+    path: /ProxyIP=ProxyIP.US.fxxk.dedyn.io
+    headers:
+      Host: Join-E.L.i.V.2.R.A.Y.net
+- name: Lit-366
+  type: vless
+  server: 104.20.101.192
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-367
+  type: vless
+  server: 104.24.33.181
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-368
+  type: vless
+  server: 190.93.245.50
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-369
+  type: vless
+  server: 172.67.2.238
+  port: 8880
+  uuid: 8e0cdac9-ab9d-4022-8325-7e482cb327e4
+  network: ws
+  tls: false
+  ws-opts:
+    path: /ProxyIP=ProxyIP.US.fxxk.dedyn.io
+    headers:
+      Host: drvenom-tehran.lipoxag351.workers.dev
+- name: Lit-370
+  type: vless
+  server: 104.20.19.168
+  port: 8880
+  uuid: 8e0cdac9-ab9d-4022-8325-7e482cb327e4
+  network: ws
+  tls: false
+  ws-opts:
+    path: /ProxyIP=ProxyIP.US.fxxk.dedyn.io
+    headers:
+      Host: drvenom-tehran.lipoxag351.workers.dev
+- name: Lit-371
+  type: vless
+  server: 162.159.152.100
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=proxyip.oracle.fxxk.dedyn.io
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-372
+  type: vless
+  server: 140.238.60.225
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=140.238.60.225:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-373
+  type: vless
+  server: 104.19.51.240
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=proxyip.oracle.fxxk.dedyn.io
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-374
+  type: vless
+  server: 104.17.139.71
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-375
+  type: vless
+  server: 45.67.215.11
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=45.67.215.113:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-376
+  type: vless
+  server: 43.156.116.194
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=43.156.116.194:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-377
+  type: vless
+  server: 104.26.12.119
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-378
+  type: vless
+  server: 162.159.152.4
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=proxyip.oracle.fxxk.dedyn.io
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-379
+  type: vless
+  server: 158.224.90.175
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=158.224.90.175:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-380
+  type: vless
+  server: 45.67.215.113
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=45.67.215.113:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-381
+  type: vless
+  server: 158.224.90.158
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-382
+  type: vless
+  server: 185.16.110.0
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.16.110.0:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-383
+  type: vless
+  server: 104.23.96.76
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-384
+  type: vless
+  server: 104.24.251.96
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-385
+  type: vless
+  server: 104.19.88.121
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=185.133.35.223:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: Lit-386
+  type: vless
+  server: 210.186.12.244
+  port: 443
+  uuid: 219d848d-60f2-4321-8275-72b9b575b37e
+  network: ws
+  tls: true
+  ws-opts:
+    path: /?ed=2560&proxyip=210.186.12.244:443
+    headers:
+      Host: qaa.zhuk.us.kg
+  servername: qaa.zhuk.us.kg
+  flow: ''
+  skip-cert-verify: false
+- name: 剩余流-1
+  type: vless
+  server: sg001.421421.xyz
+  port: 20230
+  uuid: f177de9f-6bee-405e-b620-f73b43a1f2ea
+  network: grpc
+  tls: false
+- name: 新加坡-4
+  type: vless
+  server: sg002.421421.xyz
+  port: 20230
+  uuid: f177de9f-6bee-405e-b620-f73b43a1f2ea
+  network: grpc
+  tls: false
+- name: 新加坡-5
+  type: vless
+  server: sg003.421421.xyz
+  port: 20230
+  uuid: f177de9f-6bee-405e-b620-f73b43a1f2ea
+  network: grpc
+  tls: false
+- name: 新加坡-6
+  type: vless
+  server: sg004.421421.xyz
+  port: 20230
+  uuid: f177de9f-6bee-405e-b620-f73b43a1f2ea
+  network: grpc
+  tls: false
+- name: 日本0
+  type: vless
+  server: jp001.421421.xyz
+  port: 20230
+  uuid: f177de9f-6bee-405e-b620-f73b43a1f2ea
+  network: xhttp
+  tls: false
+- name: 日本0-1
+  type: vless
+  server: jp002.421421.xyz
+  port: 20230
+  uuid: f177de9f-6bee-405e-b620-f73b43a1f2ea
+  network: grpc
+  tls: false
+- name: 日本0-2
+  type: vless
+  server: jp003.421421.xyz
+  port: 20230
+  uuid: f177de9f-6bee-405e-b620-f73b43a1f2ea
+  network: grpc
+  tls: false
+- name: 日本0-3
+  type: vless
+  server: jp004.421421.xyz
+  port: 20230
+  uuid: f177de9f-6bee-405e-b620-f73b43a1f2ea
+  network: grpc
+  tls: false
+- name: 美国0-8
+  type: vless
+  server: us001.421421.xyz
+  port: 20230
+  uuid: f177de9f-6bee-405e-b620-f73b43a1f2ea
+  network: grpc
+  tls: false
+- name: 美国0-9
+  type: vless
+  server: us002.421421.xyz
+  port: 20230
+  uuid: f177de9f-6bee-405e-b620-f73b43a1f2ea
+  network: grpc
+  tls: false
+- name: 新加坡-7
+  type: trojan
+  server: sg005.421421.xyz
+  port: 20230
+  password: f177de9f-6bee-405e-b620-f73b43a1f2ea
+  network: ws
+  sni: www.alibaba.com
+  skip-cert-verify: true
+  grpc-opts: null
+- name: 新加坡-8
+  type: trojan
+  server: sg006.421421.xyz
+  port: 20230
+  password: f177de9f-6bee-405e-b620-f73b43a1f2ea
+  network: ws
+  sni: www.alibaba.com
+  skip-cert-verify: true
+  grpc-opts: null
+- name: 新加坡-9
+  type: trojan
+  server: sg007.421421.xyz
+  port: 20230
+  password: f177de9f-6bee-405e-b620-f73b43a1f2ea
+  network: ws
+  sni: www.alibaba.com
+  skip-cert-verify: true
+  grpc-opts: null
+- name: 新加坡-10
+  type: trojan
+  server: sg008.421421.xyz
+  port: 20230
+  password: f177de9f-6bee-405e-b620-f73b43a1f2ea
+  network: ws
+  sni: www.alibaba.com
+  skip-cert-verify: true
+  grpc-opts: null
+- name: 日本0-4
+  type: trojan
+  server: jp005.421421.xyz
+  port: 20230
+  password: f177de9f-6bee-405e-b620-f73b43a1f2ea
+  network: ws
+  sni: www.alibaba.com
+  skip-cert-verify: true
+  grpc-opts: null
+- name: 日本0-5
+  type: trojan
+  server: jp006.421421.xyz
+  port: 20230
+  password: f177de9f-6bee-405e-b620-f73b43a1f2ea
+  network: ws
+  sni: www.alibaba.com
+  skip-cert-verify: true
+  grpc-opts: null
+- name: 日本0-6
+  type: trojan
+  server: jp007.421421.xyz
+  port: 20230
+  password: f177de9f-6bee-405e-b620-f73b43a1f2ea
+  network: ws
+  sni: www.alibaba.com
+  skip-cert-verify: true
+  grpc-opts: null
+- name: 日本0-7
+  type: trojan
+  server: jp008.421421.xyz
+  port: 20230
+  password: f177de9f-6bee-405e-b620-f73b43a1f2ea
+  network: ws
+  sni: www.alibaba.com
+  skip-cert-verify: true
+  grpc-opts: null
+- name: 美国0-10
+  type: trojan
+  server: us003.421421.xyz
+  port: 20230
+  password: f177de9f-6bee-405e-b620-f73b43a1f2ea
+  network: ws
+  sni: www.alibaba.com
+  skip-cert-verify: true
+  grpc-opts: null
+- name: 美国0-11
+  type: trojan
+  server: us004.421421.xyz
+  port: 20230
+  password: f177de9f-6bee-405e-b620-f73b43a1f2ea
+  network: ws
+  sni: www.alibaba.com
+  skip-cert-verify: true
+  grpc-opts: null
+- name: 邀请好
+  type: trojan
+  server: sg001.421421.xyz
+  port: 20230
+  password: f177de9f-6bee-405e-b620-f73b43a1f2ea
+  network: ws
+  sni: www.alibaba.com
+  skip-cert-verify: true
+  grpc-opts: null
+- name: '香港 '
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 12022
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 香港 -1
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 12023
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 香港 -2
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 12024
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 香港家
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 12729
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 香港家-1
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 13105
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 香港家-2
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 13115
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 香港游
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 12312
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 澳门家
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 19527
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 澳门家-1
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20032
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 澳门家-2
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20063
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: '台湾 '
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 12304
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 台湾 -1
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 12305
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 台湾 -2
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 12306
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 台湾家
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20036
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 台湾家-1
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20038
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 新加坡-11
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 12000
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 新加坡-12
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 12002
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 新加坡-13
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 12003
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 新加坡-14
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 12726
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 新加坡-15
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 13116
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 新加坡-16
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 13132
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 新加坡-17
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20039
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 马来西
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 12727
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 马来西-1
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 13182
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 马尔代
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20066
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 柬埔寨
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 12701
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: '泰国 '
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20054
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 泰国 -1
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20059
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 缅甸丨
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 13137
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 老挝丨
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 13138
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 越南家
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 12700
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 越南家-1
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20153
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 越南家-2
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20154
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: '日本 '
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 12011
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 日本 -1
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 12010
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 日本 -2
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 12012
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 日本 -3
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13235
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 日本 -4
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13269
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 日本家
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13101
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 日本家-1
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13221
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 日本家-2
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13240
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 日本家-3
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13241
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 日本家-4
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13242
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 日本家-5
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13272
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 日本家-6
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13273
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 日本游
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13024
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 日本--2
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13282
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 日本--3
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13278
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 韩国家
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 50017
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 韩国家-1
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 50016
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 韩国家-2
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 50015
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 不丹丨
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20072
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 文莱丨
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20040
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 关岛丨
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20115
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 北马里
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20127
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 斐济家
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 13185
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 菲律宾
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 12406
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 菲律宾-1
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20057
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 印尼-
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 12300
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 印尼--1
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 12301
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 印度丨
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 12302
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 蒙古丨
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 12328
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 约旦丨
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12708
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 伊朗丨
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12707
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 巴林丨
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20056
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 阿曼丨
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 13135
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 以色列
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 13147
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 巴勒斯
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 13158
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 土耳其
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12603
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 尼泊尔
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 12720
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 孟加拉
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 12724
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 黎巴嫩
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 13123
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 伊拉克
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 13124
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 叙利亚
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 13126
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 阿富汗
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20078
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 卡塔尔
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 13181
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 科威特
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 13170
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 阿联酋
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 12400
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 阿联酋-1
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 13174
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 阿塞拜
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12606
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 亚美尼
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12737
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 格鲁吉
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 13178
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 巴基斯
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 12605
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 斯里兰
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20043
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 沙特阿
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 13175
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 沙特阿-1
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20044
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 土库曼
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20051
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 哈萨克
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12602
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 吉尔吉
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 13120
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 乌兹别
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20025
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 汤加丨
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20086
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 澳大利
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 12324
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 澳大利-1
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 12401
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 新喀里
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20132
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 新西兰
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 12326
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 新西兰-1
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20023
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 瑙鲁丨
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20134
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 纽埃丨
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20135
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 帕劳丨
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20137
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 萨摩亚
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20114
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 托克劳
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20145
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 基里巴
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20121
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 瓦努阿
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20149
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 马绍尔
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20126
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 法属波
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20136
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 瓦利斯
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20150
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 法国丨
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12621
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 法国家
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 13151
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 英国丨
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12710
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 英国家
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 13177
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 英国家-1
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 13152
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 英国家-2
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 13186
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 马恩岛
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12623
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 根西岛
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20117
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 泽西岛
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20120
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 德国丨
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12619
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 丹麦丨
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12608
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 挪威丨
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12610
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 瑞典丨
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12611
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 芬兰丨
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12609
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 芬兰家
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 13179
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 冰岛丨
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12607
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 瑞士丨
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12630
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 捷克丨
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12613
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 希腊丨
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12615
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 荷兰丨
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12622
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 波兰丨
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12261
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 黑山丨
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20079
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 俄罗斯
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 13122
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 乌克兰
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12614
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 匈牙利
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12631
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 卢森堡
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12629
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 奥地利
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12628
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 意大利
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12616
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 意大利-1
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 13149
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 梵蒂冈
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20075
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 比利时
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12618
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 爱尔兰-1
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12617
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 立陶宛
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12652
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 西班牙
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12625
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 葡萄牙
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12624
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 安道尔
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12738
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 马耳他
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12743
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 摩纳哥
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20088
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 保加利
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12634
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 克罗地
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12646
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 北马其
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12645
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 塞尔维
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12647
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 塞浦路
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12654
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 拉脱维
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12649
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 摩尔多
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12651
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 斯洛伐
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12650
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 爱沙尼
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12635
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 白俄罗
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12633
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 罗马尼
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12641
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 直布罗-1
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20080
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 圣马力
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20073
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 法罗群
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20076
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 奥兰群
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20089
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 斯洛文
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12653
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 阿尔巴
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12642
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 波黑共
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12643
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 列支敦
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 13128
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 法属留
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 13176
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 美国--2
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13110
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 美国--3
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13006
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 美国--4
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13284
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 美国--5
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13007
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 美国--6
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13010
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 美国--7
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 12706
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 美国--8
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13277
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 美国--9
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13271
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 美国--10
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13107
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 美国--11
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13109
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 美国--12
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13111
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 美国--13
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13108
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 美国--14
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13113
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 美国--15
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13267
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 美国--16
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13118
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 美国--17
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13253
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 美国--18
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13257
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 美国--19
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13266
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 美国--20
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13285
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 美国--21
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13268
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 美国--22
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13227
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 美国--23
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13228
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 美国--24
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13213
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 美国--25
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13286
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 加拿大-1
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13001
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 加拿大-2
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13000
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 加拿大-3
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13200
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 加拿大-4
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13117
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 加拿大-5
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13270
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 圣皮埃
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20138
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 墨西哥
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13004
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 墨西哥-1
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13280
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 巴拿马
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 12704
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 百慕大
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20083
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 格陵兰
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20074
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 格林纳
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20116
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 哥斯达
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 12719
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 英属维
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20090
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 美属维
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20091
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 巴西丨
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13103
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 智利丨
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13104
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 秘鲁丨
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13016
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 古巴丨
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20081
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 海地丨
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20092
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 阿根廷
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13015
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 阿根廷-1
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13211
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 乌拉圭
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 12715
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 巴拉圭
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13245
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 牙买加
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20093
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 苏里南
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20104
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 巴哈马
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13254
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 法属圭
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13251
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 伯利兹
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20094
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 蒙特塞
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20129
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 荷属阿
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20084
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 荷属库
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13115
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 荷属圣
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20141
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 法属圣
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20125
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 法属瓜
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20095
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 法属马
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13279
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 安提瓜
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20082
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 圣基茨
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20122
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 特立尼
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13252
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 圣文森
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20148
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 哥伦比
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13246
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 厄瓜多
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13106
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 玻利维
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13255
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 危地马
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13218
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 萨尔瓦
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13281
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 波多黎
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13219
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 开曼群
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20096
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 洪都拉
+  type: ss
+  server: etnnq8zl.epicgames.ink
+  port: 13237
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 多米尼
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20097
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 巴巴多
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20067
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 圣卢西
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20123
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 特克斯
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20143
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 埃及丨
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12718
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 加纳丨
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20098
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 多哥丨
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 13137
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 南非丨
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12036
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 贝宁丨
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20099
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 苏丹丨
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20077
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 马里丨
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20071
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 刚果布
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20100
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 加蓬丨
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20113
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 乍得丨
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20144
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 突尼斯
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12703
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 利比亚
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20101
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 肯尼亚
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12716
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 卢旺达
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 13154
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 佛得角
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20102
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 安哥拉
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 13145
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 喀麦隆
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20103
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 布隆迪
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20105
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 索马里
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20069
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 吉布提
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20110
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 冈比亚
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20118
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 几内亚
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20119
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 莱索托
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20124
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 马拉维
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20130
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 尼日尔
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20133
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 乌干达
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20147
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 马约特
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20151
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 赞比亚
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20152
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 尼日利
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 12648
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 尼日利-1
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 13184
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 毛里求
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 13118
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 科特迪
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20106
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 坦桑尼
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 13171
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 津巴布
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20068
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 塞内加
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20107
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 博茨瓦
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20109
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 纳米比
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20131
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 塞拉利
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20139
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 斯威士
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20142
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 利比里
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20146
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 阿尔及
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 13157
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 马达加
+  type: ss
+  server: libid0og.epicgames.ink
+  port: 13173
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 赤道几
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20070
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 布基纳
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20108
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 厄立特
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20111
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 埃塞俄
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20112
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 毛里塔
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20128
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 圣多美
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20140
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
+- name: 南极洲
+  type: ss
+  server: 2bxntczz.epicgames.ink
+  port: 20031
+  cipher: aes-128-gcm
+  password: haMLMXirByn6rGVh
 proxy-groups:
 - name: Proxy
   type: select
@@ -45703,5 +52832,704 @@ proxy-groups:
   - Dig-55
   - Dig-56
   - PTC-9
+  - 剩余流
+  - 最新地
+  - Lit
+  - Lit-1
+  - Lit-2
+  - Lit-3
+  - Lit-4
+  - Lit-5
+  - Lit-6
+  - Lit-7
+  - Lit-8
+  - Lit-9
+  - Lit-10
+  - Lit-11
+  - Lit-12
+  - Lit-13
+  - Lit-14
+  - Lit-15
+  - Lit-16
+  - Lit-17
+  - Lit-18
+  - Lit-19
+  - Lit-20
+  - Lit-21
+  - Lit-22
+  - Lit-23
+  - Lit-24
+  - Lit-25
+  - Lit-26
+  - Lit-27
+  - Lit-28
+  - Lit-29
+  - Lit-30
+  - Lit-31
+  - Lit-32
+  - Lit-33
+  - Lit-34
+  - Lit-35
+  - Lit-36
+  - Lit-37
+  - Lit-38
+  - Lit-39
+  - Lit-40
+  - Lit-41
+  - Lit-42
+  - Lit-43
+  - Lit-44
+  - Lit-45
+  - Lit-46
+  - Lit-47
+  - Lit-48
+  - Lit-49
+  - Lit-50
+  - Lit-51
+  - Lit-52
+  - Lit-53
+  - Lit-54
+  - Lit-55
+  - Lit-56
+  - Lit-57
+  - Lit-58
+  - Lit-59
+  - Lit-60
+  - Lit-61
+  - Lit-62
+  - Lit-63
+  - Lit-64
+  - Lit-65
+  - Lit-66
+  - Lit-67
+  - Lit-68
+  - Lit-69
+  - Lit-70
+  - Lit-71
+  - Lit-72
+  - Lit-73
+  - Lit-74
+  - Lit-75
+  - Lit-76
+  - Lit-77
+  - Lit-78
+  - Lit-79
+  - Lit-80
+  - Lit-81
+  - Lit-82
+  - Lit-83
+  - Lit-84
+  - Lit-85
+  - Lit-86
+  - Lit-87
+  - Lit-88
+  - Lit-89
+  - Lit-90
+  - Lit-91
+  - Lit-92
+  - Lit-93
+  - Lit-94
+  - Lit-95
+  - Lit-96
+  - Lit-97
+  - Lit-98
+  - Lit-99
+  - Lit-100
+  - Lit-101
+  - Lit-102
+  - Lit-103
+  - Lit-104
+  - Lit-105
+  - Lit-106
+  - Lit-107
+  - Lit-108
+  - Lit-109
+  - Lit-110
+  - Lit-111
+  - Lit-112
+  - Lit-113
+  - Lit-114
+  - Lit-115
+  - Lit-116
+  - Lit-117
+  - Lit-118
+  - Lit-119
+  - Lit-120
+  - Lit-121
+  - Lit-122
+  - Lit-123
+  - Lit-124
+  - Lit-125
+  - Lit-126
+  - Lit-127
+  - Lit-128
+  - Lit-129
+  - Lit-130
+  - Lit-131
+  - Lit-132
+  - Lit-133
+  - Lit-134
+  - Lit-135
+  - Lit-136
+  - Lit-137
+  - Lit-138
+  - Lit-139
+  - Lit-140
+  - Lit-141
+  - Lit-142
+  - Lit-143
+  - Lit-144
+  - Lit-145
+  - Lit-146
+  - Lit-147
+  - Lit-148
+  - Lit-149
+  - Lit-150
+  - Lit-151
+  - Lit-152
+  - Lit-153
+  - Lit-154
+  - Lit-155
+  - Lit-156
+  - Lit-157
+  - Lit-158
+  - Lit-159
+  - Lit-160
+  - Lit-161
+  - Lit-162
+  - Lit-163
+  - Lit-164
+  - Lit-165
+  - Lit-166
+  - Lit-167
+  - Lit-168
+  - Lit-169
+  - Lit-170
+  - Lit-171
+  - Lit-172
+  - Lit-173
+  - Lit-174
+  - Lit-175
+  - Lit-176
+  - Lit-177
+  - Lit-178
+  - Lit-179
+  - Lit-180
+  - Lit-181
+  - Lit-182
+  - Lit-183
+  - Lit-184
+  - Lit-185
+  - Lit-186
+  - Lit-187
+  - Lit-188
+  - Lit-189
+  - Lit-190
+  - Lit-191
+  - Lit-192
+  - Lit-193
+  - Lit-194
+  - Lit-195
+  - Lit-196
+  - Lit-197
+  - Lit-198
+  - Lit-199
+  - Lit-200
+  - Lit-201
+  - Lit-202
+  - Lit-203
+  - Lit-204
+  - Lit-205
+  - Lit-206
+  - Lit-207
+  - Lit-208
+  - Lit-209
+  - Lit-210
+  - Lit-211
+  - Lit-212
+  - Lit-213
+  - Lit-214
+  - Lit-215
+  - Lit-216
+  - Lit-217
+  - Lit-218
+  - Lit-219
+  - Lit-220
+  - Lit-221
+  - Lit-222
+  - Lit-223
+  - Lit-224
+  - Lit-225
+  - Lit-226
+  - Lit-227
+  - Lit-228
+  - Lit-229
+  - Lit-230
+  - Lit-231
+  - Lit-232
+  - Lit-233
+  - Lit-234
+  - Lit-235
+  - Lit-236
+  - Lit-237
+  - Lit-238
+  - Lit-239
+  - Lit-240
+  - Lit-241
+  - Lit-242
+  - Lit-243
+  - Lit-244
+  - Lit-245
+  - Lit-246
+  - Lit-247
+  - Lit-248
+  - Lit-249
+  - Lit-250
+  - Lit-251
+  - Lit-252
+  - Lit-253
+  - Lit-254
+  - Lit-255
+  - Lit-256
+  - Lit-257
+  - Lit-258
+  - Lit-259
+  - Lit-260
+  - Lit-261
+  - Lit-262
+  - Lit-263
+  - Lit-264
+  - Lit-265
+  - Lit-266
+  - Lit-267
+  - Lit-268
+  - Lit-269
+  - Lit-270
+  - Lit-271
+  - Lit-272
+  - Lit-273
+  - Lit-274
+  - Lit-275
+  - Lit-276
+  - Lit-277
+  - Lit-278
+  - Lit-279
+  - Lit-280
+  - Lit-281
+  - Lit-282
+  - Lit-283
+  - Lit-284
+  - Lit-285
+  - Lit-286
+  - Lit-287
+  - Lit-288
+  - Lit-289
+  - Lit-290
+  - Lit-291
+  - Lit-292
+  - Lit-293
+  - Lit-294
+  - Lit-295
+  - Lit-296
+  - Lit-297
+  - Lit-298
+  - Lit-299
+  - Lit-300
+  - Lit-301
+  - Lit-302
+  - Lit-303
+  - Lit-304
+  - Lit-305
+  - Lit-306
+  - Lit-307
+  - Lit-308
+  - Lit-309
+  - Lit-310
+  - Lit-311
+  - Lit-312
+  - Lit-313
+  - Lit-314
+  - Lit-315
+  - Lit-316
+  - Lit-317
+  - Lit-318
+  - Lit-319
+  - Lit-320
+  - Lit-321
+  - Lit-322
+  - Lit-323
+  - Lit-324
+  - Lit-325
+  - Lit-326
+  - Lit-327
+  - Lit-328
+  - Lit-329
+  - Lit-330
+  - Lit-331
+  - Lit-332
+  - Lit-333
+  - Lit-334
+  - Lit-335
+  - Lit-336
+  - Lit-337
+  - Lit-338
+  - Lit-339
+  - Lit-340
+  - Lit-341
+  - Lit-342
+  - Lit-343
+  - Lit-344
+  - Lit-345
+  - Lit-346
+  - Lit-347
+  - Lit-348
+  - Lit-349
+  - Lit-350
+  - Lit-351
+  - Lit-352
+  - Lit-353
+  - Lit-354
+  - Lit-355
+  - Lit-356
+  - Lit-357
+  - Lit-358
+  - Lit-359
+  - Lit-360
+  - Lit-361
+  - Lit-362
+  - Lit-363
+  - Lit-364
+  - Lit-365
+  - Lit-366
+  - Lit-367
+  - Lit-368
+  - Lit-369
+  - Lit-370
+  - Lit-371
+  - Lit-372
+  - Lit-373
+  - Lit-374
+  - Lit-375
+  - Lit-376
+  - Lit-377
+  - Lit-378
+  - Lit-379
+  - Lit-380
+  - Lit-381
+  - Lit-382
+  - Lit-383
+  - Lit-384
+  - Lit-385
+  - Lit-386
+  - 剩余流-1
+  - 新加坡-4
+  - 新加坡-5
+  - 新加坡-6
+  - 日本0
+  - 日本0-1
+  - 日本0-2
+  - 日本0-3
+  - 美国0-8
+  - 美国0-9
+  - 新加坡-7
+  - 新加坡-8
+  - 新加坡-9
+  - 新加坡-10
+  - 日本0-4
+  - 日本0-5
+  - 日本0-6
+  - 日本0-7
+  - 美国0-10
+  - 美国0-11
+  - 邀请好
+  - '香港 '
+  - 香港 -1
+  - 香港 -2
+  - 香港家
+  - 香港家-1
+  - 香港家-2
+  - 香港游
+  - 澳门家
+  - 澳门家-1
+  - 澳门家-2
+  - '台湾 '
+  - 台湾 -1
+  - 台湾 -2
+  - 台湾家
+  - 台湾家-1
+  - 新加坡-11
+  - 新加坡-12
+  - 新加坡-13
+  - 新加坡-14
+  - 新加坡-15
+  - 新加坡-16
+  - 新加坡-17
+  - 马来西
+  - 马来西-1
+  - 马尔代
+  - 柬埔寨
+  - '泰国 '
+  - 泰国 -1
+  - 缅甸丨
+  - 老挝丨
+  - 越南家
+  - 越南家-1
+  - 越南家-2
+  - '日本 '
+  - 日本 -1
+  - 日本 -2
+  - 日本 -3
+  - 日本 -4
+  - 日本家
+  - 日本家-1
+  - 日本家-2
+  - 日本家-3
+  - 日本家-4
+  - 日本家-5
+  - 日本家-6
+  - 日本游
+  - 日本--2
+  - 日本--3
+  - 韩国家
+  - 韩国家-1
+  - 韩国家-2
+  - 不丹丨
+  - 文莱丨
+  - 关岛丨
+  - 北马里
+  - 斐济家
+  - 菲律宾
+  - 菲律宾-1
+  - 印尼-
+  - 印尼--1
+  - 印度丨
+  - 蒙古丨
+  - 约旦丨
+  - 伊朗丨
+  - 巴林丨
+  - 阿曼丨
+  - 以色列
+  - 巴勒斯
+  - 土耳其
+  - 尼泊尔
+  - 孟加拉
+  - 黎巴嫩
+  - 伊拉克
+  - 叙利亚
+  - 阿富汗
+  - 卡塔尔
+  - 科威特
+  - 阿联酋
+  - 阿联酋-1
+  - 阿塞拜
+  - 亚美尼
+  - 格鲁吉
+  - 巴基斯
+  - 斯里兰
+  - 沙特阿
+  - 沙特阿-1
+  - 土库曼
+  - 哈萨克
+  - 吉尔吉
+  - 乌兹别
+  - 汤加丨
+  - 澳大利
+  - 澳大利-1
+  - 新喀里
+  - 新西兰
+  - 新西兰-1
+  - 瑙鲁丨
+  - 纽埃丨
+  - 帕劳丨
+  - 萨摩亚
+  - 托克劳
+  - 基里巴
+  - 瓦努阿
+  - 马绍尔
+  - 法属波
+  - 瓦利斯
+  - 法国丨
+  - 法国家
+  - 英国丨
+  - 英国家
+  - 英国家-1
+  - 英国家-2
+  - 马恩岛
+  - 根西岛
+  - 泽西岛
+  - 德国丨
+  - 丹麦丨
+  - 挪威丨
+  - 瑞典丨
+  - 芬兰丨
+  - 芬兰家
+  - 冰岛丨
+  - 瑞士丨
+  - 捷克丨
+  - 希腊丨
+  - 荷兰丨
+  - 波兰丨
+  - 黑山丨
+  - 俄罗斯
+  - 乌克兰
+  - 匈牙利
+  - 卢森堡
+  - 奥地利
+  - 意大利
+  - 意大利-1
+  - 梵蒂冈
+  - 比利时
+  - 爱尔兰-1
+  - 立陶宛
+  - 西班牙
+  - 葡萄牙
+  - 安道尔
+  - 马耳他
+  - 摩纳哥
+  - 保加利
+  - 克罗地
+  - 北马其
+  - 塞尔维
+  - 塞浦路
+  - 拉脱维
+  - 摩尔多
+  - 斯洛伐
+  - 爱沙尼
+  - 白俄罗
+  - 罗马尼
+  - 直布罗-1
+  - 圣马力
+  - 法罗群
+  - 奥兰群
+  - 斯洛文
+  - 阿尔巴
+  - 波黑共
+  - 列支敦
+  - 法属留
+  - 美国--2
+  - 美国--3
+  - 美国--4
+  - 美国--5
+  - 美国--6
+  - 美国--7
+  - 美国--8
+  - 美国--9
+  - 美国--10
+  - 美国--11
+  - 美国--12
+  - 美国--13
+  - 美国--14
+  - 美国--15
+  - 美国--16
+  - 美国--17
+  - 美国--18
+  - 美国--19
+  - 美国--20
+  - 美国--21
+  - 美国--22
+  - 美国--23
+  - 美国--24
+  - 美国--25
+  - 加拿大-1
+  - 加拿大-2
+  - 加拿大-3
+  - 加拿大-4
+  - 加拿大-5
+  - 圣皮埃
+  - 墨西哥
+  - 墨西哥-1
+  - 巴拿马
+  - 百慕大
+  - 格陵兰
+  - 格林纳
+  - 哥斯达
+  - 英属维
+  - 美属维
+  - 巴西丨
+  - 智利丨
+  - 秘鲁丨
+  - 古巴丨
+  - 海地丨
+  - 阿根廷
+  - 阿根廷-1
+  - 乌拉圭
+  - 巴拉圭
+  - 牙买加
+  - 苏里南
+  - 巴哈马
+  - 法属圭
+  - 伯利兹
+  - 蒙特塞
+  - 荷属阿
+  - 荷属库
+  - 荷属圣
+  - 法属圣
+  - 法属瓜
+  - 法属马
+  - 安提瓜
+  - 圣基茨
+  - 特立尼
+  - 圣文森
+  - 哥伦比
+  - 厄瓜多
+  - 玻利维
+  - 危地马
+  - 萨尔瓦
+  - 波多黎
+  - 开曼群
+  - 洪都拉
+  - 多米尼
+  - 巴巴多
+  - 圣卢西
+  - 特克斯
+  - 埃及丨
+  - 加纳丨
+  - 多哥丨
+  - 南非丨
+  - 贝宁丨
+  - 苏丹丨
+  - 马里丨
+  - 刚果布
+  - 加蓬丨
+  - 乍得丨
+  - 突尼斯
+  - 利比亚
+  - 肯尼亚
+  - 卢旺达
+  - 佛得角
+  - 安哥拉
+  - 喀麦隆
+  - 布隆迪
+  - 索马里
+  - 吉布提
+  - 冈比亚
+  - 几内亚
+  - 莱索托
+  - 马拉维
+  - 尼日尔
+  - 乌干达
+  - 马约特
+  - 赞比亚
+  - 尼日利
+  - 尼日利-1
+  - 毛里求
+  - 科特迪
+  - 坦桑尼
+  - 津巴布
+  - 塞内加
+  - 博茨瓦
+  - 纳米比
+  - 塞拉利
+  - 斯威士
+  - 利比里
+  - 阿尔及
+  - 马达加
+  - 赤道几
+  - 布基纳
+  - 厄立特
+  - 埃塞俄
+  - 毛里塔
+  - 圣多美
+  - 南极洲
 rules:
 - MATCH,Proxy
