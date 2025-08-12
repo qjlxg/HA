@@ -43,7 +43,7 @@ def normalize_name(name):
     return truncated_name
 
 def get_vmess_fingerprint(data):
-    """为 Vmess 节点生成唯一指纹"""
+    """为 Vmess 节点生成唯一指打印"""
     return (
         data.get("type", "vmess"),
         data.get("server"),
@@ -54,7 +54,7 @@ def get_vmess_fingerprint(data):
     )
 
 def get_vless_fingerprint(data):
-    """为 Vless 节点生成唯一指纹"""
+    """为 Vless 节点生成唯一指打印"""
     return (
         "vless",
         data.get("server"),
@@ -66,7 +66,7 @@ def get_vless_fingerprint(data):
     )
 
 def get_ss_fingerprint(data):
-    """为 ShadowSocks 节点生成唯一指纹"""
+    """为 ShadowSocks 节点生成唯一指打印"""
     return (
         "ss",
         data.get("server"),
@@ -76,7 +76,7 @@ def get_ss_fingerprint(data):
     )
 
 def get_trojan_fingerprint(data):
-    """为 Trojan 节点生成唯一指纹"""
+    """为 Trojan 节点生成唯一指打印"""
     return (
         "trojan",
         data.get("server"),
@@ -86,7 +86,7 @@ def get_trojan_fingerprint(data):
     )
     
 def get_ssr_fingerprint(data):
-    """为 ShadowsocksR 节点生成唯一指纹"""
+    """为 ShadowsocksR 节点生成唯一指打印"""
     return (
         "ssr",
         data.get("server"),
@@ -98,7 +98,7 @@ def get_ssr_fingerprint(data):
     )
     
 def get_hysteria2_fingerprint(data):
-    """为 Hysteria2 节点生成唯一指纹"""
+    """为 Hysteria2 节点生成唯一指打印"""
     return (
         "hysteria2",
         data.get("server"),
@@ -357,7 +357,7 @@ def parse_hysteria2(uri):
     except Exception: return None
 
 def get_yaml_fingerprint(node):
-    """根据节点类型，为 YAML 节点生成唯一指纹"""
+    """根据节点类型，为 YAML 节点生成唯一指打印"""
     node_type = node.get("type")
     if node_type == "vmess":
         return get_vmess_fingerprint(node)
@@ -380,14 +380,24 @@ def parse_yaml_proxies(filepath, proxies_list):
     yaml_data = {}
     
     try:
+        # 尝试以 UTF-8 编码读取文件，忽略无效字符
         with open(filepath, "r", encoding="utf-8", errors='ignore') as f:
             content = f.read().strip()
             if not content:
                 print(f"错误：文件 {filepath} 为空，跳过处理。")
                 return 0, 0, 0
+        
+        # 打印文件的前几行以便调试
         print(f"正在解析 {filepath}，文件内容长度：{len(content)} 字节")
+        print(f"文件前几行内容预览（最多5行）：")
+        preview_lines = content.splitlines()[:5]
+        for i, line in enumerate(preview_lines, 1):
+            print(f"  行 {i}: {line}")
+        
+        # 尝试解析 YAML
         yaml_data = yaml.safe_load(content)
-            
+        
+        # 检查 YAML 数据是否有效
         if not isinstance(yaml_data, dict) or "proxies" not in yaml_data or not isinstance(yaml_data["proxies"], list):
             print(f"警告：文件 {filepath} 格式不正确或缺少 'proxies' 列表。")
             return 0, 0, 0
@@ -406,10 +416,12 @@ def parse_yaml_proxies(filepath, proxies_list):
             used_node_fingerprints.add(fingerprint)
             
             node_type = node.get("type")
-            # 修复：对从YAML文件加载的节点也进行参数有效性检查
-            if node_type == "ss" and node.get("cipher") not in SS_SUPPORTED_CIPHERS:
-                print(f"警告：跳过不支持的加密方法，节点：{node.get('name', '未知')}")
-                continue
+            # 检查 Shadowsocks 节点的加密方法
+            if node_type == "ss":
+                cipher = node.get("cipher")
+                if cipher not in SS_SUPPORTED_CIPHERS:
+                    print(f"警告：跳过不支持的加密方法，节点：{node.get('name', '未知')}，加密方法：{cipher}")
+                    continue
             
             # 规范化节点名称
             node["name"] = normalize_name(node.get("name", "Unnamed YAML Node"))
@@ -418,6 +430,40 @@ def parse_yaml_proxies(filepath, proxies_list):
     except yaml.YAMLError as ye:
         print(f"YAML 解析错误 ({filepath})：{ye}")
         return 0, 0, 0
+    except UnicodeDecodeError as ude:
+        print(f"编码错误 ({filepath})：{ude}")
+        print(f"尝试以其他编码重新读取文件...")
+        try:
+            with open(filepath, "r", encoding="latin1") as f:
+                content = f.read().strip()
+                if not content:
+                    print(f"错误：文件 {filepath} 为空，跳过处理。")
+                    return 0, 0, 0
+                yaml_data = yaml.safe_load(content)
+                if not isinstance(yaml_data, dict) or "proxies" not in yaml_data or not isinstance(yaml_data["proxies"], list):
+                    print(f"警告：文件 {filepath} 格式不正确或缺少 'proxies' 列表。")
+                    return 0, 0, 0
+                total_file_nodes = len(yaml_data["proxies"])
+                for node in tqdm(yaml_data["proxies"], desc=f"解析 {filepath}"):
+                    if not isinstance(node, dict) or "type" not in node:
+                        print(f"警告：跳过无效节点，节点内容：{node}")
+                        continue
+                    fingerprint = get_yaml_fingerprint(node)
+                    if fingerprint and fingerprint in used_node_fingerprints:
+                        current_duplicates += 1
+                        continue
+                    used_node_fingerprints.add(fingerprint)
+                    node_type = node.get("type")
+                    if node_type == "ss":
+                        cipher = node.get("cipher")
+                        if cipher not in SS_SUPPORTED_CIPHERS:
+                            print(f"警告：跳过不支持的加密方法，节点：{node.get('name', '未知')}，加密方法：{cipher}")
+                            continue
+                    node["name"] = normalize_name(node.get("name", "Unnamed YAML Node"))
+                    current_file_proxies.append(node)
+        except Exception as e:
+            print(f"使用 latin1 编码解析文件 {filepath} 失败：{e}")
+            return 0, 0, 0
     except Exception as e:
         print(f"解析文件 {filepath} 时出错：{e}")
         return 0, 0, len(yaml_data.get("proxies", [])) if 'yaml_data' in locals() else 0
