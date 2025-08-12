@@ -27590,16 +27590,6 @@ proxies:
   port: 8313
   cipher: chacha20-ietf-poly1305
   password: ljqdalu13..
-- name: 香港
-  type: ssr
-  server: 156.251.179.34
-  port: 465
-  password: BX9rK3D72LvGq0vd
-  cipher: chacha20-ietf-poly1305
-  protocol: origin
-  obfs: plain
-  obfs-param: ''
-  protocol-param: ''
 - name: Hon
   type: ss
   server: fzx.6pzfwf.com
@@ -44327,7 +44317,6 @@ proxy-groups:
   - Unk-95
   - Nea
   - Unk-96
-  - 香港
   - Hon
   - Unk-97
   - _Wi
