@@ -32,7 +32,6 @@ def normalize_name(name):
     name = re.sub(r'[^\u4e00-\u9fa5\w\s-]', '', name)
     name = re.sub(r'\s+', ' ', name).strip()
     
-    # 保留前3个字符
     truncated_name = name[:3] if len(name) >= 3 else name
     
     original_name = truncated_name
@@ -124,7 +123,14 @@ def parse_vmess(uri):
         # 检查关键字段
         if not all(key in data for key in ["add", "port", "id"]):
             return None
+        
+        try:
+            port = int(data.get("port"))
+        except (ValueError, TypeError):
+            return None
 
+        data["port"] = port
+        
         fingerprint = get_vmess_fingerprint(data)
         if fingerprint in used_node_fingerprints:
             return "duplicate"
@@ -132,7 +138,6 @@ def parse_vmess(uri):
         
         name = normalize_name(data.get("ps", "Unnamed Vmess Node"))
         server = data.get("add")
-        port = int(data.get("port"))
         uuid = data.get("id")
         alterId = int(data.get("aid", 0))
         cipher = data.get("scy", "auto")
@@ -177,6 +182,13 @@ def parse_vless(uri):
         # 检查关键字段
         if not all([parsed.hostname, parsed.port, parsed.username]):
             return None
+        
+        try:
+            port = int(parsed.port)
+        except (ValueError, TypeError):
+            return None
+        
+        parsed = parsed._replace(port=port)
 
         fingerprint = get_vless_fingerprint(parsed, params)
         if fingerprint in used_node_fingerprints:
@@ -226,7 +238,12 @@ def parse_ss(uri):
         # 检查关键字段
         if not all([parsed.hostname, parsed.port]):
             return None
-        
+
+        try:
+            port = int(parsed.port)
+        except (ValueError, TypeError):
+            return None
+
         core_part = parsed.netloc.split('@')[0]
         decoded_core = base64.b64decode(core_part + '=' * (-len(core_part) % 4)).decode('utf-8')
         method, password = decoded_core.split(':', 1)
@@ -246,7 +263,7 @@ def parse_ss(uri):
             "name": name,
             "type": "ss",
             "server": parsed.hostname,
-            "port": parsed.port,
+            "port": port,
             "cipher": method,
             "password": password
         }
@@ -265,6 +282,13 @@ def parse_trojan(uri):
         # 检查关键字段
         if not all([parsed.hostname, parsed.port, parsed.username]):
             return None
+
+        try:
+            port = int(parsed.port)
+        except (ValueError, TypeError):
+            return None
+        
+        parsed = parsed._replace(port=port)
 
         fingerprint = get_trojan_fingerprint(parsed, params)
         if fingerprint in used_node_fingerprints:
@@ -298,12 +322,19 @@ def parse_ssr(uri):
         encoded_data = uri[6:]
         decoded_data = base64.b64decode(encoded_data + '=' * (-len(encoded_data) % 4)).decode('utf-8')
         
+        if '/?' not in decoded_data:
+            return None
+
         main_part, params_part = decoded_data.split('/?', 1)
         server, port, protocol, method, obfs, password = main_part.split(':')
         
+        try:
+            port = int(port)
+        except (ValueError, TypeError):
+            return None
+        
         password_decoded = base64.b64decode(password + '=' * (-len(password) % 4)).decode('utf-8')
 
-        # 检查加密方法是否支持
         if method.lower() not in SS_SUPPORTED_CIPHERS:
             return None
 
@@ -326,7 +357,7 @@ def parse_ssr(uri):
             "name": name,
             "type": "ssr",
             "server": server,
-            "port": int(port),
+            "port": port,
             "password": password_decoded,
             "cipher": method,
             "protocol": protocol,
@@ -347,11 +378,16 @@ def parse_hysteria2(uri):
         password = parsed.username
         params = parse_qs(parsed.query)
 
-        # 检查关键字段
         if not all([parsed.hostname, parsed.port, password]):
             return None
 
-        # 检查混淆密码
+        try:
+            port = int(parsed.port)
+        except (ValueError, TypeError):
+            return None
+        
+        parsed = parsed._replace(port=port)
+        
         obfs_type = params.get("obfs", ["none"])[0]
         obfs_password = params.get("obfs-password", [""])[0]
         if obfs_type != "none" and not obfs_password:
