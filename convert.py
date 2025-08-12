@@ -409,7 +409,7 @@ def main():
     global used_names, used_node_fingerprints
     
     # 修改后的输入文件列表，包含YAML文件和Base64编码文件
-    input_files = ["merged_configs.txt", "all_unique_nodes.txt", "clash_proxies.yaml","sc/clash_proxies.yaml", "sc/clash_proxies_1783_20250808_142154.yaml"]
+    input_files = ["merged_configs.txt", "all_unique_nodes.txt", "sc/clash_proxies.yaml" ]
     output_file = "config.yaml"
 
     proxies = []
