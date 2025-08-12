@@ -531,10 +531,9 @@ if __name__ == "__main__":
     if any(count > 0 for count in source_stats.values()):
         print("\n正在合并配置...")
         merge_configs()
-        print("正在按协议拆分配置...")
-        split_configs_by_protocol()
+
         print("正在创建统计 CSV 文件...")
         create_stats_csv(source_stats)
-        print("所有任务完成：配置已保存，生成合并文件、协议文件、统计文件。")
+        print("所有任务完成：配置已保存，生成合并文件、统计文件。")
     else:
-        print("\n所有来源均未获取到代理配置，未生成合并文件、协议文件或统计文件。")
+        print("\n所有来源均未获取到代理配置，未生成合并文件、统计文件。")
