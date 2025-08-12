@@ -12,12 +12,14 @@ used_node_fingerprints = set()
 
 # 支持的 ShadowSocks 和 ShadowsocksR 加密方法列表
 SS_SUPPORTED_CIPHERS = [
-    "aes-256-gcm", "aes-192-gcm", "aes-128-gcm",
+    "aes-够256-gcm", "aes-192-gcm", "aes-128-gcm",
     "aes-256-cfb", "aes-192-cfb", "aes-128-cfb",
     "chacha20-poly1305", "chacha20-ietf-poly1305",
     "xchacha20-ietf-poly1305", "xchacha20",
     "aes-256-ctr", "aes-192-ctr", "aes-128-ctr",
     "camellia-256-cfb", "camellia-192-cfb", "camellia-128-cfb",
+    "rc4-md5",  # 新增支持
+    "chacha20-ietf"  # 新增支持
 ]
 
 def normalize_name(name):
@@ -43,7 +45,7 @@ def normalize_name(name):
     return truncated_name
 
 def get_vmess_fingerprint(data):
-    """为 Vmess 节点生成唯一指打印"""
+    """为 Vmess 节点生成唯一指纹"""
     return (
         data.get("type", "vmess"),
         data.get("server"),
@@ -54,7 +56,7 @@ def get_vmess_fingerprint(data):
     )
 
 def get_vless_fingerprint(data):
-    """为 Vless 节点生成唯一指打印"""
+    """为 Vless 节点生成唯一指纹"""
     return (
         "vless",
         data.get("server"),
@@ -66,7 +68,7 @@ def get_vless_fingerprint(data):
     )
 
 def get_ss_fingerprint(data):
-    """为 ShadowSocks 节点生成唯一指打印"""
+    """为 ShadowSocks 节点生成唯一指纹"""
     return (
         "ss",
         data.get("server"),
@@ -76,7 +78,7 @@ def get_ss_fingerprint(data):
     )
 
 def get_trojan_fingerprint(data):
-    """为 Trojan 节点生成唯一指打印"""
+    """为 Trojan 节点生成唯一指纹"""
     return (
         "trojan",
         data.get("server"),
@@ -86,7 +88,7 @@ def get_trojan_fingerprint(data):
     )
     
 def get_ssr_fingerprint(data):
-    """为 ShadowsocksR 节点生成唯一指打印"""
+    """为 ShadowsocksR 节点生成唯一指纹"""
     return (
         "ssr",
         data.get("server"),
@@ -98,7 +100,7 @@ def get_ssr_fingerprint(data):
     )
     
 def get_hysteria2_fingerprint(data):
-    """为 Hysteria2 节点生成唯一指打印"""
+    """为 Hysteria2 节点生成唯一指纹"""
     return (
         "hysteria2",
         data.get("server"),
@@ -122,18 +124,13 @@ def parse_vmess(uri):
         try: port = int(data.get("port"))
         except (ValueError, TypeError): return None
         
-        # 修复：确保 scy 字段存在且不为空，否则设为 'auto'
-        cipher = data.get("scy", "").strip()
-        if not cipher:
-            cipher = "auto"
-            
         node_data = {
             "type": "vmess",
             "server": data.get("add"),
             "port": port,
             "uuid": data.get("id"),
             "alterId": int(data.get("aid", 0)),
-            "cipher": cipher,
+            "cipher": data.get("scy", "auto"),
             "network": data.get("net", "tcp")
         }
         
@@ -149,7 +146,7 @@ def parse_vmess(uri):
             "port": port,
             "uuid": data.get("id"),
             "alterId": int(data.get("aid", 0)),
-            "cipher": cipher,
+            "cipher": data.get("scy", "auto"),
             "network": data.get("net", "tcp"),
             "tls": data.get("tls", "") == "tls"
         }
@@ -223,15 +220,9 @@ def parse_ss(uri):
         
         core_part = parsed.netloc.split('@')[0]
         decoded_core = base64.b64decode(core_part + '=' * (-len(core_part) % 4)).decode('utf-8')
-        
-        # 修复：防止因 ':' 缺失或格式错误导致的异常
-        if ':' not in decoded_core:
-            return None
-            
         method, password = decoded_core.split(':', 1)
         
-        if method.lower() not in SS_SUPPORTED_CIPHERS: 
-            return None
+        if method.lower() not in SS_SUPPORTED_CIPHERS: return None
 
         node_data = {"type": "ss", "server": parsed.hostname, "port": port, "cipher": method, "password": password}
         fingerprint = get_ss_fingerprint(node_data)
@@ -297,28 +288,15 @@ def parse_ssr(uri):
         if '/?' not in decoded_data: return None
 
         main_part, params_part = decoded_data.split('/?', 1)
-        
-        # 修复：处理格式不正确的 main_part
-        parts = main_part.split(':')
-        if len(parts) != 6:
-            return None
-        server, port, protocol, method, obfs, password = parts
-
+        server, port, protocol, method, obfs, password = main_part.split(':')
         try: port = int(port)
         except (ValueError, TypeError): return None
         
         password_decoded = base64.b64decode(password + '=' * (-len(password) % 4)).decode('utf-8')
+        if method.lower() not in SS_SUPPORTED_CIPHERS: return None
         
         # 修复：SSR 不支持 ss-aead 相关的加密方法
         if 'gcm' in method.lower() or 'poly1305' in method.lower() or 'xchacha' in method.lower():
-            return None
-        
-        # 修复：检查 obfs 参数，如果不是 'plain' 且 obfsparam 不存在，则返回 None
-        params = parse_qs(params_part)
-        obfs_param_encoded = params.get('obfsparam', [''])[0]
-        obfs_param = base64.b64decode(obfs_param_encoded + '=' * (-len(obfs_param_encoded) % 4)).decode('utf-8') if obfs_param_encoded else ""
-
-        if obfs != "plain" and not obfs_param.strip():
             return None
 
         node_data = {
@@ -326,11 +304,14 @@ def parse_ssr(uri):
             "password": password_decoded, "protocol": protocol, "obfs": obfs
         }
         fingerprint = get_ssr_fingerprint(node_data)
-        if fingerprint and fingerprint in used_node_fingerprints: return "duplicate"
+        if fingerprint in used_node_fingerprints: return "duplicate"
         used_node_fingerprints.add(fingerprint)
         
+        params = parse_qs(params_part)
         name_encoded = params.get('remarks', [''])[0]
         name = normalize_name(unquote(base64.b64decode(name_encoded + '=' * (-len(name_encoded) % 4)).decode('utf-8')) if name_encoded else "Unnamed SSR Node")
+        obfs_param_encoded = params.get('obfsparam', [''])[0]
+        obfs_param = base64.b64decode(obfs_param_encoded + '=' * (-len(obfs_param_encoded) % 4)).decode('utf-8') if obfs_param_encoded else ""
         protocol_param_encoded = params.get('protoparam', [''])[0]
         protocol_param = base64.b64decode(protocol_param_encoded + '=' * (-len(protocol_param_encoded) % 4)).decode('utf-8') if protocol_param_encoded else ""
         
@@ -363,6 +344,7 @@ def parse_hysteria2(uri):
             "sni": params.get("sni", [parsed.hostname])[0]
         }
         fingerprint = get_hysteria2_fingerprint(node_data)
+        Heading: Modified Script
         if fingerprint in used_node_fingerprints: return "duplicate"
         used_node_fingerprints.add(fingerprint)
         
@@ -378,7 +360,7 @@ def parse_hysteria2(uri):
     except Exception: return None
 
 def get_yaml_fingerprint(node):
-    """根据节点类型，为 YAML 节点生成唯一指打印"""
+    """根据节点类型，为 YAML 节点生成唯一指纹"""
     node_type = node.get("type")
     if node_type == "vmess":
         return get_vmess_fingerprint(node)
@@ -401,14 +383,38 @@ def parse_yaml_proxies(filepath, proxies_list):
     yaml_data = {}
     
     try:
+        # 尝试以 UTF-8 编码读取文件，忽略无效字符
         with open(filepath, "r", encoding="utf-8", errors='ignore') as f:
             content = f.read().strip()
-        if not content:
-            print(f"错误：文件 {filepath} 为空，跳过处理。")
+            if not content:
+                print(f"错误：文件 {filepath} 为空，跳过处理。")
+                return 0, 0, 0
+        
+        # 打印文件内容信息以便调试
+        print(f"正在解析 {filepath}，文件内容长度：{len(content)} 字节")
+        print(f"文件前几行内容预览（最多5行）：")
+        preview_lines = content.splitlines()[:5]
+        for i, line in enumerate(preview_lines, 1):
+            print(f"  行 {i}: {line}")
+        
+        # 尝试解析 YAML
+        try:
+            yaml_data = yaml.safe_load(content)
+        except yaml.YAMLError as ye:
+            print(f"YAML 解析错误 ({filepath})：{ye}")
+            # 打印错误附近的行以便调试
+            lines = content.splitlines()
+            error_line = getattr(ye, 'problem_mark', None)
+            if error_line:
+                line_number = error_line.line + 1
+                start_line = max(0, line_number - 3)
+                end_line = min(len(lines), line_number + 2)
+                print(f"错误发生在第 {line_number} 行附近，以下是相关内容：")
+                for i in range(start_line, end_line):
+                    print(f"  行 {i + 1}: {lines[i]}")
             return 0, 0, 0
-            
-        yaml_data = yaml.safe_load(content)
-            
+        
+        # 检查 YAML 数据是否有效
         if not isinstance(yaml_data, dict) or "proxies" not in yaml_data or not isinstance(yaml_data["proxies"], list):
             print(f"警告：文件 {filepath} 格式不正确或缺少 'proxies' 列表。")
             return 0, 0, 0
@@ -416,6 +422,7 @@ def parse_yaml_proxies(filepath, proxies_list):
         total_file_nodes = len(yaml_data["proxies"])
         for node in tqdm(yaml_data["proxies"], desc=f"解析 {filepath}"):
             if not isinstance(node, dict) or "type" not in node:
+                print(f"警告：跳过无效节点，节点内容：{node}")
                 continue
 
             fingerprint = get_yaml_fingerprint(node)
@@ -426,24 +433,72 @@ def parse_yaml_proxies(filepath, proxies_list):
             used_node_fingerprints.add(fingerprint)
             
             node_type = node.get("type")
-            # 修复：对从YAML文件加载的节点也进行参数有效性检查
+            # 检查 Shadowsocks 节点的加密方法
             if node_type == "ss":
                 cipher = node.get("cipher")
                 if cipher not in SS_SUPPORTED_CIPHERS:
-                    continue
-            elif node_type == "ssr":
-                method = node.get("cipher", "").lower()
-                obfs = node.get("obfs", "plain")
-                obfs_param = node.get("obfs-param", "")
-                if 'gcm' in method or 'poly1305' in method or 'xchacha' in method:
-                    continue
-                if obfs != "plain" and not obfs_param.strip():
+                    print(f"警告：跳过不支持的加密方法，节点：{node.get('name', '未知')}，加密方法：{cipher}")
                     continue
             
             # 规范化节点名称
             node["name"] = normalize_name(node.get("name", "Unnamed YAML Node"))
             current_file_proxies.append(node)
             
+    except UnicodeDecodeError as ude:
+        print(f"编码错误 ({filepath})：{ude}")
+        print(f"尝试以 latin1 编码重新读取文件...")
+        try:
+            with open(filepath, "r", encoding="latin1") as f:
+                content = f.read().strip()
+                if not content:
+                    print(f"错误：文件 {filepath} 为空，跳过处理。")
+                    return 0, 0, 0
+                print(f"正在解析 {filepath}，文件内容长度：{len(content)} 字节")
+                print(f"文件前几行内容预览（最多5行）：")
+                preview_lines = content.splitlines()[:5]
+                for i, line in enumerate(preview_lines, 1):
+                    print(f"  行 {i}: {line}")
+                
+                try:
+                    yaml_data = yaml.safe_load(content)
+                except yaml.YAMLError as ye:
+                    print(f"YAML 解析错误 ({filepath})：{ye}")
+                    lines = content.splitlines()
+                    error_line = getattr(ye, 'problem_mark', None)
+                    if error_line:
+                        line_number = error_line.line + 1
+                        start_line = max(0, line_number - 3)
+                        end_line = min(len(lines), line_number + 2)
+                        print(f"错误发生在第 {line_number} 行附近，以下是相关内容：")
+                        for i in range(start_line, end_line):
+                            print(f"  行 {i + 1}: {lines[i]}")
+                    return 0, 0, 0
+                
+                if not isinstance(yaml_data, dict) or "proxies" not in yaml_data or not isinstance(yaml_data["proxies"], list):
+                    print(f"警告：文件 {filepath} 格式不正确或缺少 'proxies' 列表。")
+                    return 0, 0, 0
+                
+                total_file_nodes = len(yaml_data["proxies"])
+                for node in tqdm(yaml_data["proxies"], desc=f"解析 {filepath}"):
+                    if not isinstance(node, dict) or "type" not in node:
+                        print(f"警告：跳过无效节点，节点内容：{node}")
+                        continue
+                    fingerprint = get_yaml_fingerprint(node)
+                    if fingerprint and fingerprint in used_node_fingerprints:
+                        current_duplicates += 1
+                        continue
+                    used_node_fingerprints.add(fingerprint)
+                    node_type = node.get("type")
+                    if node_type == "ss":
+                        cipher = node.get("cipher")
+                        if cipher not in SS_SUPPORTED_CIPHERS:
+                            print(f"警告：跳过不支持的加密方法，节点：{node.get('name', '未知')}，加密方法：{cipher}")
+                            continue
+                    node["name"] = normalize_name(node.get("name", "Unnamed YAML Node"))
+                    current_file_proxies.append(node)
+        except Exception as e:
+            print(f"使用 latin1 编码解析文件 {filepath} 失败：{e}")
+            return 0, 0, 0
     except Exception as e:
         print(f"解析文件 {filepath} 时出错：{e}")
         return 0, 0, len(yaml_data.get("proxies", [])) if 'yaml_data' in locals() else 0
