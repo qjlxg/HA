@@ -1,2 +1,2 @@
-vless://29bcf2de-1a8e-41d9-dd6d-2729c39c09f5@ora.naivecn.com:41538?type=ws&security=tls&path=%2Fdownloads&fp=&alpn=http%2F1.1%2Ch2#ORA-vless
 vless://49172c3a-5f76-4a87-89ae-54245f1f5f39@ora.naivecn.com:41680?type=tcp&security=reality&sni=www.yahoo.com&pbk=PeUfAL9wk_pHcbzmMMjctCbVq-VNog-yZ2KrOPyTSzA&flow=&sid=a8575d51&fp=chrome#ORA-reality
+vless://29bcf2de-1a8e-41d9-dd6d-2729c39c09f5@ora.naivecn.com:41538?type=ws&security=tls&path=%2Fdownloads&fp=&alpn=http%2F1.1%2Ch2#ORA-vless
