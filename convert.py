@@ -30,11 +30,15 @@ SS_SUPPORTED_CIPHERS = [
 
 # 为 ShadowsocksR 单独定义支持的加密方法
 SSR_SUPPORTED_CIPHERS = [
-    "aes-256-cfb", "aes-192-cfb", "aes-128-cfb",
-    "chacha20-ietf",
-    "camellia-256-cfb", "camellia-192-cfb", "camellia-128-cfb",
-    "rc4-md5"
+    "auth_aes128_md5", "auth_chain_a", "auth_chain_b", "auth_chain_c", "auth_chain_d"
 ]
+
+def is_base64(s):
+    """检查字符串是否为有效的 Base64 编码。"""
+    try:
+        return base64.b64encode(base64.b64decode(s.replace('<br/>', '').replace('\n', '').strip())) == s.replace('<br/>', '').replace('\n', '').strip().encode()
+    except Exception:
+        return False
 
 def normalize_name(name):
     """
@@ -235,19 +239,30 @@ def parse_ss(uri):
         except (ValueError, TypeError): return None
         
         core_part = parsed.netloc.split('@')[0]
-        decoded_core = base64.b64decode(core_part + '=' * (-len(core_part) % 4)).decode('utf-8')
         
-        # 尝试解析非标准格式 (UUID:password)
+        # 尝试解码核心部分
+        decoded_core = None
+        try:
+            decoded_core = base64.b64decode(core_part + '=' * (-len(core_part) % 4)).decode('utf-8')
+        except (base64.binascii.Error, UnicodeDecodeError):
+            print(f"警告：跳过非标准格式的 Shadowsocks 链接 (Base64 解码失败)：{uri}")
+            return None
+
+        # 检查是否为标准格式 (method:password) 或非标准格式 (uuid:password)
         parts = decoded_core.split(':', 1)
-        if len(parts) == 2 and len(parts[0]) == 36:
-            # 这是一个非标准格式，我们无法确定加密方法，因此直接跳过
+        if len(parts) != 2:
+            print(f"警告：跳过非标准格式的 Shadowsocks 链接 (缺少密码)：{uri}")
+            return None
+
+        method, password = parts
+        
+        if re.match(r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$', method):
             print(f"警告：跳过非标准格式的 Shadowsocks 链接 (可能缺少加密方法)：{uri}")
             return None
-            
-        # 标准格式 (method:password)
-        method, password = decoded_core.split(':', 1)
         
-        if method.lower() not in SS_SUPPORTED_CIPHERS: return None
+        if method.lower() not in SS_SUPPORTED_CIPHERS:
+            print(f"警告：跳过不支持的 Shadowsocks 加密方法：{method}")
+            return None
 
         node_data = {"type": "ss", "server": parsed.hostname, "port": port, "cipher": method, "password": password}
         fingerprint = get_ss_fingerprint(node_data)
@@ -264,6 +279,76 @@ def parse_ss(uri):
             "password": password
         }
     except Exception: return None
+
+def parse_ssr(uri):
+    """解析 ShadowsocksR 链接，返回节点配置字典或 None。"""
+    try:
+        if not uri.startswith("ssr://"): return None
+        uri_part = uri[6:].replace('<br/>', '').replace('\n', '').strip()
+        
+        # 检查是否为 base64 编码
+        if is_base64(uri_part):
+            decoded_data = base64.b64decode(uri_part + '=' * (-len(uri_part) % 4)).decode('utf-8')
+        else:
+            # 否则，假设它是明文链接
+            decoded_data = uri_part
+
+        # 解析主部分和参数部分
+        if '/?' not in decoded_data:
+            main_part = decoded_data
+            params = {}
+        else:
+            main_part, params_part = decoded_data.split('/?', 1)
+            params = parse_qs(params_part)
+
+        # 解析主部分
+        parts = main_part.split(':')
+        if len(parts) < 6: return None
+        server, port, protocol, method, obfs, password = parts[:6]
+
+        try: port = int(port)
+        except (ValueError, TypeError): return None
+        
+        # 密码和备注参数可能需要再次解码
+        password_decoded = base64.b64decode(password + '=' * (-len(password) % 4)).decode('utf-8')
+        
+        remarks_encoded = params.get('remarks', [''])[0]
+        name = normalize_name(unquote(base64.b64decode(remarks_encoded + '=' * (-len(remarks_encoded) % 4)).decode('utf-8')) if remarks_encoded else "Unnamed SSR Node")
+
+        node_data = {
+            "type": "ssr",
+            "server": server,
+            "port": port,
+            "cipher": method,
+            "password": password_decoded,
+            "protocol": protocol,
+            "obfs": obfs
+        }
+        fingerprint = get_ssr_fingerprint(node_data)
+        if fingerprint in used_node_fingerprints: return "duplicate"
+        used_node_fingerprints.add(fingerprint)
+
+        obfs_param_encoded = params.get('obfsparam', [''])[0]
+        obfs_param = base64.b64decode(obfs_param_encoded + '=' * (-len(obfs_param_encoded) % 4)).decode('utf-8') if obfs_param_encoded else ""
+        protocol_param_encoded = params.get('protoparam', [''])[0]
+        protocol_param = base64.b64decode(protocol_param_encoded + '=' * (-len(protocol_param_encoded) % 4)).decode('utf-8') if protocol_param_encoded else ""
+        
+        return {
+            "name": name,
+            "type": "ssr",
+            "server": server,
+            "port": port,
+            "password": password_decoded,
+            "cipher": method,
+            "protocol": protocol,
+            "obfs": obfs,
+            "obfs-param": obfs_param,
+            "protocol-param": protocol_param
+        }
+    except Exception as e:
+        print(f"警告：解析 SSR 链接时发生错误 -> {uri}。错误信息：{e}")
+        return None
+
 
 def parse_trojan(uri):
     """解析 Trojan 链接，返回节点配置字典或 None。"""
@@ -301,53 +386,6 @@ def parse_trojan(uri):
             "grpc-opts": {
                 "serviceName": params.get('serviceName', [''])[0]
             } if params.get('type', [''])[0] == 'grpc' else None
-        }
-    except Exception: return None
-
-def parse_ssr(uri):
-    """解析 ShadowsocksR 链接，返回节点配置字典或 None。"""
-    try:
-        if not uri.startswith("ssr://"): return None
-        uri = uri.replace('<br/>', '').replace('\n', '').strip()
-        encoded_data = uri[6:]
-        decoded_data = base64.b64decode(encoded_data + '=' * (-len(encoded_data) % 4)).decode('utf-8')
-        if '/?' not in decoded_data: return None
-        main_part, params_part = decoded_data.split('/?', 1)
-        server, port, protocol, method, obfs, password = main_part.split(':')
-        try: port = int(port)
-        except (ValueError, TypeError): return None
-        password_decoded = base64.b64decode(password + '=' * (-len(password) % 4)).decode('utf-8')
-        if method.lower() not in SSR_SUPPORTED_CIPHERS: print(f"警告：跳过不支持的 SSR 加密方法：{method}"); return None
-        node_data = {
-            "type": "ssr",
-            "server": server,
-            "port": port,
-            "cipher": method,
-            "password": password_decoded,
-            "protocol": protocol,
-            "obfs": obfs
-        }
-        fingerprint = get_ssr_fingerprint(node_data)
-        if fingerprint in used_node_fingerprints: return "duplicate"
-        used_node_fingerprints.add(fingerprint)
-        params = parse_qs(params_part)
-        name_encoded = params.get('remarks', [''])[0]
-        name = normalize_name(unquote(base64.b64decode(name_encoded + '=' * (-len(name_encoded) % 4)).decode('utf-8')) if name_encoded else "Unnamed SSR Node")
-        obfs_param_encoded = params.get('obfsparam', [''])[0]
-        obfs_param = base64.b64decode(obfs_param_encoded + '=' * (-len(obfs_param_encoded) % 4)).decode('utf-8') if obfs_param_encoded else ""
-        protocol_param_encoded = params.get('protoparam', [''])[0]
-        protocol_param = base64.b64decode(protocol_param_encoded + '=' * (-len(protocol_param_encoded) % 4)).decode('utf-8') if protocol_param_encoded else ""
-        return {
-            "name": name,
-            "type": "ssr",
-            "server": server,
-            "port": port,
-            "password": password_decoded,
-            "cipher": method,
-            "protocol": protocol,
-            "obfs": obfs,
-            "obfs-param": obfs_param,
-            "protocol-param": protocol_param
         }
     except Exception: return None
 
