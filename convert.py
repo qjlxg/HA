@@ -18,7 +18,7 @@ used_node_fingerprints = set()
 
 # 全局计数器
 total_links = 0
-successful_links = 0
+successful_nodes = 0
 skipped_links = 0
 duplicate_links = 0
 
@@ -135,7 +135,7 @@ def get_hysteria2_fingerprint(data):
 
 def parse_vmess(uri):
     """解析 Vmess 链接，返回节点配置字典或 None。"""
-    global successful_links, duplicate_links, skipped_links
+    global successful_nodes, duplicate_links, skipped_links
     try:
         if not uri.startswith("vmess://"):
             skipped_links += 1
@@ -195,7 +195,7 @@ def parse_vmess(uri):
                 "headers": {"Host": data.get("host", node["server"])}
             }
         
-        successful_links += 1
+        successful_nodes += 1
         return node
     except Exception:
         skipped_links += 1
@@ -203,7 +203,7 @@ def parse_vmess(uri):
 
 def parse_vless(uri):
     """解析 Vless 链接，返回节点配置字典或 None。"""
-    global successful_links, duplicate_links, skipped_links
+    global successful_nodes, duplicate_links, skipped_links
     try:
         if not uri.startswith("vless://"):
             skipped_links += 1
@@ -255,7 +255,7 @@ def parse_vless(uri):
             vless_node['flow'] = params.get('flow', [''])[0]
             vless_node['skip-cert-verify'] = params.get('allowInsecure', ['0'])[0] == '1'
         
-        successful_links += 1
+        successful_nodes += 1
         return vless_node
     except Exception:
         skipped_links += 1
@@ -263,7 +263,7 @@ def parse_vless(uri):
 
 def parse_ss(uri):
     """解析 ShadowSocks 链接，返回节点配置字典或 None。"""
-    global successful_links, duplicate_links, skipped_links
+    global successful_nodes, duplicate_links, skipped_links
     try:
         if not uri.startswith("ss://"):
             skipped_links += 1
@@ -313,7 +313,7 @@ def parse_ss(uri):
         
         name = normalize_name(unquote(parsed.fragment) if parsed.fragment else "Unnamed SS Node")
         
-        successful_links += 1
+        successful_nodes += 1
         return {
             "name": name,
             "type": "ss",
@@ -328,7 +328,7 @@ def parse_ss(uri):
 
 def parse_ssr(uri):
     """解析 ShadowsocksR 链接，返回节点配置字典或 None。"""
-    global successful_links, duplicate_links, skipped_links
+    global successful_nodes, duplicate_links, skipped_links
     try:
         if not uri.startswith("ssr://"):
             skipped_links += 1
@@ -383,7 +383,7 @@ def parse_ssr(uri):
         protocol_param_encoded = params.get('protoparam', [''])[0]
         protocol_param = base64.b64decode(protocol_param_encoded + '=' * (-len(protocol_param_encoded) % 4)).decode('utf-8') if protocol_param_encoded else ""
         
-        successful_links += 1
+        successful_nodes += 1
         return {
             "name": name,
             "type": "ssr",
@@ -402,7 +402,7 @@ def parse_ssr(uri):
 
 def parse_trojan(uri):
     """解析 Trojan 链接，返回节点配置字典或 None。"""
-    global successful_links, duplicate_links, skipped_links
+    global successful_nodes, duplicate_links, skipped_links
     try:
         if not uri.startswith("trojan://"):
             skipped_links += 1
@@ -434,7 +434,7 @@ def parse_trojan(uri):
         
         name = normalize_name(unquote(parsed.fragment) if parsed.fragment else "Unnamed Trojan Node")
         
-        successful_links += 1
+        successful_nodes += 1
         return {
             "name": name,
             "type": "trojan",
@@ -454,7 +454,7 @@ def parse_trojan(uri):
 
 def parse_hysteria2(uri):
     """解析 Hysteria2 链接，返回节点配置字典或 None。"""
-    global successful_links, duplicate_links, skipped_links
+    global successful_nodes, duplicate_links, skipped_links
     try:
         if not uri.startswith("hysteria2://"):
             skipped_links += 1
@@ -487,7 +487,7 @@ def parse_hysteria2(uri):
         
         name = normalize_name(unquote(parsed.fragment) if parsed.fragment else "Unnamed Hysteria2 Node")
         
-        successful_links += 1
+        successful_nodes += 1
         return {
             "name": name,
             "type": "hysteria2",
@@ -501,18 +501,20 @@ def parse_hysteria2(uri):
     except Exception:
         skipped_links += 1
         return None
-    
-def get_location_info(server):
-    """根据 IP 地址获取地理位置信息。"""
+
+def get_country_name(host, reader):
+    """
+    使用 geoip2 获取给定 IP 地址或域名的国家/地区 ISO 代码。
+    """
     try:
-        ip = socket.gethostbyname(server)
-        with geoip2.database.Reader('GeoLite2-City.mmdb') as reader:
-            response = reader.city(ip)
-            country = response.country.names.get('zh-CN', response.country.name)
-            city = response.city.names.get('zh-CN', response.city.name)
-            return f"[{country}-{city}]"
-    except Exception:
-        return "[Unknown]"
+        ip_address = socket.gethostbyname(host)
+        response = reader.country(ip_address)
+        return response.country.iso_code
+    except (socket.gaierror, geoip2.errors.AddressNotFoundError):
+        return None
+    except Exception as e:
+        print(f"错误：查询 IP {host} 时出错：{e}")
+        return None
 
 def download_url(url, timeout=(15, 60)):
     """
@@ -583,42 +585,59 @@ def download_and_parse_url(url):
     
     return all_nodes
 
-def process_and_combine_nodes(nodes, max_workers=50):
-    """使用多线程处理节点并合并。"""
-    processed_nodes = []
+def process_node_with_location(node_and_reader):
+    node, reader = node_and_reader
+    host = node.get('server')
+    if reader and host:
+        country_code = get_country_name(host, reader)
+        if country_code:
+            node['name'] = f"[{country_code}] {node['name']}"
     
-    with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        future_to_node = {executor.submit(add_node_details, node): node for node in nodes}
-        for future in tqdm(as_completed(future_to_node), total=len(nodes), desc="处理节点"):
-            node = future_to_node[future]
-            try:
-                result = future.result()
-                if result:
-                    processed_nodes.append(result)
-            except Exception as e:
-                print(f"处理节点 {node.get('name', 'N/A')} 时发生错误: {e}")
+    # 再次检查去重，因为多线程可能导致竞争条件
+    fingerprint = None
+    if node.get("type") == "vmess":
+        fingerprint = get_vmess_fingerprint(node)
+    elif node.get("type") == "vless":
+        fingerprint = get_vless_fingerprint(node)
+    elif node.get("type") == "ss":
+        fingerprint = get_ss_fingerprint(node)
+    elif node.get("type") == "trojan":
+        fingerprint = get_trojan_fingerprint(node)
+    elif node.get("type") == "ssr":
+        fingerprint = get_ssr_fingerprint(node)
+    elif node.get("type") == "hysteria2":
+        fingerprint = get_hysteria2_fingerprint(node)
 
-    return processed_nodes
+    if fingerprint and fingerprint in used_node_fingerprints:
+        return None
 
-def add_node_details(node):
-    """为单个节点添加额外信息，如地理位置。"""
-    if node:
-        name_prefix = get_location_info(node['server'])
-        node['name'] = f"{name_prefix}{node['name']}"
-        return node
-    return None
+    used_node_fingerprints.add(fingerprint)
+
+    name = normalize_name(node.get("name", "Unnamed Node"))
+    node['name'] = name
+    return node
 
 def write_to_yaml(nodes, filename='config.yaml'):
-    """将节点列表写入 YAML 文件。"""
-    config = {
-        'proxies': nodes
+    """将节点列表和 Clash 配置写入 YAML 文件。"""
+    config_data = {
+        "proxies": nodes,
+        "proxy-groups": [
+            {
+                "name": "Proxy",
+                "type": "select",
+                "proxies": [p["name"] for p in nodes]
+            }
+        ],
+        "rules": [
+            "MATCH,Proxy"
+        ]
     }
     with open(filename, 'w', encoding='utf-8') as f:
-        yaml.safe_dump(config, f, allow_unicode=True)
+        yaml.safe_dump(config_data, f, allow_unicode=True, sort_keys=False)
 
 def main():
     """主函数，负责执行整个工作流。"""
-    global total_links, successful_links, skipped_links, duplicate_links
+    global total_links, successful_nodes, skipped_links, duplicate_links, used_names, used_node_fingerprints
     
     sources_str = os.environ.get('SOURCES')
     if not sources_str:
@@ -631,26 +650,62 @@ def main():
         sys.exit(1)
 
     all_nodes = []
+    
+    # 重置全局状态
+    used_names.clear()
+    used_node_fingerprints.clear()
+    total_links = 0
+    successful_nodes = 0
+    skipped_links = 0
+    duplicate_links = 0
+
+    print("--- 启动节点转换工具 ---")
+    print(f"将处理 {len(sources)} 个来源。")
+
     for source_url in tqdm(sources, desc="下载并解析订阅链接"):
-        all_nodes.extend(download_and_parse_url(source_url))
+        downloaded_nodes = download_and_parse_url(source_url)
+        all_nodes.extend(downloaded_nodes)
 
     if not all_nodes:
         print("\n没有找到任何节点，无法生成配置文件。")
         sys.exit(1)
         
-    final_nodes = process_and_combine_nodes(all_nodes)
+    print("\n--- 正在使用 GeoLite2-Country.mmdb 进行节点地理位置查询和重命名（多线程）---")
+    try:
+        reader = geoip2.database.Reader('GeoLite2-Country.mmdb')
+    except Exception as e:
+        print(f"错误：加载 GeoLite2-Country.mmdb 失败：{e}")
+        print("将使用原始节点名称。")
+        reader = None
+
+    final_nodes = []
     
+    # 使用多线程加速地理位置查询
+    if reader:
+        with ThreadPoolExecutor(max_workers=os.cpu_count() * 2) as executor:
+            future_to_node = {executor.submit(process_node_with_location, (node, reader)): node for node in all_nodes}
+            for future in tqdm(as_completed(future_to_node), total=len(all_nodes), desc="处理节点"):
+                result_node = future.result()
+                if result_node:
+                    final_nodes.append(result_node)
+    else:
+        # 如果没有 reader，则跳过多线程处理
+        final_nodes = all_nodes
+
     if final_nodes:
         write_to_yaml(final_nodes)
-        print("\n--- 脚本执行完成，生成报告 ---")
-        print(f"总链接数: {total_links}")
-        print(f"成功解析的节点数: {successful_links}")
-        print(f"因重复而跳过的节点数: {duplicate_links}")
-        print(f"因格式错误而跳过的链接数: {skipped_links}")
-        print(f"最终写入 config.yaml 的节点数: {len(final_nodes)}")
-        print("-------------------------------")
+        print("\n" + "="*40)
+        print("✅ 转换完成！")
+        print(f"📝 成功转换并去重后节点数量: {len(final_nodes)}")
+        print(f"🔄 因节点内容重复被跳过数量: {duplicate_links}")
+        print(f"❌ 解析失败或不符合格式的行数: {skipped_links}")
+        print(f"📊 总计处理行数: {total_links}")
+        print("📄 配置文件已保存到 config.yaml")
+        print("="*40)
     else:
-        print("\n没有可用的有效节点来生成配置文件。")
+        print("\n" + "="*40)
+        print("⚠️ 未找到任何有效节点，未生成配置文件。")
+        print("="*40)
 
 if __name__ == "__main__":
     main()
