@@ -1,13 +1,15 @@
 import os
 import re
+import requests
+import json
 import yaml
 import base64
-import json
 import socket
-import geoip2.database
 from urllib.parse import urlparse, parse_qs, unquote
 from tqdm import tqdm
 from collections import defaultdict
+from concurrent.futures import ThreadPoolExecutor, as_completed
+import geoip2.database
 
 # 全局集合用于去重
 used_names = set()
@@ -402,21 +404,21 @@ def process_yaml_file(filepath, proxies_list, encoding):
         with open(filepath, "r", encoding=encoding, errors='ignore') as f:
             content = f.read().strip()
             if not content:
-                print(f"错误：文件 {filepath} 为空，跳过处理。")
+                print("错误：文件为空，跳过处理。")
                 return 0, 0, 0
         
         try:
             yaml_data = yaml.safe_load(content)
         except yaml.YAMLError as ye:
-            print(f"YAML 解析错误 ({filepath}, 编码: {encoding})：{ye}")
+            print(f"YAML 解析错误 (编码: {encoding})：{ye}")
             return 0, 0, 0
         
         if not isinstance(yaml_data, dict) or "proxies" not in yaml_data or not isinstance(yaml_data["proxies"], list):
-            print(f"警告：文件 {filepath} 格式不正确或缺少 'proxies' 列表。")
+            print("警告：文件格式不正确或缺少 'proxies' 列表。")
             return 0, 0, 0
 
         total_file_nodes = len(yaml_data["proxies"])
-        for node in tqdm(yaml_data["proxies"], desc=f"解析 {filepath}"):
+        for node in tqdm(yaml_data["proxies"], desc="解析来源"):
             if not isinstance(node, dict) or "type" not in node:
                 print(f"警告：跳过无效节点，节点内容：{node}")
                 continue
@@ -439,7 +441,7 @@ def process_yaml_file(filepath, proxies_list, encoding):
             current_file_proxies.append(node)
     
     except Exception as e:
-        print(f"处理文件 {filepath} 时出错：{e}")
+        print(f"处理文件时出错：{e}")
         return 0, 0, total_file_nodes
     
     proxies_list.extend(current_file_proxies)
@@ -450,7 +452,7 @@ def parse_yaml_proxies(filepath, proxies_list):
     success_count, duplicates, total_file_nodes = process_yaml_file(filepath, proxies_list, "utf-8")
     
     if success_count == 0 and total_file_nodes == 0:
-        print(f"UTF-8 解析失败，尝试以 latin1 编码重新读取文件 {filepath}...")
+        print("UTF-8 解析失败，尝试以 latin1 编码重新读取文件...")
         return process_yaml_file(filepath, proxies_list, "latin1")
     
     return success_count, duplicates, total_file_nodes
@@ -475,15 +477,63 @@ def get_country_name(host, reader):
         print(f"错误：查询 IP {host} 时出错：{e}")
         return None
 
+def load_yaml_from_url(url):
+    """
+    从 URL 下载 YAML 或文本内容并解析。
+    """
+    print("正在下载来源文件...")
+    try:
+        response = requests.get(url, timeout=30)
+        response.raise_for_status()
+        content = response.text
+        
+        try:
+            data = yaml.safe_load(content)
+            if isinstance(data, dict) and 'proxies' in data:
+                return data['proxies']
+            elif isinstance(data, list):
+                return data
+        except yaml.YAMLError:
+            pass
+        
+        proxies = []
+        lines = content.split('\n')
+        for line in lines:
+            if line.strip() and not line.strip().startswith('#'):
+                proxies.append(line.strip())
+        return proxies
+        
+    except requests.exceptions.RequestException as e:
+        print(f"下载来源文件失败: {e}")
+        return None
+
+def process_proxies(lines):
+    """
+    处理一个来源文件中的代理链接列表。
+    """
+    processed = []
+    failed_count = 0
+    duplicate_count = 0
+    
+    for line in lines:
+        node = parse_vmess(line) or parse_vless(line) or parse_ss(line) or parse_trojan(line) or parse_ssr(line) or parse_hysteria2(line)
+        if node == "duplicate":
+            duplicate_count += 1
+        elif node:
+            processed.append(node)
+        else:
+            failed_count += 1
+    return processed, failed_count, duplicate_count
+
+
 def main():
     """主函数，负责文件处理流程、GeoIP 查询和结果输出。"""
     global used_names, used_node_fingerprints
     
-    # 从环境变量中读取 URL 列表
     sources_str = os.environ.get("SOURCES", "")
     if not sources_str:
         print("未找到环境变量 'SOURCES'，请在 Actions variables 中进行设置。脚本已停止。")
-        exit(1) # 立即退出并报错
+        exit(1)
         
     sources = [url.strip() for url in sources_str.split(',')]
     output_file = "config.yaml"
@@ -497,7 +547,7 @@ def main():
     used_node_fingerprints.clear()
 
     print("--- 启动节点转换工具 ---")
-    print(f"将处理以下来源: {sources}")
+    print(f"将处理 {len(sources)} 个来源。")
     
     with ThreadPoolExecutor(max_workers=5) as executor:
         future_to_url = {executor.submit(load_yaml_from_url, url): url for url in sources}
@@ -506,17 +556,16 @@ def main():
             try:
                 content = future.result()
                 if content:
-                    print(f"已成功下载并处理 {url}")
+                    print("已成功下载并处理一个来源。")
                     processed_proxies, failed, duplicates = process_proxies(content)
                     proxies.extend(processed_proxies)
                     failed_count += failed
                     duplicate_count += duplicates
                     total_lines += len(content)
             except Exception as exc:
-                print(f"{url} 在处理过程中发生异常: {exc}")
+                print(f"在处理一个来源时发生异常: {exc}")
 
     if proxies:
-        # GeoIP2 查询和重命名
         print("\n--- 正在使用 GeoLite2-Country.mmdb 进行节点地理位置查询和重命名 ---")
         try:
             reader = geoip2.database.Reader('GeoLite2-Country.mmdb')
