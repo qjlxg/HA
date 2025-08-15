@@ -236,6 +236,15 @@ def parse_ss(uri):
         
         core_part = parsed.netloc.split('@')[0]
         decoded_core = base64.b64decode(core_part + '=' * (-len(core_part) % 4)).decode('utf-8')
+        
+        # 尝试解析非标准格式 (UUID:password)
+        parts = decoded_core.split(':', 1)
+        if len(parts) == 2 and len(parts[0]) == 36:
+            # 这是一个非标准格式，我们无法确定加密方法，因此直接跳过
+            print(f"警告：跳过非标准格式的 Shadowsocks 链接 (可能缺少加密方法)：{uri}")
+            return None
+            
+        # 标准格式 (method:password)
         method, password = decoded_core.split(':', 1)
         
         if method.lower() not in SS_SUPPORTED_CIPHERS: return None
@@ -392,7 +401,6 @@ def get_location_info(server):
     except Exception:
         return "[Unknown]"
 
-# 增加了 download_url 函数的健壮性和超时设置
 def download_url(url, timeout=(15, 60)):
     """
     下载 URL 内容，并使用流式处理以应对大文件。
@@ -406,7 +414,6 @@ def download_url(url, timeout=(15, 60)):
         response = requests.get(url, headers=headers, timeout=timeout, stream=True)
         response.raise_for_status()
         
-        # 逐块读取内容，确保能处理大文件
         content_chunks = []
         for chunk in response.iter_content(chunk_size=1024):
             if chunk:
@@ -463,7 +470,6 @@ def download_and_parse_url(url):
             elif node == "duplicate":
                 continue
             else:
-                # 增加了对无法解析链接的明确排除处理
                 print(f"警告：无法解析的链接 -> {line}")
     except Exception as e:
         print(f"错误：解析订阅 {url} 时发生错误: {e}")
@@ -473,10 +479,6 @@ def download_and_parse_url(url):
 def process_and_combine_nodes(nodes, max_workers=50):
     """使用多线程处理节点并合并。"""
     processed_nodes = []
-    
-    # 清空去重集合，以便于每次解析新订阅时都能独立去重
-    used_names.clear()
-    used_node_fingerprints.clear()
     
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         future_to_node = {executor.submit(add_node_details, node): node for node in nodes}
@@ -509,7 +511,6 @@ def write_to_yaml(nodes, filename='config.yaml'):
 
 def main():
     """主函数，负责执行整个工作流。"""
-    # 从环境变量中获取订阅链接
     sources_str = os.environ.get('SOURCES')
     if not sources_str:
         print("错误：未找到环境变量 'SOURCES'。")
@@ -532,7 +533,6 @@ def main():
     final_nodes = process_and_combine_nodes(all_nodes)
     
     if final_nodes:
-        # 将最终节点写入YAML文件
         write_to_yaml(final_nodes)
         print(f"成功生成了 {len(final_nodes)} 个节点，并写入到 config.yaml。")
     else:
