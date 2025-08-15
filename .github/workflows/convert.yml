@@ -42,6 +42,8 @@ jobs:
           git config --global user.email 'github-actions@github.com'
           git add config.yaml
           if ! git diff --cached --quiet; then
+            # 在推送前先拉取远程最新更改
+            git pull origin main --rebase
             git commit -m "Generate config.yaml from all"
             git push
           else
