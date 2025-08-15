@@ -62,8 +62,14 @@ def normalize_name(name):
     original_name = truncated_name
     counter = 1
     while truncated_name in used_names:
-        # 使用 01, 02 格式
-        truncated_name = f"{original_name}{counter:02d}"
+        # 使用 us_01, us_02 格式
+        # 匹配方括号内的国家代码，例如 "[US]"
+        match = re.match(r'\[(\w+)\]', original_name, re.IGNORECASE)
+        if match:
+            country_code = match.group(1).lower()
+            truncated_name = f"{country_code}_{counter:02d}"
+        else:
+            truncated_name = f"{original_name}-{counter:02d}"
         counter += 1
     used_names.add(truncated_name)
     return truncated_name
@@ -171,10 +177,10 @@ def parse_vmess(uri):
         if fingerprint in used_node_fingerprints:
             duplicate_links += 1
             return "duplicate"
+        used_node_fingerprints.add(fingerprint)
         
-        name = normalize_name(data.get("ps", "Unnamed Vmess Node"))
         node = {
-            "name": name,
+            "name": data.get("ps", "Unnamed Vmess Node"),
             "type": "vmess",
             "server": data.get("add"),
             "port": port,
@@ -233,10 +239,10 @@ def parse_vless(uri):
         if fingerprint in used_node_fingerprints:
             duplicate_links += 1
             return "duplicate"
+        used_node_fingerprints.add(fingerprint)
         
-        name = normalize_name(unquote(parsed.fragment) if parsed.fragment else "Unnamed Vless Node")
         vless_node = {
-            "name": name,
+            "name": unquote(parsed.fragment) if parsed.fragment else "Unnamed Vless Node",
             "type": "vless",
             "server": parsed.hostname,
             "port": port,
@@ -308,12 +314,11 @@ def parse_ss(uri):
         if fingerprint in used_node_fingerprints:
             duplicate_links += 1
             return "duplicate"
-        
-        name = normalize_name(unquote(parsed.fragment) if parsed.fragment else "Unnamed SS Node")
+        used_node_fingerprints.add(fingerprint)
         
         successful_nodes += 1
         return {
-            "name": name,
+            "name": unquote(parsed.fragment) if parsed.fragment else "Unnamed SS Node",
             "type": "ss",
             "server": parsed.hostname,
             "port": port,
@@ -359,8 +364,7 @@ def parse_ssr(uri):
         password_decoded = base64.b64decode(password + '=' * (-len(password) % 4)).decode('utf-8')
         
         remarks_encoded = params.get('remarks', [''])[0]
-        name = normalize_name(unquote(base64.b64decode(remarks_encoded + '=' * (-len(remarks_encoded) % 4)).decode('utf-8')) if remarks_encoded else "Unnamed SSR Node")
-
+        
         node_data = {
             "type": "ssr",
             "server": server,
@@ -374,6 +378,7 @@ def parse_ssr(uri):
         if fingerprint in used_node_fingerprints:
             duplicate_links += 1
             return "duplicate"
+        used_node_fingerprints.add(fingerprint)
 
         obfs_param_encoded = params.get('obfsparam', [''])[0]
         obfs_param = base64.b64decode(obfs_param_encoded + '=' * (-len(obfs_param_encoded) % 4)).decode('utf-8') if obfs_param_encoded else ""
@@ -382,7 +387,7 @@ def parse_ssr(uri):
         
         successful_nodes += 1
         return {
-            "name": name,
+            "name": unquote(base64.b64decode(remarks_encoded + '=' * (-len(remarks_encoded) % 4)).decode('utf-8')) if remarks_encoded else "Unnamed SSR Node",
             "type": "ssr",
             "server": server,
             "port": port,
@@ -427,12 +432,11 @@ def parse_trojan(uri):
         if fingerprint in used_node_fingerprints:
             duplicate_links += 1
             return "duplicate"
-        
-        name = normalize_name(unquote(parsed.fragment) if parsed.fragment else "Unnamed Trojan Node")
+        used_node_fingerprints.add(fingerprint)
         
         successful_nodes += 1
         return {
-            "name": name,
+            "name": unquote(parsed.fragment) if parsed.fragment else "Unnamed Trojan Node",
             "type": "trojan",
             "server": parsed.hostname,
             "port": port,
@@ -479,12 +483,11 @@ def parse_hysteria2(uri):
         if fingerprint in used_node_fingerprints:
             duplicate_links += 1
             return "duplicate"
-        
-        name = normalize_name(unquote(parsed.fragment) if parsed.fragment else "Unnamed Hysteria2 Node")
+        used_node_fingerprints.add(fingerprint)
         
         successful_nodes += 1
         return {
-            "name": name,
+            "name": unquote(parsed.fragment) if parsed.fragment else "Unnamed Hysteria2 Node",
             "type": "hysteria2",
             "server": parsed.hostname,
             "port": port,
@@ -590,26 +593,6 @@ def process_node_with_location(node_and_reader):
     # 确定用于重命名的基础名称
     base_name = f"[{country_code}]" if country_code else "Unnamed Node"
     
-    # 在重命名和去重之前，先获取指纹并检查是否重复
-    fingerprint = None
-    if node.get("type") == "vmess":
-        fingerprint = get_vmess_fingerprint(node)
-    elif node.get("type") == "vless":
-        fingerprint = get_vless_fingerprint(node)
-    elif node.get("type") == "ss":
-        fingerprint = get_ss_fingerprint(node)
-    elif node.get("type") == "trojan":
-        fingerprint = get_trojan_fingerprint(node)
-    elif node.get("type") == "ssr":
-        fingerprint = get_ssr_fingerprint(node)
-    elif node.get("type") == "hysteria2":
-        fingerprint = get_hysteria2_fingerprint(node)
-    
-    if fingerprint and fingerprint in used_node_fingerprints:
-        return None
-
-    used_node_fingerprints.add(fingerprint)
-
     # 规范化并重新命名节点
     node['name'] = normalize_name(base_name)
     return node
