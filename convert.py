@@ -393,19 +393,18 @@ def get_location_info(server):
         return "[Unknown]"
 
 # 增加了 download_url 函数的健壮性和超时设置
-def download_url(url, timeout=(15, 60)): # 设置连接超时为15s, 读取超时为60s
+def download_url(url, timeout=(15, 60)):
     """
     下载 URL 内容，并使用流式处理以应对大文件。
-    返回原始内容或 None。
+    返回原始内容的二进制数据或 None。
     """
     headers = {
         'User-Agent': 'ClashforWindows/0.20.25'
     }
     
     try:
-        # 使用 stream=True 进行流式下载，避免内存爆炸
-        response = requests.get(url, headers=headers, timeout=timeout, stream=True) 
-        response.raise_for_status() # 检查HTTP状态码，如果不是2xx，则抛出异常
+        response = requests.get(url, headers=headers, timeout=timeout, stream=True)
+        response.raise_for_status()
         
         # 逐块读取内容，确保能处理大文件
         content_chunks = []
@@ -413,57 +412,59 @@ def download_url(url, timeout=(15, 60)): # 设置连接超时为15s, 读取超�
             if chunk:
                 content_chunks.append(chunk)
         
-        return b''.join(content_chunks).decode('utf-8')
+        return b''.join(content_chunks)
     except requests.exceptions.Timeout:
         print(f"警告：下载 {url} 超时。")
     except requests.exceptions.ConnectionError:
         print(f"警告：连接到 {url} 失败。")
     except requests.exceptions.RequestException as e:
         print(f"警告：下载 {url} 时发生错误: {e}")
-    except UnicodeDecodeError:
-        print(f"警告：无法解码 {url} 的内容。")
     return None
 
 def download_and_parse_url(url):
     """下载并解析 URL 内容中的节点。"""
     
-    content = download_url(url)
-    if not content:
+    content_bytes = download_url(url)
+    if not content_bytes:
         return []
+    
+    all_nodes = []
     
     # 清空去重集合，以便于每次解析新订阅时都能独立去重
     used_names.clear()
     used_node_fingerprints.clear()
     
-    all_nodes = []
-    
     try:
-        if content.startswith("vmess://"):
-            lines = content.strip().split('\n')
-            for line in lines:
-                node = parse_vmess(line)
-                if node and node != "duplicate":
-                    all_nodes.append(node)
-        else:
-            decoded_content = base64.b64decode(content + '=' * (-len(content) % 4)).decode('utf-8')
+        # 尝试进行 base64 解码
+        try:
+            decoded_content = base64.b64decode(content_bytes).decode('utf-8')
             lines = decoded_content.strip().split('\n')
-            for line in lines:
-                node_type = line.split('://')[0]
-                node = None
-                if node_type == 'vmess': node = parse_vmess(line)
-                elif node_type == 'vless': node = parse_vless(line)
-                elif node_type == 'ss': node = parse_ss(line)
-                elif node_type == 'ssr': node = parse_ssr(line)
-                elif node_type == 'trojan': node = parse_trojan(line)
-                elif node_type == 'hysteria2': node = parse_hysteria2(line)
+        except (base64.binascii.Error, UnicodeDecodeError):
+            # 如果 base64 解码失败，则尝试直接将原始内容作为文本进行解析
+            decoded_content = content_bytes.decode('utf-8', errors='ignore')
+            lines = decoded_content.strip().split('\n')
+
+        for line in lines:
+            line = line.strip()
+            if not line:
+                continue
                 
-                if node and node != "duplicate":
-                    all_nodes.append(node)
-                elif node == "duplicate":
-                    continue
-                else:
-                    # 增加了对无法解析链接的明确排除处理
-                    print(f"警告：无法解析的链接 -> {line}")
+            node_type = line.split('://')[0]
+            node = None
+            if node_type == 'vmess': node = parse_vmess(line)
+            elif node_type == 'vless': node = parse_vless(line)
+            elif node_type == 'ss': node = parse_ss(line)
+            elif node_type == 'ssr': node = parse_ssr(line)
+            elif node_type == 'trojan': node = parse_trojan(line)
+            elif node_type == 'hysteria2': node = parse_hysteria2(line)
+            
+            if node and node != "duplicate":
+                all_nodes.append(node)
+            elif node == "duplicate":
+                continue
+            else:
+                # 增加了对无法解析链接的明确排除处理
+                print(f"警告：无法解析的链接 -> {line}")
     except Exception as e:
         print(f"错误：解析订阅 {url} 时发生错误: {e}")
     
@@ -508,15 +509,15 @@ def write_to_yaml(nodes, filename='config.yaml'):
 
 def main():
     """主函数，负责执行整个工作流。"""
-   
+    # 从环境变量中获取订阅链接
     sources_str = os.environ.get('SOURCES')
     if not sources_str:
-        print("错误：没找到'SOURCES'。")
+        print("错误：未找到环境变量 'SOURCES'。")
         sys.exit(1)
 
     sources = [s.strip() for s in sources_str.split(',') if s.strip()]
     if not sources:
-        print("错误：'SOURCES' 内容为空。")
+        print("错误：'SOURCES' 环境变量为空。")
         sys.exit(1)
 
     all_nodes = []
@@ -527,12 +528,8 @@ def main():
         print("没有找到任何节点，无法生成配置文件。")
         sys.exit(1)
 
-    # 过滤掉重复的节点
-    unique_nodes_dict = {frozenset(d.items()): d for d in all_nodes}
-    unique_nodes = list(unique_nodes_dict.values())
-    
-    # 使用多线程处理节点信息，例如获取地理位置
-    final_nodes = process_and_combine_nodes(unique_nodes)
+    # 这里的去重逻辑已经被移到下载和解析函数内部，因此无需再次处理
+    final_nodes = process_and_combine_nodes(all_nodes)
     
     if final_nodes:
         # 将最终节点写入YAML文件
