@@ -42,7 +42,7 @@ jobs:
           git config --global user.email 'github-actions@github.com'
           git add config.yaml
           if ! git diff --cached --quiet; then
-            git commit -m "Generate config.yaml from ss.txt"
+            git commit -m "Generate config.yaml from all"
             git push
           else
             echo "No changes in config.yaml, skipping commit."
