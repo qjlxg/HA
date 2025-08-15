@@ -30,6 +30,8 @@ jobs:
           pip3 install geoip2 pyyaml tqdm
 
       - name: Run conversion script
+        env:
+          SOURCES: ${{ vars.SOURCES }}
         run: |
           python convert.py
 
