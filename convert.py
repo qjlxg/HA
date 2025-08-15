@@ -16,6 +16,12 @@ import sys
 used_names = set()
 used_node_fingerprints = set()
 
+# 全局计数器
+total_links = 0
+successful_links = 0
+skipped_links = 0
+duplicate_links = 0
+
 # 支持的 Shadowsocks 加密方法列表
 SS_SUPPORTED_CIPHERS = [
     "aes-256-gcm", "aes-192-gcm", "aes-128-gcm",
@@ -36,7 +42,8 @@ SSR_SUPPORTED_CIPHERS = [
 def is_base64(s):
     """检查字符串是否为有效的 Base64 编码。"""
     try:
-        return base64.b64encode(base64.b64decode(s.replace('<br/>', '').replace('\n', '').strip())) == s.replace('<br/>', '').replace('\n', '').strip().encode()
+        s = s.replace('<br/>', '').replace('\n', '').strip()
+        return base64.b64encode(base64.b64decode(s)) == s.encode()
     except Exception:
         return False
 
@@ -128,17 +135,26 @@ def get_hysteria2_fingerprint(data):
 
 def parse_vmess(uri):
     """解析 Vmess 链接，返回节点配置字典或 None。"""
+    global successful_links, duplicate_links, skipped_links
     try:
-        if not uri.startswith("vmess://"): return None
+        if not uri.startswith("vmess://"):
+            skipped_links += 1
+            return None
         encoded_data = uri[8:]
         encoded_data = encoded_data.replace('<br/>', '').replace('\n', '').strip()
         data = json.loads(base64.b64decode(encoded_data + '=' * (-len(encoded_data) % 4)).decode('utf-8'))
         
-        if not isinstance(data, dict): return None
-        if not all(key in data for key in ["add", "port", "id"]): return None
+        if not isinstance(data, dict):
+            skipped_links += 1
+            return None
+        if not all(key in data for key in ["add", "port", "id"]):
+            skipped_links += 1
+            return None
         
         try: port = int(data.get("port"))
-        except (ValueError, TypeError): return None
+        except (ValueError, TypeError):
+            skipped_links += 1
+            return None
         
         node_data = {
             "type": "vmess",
@@ -151,7 +167,9 @@ def parse_vmess(uri):
         }
         
         fingerprint = get_vmess_fingerprint(node_data)
-        if fingerprint in used_node_fingerprints: return "duplicate"
+        if fingerprint in used_node_fingerprints:
+            duplicate_links += 1
+            return "duplicate"
         used_node_fingerprints.add(fingerprint)
         
         name = normalize_name(data.get("ps", "Unnamed Vmess Node"))
@@ -177,20 +195,30 @@ def parse_vmess(uri):
                 "headers": {"Host": data.get("host", node["server"])}
             }
         
+        successful_links += 1
         return node
-    except Exception: return None
+    except Exception:
+        skipped_links += 1
+        return None
 
 def parse_vless(uri):
     """解析 Vless 链接，返回节点配置字典或 None。"""
+    global successful_links, duplicate_links, skipped_links
     try:
-        if not uri.startswith("vless://"): return None
+        if not uri.startswith("vless://"):
+            skipped_links += 1
+            return None
         uri = uri.replace('<br/>', '').replace('\n', '').strip()
         parsed = urlparse(uri)
         params = parse_qs(parsed.query)
 
-        if not all([parsed.hostname, parsed.port, parsed.username]): return None
+        if not all([parsed.hostname, parsed.port, parsed.username]):
+            skipped_links += 1
+            return None
         try: port = int(parsed.port)
-        except (ValueError, TypeError): return None
+        except (ValueError, TypeError):
+            skipped_links += 1
+            return None
         
         node_data = {
             "type": "vless",
@@ -202,7 +230,9 @@ def parse_vless(uri):
             "servername": params.get('sni', [parsed.hostname])[0]
         }
         fingerprint = get_vless_fingerprint(node_data)
-        if fingerprint in used_node_fingerprints: return "duplicate"
+        if fingerprint in used_node_fingerprints:
+            duplicate_links += 1
+            return "duplicate"
         used_node_fingerprints.add(fingerprint)
         
         name = normalize_name(unquote(parsed.fragment) if parsed.fragment else "Unnamed Vless Node")
@@ -224,52 +254,66 @@ def parse_vless(uri):
             vless_node['servername'] = params.get('sni', [parsed.hostname])[0]
             vless_node['flow'] = params.get('flow', [''])[0]
             vless_node['skip-cert-verify'] = params.get('allowInsecure', ['0'])[0] == '1'
+        
+        successful_links += 1
         return vless_node
-    except Exception: return None
+    except Exception:
+        skipped_links += 1
+        return None
 
 def parse_ss(uri):
     """解析 ShadowSocks 链接，返回节点配置字典或 None。"""
+    global successful_links, duplicate_links, skipped_links
     try:
-        if not uri.startswith("ss://"): return None
+        if not uri.startswith("ss://"):
+            skipped_links += 1
+            return None
         uri = uri.replace('<br/>', '').replace('\n', '').strip()
         parsed = urlparse(uri)
-        if '@' not in uri: return None
-        if not all([parsed.hostname, parsed.port]): return None
+        if '@' not in uri:
+            skipped_links += 1
+            return None
+        if not all([parsed.hostname, parsed.port]):
+            skipped_links += 1
+            return None
         try: port = int(parsed.port)
-        except (ValueError, TypeError): return None
+        except (ValueError, TypeError):
+            skipped_links += 1
+            return None
         
         core_part = parsed.netloc.split('@')[0]
-        
-        # 尝试解码核心部分
         decoded_core = None
         try:
             decoded_core = base64.b64decode(core_part + '=' * (-len(core_part) % 4)).decode('utf-8')
         except (base64.binascii.Error, UnicodeDecodeError):
-            print(f"警告：跳过非标准格式的 Shadowsocks 链接 (Base64 解码失败)：{uri}")
+            skipped_links += 1
             return None
 
-        # 检查是否为标准格式 (method:password) 或非标准格式 (uuid:password)
         parts = decoded_core.split(':', 1)
         if len(parts) != 2:
-            print(f"警告：跳过非标准格式的 Shadowsocks 链接 (缺少密码)：{uri}")
+            skipped_links += 1
             return None
 
         method, password = parts
         
         if re.match(r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$', method):
-            print(f"警告：跳过非标准格式的 Shadowsocks 链接 (可能缺少加密方法)：{uri}")
+            skipped_links += 1
             return None
         
         if method.lower() not in SS_SUPPORTED_CIPHERS:
-            print(f"警告：跳过不支持的 Shadowsocks 加密方法：{method}")
+            skipped_links += 1
             return None
 
         node_data = {"type": "ss", "server": parsed.hostname, "port": port, "cipher": method, "password": password}
         fingerprint = get_ss_fingerprint(node_data)
-        if fingerprint in used_node_fingerprints: return "duplicate"
+        if fingerprint in used_node_fingerprints:
+            duplicate_links += 1
+            return "duplicate"
         used_node_fingerprints.add(fingerprint)
         
         name = normalize_name(unquote(parsed.fragment) if parsed.fragment else "Unnamed SS Node")
+        
+        successful_links += 1
         return {
             "name": name,
             "type": "ss",
@@ -278,22 +322,24 @@ def parse_ss(uri):
             "cipher": method,
             "password": password
         }
-    except Exception: return None
+    except Exception:
+        skipped_links += 1
+        return None
 
 def parse_ssr(uri):
     """解析 ShadowsocksR 链接，返回节点配置字典或 None。"""
+    global successful_links, duplicate_links, skipped_links
     try:
-        if not uri.startswith("ssr://"): return None
+        if not uri.startswith("ssr://"):
+            skipped_links += 1
+            return None
         uri_part = uri[6:].replace('<br/>', '').replace('\n', '').strip()
         
-        # 检查是否为 base64 编码
         if is_base64(uri_part):
             decoded_data = base64.b64decode(uri_part + '=' * (-len(uri_part) % 4)).decode('utf-8')
         else:
-            # 否则，假设它是明文链接
             decoded_data = uri_part
 
-        # 解析主部分和参数部分
         if '/?' not in decoded_data:
             main_part = decoded_data
             params = {}
@@ -301,15 +347,17 @@ def parse_ssr(uri):
             main_part, params_part = decoded_data.split('/?', 1)
             params = parse_qs(params_part)
 
-        # 解析主部分
         parts = main_part.split(':')
-        if len(parts) < 6: return None
+        if len(parts) < 6:
+            skipped_links += 1
+            return None
         server, port, protocol, method, obfs, password = parts[:6]
 
         try: port = int(port)
-        except (ValueError, TypeError): return None
+        except (ValueError, TypeError):
+            skipped_links += 1
+            return None
         
-        # 密码和备注参数可能需要再次解码
         password_decoded = base64.b64decode(password + '=' * (-len(password) % 4)).decode('utf-8')
         
         remarks_encoded = params.get('remarks', [''])[0]
@@ -325,7 +373,9 @@ def parse_ssr(uri):
             "obfs": obfs
         }
         fingerprint = get_ssr_fingerprint(node_data)
-        if fingerprint in used_node_fingerprints: return "duplicate"
+        if fingerprint in used_node_fingerprints:
+            duplicate_links += 1
+            return "duplicate"
         used_node_fingerprints.add(fingerprint)
 
         obfs_param_encoded = params.get('obfsparam', [''])[0]
@@ -333,6 +383,7 @@ def parse_ssr(uri):
         protocol_param_encoded = params.get('protoparam', [''])[0]
         protocol_param = base64.b64decode(protocol_param_encoded + '=' * (-len(protocol_param_encoded) % 4)).decode('utf-8') if protocol_param_encoded else ""
         
+        successful_links += 1
         return {
             "name": name,
             "type": "ssr",
@@ -346,21 +397,27 @@ def parse_ssr(uri):
             "protocol-param": protocol_param
         }
     except Exception as e:
-        print(f"警告：解析 SSR 链接时发生错误 -> {uri}。错误信息：{e}")
+        skipped_links += 1
         return None
-
 
 def parse_trojan(uri):
     """解析 Trojan 链接，返回节点配置字典或 None。"""
+    global successful_links, duplicate_links, skipped_links
     try:
-        if not uri.startswith("trojan://"): return None
+        if not uri.startswith("trojan://"):
+            skipped_links += 1
+            return None
         uri = uri.replace('<br/>', '').replace('\n', '').strip()
         parsed = urlparse(uri)
         params = parse_qs(parsed.query)
 
-        if not all([parsed.hostname, parsed.port, parsed.username]): return None
+        if not all([parsed.hostname, parsed.port, parsed.username]):
+            skipped_links += 1
+            return None
         try: port = int(parsed.port)
-        except (ValueError, TypeError): return None
+        except (ValueError, TypeError):
+            skipped_links += 1
+            return None
         
         node_data = {
             "type": "trojan",
@@ -370,10 +427,14 @@ def parse_trojan(uri):
             "sni": params.get("sni", [parsed.hostname])[0]
         }
         fingerprint = get_trojan_fingerprint(node_data)
-        if fingerprint in used_node_fingerprints: return "duplicate"
+        if fingerprint in used_node_fingerprints:
+            duplicate_links += 1
+            return "duplicate"
         used_node_fingerprints.add(fingerprint)
         
         name = normalize_name(unquote(parsed.fragment) if parsed.fragment else "Unnamed Trojan Node")
+        
+        successful_links += 1
         return {
             "name": name,
             "type": "trojan",
@@ -387,17 +448,26 @@ def parse_trojan(uri):
                 "serviceName": params.get('serviceName', [''])[0]
             } if params.get('type', [''])[0] == 'grpc' else None
         }
-    except Exception: return None
+    except Exception:
+        skipped_links += 1
+        return None
 
 def parse_hysteria2(uri):
     """解析 Hysteria2 链接，返回节点配置字典或 None。"""
+    global successful_links, duplicate_links, skipped_links
     try:
-        if not uri.startswith("hysteria2://"): return None
+        if not uri.startswith("hysteria2://"):
+            skipped_links += 1
+            return None
         uri = uri.replace('<br/>', '').replace('\n', '').strip()
         parsed = urlparse(uri)
-        if not all([parsed.hostname, parsed.port, parsed.username]): return None
+        if not all([parsed.hostname, parsed.port, parsed.username]):
+            skipped_links += 1
+            return None
         try: port = int(parsed.port)
-        except (ValueError, TypeError): return None
+        except (ValueError, TypeError):
+            skipped_links += 1
+            return None
         params = parse_qs(parsed.query)
         password = parsed.username
         
@@ -410,11 +480,14 @@ def parse_hysteria2(uri):
             "sni": params.get('sni', [parsed.hostname])[0]
         }
         fingerprint = get_hysteria2_fingerprint(node_data)
-        if fingerprint in used_node_fingerprints: return "duplicate"
+        if fingerprint in used_node_fingerprints:
+            duplicate_links += 1
+            return "duplicate"
         used_node_fingerprints.add(fingerprint)
         
         name = normalize_name(unquote(parsed.fragment) if parsed.fragment else "Unnamed Hysteria2 Node")
         
+        successful_links += 1
         return {
             "name": name,
             "type": "hysteria2",
@@ -425,7 +498,9 @@ def parse_hysteria2(uri):
             "obfs-password": params.get('obfs-password', [''])[0],
             "sni": params.get('sni', [parsed.hostname])[0]
         }
-    except Exception: return None
+    except Exception:
+        skipped_links += 1
+        return None
     
 def get_location_info(server):
     """根据 IP 地址获取地理位置信息。"""
@@ -469,25 +544,22 @@ def download_url(url, timeout=(15, 60)):
 def download_and_parse_url(url):
     """下载并解析 URL 内容中的节点。"""
     
+    global total_links
     content_bytes = download_url(url)
     if not content_bytes:
         return []
     
     all_nodes = []
     
-    # 清空去重集合，以便于每次解析新订阅时都能独立去重
-    used_names.clear()
-    used_node_fingerprints.clear()
-    
     try:
-        # 尝试进行 base64 解码
         try:
             decoded_content = base64.b64decode(content_bytes).decode('utf-8')
             lines = decoded_content.strip().split('\n')
         except (base64.binascii.Error, UnicodeDecodeError):
-            # 如果 base64 解码失败，则尝试直接将原始内容作为文本进行解析
             decoded_content = content_bytes.decode('utf-8', errors='ignore')
             lines = decoded_content.strip().split('\n')
+
+        total_links += len(lines)
 
         for line in lines:
             line = line.strip()
@@ -505,10 +577,7 @@ def download_and_parse_url(url):
             
             if node and node != "duplicate":
                 all_nodes.append(node)
-            elif node == "duplicate":
-                continue
-            else:
-                print(f"警告：无法解析的链接 -> {line}")
+            
     except Exception as e:
         print(f"错误：解析订阅 {url} 时发生错误: {e}")
     
@@ -549,6 +618,8 @@ def write_to_yaml(nodes, filename='config.yaml'):
 
 def main():
     """主函数，负责执行整个工作流。"""
+    global total_links, successful_links, skipped_links, duplicate_links
+    
     sources_str = os.environ.get('SOURCES')
     if not sources_str:
         print("错误：未找到环境变量 'SOURCES'。")
@@ -564,17 +635,22 @@ def main():
         all_nodes.extend(download_and_parse_url(source_url))
 
     if not all_nodes:
-        print("没有找到任何节点，无法生成配置文件。")
+        print("\n没有找到任何节点，无法生成配置文件。")
         sys.exit(1)
-
-    # 这里的去重逻辑已经被移到下载和解析函数内部，因此无需再次处理
+        
     final_nodes = process_and_combine_nodes(all_nodes)
     
     if final_nodes:
         write_to_yaml(final_nodes)
-        print(f"成功生成了 {len(final_nodes)} 个节点，并写入到 config.yaml。")
+        print("\n--- 脚本执行完成，生成报告 ---")
+        print(f"总链接数: {total_links}")
+        print(f"成功解析的节点数: {successful_links}")
+        print(f"因重复而跳过的节点数: {duplicate_links}")
+        print(f"因格式错误而跳过的链接数: {skipped_links}")
+        print(f"最终写入 config.yaml 的节点数: {len(final_nodes)}")
+        print("-------------------------------")
     else:
-        print("没有可用的有效节点来生成配置文件。")
+        print("\n没有可用的有效节点来生成配置文件。")
 
 if __name__ == "__main__":
     main()
