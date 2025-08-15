@@ -62,7 +62,8 @@ def normalize_name(name):
     original_name = truncated_name
     counter = 1
     while truncated_name in used_names:
-        truncated_name = f"{original_name}-{counter}"
+        # 使用 01, 02 格式
+        truncated_name = f"{original_name}{counter:02d}"
         counter += 1
     used_names.add(truncated_name)
     return truncated_name
@@ -170,7 +171,6 @@ def parse_vmess(uri):
         if fingerprint in used_node_fingerprints:
             duplicate_links += 1
             return "duplicate"
-        used_node_fingerprints.add(fingerprint)
         
         name = normalize_name(data.get("ps", "Unnamed Vmess Node"))
         node = {
@@ -233,7 +233,6 @@ def parse_vless(uri):
         if fingerprint in used_node_fingerprints:
             duplicate_links += 1
             return "duplicate"
-        used_node_fingerprints.add(fingerprint)
         
         name = normalize_name(unquote(parsed.fragment) if parsed.fragment else "Unnamed Vless Node")
         vless_node = {
@@ -309,7 +308,6 @@ def parse_ss(uri):
         if fingerprint in used_node_fingerprints:
             duplicate_links += 1
             return "duplicate"
-        used_node_fingerprints.add(fingerprint)
         
         name = normalize_name(unquote(parsed.fragment) if parsed.fragment else "Unnamed SS Node")
         
@@ -376,7 +374,6 @@ def parse_ssr(uri):
         if fingerprint in used_node_fingerprints:
             duplicate_links += 1
             return "duplicate"
-        used_node_fingerprints.add(fingerprint)
 
         obfs_param_encoded = params.get('obfsparam', [''])[0]
         obfs_param = base64.b64decode(obfs_param_encoded + '=' * (-len(obfs_param_encoded) % 4)).decode('utf-8') if obfs_param_encoded else ""
@@ -430,7 +427,6 @@ def parse_trojan(uri):
         if fingerprint in used_node_fingerprints:
             duplicate_links += 1
             return "duplicate"
-        used_node_fingerprints.add(fingerprint)
         
         name = normalize_name(unquote(parsed.fragment) if parsed.fragment else "Unnamed Trojan Node")
         
@@ -483,7 +479,6 @@ def parse_hysteria2(uri):
         if fingerprint in used_node_fingerprints:
             duplicate_links += 1
             return "duplicate"
-        used_node_fingerprints.add(fingerprint)
         
         name = normalize_name(unquote(parsed.fragment) if parsed.fragment else "Unnamed Hysteria2 Node")
         
@@ -588,12 +583,14 @@ def download_and_parse_url(url):
 def process_node_with_location(node_and_reader):
     node, reader = node_and_reader
     host = node.get('server')
+    country_code = None
     if reader and host:
         country_code = get_country_name(host, reader)
-        if country_code:
-            node['name'] = f"[{country_code}] {node['name']}"
     
-    # 再次检查去重，因为多线程可能导致竞争条件
+    # 确定用于重命名的基础名称
+    base_name = f"[{country_code}]" if country_code else "Unnamed Node"
+    
+    # 在重命名和去重之前，先获取指纹并检查是否重复
     fingerprint = None
     if node.get("type") == "vmess":
         fingerprint = get_vmess_fingerprint(node)
@@ -607,14 +604,14 @@ def process_node_with_location(node_and_reader):
         fingerprint = get_ssr_fingerprint(node)
     elif node.get("type") == "hysteria2":
         fingerprint = get_hysteria2_fingerprint(node)
-
+    
     if fingerprint and fingerprint in used_node_fingerprints:
         return None
 
     used_node_fingerprints.add(fingerprint)
 
-    name = normalize_name(node.get("name", "Unnamed Node"))
-    node['name'] = name
+    # 规范化并重新命名节点
+    node['name'] = normalize_name(base_name)
     return node
 
 def write_to_yaml(nodes, filename='config.yaml'):
@@ -690,7 +687,10 @@ def main():
                     final_nodes.append(result_node)
     else:
         # 如果没有 reader，则跳过多线程处理
-        final_nodes = all_nodes
+        for node in all_nodes:
+            # 在没有地理位置信息时，仍调用 normalize_name 进行去重和名称规范化
+            node['name'] = normalize_name(node.get('name', 'Unnamed Node'))
+            final_nodes.append(node)
 
     if final_nodes:
         write_to_yaml(final_nodes)
