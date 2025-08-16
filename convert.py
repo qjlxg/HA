@@ -468,15 +468,25 @@ def parse_hysteria2(uri):
         except (ValueError, TypeError):
             skipped_links += 1
             return None
+        
         params = parse_qs(parsed.query)
         password = parsed.username
+        obfs_type = params.get('obfs', ['none'])[0]
+        obfs_password = params.get('obfs-password', [''])[0]
+        
+        # --- ⚠️ 核心修复：检查 obfs-password 是否存在 ---
+        if obfs_type != "none" and not obfs_password:
+            print(f"警告: Hysteria2 节点 '{unquote(parsed.fragment) if parsed.fragment else ''}' 缺少 obfs-password，已跳过。")
+            skipped_links += 1
+            return None
+        # -----------------------------------------------
         
         node_data = {
             "type": "hysteria2",
             "server": parsed.hostname,
             "port": port,
             "password": password,
-            "obfs": params.get('obfs', ['none'])[0],
+            "obfs": obfs_type,
             "sni": params.get('sni', [parsed.hostname])[0]
         }
         fingerprint = get_hysteria2_fingerprint(node_data)
@@ -492,8 +502,8 @@ def parse_hysteria2(uri):
             "server": parsed.hostname,
             "port": port,
             "password": password,
-            "obfs": params.get('obfs', ['none'])[0],
-            "obfs-password": params.get('obfs-password', [''])[0],
+            "obfs": obfs_type,
+            "obfs-password": obfs_password,
             "sni": params.get('sni', [parsed.hostname])[0]
         }
     except Exception:
