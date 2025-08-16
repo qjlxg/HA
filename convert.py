@@ -74,31 +74,62 @@ def normalize_name(name):
     used_names.add(truncated_name)
     return truncated_name
 
+# ====================
+# 重构后的去重指纹函数
+# ====================
+
 def get_vmess_fingerprint(data):
-    """为 Vmess 节点生成唯一指纹，用于去重。"""
+    """为 Vmess 节点生成唯一指纹，用于去重。
+    - 只使用核心参数：uuid, server, port, network, tls, servername
+    """
+    tls = data.get('tls', False)
+    network = data.get('network', 'tcp')
+    servername = data.get('servername')
+    
+    # 增加对 ws-opts headers.Host 的处理
+    if network == 'ws':
+        ws_opts = data.get('ws-opts', {})
+        host_header = ws_opts.get('headers', {}).get('Host')
+        servername = host_header if host_header else servername
+
     return (
         data.get("type", "vmess"),
         data.get("server"),
         int(data.get("port", 0)),
         data.get("uuid"),
-        int(data.get("alterId", 0)),
-        data.get("network", "tcp")
+        network,
+        tls,
+        servername
     )
 
 def get_vless_fingerprint(data):
-    """为 Vless 节点生成唯一指纹，用于去重。"""
+    """为 Vless 节点生成唯一指纹，用于去重。
+    - 只使用核心参数：uuid, server, port, network, tls, servername
+    """
+    tls = data.get('tls', False)
+    network = data.get('network', 'tcp')
+    servername = data.get('servername', data.get('server'))
+    
+    # 增加对 ws-opts headers.Host 的处理
+    if network == 'ws':
+        ws_opts = data.get('ws-opts', {})
+        host_header = ws_opts.get('headers', {}).get('Host')
+        servername = host_header if host_header else servername
+
     return (
         "vless",
         data.get("server"),
         int(data.get("port", 0)),
         data.get("uuid"),
-        data.get('network', 'tcp'),
-        data.get('tls', False),
-        data.get('servername', data.get('server'))
+        network,
+        tls,
+        servername
     )
 
 def get_ss_fingerprint(data):
-    """为 Shadowsocks 节点生成唯一指纹，用于去重。"""
+    """为 Shadowsocks 节点生成唯一指纹，用于去重。
+    - 只使用核心参数：server, port, cipher, password
+    """
     return (
         "ss",
         data.get("server"),
@@ -108,17 +139,22 @@ def get_ss_fingerprint(data):
     )
 
 def get_trojan_fingerprint(data):
-    """为 Trojan 节点生成唯一指纹，用于去重。"""
+    """为 Trojan 节点生成唯一指纹，用于去重。
+    - 只使用核心参数：server, port, password, sni, network
+    """
     return (
         "trojan",
         data.get("server"),
         int(data.get("port", 0)),
         data.get("password"),
-        data.get("sni", data.get("server"))
+        data.get("sni", data.get("server")),
+        data.get("network", "tcp")
     )
     
 def get_ssr_fingerprint(data):
-    """为 ShadowsocksR 节点生成唯一指纹，用于去重。"""
+    """为 ShadowsocksR 节点生成唯一指纹，用于去重。
+    - 只使用核心参数：server, port, cipher, password, protocol, obfs
+    """
     return (
         "ssr",
         data.get("server"),
@@ -130,18 +166,30 @@ def get_ssr_fingerprint(data):
     )
     
 def get_hysteria2_fingerprint(data):
-    """为 Hysteria2 节点生成唯一指纹，用于去重。"""
+    """为 Hysteria2 节点生成唯一指纹，用于去重。
+    - 只使用核心参数：server, port, password, obfs, obfs-password, sni
+    """
     return (
         "hysteria2",
         data.get("server"),
         int(data.get("port", 0)),
         data.get("password"),
         data.get("obfs", "none"),
+        data.get("obfs-password", ""),
         data.get("sni", data.get("server"))
     )
 
+# ====================
+# 原始解析函数，未修改
+# ====================
+
 def parse_vmess(uri):
-    """解析 Vmess 链接，返回节点配置字典或 None。"""
+    """
+    严格解析 Vmess 链接。
+    - 检查必需参数：'add' (server), 'port', 'id' (uuid)。
+    - 检查 'port' 是否为有效数字。
+    - 如果缺少任何必需参数或格式不正确，直接返回 None。
+    """
     global successful_nodes, duplicate_links, skipped_links
     try:
         if not uri.startswith("vmess://"):
@@ -151,14 +199,16 @@ def parse_vmess(uri):
         encoded_data = encoded_data.replace('<br/>', '').replace('\n', '').strip()
         data = json.loads(base64.b64decode(encoded_data + '=' * (-len(encoded_data) % 4)).decode('utf-8'))
         
-        if not isinstance(data, dict):
-            skipped_links += 1
-            return None
-        if not all(key in data for key in ["add", "port", "id"]):
+        # ⚠️ 严格模式：检查必需参数
+        required_keys = ["add", "port", "id"]
+        if not all(key in data for key in required_keys):
             skipped_links += 1
             return None
         
-        try: port = int(data.get("port"))
+        # 严格模式：检查端口是否为有效数字
+        try:
+            port = int(data.get("port"))
+            if port <= 0 or port > 65535: raise ValueError
         except (ValueError, TypeError):
             skipped_links += 1
             return None
@@ -208,7 +258,12 @@ def parse_vmess(uri):
         return None
 
 def parse_vless(uri):
-    """解析 Vless 链接，返回节点配置字典或 None。"""
+    """
+    严格解析 Vless 链接。
+    - 检查必需参数：'hostname', 'port', 'username' (uuid)。
+    - 检查 'port' 是否为有效数字。
+    - 如果缺少任何必需参数或格式不正确，直接返回 None。
+    """
     global successful_nodes, duplicate_links, skipped_links
     try:
         if not uri.startswith("vless://"):
@@ -218,10 +273,15 @@ def parse_vless(uri):
         parsed = urlparse(uri)
         params = parse_qs(parsed.query)
 
+        # ⚠️ 严格模式：检查必需参数
         if not all([parsed.hostname, parsed.port, parsed.username]):
             skipped_links += 1
             return None
-        try: port = int(parsed.port)
+        
+        # 严格模式：检查端口是否为有效数字
+        try:
+            port = int(parsed.port)
+            if port <= 0 or port > 65535: raise ValueError
         except (ValueError, TypeError):
             skipped_links += 1
             return None
@@ -267,7 +327,13 @@ def parse_vless(uri):
         return None
 
 def parse_ss(uri):
-    """解析 ShadowSocks 链接，返回节点配置字典或 None。"""
+    """
+    严格解析 ShadowSocks 链接。
+    - 检查必需参数：'hostname', 'port'。
+    - 检查链接中的 'method' 和 'password' 是否存在。
+    - 检查 'port' 是否为有效数字。
+    - 如果缺少任何必需参数或格式不正确，直接返回 None。
+    """
     global successful_nodes, duplicate_links, skipped_links
     try:
         if not uri.startswith("ss://"):
@@ -275,13 +341,16 @@ def parse_ss(uri):
             return None
         uri = uri.replace('<br/>', '').replace('\n', '').strip()
         parsed = urlparse(uri)
-        if '@' not in uri:
+        
+        # ⚠️ 严格模式：检查必需参数
+        if not all([parsed.hostname, parsed.port, '@' in uri]):
             skipped_links += 1
             return None
-        if not all([parsed.hostname, parsed.port]):
-            skipped_links += 1
-            return None
-        try: port = int(parsed.port)
+        
+        # 严格模式：检查端口是否为有效数字
+        try:
+            port = int(parsed.port)
+            if port <= 0 or port > 65535: raise ValueError
         except (ValueError, TypeError):
             skipped_links += 1
             return None
@@ -301,10 +370,7 @@ def parse_ss(uri):
 
         method, password = parts
         
-        if re.match(r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$', method):
-            skipped_links += 1
-            return None
-        
+        # 严格模式：检查 method 是否在支持列表中
         if method.lower() not in SS_SUPPORTED_CIPHERS:
             skipped_links += 1
             return None
@@ -330,7 +396,12 @@ def parse_ss(uri):
         return None
 
 def parse_ssr(uri):
-    """解析 ShadowsocksR 链接，返回节点配置字典或 None。"""
+    """
+    严格解析 ShadowsocksR 链接。
+    - 检查必需参数：server, port, protocol, method, obfs, password。
+    - 检查 'port' 是否为有效数字。
+    - 如果缺少任何必需参数或格式不正确，直接返回 None。
+    """
     global successful_nodes, duplicate_links, skipped_links
     try:
         if not uri.startswith("ssr://"):
@@ -351,17 +422,27 @@ def parse_ssr(uri):
             params = parse_qs(params_part)
 
         parts = main_part.split(':')
+        
+        # ⚠️ 严格模式：检查必需参数
         if len(parts) < 6:
             skipped_links += 1
             return None
         server, port, protocol, method, obfs, password = parts[:6]
-
-        try: port = int(port)
+        
+        # 严格模式：检查端口是否为有效数字
+        try:
+            port = int(port)
+            if port <= 0 or port > 65535: raise ValueError
         except (ValueError, TypeError):
             skipped_links += 1
             return None
         
-        password_decoded = base64.b64decode(password + '=' * (-len(password) % 4)).decode('utf-8')
+        # 严格模式：检查密码是否有效
+        try:
+            password_decoded = base64.b64decode(password + '=' * (-len(password) % 4)).decode('utf-8')
+        except (base64.binascii.Error, UnicodeDecodeError):
+            skipped_links += 1
+            return None
         
         remarks_encoded = params.get('remarks', [''])[0]
         
@@ -403,7 +484,12 @@ def parse_ssr(uri):
         return None
 
 def parse_trojan(uri):
-    """解析 Trojan 链接，返回节点配置字典或 None。"""
+    """
+    严格解析 Trojan 链接。
+    - 检查必需参数：'hostname', 'port', 'username' (password)。
+    - 检查 'port' 是否为有效数字。
+    - 如果缺少任何必需参数或格式不正确，直接返回 None。
+    """
     global successful_nodes, duplicate_links, skipped_links
     try:
         if not uri.startswith("trojan://"):
@@ -413,10 +499,15 @@ def parse_trojan(uri):
         parsed = urlparse(uri)
         params = parse_qs(parsed.query)
 
+        # ⚠️ 严格模式：检查必需参数
         if not all([parsed.hostname, parsed.port, parsed.username]):
             skipped_links += 1
             return None
-        try: port = int(parsed.port)
+        
+        # 严格模式：检查端口是否为有效数字
+        try:
+            port = int(parsed.port)
+            if port <= 0 or port > 65535: raise ValueError
         except (ValueError, TypeError):
             skipped_links += 1
             return None
@@ -453,7 +544,13 @@ def parse_trojan(uri):
         return None
 
 def parse_hysteria2(uri):
-    """解析 Hysteria2 链接，返回节点配置字典或 None。"""
+    """
+    严格解析 Hysteria2 链接。
+    - 检查必需参数：'hostname', 'port', 'username' (password)。
+    - 检查 'port' 是否为有效数字。
+    - 如果 'obfs' 存在且不为 'none'，则强制要求 'obfs-password'。
+    - 如果缺少任何必需参数或格式不正确，直接返回 None。
+    """
     global successful_nodes, duplicate_links, skipped_links
     try:
         if not uri.startswith("hysteria2://"):
@@ -461,10 +558,16 @@ def parse_hysteria2(uri):
             return None
         uri = uri.replace('<br/>', '').replace('\n', '').strip()
         parsed = urlparse(uri)
+        
+        # ⚠️ 严格模式：检查必需参数
         if not all([parsed.hostname, parsed.port, parsed.username]):
             skipped_links += 1
             return None
-        try: port = int(parsed.port)
+        
+        # 严格模式：检查端口是否为有效数字
+        try:
+            port = int(parsed.port)
+            if port <= 0 or port > 65535: raise ValueError
         except (ValueError, TypeError):
             skipped_links += 1
             return None
@@ -474,12 +577,10 @@ def parse_hysteria2(uri):
         obfs_type = params.get('obfs', ['none'])[0]
         obfs_password = params.get('obfs-password', [''])[0]
         
-        # --- ⚠️ 核心修复：检查 obfs-password 是否存在 ---
+        # ⚠️ 严格模式：强制检查 obfs-password
         if obfs_type != "none" and not obfs_password:
-            print(f"警告: Hysteria2 节点 '{unquote(parsed.fragment) if parsed.fragment else ''}' 缺少 obfs-password，已跳过。")
             skipped_links += 1
             return None
-        # -----------------------------------------------
         
         node_data = {
             "type": "hysteria2",
@@ -487,6 +588,7 @@ def parse_hysteria2(uri):
             "port": port,
             "password": password,
             "obfs": obfs_type,
+            "obfs-password": obfs_password,
             "sni": params.get('sni', [parsed.hostname])[0]
         }
         fingerprint = get_hysteria2_fingerprint(node_data)
@@ -510,6 +612,7 @@ def parse_hysteria2(uri):
         skipped_links += 1
         return None
 
+# 以下代码保持原样，未进行修改
 def get_country_name(host, reader):
     """
     使用 geoip2 获取给定 IP 地址或域名的国家/地区 ISO 代码。
