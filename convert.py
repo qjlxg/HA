@@ -11,6 +11,7 @@ from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import geoip2.database
 import sys
+from datetime import datetime
 
 # 全局集合用于去重
 used_names = set()
@@ -55,6 +56,9 @@ SSR_SUPPORTED_OBFS = [
     "tls1.2_ticket_auth", "tls1.2_ticket_fastauth"
 ]
 
+# 支持的 Hysteria2 混淆类型
+HYSTERIA2_SUPPORTED_OBFS = ["none", "salamander"]
+
 def is_base64(s):
     """检查字符串是否为有效的 Base64 编码。"""
     try:
@@ -78,8 +82,6 @@ def normalize_name(name):
     original_name = truncated_name
     counter = 1
     while truncated_name in used_names:
-        # 使用 us_01, us_02 格式
-        # 匹配方括号内的国家代码，例如 "[US]"
         match = re.match(r'\[(\w+)\]', original_name, re.IGNORECASE)
         if match:
             country_code = match.group(1).lower()
@@ -91,14 +93,8 @@ def normalize_name(name):
     return truncated_name
 
 # ====================
-# 重构后的去重指纹函数（改进版）
+# 重构后的去重指纹函数
 # ====================
-# 基于官方标准和常见实践（如Clash、Sing-box项目）改进去重逻辑：
-# - 对于每种协议，使用更全面但精确的指纹键，确保覆盖所有唯一标识参数。
-# - 参考项目如：https://github.com/MetaCubeX/Clash.Meta (Clash Meta内核去重基于server+port+uuid/password等核心字段)
-# - 多重去重：先用核心指纹去重，如果有歧义再添加辅助参数（如sni, path）。
-# - 避免假重复：忽略非核心参数，如name，但确保tls/network等影响连接的参数包含在内。
-
 def get_vmess_fingerprint(data):
     """Vmess指纹：server, port, uuid, network, tls, servername (或ws host), path (如果ws)"""
     tls = data.get('tls', False)
@@ -120,11 +116,11 @@ def get_vmess_fingerprint(data):
         network,
         tls,
         servername,
-        path  # 添加path以区分ws路径不同的节点
+        path
     )
 
 def get_vless_fingerprint(data):
-    """Vless指纹：server, port, uuid, network, tls, servername (或ws host), flow, path (如果ws)"""
+    """Vless指纹：server, port, uuid, network, tls, servername, flow, path (如果ws)"""
     tls = data.get('tls', False)
     network = data.get('network', 'tcp')
     servername = data.get('servername', data.get('server'))
@@ -203,46 +199,42 @@ def get_hysteria2_fingerprint(data):
     )
 
 # ====================
-# 严格解析函数（改进版）
+# 严格解析函数
 # ====================
-# - 严格遵守官方标准（如Clash文档：https://github.com/Dreamacro/clash/wiki/Configuration#proxies）
-# - 必需参数检查更全面：缺少任何官方要求的字段直接排除。
-# - 参数值验证：cipher必须在支持列表中，port范围1-65535，uuid格式等。
-# - 输出格式严格：只输出符合Clash YAML标准的节点结构。
-
 def parse_vmess(uri):
     global successful_nodes, duplicate_links, skipped_links
     try:
         if not uri.startswith("vmess://"):
             skipped_links += 1
+            print(f"跳过无效 Vmess URI: {uri[:30]}...")
             return None
         encoded_data = uri[8:].replace('<br/>', '').replace('\n', '').strip()
         data = json.loads(base64.b64decode(encoded_data + '=' * (-len(encoded_data) % 4)).decode('utf-8'))
         
-        # 严格检查必需参数（官方：add, port, id, net必须存在）
         required_keys = ["add", "port", "id", "net"]
         if not all(key in data for key in required_keys):
             skipped_links += 1
+            print(f"跳过 Vmess 节点: 缺少必需参数 {required_keys}")
             return None
         
-        # 端口验证
         try:
             port = int(data["port"])
             if not (1 <= port <= 65535): raise ValueError
         except (ValueError, TypeError):
             skipped_links += 1
+            print(f"跳过 Vmess 节点: 无效端口 {data.get('port')}")
             return None
         
-        # UUID格式简单验证（必须是UUID字符串）
         uuid = data.get("id")
         if not re.match(r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$', uuid, re.I):
             skipped_links += 1
+            print(f"跳过 Vmess 节点: 无效 UUID {uuid}")
             return None
         
-        # network必须是支持类型
         network = data["net"]
         if network not in ["tcp", "ws", "http", "grpc", "kcp", "quic"]:
             skipped_links += 1
+            print(f"跳过 Vmess 节点: 无效网络类型 {network}")
             return None
         
         node = {
@@ -258,9 +250,10 @@ def parse_vmess(uri):
         
         if data.get("tls") == "tls":
             node["tls"] = True
-            node["servername"] = data.get("sni", data["add"])  # 必须有servername如果tls
+            node["servername"] = data.get("sni", data["add"])
             if not node["servername"]:
                 skipped_links += 1
+                print(f"跳过 Vmess 节点: TLS 启用但缺少 servername")
                 return None
         
         if network == "ws":
@@ -268,8 +261,9 @@ def parse_vmess(uri):
                 "path": data.get("path", "/"),
                 "headers": {"Host": data.get("host", node["server"])}
             }
-            if not node["ws-opts"]["path"]:  # path必须存在
+            if not node["ws-opts"]["path"]:
                 skipped_links += 1
+                print(f"跳过 Vmess 节点: WebSocket 缺少 path")
                 return None
         
         fingerprint = get_vmess_fingerprint(node)
@@ -280,8 +274,9 @@ def parse_vmess(uri):
         
         successful_nodes += 1
         return node
-    except Exception:
+    except Exception as e:
         skipped_links += 1
+        print(f"跳过 Vmess 节点: 解析错误 {str(e)}")
         return None
 
 def parse_vless(uri):
@@ -289,33 +284,35 @@ def parse_vless(uri):
     try:
         if not uri.startswith("vless://"):
             skipped_links += 1
+            print(f"跳过无效 Vless URI: {uri[:30]}...")
             return None
         uri = uri.replace('<br/>', '').replace('\n', '').strip()
         parsed = urlparse(uri)
         params = parse_qs(parsed.query)
         
-        # 严格检查必需参数（官方：uuid@server:port，必须有security如果tls）
         if not (parsed.username and parsed.hostname and parsed.port):
             skipped_links += 1
+            print(f"跳过 Vless 节点: 缺少 uuid, server 或 port")
             return None
         
-        # 端口验证
         try:
             port = int(parsed.port)
             if not (1 <= port <= 65535): raise ValueError
         except (ValueError, TypeError):
             skipped_links += 1
+            print(f"跳过 Vless 节点: 无效端口 {parsed.port}")
             return None
         
-        # UUID格式验证
         uuid = parsed.username
         if not re.match(r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$', uuid, re.I):
             skipped_links += 1
+            print(f"跳过 Vless 节点: 无效 UUID {uuid}")
             return None
         
         network = params.get('type', ['tcp'])[0]
         if network not in ["tcp", "ws", "http", "grpc"]:
             skipped_links += 1
+            print(f"跳过 Vless 节点: 无效网络类型 {network}")
             return None
         
         security = params.get('security', ['none'])[0]
@@ -335,6 +332,7 @@ def parse_vless(uri):
             node["servername"] = params.get('sni', [parsed.hostname])[0]
             if not node["servername"]:
                 skipped_links += 1
+                print(f"跳过 Vless 节点: TLS 启用但缺少 servername")
                 return None
             node["flow"] = params.get('flow', [''])[0]
         
@@ -345,6 +343,7 @@ def parse_vless(uri):
             }
             if not node['ws-opts']['path']:
                 skipped_links += 1
+                print(f"跳过 Vless 节点: WebSocket 缺少 path")
                 return None
         
         fingerprint = get_vless_fingerprint(node)
@@ -355,8 +354,9 @@ def parse_vless(uri):
         
         successful_nodes += 1
         return node
-    except Exception:
+    except Exception as e:
         skipped_links += 1
+        print(f"跳过 Vless 节点: 解析错误 {str(e)}")
         return None
 
 def parse_ss(uri):
@@ -364,21 +364,22 @@ def parse_ss(uri):
     try:
         if not uri.startswith("ss://"):
             skipped_links += 1
+            print(f"跳过无效 SS URI: {uri[:30]}...")
             return None
         uri = uri.replace('<br/>', '').replace('\n', '').strip()
         parsed = urlparse(uri)
         
-        # 严格检查必需参数（官方：cipher:password@server:port）
         if not (parsed.hostname and parsed.port and '@' in uri):
             skipped_links += 1
+            print(f"跳过 SS 节点: 缺少 cipher, password, server 或 port")
             return None
         
-        # 端口验证
         try:
             port = int(parsed.port)
             if not (1 <= port <= 65535): raise ValueError
         except (ValueError, TypeError):
             skipped_links += 1
+            print(f"跳过 SS 节点: 无效端口 {parsed.port}")
             return None
         
         core_part = parsed.netloc.split('@')[0]
@@ -386,13 +387,14 @@ def parse_ss(uri):
         parts = decoded_core.split(':', 1)
         if len(parts) != 2:
             skipped_links += 1
+            print(f"跳过 SS 节点: 无效 cipher:password 格式")
             return None
         
         cipher, password = parts
         
-        # 严格检查cipher（必须在官方支持列表）
         if cipher not in SS_SUPPORTED_CIPHERS:
             skipped_links += 1
+            print(f"跳过 SS 节点: 不支持的加密方法 {cipher}")
             return None
         
         node = {
@@ -412,8 +414,9 @@ def parse_ss(uri):
         
         successful_nodes += 1
         return node
-    except Exception:
+    except Exception as e:
         skipped_links += 1
+        print(f"跳过 SS 节点: 解析错误 {str(e)}")
         return None
 
 def parse_ssr(uri):
@@ -421,6 +424,7 @@ def parse_ssr(uri):
     try:
         if not uri.startswith("ssr://"):
             skipped_links += 1
+            print(f"跳过无效 SSR URI: {uri[:30]}...")
             return None
         uri_part = uri[6:].replace('<br/>', '').replace('\n', '').strip()
         
@@ -436,28 +440,29 @@ def parse_ssr(uri):
         parts = main_part.split(':')
         if len(parts) < 6:
             skipped_links += 1
+            print(f"跳过 SSR 节点: 缺少必需参数")
             return None
         
         server, port_str, protocol, cipher, obfs, password_encoded = parts[:6]
         
-        # 端口验证
         try:
             port = int(port_str)
             if not (1 <= port <= 65535): raise ValueError
         except (ValueError, TypeError):
             skipped_links += 1
+            print(f"跳过 SSR 节点: 无效端口 {port_str}")
             return None
         
-        # 密码解码验证
         try:
             password = base64.b64decode(password_encoded + '=' * (-len(password_encoded) % 4)).decode('utf-8')
         except Exception:
             skipped_links += 1
+            print(f"跳过 SSR 节点: 无效密码编码")
             return None
         
-        # 严格检查cipher, protocol, obfs（必须在官方支持列表）
         if cipher not in SSR_SUPPORTED_CIPHERS or protocol not in SSR_SUPPORTED_PROTOCOLS or obfs not in SSR_SUPPORTED_OBFS:
             skipped_links += 1
+            print(f"跳过 SSR 节点: 不支持的 cipher={cipher}, protocol={protocol}, 或 obfs={obfs}")
             return None
         
         obfs_param_encoded = params.get('obfsparam', [''])[0]
@@ -490,8 +495,9 @@ def parse_ssr(uri):
         
         successful_nodes += 1
         return node
-    except Exception:
+    except Exception as e:
         skipped_links += 1
+        print(f"跳过 SSR 节点: 解析错误 {str(e)}")
         return None
 
 def parse_trojan(uri):
@@ -499,27 +505,29 @@ def parse_trojan(uri):
     try:
         if not uri.startswith("trojan://"):
             skipped_links += 1
+            print(f"跳过无效 Trojan URI: {uri[:30]}...")
             return None
         uri = uri.replace('<br/>', '').replace('\n', '').strip()
         parsed = urlparse(uri)
         params = parse_qs(parsed.query)
         
-        # 严格检查必需参数（官方：password@server:port，必须有sni如果tls）
         if not (parsed.username and parsed.hostname and parsed.port):
             skipped_links += 1
+            print(f"跳过 Trojan 节点: 缺少 password, server 或 port")
             return None
         
-        # 端口验证
         try:
             port = int(parsed.port)
             if not (1 <= port <= 65535): raise ValueError
         except (ValueError, TypeError):
             skipped_links += 1
+            print(f"跳过 Trojan 节点: 无效端口 {parsed.port}")
             return None
         
         network = params.get("type", ["tcp"])[0]
         if network not in ["tcp", "grpc"]:
             skipped_links += 1
+            print(f"跳过 Trojan 节点: 无效网络类型 {network}")
             return None
         
         node = {
@@ -534,12 +542,14 @@ def parse_trojan(uri):
         
         if not node["sni"]:
             skipped_links += 1
+            print(f"跳过 Trojan 节点: 缺少 sni")
             return None
         
         if network == "grpc":
             node["grpc-opts"] = {"serviceName": params.get('serviceName', [''])[0]}
             if not node["grpc-opts"]["serviceName"]:
                 skipped_links += 1
+                print(f"跳过 Trojan 节点: gRPC 缺少 serviceName")
                 return None
         
         fingerprint = get_trojan_fingerprint(node)
@@ -550,8 +560,9 @@ def parse_trojan(uri):
         
         successful_nodes += 1
         return node
-    except Exception:
+    except Exception as e:
         skipped_links += 1
+        print(f"跳过 Trojan 节点: 解析错误 {str(e)}")
         return None
 
 def parse_hysteria2(uri):
@@ -559,30 +570,48 @@ def parse_hysteria2(uri):
     try:
         if not uri.startswith("hysteria2://"):
             skipped_links += 1
+            print(f"跳过无效 Hysteria2 URI: {uri[:30]}...")
             return None
         uri = uri.replace('<br/>', '').replace('\n', '').strip()
         parsed = urlparse(uri)
         params = parse_qs(parsed.query)
         
-        # 严格检查必需参数（官方：password@server:port，必须有sni）
         if not (parsed.username and parsed.hostname and parsed.port):
             skipped_links += 1
+            print(f"跳过 Hysteria2 节点: 缺少 password, server 或 port")
             return None
         
-        # 端口验证
         try:
             port = int(parsed.port)
             if not (1 <= port <= 65535): raise ValueError
         except (ValueError, TypeError):
             skipped_links += 1
+            print(f"跳过 Hysteria2 节点: 无效端口 {parsed.port}")
             return None
         
         obfs = params.get('obfs', ['none'])[0]
+        if obfs not in HYSTERIA2_SUPPORTED_OBFS:
+            skipped_links += 1
+            print(f"跳过 Hysteria2 节点: 无效 obfs 类型 {obfs}")
+            return None
+        
         obfs_password = params.get('obfs-password', [''])[0]
         
-        # 严格检查：如果obfs != none，必须有obfs-password
         if obfs != "none" and not obfs_password:
             skipped_links += 1
+            print(f"跳过 Hysteria2 节点: obfs={obfs} 但缺少 obfs-password, URI: {uri[:50]}...")
+            return None
+        
+        password = parsed.username
+        if not password:
+            skipped_links += 1
+            print(f"跳过 Hysteria2 节点: 缺少 password")
+            return None
+        
+        sni = params.get('sni', [parsed.hostname])[0]
+        if not sni:
+            skipped_links += 1
+            print(f"跳过 Hysteria2 节点: 缺少 sni")
             return None
         
         node = {
@@ -590,15 +619,11 @@ def parse_hysteria2(uri):
             "type": "hysteria2",
             "server": parsed.hostname,
             "port": port,
-            "password": parsed.username,
+            "password": password,
             "obfs": obfs,
-            "obfs-password": obfs_password,
-            "sni": params.get('sni', [parsed.hostname])[0]
+            "obfs-password": obfs_password if obfs != "none" else "",
+            "sni": sni
         }
-        
-        if not node["sni"]:
-            skipped_links += 1
-            return None
         
         fingerprint = get_hysteria2_fingerprint(node)
         if fingerprint in used_node_fingerprints:
@@ -608,8 +633,9 @@ def parse_hysteria2(uri):
         
         successful_nodes += 1
         return node
-    except Exception:
+    except Exception as e:
         skipped_links += 1
+        print(f"跳过 Hysteria2 节点: 解析错误 {str(e)}, URI: {uri[:50]}...")
         return None
 
 def get_country_name(host, reader):
@@ -677,6 +703,9 @@ def download_and_parse_url(url):
             elif node_type == 'ssr': node = parse_ssr(line)
             elif node_type == 'trojan': node = parse_trojan(line)
             elif node_type == 'hysteria2': node = parse_hysteria2(line)
+            else:
+                print(f"跳过未知协议节点: {line[:30]}...")
+                skipped_links += 1
             
             if node and node != "duplicate":
                 all_nodes.append(node)
@@ -693,16 +722,15 @@ def process_node_with_location(node_and_reader):
     if reader and host:
         country_code = get_country_name(host, reader)
     
-    # 确定用于重命名的基础名称
     base_name = f"[{country_code}]" if country_code else "Unnamed Node"
     
-    # 规范化并重新命名节点
     node['name'] = normalize_name(base_name)
     return node
 
 def write_to_yaml(nodes, filename='config.yaml'):
     """将节点列表和 Clash 配置写入 YAML 文件。"""
     config_data = {
+        "#": f"Generated by Node Converter at {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC')}",
         "proxies": nodes,
         "proxy-groups": [
             {
@@ -733,7 +761,6 @@ def main():
 
     all_nodes = []
     
-    # 重置全局状态
     used_names.clear()
     used_node_fingerprints.clear()
     total_links = 0
