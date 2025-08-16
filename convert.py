@@ -673,7 +673,7 @@ def download_url(url, timeout=(15, 60)):
     return None
 
 def download_and_parse_url(url):
-    global total_links
+    global total_links, successful_nodes, skipped_links, duplicate_links
     content_bytes = download_url(url)
     if not content_bytes:
         return []
@@ -711,6 +711,7 @@ def download_and_parse_url(url):
                 all_nodes.append(node)
             
     except Exception as e:
+        skipped_links += 1
         print(f"错误：解析订阅 {url} 时发生错误: {e}")
     
     return all_nodes
