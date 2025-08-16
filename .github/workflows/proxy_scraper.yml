@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  TZ: Asia/Shanghai # 设置时区为上海
+  TZ: Asia/Shanghai 
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -15,7 +15,7 @@ concurrency:
 jobs:
   scrape_proxies:
     runs-on: ubuntu-latest
-    timeout-minutes: 360
+    timeout-minutes: 333
 
     steps:
     - name: Checkout repository
@@ -58,35 +58,24 @@ jobs:
         git config --global user.name 'github-actions[bot]'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
-        git add data/
-        git add all_unique_nodes.txt nodes_summary.csv
-
-        echo "Checking git status after adding files:"
-        git status
-
-        if git diff --cached --exit-code --quiet; then
-          echo "No changes to commit. Skipping commit."
-        else
-          echo "Changes detected. Attempting to commit and push."
+        # 检查是否有任何需要提交的更改
+        if ! git diff --exit-code --quiet; then
+          echo "Changes detected. Committing and pushing."
           
-          # 尝试直接推送，如果失败则进入后备方案
+          # 添加所有新文件或已修改的文件
+          git add data/
+          git add all_unique_nodes.txt nodes_summary.csv
+
+          # 提交更改
           git commit -m "chore: Auto-update collected proxy data [skip ci]"
-          git push || (
-            echo "Push rejected. Pulling and attempting to merge..."
-            git pull --no-rebase origin main
-            
-            # 解决冲突：总是保留我们本地最新的爬取结果
-            git checkout --ours data/
-            git checkout --ours all_unique_nodes.txt nodes_summary.csv
-            
-            # 将解决后的冲突标记为已解决，并创建合并提交
-            git add data/
-            git add all_unique_nodes.txt nodes_summary.csv
-            git commit -m "chore: Resolve merge conflicts by keeping local proxy data [skip ci]"
-            
-            # 最后，再次尝试推送
-            git push
-          )
+
+          # 拉取最新更改并应用你的提交到其之上，避免合并冲突
+          git pull --rebase origin main
+
+          # 最后，推送最终结果
+          git push
+        else
+          echo "No changes to commit. Skipping."
         fi
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
