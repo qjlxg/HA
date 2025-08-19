@@ -1,21 +1,6 @@
 proxies:
 - client-fingerprint: chrome
   flow: xtls-rprx-vision
-  name: 美国
-  port: 5847
-  reality-opts:
-    public-key: NpqF483u4nXH0cztdyX7VbkpbDEW0sO07cGya0WvCHM
-  server: 84.33.244.7
-  servername: www.microsoft.com
-  skip-cert-verify: false
-  tfo: false
-  tls: true
-  type: vless
-  udp: true
-  uuid: 67f0fefa-a922-428c-ac02-37e1d5aaed72
-  xudp: true
-- client-fingerprint: chrome
-  flow: xtls-rprx-vision
   name: 香港
   port: 443
   reality-opts:
@@ -38,151 +23,6 @@ proxies:
   tls: true
   type: vless
   uuid: 79091265-a298-4205-a559-d04ed045c38b
-- alterId: 0
-  cipher: auto
-  name: Hongkong-1
-  network: ws
-  port: 443
-  server: vpn-hw-hk-1.helloshuai.com
-  tls: true
-  type: vmess
-  uuid: 1a031be6-748f-4b88-82be-4d090e81869f
-  ws-opts:
-    headers:
-      host: vpn-hw-hk-1.helloshuai.com
-    path: /a9d4/
-- alterId: 0
-  cipher: auto
-  name: Japan-1
-  network: ws
-  port: 443
-  server: japan1.hellomrshuai.club
-  tls: true
-  type: vmess
-  uuid: 598352e5-4416-48a2-a462-a8e709c3a8a1
-  ws-opts:
-    headers:
-      host: japan1.hellomrshuai.club
-    path: /49dfa6b20c1d/
-- alterId: 0
-  cipher: auto
-  name: Japan-2
-  network: ws
-  port: 443
-  server: japan2.hellomrshuai.club
-  tls: true
-  type: vmess
-  uuid: 355ae17e-81b1-466a-b5ee-5de89706f759
-  ws-opts:
-    headers:
-      host: japan2.hellomrshuai.club
-    path: /1462d15b0/
-- alterId: 0
-  cipher: auto
-  name: Japan-3
-  network: ws
-  port: 443
-  server: japan3.hellomrshuai.club
-  tls: true
-  type: vmess
-  uuid: bef60389-d8ce-4cdb-a8ef-4a240047c430
-  ws-opts:
-    headers:
-      host: japan3.hellomrshuai.club
-    path: /91acb82ca306d4/
-- alterId: 0
-  cipher: auto
-  name: Singapore-1
-  network: ws
-  port: 443
-  server: singapore1.helloshuai.com
-  tls: true
-  type: vmess
-  uuid: 88b7aa77-1aaa-4f9b-84b5-6d1d13aeb901
-  ws-opts:
-    headers:
-      host: singapore1.helloshuai.com
-    path: /db7bc4b/
-- alterId: 0
-  cipher: auto
-  name: Singapore-2
-  network: ws
-  port: 443
-  server: singapore2.helloshuai.com
-  tls: true
-  type: vmess
-  uuid: 14a79148-3d75-41d6-a998-2be9edef88cb
-  ws-opts:
-    headers:
-      host: singapore2.helloshuai.com
-    path: /39cb4/
-- alterId: 0
-  cipher: auto
-  name: Singapore-3
-  network: ws
-  port: 443
-  server: singapore3.helloshuai.com
-  tls: true
-  type: vmess
-  uuid: 72e8a619-3170-44f3-900c-3089854ad4c1
-  ws-opts:
-    headers:
-      host: singapore3.helloshuai.com
-    path: /936d0391e32/
-- alterId: 0
-  cipher: auto
-  name: US-1
-  network: ws
-  port: 443
-  server: us1.shuai-hub.xyz
-  tls: true
-  type: vmess
-  uuid: 646ae7b5-a130-494a-95cd-93b859ec1df1
-  ws-opts:
-    headers:
-      host: us1.shuai-hub.xyz
-    path: /3e8bf27513d/
-- alterId: 0
-  cipher: auto
-  name: US-2
-  network: ws
-  port: 443
-  server: us2.shuai-hub.xyz
-  tls: true
-  type: vmess
-  uuid: 5961aeb5-c24b-4eda-bcd5-8170359836a8
-  ws-opts:
-    headers:
-      host: us2.shuai-hub.xyz
-    path: /ca53/
-- alterId: 0
-  cipher: auto
-  name: US-3
-  network: ws
-  port: 443
-  server: us3.shuai-hub.xyz
-  tls: true
-  type: vmess
-  uuid: 325f5805-16b9-4989-8a76-b3891a375646
-  ws-opts:
-    headers:
-      host: us3.shuai-hub.xyz
-    path: /6ba87/
-- client-fingerprint: chrome
-  flow: xtls-rprx-vision
-  name: 美国_02
-  port: 5847
-  reality-opts:
-    public-key: NpqF483u4nXH0cztdyX7VbkpbDEW0sO07cGya0WvCHM
-  server: 84.33.244.7
-  servername: www.microsoft.com
-  skip-cert-verify: false
-  tfo: false
-  tls: true
-  type: vless
-  udp: true
-  uuid: 67f0fefa-a922-428c-ac02-37e1d5aaed72
-  xudp: true
 - cipher: aes-256-gcm
   name: 🇭🇰 香港A01
   password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
@@ -553,6 +393,28 @@ proxies:
   uuid: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
 - client-fingerprint: chrome
   flow: xtls-rprx-vision
+  name: 美国
+  port: 5847
+  reality-opts:
+    public-key: NpqF483u4nXH0cztdyX7VbkpbDEW0sO07cGya0WvCHM
+  server: 84.33.244.7
+  servername: www.microsoft.com
+  skip-cert-verify: false
+  tfo: false
+  tls: true
+  type: vless
+  udp: true
+  uuid: 67f0fefa-a922-428c-ac02-37e1d5aaed72
+  xudp: true
+- name: 美国_02
+  password: 20050105zhu
+  port: 51541
+  server: 204.44.110.129
+  skip-cert-verify: true
+  sni: www.bing.com
+  type: hysteria2
+- client-fingerprint: chrome
+  flow: xtls-rprx-vision
   name: 香港_03
   port: 443
   reality-opts:
@@ -575,13 +437,569 @@ proxies:
   tls: true
   type: vless
   uuid: 79091265-a298-4205-a559-d04ed045c38b
-- name: 美国_03
-  password: 20050105zhu
-  port: 51541
-  server: 204.44.110.129
-  skip-cert-verify: true
-  sni: www.bing.com
-  type: hysteria2
+- client-fingerprint: chrome
+  flow: xtls-rprx-vision
+  name: 美国_03
+  port: 5847
+  reality-opts:
+    public-key: NpqF483u4nXH0cztdyX7VbkpbDEW0sO07cGya0WvCHM
+  server: 84.33.244.7
+  servername: www.microsoft.com
+  skip-cert-verify: false
+  tfo: false
+  tls: true
+  type: vless
+  udp: true
+  uuid: 67f0fefa-a922-428c-ac02-37e1d5aaed72
+  xudp: true
+- client-fingerprint: chrome
+  flow: xtls-rprx-vision
+  name: 香港_05
+  port: 443
+  reality-opts:
+    public-key: LwD_OY7bAjGraacyIogZzLhhcaAt8crNFTD4WZe_NWc
+    short-id: be9bd45f82f511c3
+  server: 5.102.124.76
+  servername: www.cloudflare.com
+  tls: true
+  type: vless
+  uuid: ac7532c3-b870-4153-84ff-d6c7bf8552d3
+- client-fingerprint: chrome
+  flow: xtls-rprx-vision
+  name: 香港_06
+  port: 8443
+  reality-opts:
+    public-key: POAZKZyD98MlYa3A5bSOayTPHdofqXynPAT1_QWEwjo
+    short-id: dfeff076987e2d34
+  server: 5.102.124.78
+  servername: www.microsoft.com
+  tls: true
+  type: vless
+  uuid: 79091265-a298-4205-a559-d04ed045c38b
+- alterId: 0
+  cipher: auto
+  name: Hongkong-1
+  network: ws
+  port: 443
+  server: vpn-hw-hk-1.helloshuai.com
+  tls: true
+  type: vmess
+  uuid: 1a031be6-748f-4b88-82be-4d090e81869f
+  ws-opts:
+    headers:
+      host: vpn-hw-hk-1.helloshuai.com
+    path: /a9d4/
+- alterId: 0
+  cipher: auto
+  name: Japan-1
+  network: ws
+  port: 443
+  server: japan1.hellomrshuai.club
+  tls: true
+  type: vmess
+  uuid: 598352e5-4416-48a2-a462-a8e709c3a8a1
+  ws-opts:
+    headers:
+      host: japan1.hellomrshuai.club
+    path: /49dfa6b20c1d/
+- alterId: 0
+  cipher: auto
+  name: Japan-2
+  network: ws
+  port: 443
+  server: japan2.hellomrshuai.club
+  tls: true
+  type: vmess
+  uuid: 355ae17e-81b1-466a-b5ee-5de89706f759
+  ws-opts:
+    headers:
+      host: japan2.hellomrshuai.club
+    path: /1462d15b0/
+- alterId: 0
+  cipher: auto
+  name: Japan-3
+  network: ws
+  port: 443
+  server: japan3.hellomrshuai.club
+  tls: true
+  type: vmess
+  uuid: bef60389-d8ce-4cdb-a8ef-4a240047c430
+  ws-opts:
+    headers:
+      host: japan3.hellomrshuai.club
+    path: /91acb82ca306d4/
+- alterId: 0
+  cipher: auto
+  name: Singapore-1
+  network: ws
+  port: 443
+  server: singapore1.helloshuai.com
+  tls: true
+  type: vmess
+  uuid: 88b7aa77-1aaa-4f9b-84b5-6d1d13aeb901
+  ws-opts:
+    headers:
+      host: singapore1.helloshuai.com
+    path: /db7bc4b/
+- alterId: 0
+  cipher: auto
+  name: Singapore-2
+  network: ws
+  port: 443
+  server: singapore2.helloshuai.com
+  tls: true
+  type: vmess
+  uuid: 14a79148-3d75-41d6-a998-2be9edef88cb
+  ws-opts:
+    headers:
+      host: singapore2.helloshuai.com
+    path: /39cb4/
+- alterId: 0
+  cipher: auto
+  name: Singapore-3
+  network: ws
+  port: 443
+  server: singapore3.helloshuai.com
+  tls: true
+  type: vmess
+  uuid: 72e8a619-3170-44f3-900c-3089854ad4c1
+  ws-opts:
+    headers:
+      host: singapore3.helloshuai.com
+    path: /936d0391e32/
+- alterId: 0
+  cipher: auto
+  name: US-1
+  network: ws
+  port: 443
+  server: us1.shuai-hub.xyz
+  tls: true
+  type: vmess
+  uuid: 646ae7b5-a130-494a-95cd-93b859ec1df1
+  ws-opts:
+    headers:
+      host: us1.shuai-hub.xyz
+    path: /3e8bf27513d/
+- alterId: 0
+  cipher: auto
+  name: US-2
+  network: ws
+  port: 443
+  server: us2.shuai-hub.xyz
+  tls: true
+  type: vmess
+  uuid: 5961aeb5-c24b-4eda-bcd5-8170359836a8
+  ws-opts:
+    headers:
+      host: us2.shuai-hub.xyz
+    path: /ca53/
+- alterId: 0
+  cipher: auto
+  name: US-3
+  network: ws
+  port: 443
+  server: us3.shuai-hub.xyz
+  tls: true
+  type: vmess
+  uuid: 325f5805-16b9-4989-8a76-b3891a375646
+  ws-opts:
+    headers:
+      host: us3.shuai-hub.xyz
+    path: /6ba87/
+- client-fingerprint: chrome
+  flow: xtls-rprx-vision
+  name: 香港_07
+  port: 443
+  reality-opts:
+    public-key: LwD_OY7bAjGraacyIogZzLhhcaAt8crNFTD4WZe_NWc
+    short-id: be9bd45f82f511c3
+  server: 5.102.124.76
+  servername: www.cloudflare.com
+  tls: true
+  type: vless
+  uuid: ac7532c3-b870-4153-84ff-d6c7bf8552d3
+- client-fingerprint: chrome
+  flow: xtls-rprx-vision
+  name: 香港_08
+  port: 8443
+  reality-opts:
+    public-key: POAZKZyD98MlYa3A5bSOayTPHdofqXynPAT1_QWEwjo
+    short-id: dfeff076987e2d34
+  server: 5.102.124.78
+  servername: www.microsoft.com
+  tls: true
+  type: vless
+  uuid: 79091265-a298-4205-a559-d04ed045c38b
+- cipher: aes-256-gcm
+  name: 🇭🇰 香港A01_02
+  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+  port: 19275
+  server: 0whxr-g05.hk01-ae5.entry.v50307shvkaa.art
+  type: ss
+  udp: true
+- cipher: aes-256-gcm
+  name: 🇯🇵 日本A01 | x0.8_02
+  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+  port: 476
+  server: q0hre-g05.jp01-ae5.entry.v50307shvkaa.art
+  type: ss
+  udp: true
+- cipher: aes-256-gcm
+  name: 🇭🇰 香港A02 | IEPL_02
+  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+  port: 14563
+  server: zcjon-g05.hk02-ae5.entry.v50307shvkaa.art
+  type: ss
+  udp: true
+- cipher: aes-256-gcm
+  name: 🇯🇵 日本A02 | x0.8_02
+  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+  port: 486
+  server: xwqiu-g05.jp02-ae5.entry.v50307shvkaa.art
+  type: ss
+  udp: true
+- cipher: aes-256-gcm
+  name: 🇭🇰 香港A03 | IEPL_02
+  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+  port: 763
+  server: 89i8b-g05.hk03-ae5.entry.v50307shvkaa.art
+  type: ss
+  udp: true
+- cipher: aes-256-gcm
+  name: 🇯🇵 日本A03 | x0.8_02
+  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+  port: 491
+  server: 0ts70-g05.jp03-ae5.entry.v50307shvkaa.art
+  type: ss
+  udp: true
+- cipher: aes-256-gcm
+  name: 🇭🇰 香港A04 | IEPL_02
+  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+  port: 807
+  server: 0c8kl-g05.hk04-ae5.entry.v50307shvkaa.art
+  type: ss
+  udp: true
+- cipher: aes-256-gcm
+  name: 🇯🇵 日本A04 | x0.8_02
+  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+  port: 496
+  server: h0a74-g05.jp04-ae5.entry.v50307shvkaa.art
+  type: ss
+  udp: true
+- cipher: aes-256-gcm
+  name: 🇭🇰 香港A05 | IEPL_02
+  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+  port: 1815
+  server: nmk8b-g05.hk05-ae5.entry.v50307shvkaa.art
+  type: ss
+  udp: true
+- alterId: 1
+  cipher: auto
+  name: 🇯🇵 日本A05 | 下载专用 | x0.01_02
+  port: 64658
+  server: o36lx-g05.jp05-vm5.entry.rtysjur.quest
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+- cipher: aes-256-gcm
+  name: 🇭🇰 香港A06 | x0.8_02
+  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+  port: 1416
+  server: ug3m8-g05.hk06-ae5.entry.v50307shvkaa.art
+  type: ss
+  udp: true
+- alterId: 1
+  cipher: auto
+  name: 🇯🇵 日本A06 | 下载专用 | x0.01_02
+  port: 666
+  server: nqpus-g05.jp06-vm5.entry.rtysjur.quest
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+- cipher: aes-256-gcm
+  name: 🇭🇰 香港A07 | x0.8_02
+  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+  port: 1423
+  server: gtre1-g05.hk07-ae5.entry.v50307shvkaa.art
+  type: ss
+  udp: true
+- cipher: aes-256-gcm
+  name: 🇯🇵 日本A07 | x0.8_02
+  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+  port: 14008
+  server: vk49i-g05.jp07-ae5.entry.v50307shvkaa.art
+  type: ss
+  udp: true
+- cipher: aes-256-gcm
+  name: 🇭🇰 香港A08 | x0.8_02
+  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+  port: 18646
+  server: 395vk-g05.hk08-ae5.entry.v50307shvkaa.art
+  type: ss
+  udp: true
+- cipher: aes-256-gcm
+  name: 🇯🇵 日本A08 | x0.8_02
+  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+  port: 12546
+  server: 3xrro-g05.jp08-ae5.entry.v50307shvkaa.art
+  type: ss
+  udp: true
+- alterId: 1
+  cipher: auto
+  name: 🇭🇰 香港A09 | IEPL_02
+  port: 15268
+  server: 4f9xp-g05.hk09-vm5.entry.v50307shvkaa.art
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+- cipher: aes-256-gcm
+  name: 🇯🇵 日本A09 | x0.8_02
+  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+  port: 11161
+  server: sty63-g05.jp09-ae5.entry.v50307shvkaa.art
+  type: ss
+  udp: true
+- alterId: 1
+  cipher: auto
+  name: 🇭🇰 香港A10 | IEPL_02
+  network: ws
+  port: 13486
+  server: 65wrs-g05.hk10-vm5.entry.v50307shvkaa.art
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+  ws-opts:
+    headers:
+      Host: bgp-01-10.entry-0.chinasnow.net
+    path: /
+- cipher: aes-256-gcm
+  name: 🇯🇵 日本A10 | x0.8_02
+  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+  port: 16527
+  server: r2511-g05.jp10-ae5.entry.v50307shvkaa.art
+  type: ss
+  udp: true
+- alterId: 1
+  cipher: auto
+  name: 🇭🇰 香港A11 | IEPL_02
+  network: ws
+  port: 578
+  server: vvjvy-g05.hk11-vm5.entry.v50307shvkaa.art
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+  ws-opts:
+    headers:
+      Host: bgp-01-11.entry-0.chinasnow.net
+    path: /tutorial/iphone13.m3u8
+- cipher: aes-256-gcm
+  name: 🇯🇵 日本A11 | x0.8_02
+  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+  port: 17744
+  server: rah29-g05.jp11-ae5.entry.v50307shvkaa.art
+  type: ss
+  udp: true
+- cipher: aes-256-gcm
+  name: 🇯🇵 日本A12 | IEPL | 测试_02
+  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+  port: 501
+  server: e0xj1-g05.jp12-ae5.entry.v50307shvkaa.art
+  type: ss
+  udp: true
+- cipher: aes-256-gcm
+  name: 🇸🇬 新加坡A01_02
+  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+  port: 20003
+  server: ld8fl-g05.sg01-ae5.entry.v50307shvkaa.art
+  type: ss
+  udp: true
+- cipher: aes-256-gcm
+  name: 🇸🇬 新加坡A02_02
+  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+  port: 20078
+  server: 4lw4i-g05.sg02-ae5.entry.v50307shvkaa.art
+  type: ss
+  udp: true
+- cipher: aes-256-gcm
+  name: 🇨🇳 台湾A01 | IEPL | x2_02
+  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+  port: 20008
+  server: is9b0-g05.tw01-ae5.entry.v50307shvkaa.art
+  type: ss
+  udp: true
+- cipher: aes-256-gcm
+  name: 🇺🇲 美国A01_02
+  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+  port: 20013
+  server: pl00r-g05.us01-ae5.entry.v50307shvkaa.art
+  type: ss
+  udp: true
+- cipher: aes-256-gcm
+  name: 🇺🇲 美国A02_02
+  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+  port: 20018
+  server: nei9i-g05.us02-ae5.entry.v50307shvkaa.art
+  type: ss
+  udp: true
+- cipher: aes-256-gcm
+  name: 🇬🇧 英国A01_02
+  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+  port: 20023
+  server: x1xep-g05.gb01-ae5.entry.v50307shvkaa.art
+  type: ss
+  udp: true
+- cipher: aes-256-gcm
+  name: 🇦🇷 阿根廷A01_02
+  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+  port: 20028
+  server: q2g5n-g05.ar01-ae5.entry.v50307shvkaa.art
+  type: ss
+  udp: true
+- cipher: aes-256-gcm
+  name: 🇷🇺 俄罗斯A01_02
+  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+  port: 20033
+  server: 2yc83-g05.ru01-ae5.entry.v50307shvkaa.art
+  type: ss
+  udp: true
+- cipher: aes-256-gcm
+  name: 🇹🇷 土耳其A01_02
+  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+  port: 20038
+  server: rc3nl-g05.tr01-ae5.entry.v50307shvkaa.art
+  type: ss
+  udp: true
+- cipher: aes-256-gcm
+  name: 🇰🇷 韩国A01_02
+  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+  port: 20043
+  server: 8u535-g05.kr01-ae5.entry.v50307shvkaa.art
+  type: ss
+  udp: true
+- cipher: aes-256-gcm
+  name: 🇮🇳 印度A01_02
+  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+  port: 20048
+  server: 3brdm-g05.in01-ae5.entry.v50307shvkaa.art
+  type: ss
+  udp: true
+- cipher: aes-256-gcm
+  name: 🇩🇪 德国A01_02
+  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+  port: 20053
+  server: htnrm-g05.de01-ae5.entry.v50307shvkaa.art
+  type: ss
+  udp: true
+- cipher: aes-256-gcm
+  name: 🇨🇦 加拿大A01_02
+  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+  port: 20058
+  server: rio1z-g05.ca01-ae5.entry.v50307shvkaa.art
+  type: ss
+  udp: true
+- cipher: aes-256-gcm
+  name: 🇦🇺 澳大利亚A01_02
+  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+  port: 20063
+  server: i8ki3-g05.au01-ae5.entry.v50307shvkaa.art
+  type: ss
+  udp: true
+- cipher: aes-256-gcm
+  name: 🇫🇷 法国A01_02
+  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+  port: 20068
+  server: l0xpu-g05.fr01-ae5.entry.v50307shvkaa.art
+  type: ss
+  udp: true
+- cipher: aes-256-gcm
+  name: 🇺🇦 乌克兰A01_02
+  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+  port: 20073
+  server: vy46z-g05.ua01-ae5.entry.v50307shvkaa.art
+  type: ss
+  udp: true
+- alterId: 1
+  cipher: auto
+  name: 🇯🇵 免费-日本1-Ver.6_02
+  port: 21585
+  server: 77h9d-g05.jp01-0986-vm0.entry.fr0307a.art
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  udp: true
+  uuid: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+- alterId: 1
+  cipher: auto
+  name: 🇯🇵 免费-日本2-Ver.7_02
+  port: 11777
+  server: 50w1l-g05.jp02-9a99-vm0.entry.fr0307a.art
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+- alterId: 1
+  cipher: auto
+  name: 🇯🇵 免费-日本3-Ver.6_02
+  port: 21585
+  server: a59bn-g05.jp03-7d22-vm0.entry.fr0307a.art
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  udp: true
+  uuid: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+- alterId: 1
+  cipher: auto
+  name: 🇯🇵 免费-日本4-Ver.7_02
+  port: 448
+  server: t492d-g05.jp04-3771-vm0.entry.fr0307a.art
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+- alterId: 1
+  cipher: auto
+  name: 🇯🇵 免费-日本5-Ver.8_02
+  port: 46486
+  server: 39t03-g05.jp05-6786-vm0.entry.fr0307a.art
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+- alterId: 1
+  cipher: auto
+  name: 🇯🇵 免费-日本6-Ver.7_02
+  port: 28787
+  server: wid8z-g05.jp06-7c5a-vm0.entry.fr0307a.art
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  udp: true
+  uuid: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+- alterId: 1
+  cipher: auto
+  name: 🇯🇵 免费-日本7-Ver.1_02
+  port: 28787
+  server: dgfhj-g05.jp07-1f28-vm0.entry.fr0307a.art
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
+- name: 直连
+  type: direct
 - name: 德国
   password: J7VnJazPBw
   port: 443
@@ -8377,7 +8795,7 @@ proxies:
   skip-cert-verify: true
   tls: false
   type: hysteria2
-- name: 香港_05
+- name: 香港_09
   password: cc83a02b-90ea-403b-9c76-27e4be95f637
   port: 50256
   region: 印度
@@ -8633,7 +9051,7 @@ proxies:
   sni: www.bing.com
   tls: false
   type: hysteria2
-- name: 香港_06
+- name: 香港_10
   password: nfsn666
   port: 8888
   region: 印度尼西亚
@@ -20560,7 +20978,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 香港_07
+- name: 香港_11
   network: ws
   port: 8880
   region: 美国
@@ -22301,7 +22719,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 香港_08
+- name: 香港_12
   network: ws
   port: 8880
   region: 美国
@@ -24453,7 +24871,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 香港_09
+- name: 香港_13
   network: ws
   port: 8880
   region: 美国
@@ -25342,7 +25760,7 @@ proxies:
     headers:
       Host: ip.langmanshanxi.top
     path: /TelegramU0001F1E8U0001F1F3 @WangCai2 /?ed=2560
-- name: 香港_10
+- name: 香港_14
   network: ws
   port: 8880
   region: 美国
@@ -26818,7 +27236,7 @@ proxies:
     path: /
 - alterId: 0
   cipher: auto
-  name: 香港_11
+  name: 香港_15
   port: 42383
   region: 美国
   server: 154.219.120.57
@@ -28721,7 +29139,7 @@ proxies:
   sni: ssssssssssssssssssssssssssss-mualhk229.hizui.cn
   tls: false
   type: hysteria2
-- name: 香港_12
+- name: 香港_16
   password: 5d110f18-5a37-4db3-8cf6-f0bced38a1ae
   port: 443
   region: 香港
@@ -28738,7 +29156,7 @@ proxies:
   skip-cert-verify: true
   tls: false
   type: hysteria2
-- name: 香港_13
+- name: 香港_17
   password: L60nS04NhsoMpN2DDGbnMqLP8DY
   port: 11243
   region: 香港
@@ -28747,7 +29165,7 @@ proxies:
   sni: bing.com
   tls: false
   type: hysteria2
-- name: 香港_14
+- name: 香港_18
   password: NjEkAYYNqFKUbrksyW1COBtdpU
   port: 2428
   region: 香港
@@ -28764,7 +29182,7 @@ proxies:
   skip-cert-verify: true
   tls: false
   type: hysteria2
-- name: 香港_15
+- name: 香港_19
   password: XK52yierGckONMJWbJnuskD3unI
   port: 12854
   region: 香港
@@ -28781,7 +29199,7 @@ proxies:
   skip-cert-verify: true
   tls: false
   type: hysteria2
-- name: 香港_16
+- name: 香港_20
   password: b866d83a-d301-4270-b699-40f322bf52fb
   port: 443
   region: 香港
@@ -28826,7 +29244,7 @@ proxies:
   server: 112.90.84.150
   type: ss
 - cipher: aes-256-gcm
-  name: 香港_17
+  name: 香港_21
   password: AO1P29L04PJ4309I
   port: 15012
   region: 香港
@@ -28847,7 +29265,7 @@ proxies:
   server: 180.188.47.87
   type: ss
 - cipher: aes-256-gcm
-  name: 香港_18
+  name: 香港_22
   password: 11c1fb7f9eb013b1
   port: 2015
   region: 香港
@@ -29036,7 +29454,7 @@ proxies:
   server: premium01.icfjlk.xyz
   type: ss
 - cipher: aes-256-cfb
-  name: 香港_19
+  name: 香港_23
   password: f8f7aCzcPKbsF8p3
   port: 989
   region: 香港
@@ -29079,7 +29497,7 @@ proxies:
   type: ss
 - cipher: aes-256-gcm
   client-fingerprint: chrome
-  name: 香港_20
+  name: 香港_24
   password: 9bfdde71b4c0
   plugin: v2ray-plugin
   plugin-opts:
@@ -29406,7 +29824,7 @@ proxies:
   skip-cert-verify: true
   sni: www.ithome.com
   type: trojan
-- name: 香港_21
+- name: 香港_25
   network: ws
   port: 38767
   region: 香港
@@ -29436,7 +29854,7 @@ proxies:
     headers:
       Host: steep.skyfigure.top
     path: Telegram🇨🇳 @pgkj666 /?ed=2560
-- name: 香港_22
+- name: 香港_26
   network: ws
   port: 34518
   region: 香港
@@ -29451,7 +29869,7 @@ proxies:
     headers:
       Host: steep.skyfigure.top
     path: Telegram🇨🇳 @pgkj666 /?ed=2560
-- name: 香港_23
+- name: 香港_27
   network: ws
   port: 59882
   region: 香港
@@ -29466,7 +29884,7 @@ proxies:
     headers:
       Host: steep.skyfigure.top
     path: Telegram🇨🇳 @pgkj666 /?ed=2560
-- name: 香港_24
+- name: 香港_28
   network: ws
   port: 443
   region: 香港
@@ -29481,7 +29899,7 @@ proxies:
     headers:
       Host: steep.skyfigure.top
     path: Telegram🇨🇳 @pgkj666 /?ed=2560
-- name: 香港_25
+- name: 香港_29
   network: ws
   port: 49701
   region: 香港
@@ -29496,7 +29914,7 @@ proxies:
     headers:
       Host: steep.skyfigure.top
     path: Telegram🇨🇳 @pgkj666 /?ed=2560
-- name: 香港_26
+- name: 香港_30
   network: ws
   port: 43891
   region: 香港
@@ -29511,7 +29929,7 @@ proxies:
     headers:
       Host: steep.skyfigure.top
     path: Telegram🇨🇳 @pgkj666 /?ed=2560
-- name: 香港_27
+- name: 香港_31
   network: ws
   port: 8080
   region: 香港
@@ -29526,7 +29944,7 @@ proxies:
     headers:
       Host: steep.skyfigure.top
     path: Telegram🇨🇳 @pgkj666 /?ed=2560
-- name: 香港_28
+- name: 香港_32
   network: ws
   port: 46639
   region: 香港
@@ -29541,7 +29959,7 @@ proxies:
     headers:
       Host: steep.skyfigure.top
     path: Telegram🇨🇳 @pgkj666 /?ed=2560
-- name: 香港_29
+- name: 香港_33
   network: ws
   port: 7656
   region: 香港
@@ -29556,7 +29974,7 @@ proxies:
     headers:
       Host: steep.skyfigure.top
     path: Telegram🇨🇳 @pgkj666 /?ed=2560
-- name: 香港_30
+- name: 香港_34
   network: ws
   port: 443
   region: 香港
@@ -29571,7 +29989,7 @@ proxies:
     headers:
       Host: steep.skyfigure.top
     path: Telegram🇨🇳 @pgkj666 /?ed=2560
-- name: 香港_31
+- name: 香港_35
   network: ws
   port: 5534
   region: 香港
@@ -29586,7 +30004,7 @@ proxies:
     headers:
       Host: steep.skyfigure.top
     path: Telegram🇨🇳 @pgkj666 /?ed=2560
-- name: 香港_32
+- name: 香港_36
   network: ws
   port: 6669
   region: 香港
@@ -29601,7 +30019,7 @@ proxies:
     headers:
       Host: steep.skyfigure.top
     path: Telegram🇨🇳 @pgkj666 /?ed=2560
-- name: 香港_33
+- name: 香港_37
   network: ws
   port: 443
   region: 香港
@@ -29631,7 +30049,7 @@ proxies:
     headers:
       Host: steep.skyfigure.top
     path: Telegram🇨🇳 @pgkj666 /?ed=2560
-- name: 香港_34
+- name: 香港_38
   network: ws
   port: 7656
   region: 香港
@@ -29661,7 +30079,7 @@ proxies:
     headers:
       Host: steep.skyfigure.top
     path: Telegram🇨🇳 @pgkj666 /?ed=2560
-- name: 香港_35
+- name: 香港_39
   network: ws
   port: 443
   region: 香港
@@ -29677,7 +30095,7 @@ proxies:
       Host: steep.skyfigure.top
     path: Telegram🇨🇳 @pgkj666 /?ed=2560
 - client-fingerprint: random
-  name: 香港_36
+  name: 香港_40
   network: ws
   port: 30002
   region: 香港
@@ -29708,7 +30126,7 @@ proxies:
     headers:
       Host: 0229.patterdeng.pp.ua
     path: /?ed=2560
-- name: 香港_37
+- name: 香港_41
   network: ws
   port: 42291
   region: 香港
@@ -29723,7 +30141,7 @@ proxies:
     headers:
       Host: steep.skyfigure.top
     path: Telegram🇨🇳 @pgkj666 /?ed=2560
-- name: 香港_38
+- name: 香港_42
   network: ws
   port: 58009
   region: 香港
@@ -29738,7 +30156,7 @@ proxies:
     headers:
       Host: steep.skyfigure.top
     path: Telegram🇨🇳 @pgkj666 /?ed=2560
-- name: 香港_39
+- name: 香港_43
   network: ws
   port: 443
   region: 香港
@@ -29753,7 +30171,7 @@ proxies:
     headers:
       Host: steep.skyfigure.top
     path: Telegram🇨🇳 @pgkj666 /?ed=2560
-- name: 香港_40
+- name: 香港_44
   network: ws
   port: 443
   region: 香港
@@ -29768,7 +30186,7 @@ proxies:
     headers:
       Host: steep.skyfigure.top
     path: Telegram🇨🇳 @pgkj666 /?ed=2560
-- name: 香港_41
+- name: 香港_45
   network: ws
   port: 26010
   region: 香港
@@ -29799,7 +30217,7 @@ proxies:
     headers:
       Host: sub.divib.dynv6.net
     path: /?ed=2560
-- name: 香港_42
+- name: 香港_46
   network: ws
   port: 443
   region: 香港
@@ -29814,7 +30232,7 @@ proxies:
     headers:
       Host: steep.skyfigure.top
     path: Telegram🇨🇳 @pgkj666 /?ed=2560
-- name: 香港_43
+- name: 香港_47
   network: ws
   port: 443
   region: 香港
@@ -29829,7 +30247,7 @@ proxies:
     headers:
       Host: steep.skyfigure.top
     path: Telegram🇨🇳 @pgkj666 /?ed=2560
-- name: 香港_44
+- name: 香港_48
   network: ws
   port: 443
   region: 香港
@@ -29844,7 +30262,7 @@ proxies:
     headers:
       Host: steep.skyfigure.top
     path: Telegram🇨🇳 @pgkj666 /?ed=2560
-- name: 香港_45
+- name: 香港_49
   network: ws
   port: 30011
   region: 香港
@@ -29859,7 +30277,7 @@ proxies:
     headers:
       Host: steep.skyfigure.top
     path: Telegram🇨🇳 @pgkj666 /?ed=2560
-- name: 香港_46
+- name: 香港_50
   network: ws
   port: 7656
   region: 香港
@@ -29874,7 +30292,7 @@ proxies:
     headers:
       Host: steep.skyfigure.top
     path: Telegram🇨🇳 @pgkj666 /?ed=2560
-- name: 香港_47
+- name: 香港_51
   network: ws
   port: 26651
   region: 香港
@@ -29889,7 +30307,7 @@ proxies:
     headers:
       Host: steep.skyfigure.top
     path: Telegram🇨🇳 @pgkj666 /?ed=2560
-- name: 香港_48
+- name: 香港_52
   network: ws
   port: 42805
   region: 香港
@@ -29904,7 +30322,7 @@ proxies:
     headers:
       Host: steep.skyfigure.top
     path: Telegram🇨🇳 @pgkj666 /?ed=2560
-- name: 香港_49
+- name: 香港_53
   network: ws
   port: 12005
   region: 香港
@@ -29919,7 +30337,7 @@ proxies:
     headers:
       Host: steep.skyfigure.top
     path: Telegram🇨🇳 @pgkj666 /?ed=2560
-- name: 香港_50
+- name: 香港_54
   network: ws
   port: 63168
   region: 香港
@@ -29934,7 +30352,7 @@ proxies:
     headers:
       Host: steep.skyfigure.top
     path: Telegram🇨🇳 @pgkj666 /?ed=2560
-- name: 香港_51
+- name: 香港_55
   network: ws
   port: 6666
   region: 香港
@@ -29949,7 +30367,7 @@ proxies:
     headers:
       Host: steep.skyfigure.top
     path: Telegram🇨🇳 @pgkj666 /?ed=2560
-- name: 香港_52
+- name: 香港_56
   network: ws
   port: 8080
   region: 香港
@@ -29964,7 +30382,7 @@ proxies:
     headers:
       Host: steep.skyfigure.top
     path: Telegram🇨🇳 @pgkj666 /?ed=2560
-- name: 香港_53
+- name: 香港_57
   network: ws
   port: 443
   region: 香港
@@ -30036,7 +30454,7 @@ proxies:
   uuid: 418048af-a293-4b99-9b0c-98ca3580dd24
 - alterId: 0
   cipher: auto
-  name: 香港_54
+  name: 香港_58
   network: ws
   port: 64126
   region: 香港
@@ -30260,7 +30678,7 @@ proxies:
 - alterId: 0
   cipher: auto
   client-fingerprint: chrome
-  name: 香港_55
+  name: 香港_59
   port: 21186
   region: 香港
   server: 43.247.134.190
@@ -30283,7 +30701,7 @@ proxies:
   uuid: 418048af-a293-4b99-9b0c-98ca3580dd24
 - alterId: 0
   cipher: auto
-  name: 香港_56
+  name: 香港_60
   network: kcp
   port: 3351
   region: 香港
@@ -30391,419 +30809,5 @@ proxies:
   skip-cert-verify: true
   sni: cdn.alibaba.com
   type: trojan
-- client-fingerprint: chrome
-  flow: xtls-rprx-vision
-  name: 香港_57
-  port: 443
-  reality-opts:
-    public-key: LwD_OY7bAjGraacyIogZzLhhcaAt8crNFTD4WZe_NWc
-    short-id: be9bd45f82f511c3
-  server: 5.102.124.76
-  servername: www.cloudflare.com
-  tls: true
-  type: vless
-  uuid: ac7532c3-b870-4153-84ff-d6c7bf8552d3
-- client-fingerprint: chrome
-  flow: xtls-rprx-vision
-  name: 香港_58
-  port: 8443
-  reality-opts:
-    public-key: POAZKZyD98MlYa3A5bSOayTPHdofqXynPAT1_QWEwjo
-    short-id: dfeff076987e2d34
-  server: 5.102.124.78
-  servername: www.microsoft.com
-  tls: true
-  type: vless
-  uuid: 79091265-a298-4205-a559-d04ed045c38b
-- cipher: aes-256-gcm
-  name: 🇭🇰 香港A01_02
-  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-  port: 19275
-  server: 0whxr-g05.hk01-ae5.entry.v50307shvkaa.art
-  type: ss
-  udp: true
-- cipher: aes-256-gcm
-  name: 🇯🇵 日本A01 | x0.8_02
-  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-  port: 476
-  server: q0hre-g05.jp01-ae5.entry.v50307shvkaa.art
-  type: ss
-  udp: true
-- cipher: aes-256-gcm
-  name: 🇭🇰 香港A02 | IEPL_02
-  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-  port: 14563
-  server: zcjon-g05.hk02-ae5.entry.v50307shvkaa.art
-  type: ss
-  udp: true
-- cipher: aes-256-gcm
-  name: 🇯🇵 日本A02 | x0.8_02
-  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-  port: 486
-  server: xwqiu-g05.jp02-ae5.entry.v50307shvkaa.art
-  type: ss
-  udp: true
-- cipher: aes-256-gcm
-  name: 🇭🇰 香港A03 | IEPL_02
-  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-  port: 763
-  server: 89i8b-g05.hk03-ae5.entry.v50307shvkaa.art
-  type: ss
-  udp: true
-- cipher: aes-256-gcm
-  name: 🇯🇵 日本A03 | x0.8_02
-  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-  port: 491
-  server: 0ts70-g05.jp03-ae5.entry.v50307shvkaa.art
-  type: ss
-  udp: true
-- cipher: aes-256-gcm
-  name: 🇭🇰 香港A04 | IEPL_02
-  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-  port: 807
-  server: 0c8kl-g05.hk04-ae5.entry.v50307shvkaa.art
-  type: ss
-  udp: true
-- cipher: aes-256-gcm
-  name: 🇯🇵 日本A04 | x0.8_02
-  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-  port: 496
-  server: h0a74-g05.jp04-ae5.entry.v50307shvkaa.art
-  type: ss
-  udp: true
-- cipher: aes-256-gcm
-  name: 🇭🇰 香港A05 | IEPL_02
-  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-  port: 1815
-  server: nmk8b-g05.hk05-ae5.entry.v50307shvkaa.art
-  type: ss
-  udp: true
-- alterId: 1
-  cipher: auto
-  name: 🇯🇵 日本A05 | 下载专用 | x0.01_02
-  port: 64658
-  server: o36lx-g05.jp05-vm5.entry.rtysjur.quest
-  skip-cert-verify: false
-  tls: false
-  type: vmess
-  udp: true
-  uuid: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-- cipher: aes-256-gcm
-  name: 🇭🇰 香港A06 | x0.8_02
-  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-  port: 1416
-  server: ug3m8-g05.hk06-ae5.entry.v50307shvkaa.art
-  type: ss
-  udp: true
-- alterId: 1
-  cipher: auto
-  name: 🇯🇵 日本A06 | 下载专用 | x0.01_02
-  port: 666
-  server: nqpus-g05.jp06-vm5.entry.rtysjur.quest
-  skip-cert-verify: false
-  tls: false
-  type: vmess
-  udp: true
-  uuid: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-- cipher: aes-256-gcm
-  name: 🇭🇰 香港A07 | x0.8_02
-  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-  port: 1423
-  server: gtre1-g05.hk07-ae5.entry.v50307shvkaa.art
-  type: ss
-  udp: true
-- cipher: aes-256-gcm
-  name: 🇯🇵 日本A07 | x0.8_02
-  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-  port: 14008
-  server: vk49i-g05.jp07-ae5.entry.v50307shvkaa.art
-  type: ss
-  udp: true
-- cipher: aes-256-gcm
-  name: 🇭🇰 香港A08 | x0.8_02
-  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-  port: 18646
-  server: 395vk-g05.hk08-ae5.entry.v50307shvkaa.art
-  type: ss
-  udp: true
-- cipher: aes-256-gcm
-  name: 🇯🇵 日本A08 | x0.8_02
-  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-  port: 12546
-  server: 3xrro-g05.jp08-ae5.entry.v50307shvkaa.art
-  type: ss
-  udp: true
-- alterId: 1
-  cipher: auto
-  name: 🇭🇰 香港A09 | IEPL_02
-  port: 15268
-  server: 4f9xp-g05.hk09-vm5.entry.v50307shvkaa.art
-  skip-cert-verify: false
-  tls: false
-  type: vmess
-  udp: true
-  uuid: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-- cipher: aes-256-gcm
-  name: 🇯🇵 日本A09 | x0.8_02
-  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-  port: 11161
-  server: sty63-g05.jp09-ae5.entry.v50307shvkaa.art
-  type: ss
-  udp: true
-- alterId: 1
-  cipher: auto
-  name: 🇭🇰 香港A10 | IEPL_02
-  network: ws
-  port: 13486
-  server: 65wrs-g05.hk10-vm5.entry.v50307shvkaa.art
-  skip-cert-verify: false
-  tls: false
-  type: vmess
-  udp: true
-  uuid: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-  ws-opts:
-    headers:
-      Host: bgp-01-10.entry-0.chinasnow.net
-    path: /
-- cipher: aes-256-gcm
-  name: 🇯🇵 日本A10 | x0.8_02
-  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-  port: 16527
-  server: r2511-g05.jp10-ae5.entry.v50307shvkaa.art
-  type: ss
-  udp: true
-- alterId: 1
-  cipher: auto
-  name: 🇭🇰 香港A11 | IEPL_02
-  network: ws
-  port: 578
-  server: vvjvy-g05.hk11-vm5.entry.v50307shvkaa.art
-  skip-cert-verify: false
-  tls: false
-  type: vmess
-  udp: true
-  uuid: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-  ws-opts:
-    headers:
-      Host: bgp-01-11.entry-0.chinasnow.net
-    path: /tutorial/iphone13.m3u8
-- cipher: aes-256-gcm
-  name: 🇯🇵 日本A11 | x0.8_02
-  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-  port: 17744
-  server: rah29-g05.jp11-ae5.entry.v50307shvkaa.art
-  type: ss
-  udp: true
-- cipher: aes-256-gcm
-  name: 🇯🇵 日本A12 | IEPL | 测试_02
-  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-  port: 501
-  server: e0xj1-g05.jp12-ae5.entry.v50307shvkaa.art
-  type: ss
-  udp: true
-- cipher: aes-256-gcm
-  name: 🇸🇬 新加坡A01_02
-  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-  port: 20003
-  server: ld8fl-g05.sg01-ae5.entry.v50307shvkaa.art
-  type: ss
-  udp: true
-- cipher: aes-256-gcm
-  name: 🇸🇬 新加坡A02_02
-  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-  port: 20078
-  server: 4lw4i-g05.sg02-ae5.entry.v50307shvkaa.art
-  type: ss
-  udp: true
-- cipher: aes-256-gcm
-  name: 🇨🇳 台湾A01 | IEPL | x2_02
-  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-  port: 20008
-  server: is9b0-g05.tw01-ae5.entry.v50307shvkaa.art
-  type: ss
-  udp: true
-- cipher: aes-256-gcm
-  name: 🇺🇲 美国A01_02
-  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-  port: 20013
-  server: pl00r-g05.us01-ae5.entry.v50307shvkaa.art
-  type: ss
-  udp: true
-- cipher: aes-256-gcm
-  name: 🇺🇲 美国A02_02
-  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-  port: 20018
-  server: nei9i-g05.us02-ae5.entry.v50307shvkaa.art
-  type: ss
-  udp: true
-- cipher: aes-256-gcm
-  name: 🇬🇧 英国A01_02
-  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-  port: 20023
-  server: x1xep-g05.gb01-ae5.entry.v50307shvkaa.art
-  type: ss
-  udp: true
-- cipher: aes-256-gcm
-  name: 🇦🇷 阿根廷A01_02
-  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-  port: 20028
-  server: q2g5n-g05.ar01-ae5.entry.v50307shvkaa.art
-  type: ss
-  udp: true
-- cipher: aes-256-gcm
-  name: 🇷🇺 俄罗斯A01_02
-  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-  port: 20033
-  server: 2yc83-g05.ru01-ae5.entry.v50307shvkaa.art
-  type: ss
-  udp: true
-- cipher: aes-256-gcm
-  name: 🇹🇷 土耳其A01_02
-  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-  port: 20038
-  server: rc3nl-g05.tr01-ae5.entry.v50307shvkaa.art
-  type: ss
-  udp: true
-- cipher: aes-256-gcm
-  name: 🇰🇷 韩国A01_02
-  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-  port: 20043
-  server: 8u535-g05.kr01-ae5.entry.v50307shvkaa.art
-  type: ss
-  udp: true
-- cipher: aes-256-gcm
-  name: 🇮🇳 印度A01_02
-  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-  port: 20048
-  server: 3brdm-g05.in01-ae5.entry.v50307shvkaa.art
-  type: ss
-  udp: true
-- cipher: aes-256-gcm
-  name: 🇩🇪 德国A01_02
-  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-  port: 20053
-  server: htnrm-g05.de01-ae5.entry.v50307shvkaa.art
-  type: ss
-  udp: true
-- cipher: aes-256-gcm
-  name: 🇨🇦 加拿大A01_02
-  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-  port: 20058
-  server: rio1z-g05.ca01-ae5.entry.v50307shvkaa.art
-  type: ss
-  udp: true
-- cipher: aes-256-gcm
-  name: 🇦🇺 澳大利亚A01_02
-  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-  port: 20063
-  server: i8ki3-g05.au01-ae5.entry.v50307shvkaa.art
-  type: ss
-  udp: true
-- cipher: aes-256-gcm
-  name: 🇫🇷 法国A01_02
-  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-  port: 20068
-  server: l0xpu-g05.fr01-ae5.entry.v50307shvkaa.art
-  type: ss
-  udp: true
-- cipher: aes-256-gcm
-  name: 🇺🇦 乌克兰A01_02
-  password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-  port: 20073
-  server: vy46z-g05.ua01-ae5.entry.v50307shvkaa.art
-  type: ss
-  udp: true
-- alterId: 1
-  cipher: auto
-  name: 🇯🇵 免费-日本1-Ver.6_02
-  port: 21585
-  server: 77h9d-g05.jp01-0986-vm0.entry.fr0307a.art
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  udp: true
-  uuid: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-- alterId: 1
-  cipher: auto
-  name: 🇯🇵 免费-日本2-Ver.7_02
-  port: 11777
-  server: 50w1l-g05.jp02-9a99-vm0.entry.fr0307a.art
-  skip-cert-verify: false
-  tls: false
-  type: vmess
-  udp: true
-  uuid: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-- alterId: 1
-  cipher: auto
-  name: 🇯🇵 免费-日本3-Ver.6_02
-  port: 21585
-  server: a59bn-g05.jp03-7d22-vm0.entry.fr0307a.art
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  udp: true
-  uuid: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-- alterId: 1
-  cipher: auto
-  name: 🇯🇵 免费-日本4-Ver.7_02
-  port: 448
-  server: t492d-g05.jp04-3771-vm0.entry.fr0307a.art
-  skip-cert-verify: false
-  tls: false
-  type: vmess
-  udp: true
-  uuid: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-- alterId: 1
-  cipher: auto
-  name: 🇯🇵 免费-日本5-Ver.8_02
-  port: 46486
-  server: 39t03-g05.jp05-6786-vm0.entry.fr0307a.art
-  skip-cert-verify: false
-  tls: false
-  type: vmess
-  udp: true
-  uuid: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-- alterId: 1
-  cipher: auto
-  name: 🇯🇵 免费-日本6-Ver.7_02
-  port: 28787
-  server: wid8z-g05.jp06-7c5a-vm0.entry.fr0307a.art
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  udp: true
-  uuid: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-- alterId: 1
-  cipher: auto
-  name: 🇯🇵 免费-日本7-Ver.1_02
-  port: 28787
-  server: dgfhj-g05.jp07-1f28-vm0.entry.fr0307a.art
-  skip-cert-verify: false
-  tls: false
-  type: vmess
-  udp: true
-  uuid: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-- client-fingerprint: chrome
-  flow: xtls-rprx-vision
-  name: 香港_59
-  port: 443
-  reality-opts:
-    public-key: LwD_OY7bAjGraacyIogZzLhhcaAt8crNFTD4WZe_NWc
-    short-id: be9bd45f82f511c3
-  server: 5.102.124.76
-  servername: www.cloudflare.com
-  tls: true
-  type: vless
-  uuid: ac7532c3-b870-4153-84ff-d6c7bf8552d3
-- client-fingerprint: chrome
-  flow: xtls-rprx-vision
-  name: 香港_60
-  port: 8443
-  reality-opts:
-    public-key: POAZKZyD98MlYa3A5bSOayTPHdofqXynPAT1_QWEwjo
-    short-id: dfeff076987e2d34
-  server: 5.102.124.78
-  servername: www.microsoft.com
-  tls: true
-  type: vless
-  uuid: 79091265-a298-4205-a559-d04ed045c38b
+- name: 直连_02
+  type: direct
