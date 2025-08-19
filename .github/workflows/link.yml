@@ -1,0 +1,88 @@
+name: Run Node Fetcher
+
+on:
+  push:
+    paths:
+      - 'link.py'
+      - 'ip_geolocation.py'
+      - 'link.txt'
+      - '.github/workflows/link.yml'
+  workflow_dispatch:
+  schedule:
+    - cron: '0 7 * * *'  # 每日0:00 PDT（7:00 UTC）运行主任务
+    - cron: '0 7 5 * *'  # 每月5号0:00 PDT（7:00 UTC）更新 GeoLite2-Country.mmdb
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests pyyaml geoip2 tqdm beautifulsoup4 aiohttp
+
+      - name: Update GeoLite2-Country database on 5th of each month
+        if: github.event.schedule == '0 7 5 * *'
+        run: |
+          echo "Updating GeoLite2-Country.mmdb..."
+          wget -O GeoLite2-Country.mmdb https://git.io/GeoLite2-Country.mmdb
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+          git add GeoLite2-Country.mmdb
+          git commit -m "Update GeoLite2-Country.mmdb on $(date +%Y-%m-%d)" || echo "No changes to commit"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
+
+      - name: Verify GeoLite2-Country database
+        if: github.event.schedule != '0 7 5 * *'
+        run: |
+          if [ ! -f GeoLite2-Country.mmdb ]; then
+            echo "Error: GeoLite2-Country.mmdb not found in repository."
+            exit 1
+          else
+            echo "GeoLite2-Country.mmdb found, proceeding."
+          fi
+        continue-on-error: false
+
+      - name: Run the script
+        if: github.event.schedule != '0 7 5 * *'
+        run: python link.py
+        continue-on-error: true
+
+      - name: Commit and push changes
+        if: github.event.schedule != '0 7 5 * *'
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+          git add link.yaml link.csv
+          git commit -m "Auto update nodes and cache from script on $(date +%Y-%m-%d)" || echo "No changes to commit"
+          
+          # 添加一个重试循环，以应对竞态条件
+          MAX_TRIES=5
+          for i in $(seq 1 $MAX_TRIES); do
+            git pull --rebase && git push
+            if [ $? -eq 0 ]; then
+              echo "Push successful on try $i"
+              break
+            else
+              echo "Push failed. Retrying... (Attempt $i/$MAX_TRIES)"
+              # 增加一个随机延迟，以避免再次发生冲突
+              sleep $(($RANDOM % 10 + 5)) 
+            fi
+            if [ $i -eq $MAX_TRIES ]; then
+              echo "Failed to push after $MAX_TRIES attempts."
+              exit 1
+            fi
+          done
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
