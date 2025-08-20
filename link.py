@@ -14,7 +14,7 @@ import logging
 from tenacity import retry, stop_after_attempt, wait_fixed
 
 # 设置日志
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.ERROR, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 # 定义文件路径
