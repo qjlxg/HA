@@ -35,7 +35,7 @@ CONFIG_NAMES = [
     'sub.yaml', 'sub.yml', 'subscribe.yaml', 'subscribe.yml',
     'subscription.yaml', 'subscription.yml',
     '_clash.yaml', '_clash.yml', 'sub_clash.yaml', 'sub_clash.yml',
-    'n1.yaml', 'n2.yaml', 'v1.yaml', 's1.yaml', 'n.yaml', 's.yaml' # 新增文件名
+    'n1.yaml', 'n2.yaml', 'v1.yaml', 's1.yaml', 'n.yaml', 's.yaml' 
 ]
 
 # 浏览器User-Agent列表，用于伪装请求头
@@ -78,7 +78,7 @@ def test_connection_and_get_protocol(link):
     测试一个链接的连通性，并返回成功的协议。
     优先测试 HTTPS。
     """
-    link = link.replace('http://', '').replace('https://', '').strip(',') # 修复在这里
+    link = link.replace('http://', '').replace('https://', '').strip(',')
     
     # 优先尝试 HTTPS
     try:
@@ -248,26 +248,35 @@ def process_links(working_links):
     return all_nodes, node_counts
 
 def get_node_key(node):
-    """定义节点唯一键，忽略 server IP 以处理 CDN 重复"""
-    ws_opts = node.get('ws-opts', {}) or node.get('ws_opts', {})
-    headers = ws_opts.get('headers', {}) or {}
-    reality_opts = node.get('reality-opts', {}) or {}
-    key = (
-        node.get('type', ''),
-        node.get('uuid', ''),
-        node.get('cipher', ''),
-        node.get('network', ''),
-        node.get('port', ''),
-        node.get('alterId', ''),
-        ws_opts.get('path', ''),
-        headers.get('Host', ''),
-        node.get('servername', ''),
-        node.get('flow', ''),
-        node.get('password', ''),
-        node.get('skip-cert-verify', ''),
-        reality_opts.get('public-key', ''),
-        node.get('sni', ''),
-    )
+    """
+    定义节点唯一键，根据代理类型进行更精确的去重。
+    """
+    proxy_type = node.get('type', '').lower()
+    
+    if proxy_type in ['vmess', 'vless']:
+        # 对于 Vmess 和 Vless，UUID 是唯一的
+        key = (
+            proxy_type,
+            node.get('uuid', ''),
+            node.get('network', ''),
+            node.get('ws-path', '') or node.get('ws_path', ''),
+            node.get('host', '')
+        )
+    elif proxy_type in ['ss', 'trojan']:
+        # 对于 SS 和 Trojan，密码是唯一的
+        key = (
+            proxy_type,
+            node.get('password', ''),
+            node.get('cipher', ''),
+            node.get('network', ''),
+        )
+    else:
+        # 对于其他类型（如 http, socks5），服务器和端口是主要标识
+        key = (
+            proxy_type,
+            node.get('server', ''),
+            node.get('port', ''),
+        )
     return key
 
 def main():
