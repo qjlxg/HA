@@ -82,7 +82,7 @@ def test_connection_and_get_protocol(link):
     
     # 优先尝试 HTTPS
     try:
-        response = requests.head(f"https://{link}", headers=get_headers(), timeout=7)
+        response = requests.head(f"https://{link}", headers=get_headers(), timeout=5)
         if response.status_code == 200:
             return link, "https"
     except requests.exceptions.RequestException:
@@ -90,7 +90,7 @@ def test_connection_and_get_protocol(link):
     
     # 如果 HTTPS 失败，尝试 HTTP
     try:
-        response = requests.head(f"http://{link}", headers=get_headers(), timeout=7)
+        response = requests.head(f"http://{link}", headers=get_headers(), timeout=5)
         if response.status_code == 200:
             return link, "http"
     except requests.exceptions.RequestException:
@@ -262,12 +262,20 @@ def get_node_key(node):
             node.get('ws-path', '') or node.get('ws_path', ''),
             node.get('host', '')
         )
-    elif proxy_type in ['ss', 'trojan']:
-        # 对于 SS 和 Trojan，密码是唯一的
+    elif proxy_type in ['ss', 'ssr', 'trojan']:
+        # 对于 SS, SSR 和 Trojan，密码是唯一的
         key = (
             proxy_type,
             node.get('password', ''),
             node.get('cipher', ''),
+            node.get('network', ''),
+        )
+    elif proxy_type == 'hysteria2':
+        # 对于 hysteria2，password 和 sni 是主要标识
+        key = (
+            proxy_type,
+            node.get('password', ''),
+            node.get('sni', ''),
             node.get('network', ''),
         )
     else:
@@ -303,10 +311,14 @@ def main():
     logger.info("第二阶段：开始处理可用链接...")
     all_nodes, node_counts = process_links(working_links)
     
+    # 过滤节点：只保留指定的协议类型
+    allowed_types = {'hysteria2', 'vmess', 'trojan', 'ss', 'ssr', 'vless'}
+    filtered_nodes = [node for node in all_nodes if node.get('type', '').lower() in allowed_types]
+    
     # 统计和去重
     unique_nodes = []
     node_keys = set()
-    for node in all_nodes:
+    for node in filtered_nodes:
         node_key = get_node_key(node)
         if node_key not in node_keys:
             node_keys.add(node_key)
