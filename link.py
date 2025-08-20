@@ -13,6 +13,7 @@ from tqdm import tqdm
 from bs4 import BeautifulSoup
 import logging
 from tenacity import retry, stop_after_attempt, wait_fixed
+from urllib.parse import unquote
 
 # 设置日志
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -198,18 +199,32 @@ def parse_plaintext_nodes(content):
         # Shadowsocks
         elif line.startswith('ss://'):
             try:
-                base64_part = line[5:].split('#', 1)[0]
-                decoded_ss = base64.b64decode(base64_part + '=' * (-len(base64_part) % 4)).decode('utf-8')
-                method, password_and_server = decoded_ss.split(':', 1)
-                password, server_and_port = password_and_server.split('@', 1)
+                # 分割 Base64 部分和名称部分
+                parts = line[5:].split('#', 1)
+                base64_part = parts[0]
+                name_part = unquote(parts[1]) if len(parts) > 1 else 'ss_node'
+                
+                # 自动添加 Base64 填充
+                padded_base64 = base64_part + '=' * (-len(base64_part) % 4)
+                
+                decoded_ss = base64.b64decode(padded_base64).decode('utf-8')
+                
+                method_and_password, server_and_port = decoded_ss.split('@', 1)
                 server, port = server_and_port.rsplit(':', 1)
+                
+                if ':' in method_and_password:
+                    method, password = method_and_password.split(':', 1)
+                else:
+                    method = method_and_password
+                    password = ''
+                
                 ss_node = {
                     'type': 'ss',
                     'method': method,
                     'password': password,
                     'server': server,
                     'port': int(port),
-                    'ps': line.split('#', 1)[1] if '#' in line else 'ss_node'
+                    'ps': name_part
                 }
                 nodes.append(convert_to_clash_node(ss_node))
             except Exception as e:
@@ -228,7 +243,7 @@ def parse_plaintext_nodes(content):
                     'uuid': uuid,
                     'server': server,
                     'port': int(port),
-                    'ps': line.split('#', 1)[1] if '#' in line else 'vless_node',
+                    'ps': unquote(line.split('#', 1)[1]) if '#' in line else 'vless_node',
                     'net': params.get('type'),
                     'security': params.get('security'),
                     'flow': params.get('flow'),
@@ -243,13 +258,13 @@ def parse_plaintext_nodes(content):
             try:
                 password_and_server = line[9:].split('#', 1)[0]
                 password, server_info = password_and_server.split('@', 1)
-                server, port = server_info.split(':', 1)
+                server, port = server_info.rsplit(':', 1)
                 trojan_node = {
                     'type': 'trojan',
                     'password': password,
                     'server': server,
                     'port': int(port),
-                    'ps': line.split('#', 1)[1] if '#' in line else 'trojan_node'
+                    'ps': unquote(line.split('#', 1)[1]) if '#' in line else 'trojan_node'
                 }
                 nodes.append(convert_to_clash_node(trojan_node))
             except Exception as e:
