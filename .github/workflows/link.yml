@@ -9,7 +9,7 @@ on:
       - '.github/workflows/link.yml'
   workflow_dispatch:
   schedule:
-    - cron: '0 7 * * *'  # 每日0:00 PDT（7:00 UTC）运行主任务
+    - cron: '0 */3 * * *' # Run every 3 hours
     - cron: '0 7 5 * *'  # 每月5号0:00 PDT（7:00 UTC）更新 GeoLite2-Country.mmdb
 
 jobs:
