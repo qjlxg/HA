@@ -61,39 +61,41 @@ def get_headers():
 @retry(stop=stop_after_attempt(3), wait=wait_fixed(2))
 def test_connection_and_get_protocol(link):
     """
-    测试一个链接的连通性，并返回成功的协议。
+    测试一个链接的连通性，并返回成功的协议和内容类型。
     优先测试 HTTPS。
     """
     link = link.replace('http://', '').replace('https://', '')
     
     # 优先尝试 HTTPS
     try:
-        response = requests.head(f"https://{link}", headers=get_headers(), timeout=7)
+        response = requests.head(f"https://{link}", headers=get_headers(), timeout=5) # 缩短超时时间
         if response.status_code == 200:
-            return link, "https"
+            content_type = response.headers.get('content-type', '').lower()
+            return link, "https", "html" if 'text/html' in content_type else "yaml"
     except requests.exceptions.RequestException:
         pass
     
     # 如果 HTTPS 失败，尝试 HTTP
     try:
-        response = requests.head(f"http://{link}", headers=get_headers(), timeout=7)
+        response = requests.head(f"http://{link}", headers=get_headers(), timeout=5) # 缩短超时时间
         if response.status_code == 200:
-            return link, "http"
+            content_type = response.headers.get('content-type', '').lower()
+            return link, "http", "html" if 'text/html' in content_type else "yaml"
     except requests.exceptions.RequestException:
         pass
         
-    return None, None
+    return None, None, None
 
 def pre_test_links(links):
-    """并发预测试所有链接，返回可用链接及其协议的字典"""
+    """并发预测试所有链接，返回可用链接、协议和内容类型的字典"""
     working_links = {}
-    max_workers = min(32, os.cpu_count() * 2) if os.cpu_count() else 16
+    max_workers = min(64, os.cpu_count() * 4) if os.cpu_count() else 32 # 增加并发数量
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         future_to_link = {executor.submit(test_connection_and_get_protocol, link): link for link in links}
         for future in tqdm(as_completed(future_to_link), total=len(links), desc="预测试链接"):
-            result_link, result_protocol = future.result()
+            result_link, result_protocol, content_type = future.result()
             if result_link:
-                working_links[result_link] = result_protocol
+                working_links[result_link] = {'protocol': result_protocol, 'type': content_type}
     return working_links
 
 @retry(stop=stop_after_attempt(3), wait=wait_fixed(2))
@@ -101,7 +103,7 @@ def fetch_yaml_content(url):
     """尝试直接下载 YAML 文件，使用流式读取"""
     headers = get_headers()
     try:
-        response = requests.get(url, headers=headers, timeout=15, stream=True)
+        response = requests.get(url, headers=headers, timeout=10, stream=True) # 缩短超时时间
         if response.status_code == 200 and 'text/html' not in response.headers.get('content-type', '').lower():
             content = ''
             content_length = int(response.headers.get('Content-Length', 0))
@@ -127,7 +129,7 @@ def parse_and_fetch_from_html(url):
     """解析 HTML 页面，批量收集并尝试下载 YAML 文件"""
     headers = get_headers()
     try:
-        response = requests.get(url, headers=headers, timeout=15)
+        response = requests.get(url, headers=headers, timeout=10) # 缩短超时时间
         if response.status_code == 200 and 'text/html' in response.headers.get('content-type', '').lower():
             soup = BeautifulSoup(response.text, 'html.parser')
             
@@ -136,22 +138,13 @@ def parse_and_fetch_from_html(url):
                          for link in soup.find_all('a')
                          if link.get('href') and link.get('href').lower().endswith(('.yaml', '.yml'))]
             
-            # 批量尝试下载 YAML 文件
-            with ThreadPoolExecutor(max_workers=10) as executor:
-                future_to_url = {executor.submit(fetch_yaml_content, yaml_url): yaml_url for yaml_url in yaml_urls}
-                for future in as_completed(future_to_url):
-                    content, final_url = future.result()
-                    if content:
-                        return content, final_url  # 返回第一个成功下载的 YAML 文件
-            
             # 策略2: 寻找包含特定关键字的链接
             for link in soup.find_all('a'):
                 href = link.get('href')
                 if href and re.search(r'(clash|v2ray|mihomo|config)', href, re.IGNORECASE):
                     full_url = requests.compat.urljoin(url, href)
-                    content, final_url = fetch_yaml_content(full_url)
-                    if content:
-                        return content, final_url
+                    if full_url not in yaml_urls:
+                        yaml_urls.append(full_url)
             
             # 策略3: 从 <script> 标签中解析
             for script in soup.find_all('script'):
@@ -162,9 +155,16 @@ def parse_and_fetch_from_html(url):
                         yaml_url = match.group(1)
                         if not yaml_url.startswith(('http://', 'https://')):
                             yaml_url = requests.compat.urljoin(url, yaml_url)
-                        content, final_url = fetch_yaml_content(yaml_url)
-                        if content:
-                            return content, final_url
+                        if yaml_url not in yaml_urls:
+                            yaml_urls.append(yaml_url)
+            
+            # 批量尝试下载 YAML 文件
+            with ThreadPoolExecutor(max_workers=10) as executor:
+                future_to_url = {executor.submit(fetch_yaml_content, yaml_url): yaml_url for yaml_url in yaml_urls}
+                for future in as_completed(future_to_url):
+                    content, final_url = future.result()
+                    if content:
+                        return content, final_url  # 返回第一个成功下载的 YAML 文件
         return None, None
     except requests.exceptions.RequestException as e:
         logger.warning(f"HTML 解析失败: {url}, 错误: {e}")
@@ -176,58 +176,52 @@ def process_links(working_links):
     node_counts = []
     processed_links = set()
     
-    # 分批处理链接，控制内存占用
-    batch_size = 100
-    link_batches = [dict(list(working_links.items())[i:i + batch_size]) for i in range(0, len(working_links), batch_size)]
-    
-    max_workers = min(16, os.cpu_count() * 2) if os.cpu_count() else 8
-    for batch_idx, batch in enumerate(link_batches):
-        logger.info(f"处理批次 {batch_idx + 1}/{len(link_batches)}，包含 {len(batch)} 个链接")
-        urls_to_process = [{'type': 'html_parse', 'url': f"{protocol}://{link}"} for link, protocol in batch.items()]
-        # 仅在 HTML 解析失败时尝试 CONFIG_NAMES
-        for link, protocol in batch.items():
-            urls_to_process.append({'type': 'direct', 'url': f"{protocol}://{link}", 'config_names': CONFIG_NAMES})
+    max_workers = min(32, os.cpu_count() * 2) if os.cpu_count() else 16
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        future_to_task = {}
+        for link, info in working_links.items():
+            full_url = f"{info['protocol']}://{link}"
+            if info['type'] == 'html':
+                # 优先处理 HTML 解析
+                task = {'type': 'html_parse', 'url': full_url}
+                future = executor.submit(parse_and_fetch_from_html, task['url'])
+                future_to_task[future] = task
+            else:
+                # 否则，直接尝试下载
+                for config_name in CONFIG_NAMES:
+                    full_yaml_url = f"{full_url}/{config_name}"
+                    if full_yaml_url not in processed_links:
+                        task = {'type': 'direct', 'url': full_yaml_url}
+                        future = executor.submit(fetch_yaml_content, task['url'])
+                        future_to_task[future] = task
         
-        with ThreadPoolExecutor(max_workers=max_workers) as executor:
-            future_to_task = {}
-            for task in urls_to_process:
-                if task['type'] == 'direct':
-                    for config_name in task['config_names']:
-                        full_url = f"{task['url']}/{config_name}"
-                        if full_url not in processed_links:
-                            future = executor.submit(fetch_yaml_content, full_url)
-                            future_to_task[future] = task
-                elif task['type'] == 'html_parse':
-                    future = executor.submit(parse_and_fetch_from_html, task['url'])
-                    future_to_task[future] = task
+        for future in tqdm(as_completed(future_to_task), total=len(future_to_task), desc="获取节点内容"):
+            nodes_text, successful_url = future.result()
             
-            for future in tqdm(as_completed(future_to_task), total=len(future_to_task), desc=f"获取节点内容 (批次 {batch_idx + 1})"):
-                nodes_text, successful_url = future.result()
-                
-                if successful_url and successful_url in processed_links:
-                    continue
-                
-                if nodes_text:
-                    try:
-                        data = yaml.safe_load(nodes_text)
-                        if isinstance(data, dict):
-                            nodes = data.get('proxies', [])
-                            for node in nodes:
-                                ip = node.get('server', '')
-                                if re.match(r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$', ip):
-                                    try:
-                                        country_code, country_name = geolocator.get_location(ip)
-                                        node['name'] = country_name or '未知'
-                                    except:
-                                        node['name'] = '未知'
-                            all_nodes.extend(nodes)
-                            node_counts.append({'url': successful_url, 'count': len(nodes)})
-                            processed_links.add(successful_url)
-                            logger.info(f"成功从 {successful_url} 获取 {len(nodes)} 个节点")
-                        else:
-                            logger.warning(f"YAML 内容格式不正确: {successful_url}")
-                    except yaml.YAMLError as e:
-                        logger.warning(f"无法解析 YAML 内容: {successful_url}, 错误: {e}")
+            if not successful_url or successful_url in processed_links:
+                continue
+            
+            if nodes_text:
+                try:
+                    data = yaml.safe_load(nodes_text)
+                    if isinstance(data, dict):
+                        nodes = data.get('proxies', [])
+                        for node in nodes:
+                            ip = node.get('server', '')
+                            if re.match(r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$', ip):
+                                try:
+                                    country_code, country_name = geolocator.get_location(ip)
+                                    node['name'] = country_name or '未知'
+                                except:
+                                    node['name'] = '未知'
+                        all_nodes.extend(nodes)
+                        node_counts.append({'url': successful_url, 'count': len(nodes)})
+                        processed_links.add(successful_url)
+                        logger.info(f"成功从 {successful_url} 获取 {len(nodes)} 个节点")
+                    else:
+                        logger.warning(f"YAML 内容格式不正确: {successful_url}")
+                except yaml.YAMLError as e:
+                    logger.warning(f"无法解析 YAML 内容: {successful_url}, 错误: {e}")
     
     return all_nodes, node_counts
 
