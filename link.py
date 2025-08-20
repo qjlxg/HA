@@ -120,7 +120,7 @@ def fetch_yaml_content(url):
             content_length = int(response.headers.get('Content-Length', 0))
             downloaded = 0
             for chunk in response.iter_content(chunk_size=8192):
-                content += chunk.decode('utf-8')
+                content += chunk.decode('utf-8', 'ignore')  # 修复在这里
                 downloaded += len(chunk)
             if content_length and downloaded < content_length:
                 logger.warning(f"下载不完整: {url}, 预期 {content_length} 字节, 实际 {downloaded} 字节")
