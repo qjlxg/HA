@@ -37,3 +37,4 @@ jobs:
         with:
           commit_message: "feat: 更新 Clash 代理节点和统计数据"
           file_pattern: sc/*
+          force_push: true
