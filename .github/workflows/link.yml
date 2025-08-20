@@ -27,7 +27,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install requests pyyaml geoip2 tqdm beautifulsoup4 aiohttp
+          pip install requests pyyaml geoip2 tqdm beautifulsoup4 aiohttp tenacity
 
       - name: Update GeoLite2-Country database on 5th of each month
         if: github.event.schedule == '0 7 5 * *'
