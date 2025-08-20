@@ -39,7 +39,7 @@ jobs:
           # 复制文件并添加时间戳后缀
           cp all_unique_nodes.txt sc/$MONTH_DIR/$DAILY_DIR/all_unique_nodes.txt$TIMESTAMP
           cp merged_configs.txt sc/$MONTH_DIR/$DAILY_DIR/merged_configs.txt$TIMESTAMP
-          cp ink.yaml sc/$MONTH_DIR/$DAILY_DIR/ink.yaml$TIMESTAMP
+          cp innk.yaml sc/$MONTH_DIR/$DAILY_DIR/ink.yaml$TIMESTAMP
 
           echo "Files backed up to sc/$MONTH_DIR/$DAILY_DIR/ with timestamp suffix."
 
