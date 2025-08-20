@@ -65,7 +65,7 @@ def test_connection_and_get_protocol(link):
     
     # 如果 HTTPS 失败，尝试 HTTP
     try:
-        response = requests.head(f"http://link}", headers=get_headers(), timeout=5)
+        response = requests.head(f"http://{link}", headers=get_headers(), timeout=5)
         if response.status_code == 200:
             return link, "http"
     except requests.exceptions.RequestException:
