@@ -5,6 +5,7 @@ import csv
 import re
 import random
 import json
+import base64
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from functools import reduce
 from ip_geolocation import GeoLite2Country
@@ -26,9 +27,15 @@ GEOLITE_DB = os.path.join(BASE_DIR, 'GeoLite2-Country.mmdb')
 
 # 定义需要尝试的 YAML 文件名
 CONFIG_NAMES = [
-    'config.yaml', 'clash_proxies.yaml', 'all.yaml', 'mihomo.yaml',
-    'clash.yaml', 'openclash.yaml', 'clash-socket.yaml', 'v2ray.yaml',
-    'proxies.yaml', 'nodes.yaml', 'new.yaml', 'sf.yaml'
+    'config.yaml', 'config.yml', 'clash.yaml', 'clash.yml',
+    'clash_proxies.yaml', 'clash_nodes.yaml', 'clash_nodes.yml',
+    'all.yaml', 'all.yml', 'mihomo.yaml', 'mihomo.yml',
+    'openclash.yaml', 'clash-socket.yaml', 'v2ray.yaml', 'v2ray.yml',
+    'proxies.yaml', 'proxies.yml', 'nodes.yaml', 'nodes.yml',
+    'new.yaml', 'new.yml', 'sf.yaml', 'sf.yml',
+    'sub.yaml', 'sub.yml', 'subscribe.yaml', 'subscribe.yml',
+    'subscription.yaml', 'subscription.yml',
+    '_clash.yaml', '_clash.yml', 'sub_clash.yaml', 'sub_clash.yml'
 ]
 
 # 浏览器User-Agent列表，用于伪装请求头
@@ -68,7 +75,7 @@ def test_connection_and_get_protocol(link):
     
     # 优先尝试 HTTPS
     try:
-        response = requests.head(f"https://{link}", headers=get_headers(), timeout=5) # 缩短超时时间
+        response = requests.head(f"https://{link}", headers=get_headers(), timeout=5)
         if response.status_code == 200:
             content_type = response.headers.get('content-type', '').lower()
             return link, "https", "html" if 'text/html' in content_type else "yaml"
@@ -77,7 +84,7 @@ def test_connection_and_get_protocol(link):
     
     # 如果 HTTPS 失败，尝试 HTTP
     try:
-        response = requests.head(f"http://{link}", headers=get_headers(), timeout=5) # 缩短超时时间
+        response = requests.head(f"http://{link}", headers=get_headers(), timeout=5)
         if response.status_code == 200:
             content_type = response.headers.get('content-type', '').lower()
             return link, "http", "html" if 'text/html' in content_type else "yaml"
@@ -89,7 +96,7 @@ def test_connection_and_get_protocol(link):
 def pre_test_links(links):
     """并发预测试所有链接，返回可用链接、协议和内容类型的字典"""
     working_links = {}
-    max_workers = min(64, os.cpu_count() * 4) if os.cpu_count() else 32 # 增加并发数量
+    max_workers = min(64, os.cpu_count() * 4) if os.cpu_count() else 32
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         future_to_link = {executor.submit(test_connection_and_get_protocol, link): link for link in links}
         for future in tqdm(as_completed(future_to_link), total=len(links), desc="预测试链接"):
@@ -98,77 +105,252 @@ def pre_test_links(links):
                 working_links[result_link] = {'protocol': result_protocol, 'type': content_type}
     return working_links
 
+def convert_to_clash_node(node_info):
+    """将不同协议的节点信息转换为Clash格式"""
+    node_type = node_info.get('type', '').lower()
+    
+    # Vmess
+    if node_type == 'vmess':
+        return {
+            'name': node_info.get('ps', 'vmess_node'),
+            'type': 'vmess',
+            'server': node_info.get('add'),
+            'port': int(node_info.get('port')),
+            'uuid': node_info.get('id'),
+            'alterId': int(node_info.get('aid')),
+            'cipher': node_info.get('scy', 'auto'),
+            'network': node_info.get('net'),
+            'tls': node_info.get('tls') == 'tls',
+            'ws-opts': {
+                'path': node_info.get('path', ''),
+                'headers': {'Host': node_info.get('host', '')}
+            }
+        }
+    
+    # Shadowsocks
+    elif node_type == 'ss':
+        return {
+            'name': node_info.get('ps', 'ss_node'),
+            'type': 'ss',
+            'server': node_info.get('server'),
+            'port': int(node_info.get('port')),
+            'password': node_info.get('password'),
+            'cipher': node_info.get('method')
+        }
+    
+    # VLESS
+    elif node_type == 'vless':
+        return {
+            'name': node_info.get('ps', 'vless_node'),
+            'type': 'vless',
+            'server': node_info.get('server'),
+            'port': int(node_info.get('port')),
+            'uuid': node_info.get('uuid'),
+            'network': node_info.get('net'),
+            'tls': node_info.get('tls') == 'tls',
+            'flow': node_info.get('flow', ''),
+            'reality-opts': {
+                'public-key': node_info.get('pbk', '')
+            }
+        }
+    
+    # Trojan
+    elif node_type == 'trojan':
+        return {
+            'name': node_info.get('ps', 'trojan_node'),
+            'type': 'trojan',
+            'server': node_info.get('server'),
+            'port': int(node_info.get('port')),
+            'password': node_info.get('password'),
+            'sni': node_info.get('sni', node_info.get('server'))
+        }
+
+    return None
+
+def parse_base64_nodes(content):
+    """解析 Base64 编码的节点列表"""
+    try:
+        # 尝试 Base64 解码，并忽略非 Base64 字符
+        decoded_content = base64.b64decode(content.strip() + '=' * (-len(content.strip()) % 4)).decode('utf-8')
+        return parse_plaintext_nodes(decoded_content)
+    except (base64.binascii.Error, UnicodeDecodeError) as e:
+        logger.warning(f"Base64 解码失败: {e}")
+        return None
+
+def parse_plaintext_nodes(content):
+    """解析明文节点链接，如 vmess://, ss://"""
+    nodes = []
+    lines = content.splitlines()
+    for line in lines:
+        line = line.strip()
+        if not line:
+            continue
+        
+        # Vmess
+        if line.startswith('vmess://'):
+            try:
+                vmess_json = json.loads(base64.b64decode(line[8:]).decode('utf-8'))
+                vmess_json['type'] = 'vmess'
+                nodes.append(convert_to_clash_node(vmess_json))
+            except Exception as e:
+                logger.warning(f"Vmess 链接解析失败: {line}, 错误: {e}")
+                
+        # Shadowsocks
+        elif line.startswith('ss://'):
+            try:
+                base64_part = line[5:].split('#', 1)[0]
+                decoded_ss = base64.b64decode(base64_part + '=' * (-len(base64_part) % 4)).decode('utf-8')
+                method, password_and_server = decoded_ss.split(':', 1)
+                password, server_and_port = password_and_server.split('@', 1)
+                server, port = server_and_port.rsplit(':', 1)
+                ss_node = {
+                    'type': 'ss',
+                    'method': method,
+                    'password': password,
+                    'server': server,
+                    'port': int(port),
+                    'ps': line.split('#', 1)[1] if '#' in line else 'ss_node'
+                }
+                nodes.append(convert_to_clash_node(ss_node))
+            except Exception as e:
+                logger.warning(f"Shadowsocks 链接解析失败: {line}, 错误: {e}")
+                
+        # VLESS
+        elif line.startswith('vless://'):
+            try:
+                uuid_and_server = line[8:].split('#', 1)[0]
+                uuid, server_info = uuid_and_server.split('@', 1)
+                server_part, params_part = server_info.split('?', 1)
+                server, port = server_part.rsplit(':', 1)
+                params = dict(p.split('=', 1) for p in params_part.split('&'))
+                vless_node = {
+                    'type': 'vless',
+                    'uuid': uuid,
+                    'server': server,
+                    'port': int(port),
+                    'ps': line.split('#', 1)[1] if '#' in line else 'vless_node',
+                    'net': params.get('type'),
+                    'tls': params.get('security'),
+                    'flow': params.get('flow'),
+                    'pbk': params.get('pbk')
+                }
+                nodes.append(convert_to_clash_node(vless_node))
+            except Exception as e:
+                logger.warning(f"VLESS 链接解析失败: {line}, 错误: {e}")
+        
+        # Trojan
+        elif line.startswith('trojan://'):
+            try:
+                password_and_server = line[9:].split('#', 1)[0]
+                password, server_info = password_and_server.split('@', 1)
+                server, port = server_info.split(':', 1)
+                trojan_node = {
+                    'type': 'trojan',
+                    'password': password,
+                    'server': server,
+                    'port': int(port),
+                    'ps': line.split('#', 1)[1] if '#' in line else 'trojan_node'
+                }
+                nodes.append(convert_to_clash_node(trojan_node))
+            except Exception as e:
+                logger.warning(f"Trojan 链接解析失败: {line}, 错误: {e}")
+
+    return [node for node in nodes if node is not None]
+
 @retry(stop=stop_after_attempt(3), wait=wait_fixed(2))
-def fetch_yaml_content(url):
-    """尝试直接下载 YAML 文件，使用流式读取"""
+def fetch_and_parse_content(url):
+    """
+    通用内容抓取和解析函数。
+    依次尝试解析为 Base64, 明文, 或 YAML。
+    """
     headers = get_headers()
     try:
-        response = requests.get(url, headers=headers, timeout=10, stream=True) # 缩短超时时间
-        if response.status_code == 200 and 'text/html' not in response.headers.get('content-type', '').lower():
-            content = ''
-            content_length = int(response.headers.get('Content-Length', 0))
-            downloaded = 0
-            for chunk in response.iter_content(chunk_size=8192):
-                content += chunk.decode('utf-8')
-                downloaded += len(chunk)
-            if content_length and downloaded < content_length:
-                logger.warning(f"下载不完整: {url}, 预期 {content_length} 字节, 实际 {downloaded} 字节")
-                return None, None
-            try:
-                yaml.safe_load(content)
-                return content, url
-            except yaml.YAMLError as e:
-                logger.warning(f"YAML 解析失败: {url}, 错误: {e}")
-                return None, None
-        return None, None
+        response = requests.get(url, headers=headers, timeout=10, stream=True)
+        if response.status_code != 200:
+            return [], None
+            
+        content = ''
+        for chunk in response.iter_content(chunk_size=8192):
+            content += chunk.decode('utf-8')
+
+        # 尝试解析为 YAML
+        try:
+            data = yaml.safe_load(content)
+            if isinstance(data, dict) and 'proxies' in data:
+                return data.get('proxies', []), url
+        except yaml.YAMLError:
+            pass
+
+        # 尝试解析为 Base64 编码的节点
+        base64_nodes = parse_base64_nodes(content)
+        if base64_nodes:
+            return base64_nodes, url
+
+        # 尝试解析为明文节点
+        plaintext_nodes = parse_plaintext_nodes(content)
+        if plaintext_nodes:
+            return plaintext_nodes, url
+            
+        logger.warning(f"无法解析内容: {url}")
+        return [], None
+        
     except requests.exceptions.RequestException as e:
         logger.warning(f"下载失败: {url}, 错误: {e}")
-        return None, None
+        return [], None
 
 def parse_and_fetch_from_html(url):
-    """解析 HTML 页面，批量收集并尝试下载 YAML 文件"""
+    """
+    解析 HTML 页面，批量收集并尝试下载 YAML 文件。
+    新增了对包含 JavaScript 文件列表的页面的解析逻辑。
+    """
     headers = get_headers()
     try:
-        response = requests.get(url, headers=headers, timeout=10) # 缩短超时时间
+        response = requests.get(url, headers=headers, timeout=10)
         if response.status_code == 200 and 'text/html' in response.headers.get('content-type', '').lower():
             soup = BeautifulSoup(response.text, 'html.parser')
             
-            # 策略1: 收集所有以 .yaml 或 .yml 结尾的链接
-            yaml_urls = [requests.compat.urljoin(url, link.get('href'))
-                         for link in soup.find_all('a')
-                         if link.get('href') and link.get('href').lower().endswith(('.yaml', '.yml'))]
+            sub_urls = []
+            
+            # 策略1: 收集所有以 .yaml, .yml, .txt 结尾的链接
+            sub_urls.extend([requests.compat.urljoin(url, link.get('href'))
+                             for link in soup.find_all('a')
+                             if link.get('href') and link.get('href').lower().endswith(('.yaml', '.yml', '.txt'))])
             
             # 策略2: 寻找包含特定关键字的链接
             for link in soup.find_all('a'):
                 href = link.get('href')
-                if href and re.search(r'(clash|v2ray|mihomo|config)', href, re.IGNORECASE):
+                if href and re.search(r'(clash|v2ray|mihomo|config|sub|subscribe)', href, re.IGNORECASE):
                     full_url = requests.compat.urljoin(url, href)
-                    if full_url not in yaml_urls:
-                        yaml_urls.append(full_url)
+                    if full_url not in sub_urls:
+                        sub_urls.append(full_url)
             
             # 策略3: 从 <script> 标签中解析
             for script in soup.find_all('script'):
                 script_content = script.string
                 if script_content:
-                    match = re.search(r'\"url\"\s*:\s*\"(.*?\.ya?ml)\"', script_content, re.DOTALL | re.IGNORECASE)
-                    if match:
-                        yaml_url = match.group(1)
-                        if not yaml_url.startswith(('http://', 'https://')):
-                            yaml_url = requests.compat.urljoin(url, yaml_url)
-                        if yaml_url not in yaml_urls:
-                            yaml_urls.append(yaml_url)
+                    # 匹配 "url": "..." 格式的链接
+                    matches = re.findall(r'\"url\"\s*:\s*\"(.*?)\"', script_content, re.DOTALL | re.IGNORECASE)
+                    for match_url in matches:
+                        # 检查链接是否包含节点类型关键字
+                        if re.search(r'(clash|v2ray|mihomo|config|sub|subscribe|yaml|txt)', match_url, re.IGNORECASE):
+                            if not match_url.startswith(('http://', 'https://')):
+                                full_sub_url = requests.compat.urljoin(url, match_url)
+                            else:
+                                full_sub_url = match_url
+                            if full_sub_url not in sub_urls:
+                                sub_urls.append(full_sub_url)
             
-            # 批量尝试下载 YAML 文件
+            # 批量尝试下载和解析文件
             with ThreadPoolExecutor(max_workers=10) as executor:
-                future_to_url = {executor.submit(fetch_yaml_content, yaml_url): yaml_url for yaml_url in yaml_urls}
+                future_to_url = {executor.submit(fetch_and_parse_content, sub_url): sub_url for sub_url in sub_urls}
                 for future in as_completed(future_to_url):
-                    content, final_url = future.result()
-                    if content:
-                        return content, final_url  # 返回第一个成功下载的 YAML 文件
-        return None, None
+                    content_nodes, final_url = future.result()
+                    if content_nodes:
+                        return content_nodes, final_url  # 返回第一个成功解析的节点列表
+        return [], None
     except requests.exceptions.RequestException as e:
         logger.warning(f"HTML 解析失败: {url}, 错误: {e}")
-        return None, None
+        return [], None
 
 def process_links(working_links):
     """第二阶段：处理可用的链接，分批处理"""
@@ -189,39 +371,33 @@ def process_links(working_links):
             else:
                 # 否则，直接尝试下载
                 for config_name in CONFIG_NAMES:
-                    full_yaml_url = f"{full_url}/{config_name}"
-                    if full_yaml_url not in processed_links:
-                        task = {'type': 'direct', 'url': full_yaml_url}
-                        future = executor.submit(fetch_yaml_content, task['url'])
+                    full_sub_url = f"{full_url}/{config_name}"
+                    if full_sub_url not in processed_links:
+                        task = {'type': 'direct', 'url': full_sub_url}
+                        future = executor.submit(fetch_and_parse_content, task['url'])
                         future_to_task[future] = task
         
         for future in tqdm(as_completed(future_to_task), total=len(future_to_task), desc="获取节点内容"):
-            nodes_text, successful_url = future.result()
+            nodes, successful_url = future.result()
             
             if not successful_url or successful_url in processed_links:
                 continue
             
-            if nodes_text:
-                try:
-                    data = yaml.safe_load(nodes_text)
-                    if isinstance(data, dict):
-                        nodes = data.get('proxies', [])
-                        for node in nodes:
-                            ip = node.get('server', '')
-                            if re.match(r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$', ip):
-                                try:
-                                    country_code, country_name = geolocator.get_location(ip)
-                                    node['name'] = country_name or '未知'
-                                except:
-                                    node['name'] = '未知'
-                        all_nodes.extend(nodes)
-                        node_counts.append({'url': successful_url, 'count': len(nodes)})
-                        processed_links.add(successful_url)
-                        logger.info(f"成功从 {successful_url} 获取 {len(nodes)} 个节点")
-                    else:
-                        logger.warning(f"YAML 内容格式不正确: {successful_url}")
-                except yaml.YAMLError as e:
-                    logger.warning(f"无法解析 YAML 内容: {successful_url}, 错误: {e}")
+            if nodes:
+                # 为节点添加地理位置信息
+                for node in nodes:
+                    ip = node.get('server', '')
+                    if re.match(r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$', ip):
+                        try:
+                            country_code, country_name = geolocator.get_location(ip)
+                            node['name'] = country_name or '未知'
+                        except:
+                            node['name'] = '未知'
+                
+                all_nodes.extend(nodes)
+                node_counts.append({'url': successful_url, 'count': len(nodes)})
+                processed_links.add(successful_url)
+                logger.info(f"成功从 {successful_url} 获取 {len(nodes)} 个节点")
     
     return all_nodes, node_counts
 
@@ -285,13 +461,14 @@ def main():
     final_nodes = []
     final_names_count = {}
     for node in unique_nodes:
-        name = node.get('name', f"{node.get('server', 'unknown')}_{node.get('port', 'unknown')}")
-        if name in final_names_count:
-            final_names_count[name] += 1
-            node['name'] = f"{name}_{final_names_count[name]:02d}"
+        name_prefix = node.get('name', f"{node.get('server', 'unknown')}_{node.get('port', 'unknown')}")
+        name = name_prefix
+        if name_prefix in final_names_count:
+            final_names_count[name_prefix] += 1
+            name = f"{name_prefix}_{final_names_count[name_prefix]:02d}"
         else:
-            final_names_count[name] = 1
-            node['name'] = name
+            final_names_count[name_prefix] = 1
+        node['name'] = name
         final_nodes.append(node)
 
     # 保存结果
