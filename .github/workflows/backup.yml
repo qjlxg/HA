@@ -1,0 +1,53 @@
+name: Backup Important Files
+
+on:
+  schedule:
+    # 每天上海时区0点运行
+    # cron 表达式是 UTC 时间，因此需要减去8小时
+    # UTC 16:00 等于上海时间 (UTC+8) 00:00
+    - cron: '0 16 * * *'
+  workflow_dispatch:
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up timezone to Asia/Shanghai
+        run: |
+          sudo timedatectl set-timezone Asia/Shanghai
+          timedatectl
+
+      - name: Create backup directories
+        run: |
+          MONTH_DIR=$(date +'%Y-%m')
+          mkdir -p sc/$MONTH_DIR
+          echo "Created directory: sc/$MONTH_DIR"
+
+      - name: Copy files to backup directory with timestamp
+        run: |
+          MONTH_DIR=$(date +'%Y-%m')
+          DAILY_DIR=$(date +'%Y-%m-%d')
+          TIMESTAMP=$(date +'_%Y-%m-%d_%H%M%S')
+          
+          # 创建当天的备份目录
+          mkdir -p sc/$MONTH_DIR/$DAILY_DIR
+
+          # 复制文件并添加时间戳后缀
+          cp all_unique_nodes.txt sc/$MONTH_DIR/$DAILY_DIR/all_unique_nodes.txt$TIMESTAMP
+          cp merged_configs.txt sc/$MONTH_DIR/$DAILY_DIR/merged_configs.txt$TIMESTAMP
+          cp ink.yaml sc/$MONTH_DIR/$DAILY_DIR/ink.yaml$TIMESTAMP
+
+          echo "Files backed up to sc/$MONTH_DIR/$DAILY_DIR/ with timestamp suffix."
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add sc/
+          git status
+          git commit -m "Backup: $(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
+          git push
