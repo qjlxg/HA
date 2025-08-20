@@ -1,4 +1,3 @@
-
 import os
 import requests
 import yaml
@@ -6,7 +5,6 @@ import csv
 import re
 import random
 import json
-import base64
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from functools import reduce
 from ip_geolocation import GeoLite2Country
@@ -14,7 +12,6 @@ from tqdm import tqdm
 from bs4 import BeautifulSoup
 import logging
 from tenacity import retry, stop_after_attempt, wait_fixed
-from urllib.parse import unquote
 
 # 设置日志
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -29,10 +26,10 @@ GEOLITE_DB = os.path.join(BASE_DIR, 'GeoLite2-Country.mmdb')
 
 # 定义需要尝试的 YAML 文件名
 CONFIG_NAMES = [
-    'config.yaml', 'config.yml', 'clash.yaml', 'clash.yml',
-    'clash_proxies.yaml', 'clash_nodes.yaml', 'clash_nodes.yml',
+    'config.yaml', 'config.yml', 'clash_proxies.yaml', 'clash_proxies.yml',
     'all.yaml', 'all.yml', 'mihomo.yaml', 'mihomo.yml',
-    'openclash.yaml', 'clash-socket.yaml', 'v2ray.yaml', 'v2ray.yml',
+    'clash.yaml', 'clash.yml', 'openclash.yaml', 'openclash.yml',
+    'clash-socket.yaml', 'clash-socket.yml', 'v2ray.yaml', 'v2ray.yml',
     'proxies.yaml', 'proxies.yml', 'nodes.yaml', 'nodes.yml',
     'new.yaml', 'new.yml', 'sf.yaml', 'sf.yml',
     'sub.yaml', 'sub.yml', 'subscribe.yaml', 'subscribe.yml',
@@ -42,15 +39,22 @@ CONFIG_NAMES = [
 
 # 浏览器User-Agent列表，用于伪装请求头
 USER_AGENTS = [
-    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',
-    'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36',
-    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
-    'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36',
-    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36',
-    'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36',
-    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36',
-    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36',
-    'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36',
+    # 桌面浏览器 (Windows, Mac, Linux)
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36',
+    'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36',
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36',
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36',
+    'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36',
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Safari/605.1.15',
+    'Mozilla/5.0 (X11; Linux x86_64; rv:107.0) Gecko/20100101 Firefox/107.0',
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Edge/107.0.1418.62',
+    
+    # 移动端浏览器 (iPhone, Android, iPad)
+    'Mozilla/5.0 (iPhone; CPU iPhone OS 16_1_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Mobile/15E148 Safari/604.1',
+    'Mozilla/5.0 (iPhone; CPU iPhone OS 15_6_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.6 Mobile/15E148 Safari/604.1',
+    'Mozilla/5.0 (Linux; Android 10) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.5359.128 Mobile Safari/537.36',
+    'Mozilla/5.0 (Linux; Android 11; SM-G998B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.5359.128 Mobile Safari/537.36',
+    'Mozilla/5.0 (iPad; CPU OS 16_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/108.0.5359.112 Mobile/15E148 Safari/604.1',
 ]
 
 # 初始化 IP 地理位置解析器
@@ -70,353 +74,114 @@ def get_headers():
 @retry(stop=stop_after_attempt(3), wait=wait_fixed(2))
 def test_connection_and_get_protocol(link):
     """
-    测试一个链接的连通性，并返回成功的协议和内容类型。
+    测试一个链接的连通性，并返回成功的协议。
     优先测试 HTTPS。
     """
     link = link.replace('http://', '').replace('https://', '')
     
     # 优先尝试 HTTPS
     try:
-        response = requests.head(f"https://{link}", headers=get_headers(), timeout=5)
+        response = requests.head(f"https://{link}", headers=get_headers(), timeout=7)
         if response.status_code == 200:
-            content_type = response.headers.get('content-type', '').lower()
-            return link, "https", "html" if 'text/html' in content_type else "yaml"
+            return link, "https"
     except requests.exceptions.RequestException:
         pass
     
     # 如果 HTTPS 失败，尝试 HTTP
     try:
-        response = requests.head(f"http://{link}", headers=get_headers(), timeout=5)
+        response = requests.head(f"http://{link}", headers=get_headers(), timeout=7)
         if response.status_code == 200:
-            content_type = response.headers.get('content-type', '').lower()
-            return link, "http", "html" if 'text/html' in content_type else "yaml"
+            return link, "http"
     except requests.exceptions.RequestException:
         pass
         
-    return None, None, None
+    return None, None
 
 def pre_test_links(links):
-    """并发预测试所有链接，返回可用链接、协议和内容类型的字典"""
+    """并发预测试所有链接，返回可用链接及其协议的字典"""
     working_links = {}
-    max_workers = min(64, os.cpu_count() * 4) if os.cpu_count() else 32
+    max_workers = min(32, os.cpu_count() * 2) if os.cpu_count() else 16
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         future_to_link = {executor.submit(test_connection_and_get_protocol, link): link for link in links}
         for future in tqdm(as_completed(future_to_link), total=len(links), desc="预测试链接"):
-            result_link, result_protocol, content_type = future.result()
+            result_link, result_protocol = future.result()
             if result_link:
-                working_links[result_link] = {'protocol': result_protocol, 'type': content_type}
+                working_links[result_link] = result_protocol
     return working_links
 
-def convert_to_clash_node(node_info):
-    """将不同协议的节点信息转换为Clash格式"""
-    node_type = node_info.get('type', '').lower()
-    
-    # Vmess
-    if node_type == 'vmess':
-        return {
-            'name': node_info.get('ps', 'vmess_node'),
-            'type': 'vmess',
-            'server': node_info.get('add'),
-            'port': int(node_info.get('port')),
-            'uuid': node_info.get('id'),
-            'alterId': int(node_info.get('aid')),
-            'cipher': node_info.get('scy', 'auto'),
-            'network': node_info.get('net'),
-            'tls': node_info.get('tls') == 'tls',
-            'ws-opts': {
-                'path': node_info.get('path', ''),
-                'headers': {'Host': node_info.get('host', '')}
-            }
-        }
-    
-    # Shadowsocks
-    elif node_type == 'ss':
-        return {
-            'name': node_info.get('ps', 'ss_node'),
-            'type': 'ss',
-            'server': node_info.get('server'),
-            'port': int(node_info.get('port')),
-            'password': node_info.get('password'),
-            'cipher': node_info.get('method')
-        }
-    
-    # VLESS
-    elif node_type == 'vless':
-        return {
-            'name': node_info.get('ps', 'vless_node'),
-            'type': 'vless',
-            'server': node_info.get('server'),
-            'port': int(node_info.get('port')),
-            'uuid': node_info.get('uuid'),
-            'network': node_info.get('net'),
-            'tls': node_info.get('security') == 'tls',
-            'flow': node_info.get('flow', ''),
-            'reality-opts': {
-                'public-key': node_info.get('pbk', '')
-            }
-        }
-    
-    # Trojan
-    elif node_type == 'trojan':
-        return {
-            'name': node_info.get('ps', 'trojan_node'),
-            'type': 'trojan',
-            'server': node_info.get('server'),
-            'port': int(node_info.get('port')),
-            'password': node_info.get('password'),
-            'sni': node_info.get('sni', node_info.get('server'))
-        }
-
-    return None
-
-def parse_base64_nodes(content):
-    """解析 Base64 编码的节点列表"""
-    try:
-        # 尝试 Base64 解码，并忽略非 Base64 字符
-        decoded_content = base64.b64decode(content.strip() + '=' * (-len(content.strip()) % 4)).decode('utf-8', 'ignore')
-        return parse_plaintext_nodes(decoded_content)
-    except (base64.binascii.Error, UnicodeDecodeError) as e:
-        logger.warning(f"Base64 解码失败: {e}")
-        return None
-
-def parse_plaintext_nodes(content):
-    """解析明文节点链接，如 vmess://, ss://"""
-    nodes = []
-    lines = content.splitlines()
-    for line in lines:
-        line = line.strip()
-        if not line:
-            continue
-        
-        # Vmess
-        if line.startswith('vmess://'):
-            try:
-                vmess_json = json.loads(base64.b64decode(line[8:]).decode('utf-8', 'ignore'))
-                vmess_json['type'] = 'vmess'
-                nodes.append(convert_to_clash_node(vmess_json))
-            except Exception as e:
-                logger.warning(f"Vmess 链接解析失败: {line}, 错误: {e}")
-                
-        # Shadowsocks
-        elif line.startswith('ss://'):
-            try:
-                # 分割 Base64 部分和名称部分
-                parts = line[5:].split('#', 1)
-                base64_part = parts[0]
-                name_part = unquote(parts[1]) if len(parts) > 1 else 'ss_node'
-                
-                # 验证 Base64 部分是否包含 @ 分隔符
-                if '@' not in base64_part:
-                    logger.warning(f"Shadowsocks 链接缺少 @ 分隔符: {line}")
-                    continue
-                
-                # 分割 Base64 部分和服务器部分
-                method_password_b64, server_port = base64_part.split('@', 1)
-                
-                # 解码 Base64 编码的 method:password 部分
-                try:
-                    method_password = base64.b64decode(method_password_b64 + '=' * (-len(method_password_b64) % 4)).decode('utf-8', 'ignore')
-                except base64.binascii.Error as e:
-                    logger.warning(f"Shadowsocks Base64 解码失败: {line}, 错误: {e}")
-                    continue
-                
-                # 分割 method 和 password
-                if ':' not in method_password:
-                    logger.warning(f"Shadowsocks 链接缺少 method:password 分隔符: {line}")
-                    continue
-                method, password = method_password.split(':', 1)
-                
-                # 分割 server 和 port
-                if ':' not in server_port:
-                    logger.warning(f"Shadowsocks 链接缺少 server:port 分隔符: {line}")
-                    continue
-                server, port = server_port.rsplit(':', 1)
-                
-                # 验证 port 是否为有效数字
-                try:
-                    port = int(port)
-                except ValueError:
-                    logger.warning(f"Shadowsocks 链接端口无效: {line}")
-                    continue
-                
-                ss_node = {
-                    'type': 'ss',
-                    'method': method,
-                    'password': password,
-                    'server': server,
-                    'port': port,
-                    'ps': name_part
-                }
-                nodes.append(convert_to_clash_node(ss_node))
-            except Exception as e:
-                logger.warning(f"Shadowsocks 链接解析失败: {line}, 错误: {e}")
-                continue
-                
-        # VLESS
-        elif line.startswith('vless://'):
-            try:
-                uuid_and_server = line[8:].split('#', 1)[0]
-                uuid, server_info = uuid_and_server.split('@', 1)
-                server_part, params_part = server_info.split('?', 1)
-                server, port = server_part.rsplit(':', 1)
-                params = dict(p.split('=', 1) for p in params_part.split('&'))
-                vless_node = {
-                    'type': 'vless',
-                    'uuid': uuid,
-                    'server': server,
-                    'port': int(port),
-                    'ps': unquote(line.split('#', 1)[1]) if '#' in line else 'vless_node',
-                    'net': params.get('type'),
-                    'security': params.get('security'),
-                    'flow': params.get('flow'),
-                    'pbk': params.get('pbk')
-                }
-                nodes.append(convert_to_clash_node(vless_node))
-            except Exception as e:
-                logger.warning(f"VLESS 链接解析失败: {line}, 错误: {e}")
-        
-        # Trojan
-        elif line.startswith('trojan://'):
-            try:
-                password_and_server = line[9:].split('#', 1)[0]
-                password, server_info = password_and_server.split('@', 1)
-                server, port = server_info.rsplit(':', 1)
-                trojan_node = {
-                    'type': 'trojan',
-                    'password': password,
-                    'server': server,
-                    'port': int(port),
-                    'ps': unquote(line.split('#', 1)[1]) if '#' in line else 'trojan_node'
-                }
-                nodes.append(convert_to_clash_node(trojan_node))
-            except Exception as e:
-                logger.warning(f"Trojan 链接解析失败: {line}, 错误: {e}")
-
-    return [node for node in nodes if node is not None]
-
-def is_likely_subscription_url(url):
-    """判断一个URL是否可能是订阅链接"""
-    keywords = ['clash', 'v2ray', 'mihomo', 'config', 'sub', 'subscribe', 'api/v1/client/subscribe', 'yaml', 'yml', 'txt']
-    return any(keyword in url.lower() for keyword in keywords)
-
 @retry(stop=stop_after_attempt(3), wait=wait_fixed(2))
-def fetch_content(url):
-    """通用内容抓取函数，返回原始文本和URL"""
+def fetch_yaml_content(url):
+    """尝试直接下载 YAML 文件，使用流式读取"""
     headers = get_headers()
     try:
-        response = requests.get(url, headers=headers, timeout=10)
-        if response.status_code == 200:
-            return response.text, url
-        else:
-            logger.warning(f"下载失败: {url}, 状态码: {response.status_code}")
-            return None, None
+        response = requests.get(url, headers=headers, timeout=15, stream=True)
+        if response.status_code == 200 and 'text/html' not in response.headers.get('content-type', '').lower():
+            content = ''
+            content_length = int(response.headers.get('Content-Length', 0))
+            downloaded = 0
+            for chunk in response.iter_content(chunk_size=8192):
+                content += chunk.decode('utf-8')
+                downloaded += len(chunk)
+            if content_length and downloaded < content_length:
+                logger.warning(f"下载不完整: {url}, 预期 {content_length} 字节, 实际 {downloaded} 字节")
+                return None, None
+            try:
+                yaml.safe_load(content)
+                return content, url
+            except yaml.YAMLError as e:
+                logger.warning(f"YAML 解析失败: {url}, 错误: {e}")
+                return None, None
+        return None, None
     except requests.exceptions.RequestException as e:
         logger.warning(f"下载失败: {url}, 错误: {e}")
         return None, None
 
-def process_subscription_links(links, depth=0):
-    """递归处理包含订阅链接的列表"""
-    if depth > 3: # 防止无限递归
-        logger.warning("达到最大递归深度，停止处理。")
-        return []
-
-    all_nodes = []
-    processed_links = set()
-    
-    with ThreadPoolExecutor(max_workers=min(32, os.cpu_count() * 2)) as executor:
-        # 过滤掉不可能是订阅链接的URL
-        filtered_links = [link for link in links if is_likely_subscription_url(link)]
-        
-        future_to_url = {executor.submit(fetch_and_parse_content, link, depth + 1): link for link in filtered_links}
-        for future in tqdm(as_completed(future_to_url), total=len(filtered_links), desc=f"获取子订阅内容 (深度 {depth})"):
-            nodes, successful_url = future.result()
-            if nodes and successful_url and successful_url not in processed_links:
-                all_nodes.extend(nodes)
-                processed_links.add(successful_url)
-    return all_nodes
-
-def fetch_and_parse_content(url, depth=0):
-    """
-    通用内容抓取和解析函数。
-    依次尝试解析为 Base64, 明文, 或 YAML。
-    """
-    content, successful_url = fetch_content(url)
-    if not content:
-        return [], None
-    
-    if len(content) == 0:
-        logger.warning(f"文件为空 (0 字节): {url}")
-        return [], None
-
-    # 尝试解析为 URL 列表
-    lines = content.splitlines()
-    if all(line.strip().startswith(('http://', 'https://')) for line in lines if line.strip()):
-        logger.info(f"检测到订阅链接列表: {url}")
-        nodes = process_subscription_links(lines, depth)
-        return nodes, successful_url
-
-    # 尝试解析为 YAML
-    try:
-        data = yaml.safe_load(content)
-        if isinstance(data, dict) and 'proxies' in data:
-            return data.get('proxies', []), successful_url
-    except yaml.YAMLError:
-        pass
-
-    # 尝试解析为 Base64 编码的节点
-    base64_nodes = parse_base64_nodes(content)
-    if base64_nodes:
-        return base64_nodes, successful_url
-
-    # 尝试解析为明文节点
-    plaintext_nodes = parse_plaintext_nodes(content)
-    if plaintext_nodes:
-        return plaintext_nodes, successful_url
-        
-    logger.warning(f"无法解析内容: {url}")
-    return [], None
-
 def parse_and_fetch_from_html(url):
-    """
-    解析 HTML 页面，批量收集所有可能的订阅文件链接。
-    """
+    """解析 HTML 页面，批量收集并尝试下载 YAML 文件"""
     headers = get_headers()
     try:
-        response = requests.get(url, headers=headers, timeout=10)
+        response = requests.get(url, headers=headers, timeout=15)
         if response.status_code == 200 and 'text/html' in response.headers.get('content-type', '').lower():
             soup = BeautifulSoup(response.text, 'html.parser')
             
-            sub_urls = set()
+            # 策略1: 收集所有以 .yaml 或 .yml 结尾的链接
+            yaml_urls = [requests.compat.urljoin(url, link.get('href'))
+                         for link in soup.find_all('a')
+                         if link.get('href') and link.get('href').lower().endswith(('.yaml', '.yml'))]
             
-            # 策略1: 收集所有以 .yaml, .yml, .txt 结尾的链接
-            for link in soup.find_all('a'):
-                href = link.get('href')
-                if href and href.lower().endswith(('.yaml', '.yml', '.txt')):
-                    full_url = requests.compat.urljoin(url, href)
-                    sub_urls.add(full_url)
+            # 批量尝试下载 YAML 文件
+            with ThreadPoolExecutor(max_workers=10) as executor:
+                future_to_url = {executor.submit(fetch_yaml_content, yaml_url): yaml_url for yaml_url in yaml_urls}
+                for future in as_completed(future_to_url):
+                    content, final_url = future.result()
+                    if content:
+                        return content, final_url  # 返回第一个成功下载的 YAML 文件
             
             # 策略2: 寻找包含特定关键字的链接
             for link in soup.find_all('a'):
                 href = link.get('href')
-                if href and is_likely_subscription_url(href):
+                if href and re.search(r'(clash|v2ray|mihomo|config)', href, re.IGNORECASE):
                     full_url = requests.compat.urljoin(url, href)
-                    sub_urls.add(full_url)
+                    content, final_url = fetch_yaml_content(full_url)
+                    if content:
+                        return content, final_url
             
             # 策略3: 从 <script> 标签中解析
             for script in soup.find_all('script'):
                 script_content = script.string
                 if script_content:
-                    matches = re.findall(r'\"url\"\s*:\s*\"(.*?)\"', script_content, re.DOTALL | re.IGNORECASE)
-                    for match_url in matches:
-                        if is_likely_subscription_url(match_url):
-                            full_url = requests.compat.urljoin(url, match_url) if not match_url.startswith(('http://', 'https://')) else match_url
-                            sub_urls.add(full_url)
-            
-            return list(sub_urls), url
-        return [], None
+                    match = re.search(r'\"url\"\s*:\s*\"(.*?\.ya?ml)\"', script_content, re.DOTALL | re.IGNORECASE)
+                    if match:
+                        yaml_url = match.group(1)
+                        if not yaml_url.startswith(('http://', 'https://')):
+                            yaml_url = requests.compat.urljoin(url, yaml_url)
+                        content, final_url = fetch_yaml_content(yaml_url)
+                        if content:
+                            return content, final_url
+        return None, None
     except requests.exceptions.RequestException as e:
         logger.warning(f"HTML 解析失败: {url}, 错误: {e}")
-        return [], None
+        return None, None
 
 def process_links(working_links):
     """第二阶段：处理可用的链接，分批处理"""
@@ -424,71 +189,59 @@ def process_links(working_links):
     node_counts = []
     processed_links = set()
     
-    tasks = []
-    for link, info in working_links.items():
-        full_url = f"{info['protocol']}://{link}"
-        if info['type'] == 'html':
-            tasks.append({'type': 'html_parse', 'url': full_url})
-        else:
-            for config_name in CONFIG_NAMES:
-                full_sub_url = f"{full_url}/{config_name}"
-                if full_sub_url not in processed_links:
-                    tasks.append({'type': 'fetch_and_parse_content', 'url': full_sub_url})
+    # 分批处理链接，控制内存占用
+    batch_size = 100
+    link_batches = [dict(list(working_links.items())[i:i + batch_size]) for i in range(0, len(working_links), batch_size)]
     
-    # 将处理 HTML 的任务放在最前面
-    tasks.sort(key=lambda x: x['type'] != 'html_parse')
-    
-    max_workers = min(32, os.cpu_count() * 2) if os.cpu_count() else 16
-    with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        future_to_task = {}
-        for task in tasks:
-            if task['type'] == 'html_parse':
-                future = executor.submit(parse_and_fetch_from_html, task['url'])
-                future_to_task[future] = task
-            else:
-                future = executor.submit(fetch_and_parse_content, task['url'])
-                future_to_task[future] = task
+    max_workers = min(16, os.cpu_count() * 2) if os.cpu_count() else 8
+    for batch_idx, batch in enumerate(link_batches):
+        logger.info(f"处理批次 {batch_idx + 1}/{len(link_batches)}，包含 {len(batch)} 个链接")
+        urls_to_process = [{'type': 'html_parse', 'url': f"{protocol}://{link}"} for link, protocol in batch.items()]
+        # 仅在 HTML 解析失败时尝试 CONFIG_NAMES
+        for link, protocol in batch.items():
+            urls_to_process.append({'type': 'direct', 'url': f"{protocol}://{link}", 'config_names': CONFIG_NAMES})
         
-        for future in tqdm(as_completed(future_to_task), total=len(future_to_task), desc="获取节点内容"):
-            task = future_to_task[future]
-            task_url = task['url']
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+            future_to_task = {}
+            for task in urls_to_process:
+                if task['type'] == 'direct':
+                    for config_name in task['config_names']:
+                        full_url = f"{task['url']}/{config_name}"
+                        if full_url not in processed_links:
+                            future = executor.submit(fetch_yaml_content, full_url)
+                            future_to_task[future] = task
+                elif task['type'] == 'html_parse':
+                    future = executor.submit(parse_and_fetch_from_html, task['url'])
+                    future_to_task[future] = task
             
-            if task_url in processed_links:
-                continue
+            for future in tqdm(as_completed(future_to_task), total=len(future_to_task), desc=f"获取节点内容 (批次 {batch_idx + 1})"):
+                nodes_text, successful_url = future.result()
                 
-            result = future.result()
-            
-            if isinstance(result, tuple) and len(result) == 2:
-                # 处理 HTML 解析结果，将子链接添加到任务队列
-                if task['type'] == 'html_parse':
-                    sub_urls, successful_url = result
-                    if sub_urls:
-                        for sub_url in sub_urls:
-                            if sub_url not in processed_links:
-                                new_future = executor.submit(fetch_and_parse_content, sub_url)
-                                future_to_task[new_future] = {'type': 'fetch_and_parse_content', 'url': sub_url}
-                                processed_links.add(sub_url)
-                else:
-                    # 处理直接获取内容的结果
-                    nodes, successful_url = result
-                    if nodes and successful_url and successful_url not in processed_links:
-                        # 为节点添加地理位置信息
-                        for node in nodes:
-                            ip = node.get('server', '')
-                            if re.match(r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$', ip):
-                                try:
-                                    country_code, country_name = geolocator.get_location(ip)
-                                    node['name'] = country_name or '未知'
-                                except:
-                                    node['name'] = '未知'
-                        
-                        all_nodes.extend(nodes)
-                        node_counts.append({'url': successful_url, 'count': len(nodes)})
-                        processed_links.add(successful_url)
-                        logger.info(f"成功从 {successful_url} 获取 {len(nodes)} 个节点")
-            else:
-                logger.error(f"处理任务 {task_url} 时出错: 结果格式不正确")
+                if successful_url and successful_url in processed_links:
+                    continue
                 
+                if nodes_text:
+                    try:
+                        data = yaml.safe_load(nodes_text)
+                        if isinstance(data, dict):
+                            nodes = data.get('proxies', [])
+                            for node in nodes:
+                                ip = node.get('server', '')
+                                if re.match(r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$', ip):
+                                    try:
+                                        country_code, country_name = geolocator.get_location(ip)
+                                        node['name'] = country_name or '未知'
+                                    except:
+                                        node['name'] = '未知'
+                            all_nodes.extend(nodes)
+                            node_counts.append({'url': successful_url, 'count': len(nodes)})
+                            processed_links.add(successful_url)
+                            logger.info(f"成功从 {successful_url} 获取 {len(nodes)} 个节点")
+                        else:
+                            logger.warning(f"YAML 内容格式不正确: {successful_url}")
+                    except yaml.YAMLError as e:
+                        logger.warning(f"无法解析 YAML 内容: {successful_url}, 错误: {e}")
+    
     return all_nodes, node_counts
 
 def get_node_key(node):
@@ -551,14 +304,13 @@ def main():
     final_nodes = []
     final_names_count = {}
     for node in unique_nodes:
-        name_prefix = node.get('name', f"{node.get('server', 'unknown')}_{node.get('port', 'unknown')}")
-        name = name_prefix
-        if name_prefix in final_names_count:
-            final_names_count[name_prefix] += 1
-            name = f"{name_prefix}_{final_names_count[name_prefix]:02d}"
+        name = node.get('name', f"{node.get('server', 'unknown')}_{node.get('port', 'unknown')}")
+        if name in final_names_count:
+            final_names_count[name] += 1
+            node['name'] = f"{name}_{final_names_count[name]:02d}"
         else:
-            final_names_count[name_prefix] = 1
-        node['name'] = name
+            final_names_count[name] = 1
+            node['name'] = name
         final_nodes.append(node)
 
     # 保存结果
