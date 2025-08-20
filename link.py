@@ -19,7 +19,7 @@ OUTPUT_CSV = os.path.join(BASE_DIR, 'link.csv')
 GEOLITE_DB = os.path.join(BASE_DIR, 'GeoLite2-Country.mmdb')
 
 # 定义需要尝试的 YAML 文件名
-CONFIG_NAMES = ['config.yaml', 'clash_proxies.yaml', 'all.yaml', 'mihomo.yaml']
+CONFIG_NAMES = ['config.yaml', 'clash_proxies.yaml', 'all.yaml', 'mihomo.yaml', '.yaml']
 
 # 浏览器User-Agent列表，用于伪装请求头
 USER_AGENTS = [
@@ -88,7 +88,7 @@ def fetch_yaml_content(url):
     """尝试直接下载 YAML 文件"""
     headers = get_headers()
     try:
-        response = requests.get(url, headers=headers, timeout=10)
+        response = requests.get(url, headers=headers, timeout=28)
         if response.status_code == 200 and 'text/html' not in response.headers.get('content-type', '').lower():
             # 简单验证内容是否为 YAML
             try:
@@ -104,7 +104,7 @@ def parse_and_fetch_from_html(url):
     """解析 HTML 页面，寻找 YAML 文件链接并尝试下载"""
     headers = get_headers()
     try:
-        response = requests.get(url, headers=headers, timeout=10)
+        response = requests.get(url, headers=headers, timeout=28)
         if response.status_code == 200 and 'text/html' in response.headers.get('content-type', '').lower():
             soup = BeautifulSoup(response.text, 'html.parser')
             
