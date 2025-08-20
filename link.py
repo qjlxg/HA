@@ -209,6 +209,10 @@ def parse_plaintext_nodes(content):
                 
                 decoded_ss = base64.b64decode(padded_base64).decode('utf-8', 'ignore')
                 
+                if '@' not in decoded_ss:
+                    logger.warning(f"Shadowsocks 链接解析失败: {line}, 错误: 缺少 @ 分隔符")
+                    continue
+
                 method_and_password, server_and_port = decoded_ss.split('@', 1)
                 server, port = server_and_port.rsplit(':', 1)
                 
@@ -236,7 +240,11 @@ def parse_plaintext_nodes(content):
                 uuid_and_server = line[8:].split('#', 1)[0]
                 uuid, server_info = uuid_and_server.split('@', 1)
                 server_part, params_part = server_info.split('?', 1)
-                server, port = server_part.rsplit(':', 1)
+                
+                # 修正端口解析，忽略问号和后面的参数
+                server, port_with_params = server_part.rsplit(':', 1)
+                port = port_with_params.split('?', 1)[0]
+                
                 params = dict(p.split('=', 1) for p in params_part.split('&'))
                 vless_node = {
                     'type': 'vless',
@@ -258,7 +266,11 @@ def parse_plaintext_nodes(content):
             try:
                 password_and_server = line[9:].split('#', 1)[0]
                 password, server_info = password_and_server.split('@', 1)
-                server, port = server_info.rsplit(':', 1)
+                
+                # 修正端口解析，忽略问号和后面的参数
+                server, port_with_params = server_info.rsplit(':', 1)
+                port = port_with_params.split('?', 1)[0]
+                
                 trojan_node = {
                     'type': 'trojan',
                     'password': password,
@@ -302,8 +314,8 @@ def process_subscription_links(links, depth=0):
     processed_links = set()
     
     with ThreadPoolExecutor(max_workers=min(32, os.cpu_count() * 2)) as executor:
-        # 过滤掉不可能是订阅链接的URL
-        filtered_links = [link for link in links if is_likely_subscription_url(link)]
+        # 过滤掉不可能是订阅链接的URL，并清理链接
+        filtered_links = [re.sub(r'\s+.*', '', link).strip() for link in links if is_likely_subscription_url(link)]
         
         future_to_url = {executor.submit(fetch_and_parse_content, link, depth + 1): link for link in filtered_links}
         for future in tqdm(as_completed(future_to_url), total=len(filtered_links), desc=f"获取子订阅内容 (深度 {depth})"):
@@ -328,7 +340,7 @@ def fetch_and_parse_content(url, depth=0):
 
     # 尝试解析为 URL 列表
     lines = content.splitlines()
-    if all(line.strip().startswith(('http://', 'https://')) for line in lines if line.strip()):
+    if all(re.match(r'https?://', line.strip()) for line in lines if line.strip()):
         logger.info(f"检测到订阅链接列表: {url}")
         nodes = process_subscription_links(lines, depth)
         return nodes, successful_url
