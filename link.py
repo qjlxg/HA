@@ -172,7 +172,7 @@ def parse_base64_nodes(content):
     """解析 Base64 编码的节点列表"""
     try:
         # 尝试 Base64 解码，并忽略非 Base64 字符
-        decoded_content = base64.b64decode(content.strip() + '=' * (-len(content.strip()) % 4)).decode('utf-8')
+        decoded_content = base64.b64decode(content.strip() + '=' * (-len(content.strip()) % 4)).decode('utf-8', 'ignore')
         return parse_plaintext_nodes(decoded_content)
     except (base64.binascii.Error, UnicodeDecodeError) as e:
         logger.warning(f"Base64 解码失败: {e}")
@@ -190,7 +190,7 @@ def parse_plaintext_nodes(content):
         # Vmess
         if line.startswith('vmess://'):
             try:
-                vmess_json = json.loads(base64.b64decode(line[8:]).decode('utf-8'))
+                vmess_json = json.loads(base64.b64decode(line[8:]).decode('utf-8', 'ignore'))
                 vmess_json['type'] = 'vmess'
                 nodes.append(convert_to_clash_node(vmess_json))
             except Exception as e:
@@ -207,7 +207,7 @@ def parse_plaintext_nodes(content):
                 # 自动添加 Base64 填充
                 padded_base64 = base64_part + '=' * (-len(base64_part) % 4)
                 
-                decoded_ss = base64.b64decode(padded_base64).decode('utf-8')
+                decoded_ss = base64.b64decode(padded_base64).decode('utf-8', 'ignore')
                 
                 method_and_password, server_and_port = decoded_ss.split('@', 1)
                 server, port = server_and_port.rsplit(':', 1)
