@@ -257,51 +257,91 @@ def parse_plaintext_nodes(content):
 
     return [node for node in nodes if node is not None]
 
+def is_likely_subscription_url(url):
+    """判断一个URL是否可能是订阅链接"""
+    keywords = ['clash', 'v2ray', 'mihomo', 'config', 'sub', 'subscribe', 'api/v1/client/subscribe', 'yaml', 'yml', 'txt']
+    return any(keyword in url.lower() for keyword in keywords)
+
 @retry(stop=stop_after_attempt(3), wait=wait_fixed(2))
-def fetch_and_parse_content(url):
+def fetch_content(url):
+    """通用内容抓取函数，返回原始文本和URL"""
+    headers = get_headers()
+    try:
+        response = requests.get(url, headers=headers, timeout=10)
+        if response.status_code == 200:
+            return response.text, url
+        else:
+            logger.warning(f"下载失败: {url}, 状态码: {response.status_code}")
+            return None, None
+    except requests.exceptions.RequestException as e:
+        logger.warning(f"下载失败: {url}, 错误: {e}")
+        return None, None
+
+def process_subscription_links(links, depth=0):
+    """递归处理包含订阅链接的列表"""
+    if depth > 3: # 防止无限递归
+        logger.warning("达到最大递归深度，停止处理。")
+        return []
+
+    all_nodes = []
+    processed_links = set()
+    
+    with ThreadPoolExecutor(max_workers=min(32, os.cpu_count() * 2)) as executor:
+        # 过滤掉不可能是订阅链接的URL
+        filtered_links = [link for link in links if is_likely_subscription_url(link)]
+        
+        future_to_url = {executor.submit(fetch_and_parse_content, link, depth + 1): link for link in filtered_links}
+        for future in tqdm(as_completed(future_to_url), total=len(filtered_links), desc=f"获取子订阅内容 (深度 {depth})"):
+            nodes, successful_url = future.result()
+            if nodes and successful_url and successful_url not in processed_links:
+                all_nodes.extend(nodes)
+                processed_links.add(successful_url)
+    return all_nodes
+
+def fetch_and_parse_content(url, depth=0):
     """
     通用内容抓取和解析函数。
     依次尝试解析为 Base64, 明文, 或 YAML。
     """
-    headers = get_headers()
+    content, successful_url = fetch_content(url)
+    if not content:
+        return [], None
+    
+    if len(content) == 0:
+        logger.warning(f"文件为空 (0 字节): {url}")
+        return [], None
+
+    # 尝试解析为 URL 列表
+    lines = content.splitlines()
+    if all(line.strip().startswith(('http://', 'https://')) for line in lines if line.strip()):
+        logger.info(f"检测到订阅链接列表: {url}")
+        nodes = process_subscription_links(lines, depth)
+        return nodes, successful_url
+
+    # 尝试解析为 YAML
     try:
-        response = requests.get(url, headers=headers, timeout=10, stream=True)
-        if response.status_code != 200:
-            return [], None
-            
-        content = ''
-        for chunk in response.iter_content(chunk_size=8192):
-            content += chunk.decode('utf-8')
+        data = yaml.safe_load(content)
+        if isinstance(data, dict) and 'proxies' in data:
+            return data.get('proxies', []), successful_url
+    except yaml.YAMLError:
+        pass
 
-        # 尝试解析为 YAML
-        try:
-            data = yaml.safe_load(content)
-            if isinstance(data, dict) and 'proxies' in data:
-                return data.get('proxies', []), url
-        except yaml.YAMLError:
-            pass
+    # 尝试解析为 Base64 编码的节点
+    base64_nodes = parse_base64_nodes(content)
+    if base64_nodes:
+        return base64_nodes, successful_url
 
-        # 尝试解析为 Base64 编码的节点
-        base64_nodes = parse_base64_nodes(content)
-        if base64_nodes:
-            return base64_nodes, url
-
-        # 尝试解析为明文节点
-        plaintext_nodes = parse_plaintext_nodes(content)
-        if plaintext_nodes:
-            return plaintext_nodes, url
-            
-        logger.warning(f"无法解析内容: {url}")
-        return [], None
+    # 尝试解析为明文节点
+    plaintext_nodes = parse_plaintext_nodes(content)
+    if plaintext_nodes:
+        return plaintext_nodes, successful_url
         
-    except requests.exceptions.RequestException as e:
-        logger.warning(f"下载失败: {url}, 错误: {e}")
-        return [], None
+    logger.warning(f"无法解析内容: {url}")
+    return [], None
 
 def parse_and_fetch_from_html(url):
     """
-    解析 HTML 页面，批量收集并尝试下载 YAML 文件。
-    新增了对包含 JavaScript 文件列表的页面的解析逻辑。
+    解析 HTML 页面，批量收集所有可能的订阅文件链接。
     """
     headers = get_headers()
     try:
@@ -309,44 +349,33 @@ def parse_and_fetch_from_html(url):
         if response.status_code == 200 and 'text/html' in response.headers.get('content-type', '').lower():
             soup = BeautifulSoup(response.text, 'html.parser')
             
-            sub_urls = []
+            sub_urls = set()
             
             # 策略1: 收集所有以 .yaml, .yml, .txt 结尾的链接
-            sub_urls.extend([requests.compat.urljoin(url, link.get('href'))
-                             for link in soup.find_all('a')
-                             if link.get('href') and link.get('href').lower().endswith(('.yaml', '.yml', '.txt'))])
+            for link in soup.find_all('a'):
+                href = link.get('href')
+                if href and href.lower().endswith(('.yaml', '.yml', '.txt')):
+                    full_url = requests.compat.urljoin(url, href)
+                    sub_urls.add(full_url)
             
             # 策略2: 寻找包含特定关键字的链接
             for link in soup.find_all('a'):
                 href = link.get('href')
-                if href and re.search(r'(clash|v2ray|mihomo|config|sub|subscribe)', href, re.IGNORECASE):
+                if href and is_likely_subscription_url(href):
                     full_url = requests.compat.urljoin(url, href)
-                    if full_url not in sub_urls:
-                        sub_urls.append(full_url)
+                    sub_urls.add(full_url)
             
             # 策略3: 从 <script> 标签中解析
             for script in soup.find_all('script'):
                 script_content = script.string
                 if script_content:
-                    # 匹配 "url": "..." 格式的链接
                     matches = re.findall(r'\"url\"\s*:\s*\"(.*?)\"', script_content, re.DOTALL | re.IGNORECASE)
                     for match_url in matches:
-                        # 检查链接是否包含节点类型关键字
-                        if re.search(r'(clash|v2ray|mihomo|config|sub|subscribe|yaml|txt)', match_url, re.IGNORECASE):
-                            if not match_url.startswith(('http://', 'https://')):
-                                full_sub_url = requests.compat.urljoin(url, match_url)
-                            else:
-                                full_sub_url = match_url
-                            if full_sub_url not in sub_urls:
-                                sub_urls.append(full_sub_url)
+                        if is_likely_subscription_url(match_url):
+                            full_url = requests.compat.urljoin(url, match_url) if not match_url.startswith(('http://', 'https://')) else match_url
+                            sub_urls.add(full_url)
             
-            # 批量尝试下载和解析文件
-            with ThreadPoolExecutor(max_workers=10) as executor:
-                future_to_url = {executor.submit(fetch_and_parse_content, sub_url): sub_url for sub_url in sub_urls}
-                for future in as_completed(future_to_url):
-                    content_nodes, final_url = future.result()
-                    if content_nodes:
-                        return content_nodes, final_url  # 返回第一个成功解析的节点列表
+            return list(sub_urls), url
         return [], None
     except requests.exceptions.RequestException as e:
         logger.warning(f"HTML 解析失败: {url}, 错误: {e}")
@@ -358,47 +387,67 @@ def process_links(working_links):
     node_counts = []
     processed_links = set()
     
+    tasks = []
+    for link, info in working_links.items():
+        full_url = f"{info['protocol']}://{link}"
+        if info['type'] == 'html':
+            tasks.append({'type': 'html_parse', 'url': full_url})
+        else:
+            for config_name in CONFIG_NAMES:
+                full_sub_url = f"{full_url}/{config_name}"
+                if full_sub_url not in processed_links:
+                    tasks.append({'type': 'fetch_and_parse_content', 'url': full_sub_url})
+    
+    # 将处理 HTML 的任务放在最前面
+    tasks.sort(key=lambda x: x['type'] != 'html_parse')
+    
     max_workers = min(32, os.cpu_count() * 2) if os.cpu_count() else 16
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        future_to_task = {}
-        for link, info in working_links.items():
-            full_url = f"{info['protocol']}://{link}"
-            if info['type'] == 'html':
-                # 优先处理 HTML 解析
-                task = {'type': 'html_parse', 'url': full_url}
-                future = executor.submit(parse_and_fetch_from_html, task['url'])
-                future_to_task[future] = task
-            else:
-                # 否则，直接尝试下载
-                for config_name in CONFIG_NAMES:
-                    full_sub_url = f"{full_url}/{config_name}"
-                    if full_sub_url not in processed_links:
-                        task = {'type': 'direct', 'url': full_sub_url}
-                        future = executor.submit(fetch_and_parse_content, task['url'])
-                        future_to_task[future] = task
+        future_to_url = {executor.submit(globals()[task['type']], **task): task['url'] for task in tasks}
         
-        for future in tqdm(as_completed(future_to_task), total=len(future_to_task), desc="获取节点内容"):
-            nodes, successful_url = future.result()
+        for future in tqdm(as_completed(future_to_url), total=len(future_to_url), desc="获取节点内容"):
+            task_url = future_to_url[future]
             
-            if not successful_url or successful_url in processed_links:
+            if task_url in processed_links:
                 continue
-            
-            if nodes:
-                # 为节点添加地理位置信息
-                for node in nodes:
-                    ip = node.get('server', '')
-                    if re.match(r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$', ip):
-                        try:
-                            country_code, country_name = geolocator.get_location(ip)
-                            node['name'] = country_name or '未知'
-                        except:
-                            node['name'] = '未知'
+
+            try:
+                result = future.result()
                 
-                all_nodes.extend(nodes)
-                node_counts.append({'url': successful_url, 'count': len(nodes)})
-                processed_links.add(successful_url)
-                logger.info(f"成功从 {successful_url} 获取 {len(nodes)} 个节点")
-    
+                if isinstance(result, tuple) and len(result) == 2:
+                    sub_urls, successful_url = result
+                    
+                    if successful_url in processed_links:
+                        continue
+                    
+                    if isinstance(sub_urls, list):
+                        # 处理 HTML 解析结果，将子链接添加到任务队列
+                        for sub_url in sub_urls:
+                            if sub_url not in processed_links:
+                                new_future = executor.submit(fetch_and_parse_content, sub_url)
+                                future_to_url[new_future] = sub_url
+                    else:
+                        # 处理直接获取内容的结果
+                        nodes = sub_urls
+                        if nodes:
+                            # 为节点添加地理位置信息
+                            for node in nodes:
+                                ip = node.get('server', '')
+                                if re.match(r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$', ip):
+                                    try:
+                                        country_code, country_name = geolocator.get_location(ip)
+                                        node['name'] = country_name or '未知'
+                                    except:
+                                        node['name'] = '未知'
+                            
+                            all_nodes.extend(nodes)
+                            node_counts.append({'url': successful_url, 'count': len(nodes)})
+                            processed_links.add(successful_url)
+                            logger.info(f"成功从 {successful_url} 获取 {len(nodes)} 个节点")
+                
+            except Exception as e:
+                logger.error(f"处理任务 {task_url} 时出错: {e}")
+                
     return all_nodes, node_counts
 
 def get_node_key(node):
