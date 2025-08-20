@@ -34,7 +34,8 @@ CONFIG_NAMES = [
     'new.yaml', 'new.yml', 'sf.yaml', 'sf.yml',
     'sub.yaml', 'sub.yml', 'subscribe.yaml', 'subscribe.yml',
     'subscription.yaml', 'subscription.yml',
-    '_clash.yaml', '_clash.yml', 'sub_clash.yaml', 'sub_clash.yml'
+    '_clash.yaml', '_clash.yml', 'sub_clash.yaml', 'sub_clash.yml',
+    'n1.yaml', 'n2.yaml', 'v1.yaml', 's1.yaml', 'n.yaml', 's.yaml' # 新增文件名
 ]
 
 # 浏览器User-Agent列表，用于伪装请求头
@@ -77,7 +78,7 @@ def test_connection_and_get_protocol(link):
     测试一个链接的连通性，并返回成功的协议。
     优先测试 HTTPS。
     """
-    link = link.replace('http://', '').replace('https://', '')
+    link = link.replace('http://', '').replace('https://', '').strip(',') # 修复在这里
     
     # 优先尝试 HTTPS
     try:
