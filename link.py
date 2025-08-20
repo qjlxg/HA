@@ -1,3 +1,4 @@
+
 import os
 import requests
 import yaml
@@ -199,56 +200,57 @@ def parse_plaintext_nodes(content):
         # Shadowsocks
         elif line.startswith('ss://'):
             try:
-                ss_content = line[5:]
+                # 分割 Base64 部分和名称部分
+                parts = line[5:].split('#', 1)
+                base64_part = parts[0]
+                name_part = unquote(parts[1]) if len(parts) > 1 else 'ss_node'
                 
-                # 检查新的非标准格式: ss://<base64_method_password>@<server>:<port>#<name>
-                if '@' in ss_content and '#' in ss_content and ss_content.find('@') < ss_content.find('#'):
-                    base64_part, rest = ss_content.split('@', 1)
-                    server_and_port, name_part = rest.split('#', 1)
-                    name_part = unquote(name_part)
-                    server, port = server_and_port.rsplit(':', 1)
-                    
-                    padded_base64 = base64_part + '=' * (-len(base64_part) % 4)
-                    decoded_mp = base64.b64decode(padded_base64).decode('utf-8', 'ignore')
-                    if ':' in decoded_mp:
-                        method, password = decoded_mp.split(':', 1)
-                    else:
-                        method = decoded_mp
-                        password = ''
+                # 验证 Base64 部分是否包含 @ 分隔符
+                if '@' not in base64_part:
+                    logger.warning(f"Shadowsocks 链接缺少 @ 分隔符: {line}")
+                    continue
                 
-                # 兼容旧的标准格式: ss://<base64_all>#<name>
-                else:
-                    parts = ss_content.split('#', 1)
-                    base64_part = parts[0]
-                    name_part = unquote(parts[1]) if len(parts) > 1 else 'ss_node'
-                    
-                    padded_base64 = base64_part + '=' * (-len(base64_part) % 4)
-                    decoded_ss = base64.b64decode(padded_base64).decode('utf-8', 'ignore')
-                    
-                    if '@' not in decoded_ss:
-                        logger.warning(f"Shadowsocks 链接解析失败: {line}, 错误: Base64 解码后缺少 @ 分隔符")
-                        continue
-
-                    method_and_password, server_and_port = decoded_ss.split('@', 1)
-                    server, port = server_and_port.rsplit(':', 1)
-                    
-                    if ':' in method_and_password:
-                        method, password = method_and_password.split(':', 1)
-                    else:
-                        method = method_and_password
-                        password = ''
-                        
+                # 分割 Base64 部分和服务器部分
+                method_password_b64, server_port = base64_part.split('@', 1)
+                
+                # 解码 Base64 编码的 method:password 部分
+                try:
+                    method_password = base64.b64decode(method_password_b64 + '=' * (-len(method_password_b64) % 4)).decode('utf-8', 'ignore')
+                except base64.binascii.Error as e:
+                    logger.warning(f"Shadowsocks Base64 解码失败: {line}, 错误: {e}")
+                    continue
+                
+                # 分割 method 和 password
+                if ':' not in method_password:
+                    logger.warning(f"Shadowsocks 链接缺少 method:password 分隔符: {line}")
+                    continue
+                method, password = method_password.split(':', 1)
+                
+                # 分割 server 和 port
+                if ':' not in server_port:
+                    logger.warning(f"Shadowsocks 链接缺少 server:port 分隔符: {line}")
+                    continue
+                server, port = server_port.rsplit(':', 1)
+                
+                # 验证 port 是否为有效数字
+                try:
+                    port = int(port)
+                except ValueError:
+                    logger.warning(f"Shadowsocks 链接端口无效: {line}")
+                    continue
+                
                 ss_node = {
                     'type': 'ss',
                     'method': method,
                     'password': password,
                     'server': server,
-                    'port': int(port),
+                    'port': port,
                     'ps': name_part
                 }
                 nodes.append(convert_to_clash_node(ss_node))
             except Exception as e:
                 logger.warning(f"Shadowsocks 链接解析失败: {line}, 错误: {e}")
+                continue
                 
         # VLESS
         elif line.startswith('vless://'):
@@ -256,11 +258,7 @@ def parse_plaintext_nodes(content):
                 uuid_and_server = line[8:].split('#', 1)[0]
                 uuid, server_info = uuid_and_server.split('@', 1)
                 server_part, params_part = server_info.split('?', 1)
-                
-                # 修正端口解析，忽略问号和后面的参数
-                server, port_with_params = server_part.rsplit(':', 1)
-                port = port_with_params.split('?', 1)[0]
-                
+                server, port = server_part.rsplit(':', 1)
                 params = dict(p.split('=', 1) for p in params_part.split('&'))
                 vless_node = {
                     'type': 'vless',
@@ -282,11 +280,7 @@ def parse_plaintext_nodes(content):
             try:
                 password_and_server = line[9:].split('#', 1)[0]
                 password, server_info = password_and_server.split('@', 1)
-                
-                # 修正端口解析，忽略问号和后面的参数
-                server, port_with_params = server_info.rsplit(':', 1)
-                port = port_with_params.split('?', 1)[0]
-                
+                server, port = server_info.rsplit(':', 1)
                 trojan_node = {
                     'type': 'trojan',
                     'password': password,
@@ -330,8 +324,8 @@ def process_subscription_links(links, depth=0):
     processed_links = set()
     
     with ThreadPoolExecutor(max_workers=min(32, os.cpu_count() * 2)) as executor:
-        # 过滤掉不可能是订阅链接的URL，并清理链接
-        filtered_links = [re.sub(r'\s+.*', '', link).strip() for link in links if is_likely_subscription_url(link)]
+        # 过滤掉不可能是订阅链接的URL
+        filtered_links = [link for link in links if is_likely_subscription_url(link)]
         
         future_to_url = {executor.submit(fetch_and_parse_content, link, depth + 1): link for link in filtered_links}
         for future in tqdm(as_completed(future_to_url), total=len(filtered_links), desc=f"获取子订阅内容 (深度 {depth})"):
@@ -356,7 +350,7 @@ def fetch_and_parse_content(url, depth=0):
 
     # 尝试解析为 URL 列表
     lines = content.splitlines()
-    if all(re.match(r'https?://', line.strip()) for line in lines if line.strip()):
+    if all(line.strip().startswith(('http://', 'https://')) for line in lines if line.strip()):
         logger.info(f"检测到订阅链接列表: {url}")
         nodes = process_subscription_links(lines, depth)
         return nodes, successful_url
