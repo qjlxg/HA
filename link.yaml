@@ -1,1 +1,7275 @@
-proxies: []
+proxies:
+- name: YouTube顺丰资源 美国1
+  network: ws
+  port: 443
+  server: cloudflare.182682.xyz
+  servername: test.saas.cname.123153.xyz
+  tls: true
+  type: vless
+  uuid: d342d11e-d424-4583-b36e-524ab1f0afa4
+  ws-opts:
+    headers:
+      host: test.saas.cname.123153.xyz
+    path: /snippets
+- name: 日本
+  network: ws
+  port: 8880
+  server: 156.238.18.113
+  servername: kjgx.laoyoutiao.link
+  tls: false
+  type: vless
+  uuid: fab7bf9c-ddb9-4563-8a04-fb01ce6c0fbf
+  ws-opts:
+    headers:
+      host: kjgx.laoyoutiao.link
+    path: Telegram@freecodes/?ed=2560
+- name: 日本_02
+  network: ws
+  port: 8880
+  server: 156.238.18.13
+  servername: yd.laoyoutiao.link
+  tls: false
+  type: vless
+  uuid: fab7bf9c-ddb9-4563-8a04-fb01ce6c0fbf
+  ws-opts:
+    headers:
+      host: yd.laoyoutiao.link
+    path: /Telegram@MxlShare@freecodes/?ed=2560
+- name: 西班牙
+  network: ws
+  port: 8880
+  server: 185.251.81.177
+  servername: ip.langmanshanxi.top
+  tls: false
+  type: vless
+  uuid: 583ceab3-4022-4553-9158-9bedc625ad4e
+  ws-opts:
+    headers:
+      host: ip.langmanshanxi.top
+    path: /Telegram @freecodes /?ed
+- name: 日本_03
+  network: ws
+  port: 2087
+  server: 156.238.18.112
+  servername: vle.amclubsapp.dpdns.org
+  tls: true
+  type: vless
+  uuid: d6b8011a-c725-435a-9fec-bf6d3530392c
+  ws-opts:
+    headers:
+      host: vle.amclubsapp.dpdns.org
+    path: /?ed=2560
+- name: 西班牙_02
+  network: ws
+  port: 8880
+  server: 185.251.81.3
+  servername: Telegram-channel-freecodes
+  tls: false
+  type: vless
+  uuid: b5441b0d-2147-4898-8a6a-9b2c87f58382
+  ws-opts:
+    headers:
+      host: bitget1.asdasd.click
+    path: /
+- name: 韩国
+  network: ws
+  port: 10397
+  server: 222.108.106.148
+  servername: jp.laoyoutiao.link
+  tls: true
+  type: vless
+  uuid: fab7bf9c-ddb9-4563-8a04-fb01ce6c0fbf
+  ws-opts:
+    headers:
+      host: jp.laoyoutiao.link
+    path: Telegram @freecodes /?ed=2560
+- name: YouTube顺丰资源 美国8
+  network: ws
+  port: 443
+  server: cdnjs.com
+  servername: rayan-navy.foton.dpdns.org
+  tls: true
+  type: vless
+  uuid: 1d173704-d5cc-4ce2-8b06-3a9a71037530
+  ws-opts:
+    headers:
+      host: rayan-navy.foton.dpdns.org
+    path: /
+- name: YouTube顺丰资源 美国9
+  network: ws
+  port: 443
+  server: 2606:4700:3036:6ed4:260:e367:c3d4:d3bb
+  servername: nt1.ylks0033.dpdns.org
+  tls: true
+  type: vless
+  uuid: 06e4425e-a8cb-4b63-929f-2105604ab0a9
+  ws-opts:
+    headers:
+      host: nt1.ylks0033.dpdns.org
+    path: /?ed=2560
+- name: 荷兰
+  network: ws
+  port: 8880
+  server: 45.149.12.251
+  servername: ' [By EbraSha]'
+  tls: false
+  type: vless
+  uuid: 0132166f-e702-48ed-a9e7-b07af768faf8
+  ws-opts:
+    headers:
+      host: cf.d3z.net
+    path: / [By EbraSha]
+- name: 美国
+  network: ws
+  port: 8880
+  server: 103.133.1.188
+  servername: Telegram-channel-freecodes
+  tls: false
+  type: vless
+  uuid: 583ceab3-4022-4553-9158-9bedc625ad4e
+  ws-opts:
+    headers:
+      host: ip.langmanshanxi.top
+    path: /TelegramU0001F1E8U0001F1F3 @freecodes
+- name: YouTube顺丰资源 美国12
+  network: ws
+  port: 443
+  server: 2606:4700:3036:6ed4:ff6e:712c:4953:87a5
+  servername: nc1.ylks0033.dpdns.org
+  tls: true
+  type: vless
+  uuid: 06e4425e-a8cb-4b63-929f-2105604ab0a9
+  ws-opts:
+    headers:
+      host: nc1.ylks0033.dpdns.org
+    path: /?ed=2560
+- name: YouTube顺丰资源 美国13
+  network: ws
+  port: 443
+  server: unlimited.spauu.web.id
+  servername: unlimited.spauu.web.id
+  tls: true
+  type: vless
+  uuid: 5415d823-c92f-4bbf-ae49-1b2d0f46e802
+  ws-opts:
+    headers:
+      host: unlimited.spauu.web.id
+    path: /vl=213.35.107.73=443
+- name: YouTube顺丰资源 美国17
+  network: ws
+  port: 443
+  server: unlimited.spauu.web.id
+  servername: unlimited.spauu.web.id
+  tls: true
+  type: vless
+  uuid: 4b921362-35a7-4bd5-8323-338de6f7f8bb
+  ws-opts:
+    headers:
+      host: unlimited.spauu.web.id
+    path: /
+- name: 英国
+  network: ws
+  port: 8880
+  server: 91.193.58.242
+  servername: Telegram-channel-freecodes
+  tls: false
+  type: vless
+  uuid: fab7bf9c-ddb9-4563-8a04-fb01ce6c0fbf
+  ws-opts:
+    headers:
+      host: kjgx.laoyoutiao.link
+    path: /Telegram @freecodes /?ed=2560
+- name: 新加坡
+  network: ws
+  port: 8880
+  server: 92.243.74.156
+  servername: Telegram-channel-freecodes
+  tls: false
+  type: vless
+  uuid: fab7bf9c-ddb9-4563-8a04-fb01ce6c0fbf
+  ws-opts:
+    headers:
+      host: kjgx.laoyoutiao.link
+    path: /
+- name: 俄罗斯联邦
+  network: ws
+  port: 8880
+  server: 185.174.138.177
+  servername: Telegram-channel-freecodes
+  tls: false
+  type: vless
+  uuid: 583ceab3-4022-4553-9158-9bedc625ad4e
+  ws-opts:
+    headers:
+      host: ip.langmanshanxi.top
+    path: /
+- name: 俄罗斯联邦_02
+  network: ws
+  port: 8880
+  server: 46.254.92.8
+  servername: cf.d3z.net
+  tls: false
+  type: vless
+  uuid: 0132166f-e702-48ed-a9e7-b07af768faf8
+  ws-opts:
+    headers:
+      host: cf.d3z.net
+    path: / [By EbraSha]
+- name: 新西兰
+  network: ws
+  port: 8880
+  server: 114.129.43.251
+  servername: cf.d3z.net
+  tls: false
+  type: vless
+  uuid: 0132166f-e702-48ed-a9e7-b07af768faf8
+  ws-opts:
+    headers:
+      host: cf.d3z.net
+    path: /Telegram @freecodes /?ed=2560
+- name: 美国_02
+  network: ws
+  port: 8880
+  server: 45.159.217.141
+  servername: sg.laoyoutiao.link
+  tls: false
+  type: vless
+  uuid: fab7bf9c-ddb9-4563-8a04-fb01ce6c0fbf
+  ws-opts:
+    headers:
+      host: sg.laoyoutiao.link
+    path: Telegram @freecodes /?ed=2560
+- name: 约旦
+  network: ws
+  port: 8880
+  server: 62.72.166.3
+  servername: bitget1.asdasd.click
+  tls: false
+  type: vless
+  uuid: b5441b0d-2147-4898-8a6a-9b2c87f58382
+  ws-opts:
+    headers:
+      host: bitget1.asdasd.click
+    path: /Telegram
+- name: YouTube顺丰资源 美国30
+  network: ws
+  port: 443
+  server: cdnjs.com
+  servername: rayan-fg-3.parmis.filegear-sg.me
+  tls: true
+  type: vless
+  uuid: 21cf57f2-391f-4e7b-91ac-8b650e0a2f4c
+  ws-opts:
+    headers:
+      host: rayan-fg-3.parmis.filegear-sg.me
+    path: /?ed=2560
+- name: 韩国_02
+  network: ws
+  port: 34599
+  server: 124.57.36.207
+  servername: jp.laoyoutiao.link
+  tls: true
+  type: vless
+  uuid: fab7bf9c-ddb9-4563-8a04-fb01ce6c0fbf
+  ws-opts:
+    headers:
+      host: jp.laoyoutiao.link
+    path: Telegram @freecodes /?ed=2560
+- name: 菲律宾
+  network: ws
+  port: 8880
+  server: 154.83.2.251
+  servername: cf.d3z.net
+  tls: false
+  type: vless
+  uuid: 0132166f-e702-48ed-a9e7-b07af768faf8
+  ws-opts:
+    headers:
+      host: cf.d3z.net
+    path: /Telegram @freecodes /
+- name: 美国_03
+  network: ws
+  port: 8880
+  server: 167.68.4.177
+  servername: ip.langmanshanxi.top
+  tls: false
+  type: vless
+  uuid: 583ceab3-4022-4553-9158-9bedc625ad4e
+  ws-opts:
+    headers:
+      host: ip.langmanshanxi.top
+    path: /
+- name: 英国_02
+  network: ws
+  port: 8880
+  server: 91.193.58.214
+  servername: ' [By EbraSha]'
+  tls: false
+  type: vless
+  uuid: fab7bf9c-ddb9-4563-8a04-fb01ce6c0fbf
+  ws-opts:
+    headers:
+      host: us.laoyoutiao.link
+    path: / [By EbraSha]
+- name: 未知
+  network: ws
+  password: f282b878-8711-45a1-8c69-5564172123c1
+  port: 443
+  server: 172.67.181.173
+  skip-cert-verify: true
+  sni: vpn.stupidworld.web.id
+  type: trojan
+  udp: true
+  ws-opts:
+    headers:
+      host: vpn.stupidworld.web.id
+    path: /Stupid-World/103.106.228.126-2053
+- name: 美国_04
+  network: ws
+  port: 8880
+  server: 103.116.7.3
+  servername: Telegram-channel-freecodes
+  tls: false
+  type: vless
+  uuid: b5441b0d-2147-4898-8a6a-9b2c87f58382
+  ws-opts:
+    headers:
+      host: bitget1.asdasd.click
+    path: /TelegramU0001F1E8U0001F1F3
+- name: 哈萨克斯坦
+  network: ws
+  port: 8880
+  server: 31.43.179.177
+  servername: Telegram-channel-freecodes
+  tls: false
+  type: vless
+  uuid: 583ceab3-4022-4553-9158-9bedc625ad4e
+  ws-opts:
+    headers:
+      host: ip.langmanshanxi.top
+    path: /Telegram @freecodes /?ed=2560
+- name: 新西兰_02
+  network: ws
+  port: 8880
+  server: 114.129.43.251
+  servername: cf.d3z.net
+  tls: false
+  type: vless
+  uuid: 0132166f-e702-48ed-a9e7-b07af768faf8
+  ws-opts:
+    headers:
+      host: cf.d3z.net
+    path: /TelegramU0001F1E8U0001F1F3
+- name: 卢森堡
+  network: ws
+  port: 8880
+  server: 188.42.89.251
+  servername: cf.d3z.net
+  tls: false
+  type: vless
+  uuid: 0132166f-e702-48ed-a9e7-b07af768faf8
+  ws-opts:
+    headers:
+      host: cf.d3z.net
+    path: /Telegram @freecodes /?ed=2560fp=chrome
+- name: 俄罗斯联邦_03
+  network: ws
+  port: 8880
+  server: 45.142.120.251
+  servername: Telegram-channel-freecodes
+  tls: false
+  type: vless
+  uuid: 0132166f-e702-48ed-a9e7-b07af768faf8
+  ws-opts:
+    headers:
+      host: cf.d3z.net
+    path: /Telegram
+- name: 美国_05
+  network: ws
+  port: 8880
+  server: 170.114.45.177
+  servername: Telegram-channel-freecodes
+  tls: false
+  type: vless
+  uuid: 583ceab3-4022-4553-9158-9bedc625ad4e
+  ws-opts:
+    headers:
+      host: ip.langmanshanxi.top
+    path: /Telegram @freecodes
+- name: 俄罗斯联邦_04
+  network: ws
+  port: 8880
+  server: 46.254.92.254
+  servername: Telegram-channel-freecodes
+  tls: false
+  type: vless
+  uuid: 34c01e61-f4f3-4afb-a83b-406caf8caa33
+  ws-opts:
+    headers:
+      host: yg.bantony199.top
+    path: /
+- name: 俄罗斯联邦_05
+  network: ws
+  port: 8880
+  server: 45.8.211.177
+  servername: ip.langmanshanxi.top
+  tls: false
+  type: vless
+  uuid: 583ceab3-4022-4553-9158-9bedc625ad4e
+  ws-opts:
+    headers:
+      host: ip.langmanshanxi.top
+    path: /Telegram@freecodes/?ed
+- name: 俄罗斯联邦_06
+  network: ws
+  port: 8880
+  server: 185.148.107.168
+  servername: kjgx.laoyoutiao.link
+  tls: false
+  type: vless
+  uuid: fab7bf9c-ddb9-4563-8a04-fb01ce6c0fbf
+  ws-opts:
+    headers:
+      host: kjgx.laoyoutiao.link
+    path: Telegram @freecodes /?ed=2560
+- name: 俄罗斯联邦_07
+  network: ws
+  port: 8880
+  server: 46.254.93.213
+  servername: jp.laoyoutiao.link
+  tls: false
+  type: vless
+  uuid: fab7bf9c-ddb9-4563-8a04-fb01ce6c0fbf
+  ws-opts:
+    headers:
+      host: jp.laoyoutiao.link
+    path: /
+- name: 俄罗斯联邦_08
+  network: ws
+  port: 8880
+  server: 46.254.92.8
+  servername: cf.d3z.net
+  tls: false
+  type: vless
+  uuid: 0132166f-e702-48ed-a9e7-b07af768faf8
+  ws-opts:
+    headers:
+      host: cf.d3z.net
+    path: /TelegramU0001F1E8U0001F1F3 @freecodes
+- name: 德国
+  network: ws
+  port: 8880
+  server: 5.10.215.177
+  servername: ip.langmanshanxi.top
+  tls: false
+  type: vless
+  uuid: 583ceab3-4022-4553-9158-9bedc625ad4e
+  ws-opts:
+    headers:
+      host: ip.langmanshanxi.top
+    path: /Telegram
+- name: 俄罗斯联邦_09
+  network: ws
+  port: 8880
+  server: 185.148.106.177
+  servername: Telegram-channel- CoinTech2U2
+  tls: false
+  type: vless
+  uuid: 583ceab3-4022-4553-9158-9bedc625ad4e
+  ws-opts:
+    headers:
+      host: ip.langmanshanxi.top
+    path: /freecodesfreecodes
+- name: 西班牙_03
+  network: ws
+  port: 8880
+  server: 185.251.82.20
+  servername: us.laoyoutiao.link
+  tls: false
+  type: vless
+  uuid: fab7bf9c-ddb9-4563-8a04-fb01ce6c0fbf
+  ws-opts:
+    headers:
+      host: us.laoyoutiao.link
+    path: /
+- name: 俄罗斯联邦_10
+  network: ws
+  port: 8880
+  server: 46.254.92.9
+  servername: cf.d3z.net
+  tls: false
+  type: vless
+  uuid: 0132166f-e702-48ed-a9e7-b07af768faf8
+  ws-opts:
+    headers:
+      host: cf.d3z.net
+    path: /
+- name: 美国_06
+  network: ws
+  port: 8880
+  server: 45.159.219.63
+  servername: jp.laoyoutiao.link
+  tls: false
+  type: vless
+  uuid: fab7bf9c-ddb9-4563-8a04-fb01ce6c0fbf
+  ws-opts:
+    headers:
+      host: jp.laoyoutiao.link
+    path: /TelegramU0001F1E8U0001F1F3
+- name: 俄罗斯联邦_11
+  network: ws
+  port: 8880
+  server: 46.254.93.177
+  servername: ip.langmanshanxi.top
+  tls: false
+  type: vless
+  uuid: 583ceab3-4022-4553-9158-9bedc625ad4e
+  ws-opts:
+    headers:
+      host: ip.langmanshanxi.top
+    path: /Telegram @freecodes /?ed=2560
+- name: 美国_07
+  network: ws
+  port: 8880
+  server: 195.13.45.177
+  servername: ip.langmanshanxi.top
+  tls: false
+  type: vless
+  uuid: 583ceab3-4022-4553-9158-9bedc625ad4e
+  ws-opts:
+    headers:
+      host: ip.langmanshanxi.top
+    path: /freecodesfreecodes
+- name: 俄罗斯联邦_12
+  network: ws
+  port: 8880
+  server: 185.148.104.168
+  servername: kjgx.laoyoutiao.link
+  tls: false
+  type: vless
+  uuid: fab7bf9c-ddb9-4563-8a04-fb01ce6c0fbf
+  ws-opts:
+    headers:
+      host: kjgx.laoyoutiao.link
+    path: freecodesfreecodes
+- name: 法国
+  network: ws
+  port: 8880
+  server: 141.11.203.177
+  servername: ip.langmanshanxi.top
+  tls: false
+  type: vless
+  uuid: 583ceab3-4022-4553-9158-9bedc625ad4e
+  ws-opts:
+    headers:
+      host: ip.langmanshanxi.top
+    path: /Telegram @freecodes
+- name: 美国_08
+  network: ws
+  port: 8880
+  server: 45.159.218.124
+  servername: us.laoyoutiao.link
+  tls: false
+  type: vless
+  uuid: fab7bf9c-ddb9-4563-8a04-fb01ce6c0fbf
+  ws-opts:
+    headers:
+      host: us.laoyoutiao.link
+    path: Telegram @freecodes /?ed=2560
+- name: 斯洛文尼亚
+  network: ws
+  port: 8880
+  server: 92.53.188.177
+  servername: ip.langmanshanxi.top
+  tls: false
+  type: vless
+  uuid: 583ceab3-4022-4553-9158-9bedc625ad4e
+  ws-opts:
+    headers:
+      host: ip.langmanshanxi.top
+    path: /TelegramрЯЗ®рЯЗ≥ @freecodes
+- name: 斯洛文尼亚_02
+  network: ws
+  port: 8880
+  server: 92.53.189.251
+  servername: cf.d3z.net
+  tls: false
+  type: vless
+  uuid: 0132166f-e702-48ed-a9e7-b07af768faf8
+  ws-opts:
+    headers:
+      host: cf.d3z.net
+    path: /Telegram@freecodes/?ed=2560
+- name: 美国_09
+  network: ws
+  port: 8880
+  server: 170.114.46.177
+  servername: Telegram-channel- CoinTech2U2
+  tls: false
+  type: vless
+  uuid: 583ceab3-4022-4553-9158-9bedc625ad4e
+  ws-opts:
+    headers:
+      host: ip.langmanshanxi.top
+    path: /
+- name: 斯洛文尼亚_03
+  network: ws
+  port: 8880
+  server: 92.53.188.177
+  servername: ip.langmanshanxi.top
+  tls: false
+  type: vless
+  uuid: 583ceab3-4022-4553-9158-9bedc625ad4e
+  ws-opts:
+    headers:
+      host: ip.langmanshanxi.top
+    path: /TelegramрЯЗ®рЯЗ≥ @freecodes /?ed
+- name: 未知_02
+  network: ws
+  port: 443
+  server: 162.159.9.55
+  servername: rayan-fg-4.sahel.filegear-sg.me
+  tls: true
+  type: vless
+  uuid: ee06e485-f3d1-46c0-97f4-e98040b828ed
+  ws-opts:
+    headers:
+      host: rayan-fg-4.sahel.filegear-sg.me
+    path: /?ed=2560
+- name: 俄罗斯联邦_13
+  network: ws
+  port: 8880
+  server: 185.148.106.251
+  servername: cf.d3z.net
+  tls: false
+  type: vless
+  uuid: 0132166f-e702-48ed-a9e7-b07af768faf8
+  ws-opts:
+    headers:
+      host: cf.d3z.net
+    path: /TelegramU0001F1E8U0001F1F3 @freecodes /?ed=2560fp=chrome
+- name: YouTube顺丰资源 美国114
+  network: grpc
+  port: 443
+  server: all.tellmethetrue.shop
+  servername: pqh30v8.hiddendom.shop
+  tls: true
+  type: vless
+  uuid: 401374e6-df77-41fb-f638-dad8184f175b
+- name: 立陶宛
+  network: ws
+  port: 8880
+  server: 86.38.214.177
+  servername: Telegram-channel-freecodes
+  tls: false
+  type: vless
+  uuid: 583ceab3-4022-4553-9158-9bedc625ad4e
+  ws-opts:
+    headers:
+      host: ip.langmanshanxi.top
+    path: /freecodesfreecodes
+- name: YouTube顺丰资源 美国120
+  network: grpc
+  port: 443
+  server: all.tellmethetrue.shop
+  servername: pqh23v4.hiddendom.shop
+  tls: true
+  type: vless
+  uuid: 401374e6-df77-41fb-f638-dad8184f175b
+- name: 斯洛文尼亚_04
+  network: ws
+  port: 8880
+  server: 92.53.188.177
+  servername: ip.langmanshanxi.top
+  tls: false
+  type: vless
+  uuid: 583ceab3-4022-4553-9158-9bedc625ad4e
+  ws-opts:
+    headers:
+      host: ip.langmanshanxi.top
+    path: /TelegramрЯЗ®рЯЗ≥@freecodes
+- name: YouTube顺丰资源 美国128
+  network: ws
+  port: 443
+  server: zaintest.vuclip.com.unlimited.spauu.web.id
+  servername: zaintest.vuclip.com.unlimited.spauu.web.id
+  tls: true
+  type: vless
+  uuid: 5f22ead8-e3fb-4d39-8357-193b952465ab
+  ws-opts:
+    headers:
+      host: zaintest.vuclip.com.unlimited.spauu.web.id
+    path: /vl=146.235.18.248=45137
+- name: 约旦_02
+  network: ws
+  port: 8880
+  server: 62.72.166.251
+  servername: cf.d3z.net
+  tls: false
+  type: vless
+  uuid: 0132166f-e702-48ed-a9e7-b07af768faf8
+  ws-opts:
+    headers:
+      host: cf.d3z.net
+    path: /Telegram@freecodes
+- name: 韩国_03
+  network: ws
+  port: 12307
+  server: 118.45.113.48
+  servername: jp.laoyoutiao.link
+  tls: true
+  type: vless
+  uuid: fab7bf9c-ddb9-4563-8a04-fb01ce6c0fbf
+  ws-opts:
+    headers:
+      host: jp.laoyoutiao.link
+    path: Telegram @freecodes /?ed=2560
+- name: YouTube顺丰资源 美国136
+  network: ws
+  port: 2053
+  server: loscdn.bm04.xyz
+  servername: loscdn.bm04.xyz
+  tls: true
+  type: vless
+  uuid: 94cf288d-f764-4ce9-a547-a7228144f056
+  ws-opts:
+    headers:
+      host: loscdn.bm04.xyz
+    path: /workspace/stream/
+- name: 未知_03
+  network: ws
+  port: 443
+  server: 104.21.35.171
+  servername: MaIncrafT.dPdnS.OrG
+  tls: true
+  type: vless
+  uuid: 252df5e8-0428-4345-b236-a6dae7b3457d
+  ws-opts:
+    headers:
+      host: MaIncrafT.dPdnS.OrG
+    path: /
+- name: 俄罗斯联邦_14
+  network: ws
+  port: 8880
+  server: 185.148.104.3
+  servername: Telegram-channel- CoinTech2U2
+  tls: false
+  type: vless
+  uuid: b5441b0d-2147-4898-8a6a-9b2c87f58382
+  ws-opts:
+    headers:
+      host: bitget1.asdasd.click
+    path: /
+- name: 韩国_04
+  network: ws
+  port: 12290
+  server: 220.118.236.239
+  servername: jp.laoyoutiao.link
+  tls: true
+  type: vless
+  uuid: fab7bf9c-ddb9-4563-8a04-fb01ce6c0fbf
+  ws-opts:
+    headers:
+      host: jp.laoyoutiao.link
+    path: Telegram @freecodes /?ed=2560
+- name: YouTube顺丰资源 美国144
+  network: grpc
+  port: 443
+  server: all.tellmethetrue.shop
+  servername: pqh24v6.hiddendom.shop
+  tls: true
+  type: vless
+  uuid: 401374e6-df77-41fb-f638-dad8184f175b
+- name: 香港
+  network: ws
+  port: 8880
+  server: 45.192.224.68
+  servername: yd.laoyoutiao.link
+  tls: false
+  type: vless
+  uuid: fab7bf9c-ddb9-4563-8a04-fb01ce6c0fbf
+  ws-opts:
+    headers:
+      host: yd.laoyoutiao.link
+    path: Telegram @freecodes /?ed=2560
+- name: YouTube顺丰资源 美国150
+  network: grpc
+  port: 443
+  server: all.tellmethetrue.shop
+  servername: pqh23v5.hiddendom.shop
+  tls: true
+  type: vless
+  uuid: 401374e6-df77-41fb-f638-dad8184f175b
+- name: 亚美尼亚
+  network: ws
+  port: 8880
+  server: 77.105.163.186
+  servername: Telegram-channel-freecodes
+  tls: false
+  type: vless
+  uuid: 583ceab3-4022-4553-9158-9bedc625ad4e
+  ws-opts:
+    headers:
+      host: ip.langmanshanxi.top
+    path: /TelegramU0001F1E8U0001F1F3 @freecodes /?ed=2560
+- alterId: 0
+  cipher: auto
+  name: YouTube顺丰资源Nofound152
+  network: ws
+  port: 80
+  server: bBbbbbbBb.222769.XYZ
+  servername: bbbbbbbbb.222769.xyz
+  skip-cert-verify: true
+  tls: false
+  type: vmess
+  uuid: 2e65577e-8fdb-4bb1-a495-96f3122099a7
+  ws-opts:
+    headers:
+      host: bbbbbbbbb.222769.xyz
+    path: /f6taOMcOSZb9TPR
+- name: 韩国_05
+  network: ws
+  port: 10007
+  server: 220.72.161.178
+  servername: jp.laoyoutiao.link
+  tls: true
+  type: vless
+  uuid: fab7bf9c-ddb9-4563-8a04-fb01ce6c0fbf
+  ws-opts:
+    headers:
+      host: jp.laoyoutiao.link
+    path: Telegram @freecodes /?ed=2560
+- name: 新西兰_03
+  network: ws
+  port: 8880
+  server: 114.129.43.251
+  servername: Telegram-channel-freecodes
+  tls: false
+  type: vless
+  uuid: 0132166f-e702-48ed-a9e7-b07af768faf8
+  ws-opts:
+    headers:
+      host: cf.d3z.net
+    path: /TelegramU0001F1E8U0001F1F3 @freecodes /?ed=2560fp=chrome
+- name: 德国_02
+  network: ws
+  port: 4002
+  server: 45.145.42.229
+  servername: nc1.ylks0033.dpdns.org
+  tls: true
+  type: vless
+  uuid: 06e4425e-a8cb-4b63-929f-2105604ab0a9
+  ws-opts:
+    headers:
+      host: nc1.ylks0033.dpdns.org
+    path: /?ed=2560
+- name: 美国_10
+  network: ws
+  port: 8880
+  server: 192.0.63.247
+  servername: ex.sue.x10.mx
+  tls: false
+  type: vless
+  uuid: d60fc3c5-9f07-4cdb-b81f-70af27936bdc
+  ws-opts:
+    headers:
+      host: ex.sue.x10.mx
+    path: /Telegram
+- name: 美国_11
+  network: ws
+  port: 8880
+  server: 209.94.90.63
+  servername: jp.laoyoutiao.link
+  tls: false
+  type: vless
+  uuid: fab7bf9c-ddb9-4563-8a04-fb01ce6c0fbf
+  ws-opts:
+    headers:
+      host: jp.laoyoutiao.link
+    path: /Telegram
+- cipher: aes-128-gcm
+  name: YouTube顺丰资源 中国163
+  password: 6b1e5475-7661-4921-aa26-d11758b2f3f1
+  port: 13882
+  server: hanguo01.tmdns-sing.top
+  type: ss
+- name: 美国_12
+  network: ws
+  port: 8880
+  server: 199.34.230.29
+  servername: hk.laoyoutiao.link
+  tls: false
+  type: vless
+  uuid: fab7bf9c-ddb9-4563-8a04-fb01ce6c0fbf
+  ws-opts:
+    headers:
+      host: hk.laoyoutiao.link
+    path: /
+- name: 美国_13
+  network: ws
+  port: 8880
+  server: 130.250.137.168
+  servername: kjgx.laoyoutiao.link
+  tls: false
+  type: vless
+  uuid: fab7bf9c-ddb9-4563-8a04-fb01ce6c0fbf
+  ws-opts:
+    headers:
+      host: kjgx.laoyoutiao.link
+    path: /Telegram@freecodes/?ed=2560
+- name: 德国_03
+  network: ws
+  port: 4002
+  server: 45.145.42.229
+  servername: nt1.ylks0033.dpdns.org
+  tls: true
+  type: vless
+  uuid: 06e4425e-a8cb-4b63-929f-2105604ab0a9
+  ws-opts:
+    headers:
+      host: nt1.ylks0033.dpdns.org
+    path: /?ed=2560
+- name: 立陶宛_02
+  network: ws
+  port: 8880
+  server: 89.116.180.156
+  servername: Telegram-channel-freecodes
+  tls: false
+  type: vless
+  uuid: fab7bf9c-ddb9-4563-8a04-fb01ce6c0fbf
+  ws-opts:
+    headers:
+      host: kjgx.laoyoutiao.link
+    path: /TelegramU0001F1E8U0001F1F3 @freecodes
+- name: 俄罗斯联邦_15
+  network: ws
+  port: 8880
+  server: 185.174.138.177
+  servername: Telegram-channel-freecodes
+  tls: false
+  type: vless
+  uuid: 583ceab3-4022-4553-9158-9bedc625ad4e
+  ws-opts:
+    headers:
+      host: ip.langmanshanxi.top
+    path: /TelegramU0001F1E8U0001F1F3
+- name: YouTube顺丰资源 美国177
+  network: ws
+  port: 443
+  server: cloudgetservice.mcloudservice.site
+  servername: maxnetvipap-cloud76.netkh3.site
+  tls: true
+  type: vless
+  uuid: 1b368bf6-5aac-413c-a77c-229fb984d5ae
+  ws-opts:
+    headers:
+      host: maxnetvipap-cloud76.netkh3.site
+    path: /linkws
+- name: 韩国_06
+  network: ws
+  port: 50000
+  server: 106.255.89.151
+  servername: jp.laoyoutiao.link
+  tls: true
+  type: vless
+  uuid: fab7bf9c-ddb9-4563-8a04-fb01ce6c0fbf
+  ws-opts:
+    headers:
+      host: jp.laoyoutiao.link
+    path: Telegram @freecodes /?ed=2560
+- name: 俄罗斯联邦_16
+  network: ws
+  port: 8880
+  server: 185.148.104.251
+  servername: cf.d3z.net
+  tls: false
+  type: vless
+  uuid: 0132166f-e702-48ed-a9e7-b07af768faf8
+  ws-opts:
+    headers:
+      host: cf.d3z.net
+    path: /TelegramU0001F1E8U0001F1F3 @freecodes /?ed=2560
+- name: 美国_14
+  network: ws
+  port: 8880
+  server: 199.34.230.29
+  servername: hk.laoyoutiao.link
+  tls: false
+  type: vless
+  uuid: fab7bf9c-ddb9-4563-8a04-fb01ce6c0fbf
+  ws-opts:
+    headers:
+      host: hk.laoyoutiao.link
+    path: /Telegramتعداد
+- name: 美国_15
+  network: ws
+  port: 8880
+  server: 170.114.46.177
+  servername: Telegram-channel-freecodes
+  tls: false
+  type: vless
+  uuid: 583ceab3-4022-4553-9158-9bedc625ad4e
+  ws-opts:
+    headers:
+      host: ip.langmanshanxi.top
+    path: /Telegram@freecodes/?ed=2560
+- name: 美国_16
+  network: ws
+  port: 8880
+  server: 216.24.57.186
+  servername: ''
+  tls: false
+  type: vless
+  uuid: 583ceab3-4022-4553-9158-9bedc625ad4e
+  ws-opts:
+    headers:
+      host: ip.langmanshanxi.top
+    path: /Telegram @freecodes /?ed=2560
+- name: 美国_17
+  network: ws
+  port: 8880
+  server: 141.193.27.63
+  servername: jp.laoyoutiao.link
+  tls: false
+  type: vless
+  uuid: fab7bf9c-ddb9-4563-8a04-fb01ce6c0fbf
+  ws-opts:
+    headers:
+      host: jp.laoyoutiao.link
+    path: /TelegramU0001F1E8U0001F1F3 @freecodes /?ed=2560
+- name: 美国_18
+  network: ws
+  port: 8880
+  server: 66.81.247.20
+  servername: us.laoyoutiao.link
+  tls: false
+  type: vless
+  uuid: fab7bf9c-ddb9-4563-8a04-fb01ce6c0fbf
+  ws-opts:
+    headers:
+      host: us.laoyoutiao.link
+    path: /Telegram @MxlShare @freecodes
+- name: 法国_02
+  network: ws
+  port: 8880
+  server: 185.16.110.63
+  servername: ' [By EbraSha]'
+  tls: false
+  type: vless
+  uuid: fab7bf9c-ddb9-4563-8a04-fb01ce6c0fbf
+  ws-opts:
+    headers:
+      host: sg.laoyoutiao.link
+    path: / [By EbraSha] b2n.ir/v2ray-configs | 428
+- name: 俄罗斯联邦_17
+  network: ws
+  port: 8880
+  server: 193.9.49.177
+  servername: ip.langmanshanxi.top
+  tls: false
+  type: vless
+  uuid: 583ceab3-4022-4553-9158-9bedc625ad4e
+  ws-opts:
+    headers:
+      host: ip.langmanshanxi.top
+    path: /Telegram @ CoinTech2U2 /?ed
+- name: 美国_19
+  network: ws
+  port: 8880
+  server: 216.24.57.20
+  servername: ''
+  tls: false
+  type: vless
+  uuid: fab7bf9c-ddb9-4563-8a04-fb01ce6c0fbf
+  ws-opts:
+    headers:
+      host: us.laoyoutiao.link
+    path: /Telegram@freecodes
+- name: 德国_04
+  network: ws
+  port: 8880
+  server: 45.80.111.20
+  servername: us.laoyoutiao.link
+  tls: false
+  type: vless
+  uuid: fab7bf9c-ddb9-4563-8a04-fb01ce6c0fbf
+  ws-opts:
+    headers:
+      host: us.laoyoutiao.link
+    path: /Telegram @MxlShare @freecodes /?ed=2560
+- name: YouTube顺丰资源 美国220
+  network: ws
+  port: 443
+  server: pvt.moonop.tech
+  servername: pvt.moonop.tech
+  tls: true
+  type: vless
+  uuid: 45be1c2b-4bb1-44f4-89e4-c026ad211d04
+  ws-opts:
+    headers:
+      host: pvt.moonop.tech
+    path: /aws5
+- name: 美国_20
+  network: ws
+  port: 8880
+  server: 199.34.229.63
+  servername: jp.laoyoutiao.link
+  tls: false
+  type: vless
+  uuid: fab7bf9c-ddb9-4563-8a04-fb01ce6c0fbf
+  ws-opts:
+    headers:
+      host: jp.laoyoutiao.link
+    path: /TelegramU0001F1E8U0001F1F3 @freecodes
+- client-fingerprint: chrome
+  name: 最优节点
+  network: ws
+  port: 443
+  server: bestcf.yzqiang.site
+  sni: vvv.yzqiang.site
+  tls: true
+  type: vless
+  udp: false
+  uuid: b940be1b-3998-45d2-bf7b-06e7b6c4987a
+  ws-opts:
+    headers:
+      host: vvv.yzqiang.site
+    path: /?ed=2560
+- client-fingerprint: chrome
+  name: myanmar.visa.com
+  network: ws
+  port: 8443
+  server: myanmar.visa.com
+  sni: vvv.yzqiang.site
+  tls: true
+  type: vless
+  udp: false
+  uuid: b940be1b-3998-45d2-bf7b-06e7b6c4987a
+  ws-opts:
+    headers:
+      host: vvv.yzqiang.site
+    path: /?ed=2560
+- client-fingerprint: chrome
+  name: www.visa.com.tw
+  network: ws
+  port: 2053
+  server: www.visa.com.tw
+  sni: vvv.yzqiang.site
+  tls: true
+  type: vless
+  udp: false
+  uuid: b940be1b-3998-45d2-bf7b-06e7b6c4987a
+  ws-opts:
+    headers:
+      host: vvv.yzqiang.site
+    path: /?ed=2560
+- client-fingerprint: chrome
+  name: www.visaeurope.ch
+  network: ws
+  port: 2083
+  server: www.visaeurope.ch
+  sni: vvv.yzqiang.site
+  tls: true
+  type: vless
+  udp: false
+  uuid: b940be1b-3998-45d2-bf7b-06e7b6c4987a
+  ws-opts:
+    headers:
+      host: vvv.yzqiang.site
+    path: /?ed=2560
+- client-fingerprint: chrome
+  name: www.visa.com.br
+  network: ws
+  port: 2087
+  server: www.visa.com.br
+  sni: vvv.yzqiang.site
+  tls: true
+  type: vless
+  udp: false
+  uuid: b940be1b-3998-45d2-bf7b-06e7b6c4987a
+  ws-opts:
+    headers:
+      host: vvv.yzqiang.site
+    path: /?ed=2560
+- client-fingerprint: chrome
+  name: www.visasoutheasteurope.com
+  network: ws
+  port: 2096
+  server: www.visasoutheasteurope.com
+  sni: vvv.yzqiang.site
+  tls: true
+  type: vless
+  udp: false
+  uuid: b940be1b-3998-45d2-bf7b-06e7b6c4987a
+  ws-opts:
+    headers:
+      host: vvv.yzqiang.site
+    path: /?ed=2560
+- name: 备用节点
+  port: 7891
+  server: home1.yzqiang.site
+  type: socks5
+- client-fingerprint: random
+  name: 最优节点_02
+  network: ws
+  port: 80
+  server: bestcf.yzqiang.site
+  skip-cert-verify: true
+  tfo: false
+  tls: false
+  type: vless
+  uuid: b940be1b-3998-45d2-bf7b-06e7b6c4987a
+  ws-opts:
+    headers:
+      Host: vs.yzqiang11.workers.dev
+    path: /5ggbx68sal8?ed=2048
+- name: CF1
+  network: ws
+  port: 80
+  server: bestcf.yzqiang.site
+  tls: false
+  type: vless
+  udp: false
+  uuid: b940be1b-3998-45d2-bf7b-06e7b6c4987a
+  ws-opts:
+    headers:
+      host: vs.yzqiang1.workers.dev
+    path: /?ed=2560
+- alpn:
+  - h3
+  - h2
+  - http/1.1
+  alterId: 0
+  cipher: auto
+  client-fingerprint: chrome
+  name: clash-young
+  network: tcp
+  port: 17891
+  server: vps.my-youth.asia
+  servername: vps.my-youth.asia
+  tls: true
+  type: vmess
+  udp: true
+  uuid: 8f2d400c-0879-4076-9b87-2302f00a135b
+- name: clash-young_02
+  port: 32566
+  server: vps.my-youth.asia
+  type: socks5
+  udp: false
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国-1K
+  port: 19901
+  server: fg.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 165e3c7f-b670-45a5-8337-41a0915a22aa
+- alterId: 0
+  cipher: auto
+  name: 🇭🇰 香港NO.2-1P
+  port: 45051
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 92bf2dbe-3fb4-4b20-915c-fbd5486d2f45
+- cipher: chacha20-ietf-poly1305
+  name: 🇰🇷 VIP 韩国01-1O
+  password: bdfecd07-e300-4b20-81a8-53ec21e80e02
+  port: 16087
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇬🇧 英国1-1B
+  port: 45066
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 0ff59aac-df7f-4e78-9c0a-8f93bda9b534
+- alterId: 0
+  cipher: auto
+  name: 🇯🇵 日本NO.2-1Q
+  port: 45057
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 7e3e92de-be91-4756-be72-660e9fff5569
+- alterId: 0
+  cipher: auto
+  name: 🇰🇷 韩国 专线NO1-1G
+  port: 45076
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: aaaf991f-66e5-42a1-96e6-bdb241dbc9d1
+- alterId: 0
+  cipher: auto
+  name: 🇰🇷 韩国 专线NO2-1D
+  port: 45075
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 98f5e3bb-f6e4-4d0a-a926-b1b0ebd0c891
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国-1L
+  port: 19901
+  server: fg.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: b0d7bdf1-09c0-40d9-8477-562977d069ea
+- cipher: chacha20-ietf-poly1305
+  name: 香港_02
+  password: 11af3a93-b3be-4ab1-8ec3-60e1a67c66d9
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇮🇳 印度1-1C
+  port: 45074
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 075f7216-c7fb-4c46-885f-e543187838d9
+- alterId: 0
+  cipher: auto
+  name: 🇸🇬 新加坡NO.1-1G
+  port: 45054
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: aaaf991f-66e5-42a1-96e6-bdb241dbc9d1
+- cipher: chacha20-ietf-poly1305
+  name: 香港_03
+  password: 9333a63d-b6e8-49a3-b977-124cc0fbc39c
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇦🇺 澳大利亚原生1-1A
+  port: 45062
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: bb6a5577-8efe-4377-a8b2-ac2d4f7e82cf
+- alterId: 0
+  cipher: auto
+  name: 🇦🇺 澳大利亚原生1-1Q
+  port: 45062
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 7e3e92de-be91-4756-be72-660e9fff5569
+- alterId: 0
+  cipher: auto
+  name: 🇦🇺 澳大利亚原生1-1D
+  port: 45062
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 98f5e3bb-f6e4-4d0a-a926-b1b0ebd0c891
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰
+  password: d9e0c455-bdfb-4f76-bbf1-77cb3efa9b96
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇨🇦 加拿大1-1F
+  port: 45064
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 226be3df-678b-4c60-b12d-ed0f677829e8
+- alterId: 0
+  cipher: auto
+  name: 🇨🇦 加拿大2-1E
+  port: 45065
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 93d8e8b6-1319-440e-b59c-d2188a160625
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_02
+  password: a32c12ba-57a0-468f-a295-729be9656e04
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸 美国NO.2-1J
+  port: 45053
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1115654a-7876-4cea-97a0-cc0c5d34bfb7
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国2-1J
+  port: 45071
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1115654a-7876-4cea-97a0-cc0c5d34bfb7
+- cipher: chacha20-ietf-poly1305
+  name: 香港_04
+  password: e055a04f-0b42-4676-9769-4f6ff0391924
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇬🇧 英国2-1K
+  port: 45067
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 165e3c7f-b670-45a5-8337-41a0915a22aa
+- cipher: chacha20-ietf-poly1305
+  name: 香港_05
+  password: 5d9a30de-44d6-4c7d-a9af-e59f02480a28
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇭🇰 香港NO.2-1E
+  port: 45051
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 93d8e8b6-1319-440e-b59c-d2188a160625
+- name: 台湾
+  password: 76806469-d1a1-456f-8b0a-0b78e4a26bb2
+  port: 443
+  server: 118.232.199.29
+  skip-cert-verify: true
+  sni: node2.yuntongclouds.com
+  type: trojan
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国-1Q
+  port: 19901
+  server: fg.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 7e3e92de-be91-4756-be72-660e9fff5569
+- name: 台湾_02
+  password: 5f757369-0b36-40cc-a2d6-b27ca76388c4
+  port: 443
+  server: 103.137.63.77
+  skip-cert-verify: true
+  sni: node1.yuntongclouds.com
+  type: trojan
+  udp: true
+- name: 台湾_03
+  password: e53c008a-7606-4d95-9a10-c93ccff934ad
+  port: 443
+  server: 118.232.199.14
+  skip-cert-verify: true
+  sni: node3.yuntongclouds.com
+  type: trojan
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇺🇸 VIP 美国01-1V
+  password: bdbfc358-743c-4291-8605-e16404d7f511
+  port: 14848
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇮🇳 印度2-1O
+  port: 45073
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 2e32687b-7dfe-4566-9c2b-9fb15140a2d2
+- alterId: 0
+  cipher: auto
+  name: 🇭🇰 香港NO.2-1Q
+  port: 45051
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 7e3e92de-be91-4756-be72-660e9fff5569
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_03
+  password: 1efccd98-8716-4a23-94c8-6fa351e5b4b7
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇰🇷 韩国 专线NO1-1D
+  port: 45076
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 98f5e3bb-f6e4-4d0a-a926-b1b0ebd0c891
+- cipher: chacha20-ietf-poly1305
+  name: 香港_06
+  password: f2a69df2-0b9f-4152-b9d3-3378bfd475b9
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_07
+  password: 240bffee-6fc8-44bd-b34f-e3945e684693
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- name: 🇭🇰 2号专线 香港HK 244-1B
+  password: 4b185cc2-8f83-4253-8d81-7d7419d5e7df
+  port: 38522
+  server: cdntwa.xiaomispeed.com
+  skip-cert-verify: true
+  sni: cdntwa.xiaomispeed.com
+  type: trojan
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇮🇳 印度2-1Q
+  port: 45073
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 7e3e92de-be91-4756-be72-660e9fff5569
+- alterId: 0
+  cipher: auto
+  name: 🇸🇬 新加坡NO.1-1E
+  port: 45054
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 93d8e8b6-1319-440e-b59c-d2188a160625
+- cipher: chacha20-ietf-poly1305
+  name: 🇰🇷 VIP 韩国01-1E
+  password: e5b55882-de5f-4fd1-bcab-463d7de13d8c
+  port: 16087
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇸🇬 VIP 新加坡01-1M
+  password: a9ad6807-9ecb-43f3-bbb3-b653a8858409
+  port: 27004
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇬🇧 英国2-1P
+  port: 45067
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 92bf2dbe-3fb4-4b20-915c-fbd5486d2f45
+- alterId: 0
+  cipher: auto
+  name: 🇦🇺 澳大利亚原生2-1E
+  port: 45063
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 93d8e8b6-1319-440e-b59c-d2188a160625
+- cipher: chacha20-ietf-poly1305
+  name: 🇯🇵 VIP 日本01-1S
+  password: b3884bf1-ccf8-4b7f-b2e0-889aee5c511c
+  port: 47296
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸 美国NO.1-1P
+  port: 45052
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 92bf2dbe-3fb4-4b20-915c-fbd5486d2f45
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_04
+  password: fc95eae1-0eca-42a7-85c9-b46060f7f4a7
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇨🇦 加拿大1-1E
+  port: 45064
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 93d8e8b6-1319-440e-b59c-d2188a160625
+- cipher: chacha20-ietf-poly1305
+  name: 🇸🇬 SS 新加坡 1-1A
+  password: fd84cbdc-60c5-4847-ace2-18dc241745c0
+  port: 28063
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇯🇵 VIP 日本01-1T
+  password: d90fd4a6-cceb-496d-b630-6ec802db58d4
+  port: 47296
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 台湾1-1R
+  port: 45078
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: e4a1182f-ef59-42fb-9885-9c47f0a30bab
+- alterId: 0
+  cipher: auto
+  name: 🇮🇳 印度2-1K
+  port: 45073
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 165e3c7f-b670-45a5-8337-41a0915a22aa
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国1-1Q
+  port: 45072
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 7e3e92de-be91-4756-be72-660e9fff5569
+- cipher: chacha20-ietf-poly1305
+  name: 中国
+  password: 4b185cc2-8f83-4253-8d81-7d7419d5e7df
+  port: 39524
+  server: 120.233.44.206
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇸🇬 新加坡NO.1-1I
+  port: 45054
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1f4be065-f6a5-42f9-a99b-c17d491741b9
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 台湾1-1C
+  port: 45078
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 075f7216-c7fb-4c46-885f-e543187838d9
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 台湾1-1E
+  port: 45078
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 93d8e8b6-1319-440e-b59c-d2188a160625
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 3x备用专线台湾1-1I
+  port: 50050
+  server: xh.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1f4be065-f6a5-42f9-a99b-c17d491741b9
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国1-1K
+  port: 45072
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 165e3c7f-b670-45a5-8337-41a0915a22aa
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 台湾2-1F
+  port: 45077
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 226be3df-678b-4c60-b12d-ed0f677829e8
+- cipher: chacha20-ietf-poly1305
+  name: 🇭🇰 VIP 香港01-1R
+  password: c4f4e380-395a-414b-b57c-e4b660bf069f
+  port: 23764
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇸🇬 新加坡NO.1-1M
+  port: 45054
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: ea724619-4a91-4ca5-a49c-e9f8dd315901
+- alterId: 0
+  cipher: auto
+  name: 🇨🇦 加拿大2-1N
+  port: 45065
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 32c197c8-3e01-4e06-a0f6-227c8ab97387
+- alterId: 0
+  cipher: auto
+  name: 🇮🇳 印度1-1F
+  port: 45074
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 226be3df-678b-4c60-b12d-ed0f677829e8
+- cipher: chacha20-ietf-poly1305
+  name: 🇹🇷 SS 土耳其1-1C
+  password: 66f1237e-e486-4205-8d5d-efa60e9aa22d
+  port: 33744
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇮🇳 印度2-1R
+  port: 45073
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: e4a1182f-ef59-42fb-9885-9c47f0a30bab
+- alterId: 0
+  cipher: auto
+  name: 🇰🇷 韩国 专线NO2-1Q
+  port: 45075
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 7e3e92de-be91-4756-be72-660e9fff5569
+- alterId: 0
+  cipher: auto
+  name: 🇸🇬 新加坡NO.1-1N
+  port: 45054
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 32c197c8-3e01-4e06-a0f6-227c8ab97387
+- cipher: chacha20-ietf-poly1305
+  name: 香港_08
+  password: e6574e47-14e1-4ea9-bdd4-724b012f1f75
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸 美国NO.1-1A
+  port: 45052
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: bb6a5577-8efe-4377-a8b2-ac2d4f7e82cf
+- alterId: 0
+  cipher: auto
+  name: 🇯🇵 日本NO.1-1I
+  port: 45056
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1f4be065-f6a5-42f9-a99b-c17d491741b9
+- alterId: 0
+  cipher: auto
+  name: 🇰🇷 韩国 专线NO1-1A
+  port: 45076
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: bb6a5577-8efe-4377-a8b2-ac2d4f7e82cf
+- alterId: 0
+  cipher: auto
+  name: 🇭🇰 3x备用专线香港1-1N
+  port: 50051
+  server: xh.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 32c197c8-3e01-4e06-a0f6-227c8ab97387
+- alterId: 0
+  cipher: auto
+  name: 🇸🇬 新加坡NO.2-1N
+  port: 45055
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 32c197c8-3e01-4e06-a0f6-227c8ab97387
+- alterId: 0
+  cipher: auto
+  name: 🇰🇷 韩国 专线NO1-1N
+  port: 45076
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 32c197c8-3e01-4e06-a0f6-227c8ab97387
+- cipher: chacha20-ietf-poly1305
+  name: 🇹🇼 SS 台湾2-1-1B
+  password: 50c2ff26-0fae-4720-bd20-6e8b1de47440
+  port: 43076
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇲🇾 SS 马来西亚1-1B
+  password: 50c2ff26-0fae-4720-bd20-6e8b1de47440
+  port: 13828
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_09
+  password: 54dc3279-a1b4-4fd0-a539-8aac2a031442
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- name: 台湾_04
+  password: fe0e4e5a-97c4-4f84-a5e5-cf9e04e6be00
+  port: 443
+  server: 103.137.63.77
+  skip-cert-verify: true
+  sni: node1.yuntongclouds.com
+  type: trojan
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇺🇸 VIP 美国01-1K
+  password: a01e5f12-7948-408f-bde5-fc4d8b6bf1f1
+  port: 14848
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇮🇳 SS 印度1-1B
+  password: 50c2ff26-0fae-4720-bd20-6e8b1de47440
+  port: 34411
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇯🇵 日本NO.2-1D
+  port: 45057
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 98f5e3bb-f6e4-4d0a-a926-b1b0ebd0c891
+- cipher: chacha20-ietf-poly1305
+  name: 🇯🇵 VIP 日本01-1Z
+  password: 6a13a226-be78-4045-9377-c34920d3c3e1
+  port: 47296
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇸🇬 新加坡NO.1-1K
+  port: 45054
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 165e3c7f-b670-45a5-8337-41a0915a22aa
+- cipher: chacha20-ietf-poly1305
+  name: 香港_10
+  password: 242d00ec-7534-46b9-9e1d-64060dbc8ae9
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇺🇸 SS 美国1-1A
+  password: fd84cbdc-60c5-4847-ace2-18dc241745c0
+  port: 46197
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇦🇺 澳大利亚原生1-1E
+  port: 45062
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 93d8e8b6-1319-440e-b59c-d2188a160625
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸 美国NO.1-1Q
+  port: 45052
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 7e3e92de-be91-4756-be72-660e9fff5569
+- cipher: chacha20-ietf-poly1305
+  name: 🇺🇸 VIP 美国01-1Z
+  password: 6a13a226-be78-4045-9377-c34920d3c3e1
+  port: 14848
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_11
+  password: 7011c837-668c-4246-96e5-9021e70a06a9
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇮🇳 印度1-1O
+  port: 45074
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 2e32687b-7dfe-4566-9c2b-9fb15140a2d2
+- cipher: chacha20-ietf-poly1305
+  name: 香港_12
+  password: 2bc39aa3-87b4-4b34-92fa-798ebeb8c876
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- name: 台湾_05
+  password: fe0e4e5a-97c4-4f84-a5e5-cf9e04e6be00
+  port: 443
+  server: 118.232.199.14
+  skip-cert-verify: true
+  sni: node3.yuntongclouds.com
+  type: trojan
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇭🇰 VIP 香港01-1G
+  password: 506a346b-2969-4c1d-ad3f-76ad9adfb34c
+  port: 23764
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇯🇵 VIP 日本01-1Q
+  password: b38fa2c6-fbb8-4332-8fac-e56add8e5632
+  port: 47296
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_13
+  password: 1b49cd17-7398-47eb-a840-2363983959cb
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇭🇰 3x备用专线香港1-1P
+  port: 50051
+  server: xh.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 92bf2dbe-3fb4-4b20-915c-fbd5486d2f45
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸 美国NO.2-1O
+  port: 45053
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 2e32687b-7dfe-4566-9c2b-9fb15140a2d2
+- alterId: 0
+  cipher: auto
+  name: 🇨🇦 加拿大1-1C
+  port: 45064
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 075f7216-c7fb-4c46-885f-e543187838d9
+- alterId: 0
+  cipher: auto
+  name: 🇭🇰 3x备用专线香港1-1A
+  port: 50051
+  server: xh.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: bb6a5577-8efe-4377-a8b2-ac2d4f7e82cf
+- cipher: chacha20-ietf-poly1305
+  name: 🇭🇰 VIP 香港01-1Y
+  password: e778665a-9354-4e91-8bad-e79237428fbf
+  port: 23764
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇸🇬 VIP 新加坡01-1Y
+  password: e778665a-9354-4e91-8bad-e79237428fbf
+  port: 27004
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇰🇷 VIP 韩国01-1V
+  password: bdbfc358-743c-4291-8605-e16404d7f511
+  port: 16087
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇭🇰 VIP 香港01-1J
+  password: c1c331e3-4f43-4b51-867a-cf7a3b5e92f3
+  port: 23764
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 台湾1-1K
+  port: 45078
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 165e3c7f-b670-45a5-8337-41a0915a22aa
+- name: 🇺🇸 2号专线 美国US 110-1A
+  password: cceeea0e-14de-48ce-bff7-6dbcf4e40d1a
+  port: 33889
+  server: cdntwa.xiaomispeed.com
+  skip-cert-verify: true
+  sni: cdntwa.xiaomispeed.com
+  type: trojan
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸 美国NO.2-1B
+  port: 45053
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 0ff59aac-df7f-4e78-9c0a-8f93bda9b534
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸 美国NO.1-1H
+  port: 45052
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 4dca1f0c-f253-43d6-851c-2277e5cd8e1d
+- alterId: 0
+  cipher: auto
+  name: 🇮🇳 印度1-1R
+  port: 45074
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: e4a1182f-ef59-42fb-9885-9c47f0a30bab
+- alterId: 0
+  cipher: auto
+  name: 🇭🇰 香港NO.2-1B
+  port: 45051
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 0ff59aac-df7f-4e78-9c0a-8f93bda9b534
+- cipher: chacha20-ietf-poly1305
+  name: 🇹🇼 SS 台湾1-1B
+  password: 50c2ff26-0fae-4720-bd20-6e8b1de47440
+  port: 18148
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国-1H
+  port: 19901
+  server: fg.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 4dca1f0c-f253-43d6-851c-2277e5cd8e1d
+- cipher: chacha20-ietf-poly1305
+  name: 🇺🇸 VIP 美国01-1M
+  password: a9ad6807-9ecb-43f3-bbb3-b653a8858409
+  port: 14848
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- name: 台湾_06
+  password: 5f757369-0b36-40cc-a2d6-b27ca76388c4
+  port: 443
+  server: 118.232.199.14
+  skip-cert-verify: true
+  sni: node3.yuntongclouds.com
+  type: trojan
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇸🇬 新加坡NO.1-1R
+  port: 45054
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: e4a1182f-ef59-42fb-9885-9c47f0a30bab
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国2-1I
+  port: 45071
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1f4be065-f6a5-42f9-a99b-c17d491741b9
+- cipher: chacha20-ietf-poly1305
+  name: 🇯🇵 VIP 日本01-1A
+  password: be6adc88-52dd-4b22-9cad-4a88c257235e
+  port: 47296
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇸🇬 VIP 新加坡01-1D
+  password: 44cafd16-89d6-4a43-8163-c2e7de408ced
+  port: 27004
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国-1D
+  port: 19901
+  server: fg.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 98f5e3bb-f6e4-4d0a-a926-b1b0ebd0c891
+- alterId: 0
+  cipher: auto
+  name: 🇦🇺 澳大利亚原生2-1I
+  port: 45063
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1f4be065-f6a5-42f9-a99b-c17d491741b9
+- cipher: chacha20-ietf-poly1305
+  name: 🇺🇸 SS 美国1-1B
+  password: 50c2ff26-0fae-4720-bd20-6e8b1de47440
+  port: 46197
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_05
+  password: 1184f713-2357-45e7-80c5-0cf5976fd7db
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇯🇵 VIP 日本01-1E
+  password: e5b55882-de5f-4fd1-bcab-463d7de13d8c
+  port: 47296
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- name: 台湾_07
+  password: ece1d3df-abbe-4605-9dbd-4ab0ddd79cc0
+  port: 443
+  server: 118.232.199.14
+  skip-cert-verify: true
+  sni: node3.yuntongclouds.com
+  type: trojan
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 台湾1-1G
+  port: 45078
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: aaaf991f-66e5-42a1-96e6-bdb241dbc9d1
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_06
+  password: 7e298076-0daf-4995-b4b7-b07fef0fb781
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国2-1M
+  port: 45071
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: ea724619-4a91-4ca5-a49c-e9f8dd315901
+- cipher: chacha20-ietf-poly1305
+  name: 🇭🇰 SS 香港1-1C
+  password: 66f1237e-e486-4205-8d5d-efa60e9aa22d
+  port: 34061
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 3x备用专线台湾1-1K
+  port: 50050
+  server: xh.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 165e3c7f-b670-45a5-8337-41a0915a22aa
+- alterId: 0
+  cipher: auto
+  name: 🇮🇳 印度1-1E
+  port: 45074
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 93d8e8b6-1319-440e-b59c-d2188a160625
+- cipher: chacha20-ietf-poly1305
+  name: 🇯🇵 SS 日本3-1B
+  password: 50c2ff26-0fae-4720-bd20-6e8b1de47440
+  port: 57927
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇯🇵 日本NO.1-1O
+  port: 45056
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 2e32687b-7dfe-4566-9c2b-9fb15140a2d2
+- cipher: chacha20-ietf-poly1305
+  name: 🇰🇷 SS 韩国1-1C
+  password: 66f1237e-e486-4205-8d5d-efa60e9aa22d
+  port: 41431
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇸🇬 VIP 新加坡01-1O
+  password: bdfecd07-e300-4b20-81a8-53ec21e80e02
+  port: 27004
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_14
+  password: 8a14961c-6c5a-4501-865f-20c66fb80d5c
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇰🇷 韩国 专线NO2-1N
+  port: 45075
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 32c197c8-3e01-4e06-a0f6-227c8ab97387
+- name: 🇭🇰 2号专线 香港HK 53-1A
+  password: cceeea0e-14de-48ce-bff7-6dbcf4e40d1a
+  port: 39765
+  server: cdntwa.xiaomispeed.com
+  skip-cert-verify: true
+  sni: cdntwa.xiaomispeed.com
+  type: trojan
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇨🇦 加拿大1-1D
+  port: 45064
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 98f5e3bb-f6e4-4d0a-a926-b1b0ebd0c891
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 台湾2-1I
+  port: 45077
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1f4be065-f6a5-42f9-a99b-c17d491741b9
+- cipher: chacha20-ietf-poly1305
+  name: 香港_15
+  password: 353b890e-0433-44b7-b684-527e992fc71f
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国-1N
+  port: 19901
+  server: fg.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 32c197c8-3e01-4e06-a0f6-227c8ab97387
+- alterId: 0
+  cipher: auto
+  name: 🇬🇧 英国1-1G
+  port: 45066
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: aaaf991f-66e5-42a1-96e6-bdb241dbc9d1
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_07
+  password: 8ad9d9f2-a4ec-42b0-a18f-5436a42502aa
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- name: 台湾_08
+  password: e53c008a-7606-4d95-9a10-c93ccff934ad
+  port: 443
+  server: 103.137.63.77
+  skip-cert-verify: true
+  sni: node1.yuntongclouds.com
+  type: trojan
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇭🇰 VIP 香港01-1T
+  password: d90fd4a6-cceb-496d-b630-6ec802db58d4
+  port: 23764
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇸🇬 新加坡NO.2-1G
+  port: 45055
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: aaaf991f-66e5-42a1-96e6-bdb241dbc9d1
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 台湾2-1K
+  port: 45077
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 165e3c7f-b670-45a5-8337-41a0915a22aa
+- cipher: chacha20-ietf-poly1305
+  name: 🇰🇷 VIP 韩国01-1N
+  password: 3de6dc0f-996a-46f6-b073-e1342fa48440
+  port: 16087
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸 美国NO.2-1P
+  port: 45053
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 92bf2dbe-3fb4-4b20-915c-fbd5486d2f45
+- cipher: chacha20-ietf-poly1305
+  name: 香港_16
+  password: bcca0d43-d2dc-45d1-8e4c-b339616c8b9b
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国-1O
+  port: 19901
+  server: fg.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 2e32687b-7dfe-4566-9c2b-9fb15140a2d2
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_08
+  password: 5080252e-f677-41fe-98c5-0c9a8e9992b4
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇦🇺 澳大利亚原生2-1Q
+  port: 45063
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 7e3e92de-be91-4756-be72-660e9fff5569
+- cipher: chacha20-ietf-poly1305
+  name: 🇭🇰 VIP 香港01-1Z
+  password: 6a13a226-be78-4045-9377-c34920d3c3e1
+  port: 23764
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_09
+  password: 29e192c6-54da-4ab2-a9e4-040d305f987d
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 中国_02
+  password: cceeea0e-14de-48ce-bff7-6dbcf4e40d1a
+  port: 33922
+  server: 120.233.44.206
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇸🇬 VIP 新加坡01-1I
+  password: ed1f378f-99e7-4917-9e85-72cf6d50feff
+  port: 27004
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇰🇷 韩国 专线NO2-1G
+  port: 45075
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: aaaf991f-66e5-42a1-96e6-bdb241dbc9d1
+- cipher: chacha20-ietf-poly1305
+  name: 🇭🇰 VIP 香港01-1D
+  password: 44cafd16-89d6-4a43-8163-c2e7de408ced
+  port: 23764
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇮🇳 印度1-1A
+  port: 45074
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: bb6a5577-8efe-4377-a8b2-ac2d4f7e82cf
+- alterId: 0
+  cipher: auto
+  name: 🇬🇧 英国1-1A
+  port: 45066
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: bb6a5577-8efe-4377-a8b2-ac2d4f7e82cf
+- alterId: 0
+  cipher: auto
+  name: 🇨🇦 加拿大2-1L
+  port: 45065
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: b0d7bdf1-09c0-40d9-8477-562977d069ea
+- cipher: chacha20-ietf-poly1305
+  name: 香港_17
+  password: 933cf894-c7fb-49c8-b562-59a4c56aac3c
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇰🇷 VIP 韩国01-1x
+  password: 3fa2f4f9-f473-400c-af77-e99b40e4109c
+  port: 16087
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 台湾2-1A
+  port: 45077
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: bb6a5577-8efe-4377-a8b2-ac2d4f7e82cf
+- alterId: 0
+  cipher: auto
+  name: 🇦🇺 澳大利亚原生1-1R
+  port: 45062
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: e4a1182f-ef59-42fb-9885-9c47f0a30bab
+- cipher: chacha20-ietf-poly1305
+  name: 🇯🇵 VIP 日本01-1x
+  password: 3fa2f4f9-f473-400c-af77-e99b40e4109c
+  port: 47296
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇬🇧 英国2-1D
+  port: 45067
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 98f5e3bb-f6e4-4d0a-a926-b1b0ebd0c891
+- cipher: chacha20-ietf-poly1305
+  name: 🇸🇬 VIP 新加坡01-1J
+  password: c1c331e3-4f43-4b51-867a-cf7a3b5e92f3
+  port: 27004
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇦🇺 澳大利亚原生2-1A
+  port: 45063
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: bb6a5577-8efe-4377-a8b2-ac2d4f7e82cf
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸 美国NO.1-1M
+  port: 45052
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: ea724619-4a91-4ca5-a49c-e9f8dd315901
+- alterId: 0
+  cipher: auto
+  name: 🇬🇧 英国1-1K
+  port: 45066
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 165e3c7f-b670-45a5-8337-41a0915a22aa
+- alterId: 0
+  cipher: auto
+  name: 🇯🇵 日本NO.2-1F
+  port: 45057
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 226be3df-678b-4c60-b12d-ed0f677829e8
+- cipher: chacha20-ietf-poly1305
+  name: 🇹🇼 SS 台湾1-1A
+  password: fd84cbdc-60c5-4847-ace2-18dc241745c0
+  port: 18148
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸 美国NO.2-1G
+  port: 45053
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: aaaf991f-66e5-42a1-96e6-bdb241dbc9d1
+- alterId: 0
+  cipher: auto
+  name: 🇨🇦 加拿大2-1C
+  port: 45065
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 075f7216-c7fb-4c46-885f-e543187838d9
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 台湾1-1A
+  port: 45078
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: bb6a5577-8efe-4377-a8b2-ac2d4f7e82cf
+- alterId: 0
+  cipher: auto
+  name: 🇸🇬 新加坡NO.2-1I
+  port: 45055
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1f4be065-f6a5-42f9-a99b-c17d491741b9
+- alterId: 0
+  cipher: auto
+  name: 🇯🇵 日本NO.1-1R
+  port: 45056
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: e4a1182f-ef59-42fb-9885-9c47f0a30bab
+- cipher: chacha20-ietf-poly1305
+  name: 🇭🇰 VIP 香港01-1x
+  password: 3fa2f4f9-f473-400c-af77-e99b40e4109c
+  port: 23764
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇰🇷 韩国 专线NO2-1B
+  port: 45075
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 0ff59aac-df7f-4e78-9c0a-8f93bda9b534
+- alterId: 0
+  cipher: auto
+  name: 🇮🇳 印度1-1J
+  port: 45074
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1115654a-7876-4cea-97a0-cc0c5d34bfb7
+- alterId: 0
+  cipher: auto
+  name: 🇯🇵 日本NO.1-1H
+  port: 45056
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 4dca1f0c-f253-43d6-851c-2277e5cd8e1d
+- cipher: chacha20-ietf-poly1305
+  name: 🇹🇼 SS 台湾1-1C
+  password: 66f1237e-e486-4205-8d5d-efa60e9aa22d
+  port: 18148
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇯🇵 VIP 日本01-1K
+  password: a01e5f12-7948-408f-bde5-fc4d8b6bf1f1
+  port: 47296
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇰🇷 VIP 韩国01-1S
+  password: b3884bf1-ccf8-4b7f-b2e0-889aee5c511c
+  port: 16087
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇭🇰 3x备用专线香港1-1G
+  port: 50051
+  server: xh.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: aaaf991f-66e5-42a1-96e6-bdb241dbc9d1
+- alterId: 0
+  cipher: auto
+  name: 🇸🇬 新加坡NO.2-1D
+  port: 45055
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 98f5e3bb-f6e4-4d0a-a926-b1b0ebd0c891
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 台湾2-1B
+  port: 45077
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 0ff59aac-df7f-4e78-9c0a-8f93bda9b534
+- alterId: 0
+  cipher: auto
+  name: 🇨🇦 加拿大2-1F
+  port: 45065
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 226be3df-678b-4c60-b12d-ed0f677829e8
+- alterId: 0
+  cipher: auto
+  name: 🇮🇳 印度1-1L
+  port: 45074
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: b0d7bdf1-09c0-40d9-8477-562977d069ea
+- alterId: 0
+  cipher: auto
+  name: 🇦🇺 澳大利亚原生2-1G
+  port: 45063
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: aaaf991f-66e5-42a1-96e6-bdb241dbc9d1
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸 美国NO.1-1G
+  port: 45052
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: aaaf991f-66e5-42a1-96e6-bdb241dbc9d1
+- alterId: 0
+  cipher: auto
+  name: 🇬🇧 英国1-1R
+  port: 45066
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: e4a1182f-ef59-42fb-9885-9c47f0a30bab
+- alterId: 0
+  cipher: auto
+  name: 🇮🇳 印度2-1G
+  port: 45073
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: aaaf991f-66e5-42a1-96e6-bdb241dbc9d1
+- cipher: chacha20-ietf-poly1305
+  name: 🇸🇬 VIP 新加坡01-1Z
+  password: 6a13a226-be78-4045-9377-c34920d3c3e1
+  port: 27004
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇸🇬 VIP 新加坡01-1S
+  password: b3884bf1-ccf8-4b7f-b2e0-889aee5c511c
+  port: 27004
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇬🇧 英国2-1N
+  port: 45067
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 32c197c8-3e01-4e06-a0f6-227c8ab97387
+- alterId: 0
+  cipher: auto
+  name: 🇭🇰 香港NO.2-1I
+  port: 45051
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1f4be065-f6a5-42f9-a99b-c17d491741b9
+- cipher: chacha20-ietf-poly1305
+  name: 🇯🇵 SS 日本3-1C
+  password: 66f1237e-e486-4205-8d5d-efa60e9aa22d
+  port: 57927
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇰🇷 VIP 韩国01-1T
+  password: d90fd4a6-cceb-496d-b630-6ec802db58d4
+  port: 16087
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇦🇺 澳大利亚原生2-1K
+  port: 45063
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 165e3c7f-b670-45a5-8337-41a0915a22aa
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸 美国NO.2-1A
+  port: 45053
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: bb6a5577-8efe-4377-a8b2-ac2d4f7e82cf
+- alterId: 0
+  cipher: auto
+  name: 🇰🇷 韩国 专线NO2-1O
+  port: 45075
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 2e32687b-7dfe-4566-9c2b-9fb15140a2d2
+- cipher: chacha20-ietf-poly1305
+  name: 🇺🇸 VIP 美国01-1L
+  password: 23fb78d3-54de-44e5-91c9-2454541839b4
+  port: 14848
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 3x备用专线台湾1-1D
+  port: 50050
+  server: xh.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 98f5e3bb-f6e4-4d0a-a926-b1b0ebd0c891
+- cipher: chacha20-ietf-poly1305
+  name: 🇮🇸 SS 冰岛1-1C
+  password: 66f1237e-e486-4205-8d5d-efa60e9aa22d
+  port: 18244
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_10
+  password: b88579f7-593e-40e3-a6ea-86d4958bc209
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 台湾1-1J
+  port: 45078
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1115654a-7876-4cea-97a0-cc0c5d34bfb7
+- alterId: 0
+  cipher: auto
+  name: 🇮🇳 印度1-1P
+  port: 45074
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 92bf2dbe-3fb4-4b20-915c-fbd5486d2f45
+- cipher: chacha20-ietf-poly1305
+  name: 🇺🇸 VIP 美国01-1D
+  password: 44cafd16-89d6-4a43-8163-c2e7de408ced
+  port: 14848
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸 美国NO.2-1D
+  port: 45053
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 98f5e3bb-f6e4-4d0a-a926-b1b0ebd0c891
+- cipher: chacha20-ietf-poly1305
+  name: 🇲🇽 SS 墨西哥1-1C
+  password: 66f1237e-e486-4205-8d5d-efa60e9aa22d
+  port: 20149
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_11
+  password: 9aeb46dc-84b7-4a07-b149-8549f4339acb
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_18
+  password: ba87e4cc-d47a-4c89-b574-68e21aa63546
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇦🇺 澳大利亚原生1-1K
+  port: 45062
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 165e3c7f-b670-45a5-8337-41a0915a22aa
+- alterId: 0
+  cipher: auto
+  name: 🇬🇧 英国2-1R
+  port: 45067
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: e4a1182f-ef59-42fb-9885-9c47f0a30bab
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 3x备用专线台湾1-1R
+  port: 50050
+  server: xh.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: e4a1182f-ef59-42fb-9885-9c47f0a30bab
+- alterId: 0
+  cipher: auto
+  name: 🇬🇧 英国1-1O
+  port: 45066
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 2e32687b-7dfe-4566-9c2b-9fb15140a2d2
+- name: 台湾_09
+  password: 68cfaf9d-f86c-43bc-ab0b-7f2abca14960
+  port: 443
+  server: 118.232.199.29
+  skip-cert-verify: true
+  sni: node2.yuntongclouds.com
+  type: trojan
+  udp: true
+- name: 台湾_10
+  password: e53c008a-7606-4d95-9a10-c93ccff934ad
+  port: 443
+  server: 118.232.199.29
+  skip-cert-verify: true
+  sni: node2.yuntongclouds.com
+  type: trojan
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_12
+  password: 2c9e4a85-cb7c-4798-8c0f-4990b81c9762
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_19
+  password: d05fd77b-5b75-4d89-8b2b-a5bc624990ed
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 3x备用专线台湾1-1A
+  port: 50050
+  server: xh.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: bb6a5577-8efe-4377-a8b2-ac2d4f7e82cf
+- alterId: 0
+  cipher: auto
+  name: 🇬🇧 英国1-1J
+  port: 45066
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1115654a-7876-4cea-97a0-cc0c5d34bfb7
+- name: 中国_03
+  password: fe0e4e5a-97c4-4f84-a5e5-cf9e04e6be00
+  port: 5443
+  server: 115.231.220.33
+  skip-cert-verify: true
+  sni: nodecn1.jiayinetwork.es
+  type: trojan
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇸🇬 新加坡NO.1-1A
+  port: 45054
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: bb6a5577-8efe-4377-a8b2-ac2d4f7e82cf
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 台湾1-1F
+  port: 45078
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 226be3df-678b-4c60-b12d-ed0f677829e8
+- alterId: 0
+  cipher: auto
+  name: 🇭🇰 3x备用专线香港1-1F
+  port: 50051
+  server: xh.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 226be3df-678b-4c60-b12d-ed0f677829e8
+- alterId: 0
+  cipher: auto
+  name: 🇭🇰 3x备用专线香港1-1L
+  port: 50051
+  server: xh.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: b0d7bdf1-09c0-40d9-8477-562977d069ea
+- cipher: chacha20-ietf-poly1305
+  name: 🇭🇰 VIP 香港01-1H
+  password: 218f10cc-609c-4840-876c-79b04306beba
+  port: 23764
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇸🇬 新加坡NO.1-1H
+  port: 45054
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 4dca1f0c-f253-43d6-851c-2277e5cd8e1d
+- alterId: 0
+  cipher: auto
+  name: 🇯🇵 日本NO.1-1Q
+  port: 45056
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 7e3e92de-be91-4756-be72-660e9fff5569
+- alterId: 0
+  cipher: auto
+  name: 🇮🇳 印度2-1F
+  port: 45073
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 226be3df-678b-4c60-b12d-ed0f677829e8
+- alterId: 0
+  cipher: auto
+  name: 🇰🇷 韩国 专线NO2-1L
+  port: 45075
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: b0d7bdf1-09c0-40d9-8477-562977d069ea
+- cipher: chacha20-ietf-poly1305
+  name: 🇸🇬 VIP 新加坡01-1B
+  password: 21773d3c-7dfb-4e3c-b8b8-cd39e8b1d22e
+  port: 27004
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇸🇬 VIP 新加坡01-1A
+  password: be6adc88-52dd-4b22-9cad-4a88c257235e
+  port: 27004
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- name: 中国_04
+  password: e53c008a-7606-4d95-9a10-c93ccff934ad
+  port: 5443
+  server: 115.231.220.33
+  skip-cert-verify: true
+  sni: nodecn1.jiayinetwork.es
+  type: trojan
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇺🇸 VIP 美国01-1N
+  password: 3de6dc0f-996a-46f6-b073-e1342fa48440
+  port: 14848
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_20
+  password: e7168677-8d72-46bb-b84e-f9e3bc8c782e
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇰🇷 韩国 专线NO2-1P
+  port: 45075
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 92bf2dbe-3fb4-4b20-915c-fbd5486d2f45
+- alterId: 0
+  cipher: auto
+  name: 🇮🇳 印度2-1N
+  port: 45073
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 32c197c8-3e01-4e06-a0f6-227c8ab97387
+- alterId: 0
+  cipher: auto
+  name: 🇮🇳 印度1-1G
+  port: 45074
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: aaaf991f-66e5-42a1-96e6-bdb241dbc9d1
+- cipher: chacha20-ietf-poly1305
+  name: 🇭🇰 SS 香港1-1A
+  password: fd84cbdc-60c5-4847-ace2-18dc241745c0
+  port: 34061
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 3x备用专线台湾1-1M
+  port: 50050
+  server: xh.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: ea724619-4a91-4ca5-a49c-e9f8dd315901
+- alterId: 0
+  cipher: auto
+  name: 🇨🇦 加拿大1-1R
+  port: 45064
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: e4a1182f-ef59-42fb-9885-9c47f0a30bab
+- cipher: chacha20-ietf-poly1305
+  name: 🇸🇬 VIP 新加坡01-1Q
+  password: b38fa2c6-fbb8-4332-8fac-e56add8e5632
+  port: 27004
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- name: 美国_21
+  password: ece1d3df-abbe-4605-9dbd-4ab0ddd79cc0
+  port: 1443
+  server: 144.34.178.66
+  skip-cert-verify: true
+  sni: node4.yuntongclouds.com
+  type: trojan
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇰🇷 VIP 韩国01-1W
+  password: d4ea8228-f8ac-4316-b966-bbeefc359f9e
+  port: 16087
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇺🇸 SS 美国2-1-1B
+  password: 50c2ff26-0fae-4720-bd20-6e8b1de47440
+  port: 12589
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- name: 美国_22
+  password: e53c008a-7606-4d95-9a10-c93ccff934ad
+  port: 1443
+  server: 144.34.178.66
+  skip-cert-verify: true
+  sni: node4.yuntongclouds.com
+  type: trojan
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸 美国NO.1-1J
+  port: 45052
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1115654a-7876-4cea-97a0-cc0c5d34bfb7
+- alterId: 0
+  cipher: auto
+  name: 🇬🇧 英国1-1L
+  port: 45066
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: b0d7bdf1-09c0-40d9-8477-562977d069ea
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 台湾2-1D
+  port: 45077
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 98f5e3bb-f6e4-4d0a-a926-b1b0ebd0c891
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国2-1D
+  port: 45071
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 98f5e3bb-f6e4-4d0a-a926-b1b0ebd0c891
+- cipher: chacha20-ietf-poly1305
+  name: 香港_21
+  password: 63fecd9e-c726-4962-9ec8-b84907574ecb
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇸🇬 新加坡NO.1-1L
+  port: 45054
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: b0d7bdf1-09c0-40d9-8477-562977d069ea
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国2-1K
+  port: 45071
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 165e3c7f-b670-45a5-8337-41a0915a22aa
+- cipher: chacha20-ietf-poly1305
+  name: 🇯🇵 VIP 日本01-1D
+  password: 44cafd16-89d6-4a43-8163-c2e7de408ced
+  port: 47296
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇸🇬 VIP 新加坡01-1G
+  password: 506a346b-2969-4c1d-ad3f-76ad9adfb34c
+  port: 27004
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇰🇷 VIP 韩国01-1Q
+  password: b38fa2c6-fbb8-4332-8fac-e56add8e5632
+  port: 16087
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇯🇵 SS 日本1-1B
+  password: 50c2ff26-0fae-4720-bd20-6e8b1de47440
+  port: 10589
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_22
+  password: 929464f6-fab4-488c-a570-96873cf27f08
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇨🇦 加拿大2-1G
+  port: 45065
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: aaaf991f-66e5-42a1-96e6-bdb241dbc9d1
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_13
+  password: fbe4a0f7-ba91-497e-bc7d-7d5df99e1cf2
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇨🇦 加拿大2-1Q
+  port: 45065
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 7e3e92de-be91-4756-be72-660e9fff5569
+- cipher: chacha20-ietf-poly1305
+  name: 🇸🇬 VIP 新加坡01-1T
+  password: d90fd4a6-cceb-496d-b630-6ec802db58d4
+  port: 27004
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇭🇰 VIP 香港01-1C
+  password: 175ef670-9afc-464c-88e1-923821890e7e
+  port: 23764
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_23
+  password: e3f052fe-0812-414d-9bfe-5853b583701f
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇭🇰 香港NO.2-1H
+  port: 45051
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 4dca1f0c-f253-43d6-851c-2277e5cd8e1d
+- cipher: chacha20-ietf-poly1305
+  name: 香港_24
+  password: 98d85ade-da6f-45fb-b4fe-a56fa5bcc086
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇰🇷 韩国 专线NO1-1I
+  port: 45076
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1f4be065-f6a5-42f9-a99b-c17d491741b9
+- alterId: 0
+  cipher: auto
+  name: 🇮🇳 印度2-1J
+  port: 45073
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1115654a-7876-4cea-97a0-cc0c5d34bfb7
+- name: 台湾_11
+  password: 33cdc353-60fc-49c3-9c23-153ce7fa34dd
+  port: 443
+  server: 103.137.63.77
+  skip-cert-verify: true
+  sni: node1.yuntongclouds.com
+  type: trojan
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 3x备用专线台湾1-1C
+  port: 50050
+  server: xh.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 075f7216-c7fb-4c46-885f-e543187838d9
+- alterId: 0
+  cipher: auto
+  name: 🇯🇵 日本NO.1-1F
+  port: 45056
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 226be3df-678b-4c60-b12d-ed0f677829e8
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_14
+  password: 92f932ba-acfa-470a-8539-f7091197231f
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇬🇧 英国1-1Q
+  port: 45066
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 7e3e92de-be91-4756-be72-660e9fff5569
+- cipher: chacha20-ietf-poly1305
+  name: 🇺🇸 VIP 美国01-1C
+  password: 175ef670-9afc-464c-88e1-923821890e7e
+  port: 14848
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇯🇵 日本NO.2-1B
+  port: 45057
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 0ff59aac-df7f-4e78-9c0a-8f93bda9b534
+- alterId: 0
+  cipher: auto
+  name: 🇯🇵 日本NO.2-1N
+  port: 45057
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 32c197c8-3e01-4e06-a0f6-227c8ab97387
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国2-1B
+  port: 45071
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 0ff59aac-df7f-4e78-9c0a-8f93bda9b534
+- cipher: chacha20-ietf-poly1305
+  name: 🇭🇰 VIP 香港01-1F
+  password: 03f0b459-f66b-496b-8b3c-e01e7b2d9dcb
+  port: 23764
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇸🇬 新加坡NO.2-1R
+  port: 45055
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: e4a1182f-ef59-42fb-9885-9c47f0a30bab
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸 美国NO.1-1C
+  port: 45052
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 075f7216-c7fb-4c46-885f-e543187838d9
+- cipher: chacha20-ietf-poly1305
+  name: 🇯🇵 VIP 日本01-1H
+  password: 218f10cc-609c-4840-876c-79b04306beba
+  port: 47296
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_15
+  password: d2d53cec-ca25-4b55-bff8-c1531eab79e6
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇬🇧 英国2-1F
+  port: 45067
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 226be3df-678b-4c60-b12d-ed0f677829e8
+- cipher: chacha20-ietf-poly1305
+  name: 🇮🇳 SS 印度1-1A
+  password: fd84cbdc-60c5-4847-ace2-18dc241745c0
+  port: 34411
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇦🇺 澳大利亚原生2-1H
+  port: 45063
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 4dca1f0c-f253-43d6-851c-2277e5cd8e1d
+- alterId: 0
+  cipher: auto
+  name: 🇭🇰 3x备用专线香港1-1B
+  port: 50051
+  server: xh.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 0ff59aac-df7f-4e78-9c0a-8f93bda9b534
+- alterId: 0
+  cipher: auto
+  name: 🇸🇬 新加坡NO.1-1O
+  port: 45054
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 2e32687b-7dfe-4566-9c2b-9fb15140a2d2
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_16
+  password: f3bdaac5-2e63-4eae-9a5a-2eb1d9c31189
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国2-1H
+  port: 45071
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 4dca1f0c-f253-43d6-851c-2277e5cd8e1d
+- alterId: 0
+  cipher: auto
+  name: 🇰🇷 韩国 专线NO1-1O
+  port: 45076
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 2e32687b-7dfe-4566-9c2b-9fb15140a2d2
+- cipher: chacha20-ietf-poly1305
+  name: 🇺🇸 VIP 美国01-1B
+  password: 21773d3c-7dfb-4e3c-b8b8-cd39e8b1d22e
+  port: 14848
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇯🇵 日本NO.1-1C
+  port: 45056
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 075f7216-c7fb-4c46-885f-e543187838d9
+- alterId: 0
+  cipher: auto
+  name: 🇯🇵 日本NO.1-1G
+  port: 45056
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: aaaf991f-66e5-42a1-96e6-bdb241dbc9d1
+- alterId: 0
+  cipher: auto
+  name: 🇰🇷 韩国 专线NO1-1M
+  port: 45076
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: ea724619-4a91-4ca5-a49c-e9f8dd315901
+- alterId: 0
+  cipher: auto
+  name: 🇸🇬 新加坡NO.1-1J
+  port: 45054
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1115654a-7876-4cea-97a0-cc0c5d34bfb7
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 台湾1-1H
+  port: 45078
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 4dca1f0c-f253-43d6-851c-2277e5cd8e1d
+- name: 美国_23
+  password: 76806469-d1a1-456f-8b0a-0b78e4a26bb2
+  port: 1443
+  server: 144.34.178.66
+  skip-cert-verify: true
+  sni: node4.yuntongclouds.com
+  type: trojan
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇰🇷 韩国 专线NO2-1F
+  port: 45075
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 226be3df-678b-4c60-b12d-ed0f677829e8
+- alterId: 0
+  cipher: auto
+  name: 🇬🇧 英国2-1I
+  port: 45067
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1f4be065-f6a5-42f9-a99b-c17d491741b9
+- alterId: 0
+  cipher: auto
+  name: 🇰🇷 韩国 专线NO1-1F
+  port: 45076
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 226be3df-678b-4c60-b12d-ed0f677829e8
+- cipher: chacha20-ietf-poly1305
+  name: 🇰🇷 VIP 韩国01-1H
+  password: 218f10cc-609c-4840-876c-79b04306beba
+  port: 16087
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- name: 台湾_12
+  password: ece1d3df-abbe-4605-9dbd-4ab0ddd79cc0
+  port: 443
+  server: 118.232.199.29
+  skip-cert-verify: true
+  sni: node2.yuntongclouds.com
+  type: trojan
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇦🇺 澳大利亚原生2-1F
+  port: 45063
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 226be3df-678b-4c60-b12d-ed0f677829e8
+- cipher: chacha20-ietf-poly1305
+  name: 🇸🇬 VIP 新加坡01-1L
+  password: 23fb78d3-54de-44e5-91c9-2454541839b4
+  port: 27004
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇯🇵 SS 日本3-1A
+  password: fd84cbdc-60c5-4847-ace2-18dc241745c0
+  port: 57927
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸 美国NO.1-1E
+  port: 45052
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 93d8e8b6-1319-440e-b59c-d2188a160625
+- alterId: 0
+  cipher: auto
+  name: 🇮🇳 印度2-1C
+  port: 45073
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 075f7216-c7fb-4c46-885f-e543187838d9
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 台湾2-1N
+  port: 45077
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 32c197c8-3e01-4e06-a0f6-227c8ab97387
+- cipher: chacha20-ietf-poly1305
+  name: 🇯🇵 VIP 日本01-1C
+  password: 175ef670-9afc-464c-88e1-923821890e7e
+  port: 47296
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇰🇷 韩国 专线NO2-1M
+  port: 45075
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: ea724619-4a91-4ca5-a49c-e9f8dd315901
+- alterId: 0
+  cipher: auto
+  name: 🇦🇺 澳大利亚原生1-1L
+  port: 45062
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: b0d7bdf1-09c0-40d9-8477-562977d069ea
+- alterId: 0
+  cipher: auto
+  name: 🇯🇵 日本NO.1-1A
+  port: 45056
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: bb6a5577-8efe-4377-a8b2-ac2d4f7e82cf
+- alterId: 0
+  cipher: auto
+  name: 🇮🇳 印度1-1Q
+  port: 45074
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 7e3e92de-be91-4756-be72-660e9fff5569
+- cipher: chacha20-ietf-poly1305
+  name: 香港_25
+  password: 1fecb82a-c25e-4a63-96ce-06456b5ed035
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇨🇦 加拿大2-1K
+  port: 45065
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 165e3c7f-b670-45a5-8337-41a0915a22aa
+- alterId: 0
+  cipher: auto
+  name: 🇮🇳 印度2-1I
+  port: 45073
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1f4be065-f6a5-42f9-a99b-c17d491741b9
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_17
+  password: 30b448e2-270f-49c8-8abd-e74f43d776d8
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国-1F
+  port: 19901
+  server: fg.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 226be3df-678b-4c60-b12d-ed0f677829e8
+- name: 中国_05
+  password: 33cdc353-60fc-49c3-9c23-153ce7fa34dd
+  port: 5443
+  server: 115.231.220.33
+  skip-cert-verify: true
+  sni: nodecn1.jiayinetwork.es
+  type: trojan
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇺🇸 SS 美国2-1-1A
+  password: fd84cbdc-60c5-4847-ace2-18dc241745c0
+  port: 12589
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_18
+  password: 0eeccfb4-df3b-4282-aed5-6a68e93644c5
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇹🇷 SS 土耳其1-1A
+  password: fd84cbdc-60c5-4847-ace2-18dc241745c0
+  port: 33744
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇸🇬 新加坡NO.2-1A
+  port: 45055
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: bb6a5577-8efe-4377-a8b2-ac2d4f7e82cf
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国1-1C
+  port: 45072
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 075f7216-c7fb-4c46-885f-e543187838d9
+- cipher: chacha20-ietf-poly1305
+  name: 🇸🇬 VIP 新加坡01-1W
+  password: d4ea8228-f8ac-4316-b966-bbeefc359f9e
+  port: 27004
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇭🇰 SS 香港1-1B
+  password: 50c2ff26-0fae-4720-bd20-6e8b1de47440
+  port: 34061
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇯🇵 VIP 日本01-1P
+  password: 0d2195d1-9fdd-4a7a-b8ea-92651f749ec1
+  port: 47296
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇯🇵 VIP 日本01-1B
+  password: 21773d3c-7dfb-4e3c-b8b8-cd39e8b1d22e
+  port: 47296
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇭🇰 香港NO.2-1A
+  port: 45051
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: bb6a5577-8efe-4377-a8b2-ac2d4f7e82cf
+- cipher: chacha20-ietf-poly1305
+  name: 香港_26
+  password: 348b0557-9c6d-410f-8d4e-39e14e16f3fb
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇭🇰 香港NO.2-1C
+  port: 45051
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 075f7216-c7fb-4c46-885f-e543187838d9
+- name: 中国_06
+  password: ece1d3df-abbe-4605-9dbd-4ab0ddd79cc0
+  port: 5443
+  server: 115.231.220.33
+  skip-cert-verify: true
+  sni: nodecn1.jiayinetwork.es
+  type: trojan
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇦🇺 澳大利亚原生2-1B
+  port: 45063
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 0ff59aac-df7f-4e78-9c0a-8f93bda9b534
+- alterId: 0
+  cipher: auto
+  name: 🇬🇧 英国2-1L
+  port: 45067
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: b0d7bdf1-09c0-40d9-8477-562977d069ea
+- cipher: chacha20-ietf-poly1305
+  name: 🇹🇭 SS 泰国1-1B
+  password: 50c2ff26-0fae-4720-bd20-6e8b1de47440
+  port: 39037
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇦🇺 澳大利亚原生1-1O
+  port: 45062
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 2e32687b-7dfe-4566-9c2b-9fb15140a2d2
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 台湾1-1N
+  port: 45078
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 32c197c8-3e01-4e06-a0f6-227c8ab97387
+- cipher: chacha20-ietf-poly1305
+  name: 🇹🇼 SS 台湾2-1-1A
+  password: fd84cbdc-60c5-4847-ace2-18dc241745c0
+  port: 43076
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇧🇷 SS 巴西1-1A
+  password: fd84cbdc-60c5-4847-ace2-18dc241745c0
+  port: 55936
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇨🇦 加拿大2-1D
+  port: 45065
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 98f5e3bb-f6e4-4d0a-a926-b1b0ebd0c891
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国-1I
+  port: 19901
+  server: fg.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1f4be065-f6a5-42f9-a99b-c17d491741b9
+- cipher: chacha20-ietf-poly1305
+  name: 🇰🇷 VIP 韩国01-1I
+  password: ed1f378f-99e7-4917-9e85-72cf6d50feff
+  port: 16087
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇭🇰 3x备用专线香港1-1R
+  port: 50051
+  server: xh.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: e4a1182f-ef59-42fb-9885-9c47f0a30bab
+- cipher: chacha20-ietf-poly1305
+  name: 🇺🇸 VIP 美国01-1O
+  password: bdfecd07-e300-4b20-81a8-53ec21e80e02
+  port: 14848
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇯🇵 日本NO.2-1E
+  port: 45057
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 93d8e8b6-1319-440e-b59c-d2188a160625
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸 美国NO.1-1I
+  port: 45052
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1f4be065-f6a5-42f9-a99b-c17d491741b9
+- cipher: chacha20-ietf-poly1305
+  name: 🇭🇰 VIP 香港01-1B
+  password: 21773d3c-7dfb-4e3c-b8b8-cd39e8b1d22e
+  port: 23764
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇯🇵 VIP 日本01-1L
+  password: 23fb78d3-54de-44e5-91c9-2454541839b4
+  port: 47296
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇹🇷 SS 土耳其1-1B
+  password: 50c2ff26-0fae-4720-bd20-6e8b1de47440
+  port: 33744
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇯🇵 日本NO.2-1R
+  port: 45057
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: e4a1182f-ef59-42fb-9885-9c47f0a30bab
+- alterId: 0
+  cipher: auto
+  name: 🇦🇺 澳大利亚原生2-1O
+  port: 45063
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 2e32687b-7dfe-4566-9c2b-9fb15140a2d2
+- cipher: chacha20-ietf-poly1305
+  name: 🇯🇵 VIP 日本01-1I
+  password: ed1f378f-99e7-4917-9e85-72cf6d50feff
+  port: 47296
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇸🇬 VIP 新加坡01-1F
+  password: 03f0b459-f66b-496b-8b3c-e01e7b2d9dcb
+  port: 27004
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇲🇾 SS 马来西亚1-1A
+  password: fd84cbdc-60c5-4847-ace2-18dc241745c0
+  port: 13828
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇺🇸 SS 美国2-1-1C
+  password: 66f1237e-e486-4205-8d5d-efa60e9aa22d
+  port: 12589
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- name: 美国_24
+  password: 5f757369-0b36-40cc-a2d6-b27ca76388c4
+  port: 1443
+  server: 144.34.178.66
+  skip-cert-verify: true
+  sni: node4.yuntongclouds.com
+  type: trojan
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇯🇵 日本NO.1-1E
+  port: 45056
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 93d8e8b6-1319-440e-b59c-d2188a160625
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 台湾1-1L
+  port: 45078
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: b0d7bdf1-09c0-40d9-8477-562977d069ea
+- cipher: chacha20-ietf-poly1305
+  name: 中国_07
+  password: cceeea0e-14de-48ce-bff7-6dbcf4e40d1a
+  port: 39312
+  server: 120.233.44.206
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇦🇺 澳大利亚原生1-1C
+  port: 45062
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 075f7216-c7fb-4c46-885f-e543187838d9
+- alterId: 0
+  cipher: auto
+  name: 🇭🇰 香港NO.2-1G
+  port: 45051
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: aaaf991f-66e5-42a1-96e6-bdb241dbc9d1
+- name: 台湾_13
+  password: 76806469-d1a1-456f-8b0a-0b78e4a26bb2
+  port: 443
+  server: 103.137.63.77
+  skip-cert-verify: true
+  sni: node1.yuntongclouds.com
+  type: trojan
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国1-1G
+  port: 45072
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: aaaf991f-66e5-42a1-96e6-bdb241dbc9d1
+- alterId: 0
+  cipher: auto
+  name: 🇨🇦 加拿大2-1R
+  port: 45065
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: e4a1182f-ef59-42fb-9885-9c47f0a30bab
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸 美国NO.1-1K
+  port: 45052
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 165e3c7f-b670-45a5-8337-41a0915a22aa
+- alterId: 0
+  cipher: auto
+  name: 🇬🇧 英国2-1C
+  port: 45067
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 075f7216-c7fb-4c46-885f-e543187838d9
+- alterId: 0
+  cipher: auto
+  name: 🇦🇺 澳大利亚原生1-1M
+  port: 45062
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: ea724619-4a91-4ca5-a49c-e9f8dd315901
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_19
+  password: 4ccb00cc-3962-451c-806f-d041e6c144b1
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇯🇵 日本NO.2-1J
+  port: 45057
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1115654a-7876-4cea-97a0-cc0c5d34bfb7
+- cipher: chacha20-ietf-poly1305
+  name: 🇺🇸 VIP 美国01-1H
+  password: 218f10cc-609c-4840-876c-79b04306beba
+  port: 14848
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇭🇰 3x备用专线香港1-1D
+  port: 50051
+  server: xh.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 98f5e3bb-f6e4-4d0a-a926-b1b0ebd0c891
+- cipher: chacha20-ietf-poly1305
+  name: 🇭🇰 VIP 香港01-1U
+  password: 80b9d6f2-1f29-4f41-abf7-0f2582280893
+  port: 23764
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇯🇵 VIP 日本01-1M
+  password: a9ad6807-9ecb-43f3-bbb3-b653a8858409
+  port: 47296
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇯🇵 VIP 日本01-1Y
+  password: e778665a-9354-4e91-8bad-e79237428fbf
+  port: 47296
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇲🇽 SS 墨西哥1-1B
+  password: 50c2ff26-0fae-4720-bd20-6e8b1de47440
+  port: 20149
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸 美国NO.2-1I
+  port: 45053
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1f4be065-f6a5-42f9-a99b-c17d491741b9
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸 美国NO.2-1C
+  port: 45053
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 075f7216-c7fb-4c46-885f-e543187838d9
+- alterId: 0
+  cipher: auto
+  name: 🇬🇧 英国1-1P
+  port: 45066
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 92bf2dbe-3fb4-4b20-915c-fbd5486d2f45
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 台湾2-1G
+  port: 45077
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: aaaf991f-66e5-42a1-96e6-bdb241dbc9d1
+- alterId: 0
+  cipher: auto
+  name: 🇮🇳 印度2-1A
+  port: 45073
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: bb6a5577-8efe-4377-a8b2-ac2d4f7e82cf
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 台湾2-1H
+  port: 45077
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 4dca1f0c-f253-43d6-851c-2277e5cd8e1d
+- cipher: chacha20-ietf-poly1305
+  name: 🇸🇬 VIP 新加坡01-1H
+  password: 218f10cc-609c-4840-876c-79b04306beba
+  port: 27004
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 3x备用专线台湾1-1P
+  port: 50050
+  server: xh.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 92bf2dbe-3fb4-4b20-915c-fbd5486d2f45
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_20
+  password: 1a7c2266-16ad-4cff-bcdd-f3430a2ace43
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇯🇵 日本NO.1-1M
+  port: 45056
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: ea724619-4a91-4ca5-a49c-e9f8dd315901
+- alterId: 0
+  cipher: auto
+  name: 🇭🇰 3x备用专线香港1-1E
+  port: 50051
+  server: xh.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 93d8e8b6-1319-440e-b59c-d2188a160625
+- cipher: chacha20-ietf-poly1305
+  name: 🇰🇷 VIP 韩国01-1D
+  password: 44cafd16-89d6-4a43-8163-c2e7de408ced
+  port: 16087
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇭🇰 香港NO.2-1M
+  port: 45051
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: ea724619-4a91-4ca5-a49c-e9f8dd315901
+- cipher: chacha20-ietf-poly1305
+  name: 🇰🇷 VIP 韩国01-1J
+  password: c1c331e3-4f43-4b51-867a-cf7a3b5e92f3
+  port: 16087
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸 美国NO.2-1E
+  port: 45053
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 93d8e8b6-1319-440e-b59c-d2188a160625
+- cipher: chacha20-ietf-poly1305
+  name: 🇺🇸 VIP 美国01-1F
+  password: 03f0b459-f66b-496b-8b3c-e01e7b2d9dcb
+  port: 14848
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- name: 美国_25
+  password: fe0e4e5a-97c4-4f84-a5e5-cf9e04e6be00
+  port: 1443
+  server: 144.34.178.66
+  skip-cert-verify: true
+  sni: node4.yuntongclouds.com
+  type: trojan
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_21
+  password: c60b26eb-e26d-4065-a8fd-c82a4c41d747
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇹🇼 SS 台湾2-1-1C
+  password: 66f1237e-e486-4205-8d5d-efa60e9aa22d
+  port: 43076
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇰🇷 VIP 韩国01-1M
+  password: a9ad6807-9ecb-43f3-bbb3-b653a8858409
+  port: 16087
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇬🇧 英国1-1H
+  port: 45066
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 4dca1f0c-f253-43d6-851c-2277e5cd8e1d
+- alterId: 0
+  cipher: auto
+  name: 🇨🇦 加拿大1-1K
+  port: 45064
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 165e3c7f-b670-45a5-8337-41a0915a22aa
+- alterId: 0
+  cipher: auto
+  name: 🇮🇳 印度2-1L
+  port: 45073
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: b0d7bdf1-09c0-40d9-8477-562977d069ea
+- alterId: 0
+  cipher: auto
+  name: 🇨🇦 加拿大1-1O
+  port: 45064
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 2e32687b-7dfe-4566-9c2b-9fb15140a2d2
+- alterId: 0
+  cipher: auto
+  name: 🇭🇰 3x备用专线香港1-1M
+  port: 50051
+  server: xh.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: ea724619-4a91-4ca5-a49c-e9f8dd315901
+- name: 中国_08
+  password: 76806469-d1a1-456f-8b0a-0b78e4a26bb2
+  port: 5443
+  server: 115.231.220.33
+  skip-cert-verify: true
+  sni: nodecn1.jiayinetwork.es
+  type: trojan
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇭🇰 VIP 香港01-1S
+  password: b3884bf1-ccf8-4b7f-b2e0-889aee5c511c
+  port: 23764
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇰🇷 韩国 专线NO2-1E
+  port: 45075
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 93d8e8b6-1319-440e-b59c-d2188a160625
+- name: 台湾_14
+  password: 6c81b809-58ef-48e8-b28a-51fad088a6b4
+  port: 443
+  server: 103.137.63.77
+  skip-cert-verify: true
+  sni: node1.yuntongclouds.com
+  type: trojan
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 3x备用专线台湾1-1E
+  port: 50050
+  server: xh.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 93d8e8b6-1319-440e-b59c-d2188a160625
+- alterId: 0
+  cipher: auto
+  name: 🇬🇧 英国1-1E
+  port: 45066
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 93d8e8b6-1319-440e-b59c-d2188a160625
+- cipher: chacha20-ietf-poly1305
+  name: 香港_27
+  password: a17353a3-b697-4280-b622-584501151089
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇮🇳 印度1-1D
+  port: 45074
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 98f5e3bb-f6e4-4d0a-a926-b1b0ebd0c891
+- alterId: 0
+  cipher: auto
+  name: 🇸🇬 新加坡NO.1-1C
+  port: 45054
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 075f7216-c7fb-4c46-885f-e543187838d9
+- cipher: chacha20-ietf-poly1305
+  name: 🇰🇷 VIP 韩国01-1P
+  password: 0d2195d1-9fdd-4a7a-b8ea-92651f749ec1
+  port: 16087
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 台湾2-1P
+  port: 45077
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 92bf2dbe-3fb4-4b20-915c-fbd5486d2f45
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国1-1R
+  port: 45072
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: e4a1182f-ef59-42fb-9885-9c47f0a30bab
+- cipher: chacha20-ietf-poly1305
+  name: 🇭🇰 VIP 香港01-1P
+  password: 0d2195d1-9fdd-4a7a-b8ea-92651f749ec1
+  port: 23764
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇯🇵 VIP 日本01-1U
+  password: 80b9d6f2-1f29-4f41-abf7-0f2582280893
+  port: 47296
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇮🇳 印度1-1M
+  port: 45074
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: ea724619-4a91-4ca5-a49c-e9f8dd315901
+- name: 台湾_15
+  password: 6c81b809-58ef-48e8-b28a-51fad088a6b4
+  port: 443
+  server: 118.232.199.29
+  skip-cert-verify: true
+  sni: node2.yuntongclouds.com
+  type: trojan
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇸🇬 新加坡NO.2-1J
+  port: 45055
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1115654a-7876-4cea-97a0-cc0c5d34bfb7
+- cipher: chacha20-ietf-poly1305
+  name: 中国_09
+  password: cceeea0e-14de-48ce-bff7-6dbcf4e40d1a
+  port: 36555
+  server: 120.233.44.206
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 台湾2-1C
+  port: 45077
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 075f7216-c7fb-4c46-885f-e543187838d9
+- alterId: 0
+  cipher: auto
+  name: 🇯🇵 日本NO.2-1L
+  port: 45057
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: b0d7bdf1-09c0-40d9-8477-562977d069ea
+- alterId: 0
+  cipher: auto
+  name: 🇬🇧 英国1-1M
+  port: 45066
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: ea724619-4a91-4ca5-a49c-e9f8dd315901
+- cipher: chacha20-ietf-poly1305
+  name: 🇺🇸 SS 美国1-1C
+  password: 66f1237e-e486-4205-8d5d-efa60e9aa22d
+  port: 46197
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- name: 台湾_16
+  password: 33cdc353-60fc-49c3-9c23-153ce7fa34dd
+  port: 443
+  server: 118.232.199.29
+  skip-cert-verify: true
+  sni: node2.yuntongclouds.com
+  type: trojan
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇭🇰 VIP 香港01-1E
+  password: e5b55882-de5f-4fd1-bcab-463d7de13d8c
+  port: 23764
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇺🇸 VIP 美国01-1I
+  password: ed1f378f-99e7-4917-9e85-72cf6d50feff
+  port: 14848
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇺🇸 VIP 美国01-1W
+  password: d4ea8228-f8ac-4316-b966-bbeefc359f9e
+  port: 14848
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇨🇦 加拿大2-1I
+  port: 45065
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1f4be065-f6a5-42f9-a99b-c17d491741b9
+- alterId: 0
+  cipher: auto
+  name: 🇬🇧 英国2-1E
+  port: 45067
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 93d8e8b6-1319-440e-b59c-d2188a160625
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸 美国NO.1-1F
+  port: 45052
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 226be3df-678b-4c60-b12d-ed0f677829e8
+- cipher: chacha20-ietf-poly1305
+  name: 香港_28
+  password: 5020a27c-acf7-4a66-8377-711f38f07bc3
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇮🇳 印度1-1K
+  port: 45074
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 165e3c7f-b670-45a5-8337-41a0915a22aa
+- alterId: 0
+  cipher: auto
+  name: 🇦🇺 澳大利亚原生2-1C
+  port: 45063
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 075f7216-c7fb-4c46-885f-e543187838d9
+- cipher: chacha20-ietf-poly1305
+  name: 🇭🇰 VIP 香港01-1A
+  password: be6adc88-52dd-4b22-9cad-4a88c257235e
+  port: 23764
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国-1A
+  port: 19901
+  server: fg.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: bb6a5577-8efe-4377-a8b2-ac2d4f7e82cf
+- cipher: chacha20-ietf-poly1305
+  name: 中国_10
+  password: 4b185cc2-8f83-4253-8d81-7d7419d5e7df
+  port: 39312
+  server: 120.233.44.206
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 3x备用专线台湾1-1J
+  port: 50050
+  server: xh.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1115654a-7876-4cea-97a0-cc0c5d34bfb7
+- cipher: chacha20-ietf-poly1305
+  name: 🇰🇷 VIP 韩国01-1L
+  password: 23fb78d3-54de-44e5-91c9-2454541839b4
+  port: 16087
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇸🇬 VIP 新加坡01-1E
+  password: e5b55882-de5f-4fd1-bcab-463d7de13d8c
+  port: 27004
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇰🇷 VIP 韩国01-1C
+  password: 175ef670-9afc-464c-88e1-923821890e7e
+  port: 16087
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 台湾1-1M
+  port: 45078
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: ea724619-4a91-4ca5-a49c-e9f8dd315901
+- cipher: chacha20-ietf-poly1305
+  name: 🇭🇰 VIP 香港01-1O
+  password: bdfecd07-e300-4b20-81a8-53ec21e80e02
+  port: 23764
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇸🇬 新加坡NO.2-1P
+  port: 45055
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 92bf2dbe-3fb4-4b20-915c-fbd5486d2f45
+- alterId: 0
+  cipher: auto
+  name: 🇬🇧 英国1-1F
+  port: 45066
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 226be3df-678b-4c60-b12d-ed0f677829e8
+- name: 🇯🇵 2号专线 日本JP 75-1A
+  password: cceeea0e-14de-48ce-bff7-6dbcf4e40d1a
+  port: 39769
+  server: cdntwa.xiaomispeed.com
+  skip-cert-verify: true
+  sni: cdntwa.xiaomispeed.com
+  type: trojan
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇦🇺 澳大利亚原生2-1D
+  port: 45063
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 98f5e3bb-f6e4-4d0a-a926-b1b0ebd0c891
+- cipher: chacha20-ietf-poly1305
+  name: 🇸🇬 VIP 新加坡01-1K
+  password: a01e5f12-7948-408f-bde5-fc4d8b6bf1f1
+  port: 27004
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇨🇦 加拿大2-1O
+  port: 45065
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 2e32687b-7dfe-4566-9c2b-9fb15140a2d2
+- cipher: chacha20-ietf-poly1305
+  name: 🇰🇷 VIP 韩国01-1R
+  password: c4f4e380-395a-414b-b57c-e4b660bf069f
+  port: 16087
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 中国_11
+  password: cceeea0e-14de-48ce-bff7-6dbcf4e40d1a
+  port: 39524
+  server: 120.233.44.206
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇺🇸 VIP 美国01-1G
+  password: 506a346b-2969-4c1d-ad3f-76ad9adfb34c
+  port: 14848
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- name: 台湾_17
+  password: 68cfaf9d-f86c-43bc-ab0b-7f2abca14960
+  port: 443
+  server: 118.232.199.14
+  skip-cert-verify: true
+  sni: node3.yuntongclouds.com
+  type: trojan
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇰🇷 VIP 韩国01-1Y
+  password: e778665a-9354-4e91-8bad-e79237428fbf
+  port: 16087
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 台湾2-1R
+  port: 45077
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: e4a1182f-ef59-42fb-9885-9c47f0a30bab
+- cipher: chacha20-ietf-poly1305
+  name: 🇺🇸 VIP 美国01-1S
+  password: b3884bf1-ccf8-4b7f-b2e0-889aee5c511c
+  port: 14848
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇮🇸 SS 冰岛1-1A
+  password: fd84cbdc-60c5-4847-ace2-18dc241745c0
+  port: 18244
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇭🇰 香港NO.2-1L
+  port: 45051
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: b0d7bdf1-09c0-40d9-8477-562977d069ea
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国2-1A
+  port: 45071
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: bb6a5577-8efe-4377-a8b2-ac2d4f7e82cf
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸 美国NO.1-1O
+  port: 45052
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 2e32687b-7dfe-4566-9c2b-9fb15140a2d2
+- alterId: 0
+  cipher: auto
+  name: 🇭🇰 香港NO.2-1N
+  port: 45051
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 32c197c8-3e01-4e06-a0f6-227c8ab97387
+- cipher: chacha20-ietf-poly1305
+  name: 🇺🇸 VIP 美国01-1R
+  password: c4f4e380-395a-414b-b57c-e4b660bf069f
+  port: 14848
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国2-1Q
+  port: 45071
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 7e3e92de-be91-4756-be72-660e9fff5569
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国2-1O
+  port: 45071
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 2e32687b-7dfe-4566-9c2b-9fb15140a2d2
+- name: 🇭🇰 2号专线 香港HK 74-1B
+  password: 4b185cc2-8f83-4253-8d81-7d7419d5e7df
+  port: 33838
+  server: cdntwa.xiaomispeed.com
+  skip-cert-verify: true
+  sni: cdntwa.xiaomispeed.com
+  type: trojan
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇯🇵 日本NO.1-1B
+  port: 45056
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 0ff59aac-df7f-4e78-9c0a-8f93bda9b534
+- cipher: chacha20-ietf-poly1305
+  name: 🇺🇸 VIP 美国01-1T
+  password: d90fd4a6-cceb-496d-b630-6ec802db58d4
+  port: 14848
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇸🇬 VIP 新加坡01-1U
+  password: 80b9d6f2-1f29-4f41-abf7-0f2582280893
+  port: 27004
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇰🇷 韩国 专线NO1-1C
+  port: 45076
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 075f7216-c7fb-4c46-885f-e543187838d9
+- alterId: 0
+  cipher: auto
+  name: 🇭🇰 3x备用专线香港1-1J
+  port: 50051
+  server: xh.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1115654a-7876-4cea-97a0-cc0c5d34bfb7
+- name: 台湾_18
+  password: 33cdc353-60fc-49c3-9c23-153ce7fa34dd
+  port: 443
+  server: 118.232.199.14
+  skip-cert-verify: true
+  sni: node3.yuntongclouds.com
+  type: trojan
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国1-1B
+  port: 45072
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 0ff59aac-df7f-4e78-9c0a-8f93bda9b534
+- name: 美国_26
+  password: 33cdc353-60fc-49c3-9c23-153ce7fa34dd
+  port: 1443
+  server: 144.34.178.66
+  skip-cert-verify: true
+  sni: node4.yuntongclouds.com
+  type: trojan
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_29
+  password: ee708dd7-2c21-4a35-a3c7-e1c905e52b04
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇸🇬 新加坡NO.1-1P
+  port: 45054
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 92bf2dbe-3fb4-4b20-915c-fbd5486d2f45
+- alterId: 0
+  cipher: auto
+  name: 🇯🇵 日本NO.1-1N
+  port: 45056
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 32c197c8-3e01-4e06-a0f6-227c8ab97387
+- alterId: 0
+  cipher: auto
+  name: 🇸🇬 新加坡NO.1-1Q
+  port: 45054
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 7e3e92de-be91-4756-be72-660e9fff5569
+- alterId: 0
+  cipher: auto
+  name: 🇯🇵 日本NO.2-1P
+  port: 45057
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 92bf2dbe-3fb4-4b20-915c-fbd5486d2f45
+- alterId: 0
+  cipher: auto
+  name: 🇸🇬 新加坡NO.2-1F
+  port: 45055
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 226be3df-678b-4c60-b12d-ed0f677829e8
+- cipher: chacha20-ietf-poly1305
+  name: 🇯🇵 VIP 日本01-1J
+  password: c1c331e3-4f43-4b51-867a-cf7a3b5e92f3
+  port: 47296
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇯🇵 SS 日本1-1A
+  password: fd84cbdc-60c5-4847-ace2-18dc241745c0
+  port: 10589
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- name: 台湾_19
+  password: 76806469-d1a1-456f-8b0a-0b78e4a26bb2
+  port: 443
+  server: 118.232.199.14
+  skip-cert-verify: true
+  sni: node3.yuntongclouds.com
+  type: trojan
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇰🇷 VIP 韩国01-1B
+  password: 21773d3c-7dfb-4e3c-b8b8-cd39e8b1d22e
+  port: 16087
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 3x备用专线台湾1-1G
+  port: 50050
+  server: xh.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: aaaf991f-66e5-42a1-96e6-bdb241dbc9d1
+- cipher: chacha20-ietf-poly1305
+  name: 🇭🇰 VIP 香港01-1L
+  password: 23fb78d3-54de-44e5-91c9-2454541839b4
+  port: 23764
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇨🇦 加拿大2-1M
+  port: 45065
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: ea724619-4a91-4ca5-a49c-e9f8dd315901
+- cipher: chacha20-ietf-poly1305
+  name: 🇯🇵 SS 日本1-1C
+  password: 66f1237e-e486-4205-8d5d-efa60e9aa22d
+  port: 10589
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇯🇵 VIP 日本01-1V
+  password: bdbfc358-743c-4291-8605-e16404d7f511
+  port: 47296
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 中国_12
+  password: 4b185cc2-8f83-4253-8d81-7d7419d5e7df
+  port: 36555
+  server: 120.233.44.206
+  type: ss
+  udp: true
+- name: 台湾_20
+  password: 6c81b809-58ef-48e8-b28a-51fad088a6b4
+  port: 443
+  server: 118.232.199.14
+  skip-cert-verify: true
+  sni: node3.yuntongclouds.com
+  type: trojan
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 中国_13
+  password: 4b185cc2-8f83-4253-8d81-7d7419d5e7df
+  port: 33922
+  server: 120.233.44.206
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇨🇦 加拿大1-1H
+  port: 45064
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 4dca1f0c-f253-43d6-851c-2277e5cd8e1d
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_22
+  password: 2f42b4b5-cba3-4f16-8ec6-13b78b0fab0d
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇭🇰 香港NO.2-1F
+  port: 45051
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 226be3df-678b-4c60-b12d-ed0f677829e8
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国-1M
+  port: 19901
+  server: fg.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: ea724619-4a91-4ca5-a49c-e9f8dd315901
+- alterId: 0
+  cipher: auto
+  name: 🇦🇺 澳大利亚原生1-1P
+  port: 45062
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 92bf2dbe-3fb4-4b20-915c-fbd5486d2f45
+- alterId: 0
+  cipher: auto
+  name: 🇨🇦 加拿大1-1J
+  port: 45064
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1115654a-7876-4cea-97a0-cc0c5d34bfb7
+- cipher: chacha20-ietf-poly1305
+  name: 🇺🇸 VIP 美国01-1E
+  password: e5b55882-de5f-4fd1-bcab-463d7de13d8c
+  port: 14848
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸 美国NO.2-1F
+  port: 45053
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 226be3df-678b-4c60-b12d-ed0f677829e8
+- name: 台湾_21
+  password: fe0e4e5a-97c4-4f84-a5e5-cf9e04e6be00
+  port: 443
+  server: 118.232.199.29
+  skip-cert-verify: true
+  sni: node2.yuntongclouds.com
+  type: trojan
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇯🇵 VIP 日本01-1W
+  password: d4ea8228-f8ac-4316-b966-bbeefc359f9e
+  port: 47296
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇰🇷 SS 韩国1-1B
+  password: 50c2ff26-0fae-4720-bd20-6e8b1de47440
+  port: 41431
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇧🇷 SS 巴西1-1C
+  password: 66f1237e-e486-4205-8d5d-efa60e9aa22d
+  port: 55936
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸 美国NO.2-1L
+  port: 45053
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: b0d7bdf1-09c0-40d9-8477-562977d069ea
+- alterId: 0
+  cipher: auto
+  name: 🇬🇧 英国1-1I
+  port: 45066
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1f4be065-f6a5-42f9-a99b-c17d491741b9
+- alterId: 0
+  cipher: auto
+  name: 🇯🇵 日本NO.1-1D
+  port: 45056
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 98f5e3bb-f6e4-4d0a-a926-b1b0ebd0c891
+- cipher: chacha20-ietf-poly1305
+  name: 🇸🇬 VIP 新加坡01-1R
+  password: c4f4e380-395a-414b-b57c-e4b660bf069f
+  port: 27004
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸 美国NO.2-1K
+  port: 45053
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 165e3c7f-b670-45a5-8337-41a0915a22aa
+- cipher: chacha20-ietf-poly1305
+  name: 香港_30
+  password: d6292cee-8207-40aa-a874-be7158158037
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇨🇦 加拿大1-1N
+  port: 45064
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 32c197c8-3e01-4e06-a0f6-227c8ab97387
+- alterId: 0
+  cipher: auto
+  name: 🇰🇷 韩国 专线NO1-1J
+  port: 45076
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1115654a-7876-4cea-97a0-cc0c5d34bfb7
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 3x备用专线台湾1-1B
+  port: 50050
+  server: xh.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 0ff59aac-df7f-4e78-9c0a-8f93bda9b534
+- alterId: 0
+  cipher: auto
+  name: 🇨🇦 加拿大2-1H
+  port: 45065
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 4dca1f0c-f253-43d6-851c-2277e5cd8e1d
+- alterId: 0
+  cipher: auto
+  name: 🇬🇧 英国1-1N
+  port: 45066
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 32c197c8-3e01-4e06-a0f6-227c8ab97387
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸 美国NO.1-1R
+  port: 45052
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: e4a1182f-ef59-42fb-9885-9c47f0a30bab
+- cipher: chacha20-ietf-poly1305
+  name: 🇸🇬 VIP 新加坡01-1N
+  password: 3de6dc0f-996a-46f6-b073-e1342fa48440
+  port: 27004
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇰🇷 VIP 韩国01-1F
+  password: 03f0b459-f66b-496b-8b3c-e01e7b2d9dcb
+  port: 16087
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国1-1N
+  port: 45072
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 32c197c8-3e01-4e06-a0f6-227c8ab97387
+- cipher: chacha20-ietf-poly1305
+  name: 中国_14
+  password: cceeea0e-14de-48ce-bff7-6dbcf4e40d1a
+  port: 39622
+  server: 120.233.44.206
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国-1C
+  port: 19901
+  server: fg.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 075f7216-c7fb-4c46-885f-e543187838d9
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国1-1P
+  port: 45072
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 92bf2dbe-3fb4-4b20-915c-fbd5486d2f45
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国1-1H
+  port: 45072
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 4dca1f0c-f253-43d6-851c-2277e5cd8e1d
+- alterId: 0
+  cipher: auto
+  name: 🇰🇷 韩国 专线NO2-1I
+  port: 45075
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1f4be065-f6a5-42f9-a99b-c17d491741b9
+- alterId: 0
+  cipher: auto
+  name: 🇮🇳 印度2-1P
+  port: 45073
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 92bf2dbe-3fb4-4b20-915c-fbd5486d2f45
+- alterId: 0
+  cipher: auto
+  name: 🇮🇳 印度1-1N
+  port: 45074
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 32c197c8-3e01-4e06-a0f6-227c8ab97387
+- alterId: 0
+  cipher: auto
+  name: 🇯🇵 日本NO.2-1A
+  port: 45057
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: bb6a5577-8efe-4377-a8b2-ac2d4f7e82cf
+- alterId: 0
+  cipher: auto
+  name: 🇰🇷 韩国 专线NO1-1K
+  port: 45076
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 165e3c7f-b670-45a5-8337-41a0915a22aa
+- alterId: 0
+  cipher: auto
+  name: 🇦🇺 澳大利亚原生2-1N
+  port: 45063
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 32c197c8-3e01-4e06-a0f6-227c8ab97387
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国1-1A
+  port: 45072
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: bb6a5577-8efe-4377-a8b2-ac2d4f7e82cf
+- cipher: chacha20-ietf-poly1305
+  name: 🇯🇵 VIP 日本01-1F
+  password: 03f0b459-f66b-496b-8b3c-e01e7b2d9dcb
+  port: 47296
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇲🇽 SS 墨西哥1-1A
+  password: fd84cbdc-60c5-4847-ace2-18dc241745c0
+  port: 20149
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇬🇧 英国2-1J
+  port: 45067
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1115654a-7876-4cea-97a0-cc0c5d34bfb7
+- cipher: chacha20-ietf-poly1305
+  name: 中国_15
+  password: cceeea0e-14de-48ce-bff7-6dbcf4e40d1a
+  port: 31923
+  server: 120.233.44.206
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇭🇰 3x备用专线香港1-1C
+  port: 50051
+  server: xh.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 075f7216-c7fb-4c46-885f-e543187838d9
+- alterId: 0
+  cipher: auto
+  name: 🇦🇺 澳大利亚原生2-1P
+  port: 45063
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 92bf2dbe-3fb4-4b20-915c-fbd5486d2f45
+- name: 🇭🇰 2号专线 香港HK 74-1A
+  password: cceeea0e-14de-48ce-bff7-6dbcf4e40d1a
+  port: 33838
+  server: cdntwa.xiaomispeed.com
+  skip-cert-verify: true
+  sni: cdntwa.xiaomispeed.com
+  type: trojan
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇭🇰 VIP 香港01-1W
+  password: d4ea8228-f8ac-4316-b966-bbeefc359f9e
+  port: 23764
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇯🇵 VIP 日本01-1O
+  password: bdfecd07-e300-4b20-81a8-53ec21e80e02
+  port: 47296
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇺🇸 VIP 美国01-1Q
+  password: b38fa2c6-fbb8-4332-8fac-e56add8e5632
+  port: 14848
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇭🇰 3x备用专线香港1-1K
+  port: 50051
+  server: xh.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 165e3c7f-b670-45a5-8337-41a0915a22aa
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国1-1F
+  port: 45072
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 226be3df-678b-4c60-b12d-ed0f677829e8
+- alterId: 0
+  cipher: auto
+  name: 🇮🇳 印度2-1E
+  port: 45073
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 93d8e8b6-1319-440e-b59c-d2188a160625
+- alterId: 0
+  cipher: auto
+  name: 🇰🇷 韩国 专线NO1-1E
+  port: 45076
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 93d8e8b6-1319-440e-b59c-d2188a160625
+- alterId: 0
+  cipher: auto
+  name: 🇭🇰 3x备用专线香港1-1I
+  port: 50051
+  server: xh.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1f4be065-f6a5-42f9-a99b-c17d491741b9
+- alterId: 0
+  cipher: auto
+  name: 🇸🇬 新加坡NO.1-1F
+  port: 45054
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 226be3df-678b-4c60-b12d-ed0f677829e8
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国2-1E
+  port: 45071
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 93d8e8b6-1319-440e-b59c-d2188a160625
+- alterId: 0
+  cipher: auto
+  name: 🇭🇰 香港NO.2-1R
+  port: 45051
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: e4a1182f-ef59-42fb-9885-9c47f0a30bab
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国1-1D
+  port: 45072
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 98f5e3bb-f6e4-4d0a-a926-b1b0ebd0c891
+- cipher: chacha20-ietf-poly1305
+  name: 🇰🇷 VIP 韩国01-1Z
+  password: 6a13a226-be78-4045-9377-c34920d3c3e1
+  port: 16087
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇮🇳 印度2-1M
+  port: 45073
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: ea724619-4a91-4ca5-a49c-e9f8dd315901
+- cipher: chacha20-ietf-poly1305
+  name: 香港_31
+  password: ba65485b-eda5-4b55-8d80-3e59934cd9f6
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇦🇺 澳大利亚原生1-1H
+  port: 45062
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 4dca1f0c-f253-43d6-851c-2277e5cd8e1d
+- name: 美国_27
+  password: 6c81b809-58ef-48e8-b28a-51fad088a6b4
+  port: 1443
+  server: 144.34.178.66
+  skip-cert-verify: true
+  sni: node4.yuntongclouds.com
+  type: trojan
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇨🇦 加拿大1-1G
+  port: 45064
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: aaaf991f-66e5-42a1-96e6-bdb241dbc9d1
+- alterId: 0
+  cipher: auto
+  name: 🇰🇷 韩国 专线NO2-1A
+  port: 45075
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: bb6a5577-8efe-4377-a8b2-ac2d4f7e82cf
+- cipher: chacha20-ietf-poly1305
+  name: 🇸🇬 VIP 新加坡01-1C
+  password: 175ef670-9afc-464c-88e1-923821890e7e
+  port: 27004
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇭🇰 香港NO.2-1D
+  port: 45051
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 98f5e3bb-f6e4-4d0a-a926-b1b0ebd0c891
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 3x备用专线台湾1-1H
+  port: 50050
+  server: xh.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 4dca1f0c-f253-43d6-851c-2277e5cd8e1d
+- alterId: 0
+  cipher: auto
+  name: 🇨🇦 加拿大2-1P
+  port: 45065
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 92bf2dbe-3fb4-4b20-915c-fbd5486d2f45
+- alterId: 0
+  cipher: auto
+  name: 🇦🇺 澳大利亚原生2-1M
+  port: 45063
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: ea724619-4a91-4ca5-a49c-e9f8dd315901
+- cipher: chacha20-ietf-poly1305
+  name: 🇮🇱 SS 以色列1-1A
+  password: fd84cbdc-60c5-4847-ace2-18dc241745c0
+  port: 18140
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇨🇦 加拿大1-1L
+  port: 45064
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: b0d7bdf1-09c0-40d9-8477-562977d069ea
+- alterId: 0
+  cipher: auto
+  name: 🇭🇰 香港NO.2-1O
+  port: 45051
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 2e32687b-7dfe-4566-9c2b-9fb15140a2d2
+- alterId: 0
+  cipher: auto
+  name: 🇦🇺 澳大利亚原生1-1I
+  port: 45062
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1f4be065-f6a5-42f9-a99b-c17d491741b9
+- alterId: 0
+  cipher: auto
+  name: 🇸🇬 新加坡NO.1-1B
+  port: 45054
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 0ff59aac-df7f-4e78-9c0a-8f93bda9b534
+- alterId: 0
+  cipher: auto
+  name: 🇯🇵 日本NO.1-1L
+  port: 45056
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: b0d7bdf1-09c0-40d9-8477-562977d069ea
+- alterId: 0
+  cipher: auto
+  name: 🇸🇬 新加坡NO.2-1M
+  port: 45055
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: ea724619-4a91-4ca5-a49c-e9f8dd315901
+- alterId: 0
+  cipher: auto
+  name: 🇦🇺 澳大利亚原生1-1G
+  port: 45062
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: aaaf991f-66e5-42a1-96e6-bdb241dbc9d1
+- alterId: 0
+  cipher: auto
+  name: 🇬🇧 英国2-1B
+  port: 45067
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 0ff59aac-df7f-4e78-9c0a-8f93bda9b534
+- alterId: 0
+  cipher: auto
+  name: 🇦🇺 澳大利亚原生1-1B
+  port: 45062
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 0ff59aac-df7f-4e78-9c0a-8f93bda9b534
+- alterId: 0
+  cipher: auto
+  name: 🇸🇬 新加坡NO.2-1B
+  port: 45055
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 0ff59aac-df7f-4e78-9c0a-8f93bda9b534
+- cipher: chacha20-ietf-poly1305
+  name: 🇮🇱 SS 以色列1-1B
+  password: 50c2ff26-0fae-4720-bd20-6e8b1de47440
+  port: 18140
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇦🇺 澳大利亚原生2-1J
+  port: 45063
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1115654a-7876-4cea-97a0-cc0c5d34bfb7
+- cipher: chacha20-ietf-poly1305
+  name: 中国_16
+  password: 4b185cc2-8f83-4253-8d81-7d7419d5e7df
+  port: 39622
+  server: 120.233.44.206
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇬🇧 英国2-1O
+  port: 45067
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 2e32687b-7dfe-4566-9c2b-9fb15140a2d2
+- cipher: chacha20-ietf-poly1305
+  name: 🇺🇸 VIP 美国01-1P
+  password: 0d2195d1-9fdd-4a7a-b8ea-92651f749ec1
+  port: 14848
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国1-1O
+  port: 45072
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 2e32687b-7dfe-4566-9c2b-9fb15140a2d2
+- alterId: 0
+  cipher: auto
+  name: 🇸🇬 新加坡NO.2-1Q
+  port: 45055
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 7e3e92de-be91-4756-be72-660e9fff5569
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 3x备用专线台湾1-1Q
+  port: 50050
+  server: xh.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 7e3e92de-be91-4756-be72-660e9fff5569
+- name: 🇭🇰 2号专线 香港HK 53-1B
+  password: 4b185cc2-8f83-4253-8d81-7d7419d5e7df
+  port: 39765
+  server: cdntwa.xiaomispeed.com
+  skip-cert-verify: true
+  sni: cdntwa.xiaomispeed.com
+  type: trojan
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇺🇸 VIP 美国01-1U
+  password: 80b9d6f2-1f29-4f41-abf7-0f2582280893
+  port: 14848
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇨🇦 加拿大2-1B
+  port: 45065
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 0ff59aac-df7f-4e78-9c0a-8f93bda9b534
+- alterId: 0
+  cipher: auto
+  name: 🇨🇦 加拿大1-1I
+  port: 45064
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1f4be065-f6a5-42f9-a99b-c17d491741b9
+- alterId: 0
+  cipher: auto
+  name: 🇮🇳 印度1-1B
+  port: 45074
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 0ff59aac-df7f-4e78-9c0a-8f93bda9b534
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国2-1P
+  port: 45071
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 92bf2dbe-3fb4-4b20-915c-fbd5486d2f45
+- alterId: 0
+  cipher: auto
+  name: 🇨🇦 加拿大1-1A
+  port: 45064
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: bb6a5577-8efe-4377-a8b2-ac2d4f7e82cf
+- cipher: chacha20-ietf-poly1305
+  name: 🇺🇸 VIP 美国01-1x
+  password: 3fa2f4f9-f473-400c-af77-e99b40e4109c
+  port: 14848
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 台湾1-1D
+  port: 45078
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 98f5e3bb-f6e4-4d0a-a926-b1b0ebd0c891
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 台湾1-1O
+  port: 45078
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 2e32687b-7dfe-4566-9c2b-9fb15140a2d2
+- alterId: 0
+  cipher: auto
+  name: 🇨🇦 加拿大1-1M
+  port: 45064
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: ea724619-4a91-4ca5-a49c-e9f8dd315901
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 台湾1-1P
+  port: 45078
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 92bf2dbe-3fb4-4b20-915c-fbd5486d2f45
+- alterId: 0
+  cipher: auto
+  name: 🇦🇺 澳大利亚原生2-1R
+  port: 45063
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: e4a1182f-ef59-42fb-9885-9c47f0a30bab
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸 美国NO.1-1L
+  port: 45052
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: b0d7bdf1-09c0-40d9-8477-562977d069ea
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国1-1L
+  port: 45072
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: b0d7bdf1-09c0-40d9-8477-562977d069ea
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国1-1M
+  port: 45072
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: ea724619-4a91-4ca5-a49c-e9f8dd315901
+- alterId: 0
+  cipher: auto
+  name: 🇰🇷 韩国 专线NO2-1H
+  port: 45075
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 4dca1f0c-f253-43d6-851c-2277e5cd8e1d
+- alterId: 0
+  cipher: auto
+  name: 🇯🇵 日本NO.2-1G
+  port: 45057
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: aaaf991f-66e5-42a1-96e6-bdb241dbc9d1
+- name: 🇺🇸 2号专线 美国US 110-1B
+  password: 4b185cc2-8f83-4253-8d81-7d7419d5e7df
+  port: 33889
+  server: cdntwa.xiaomispeed.com
+  skip-cert-verify: true
+  sni: cdntwa.xiaomispeed.com
+  type: trojan
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 台湾1-1Q
+  port: 45078
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 7e3e92de-be91-4756-be72-660e9fff5569
+- alterId: 0
+  cipher: auto
+  name: 🇰🇷 韩国 专线NO1-1Q
+  port: 45076
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 7e3e92de-be91-4756-be72-660e9fff5569
+- alterId: 0
+  cipher: auto
+  name: 🇬🇧 英国2-1H
+  port: 45067
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 4dca1f0c-f253-43d6-851c-2277e5cd8e1d
+- alterId: 0
+  cipher: auto
+  name: 🇯🇵 日本NO.2-1M
+  port: 45057
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: ea724619-4a91-4ca5-a49c-e9f8dd315901
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸 美国NO.1-1N
+  port: 45052
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 32c197c8-3e01-4e06-a0f6-227c8ab97387
+- name: 🇭🇰 2号专线 香港HK 244-1A
+  password: cceeea0e-14de-48ce-bff7-6dbcf4e40d1a
+  port: 38522
+  server: cdntwa.xiaomispeed.com
+  skip-cert-verify: true
+  sni: cdntwa.xiaomispeed.com
+  type: trojan
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇯🇵 日本NO.2-1K
+  port: 45057
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 165e3c7f-b670-45a5-8337-41a0915a22aa
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国2-1L
+  port: 45071
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: b0d7bdf1-09c0-40d9-8477-562977d069ea
+- cipher: chacha20-ietf-poly1305
+  name: 🇭🇰 VIP 香港01-1N
+  password: 3de6dc0f-996a-46f6-b073-e1342fa48440
+  port: 23764
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇬🇧 英国2-1A
+  port: 45067
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: bb6a5577-8efe-4377-a8b2-ac2d4f7e82cf
+- name: 台湾_22
+  password: 68cfaf9d-f86c-43bc-ab0b-7f2abca14960
+  port: 443
+  server: 103.137.63.77
+  skip-cert-verify: true
+  sni: node1.yuntongclouds.com
+  type: trojan
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇰🇷 韩国 专线NO1-1B
+  port: 45076
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 0ff59aac-df7f-4e78-9c0a-8f93bda9b534
+- alterId: 0
+  cipher: auto
+  name: 🇭🇰 香港NO.2-1K
+  port: 45051
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 165e3c7f-b670-45a5-8337-41a0915a22aa
+- alterId: 0
+  cipher: auto
+  name: 🇯🇵 日本NO.2-1I
+  port: 45057
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1f4be065-f6a5-42f9-a99b-c17d491741b9
+- cipher: chacha20-ietf-poly1305
+  name: 🇰🇷 VIP 韩国01-1K
+  password: a01e5f12-7948-408f-bde5-fc4d8b6bf1f1
+  port: 16087
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- name: 中国_17
+  password: 6c81b809-58ef-48e8-b28a-51fad088a6b4
+  port: 5443
+  server: 115.231.220.33
+  skip-cert-verify: true
+  sni: nodecn1.jiayinetwork.es
+  type: trojan
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇦🇺 澳大利亚原生2-1L
+  port: 45063
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: b0d7bdf1-09c0-40d9-8477-562977d069ea
+- cipher: chacha20-ietf-poly1305
+  name: 🇺🇸 VIP 美国01-1J
+  password: c1c331e3-4f43-4b51-867a-cf7a3b5e92f3
+  port: 14848
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_32
+  password: f19763ef-ef0e-4a50-8731-78dbe83829ca
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇯🇵 日本NO.2-1H
+  port: 45057
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 4dca1f0c-f253-43d6-851c-2277e5cd8e1d
+- cipher: chacha20-ietf-poly1305
+  name: 🇸🇬 SS 新加坡 1-1C
+  password: 66f1237e-e486-4205-8d5d-efa60e9aa22d
+  port: 28063
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇨🇦 加拿大2-1A
+  port: 45065
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: bb6a5577-8efe-4377-a8b2-ac2d4f7e82cf
+- alterId: 0
+  cipher: auto
+  name: 🇸🇬 新加坡NO.2-1K
+  port: 45055
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 165e3c7f-b670-45a5-8337-41a0915a22aa
+- name: 台湾_23
+  password: ece1d3df-abbe-4605-9dbd-4ab0ddd79cc0
+  port: 443
+  server: 103.137.63.77
+  skip-cert-verify: true
+  sni: node1.yuntongclouds.com
+  type: trojan
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇰🇷 韩国 专线NO2-1K
+  port: 45075
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 165e3c7f-b670-45a5-8337-41a0915a22aa
+- cipher: chacha20-ietf-poly1305
+  name: 🇯🇵 VIP 日本01-1N
+  password: 3de6dc0f-996a-46f6-b073-e1342fa48440
+  port: 47296
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇰🇷 韩国 专线NO2-1C
+  port: 45075
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 075f7216-c7fb-4c46-885f-e543187838d9
+- alterId: 0
+  cipher: auto
+  name: 🇸🇬 新加坡NO.2-1H
+  port: 45055
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 4dca1f0c-f253-43d6-851c-2277e5cd8e1d
+- alterId: 0
+  cipher: auto
+  name: 🇯🇵 日本NO.1-1J
+  port: 45056
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1115654a-7876-4cea-97a0-cc0c5d34bfb7
+- cipher: chacha20-ietf-poly1305
+  name: 🇮🇸 SS 冰岛1-1B
+  password: 50c2ff26-0fae-4720-bd20-6e8b1de47440
+  port: 18244
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国2-1N
+  port: 45071
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 32c197c8-3e01-4e06-a0f6-227c8ab97387
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸 美国NO.2-1M
+  port: 45053
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: ea724619-4a91-4ca5-a49c-e9f8dd315901
+- alterId: 0
+  cipher: auto
+  name: 🇰🇷 韩国 专线NO1-1H
+  port: 45076
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 4dca1f0c-f253-43d6-851c-2277e5cd8e1d
+- alterId: 0
+  cipher: auto
+  name: 🇮🇳 印度2-1B
+  port: 45073
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 0ff59aac-df7f-4e78-9c0a-8f93bda9b534
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国-1B
+  port: 19901
+  server: fg.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 0ff59aac-df7f-4e78-9c0a-8f93bda9b534
+- cipher: chacha20-ietf-poly1305
+  name: 🇯🇵 VIP 日本01-1R
+  password: c4f4e380-395a-414b-b57c-e4b660bf069f
+  port: 47296
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国1-1J
+  port: 45072
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1115654a-7876-4cea-97a0-cc0c5d34bfb7
+- alterId: 0
+  cipher: auto
+  name: 🇰🇷 韩国 专线NO1-1L
+  port: 45076
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: b0d7bdf1-09c0-40d9-8477-562977d069ea
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国-1R
+  port: 19901
+  server: fg.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: e4a1182f-ef59-42fb-9885-9c47f0a30bab
+- alterId: 0
+  cipher: auto
+  name: 🇭🇰 3x备用专线香港1-1O
+  port: 50051
+  server: xh.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 2e32687b-7dfe-4566-9c2b-9fb15140a2d2
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸 美国NO.1-1D
+  port: 45052
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 98f5e3bb-f6e4-4d0a-a926-b1b0ebd0c891
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 3x备用专线台湾1-1N
+  port: 50050
+  server: xh.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 32c197c8-3e01-4e06-a0f6-227c8ab97387
+- alterId: 0
+  cipher: auto
+  name: 🇦🇺 澳大利亚原生1-1F
+  port: 45062
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 226be3df-678b-4c60-b12d-ed0f677829e8
+- alterId: 0
+  cipher: auto
+  name: 🇯🇵 日本NO.1-1K
+  port: 45056
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 165e3c7f-b670-45a5-8337-41a0915a22aa
+- cipher: chacha20-ietf-poly1305
+  name: 中国_18
+  password: 4b185cc2-8f83-4253-8d81-7d7419d5e7df
+  port: 31923
+  server: 120.233.44.206
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国2-1R
+  port: 45071
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: e4a1182f-ef59-42fb-9885-9c47f0a30bab
+- alterId: 0
+  cipher: auto
+  name: 🇰🇷 韩国 专线NO2-1R
+  port: 45075
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: e4a1182f-ef59-42fb-9885-9c47f0a30bab
+- alterId: 0
+  cipher: auto
+  name: 🇬🇧 英国1-1D
+  port: 45066
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 98f5e3bb-f6e4-4d0a-a926-b1b0ebd0c891
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 台湾2-1Q
+  port: 45077
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 7e3e92de-be91-4756-be72-660e9fff5569
+- cipher: chacha20-ietf-poly1305
+  name: 香港_33
+  password: d4e8df49-5dab-474a-a907-3a7eaa960458
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 3x备用专线台湾1-1L
+  port: 50050
+  server: xh.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: b0d7bdf1-09c0-40d9-8477-562977d069ea
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 台湾2-1O
+  port: 45077
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 2e32687b-7dfe-4566-9c2b-9fb15140a2d2
+- cipher: chacha20-ietf-poly1305
+  name: 🇧🇷 SS 巴西1-1B
+  password: 50c2ff26-0fae-4720-bd20-6e8b1de47440
+  port: 55936
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇯🇵 日本NO.1-1P
+  port: 45056
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 92bf2dbe-3fb4-4b20-915c-fbd5486d2f45
+- alterId: 0
+  cipher: auto
+  name: 🇨🇦 加拿大1-1P
+  port: 45064
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 92bf2dbe-3fb4-4b20-915c-fbd5486d2f45
+- alterId: 0
+  cipher: auto
+  name: 🇯🇵 日本NO.2-1O
+  port: 45057
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 2e32687b-7dfe-4566-9c2b-9fb15140a2d2
+- cipher: chacha20-ietf-poly1305
+  name: 🇹🇭 SS 泰国1-1C
+  password: 66f1237e-e486-4205-8d5d-efa60e9aa22d
+  port: 39037
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- name: 台湾_24
+  password: 5f757369-0b36-40cc-a2d6-b27ca76388c4
+  port: 443
+  server: 118.232.199.29
+  skip-cert-verify: true
+  sni: node2.yuntongclouds.com
+  type: trojan
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇸🇬 新加坡NO.1-1D
+  port: 45054
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 98f5e3bb-f6e4-4d0a-a926-b1b0ebd0c891
+- alterId: 0
+  cipher: auto
+  name: 🇮🇳 印度1-1I
+  port: 45074
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1f4be065-f6a5-42f9-a99b-c17d491741b9
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 台湾1-1I
+  port: 45078
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1f4be065-f6a5-42f9-a99b-c17d491741b9
+- cipher: chacha20-ietf-poly1305
+  name: 🇰🇷 SS 韩国1-1A
+  password: fd84cbdc-60c5-4847-ace2-18dc241745c0
+  port: 41431
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇦🇺 澳大利亚原生1-1J
+  port: 45062
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1115654a-7876-4cea-97a0-cc0c5d34bfb7
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国2-1C
+  port: 45071
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 075f7216-c7fb-4c46-885f-e543187838d9
+- cipher: chacha20-ietf-poly1305
+  name: 🇭🇰 VIP 香港01-1I
+  password: ed1f378f-99e7-4917-9e85-72cf6d50feff
+  port: 23764
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸 美国NO.1-1B
+  port: 45052
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 0ff59aac-df7f-4e78-9c0a-8f93bda9b534
+- alterId: 0
+  cipher: auto
+  name: 🇦🇺 澳大利亚原生1-1N
+  port: 45062
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 32c197c8-3e01-4e06-a0f6-227c8ab97387
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 台湾2-1L
+  port: 45077
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: b0d7bdf1-09c0-40d9-8477-562977d069ea
+- alterId: 0
+  cipher: auto
+  name: 🇬🇧 英国2-1G
+  port: 45067
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: aaaf991f-66e5-42a1-96e6-bdb241dbc9d1
+- cipher: chacha20-ietf-poly1305
+  name: 🇲🇾 SS 马来西亚1-1C
+  password: 66f1237e-e486-4205-8d5d-efa60e9aa22d
+  port: 13828
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇺🇸 VIP 美国01-1Y
+  password: e778665a-9354-4e91-8bad-e79237428fbf
+  port: 14848
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 台湾2-1M
+  port: 45077
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: ea724619-4a91-4ca5-a49c-e9f8dd315901
+- cipher: chacha20-ietf-poly1305
+  name: 🇸🇬 VIP 新加坡01-1x
+  password: 3fa2f4f9-f473-400c-af77-e99b40e4109c
+  port: 27004
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国2-1F
+  port: 45071
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 226be3df-678b-4c60-b12d-ed0f677829e8
+- alterId: 0
+  cipher: auto
+  name: 🇮🇳 印度1-1H
+  port: 45074
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 4dca1f0c-f253-43d6-851c-2277e5cd8e1d
+- alterId: 0
+  cipher: auto
+  name: 🇯🇵 日本NO.2-1C
+  port: 45057
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 075f7216-c7fb-4c46-885f-e543187838d9
+- cipher: chacha20-ietf-poly1305
+  name: 🇸🇬 VIP 新加坡01-1P
+  password: 0d2195d1-9fdd-4a7a-b8ea-92651f749ec1
+  port: 27004
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇯🇵 VIP 日本01-1G
+  password: 506a346b-2969-4c1d-ad3f-76ad9adfb34c
+  port: 47296
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- name: 中国_19
+  password: 5f757369-0b36-40cc-a2d6-b27ca76388c4
+  port: 5443
+  server: 115.231.220.33
+  skip-cert-verify: true
+  sni: nodecn1.jiayinetwork.es
+  type: trojan
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇰🇷 韩国 专线NO2-1J
+  port: 45075
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1115654a-7876-4cea-97a0-cc0c5d34bfb7
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国2-1G
+  port: 45071
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: aaaf991f-66e5-42a1-96e6-bdb241dbc9d1
+- name: 🇯🇵 2号专线 日本JP 75-1B
+  password: 4b185cc2-8f83-4253-8d81-7d7419d5e7df
+  port: 39769
+  server: cdntwa.xiaomispeed.com
+  skip-cert-verify: true
+  sni: cdntwa.xiaomispeed.com
+  type: trojan
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇨🇦 加拿大2-1J
+  port: 45065
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1115654a-7876-4cea-97a0-cc0c5d34bfb7
+- alterId: 0
+  cipher: auto
+  name: 🇭🇰 香港NO.2-1J
+  port: 45051
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1115654a-7876-4cea-97a0-cc0c5d34bfb7
+- cipher: chacha20-ietf-poly1305
+  name: 🇺🇸 VIP 美国01-1A
+  password: be6adc88-52dd-4b22-9cad-4a88c257235e
+  port: 14848
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇭🇰 VIP 香港01-1M
+  password: a9ad6807-9ecb-43f3-bbb3-b653a8858409
+  port: 23764
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇸🇬 新加坡NO.2-1E
+  port: 45055
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 93d8e8b6-1319-440e-b59c-d2188a160625
+- cipher: chacha20-ietf-poly1305
+  name: 🇰🇷 VIP 韩国01-1G
+  password: 506a346b-2969-4c1d-ad3f-76ad9adfb34c
+  port: 16087
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇸🇬 SS 新加坡 1-1B
+  password: 50c2ff26-0fae-4720-bd20-6e8b1de47440
+  port: 28063
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇰🇷 VIP 韩国01-1A
+  password: be6adc88-52dd-4b22-9cad-4a88c257235e
+  port: 16087
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇮🇱 SS 以色列1-1C
+  password: 66f1237e-e486-4205-8d5d-efa60e9aa22d
+  port: 18140
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国-1P
+  port: 19901
+  server: fg.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 92bf2dbe-3fb4-4b20-915c-fbd5486d2f45
+- name: 中国_20
+  password: 68cfaf9d-f86c-43bc-ab0b-7f2abca14960
+  port: 5443
+  server: 115.231.220.33
+  skip-cert-verify: true
+  sni: nodecn1.jiayinetwork.es
+  type: trojan
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国-1J
+  port: 19901
+  server: fg.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1115654a-7876-4cea-97a0-cc0c5d34bfb7
+- cipher: chacha20-ietf-poly1305
+  name: 🇰🇷 VIP 韩国01-1U
+  password: 80b9d6f2-1f29-4f41-abf7-0f2582280893
+  port: 16087
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇮🇳 SS 印度1-1C
+  password: 66f1237e-e486-4205-8d5d-efa60e9aa22d
+  port: 34411
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇹🇭 SS 泰国1-1A
+  password: fd84cbdc-60c5-4847-ace2-18dc241745c0
+  port: 39037
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇬🇧 英国2-1M
+  port: 45067
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: ea724619-4a91-4ca5-a49c-e9f8dd315901
+- alterId: 0
+  cipher: auto
+  name: 🇮🇳 印度2-1D
+  port: 45073
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 98f5e3bb-f6e4-4d0a-a926-b1b0ebd0c891
+- name: 美国_28
+  password: 68cfaf9d-f86c-43bc-ab0b-7f2abca14960
+  port: 1443
+  server: 144.34.178.66
+  skip-cert-verify: true
+  sni: node4.yuntongclouds.com
+  type: trojan
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇰🇷 韩国 专线NO1-1R
+  port: 45076
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: e4a1182f-ef59-42fb-9885-9c47f0a30bab
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸 美国NO.2-1Q
+  port: 45053
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 7e3e92de-be91-4756-be72-660e9fff5569
+- alterId: 0
+  cipher: auto
+  name: 🇬🇧 英国2-1Q
+  port: 45067
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 7e3e92de-be91-4756-be72-660e9fff5569
+- alterId: 0
+  cipher: auto
+  name: 🇨🇦 加拿大1-1B
+  port: 45064
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 0ff59aac-df7f-4e78-9c0a-8f93bda9b534
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸 美国NO.2-1N
+  port: 45053
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 32c197c8-3e01-4e06-a0f6-227c8ab97387
+- alterId: 0
+  cipher: auto
+  name: 🇸🇬 新加坡NO.2-1O
+  port: 45055
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 2e32687b-7dfe-4566-9c2b-9fb15140a2d2
+- cipher: chacha20-ietf-poly1305
+  name: 🇸🇬 VIP 新加坡01-1V
+  password: bdbfc358-743c-4291-8605-e16404d7f511
+  port: 27004
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国-1G
+  port: 19901
+  server: fg.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: aaaf991f-66e5-42a1-96e6-bdb241dbc9d1
+- alterId: 0
+  cipher: auto
+  name: 🇭🇰 3x备用专线香港1-1H
+  port: 50051
+  server: xh.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 4dca1f0c-f253-43d6-851c-2277e5cd8e1d
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 台湾1-1B
+  port: 45078
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 0ff59aac-df7f-4e78-9c0a-8f93bda9b534
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 3x备用专线台湾1-1F
+  port: 50050
+  server: xh.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 226be3df-678b-4c60-b12d-ed0f677829e8
+- cipher: chacha20-ietf-poly1305
+  name: 🇭🇰 VIP 香港01-1K
+  password: a01e5f12-7948-408f-bde5-fc4d8b6bf1f1
+  port: 23764
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国-1E
+  port: 19901
+  server: fg.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 93d8e8b6-1319-440e-b59c-d2188a160625
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 台湾2-1E
+  port: 45077
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 93d8e8b6-1319-440e-b59c-d2188a160625
+- alterId: 0
+  cipher: auto
+  name: 🇨🇦 加拿大1-1Q
+  port: 45064
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 7e3e92de-be91-4756-be72-660e9fff5569
+- alterId: 0
+  cipher: auto
+  name: 🇬🇧 英国1-1C
+  port: 45066
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 075f7216-c7fb-4c46-885f-e543187838d9
+- alterId: 0
+  cipher: auto
+  name: 🇰🇷 韩国 专线NO1-1P
+  port: 45076
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 92bf2dbe-3fb4-4b20-915c-fbd5486d2f45
+- alterId: 0
+  cipher: auto
+  name: 🇮🇳 印度2-1H
+  port: 45073
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 4dca1f0c-f253-43d6-851c-2277e5cd8e1d
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国1-1I
+  port: 45072
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1f4be065-f6a5-42f9-a99b-c17d491741b9
+- alterId: 0
+  cipher: auto
+  name: 🇸🇬 新加坡NO.2-1C
+  port: 45055
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 075f7216-c7fb-4c46-885f-e543187838d9
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 3x备用专线台湾1-1O
+  port: 50050
+  server: xh.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 2e32687b-7dfe-4566-9c2b-9fb15140a2d2
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸 美国NO.2-1H
+  port: 45053
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 4dca1f0c-f253-43d6-851c-2277e5cd8e1d
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸 美国NO.2-1R
+  port: 45053
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: e4a1182f-ef59-42fb-9885-9c47f0a30bab
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 台湾2-1J
+  port: 45077
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1115654a-7876-4cea-97a0-cc0c5d34bfb7
+- alterId: 0
+  cipher: auto
+  name: 🇸🇬 新加坡NO.2-1L
+  port: 45055
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: b0d7bdf1-09c0-40d9-8477-562977d069ea
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国1-1E
+  port: 45072
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 93d8e8b6-1319-440e-b59c-d2188a160625
+- cipher: chacha20-ietf-poly1305
+  name: 🇭🇰 VIP 香港01-1Q
+  password: b38fa2c6-fbb8-4332-8fac-e56add8e5632
+  port: 23764
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇭🇰 3x备用专线香港1-1Q
+  port: 50051
+  server: xh.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 7e3e92de-be91-4756-be72-660e9fff5569
+- cipher: chacha20-ietf-poly1305
+  name: 🇭🇰 VIP 香港01-1V
+  password: bdbfc358-743c-4291-8605-e16404d7f511
+  port: 23764
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
