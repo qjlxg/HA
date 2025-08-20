@@ -1,11 +1,4 @@
 proxies:
-- name: 美国
-  password: 20050105zhu
-  port: 51541
-  server: 204.44.110.129
-  skip-cert-verify: true
-  sni: www.bing.com
-  type: hysteria2
 - alterId: 0
   cipher: auto
   name: Hongkong-1
@@ -154,7 +147,7 @@ proxies:
   sni: www.bing.com
   tls: false
   type: hysteria2
-- name: 美国_02
+- name: 美国
   password: '123456'
   port: 443
   region: '@V2rayNG3'
@@ -434,7 +427,7 @@ proxies:
   sni: cdn.alibaba.com
   type: trojan
 - client-fingerprint: random
-  name: 美国_03
+  name: 美国_02
   network: ws
   port: 443
   region: 🇳🇬
@@ -450,7 +443,7 @@ proxies:
       Host: qwok.feidyql.dpdns.org
     path: /?ed=2560
 - client-fingerprint: random
-  name: 美国_04
+  name: 美国_03
   network: ws
   port: 443
   region: 🇳🇬
@@ -3562,7 +3555,7 @@ proxies:
     headers:
       Host: free.5niu.xyz
     path: /?ed=2560
-- name: 美国_05
+- name: 美国_04
   network: ws
   port: 80
   region: 其他地区
@@ -5455,7 +5448,7 @@ proxies:
       Host: ws345.890604.fIlEGeAR-Sg.me
     path: /h1iXYtqUZkDQMvgKagyIefJfM0OQ
 - client-fingerprint: random
-  name: 美国_06
+  name: 美国_05
   network: ws
   port: 443
   region: 其他地区
@@ -5840,7 +5833,7 @@ proxies:
       Host: bettercf.724719.xyz
     path: /?ed=2560
 - client-fingerprint: randomized
-  name: 美国_07
+  name: 美国_06
   network: ws
   port: 443
   region: 其他地区
@@ -6721,7 +6714,7 @@ proxies:
     headers:
       Host: qwok.feidyql.dpdns.org
     path: /?ed=2560
-- name: 美国_08
+- name: 美国_07
   network: ws
   port: 55573
   region: 其他地区
@@ -7251,7 +7244,7 @@ proxies:
     headers:
       Host: KKiuyTr.191266.xyz
     path: /wAlPWPCQWnsVcNgLsMVz
-- name: 美国_09
+- name: 美国_08
   network: ws
   port: 80
   region: 其他地区
@@ -7349,7 +7342,7 @@ proxies:
       Host: XCdvFRTtt.fREEvpnATM.dPDNS.oRg
     path: /prUFeqTNsRZbl4sVHqtMKS
 - client-fingerprint: random
-  name: 美国_10
+  name: 美国_09
   network: ws
   port: 443
   region: 其他地区
@@ -7803,7 +7796,7 @@ proxies:
   skip-cert-verify: true
   sni: ca.cacnord.bilibili.com
   type: trojan
-- name: 美国_11
+- name: 美国_10
   network: ws
   port: 443
   region: 加拿大
@@ -7940,7 +7933,7 @@ proxies:
   sni: www.bing.com
   tls: false
   type: hysteria2
-- name: 美国_12
+- name: 美国_11
   password: dongtaiwang.com
   port: 63015
   region: 印度
@@ -8150,7 +8143,7 @@ proxies:
   sni: www.bing.com
   tls: false
   type: hysteria2
-- name: 美国_13
+- name: 美国_12
   password: 5CBqBh6MeDq6GajcilBiDg==
   port: 61001
   region: 印度尼西亚
@@ -8159,7 +8152,7 @@ proxies:
   sni: 192-227-152-86.nip.io
   tls: false
   type: hysteria2
-- name: 美国_14
+- name: 美国_13
   password: 7992f244-8c2c-4a1a-923f-2e116e90149b
   port: 443
   region: 印度尼西亚
@@ -8771,7 +8764,7 @@ proxies:
     headers:
       Host: steep.skyfigure.top
     path: Telegram🇨🇳 @pgkj666 /?ed=2560
-- name: 美国_15
+- name: 美国_14
   network: ws
   port: 2053
   region: 台湾
@@ -8974,7 +8967,7 @@ proxies:
     path: /oooo
 - alterId: 64
   cipher: auto
-  name: 美国_16
+  name: 美国_15
   network: ws
   port: 36000
   region: 台湾
@@ -16035,7 +16028,7 @@ proxies:
     headers:
       Host: steep.skyfigure.top
     path: Telegram🇨🇳 @pgkj666 /?ed=2560
-- name: 美国_17
+- name: 美国_16
   network: ws
   port: 8880
   region: 日本
@@ -16385,7 +16378,7 @@ proxies:
   skip-cert-verify: true
   sni: faguo.959555.xyz
   type: hysteria2
-- name: 美国_18
+- name: 美国_17
   password: dongtaiwang.com
   port: 22222
   region: 法国
@@ -17676,7 +17669,7 @@ proxies:
   server: 45.147.201.231
   skip-cert-verify: true
   type: hysteria2
-- name: 美国_19
+- name: 美国_18
   password: 51de9de9-3445-4dd3-8ac9-f42dc0baa230
   port: 443
   region: 美国
@@ -17685,7 +17678,7 @@ proxies:
   sni: cn.cremedelamer.com
   tls: false
   type: hysteria2
-- name: 美国_20
+- name: 美国_19
   password: HfK3UK4MoXxYUccnp7qzx3Y3o
   port: 34321
   region: 美国
@@ -17703,7 +17696,7 @@ proxies:
   sni: bing.com
   tls: false
   type: hysteria2
-- name: 美国_21
+- name: 美国_20
   password: RKrGw4dSUwK3YAvqdQI8tcqNl0
   port: 34060
   region: 美国
@@ -17712,7 +17705,7 @@ proxies:
   sni: bing.com
   tls: false
   type: hysteria2
-- name: 美国_22
+- name: 美国_21
   password: Wjes5mJnUmH7kwzpgZX5d2BeCs
   port: 13438
   region: 美国
@@ -17730,7 +17723,7 @@ proxies:
   sni: us2.1010991.xyz
   tls: false
   type: hysteria2
-- name: 美国_23
+- name: 美国_22
   password: 527a7c04-9a2c-4fdb-aa18-37337e62e917
   port: 45000
   region: 美国
@@ -17739,7 +17732,7 @@ proxies:
   sni: www.apple.com
   tls: false
   type: hysteria2
-- name: 美国_24
+- name: 美国_23
   password: dac2d4dd-9a4d-4eb0-92a6-028532caed52
   port: 45000
   region: 美国
@@ -17770,7 +17763,7 @@ proxies:
   server: 111.29.57.104
   type: ss
 - cipher: aes-256-cfb
-  name: 美国_25
+  name: 美国_24
   password: awsps0501
   port: 443
   region: 美国
@@ -17784,7 +17777,7 @@ proxies:
   server: eepl1.dhh114514.christmas
   type: ss
 - cipher: aes-256-cfb
-  name: 美国_26
+  name: 美国_25
   password: awsps0501
   port: 443
   region: 美国
@@ -17861,7 +17854,7 @@ proxies:
   server: ti3hyra4.slashdevslashnetslashtun.net
   type: ss
 - cipher: aes-256-cfb
-  name: 美国_27
+  name: 美国_26
   password: awsps0501
   port: 443
   region: 美国
@@ -17945,7 +17938,7 @@ proxies:
   server: 180.188.47.63
   type: ss
 - cipher: aes-256-cfb
-  name: 美国_28
+  name: 美国_27
   password: awsps0501
   port: 443
   region: 美国
@@ -17959,7 +17952,7 @@ proxies:
   server: us03.dns.sspa.zzssptop.com
   type: ss
 - cipher: aes-256-cfb
-  name: 美国_29
+  name: 美国_28
   password: awsps0501
   port: 443
   region: 美国
@@ -18093,28 +18086,28 @@ proxies:
   server: 204.136.10.115
   type: ss
 - cipher: chacha20-ietf-poly1305
-  name: 美国_30
+  name: 美国_29
   password: oXGp1+ihlfKg826H
   port: 1866
   region: 美国
   server: 172.233.128.126
   type: ss
 - cipher: chacha20-ietf-poly1305
-  name: 美国_31
+  name: 美国_30
   password: 360e21d21977dc11
   port: 57456
   region: 美国
   server: 104.167.197.25
   type: ss
 - cipher: aes-256-gcm
-  name: 美国_32
+  name: 美国_31
   password: iUB0923RBA
   port: 30067
   region: 美国
   server: 154.3.8.151
   type: ss
 - cipher: rc4-md5
-  name: 美国_33
+  name: 美国_32
   obfs: plain
   password: 14fFPrbezE3HDZzsMOr6
   port: 8080
@@ -18628,7 +18621,7 @@ proxies:
   skip-cert-verify: true
   sni: mmbiz.qpic.cn
   type: trojan
-- name: 美国_34
+- name: 美国_33
   password: SDYlNZ6z5DA8TZqz33YnN4lzpp88YBZOyXC5we8AZBqn6YXwI0gISyalXjIOyNwCaDpDORKSyDCSg9S
   port: 28333
   region: 美国
@@ -19447,7 +19440,7 @@ proxies:
   server: 9f212389-swtr40-t0qwks-1anhm.cu.plebai.net
   skip-cert-verify: true
   type: trojan
-- name: 美国_35
+- name: 美国_34
   password: WpfQAbO2wg
   port: 443
   region: 美国
@@ -19543,7 +19536,7 @@ proxies:
     headers:
       Host: ocost-dy.wmlefl.cc
     path: /
-- name: 美国_36
+- name: 美国_35
   network: ws
   password: tg-fq521free
   port: 443
@@ -19557,7 +19550,7 @@ proxies:
     headers:
       Host: torjan.xn--xhq44j.eu.org
     path: /
-- name: 美国_37
+- name: 美国_36
   network: ws
   password: tg-fq521free
   port: 443
@@ -19587,7 +19580,7 @@ proxies:
       Host: reedfree8mahsang2.redorg.ir
     path: /?ed=2560
 - client-fingerprint: random
-  name: 美国_38
+  name: 美国_37
   network: ws
   port: 443
   region: 美国
@@ -19707,7 +19700,7 @@ proxies:
     headers:
       Host: reedfree8mahsang2.redorg.ir
     path: /?ed=2560
-- name: 美国_39
+- name: 美国_38
   network: ws
   port: 8880
   region: 美国
@@ -19722,7 +19715,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_40
+- name: 美国_39
   network: ws
   port: 8880
   region: 美国
@@ -19796,7 +19789,7 @@ proxies:
     headers:
       Host: REEdfREe8MahSaNg2.rEDOrG.IR
     path: /vpnowl?ed=2560
-- name: 美国_41
+- name: 美国_40
   network: ws
   port: 8880
   region: 美国
@@ -19841,7 +19834,7 @@ proxies:
     headers:
       Host: reedfree8mahsang2.redorg.ir
     path: /?ed=2560
-- name: 美国_42
+- name: 美国_41
   network: ws
   port: 18454
   region: 美国
@@ -19856,7 +19849,7 @@ proxies:
     headers:
       Host: zedwareoracle.lzj520hxw.dpdns.org
     path: /by-zedware-network/
-- name: 美国_43
+- name: 美国_42
   network: ws
   port: 8880
   region: 美国
@@ -19996,7 +19989,7 @@ proxies:
       Host: FfrTyui.191266.XyZ
     path: /C1SukvGdr58yeduy9AOG
 - client-fingerprint: random
-  name: 美国_44
+  name: 美国_43
   network: ws
   port: 443
   region: 美国
@@ -20026,7 +20019,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_45
+- name: 美国_44
   network: ws
   port: 8880
   region: 美国
@@ -20071,7 +20064,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_46
+- name: 美国_45
   network: ws
   port: 8880
   region: 美国
@@ -20116,7 +20109,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_47
+- name: 美国_46
   network: ws
   port: 8880
   region: 美国
@@ -20131,7 +20124,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_48
+- name: 美国_47
   network: ws
   port: 8880
   region: 美国
@@ -20254,7 +20247,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_49
+- name: 美国_48
   network: ws
   port: 8880
   region: 美国
@@ -20269,7 +20262,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_50
+- name: 美国_49
   network: ws
   port: 8880
   region: 美国
@@ -20284,7 +20277,7 @@ proxies:
     headers:
       Host: reedfree8mahsang2.redorg.ir
     path: /?ed=2560
-- name: 美国_51
+- name: 美国_50
   network: ws
   port: 8880
   region: 美国
@@ -20300,7 +20293,7 @@ proxies:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
 - client-fingerprint: random
-  name: 美国_52
+  name: 美国_51
   network: ws
   port: 18446
   region: 美国
@@ -20375,7 +20368,7 @@ proxies:
     headers:
       Host: reedfree8mahsang2.redorg.ir
     path: /?ed=2560
-- name: 美国_53
+- name: 美国_52
   network: ws
   port: 8880
   region: 美国
@@ -20390,7 +20383,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_54
+- name: 美国_53
   network: ws
   port: 80
   region: 美国
@@ -20465,7 +20458,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_55
+- name: 美国_54
   network: ws
   port: 8880
   region: 美国
@@ -20585,7 +20578,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_56
+- name: 美国_55
   network: ws
   port: 8880
   region: 美国
@@ -20616,7 +20609,7 @@ proxies:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
 - client-fingerprint: random
-  name: 美国_57
+  name: 美国_56
   network: ws
   port: 443
   region: 美国
@@ -20676,7 +20669,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_58
+- name: 美国_57
   network: ws
   port: 8880
   region: 美国
@@ -20737,7 +20730,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_59
+- name: 美国_58
   network: ws
   port: 8880
   region: 美国
@@ -20782,7 +20775,7 @@ proxies:
     headers:
       Host: reedfree8mahsang2.redorg.ir
     path: /?ed=2560
-- name: 美国_60
+- name: 美国_59
   network: ws
   port: 8880
   region: 美国
@@ -20828,7 +20821,7 @@ proxies:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
 - client-fingerprint: random
-  name: 美国_61
+  name: 美国_60
   network: ws
   port: 50001
   region: 美国
@@ -20843,7 +20836,7 @@ proxies:
     headers:
       Host: 0229.patterdeng.pp.ua
     path: /?ed=2560
-- name: 美国_62
+- name: 美国_61
   network: ws
   port: 8880
   region: 美国
@@ -20993,7 +20986,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_63
+- name: 美国_62
   network: ws
   port: 8880
   region: 美国
@@ -21053,7 +21046,7 @@ proxies:
     headers:
       Host: reedfree8mahsang2.redorg.ir
     path: /?ed=2560
-- name: 美国_64
+- name: 美国_63
   network: ws
   port: 8880
   region: 美国
@@ -21068,7 +21061,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_65
+- name: 美国_64
   network: ws
   port: 8880
   region: 美国
@@ -21098,7 +21091,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_66
+- name: 美国_65
   network: ws
   port: 8880
   region: 美国
@@ -21158,7 +21151,7 @@ proxies:
     headers:
       Host: reedfree8mahsang2.redorg.ir
     path: /?ed=2560
-- name: 美国_67
+- name: 美国_66
   network: ws
   port: 8880
   region: 美国
@@ -21267,7 +21260,7 @@ proxies:
     headers:
       Host: vless02.trevely.us.kg
     path: /?ed=2560
-- name: 美国_68
+- name: 美国_67
   network: ws
   port: 8880
   region: 美国
@@ -21297,7 +21290,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_69
+- name: 美国_68
   network: ws
   port: 8880
   region: 美国
@@ -21312,7 +21305,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_70
+- name: 美国_69
   network: ws
   port: 8880
   region: 美国
@@ -21373,7 +21366,7 @@ proxies:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
 - client-fingerprint: random
-  name: 美国_71
+  name: 美国_70
   network: ws
   port: 17635
   region: 美国
@@ -21403,7 +21396,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_72
+- name: 美国_71
   network: ws
   port: 8880
   region: 美国
@@ -21418,7 +21411,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_73
+- name: 美国_72
   network: ws
   port: 8880
   region: 美国
@@ -21464,7 +21457,7 @@ proxies:
     headers:
       Host: reedfree8mahsang2.redorg.ir
     path: /?ed=2560
-- name: 美国_74
+- name: 美国_73
   network: ws
   port: 8880
   region: 美国
@@ -21480,7 +21473,7 @@ proxies:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
 - client-fingerprint: random
-  name: 美国_75
+  name: 美国_74
   network: ws
   port: 443
   region: 美国
@@ -21692,7 +21685,7 @@ proxies:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
 - client-fingerprint: random
-  name: 美国_76
+  name: 美国_75
   network: ws
   port: 443
   region: 美国
@@ -21752,7 +21745,7 @@ proxies:
     headers:
       Host: reedfree8mahsang2.redorg.ir
     path: /?ed=2560
-- name: 美国_77
+- name: 美国_76
   network: ws
   port: 8880
   region: 美国
@@ -21797,7 +21790,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_78
+- name: 美国_77
   network: ws
   port: 8880
   region: 美国
@@ -21842,7 +21835,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_79
+- name: 美国_78
   network: ws
   port: 8880
   region: 美国
@@ -21917,7 +21910,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_80
+- name: 美国_79
   network: ws
   port: 8880
   region: 美国
@@ -21932,7 +21925,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_81
+- name: 美国_80
   network: ws
   port: 8880
   region: 美国
@@ -21947,7 +21940,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_82
+- name: 美国_81
   network: ws
   port: 8880
   region: 美国
@@ -21962,7 +21955,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_83
+- name: 美国_82
   network: ws
   port: 8880
   region: 美国
@@ -21977,7 +21970,7 @@ proxies:
     headers:
       Host: reedfree8mahsang2.redorg.ir
     path: /?ed=2560
-- name: 美国_84
+- name: 美国_83
   network: ws
   port: 8880
   region: 美国
@@ -22007,7 +22000,7 @@ proxies:
     headers:
       Host: reedfree8mahsang2.redorg.ir
     path: /?ed=2560
-- name: 美国_85
+- name: 美国_84
   network: ws
   port: 8880
   region: 美国
@@ -22067,7 +22060,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_86
+- name: 美国_85
   network: ws
   port: 9999
   region: 美国
@@ -22082,7 +22075,7 @@ proxies:
     headers:
       Host: seen-israel-dining-sure.trycloudflare.com
     path: /9af46703-64fa-4d42-b87b-656372e517ae-vless?ed=2048
-- name: 美国_87
+- name: 美国_86
   network: ws
   port: 8880
   region: 美国
@@ -22158,7 +22151,7 @@ proxies:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
 - client-fingerprint: random
-  name: 美国_88
+  name: 美国_87
   network: ws
   port: 443
   region: 美国
@@ -22173,7 +22166,7 @@ proxies:
     headers:
       Host: 0229.patterdeng.pp.ua
     path: /?ed=2560
-- name: 美国_89
+- name: 美国_88
   network: ws
   port: 8880
   region: 美国
@@ -22309,7 +22302,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_90
+- name: 美国_89
   network: ws
   port: 8880
   region: 美国
@@ -22340,7 +22333,7 @@ proxies:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
 - client-fingerprint: random
-  name: 美国_91
+  name: 美国_90
   network: ws
   port: 443
   region: 美国
@@ -22370,7 +22363,7 @@ proxies:
     headers:
       Host: reedfree8mahsang2.redorg.ir
     path: /?ed=2560
-- name: 美国_92
+- name: 美国_91
   network: ws
   port: 8880
   region: 美国
@@ -22400,7 +22393,7 @@ proxies:
     headers:
       Host: ip.langmanshanxi.top
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_93
+- name: 美国_92
   network: ws
   port: 8880
   region: 美国
@@ -22415,7 +22408,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_94
+- name: 美国_93
   network: ws
   port: 8880
   region: 美国
@@ -22430,7 +22423,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_95
+- name: 美国_94
   network: ws
   port: 8880
   region: 美国
@@ -22445,7 +22438,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_96
+- name: 美国_95
   network: ws
   port: 8880
   region: 美国
@@ -22565,7 +22558,7 @@ proxies:
     headers:
       Host: reedfree8mahsang2.redorg.ir
     path: /?ed=2560
-- name: 美国_97
+- name: 美国_96
   network: ws
   port: 80
   region: 美国
@@ -22580,7 +22573,7 @@ proxies:
     headers:
       Host: wWw.SpEeDtEsT.NeT.ZuLa.Ir.IkCoSaLeS.iR.D662599.v26.networkpro.net
     path: /?ed=2048
-- name: 美国_98
+- name: 美国_97
   network: ws
   port: 8880
   region: 美国
@@ -22595,7 +22588,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_99
+- name: 美国_98
   network: ws
   port: 8880
   region: 美国
@@ -22655,7 +22648,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_100
+- name: 美国_99
   network: ws
   port: 8880
   region: 美国
@@ -22670,7 +22663,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_101
+- name: 美国_100
   network: ws
   port: 8880
   region: 美国
@@ -22748,7 +22741,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_102
+- name: 美国_101
   network: ws
   port: 8880
   region: 美国
@@ -22778,7 +22771,7 @@ proxies:
     headers:
       Host: reedfree8mahsang2.redorg.ir
     path: /?ed=2560
-- name: 美国_103
+- name: 美国_102
   network: ws
   port: 8880
   region: 美国
@@ -22823,7 +22816,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_104
+- name: 美国_103
   network: ws
   port: 80
   region: 美国
@@ -23006,7 +22999,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_105
+- name: 美国_104
   network: ws
   port: 8880
   region: 美国
@@ -23036,7 +23029,7 @@ proxies:
     headers:
       Host: reedfree8mahsang2.redorg.ir
     path: /?ed=2560
-- name: 美国_106
+- name: 美国_105
   network: ws
   port: 8880
   region: 美国
@@ -23084,7 +23077,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_107
+- name: 美国_106
   network: ws
   port: 8880
   region: 美国
@@ -23099,7 +23092,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_108
+- name: 美国_107
   network: ws
   port: 8880
   region: 美国
@@ -23114,7 +23107,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_109
+- name: 美国_108
   network: ws
   port: 8880
   region: 美国
@@ -23129,7 +23122,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_110
+- name: 美国_109
   network: ws
   port: 8880
   region: 美国
@@ -23144,7 +23137,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_111
+- name: 美国_110
   network: ws
   port: 8880
   region: 美国
@@ -23159,7 +23152,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_112
+- name: 美国_111
   network: ws
   port: 8880
   region: 美国
@@ -23174,7 +23167,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_113
+- name: 美国_112
   network: ws
   port: 8880
   region: 美国
@@ -23204,7 +23197,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_114
+- name: 美国_113
   network: ws
   port: 8880
   region: 美国
@@ -23219,7 +23212,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_115
+- name: 美国_114
   network: ws
   port: 8880
   region: 美国
@@ -23234,7 +23227,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_116
+- name: 美国_115
   network: ws
   port: 8880
   region: 美国
@@ -23250,7 +23243,7 @@ proxies:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
 - client-fingerprint: random
-  name: 美国_117
+  name: 美国_116
   network: ws
   port: 10095
   region: 美国
@@ -23266,7 +23259,7 @@ proxies:
       Host: 0229.patterdeng.pp.ua
     path: /?ed=2560
 - client-fingerprint: random
-  name: 美国_118
+  name: 美国_117
   network: ws
   port: 21010
   region: 美国
@@ -23341,7 +23334,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_119
+- name: 美国_118
   network: ws
   port: 8880
   region: 美国
@@ -23357,7 +23350,7 @@ proxies:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
 - client-fingerprint: firefox
-  name: 美国_120
+  name: 美国_119
   network: tcp
   port: 10001
   reality-opts:
@@ -23386,7 +23379,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_121
+- name: 美国_120
   network: ws
   port: 8880
   region: 美国
@@ -23401,7 +23394,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_122
+- name: 美国_121
   network: ws
   port: 8880
   region: 美国
@@ -23446,7 +23439,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_123
+- name: 美国_122
   network: ws
   port: 8880
   region: 美国
@@ -23461,7 +23454,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_124
+- name: 美国_123
   network: ws
   port: 8880
   region: 美国
@@ -23539,7 +23532,7 @@ proxies:
     headers:
       Host: 10duuuu.288288.shop
     path: /uDLWPKXENxF2ulPWRIwOavJd
-- name: 美国_125
+- name: 美国_124
   network: ws
   port: 8880
   region: 美国
@@ -23584,7 +23577,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_126
+- name: 美国_125
   network: ws
   port: 8880
   region: 美国
@@ -23704,7 +23697,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_127
+- name: 美国_126
   network: ws
   port: 8880
   region: 美国
@@ -23794,7 +23787,7 @@ proxies:
     headers:
       Host: reedfree8mahsang2.redorg.ir
     path: /?ed=2560
-- name: 美国_128
+- name: 美国_127
   network: ws
   port: 33957
   region: 美国
@@ -23809,7 +23802,7 @@ proxies:
     headers:
       Host: seen-israel-dining-sure.trycloudflare.com
     path: /9af46703-64fa-4d42-b87b-656372e517ae-vless?ed=2048
-- name: 美国_129
+- name: 美国_128
   network: ws
   port: 8880
   region: 美国
@@ -23888,7 +23881,7 @@ proxies:
       Host: justhost1.jiahe.buzz
     path: /just04
 - client-fingerprint: random
-  name: 美国_130
+  name: 美国_129
   network: ws
   port: 443
   region: 美国
@@ -23934,7 +23927,7 @@ proxies:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
 - client-fingerprint: random
-  name: 美国_131
+  name: 美国_130
   network: ws
   port: 443
   region: 美国
@@ -23949,7 +23942,7 @@ proxies:
     headers:
       Host: 0229.patterdeng.pp.ua
     path: /?ed=2560
-- name: 美国_132
+- name: 美国_131
   network: ws
   port: 23596
   region: 美国
@@ -24009,7 +24002,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_133
+- name: 美国_132
   network: ws
   port: 8880
   region: 美国
@@ -24161,7 +24154,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_134
+- name: 美国_133
   network: ws
   port: 8880
   region: 美国
@@ -24176,7 +24169,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_135
+- name: 美国_134
   network: ws
   port: 8880
   region: 美国
@@ -24206,7 +24199,7 @@ proxies:
     headers:
       Host: reedfree8mahsang2.redorg.ir
     path: /?ed=2560
-- name: 美国_136
+- name: 美国_135
   network: ws
   port: 8880
   region: 美国
@@ -24222,7 +24215,7 @@ proxies:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
 - client-fingerprint: randomized
-  name: 美国_137
+  name: 美国_136
   network: ws
   port: 443
   region: 美国
@@ -24237,7 +24230,7 @@ proxies:
     headers:
       Host: sub.divib.dynv6.net
     path: /?ed=2560
-- name: 美国_138
+- name: 美国_137
   network: ws
   port: 8880
   region: 美国
@@ -24342,7 +24335,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: Telegram🇨🇳 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_139
+- name: 美国_138
   network: ws
   port: 8880
   region: 美国
@@ -24418,7 +24411,7 @@ proxies:
     headers:
       Host: sub.divib.dynv6.net
     path: /?ed=2560
-- name: 美国_140
+- name: 美国_139
   network: ws
   port: 8880
   region: 美国
@@ -24433,7 +24426,7 @@ proxies:
     headers:
       Host: ip.langmanshanxi.top
     path: /TelegramU0001F1E8U0001F1F3 @WangCai2 /?ed=2560
-- name: 美国_141
+- name: 美国_140
   network: ws
   port: 8880
   region: 美国
@@ -24463,7 +24456,7 @@ proxies:
     headers:
       Host: cf.d3z.net
     path: /TelegramU0001F1E8U0001F1F3 @WangCai2 /?ed=2560
-- name: 美国_142
+- name: 美国_141
   network: ws
   port: 8880
   region: 美国
@@ -24478,7 +24471,7 @@ proxies:
     headers:
       Host: cf.d3z.net
     path: /TelegramU0001F1E8U0001F1F3 @WangCai2 /?ed=2560
-- name: 美国_143
+- name: 美国_142
   network: ws
   port: 8880
   region: 美国
@@ -24493,7 +24486,7 @@ proxies:
     headers:
       Host: ip.langmanshanxi.top
     path: /TelegramU0001F1E8U0001F1F3 @WangCai2 /?ed=2560
-- name: 美国_144
+- name: 美国_143
   network: ws
   port: 8880
   region: 美国
@@ -24508,7 +24501,7 @@ proxies:
     headers:
       Host: ip.langmanshanxi.top
     path: /TelegramU0001F1E8U0001F1F3 @WangCai2 /?ed=2560
-- name: 美国_145
+- name: 美国_144
   network: ws
   port: 8880
   region: 美国
@@ -24523,7 +24516,7 @@ proxies:
     headers:
       Host: jp.laoyoutiao.link
     path: /TelegramU0001F1E8U0001F1F3 @WangCai2 /?ed=2560
-- name: 美国_146
+- name: 美国_145
   network: ws
   port: 8880
   region: 美国
@@ -24538,7 +24531,7 @@ proxies:
     headers:
       Host: ip.langmanshanxi.top
     path: /TelegramU0001F1E8U0001F1F3 @WangCai2 /?ed=2560
-- name: 美国_147
+- name: 美国_146
   network: ws
   port: 8880
   region: 美国
@@ -24568,7 +24561,7 @@ proxies:
     headers:
       Host: ip.langmanshanxi.top
     path: /TelegramU0001F1E8U0001F1F3 @WangCai2 /?ed=2560
-- name: 美国_148
+- name: 美国_147
   network: ws
   port: 8880
   region: 美国
@@ -24583,7 +24576,7 @@ proxies:
     headers:
       Host: jp.laoyoutiao.link
     path: /TelegramU0001F1E8U0001F1F3 @WangCai2 /?ed=2560
-- name: 美国_149
+- name: 美国_148
   network: ws
   port: 8880
   region: 美国
@@ -24598,7 +24591,7 @@ proxies:
     headers:
       Host: ip.langmanshanxi.top
     path: /TelegramU0001F1E8U0001F1F3 @WangCai2 /?ed=2560
-- name: 美国_150
+- name: 美国_149
   network: ws
   port: 8880
   region: 美国
@@ -24613,7 +24606,7 @@ proxies:
     headers:
       Host: ip.langmanshanxi.top
     path: /TelegramU0001F1E8U0001F1F3 @WangCai2 /?ed=2560
-- name: 美国_151
+- name: 美国_150
   network: ws
   port: 8880
   region: 美国
@@ -24628,7 +24621,7 @@ proxies:
     headers:
       Host: ip.langmanshanxi.top
     path: /TelegramU0001F1E8U0001F1F3 @WangCai2 /?ed=2560
-- name: 美国_152
+- name: 美国_151
   network: ws
   port: 8880
   region: 美国
@@ -24643,7 +24636,7 @@ proxies:
     headers:
       Host: ip.langmanshanxi.top
     path: /TelegramU0001F1E8U0001F1F3 @WangCai2 /?ed=2560
-- name: 美国_153
+- name: 美国_152
   network: ws
   port: 8880
   region: 美国
@@ -24658,7 +24651,7 @@ proxies:
     headers:
       Host: ip.langmanshanxi.top
     path: /TelegramU0001F1E8U0001F1F3 @WangCai2 /?ed=2560
-- name: 美国_154
+- name: 美国_153
   network: ws
   port: 8880
   region: 美国
@@ -24673,7 +24666,7 @@ proxies:
     headers:
       Host: jp.laoyoutiao.link
     path: /TelegramU0001F1E8U0001F1F3 @WangCai2 /?ed=2560
-- name: 美国_155
+- name: 美国_154
   network: ws
   port: 8880
   region: 美国
@@ -24688,7 +24681,7 @@ proxies:
     headers:
       Host: ip.langmanshanxi.top
     path: /TelegramU0001F1E8U0001F1F3 @WangCai2 /?ed=2560
-- name: 美国_156
+- name: 美国_155
   network: ws
   port: 8880
   region: 美国
@@ -24703,7 +24696,7 @@ proxies:
     headers:
       Host: ip.langmanshanxi.top
     path: /TelegramU0001F1E8U0001F1F3 @WangCai2 /?ed=2560
-- name: 美国_157
+- name: 美国_156
   network: ws
   port: 8880
   region: 美国
@@ -24718,7 +24711,7 @@ proxies:
     headers:
       Host: ip.langmanshanxi.top
     path: /TelegramU0001F1E8U0001F1F3 @WangCai2 /?ed=2560
-- name: 美国_158
+- name: 美国_157
   network: ws
   port: 8880
   region: 美国
@@ -24733,7 +24726,7 @@ proxies:
     headers:
       Host: ip.langmanshanxi.top
     path: /TelegramU0001F1E8U0001F1F3 @WangCai2 /?ed=2560
-- name: 美国_159
+- name: 美国_158
   network: ws
   port: 8880
   region: 美国
@@ -24748,7 +24741,7 @@ proxies:
     headers:
       Host: ip.langmanshanxi.top
     path: /TelegramU0001F1E8U0001F1F3 @WangCai2 /?ed=2560
-- name: 美国_160
+- name: 美国_159
   network: ws
   port: 8880
   region: 美国
@@ -24763,7 +24756,7 @@ proxies:
     headers:
       Host: kjgx.laoyoutiao.link
     path: /TelegramU0001F1E8U0001F1F3 @WangCai2 /?ed=2560
-- name: 美国_161
+- name: 美国_160
   network: ws
   port: 8880
   region: 美国
@@ -24778,7 +24771,7 @@ proxies:
     headers:
       Host: ip.langmanshanxi.top
     path: /TelegramU0001F1E8U0001F1F3 @WangCai2 /?ed=2560
-- name: 美国_162
+- name: 美国_161
   network: ws
   port: 8880
   region: 美国
@@ -24793,7 +24786,7 @@ proxies:
     headers:
       Host: jp.laoyoutiao.link
     path: /?ed=2560
-- name: 美国_163
+- name: 美国_162
   network: ws
   port: 8880
   region: 美国
@@ -24808,7 +24801,7 @@ proxies:
     headers:
       Host: ip.langmanshanxi.top
     path: /TelegramU0001F1E8U0001F1F3 @WangCai2 /?ed=2560
-- name: 美国_164
+- name: 美国_163
   network: ws
   port: 8880
   region: 美国
@@ -24823,7 +24816,7 @@ proxies:
     headers:
       Host: ip.langmanshanxi.top
     path: /TelegramU0001F1E8U0001F1F3 @WangCai2 /?ed=2560
-- name: 美国_165
+- name: 美国_164
   network: ws
   port: 8880
   region: 美国
@@ -24853,7 +24846,7 @@ proxies:
     headers:
       Host: cf.d3z.net
     path: /telegramU0001F1E8U0001F1F3 @wangcai2 /?ed=2560
-- name: 美国_166
+- name: 美国_165
   network: ws
   port: 8880
   region: 美国
@@ -24883,7 +24876,7 @@ proxies:
     headers:
       Host: ip.langmanshanxi.top
     path: /TelegramU0001F1E8U0001F1F3 @WangCai2 /?ed=2560
-- name: 美国_167
+- name: 美国_166
   network: ws
   port: 8880
   region: 美国
@@ -24898,7 +24891,7 @@ proxies:
     headers:
       Host: ip.langmanshanxi.top
     path: /TelegramU0001F1E8U0001F1F3 @WangCai2 /?ed=2560
-- name: 美国_168
+- name: 美国_167
   network: ws
   port: 8880
   region: 美国
@@ -24913,7 +24906,7 @@ proxies:
     headers:
       Host: kjgx.laoyoutiao.link
     path: /Telegram@WangCai2/?ed=2560
-- name: 美国_169
+- name: 美国_168
   network: ws
   port: 8880
   region: 美国
@@ -24928,7 +24921,7 @@ proxies:
     headers:
       Host: ip.langmanshanxi.top
     path: /TelegramU0001F1E8U0001F1F3 @WangCai2 /?ed=2560
-- name: 美国_170
+- name: 美国_169
   network: ws
   port: 8880
   region: 美国
@@ -24958,7 +24951,7 @@ proxies:
     headers:
       Host: yd.laoyoutiao.link
     path: /TelegramU0001F1E8U0001F1F3 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_171
+- name: 美国_170
   network: ws
   port: 8880
   region: 美国
@@ -24973,7 +24966,7 @@ proxies:
     headers:
       Host: ip.langmanshanxi.top
     path: /TelegramU0001F1E8U0001F1F3 @WangCai2 /?ed=2560
-- name: 美国_172
+- name: 美国_171
   network: ws
   port: 8880
   region: 美国
@@ -24988,7 +24981,7 @@ proxies:
     headers:
       Host: jp.laoyoutiao.link
     path: /?ed=2560
-- name: 美国_173
+- name: 美国_172
   network: ws
   port: 8880
   region: 美国
@@ -25018,7 +25011,7 @@ proxies:
     headers:
       Host: ip.langmanshanxi.top
     path: /TelegramU0001F1E8U0001F1F3 @WangCai2 /?ed=2560
-- name: 美国_174
+- name: 美国_173
   network: ws
   port: 8880
   region: 美国
@@ -25048,7 +25041,7 @@ proxies:
     headers:
       Host: cf.d3z.net
     path: /Telegram @WangCai2 /?ed=2560
-- name: 美国_175
+- name: 美国_174
   network: ws
   port: 80
   region: 美国
@@ -25078,7 +25071,7 @@ proxies:
     headers:
       Host: yd.laoyoutiao.link
     path: /TelegramU0001F1E8U0001F1F3 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_176
+- name: 美国_175
   network: ws
   port: 8880
   region: 美国
@@ -25108,7 +25101,7 @@ proxies:
     headers:
       Host: yd.laoyoutiao.link
     path: /TelegramU0001F1E8U0001F1F3 @MxlShare @WangCai2 /?ed=2560
-- name: 美国_177
+- name: 美国_176
   network: ws
   port: 8880
   region: 美国
@@ -25123,7 +25116,7 @@ proxies:
     headers:
       Host: jp.laoyoutiao.link
     path: /TelegramU0001F1E8U0001F1F3 @WangCai2 /?ed=2560
-- name: 美国_178
+- name: 美国_177
   network: ws
   port: 8880
   region: 美国
@@ -25138,7 +25131,7 @@ proxies:
     headers:
       Host: kjgx.laoyoutiao.link
     path: /Telegram@WangCai2/?ed=2560
-- name: 美国_179
+- name: 美国_178
   network: ws
   port: 8880
   region: 美国
@@ -25153,7 +25146,7 @@ proxies:
     headers:
       Host: ip.langmanshanxi.top
     path: /TelegramU0001F1E8U0001F1F3 @WangCai2 /?ed=2560
-- name: 美国_180
+- name: 美国_179
   network: ws
   port: 8880
   region: 美国
@@ -25168,7 +25161,7 @@ proxies:
     headers:
       Host: jp.laoyoutiao.link
     path: /?ed=2560
-- name: 美国_181
+- name: 美国_180
   network: ws
   port: 8880
   region: 美国
@@ -25183,7 +25176,7 @@ proxies:
     headers:
       Host: ip.langmanshanxi.top
     path: /TelegramU0001F1E8U0001F1F3 @WangCai2 /?ed=2560
-- name: 美国_182
+- name: 美国_181
   network: ws
   port: 8880
   region: 美国
@@ -25198,7 +25191,7 @@ proxies:
     headers:
       Host: ip.langmanshanxi.top
     path: /TelegramU0001F1E8U0001F1F3 @WangCai2 /?ed=2560
-- name: 美国_183
+- name: 美国_182
   network: ws
   port: 8880
   region: 美国
@@ -25228,7 +25221,7 @@ proxies:
     headers:
       Host: yd.laoyoutiao.link
     path: /TelegramU0001F1E8U0001F1F3
-- name: 美国_184
+- name: 美国_183
   network: ws
   port: 8880
   region: 美国
@@ -25243,7 +25236,7 @@ proxies:
     headers:
       Host: us.laoyoutiao.link
     path: /Telegram@WangCai2
-- name: 美国_185
+- name: 美国_184
   network: ws
   port: 8880
   region: 美国
@@ -25258,7 +25251,7 @@ proxies:
     headers:
       Host: jp.laoyoutiao.link
     path: /
-- name: 美国_186
+- name: 美国_185
   network: ws
   port: 8880
   region: 美国
@@ -25273,7 +25266,7 @@ proxies:
     headers:
       Host: cf.d3z.net
     path: /TelegramU0001F1E8U0001F1F3 @WangCai2
-- name: 美国_187
+- name: 美国_186
   network: ws
   port: 8880
   region: 美国
@@ -25288,7 +25281,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: /
-- name: 美国_188
+- name: 美国_187
   network: ws
   port: 8880
   region: 美国
@@ -25333,7 +25326,7 @@ proxies:
     headers:
       Host: jp.laoyoutiao.link
     path: /TelegramU0001F1E8U0001F1F3
-- name: 美国_189
+- name: 美国_188
   network: ws
   port: 8880
   region: 美国
@@ -25363,7 +25356,7 @@ proxies:
     headers:
       Host: yd.laoyoutiao.link
     path: /TelegramU0001F1E8U0001F1F3
-- name: 美国_190
+- name: 美国_189
   network: ws
   port: 8880
   region: 美国
@@ -25378,7 +25371,7 @@ proxies:
     headers:
       Host: ip.langmanshanxi.top
     path: /TelegramU0001F1E8U0001F1F3 @WangCai2
-- name: 美国_191
+- name: 美国_190
   network: ws
   port: 8880
   region: 美国
@@ -25393,7 +25386,7 @@ proxies:
     headers:
       Host: ip.langmanshanxi.top
     path: /Telegram🇨🇳
-- name: 美国_192
+- name: 美国_191
   network: ws
   port: 8880
   region: 美国
@@ -25408,7 +25401,7 @@ proxies:
     headers:
       Host: ip.langmanshanxi.top
     path: /TelegramU0001F1E8U0001F1F3 @WangCai2
-- name: 美国_193
+- name: 美国_192
   network: ws
   port: 8880
   region: 美国
@@ -25438,7 +25431,7 @@ proxies:
     headers:
       Host: yd.laoyoutiao.link
     path: /TelegramU0001F1E8U0001F1F3
-- name: 美国_194
+- name: 美国_193
   network: ws
   port: 8880
   region: 美国
@@ -25454,7 +25447,7 @@ proxies:
       Host: yg.bantony199.top
     path: /TelegramU0001F1E8U0001F1F3
 - client-fingerprint: chromefp=chrome
-  name: 美国_195
+  name: 美国_194
   network: ws
   port: 8880
   region: 美国
@@ -25469,7 +25462,7 @@ proxies:
     headers:
       Host: jp.laoyoutiao.link
     path: /TelegramU0001F1E8U0001F1F3 @WangCai2fp=chromefp=chrome
-- name: 美国_196
+- name: 美国_195
   network: ws
   port: 8880
   region: 美国
@@ -25484,7 +25477,7 @@ proxies:
     headers:
       Host: bitget1.asdasd.click
     path: /TelegramU0001F1E8U0001F1F3
-- name: 美国_197
+- name: 美国_196
   network: ws
   port: 8880
   region: 美国
@@ -25499,7 +25492,7 @@ proxies:
     headers:
       Host: ip.langmanshanxi.top
     path: /TelegramU0001F1E8U0001F1F3 @WangCai2
-- name: 美国_198
+- name: 美国_197
   network: ws
   port: 8880
   region: 美国
@@ -25514,7 +25507,7 @@ proxies:
     headers:
       Host: ip.langmanshanxi.top
     path: /TelegramU0001F1E8U0001F1F3
-- name: 美国_199
+- name: 美国_198
   network: ws
   port: 8880
   region: 美国
@@ -25544,7 +25537,7 @@ proxies:
     headers:
       Host: bitget1.asdasd.click
     path: /
-- name: 美国_200
+- name: 美国_199
   network: ws
   port: 8880
   region: 美国
@@ -25559,7 +25552,7 @@ proxies:
     headers:
       Host: ip.langmanshanxi.top
     path: /TelegramU0001F1E8U0001F1F3 @WangCai2
-- name: 美国_201
+- name: 美国_200
   network: ws
   port: 80
   region: 美国
@@ -25589,7 +25582,7 @@ proxies:
     headers:
       Host: jp.laoyoutiao.link
     path: /Telegram🇨🇳 @WangCai2
-- name: 美国_202
+- name: 美国_201
   network: ws
   port: 8880
   region: 美国
@@ -25604,7 +25597,7 @@ proxies:
     headers:
       Host: yg.bantony199.top
     path: /TelegramU0001F1E8U0001F1F3 @WangCai2
-- name: 美国_203
+- name: 美国_202
   network: ws
   port: 8880
   region: 美国
@@ -25634,7 +25627,7 @@ proxies:
     headers:
       Host: jp.laoyoutiao.link
     path: /
-- name: 美国_204
+- name: 美国_203
   network: ws
   port: 8880
   region: 美国
@@ -25649,7 +25642,7 @@ proxies:
     headers:
       Host: jp.laoyoutiao.link
     path: /TelegramU0001F1E8U0001F1F3 @WangCai2fp=chrome
-- name: 美国_205
+- name: 美国_204
   network: ws
   port: 8880
   region: 美国
@@ -25664,7 +25657,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
     path: /TelegramU0001F1E8U0001F1F3 @MxlShare @WangCai2
-- name: 美国_206
+- name: 美国_205
   network: ws
   port: 8880
   region: 美国
@@ -25679,7 +25672,7 @@ proxies:
     headers:
       Host: yg.bantony199.top
     path: /Telegram
-- name: 美国_207
+- name: 美国_206
   network: ws
   port: 8880
   region: 美国
@@ -25694,7 +25687,7 @@ proxies:
     headers:
       Host: jp.laoyoutiao.link
     path: /TelegramU0001F1E8U0001F1F3 @WangCai2
-- name: 美国_208
+- name: 美国_207
   network: ws
   port: 8880
   region: 美国
@@ -25709,7 +25702,7 @@ proxies:
     headers:
       Host: bitget1.asdasd.click
     path: /TelegramU0001F1E8U0001F1F3
-- name: 美国_209
+- name: 美国_208
   network: ws
   port: 8880
   region: 美国
@@ -25724,7 +25717,7 @@ proxies:
     headers:
       Host: jp.laoyoutiao.link
     path: /TelegramU0001F1E8U0001F1F3
-- name: 美国_210
+- name: 美国_209
   network: ws
   port: 8880
   region: 美国
@@ -26462,7 +26455,7 @@ proxies:
     path: /
 - alterId: 64
   cipher: auto
-  name: 美国_211
+  name: 美国_210
   port: 30002
   region: 美国
   server: 38.12.83.217
@@ -29129,7 +29122,7 @@ proxies:
     headers:
       Host: steep.skyfigure.top
     path: Telegram🇨🇳 @pgkj666 /?ed=2560
-- name: 美国_212
+- name: 美国_211
   network: ws
   port: 443
   region: 香港
@@ -29906,7 +29899,7 @@ proxies:
   type: trojan
 - client-fingerprint: chrome
   flow: xtls-rprx-vision
-  name: 美国_213
+  name: 美国_212
   port: 5847
   reality-opts:
     public-key: NpqF483u4nXH0cztdyX7VbkpbDEW0sO07cGya0WvCHM
@@ -29967,6 +29960,8 @@ proxies:
   tls: true
   type: vless
   uuid: 79091265-a298-4205-a559-d04ed045c38b
+- name: 直连
+  type: direct
 - client-fingerprint: chrome
   flow: xtls-rprx-vision
   name: 香港_57
@@ -29991,30 +29986,28 @@ proxies:
   tls: true
   type: vless
   uuid: 79091265-a298-4205-a559-d04ed045c38b
+- name: 美国_213
+  password: 20050105zhu
+  port: 51541
+  server: 204.44.110.129
+  skip-cert-verify: true
+  sni: www.bing.com
+  type: hysteria2
 - client-fingerprint: chrome
   flow: xtls-rprx-vision
-  name: 香港_59
-  port: 443
+  name: 美国_214
+  port: 5847
   reality-opts:
-    public-key: LwD_OY7bAjGraacyIogZzLhhcaAt8crNFTD4WZe_NWc
-    short-id: be9bd45f82f511c3
-  server: 5.102.124.76
-  servername: www.cloudflare.com
-  tls: true
-  type: vless
-  uuid: ac7532c3-b870-4153-84ff-d6c7bf8552d3
-- client-fingerprint: chrome
-  flow: xtls-rprx-vision
-  name: 香港_60
-  port: 8443
-  reality-opts:
-    public-key: POAZKZyD98MlYa3A5bSOayTPHdofqXynPAT1_QWEwjo
-    short-id: dfeff076987e2d34
-  server: 5.102.124.78
+    public-key: NpqF483u4nXH0cztdyX7VbkpbDEW0sO07cGya0WvCHM
+  server: 84.33.244.7
   servername: www.microsoft.com
+  skip-cert-verify: false
+  tfo: false
   tls: true
   type: vless
-  uuid: 79091265-a298-4205-a559-d04ed045c38b
+  udp: true
+  uuid: 67f0fefa-a922-428c-ac02-37e1d5aaed72
+  xudp: true
 - cipher: aes-256-gcm
   name: 🇭🇰 香港A01
   password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
@@ -30383,21 +30376,6 @@ proxies:
   type: vmess
   udp: true
   uuid: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-- client-fingerprint: chrome
-  flow: xtls-rprx-vision
-  name: 美国_214
-  port: 5847
-  reality-opts:
-    public-key: NpqF483u4nXH0cztdyX7VbkpbDEW0sO07cGya0WvCHM
-  server: 84.33.244.7
-  servername: www.microsoft.com
-  skip-cert-verify: false
-  tfo: false
-  tls: true
-  type: vless
-  udp: true
-  uuid: 67f0fefa-a922-428c-ac02-37e1d5aaed72
-  xudp: true
 - cipher: aes-256-gcm
   name: 🇭🇰 香港A01_02
   password: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
@@ -30766,7 +30744,29 @@ proxies:
   type: vmess
   udp: true
   uuid: 2b30da31-c82a-3c2a-bb35-e9e2bb142781
-- name: 直连
-  type: direct
+- client-fingerprint: chrome
+  flow: xtls-rprx-vision
+  name: 香港_59
+  port: 443
+  reality-opts:
+    public-key: LwD_OY7bAjGraacyIogZzLhhcaAt8crNFTD4WZe_NWc
+    short-id: be9bd45f82f511c3
+  server: 5.102.124.76
+  servername: www.cloudflare.com
+  tls: true
+  type: vless
+  uuid: ac7532c3-b870-4153-84ff-d6c7bf8552d3
+- client-fingerprint: chrome
+  flow: xtls-rprx-vision
+  name: 香港_60
+  port: 8443
+  reality-opts:
+    public-key: POAZKZyD98MlYa3A5bSOayTPHdofqXynPAT1_QWEwjo
+    short-id: dfeff076987e2d34
+  server: 5.102.124.78
+  servername: www.microsoft.com
+  tls: true
+  type: vless
+  uuid: 79091265-a298-4205-a559-d04ed045c38b
 - name: 直连_02
   type: direct
