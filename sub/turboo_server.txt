@@ -1,2 +1,2 @@
-vless://10776745-8a65-4b9e-be03-092009cee211@turboo-server.com.co:80?path=%2Fed%3D2560&security=none&encryption=none&type=ws#Turboo-Server
 vless://turboo-server@ip1-cloudflare.cimport.ir:8443?path=%2Fed%3D256&security=tls&alpn=h3%2Ch2%2Chttp%2F1.1&encryption=none&host=telegram.turbooo-server.com&fp=chrome&type=ws&sni=telegram.turbooo-server.com#Turboo_Server 🇳🇱 vless://turboo-server@telegram1.turbooo-server.com:43978?security=none&encryption=none&headerType=http&type=tcp#Turboo_Server
+vless://10776745-8a65-4b9e-be03-092009cee211@turboo-server.com.co:80?path=%2Fed%3D2560&security=none&encryption=none&type=ws#Turboo-Server
