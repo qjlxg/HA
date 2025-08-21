@@ -11,7 +11,7 @@ import hashlib
 import random
 import base64
 
-# --- 新增的去重逻辑函数：根据协议提取核心参数 ---
+# --- 修正后的去重逻辑函数：根据协议提取核心参数 ---
 def get_core_params(config):
     """
     根据协议类型提取核心参数，生成一个可哈希的字符串。
@@ -22,8 +22,8 @@ def get_core_params(config):
             # Vmess 特殊处理，需要 base64 解码并解析 JSON
             decoded_json = base64.b64decode(config[8:]).decode('utf-8')
             data = json.loads(decoded_json)
-            # 核心参数为 add, port, id
-            return f"vmess_{data.get('add')}:{data.get('port')}:{data.get('id')}"
+            # 修正：核心参数仅为 id，地址和端口可以变化
+            return f"vmess_{data.get('id')}"
         except Exception:
             return None
             
@@ -31,8 +31,9 @@ def get_core_params(config):
         # Vless 特殊处理，提取 uuid, address, port
         match = re.search(r'vless://([^@]+)@([^:]+):(\d+)', config)
         if match:
-            uuid, address, port = match.groups()
-            return f"vless_{uuid}@{address}:{port}"
+            uuid = match.group(1)
+            # 修正：核心参数仅为 uuid，地址和端口可以变化
+            return f"vless_{uuid}"
         return None
 
     elif config.startswith('trojan://'):
