@@ -1,4 +1,9 @@
-ss://ss://%50%61%72%73%61%73%68%6F%6E%61%6D-300@[2a01:4f8:1c1a:dc2b::1]:8888?security=none&encryption=none&headerType=none&type=tcp#@CUSTOMVPNSERVER
+ss://ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTpuUVNBUk9UaE9iTVcxbksyMnRoajZK@83.172.138.137:8443#@CUSTOMVPNSERVER
+
+
+Oman
+ss://ss://f278037e-ce36-4634-9b4d-fca93e345a35@104.16.191.195:80?path=%2Fvpn%3Fed%3D2560&security=none&encryption=none&host=barayeiran.mahiozonboroon.qzz.io&fp=random&type=ws&sni=barayeiran.mahiozonboroon.qzz.io#@CUSTOMVPNSERVER
+ss://ss://%50%61%72%73%61%73%68%6F%6E%61%6D-299@[2a01:4f8:1c1a:dc2b::1]:8888?security=none&encryption=none&headerType=none&type=tcp#@CUSTOMVPNSERVER
 
    ipv6
 
@@ -7,9 +12,29 @@ ss://ss://%50%61%72%73%61%73%68%6F%6E%61%6D-300@[2a01:4f8:1c1a:dc2b::1]:8888?sec
 
 
 @CUSTOMVPNSERVER
+ss://ss://%50%61%72%73%61%73%68%6F%6E%61%6D-298@185.146.173.39:8880?type=httpupgrade&path=%2F%50%61%72%73%61%73%68%6F%6E%61%6D-%50%61%72%73%61%73%68%6F%6E%61%6D-%50%61%72%73%61%73%68%6F%6E%61%6D%2F%3Fed%3D2056&host=De.%50%61%72%73%61%73%68%6F%6E%61%6D.CfD.&security=none#@CUSTOMVPNSERVER
+ss://ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTpVS0s1WFV2aklsT2tlVGJCQTBuZllo@2.56.207.150:8443#@CUSTOMVPNSERVER
+
+
+Garmeny
 ss://ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTpPVUVSaXl4dnJ6VEppNWtmdHg5ODBH@213.111.142.216:8443#@CUSTOMVPNSERVER
-ss://ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTpuUVNBUk9UaE9iTVcxbksyMnRoajZK@83.172.138.137:8443#@CUSTOMVPNSERVER
+
+
+ 
+  
+
+
+         
+
+
+@CUSTOMVPNSE
 ss://ss://fac1c66f-3ba3-4d24-8ae8-d6049d949898@51.38.64.196:443?security=reality&encryption=none&pbk=guQofANvA8Ia_uVwhRMriU09zudRTM_k7Nr498g161s&headerType=none&type=tcp&sni=yahoo.com&sid=a31a8d04622560#@CUSTOMVPNSERVER
+ss://ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTowdGNickgwR1FObUdKeEdNNWRrZURo@46.246.90.6:8443#@CUSTOMVPNSERVER
+ss://ss://%50%61%72%73%61%73%68%6F%6E%61%6D-300@91.99.16.244:443?mode=auto&path=%2F%50%61%72%73%61%73%68%6F%6E%61%6D-%50%61%72%73%61%73%68%6F%6E%61%6D-%50%61%72%73%61%73%68%6F%6E%61%6D-%50%61%72%73%61%73%68%6F%6E%61%6D-%50%61%72%73%61%73%68%6F%6E%61%6D-%50%61%72%73%61%73%68%6F%6E%61%6D&security=reality&encryption=none&pbk=sa5RHNjAAD3hYv4OU_YYU08gRUsmPs5JdZES5Xy3pn8&fp=chrome&spx=%2F&type=xhttp&sni=Google.com&sid=61e683d41fdb#@CUSTOMVPNSERVER
+ss://ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTpFSlFmRkZMMnJtMXNHMDVmUlIxN0ZN@154.205.147.68:8443#@CUSTOMVPNSERVER
+
+
+Swedan
 ss://ss://cac07fc1-9c38-42af-b26f-421eaca2cd65@94.183.158.13:1190?path=%2F%3Fed%3D2560&security=&encryption=none&type=ws#@CUSTOMVPNSERVER
 
  
@@ -21,20 +46,7 @@ ss://ss://cac07fc1-9c38-42af-b26f-421eaca2cd65@94.183.158.13:1190?path=%2F%3Fed%
   
 
 Ple
-ss://ss://004ba5d4-d448-4960-a762-e5190ab415f2@www.indyskipass.com:443?security=tls&alpn=http%2F1.1&encryption=none&host=albedoalbedochan.violetchaan.ip-ddns.com&fp=random&type=ws&sni=albedoalbedochan.violetchaan.ip-ddns.com#@CUSTOMVPNSERVER
-ss://ss://%50%61%72%73%61%73%68%6F%6E%61%6D-298@[2a01:4f8:1c1a:dc2b::1]:8888?security=none&encryption=none&headerType=none&type=tcp#@CUSTOMVPNSERVER
-
-   ipv6
-
- 
-  
-
-
-@CUSTOMVPNSERVER
-ss://ss://e4824193-4f54-453b-d037-88368e85ef0e@45.82.251.93:8880?mode=gun&security=none&encryption=none&type=grpc#@CUSTOMVPNSERVER
 ss://ss://30f2d443-af46-4dd6-83c9-b5e17299ebd2@www.bankonbasak.com:443?path=%2Fproxyip%3Dzani.yaemiko.ggff.net&security=tls&alpn=h2%2Chttp%2F1.1&encryption=none&host=carlotta.shoorekeeper.cloudns.org&fp=random&type=ws&sni=carlotta.shoorekeeper.cloudns.org#@CUSTOMVPNSERVER
-ss://ss://f278037e-ce36-4634-9b4d-fca93e345a35@104.16.191.195:80?path=%2Fvpn%3Fed%3D2560&security=none&encryption=none&host=barayeiran.mahiozonboroon.qzz.io&fp=random&type=ws&sni=barayeiran.mahiozonboroon.qzz.io#@CUSTOMVPNSERVER
-ss://ss://%50%61%72%73%61%73%68%6F%6E%61%6D-298@91.99.16.244:443?mode=auto&path=%2F%50%61%72%73%61%73%68%6F%6E%61%6D-%50%61%72%73%61%73%68%6F%6E%61%6D-%50%61%72%73%61%73%68%6F%6E%61%6D-%50%61%72%73%61%73%68%6F%6E%61%6D-%50%61%72%73%61%73%68%6F%6E%61%6D-%50%61%72%73%61%73%68%6F%6E%61%6D&security=reality&encryption=none&pbk=sa5RHNjAAD3hYv4OU_YYU08gRUsmPs5JdZES5Xy3pn8&fp=chrome&spx=%2F&type=xhttp&sni=Google.com&sid=61e683d41fdb#@CUSTOMVPNSERVER
 ss://ss://a6580107-b1e0-4057-9f47-ac7f28de457a@91.107.254.202:8443?type=xhttp&path=%2F@CUSTOMVPNSERVER---@CUSTOMVPNSERVER------@CUSTOMVPNSERVER------@CUSTOMVPNSERVER------@CUSTOMVPNSERVER------@CUSTOMVPNSERVER------@CUSTOMVPNSERVER------@CUSTOMVPNSERVER------@CUSTOMVPNSERVER------@CUSTOMVPNSERVER---&host=firebase.googleapis.com&mode=auto&security=reality&pbk=4Xu_jqRD-mbhEwNyntlz_6zU4VhsE0-QWCxAbhEL_H4&fp=chrome&sni=firebase.googleapis.com&sid=7ab467&spx=%2F#@CUSTOMVPNSERVER
 
   Apn     ipv4    
@@ -45,30 +57,5 @@ ss://ss://a6580107-b1e0-4057-9f47-ac7f28de457a@91.107.254.202:8443?type=xhttp&pa
 
 
 @CUS
-ss://ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTpFSlFmRkZMMnJtMXNHMDVmUlIxN0ZN@154.205.147.68:8443#@CUSTOMVPNSERVER
-
-
-Swedan
-ss://ss://%50%61%72%73%61%73%68%6F%6E%61%6D-299@[2a01:4f8:1c1a:dc2b::1]:8888?security=none&encryption=none&headerType=none&type=tcp#@CUSTOMVPNSERVER
-
-   ipv6
-
- 
-  
-
-
-@CUSTOMVPNSERVER
-ss://ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTpVS0s1WFV2aklsT2tlVGJCQTBuZllo@2.56.207.150:8443#@CUSTOMVPNSERVER
-
-
-Garmeny
-ss://ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTowdGNickgwR1FObUdKeEdNNWRrZURo@46.246.90.6:8443#@CUSTOMVPNSERVER
-
-
-UnitedStates
-ss://ss://%50%61%72%73%61%73%68%6F%6E%61%6D-300@185.146.173.39:8880?type=httpupgrade&path=%2F%50%61%72%73%61%73%68%6F%6E%61%6D-%50%61%72%73%61%73%68%6F%6E%61%6D-%50%61%72%73%61%73%68%6F%6E%61%6D%2F%3Fed%3D2056&host=De.%50%61%72%73%61%73%68%6F%6E%61%6D.CfD.&security=none#@CUSTOMVPNSERVER
-ss://ss://f278037e-ce36-4634-9b4d-fca93e345a35@104.16.228.91:80?path=%2Fvpn%3Fed%3D2560&security=none&encryption=none&host=barayeiran.mahiozonboroon.qzz.io&fp=random&type=ws&sni=barayeiran.mahiozonboroon.qzz.io#@CUSTOMVPNSERVER
-ss://ss://%50%61%72%73%61%73%68%6F%6E%61%6D-299@185.146.173.39:8880?type=httpupgrade&path=%2F%50%61%72%73%61%73%68%6F%6E%61%6D-%50%61%72%73%61%73%68%6F%6E%61%6D-%50%61%72%73%61%73%68%6F%6E%61%6D%2F%3Fed%3D2056&host=De.%50%61%72%73%61%73%68%6F%6E%61%6D.CfD.&security=none#@CUSTOMVPNSERVER
-ss://ss://%50%61%72%73%61%73%68%6F%6E%61%6D-300@91.99.16.244:443?mode=auto&path=%2F%50%61%72%73%61%73%68%6F%6E%61%6D-%50%61%72%73%61%73%68%6F%6E%61%6D-%50%61%72%73%61%73%68%6F%6E%61%6D-%50%61%72%73%61%73%68%6F%6E%61%6D-%50%61%72%73%61%73%68%6F%6E%61%6D-%50%61%72%73%61%73%68%6F%6E%61%6D&security=reality&encryption=none&pbk=sa5RHNjAAD3hYv4OU_YYU08gRUsmPs5JdZES5Xy3pn8&fp=chrome&spx=%2F&type=xhttp&sni=Google.com&sid=61e683d41fdb#@CUSTOMVPNSERVER
-ss://ss://%50%61%72%73%61%73%68%6F%6E%61%6D-299@91.99.16.244:443?mode=auto&path=%2F%50%61%72%73%61%73%68%6F%6E%61%6D-%50%61%72%73%61%73%68%6F%6E%61%6D-%50%61%72%73%61%73%68%6F%6E%61%6D-%50%61%72%73%61%73%68%6F%6E%61%6D-%50%61%72%73%61%73%68%6F%6E%61%6D-%50%61%72%73%61%73%68%6F%6E%61%6D&security=reality&encryption=none&pbk=sa5RHNjAAD3hYv4OU_YYU08gRUsmPs5JdZES5Xy3pn8&fp=chrome&spx=%2F&type=xhttp&sni=Google.com&sid=61e683d41fdb#@CUSTOMVPNSERVER
-ss://ss://%50%61%72%73%61%73%68%6F%6E%61%6D-298@185.146.173.39:8880?type=httpupgrade&path=%2F%50%61%72%73%61%73%68%6F%6E%61%6D-%50%61%72%73%61%73%68%6F%6E%61%6D-%50%61%72%73%61%73%68%6F%6E%61%6D%2F%3Fed%3D2056&host=De.%50%61%72%73%61%73%68%6F%6E%61%6D.CfD.&security=none#@CUSTOMVPNSERVER
+ss://ss://e4824193-4f54-453b-d037-88368e85ef0e@45.82.251.93:8880?mode=gun&security=none&encryption=none&type=grpc#@CUSTOMVPNSERVER
+ss://ss://004ba5d4-d448-4960-a762-e5190ab415f2@www.indyskipass.com:443?security=tls&alpn=http%2F1.1&encryption=none&host=albedoalbedochan.violetchaan.ip-ddns.com&fp=random&type=ws&sni=albedoalbedochan.violetchaan.ip-ddns.com#@CUSTOMVPNSERVER
