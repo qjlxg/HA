@@ -11,7 +11,7 @@ import hashlib
 import random
 import base64
 
-async def get_v2ray_links(session, url, max_pages=1, max_retries=3):
+async def get_v2ray_links(session, url, max_pages=1, max_retries=1):
     """从指定 Telegram 频道 URL 获取代理配置（每频道最多爬取 max_pages 页）。"""
     v2ray_configs = []
     current_url = url
@@ -22,7 +22,7 @@ async def get_v2ray_links(session, url, max_pages=1, max_retries=3):
         retry_count = 0
         while retry_count <= max_retries:
             try:
-                await asyncio.sleep(random.uniform(1, 3) * retry_count)  # 添加随机延迟以避免触发速率限制
+                await asyncio.sleep(random.uniform(1, 5) * retry_count)  # 添加随机延迟以避免触发速率限制
                 async with session.get(current_url, timeout=15) as response:
                     if response.status == 200:
                         content = await response.text()
