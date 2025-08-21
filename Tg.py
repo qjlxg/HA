@@ -11,58 +11,133 @@ import hashlib
 import random
 import base64
 
-# --- 修正后的去重逻辑函数：根据协议提取核心参数 ---
+# --- 优化后的去重逻辑函数：根据协议提取核心参数 ---
 def get_core_params(config):
     """
     根据协议类型提取核心参数，生成一个可哈希的字符串。
-    这样可以忽略节点名称和非核心参数进行去重。
+    优化：忽略地址和端口，仅用凭证（如UUID、password）去重，适合CDN多入口场景。
+    新增：增强hysteria2://和ssr://的解析，处理非标准格式。
     """
+    # 先规范化配置：去除#后名称，并清理多余query参数（仅保留核心）
+    config_no_name = config.split('#')[0].strip()
+    if '?' in config_no_name:
+        base, query = config_no_name.rsplit('?', 1)
+        essential_query = '&'.join([p for p in query.split('&') if p.startswith(('path=', 'encryption=', 'security='))])
+        config_no_name = base + ('?' + essential_query if essential_query else '')
+
     if config.startswith('vmess://'):
         try:
-            # Vmess 特殊处理，需要 base64 解码并解析 JSON
-            decoded_json = base64.b64decode(config[8:]).decode('utf-8')
+            decoded_json = base64.b64decode(config[8:].split('#')[0]).decode('utf-8')
             data = json.loads(decoded_json)
-            # 修正：核心参数仅为 id，地址和端口可以变化
             return f"vmess_{data.get('id')}"
-        except Exception:
-            return None
+        except Exception as e:
+            print(f"解析 vmess 配置失败: {config}, 错误: {e}")
+            return config_no_name
             
     elif config.startswith('vless://'):
-        # Vless 特殊处理，提取 uuid, address, port
-        match = re.search(r'vless://([^@]+)@([^:]+):(\d+)', config)
+        match = re.search(r'vless://([^@]+)@', config_no_name)
         if match:
             uuid = match.group(1)
-            # 修正：核心参数仅为 uuid，地址和端口可以变化
             return f"vless_{uuid}"
-        return None
+        print(f"解析 vless 配置失败: {config}")
+        return config_no_name
 
     elif config.startswith('trojan://'):
-        # Trojan 特殊处理，提取 password, address, port
-        match = re.search(r'trojan://([^@]+)@([^:]+):(\d+)', config)
+        match = re.search(r'trojan://([^@]+)@', config_no_name)
         if match:
-            password, address, port = match.groups()
-            return f"trojan_{password}@{address}:{port}"
-        return None
+            password = match.group(1)
+            return f"trojan_{password}"
+        print(f"解析 trojan 配置失败: {config}")
+        return config_no_name
         
     elif config.startswith('ss://'):
-        # SS 特殊处理，提取 method, password, address, port
         try:
-            match = re.search(r'ss://([a-zA-Z0-9+/=]+)@([^:]+):(\d+)', config)
+            match = re.search(r'ss://([a-zA-Z0-9+/=]+)@', config_no_name)
             if match:
                 encoded_info = match.group(1)
-                address = match.group(2)
-                port = match.group(3)
-                
                 decoded_info = base64.b64decode(encoded_info).decode('utf-8')
                 method, password = decoded_info.split(':', 1)
-                
-                return f"ss_{method}:{password}@{address}:{port}"
-        except Exception:
-            pass
-        return None
+                return f"ss_{method}:{password}"
+            print(f"解析 ss 配置失败: {config}")
+        except Exception as e:
+            print(f"解析 ss 配置失败: {config}, 错误: {e}")
+        return config_no_name
     
-    # 对于其他协议，保留原始去重逻辑（忽略 # 后内容）
-    return config.split('#')[0]
+    elif config.startswith('ssr://'):
+        try:
+            decoded = base64.b64decode(config[6:].split('/')[0]).decode('utf-8')
+            parts = decoded.split(':')
+            if len(parts) >= 6:
+                method = parts[3]
+                password = parts[5]
+                return f"ssr_{method}:{password}"
+            print(f"解析 ssr 配置失败: {config}")
+        except Exception as e:
+            print(f"解析 ssr 配置失败: {config}, 错误: {e}")
+        return config_no_name
+
+    elif config.startswith('hysteria2://'):
+        match = re.search(r'hysteria2://([^@]+)@', config_no_name)
+        if match:
+            auth = match.group(1)
+            return f"hysteria2_{auth}"
+        # 处理非标准格式（如缺少@）
+        if config_no_name.startswith('hysteria2://') and len(config_no_name) > len('hysteria2://'):
+            auth = config_no_name[len('hysteria2://'):]
+            if auth:
+                return f"hysteria2_{auth}"
+        print(f"解析 hysteria2 配置失败: {config}")
+        return config_no_name
+    
+    return config_no_name
+
+# --- 优化后的验证函数 ---
+def is_valid_config(config):
+    """验证代理配置是否有效，增强对 ssr 和 hysteria2 的检查，允许部分非标准格式。"""
+    try:
+        if not config.strip() or config.startswith('#'):
+            return False
+        protocol_match = re.match(r'^(hysteria2://|vmess://|trojan://|ss://|ssr://|vless://)', config)
+        if not protocol_match:
+            return False
+        
+        protocol = protocol_match.group(1)
+        if protocol in ['vless://', 'trojan://']:
+            if not re.search(r'@\S+?:\d+\?', config):
+                print(f"配置验证失败: {config}, 缺少@address:port?结构")
+                return False
+        elif protocol == 'ss://':
+            if not re.search(r'[^@]+@[^:]+:\d+', config):
+                print(f"配置验证失败: {config}, 缺少method:password@address:port结构")
+                return False
+        elif protocol == 'vmess://':
+            try:
+                decoded = json.loads(base64.b64decode(config.split('://')[1].split('#')[0]).decode('utf-8'))
+                if not all(k in decoded for k in ['add', 'port', 'id', 'net']):
+                    print(f"配置验证失败: {config}, vmess缺少必要字段")
+                    return False
+            except Exception as e:
+                print(f"配置验证失败: {config}, vmess解析错误: {e}")
+                return False
+        elif protocol == 'ssr://':
+            try:
+                decoded = base64.b64decode(config[6:].split('/')[0]).decode('utf-8')
+                parts = decoded.split(':')
+                if len(parts) < 6:
+                    print(f"配置验证失败: {config}, ssr缺少必要字段")
+                    return False
+            except Exception as e:
+                print(f"配置验证失败: {config}, ssr解析错误: {e}")
+                return False
+        elif protocol == 'hysteria2://':
+            # 放宽验证，允许缺少@但有auth的情况
+            if not (re.search(r'@\S+?:\d+', config) or len(config.split('://')[1].split('#')[0]) > 0):
+                print(f"配置验证失败: {config}, hysteria2缺少auth或@address:port")
+                return False
+        return True
+    except Exception as e:
+        print(f"配置验证失败: {config}, 错误: {e}")
+        return False
 
 async def get_v2ray_links(session, url, max_pages=1, max_retries=3):
     """从指定 Telegram 频道 URL 获取代理配置（每频道最多爬取 max_pages 页）。"""
@@ -75,7 +150,7 @@ async def get_v2ray_links(session, url, max_pages=1, max_retries=3):
         retry_count = 0
         while retry_count <= max_retries:
             try:
-                await asyncio.sleep(random.uniform(1, 3) * retry_count)  # 添加随机延迟以避免触发速率限制
+                await asyncio.sleep(random.uniform(1, 3) * retry_count)
                 async with session.get(current_url, timeout=15) as response:
                     if response.status == 200:
                         content = await response.text()
@@ -103,7 +178,10 @@ async def get_v2ray_links(session, url, max_pages=1, max_retries=3):
                                     for match in matches:
                                         config = match[0] + (match[1] if match[1] else '')
                                         if len(config) > len('vmess://') + 5:
-                                            page_configs.append(config.strip())
+                                            if is_valid_config(config):
+                                                page_configs.append(config.strip())
+                                            else:
+                                                print(f"爬取时跳过无效配置: {config}")
                     
                         for tag_list in tags_to_check:
                             for tag in tag_list:
@@ -112,11 +190,13 @@ async def get_v2ray_links(session, url, max_pages=1, max_retries=3):
                                     for config_line in text.split('\n'):
                                         stripped_config = config_line.strip()
                                         if stripped_config.startswith(('hysteria2://', 'vmess://', 'trojan://', 'ss://', 'ssr://', 'vless://')):
-                                            if len(config) > len('vmess://') + 5:
+                                            if len(stripped_config) > len('vmess://') + 5 and is_valid_config(stripped_config):
                                                 page_configs.append(stripped_config)
+                                            else:
+                                                print(f"爬取时跳过无效配置: {stripped_config}")
                     
                         page_configs = list(set(page_configs))
-                        print(f"从 {current_url} (第 {page_count + 1} 页，状态码 {response.status}) 获取到 {len(page_configs)} 个配置")
+                        print(f"从 {current_url} (第 {page_count + 1} 页，状态码 {response.status}) 获取到 {len(page_configs)} 个有效配置")
                         v2ray_configs.extend(page_configs)
 
                         if not page_configs:
@@ -195,34 +275,11 @@ async def fetch_all_configs(sources, max_pages=3):
                 configs = [c for c in results[i] if isinstance(c, str) and is_valid_config(c)]
                 all_configs.update(configs)
                 result_pairs.append((source_name, configs))
+                print(f"来源 {source_name} 获取到 {len(configs)} 个有效配置")
             else:
                 result_pairs.append((source_name, []))
+                print(f"来源 {source_name} 未获取到配置（或爬取时发生错误）")
         return result_pairs
-
-def is_valid_config(config):
-    """验证代理配置是否有效。"""
-    try:
-        if not config.strip() or config.startswith('#'):
-            return False
-        protocol_match = re.match(r'^(hysteria2://|vmess://|trojan://|ss://|ssr://|vless://)', config)
-        if not protocol_match:
-            return False
-        if protocol_match.group(1) in ['vless://', 'trojan://']:
-            if not re.search(r'@\S+?:\d+\?', config):
-                return False
-        if protocol_match.group(1) == 'ss://':
-            if not re.search(r'[^@]+@[^:]+:\d+', config):
-                return False
-        if protocol_match.group(1) == 'vmess://':
-            try:
-                decoded = json.loads(base64.b64decode(config.split('://')[1]).decode('utf-8'))
-                if not all(k in decoded for k in ['add', 'port', 'id', 'net']):
-                    return False
-            except:
-                return False
-        return True
-    except:
-        return False
 
 def clean_node_name(name):
     """清理节点名称，移除 emoji 和复杂字符，限制长度。"""
@@ -275,6 +332,7 @@ def save_configs_by_channel(configs, source_name):
     seen_hashes = set()
     for config in configs:
         if not is_valid_config(config):
+            print(f"保存时跳过无效配置: {config}")
             continue
         
         core_params = get_core_params(config)
@@ -310,7 +368,6 @@ def merge_configs():
     seen_hashes = set()
     current_time_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    # 改进的正则匹配模式，用于从任何文本中提取所有配置，包括跨行和多配置在一行的情况
     protocol_pattern = r'(hysteria2://|vmess://|trojan://|ss://|ssr://|vless://)[^\s#]*(#[^\s#]*)?'
 
     try:
@@ -321,32 +378,31 @@ def merge_configs():
                     file_path = os.path.join(config_folder, filename)
                     try:
                         with open(file_path, 'r', encoding='utf-8') as infile:
-                            # 更改：读取整个文件内容
                             content = infile.read()
-                            # 更改：使用正则表达式查找所有匹配项
-                            matches = re.findall(protocol_pattern, content)
+                            matches = re.findall(protocol_pattern, content, re.MULTILINE)
                             all_configs_from_file = [match[0] + match[1] for match in matches]
+                            valid_configs = [config for config in all_configs_from_file if is_valid_config(config)]
+                            print(f"文件 {file_path} 包含 {len(all_configs_from_file)} 个配置，其中 {len(valid_configs)} 个有效")
 
-                            for config in all_configs_from_file:
-                                if is_valid_config(config):
-                                    core_params = get_core_params(config)
-                                    if core_params:
-                                        config_hash = hashlib.md5(core_params.encode('utf-8')).hexdigest()
-                                    else:
-                                        config_no_name = config.split('#')[0] if '#' in config else config
-                                        config_hash = hashlib.md5(config_no_name.encode('utf-8')).hexdigest()
+                            for config in valid_configs:
+                                core_params = get_core_params(config)
+                                if core_params:
+                                    config_hash = hashlib.md5(core_params.encode('utf-8')).hexdigest()
+                                else:
+                                    config_no_name = config.split('#')[0] if '#' in config else config
+                                    config_hash = hashlib.md5(config_no_name.encode('utf-8')).hexdigest()
 
-                                    if config_hash not in seen_hashes:
-                                        if '#' in config:
-                                            config_body, node_name = config.rsplit('#', 1)
-                                            cleaned_name = clean_node_name(node_name)
-                                            config = f"{config_body}#{cleaned_name}"
-                                        outfile.write(config + '\n')
-                                        seen_hashes.add(config_hash)
+                                if config_hash not in seen_hashes:
+                                    if '#' in config:
+                                        config_body, node_name = config.rsplit('#', 1)
+                                        cleaned_name = clean_node_name(node_name)
+                                        config = f"{config_body}#{cleaned_name}"
+                                    outfile.write(config + '\n')
+                                    seen_hashes.add(config_hash)
                             outfile.write('\n')
                     except Exception as e:
                         print(f"读取文件 {file_path} 失败: {e}")
-            print(f"成功生成合并文件: {merged_file}")
+            print(f"成功生成合并文件: {merged_file}, 共保存 {len(seen_hashes)} 个唯一配置")
     except Exception as e:
         print(f"生成合并文件 {merged_file} 失败: {e}")
 
@@ -394,7 +450,7 @@ def split_configs_by_protocol():
                                 print(f"写入协议文件 {protocol_files[protocol_prefix]} 失败: {e}")
                             break
                 else:
-                    print(f"跳过无效配置: {line_stripped}")
+                    print(f"拆分时跳过无效配置: {line_stripped}")
         print("成功按协议拆分配置")
     except Exception as e:
         print(f"读取合并文件 {merged_file} 或拆分协议失败: {e}")
