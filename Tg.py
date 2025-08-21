@@ -11,58 +11,90 @@ import hashlib
 import random
 import base64
 
-# --- 修正后的去重逻辑函数：根据协议提取核心参数 ---
+# --- 优化后的去重逻辑函数：根据协议提取核心参数 ---
 def get_core_params(config):
     """
     根据协议类型提取核心参数，生成一个可哈希的字符串。
     这样可以忽略节点名称和非核心参数进行去重。
+    优化：忽略地址和端口，仅用凭证（如UUID、password）去重，适合CDN多入口场景。
+    新增：处理ssr://和hysteria2://协议。
     """
+    # 先规范化配置：去除#后名称，并清理多余query参数（仅保留核心）
+    config_no_name = config.split('#')[0].strip()
+    if '?' in config_no_name:
+        base, query = config_no_name.rsplit('?', 1)
+        # 保留必要query（如path, security），但忽略可变如sni, host（因为CDN变）
+        essential_query = '&'.join([p for p in query.split('&') if p.startswith(('path=', 'encryption=', 'security='))])
+        config_no_name = base + ('?' + essential_query if essential_query else '')
+
     if config.startswith('vmess://'):
         try:
             # Vmess 特殊处理，需要 base64 解码并解析 JSON
             decoded_json = base64.b64decode(config[8:]).decode('utf-8')
             data = json.loads(decoded_json)
-            # 修正：核心参数仅为 id，地址和端口可以变化
+            # 优化：核心参数仅为 id，忽略地址和端口
             return f"vmess_{data.get('id')}"
         except Exception:
             return None
             
     elif config.startswith('vless://'):
-        # Vless 特殊处理，提取 uuid, address, port
-        match = re.search(r'vless://([^@]+)@([^:]+):(\d+)', config)
+        # Vless 特殊处理，提取 uuid
+        match = re.search(r'vless://([^@]+)@', config_no_name)
         if match:
             uuid = match.group(1)
-            # 修正：核心参数仅为 uuid，地址和端口可以变化
+            # 优化：核心参数仅为 uuid，忽略地址和端口
             return f"vless_{uuid}"
         return None
 
     elif config.startswith('trojan://'):
-        # Trojan 特殊处理，提取 password, address, port
-        match = re.search(r'trojan://([^@]+)@([^:]+):(\d+)', config)
+        # Trojan 特殊处理，提取 password
+        match = re.search(r'trojan://([^@]+)@', config_no_name)
         if match:
-            password, address, port = match.groups()
-            return f"trojan_{password}@{address}:{port}"
+            password = match.group(1)
+            # 优化：核心参数仅为 password，忽略地址和端口（CDN常见复用）
+            return f"trojan_{password}"
         return None
         
     elif config.startswith('ss://'):
-        # SS 特殊处理，提取 method, password, address, port
+        # SS 特殊处理，提取 method, password
         try:
-            match = re.search(r'ss://([a-zA-Z0-9+/=]+)@([^:]+):(\d+)', config)
+            match = re.search(r'ss://([a-zA-Z0-9+/=]+)@', config_no_name)
             if match:
                 encoded_info = match.group(1)
-                address = match.group(2)
-                port = match.group(3)
-                
                 decoded_info = base64.b64decode(encoded_info).decode('utf-8')
                 method, password = decoded_info.split(':', 1)
-                
-                return f"ss_{method}:{password}@{address}:{port}"
+                # 优化：核心参数仅为 method:password，忽略地址和端口
+                return f"ss_{method}:{password}"
         except Exception:
             pass
         return None
+
+    elif config.startswith('ssr://'):
+        # 新增 SSR 处理：base64解码，提取 method:password
+        try:
+            decoded = base64.b64decode(config[6:].split('/')[0]).decode('utf-8')
+            parts = decoded.split(':')
+            if len(parts) >= 6:
+                method = parts[3]
+                password = parts[5]
+                # 优化：核心参数仅为 method:password，忽略其他
+                return f"ssr_{method}:{password}"
+        except Exception:
+            return None
+
+    elif config.startswith('hysteria2://'):
+        # 新增 Hysteria2 处理：提取 auth (password)
+        match = re.search(r'hysteria2://([^@]+)@', config_no_name)
+        if match:
+            auth = match.group(1)
+            # 优化：核心参数仅为 auth，忽略地址和端口
+            return f"hysteria2_{auth}"
+        return None
     
-    # 对于其他协议，保留原始去重逻辑（忽略 # 后内容）
-    return config.split('#')[0]
+    # 对于其他协议，保留原始去重逻辑（忽略 # 后内容），但用规范化后的
+    return config_no_name
+
+# --- 以下是您的原始代码，仅修改了去重部分 ---
 
 async def get_v2ray_links(session, url, max_pages=1, max_retries=3):
     """从指定 Telegram 频道 URL 获取代理配置（每频道最多爬取 max_pages 页）。"""
@@ -81,6 +113,7 @@ async def get_v2ray_links(session, url, max_pages=1, max_retries=3):
                         content = await response.text()
                         soup = BeautifulSoup(content, 'html.parser')
 
+                        # 查找可能包含代理配置的标签
                         tags_to_check = (
                             soup.find_all('div', class_='tgme_widget_message_text'),
                             soup.find_all('div', class_='tgme_widget_message_text js-message_text before_footer'),
@@ -277,12 +310,14 @@ def save_configs_by_channel(configs, source_name):
         if not is_valid_config(config):
             continue
         
+        # --- 优化后的去重逻辑开始（使用规范化后的core_params） ---
         core_params = get_core_params(config)
         if core_params:
             config_hash = hashlib.md5(core_params.encode('utf-8')).hexdigest()
         else:
             config_no_name = config.split('#')[0] if '#' in config else config
             config_hash = hashlib.md5(config_no_name.encode('utf-8')).hexdigest()
+        # --- 优化后的去重逻辑结束 ---
 
         if config_hash not in seen_hashes:
             if '#' in config:
@@ -310,7 +345,7 @@ def merge_configs():
     seen_hashes = set()
     current_time_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    # 改进的正则匹配模式，用于从任何文本中提取所有配置，包括跨行和多配置在一行的情况
+    # 新增的正则匹配模式，用于从一行中提取所有配置
     protocol_pattern = r'(hysteria2://|vmess://|trojan://|ss://|ssr://|vless://)[^\s#]*(#[^\s#]*)?'
 
     try:
@@ -321,14 +356,14 @@ def merge_configs():
                     file_path = os.path.join(config_folder, filename)
                     try:
                         with open(file_path, 'r', encoding='utf-8') as infile:
-                            # 更改：读取整个文件内容
+                            # 更改：读取整个文件内容，然后用正则匹配所有配置
                             content = infile.read()
-                            # 更改：使用正则表达式查找所有匹配项
-                            matches = re.findall(protocol_pattern, content)
+                            matches = re.findall(protocol_pattern, content, re.MULTILINE)
                             all_configs_from_file = [match[0] + match[1] for match in matches]
 
                             for config in all_configs_from_file:
                                 if is_valid_config(config):
+                                    # 优化：使用规范化后的core_params去重
                                     core_params = get_core_params(config)
                                     if core_params:
                                         config_hash = hashlib.md5(core_params.encode('utf-8')).hexdigest()
