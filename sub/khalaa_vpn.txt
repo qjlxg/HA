@@ -1,3 +1,3 @@
 vless://e52d6cb4-f689-478d-cb79-9b76ab2fa4d9@mxdrug32.lmxtinl.com:2087?type=grpc&serviceName=&authority=&security=tls&fp=chrome&alpn=http%2F1.1%2Ch2&allowInsecure=1&sni=mxdrug32.lmxtinl.com#CDNkhalaa_vpn-khalaa_tm
 vless://b69f3e77-cdf1-4b84-851a-4b7ebede5433@Swedeeen.mehrdadsadaf.com:1300?mode=gun&security=reality&encryption=none&pbk=AZSptdvlWvvmKWEDTY56UsIcnTP8nGCafvPEQOozrxw&fp=chrome&type=grpc&serviceName=1300vless&sni=rosbalt.ru&sid=765e8e700426816c#yaqyy
-vless://d678027b-b43a-4c32-872d-e3a571d1c52b@mxdrug32.shahabservices.com:2087?type=grpc&serviceName=&security=tls&fp=chrome&alpn=http%2F1.1%2Ch2&allowInsecure=1&sni=mxdrug32.shahabservices.com#khalaa_vpn-khalaa_tm
+vless://d678027b-b43a-4c32-872d-e3a571d1c52b@mxdrug32.shahabservices.com:2087?type=grpc&serviceName=&security=tls&fp=chrome&alpn=http%2F1.1%2Ch2&allowInsecure=1&sni=mxdrug32.shahabservices.com#khalaa_vpn-khalaa_tm             @khalaa_tm
