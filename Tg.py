@@ -315,6 +315,9 @@ def merge_configs():
     seen_hashes = set()
     current_time_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
+    # 新增的正则匹配模式，用于从一行中提取所有配置
+    protocol_pattern = r'(hysteria2://|vmess://|trojan://|ss://|ssr://|vless://)[^\s#]*(#[^\s#]*)?'
+
     try:
         with open(merged_file, 'w', encoding='utf-8') as outfile:
             outfile.write(f"# 自动生成的合并配置，生成时间：{current_time_str}\n\n")
@@ -323,24 +326,26 @@ def merge_configs():
                     file_path = os.path.join(config_folder, filename)
                     try:
                         with open(file_path, 'r', encoding='utf-8') as infile:
-                            for line in infile:
-                                if line.strip() and not line.strip().startswith('#') and is_valid_config(line.strip()):
-                                    
-                                    # --- 优化后的去重逻辑开始 ---
-                                    core_params = get_core_params(line.strip())
+                            # 更改：读取整个文件内容，然后用正则匹配所有配置
+                            content = infile.read()
+                            matches = re.findall(protocol_pattern, content, re.MULTILINE)
+                            all_configs_from_file = [match[0] + match[1] for match in matches]
+
+                            for config in all_configs_from_file:
+                                if is_valid_config(config):
+                                    core_params = get_core_params(config)
                                     if core_params:
                                         config_hash = hashlib.md5(core_params.encode('utf-8')).hexdigest()
                                     else:
-                                        config_no_name = line.split('#')[0] if '#' in line else line
+                                        config_no_name = config.split('#')[0] if '#' in config else config
                                         config_hash = hashlib.md5(config_no_name.encode('utf-8')).hexdigest()
-                                    # --- 优化后的去重逻辑结束 ---
-                                    
+
                                     if config_hash not in seen_hashes:
-                                        if '#' in line:
-                                            config_body, node_name = line.rsplit('#', 1)
+                                        if '#' in config:
+                                            config_body, node_name = config.rsplit('#', 1)
                                             cleaned_name = clean_node_name(node_name)
-                                            line = f"{config_body}#{cleaned_name}\n"
-                                        outfile.write(line)
+                                            config = f"{config_body}#{cleaned_name}"
+                                        outfile.write(config + '\n')
                                         seen_hashes.add(config_hash)
                             outfile.write('\n')
                     except Exception as e:
