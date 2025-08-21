@@ -1,536 +1,534 @@
 proxies:
 - cipher: chacha20-ietf-poly1305
-  name: 香港
-  password: 2c9e4a85-cb7c-4798-8c0f-4990b81c9762
-  port: 22800
-  server: 156.224.77.215
-  type: ss
-  udp: true
-- alterId: 0
-  cipher: auto
-  name: 🇫🇷 法国1-1E
-  port: 45072
-  server: haa.dashuai.cyou
-  tls: false
-  type: vmess
-  udp: true
-  uuid: c2793e04-12af-4454-a7e4-5734ed54f5a2
-- name: 美国
-  password: c116e3e0-23d7-45a6-8ced-a2eab62f184f
-  port: 1443
-  server: 144.34.178.66
-  skip-cert-verify: true
-  sni: node4.yuntongclouds.com
-  type: trojan
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 中国
-  password: 1029cdb4-5c4e-4025-a5a9-930d6b7d4ec1
-  port: 36555
-  server: 120.233.44.206
-  type: ss
-  udp: true
-- alterId: 0
-  cipher: auto
-  name: 🇯🇵 日本NO.1-1D
-  port: 45056
-  server: haa.dashuai.cyou
-  tls: false
-  type: vmess
-  udp: true
-  uuid: 1aaced2b-d5fb-4495-8912-b914e23a9ec8
-- cipher: chacha20-ietf-poly1305
-  name: 🇸🇬 SS 新加坡 1-1U
-  password: f47de4eb-80ec-4074-8ff1-70efe31eebe8
-  port: 28063
-  server: ldu.izenny.com
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
   name: 爱尔兰
-  password: a32c12ba-57a0-468f-a295-729be9656e04
+  password: 9ebf12ac-7556-4fa0-932a-489524ad4745
   port: 22800
   server: 107.175.187.181
   type: ss
   udp: true
 - alterId: 0
   cipher: auto
-  name: 🇭🇰 香港NO.2-1A
-  port: 45051
-  server: xdd.dashuai.cyou
+  name: 🇰🇷 韩国 专线NO1-1D
+  port: 45076
+  server: haa.dashuai.cyou
   tls: false
   type: vmess
   udp: true
-  uuid: 6e988e49-d092-435e-b417-55e64c57bdcc
+  uuid: 1785a1a3-0ab8-4d81-866a-1c2c65d82fd8
 - cipher: chacha20-ietf-poly1305
-  name: 香港_02
-  password: 2bc39aa3-87b4-4b34-92fa-798ebeb8c876
+  name: 爱尔兰_02
+  password: ba65485b-eda5-4b55-8d80-3e59934cd9f6
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇰🇷 SS 韩国1-1F
+  password: e83f44d1-38cb-4602-92f1-7f8e01844963
+  port: 41431
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇹🇼 SS 台湾2-1-1H
+  password: b8aa4314-06ae-4e05-834f-e7c3c5828178
+  port: 43076
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港
+  password: 98d2ba5e-bc56-4680-b900-42b8e1434023
   port: 22800
   server: 156.224.77.215
   type: ss
   udp: true
 - cipher: chacha20-ietf-poly1305
-  name: 🇮🇱 SS 以色列1-1I
-  password: b7a005e8-235f-45cd-bdb7-816ee01ac437
-  port: 18140
-  server: ldu.izenny.com
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 🇭🇰 VIP 香港01-1A
-  password: d4ea8228-f8ac-4316-b966-bbeefc359f9e
-  port: 23764
-  server: tun.tuzivip.pw
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 🇭🇰 VIP 香港01-1C
-  password: a474993e-3a3e-4801-aeb4-9f1086845af9
-  port: 23764
-  server: tun.tuzivip.pw
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 🇰🇷 SS 韩国1-1S
-  password: 6f32e509-c4a4-4f80-97a7-ed52a7f78b79
-  port: 41431
+  name: 🇮🇳 SS 印度1-1E
+  password: 1f0af50c-0c53-4858-9f9f-b6e3d308f573
+  port: 34411
   server: ldu.izenny.com
   type: ss
   udp: true
 - alterId: 0
   cipher: auto
-  name: 🇬🇧 英国2-1H
+  name: 🇬🇧 英国2-1J
   port: 45067
   server: xdd.dashuai.cyou
   tls: false
   type: vmess
   udp: true
-  uuid: b60e299c-9828-4074-a544-416843e26fcc
+  uuid: bd58d1e2-a1ca-4208-895d-689f6ab76e86
+- cipher: chacha20-ietf-poly1305
+  name: 🇹🇷 SS 土耳其1-1L
+  password: 131aab4c-66a9-4e86-b6a5-3e2f4d2af777
+  port: 33744
+  server: ldu.izenny.com
+  type: ss
+  udp: true
 - alterId: 0
   cipher: auto
-  name: 🇨🇦 加拿大2-1L
-  port: 45065
-  server: xdd.dashuai.cyou
+  name: 🇹🇼 3x备用专线台湾1-1Q
+  port: 50050
+  server: xh.dashuai.cyou
   tls: false
   type: vmess
   udp: true
-  uuid: 2885f19f-468b-42e5-adc4-52661b7b9b3b
-- cipher: chacha20-ietf-poly1305
-  name: 🇲🇾 SS 马来西亚1-1K
-  password: eacd33e2-a1e0-426c-b317-a8553afae51b
-  port: 13828
-  server: ldu.izenny.com
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 🇸🇬 VIP 新加坡01-1B
-  password: 006e94ce-56d8-43de-8e9f-3b53df53aa20
-  port: 27004
-  server: tun.tuzivip.pw
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 🇭🇰 SS 香港1-1B
-  password: 23ea06fc-d735-460c-9375-75f9f9f867af
-  port: 34061
-  server: ldu.izenny.com
-  type: ss
-  udp: true
+  uuid: 1f94c159-16c2-488c-a08e-0379154e41ae
 - alterId: 0
   cipher: auto
-  name: 🇺🇸 美国NO.1-1C
-  port: 45052
-  server: haa.dashuai.cyou
-  tls: false
-  type: vmess
-  udp: true
-  uuid: 46f35fd7-0d7f-484e-a25f-3c9ef9b8643b
-- cipher: chacha20-ietf-poly1305
-  name: 🇯🇵 SS 日本3-1G
-  password: 0405c8d3-97d3-4fcc-bee4-3e4d43ac879e
-  port: 57927
-  server: ldu.izenny.com
-  type: ss
-  udp: true
-- alterId: 0
-  cipher: auto
-  name: 🇬🇧 英国1-1O
+  name: 🇬🇧 英国1-1A
   port: 45066
   server: haa.dashuai.cyou
   tls: false
   type: vmess
   udp: true
-  uuid: 171c1c61-57a0-4fdd-a140-2eb6e985292c
+  uuid: 79fa9bb4-62d7-4def-b08a-3843dbebdbc5
 - cipher: chacha20-ietf-poly1305
-  name: 🇯🇵 SS 日本1-1Q
-  password: c4b14a01-2135-43be-91d9-7b7bbc00a207
-  port: 10589
-  server: ldu.izenny.com
-  type: ss
-  udp: true
-- name: 美国_02
-  password: 67ba92fb-741d-4629-8466-c36fa397bd60
-  port: 1443
-  server: 144.34.178.66
-  skip-cert-verify: true
-  sni: node4.yuntongclouds.com
-  type: trojan
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 🇰🇷 VIP 韩国01-1D
-  password: 844042c7-87ec-472c-bdc6-a17e78b75c33
-  port: 16087
-  server: tun.tuzivip.pw
-  type: ss
-  udp: true
-- alterId: 0
-  cipher: auto
-  name: 🇹🇼 台湾2-1B
-  port: 45077
-  server: xdd.dashuai.cyou
-  tls: false
-  type: vmess
-  udp: true
-  uuid: e4a1182f-ef59-42fb-9885-9c47f0a30bab
-- cipher: chacha20-ietf-poly1305
-  name: 🇹🇷 SS 土耳其1-1R
-  password: d18e0e9c-674e-4c5d-a56b-6a1f8b88c4e4
-  port: 33744
+  name: 🇸🇬 SS 新加坡 1-1J
+  password: 6ec742be-7619-4451-9048-bcb946ec5a44
+  port: 28063
   server: ldu.izenny.com
   type: ss
   udp: true
 - cipher: chacha20-ietf-poly1305
-  name: 🇹🇼 SS 台湾1-1C
-  password: c2fb4241-9f89-4640-a2e8-bea493afd3ce
-  port: 18148
-  server: ldu.izenny.com
-  type: ss
-  udp: true
-- alterId: 0
-  cipher: auto
-  name: 🇨🇦 加拿大2-1N
-  port: 45065
-  server: xdd.dashuai.cyou
-  tls: false
-  type: vmess
-  udp: true
-  uuid: b4e97e59-b09b-4026-a5e8-7308f10e4ec3
-- cipher: chacha20-ietf-poly1305
-  name: 🇺🇸 SS 美国1-1P
-  password: 548e1d4a-69bd-40b1-8a04-3889ebb118e1
-  port: 46197
-  server: ldu.izenny.com
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 🇹🇭 SS 泰国1-1V
-  password: a699be5d-3967-4896-b11e-f7663cd1d79a
-  port: 39037
-  server: ldu.izenny.com
-  type: ss
-  udp: true
-- alterId: 0
-  cipher: auto
-  name: 🇦🇺 澳大利亚原生1-1F
-  port: 45062
-  server: haa.dashuai.cyou
-  tls: false
-  type: vmess
-  udp: true
-  uuid: fab42ece-1a27-4386-925c-54a589256462
-- alterId: 0
-  cipher: auto
-  name: 🇫🇷 法国2-1I
-  port: 45071
-  server: xdd.dashuai.cyou
-  tls: false
-  type: vmess
-  udp: true
-  uuid: ad85c3a1-4dfc-42ba-9186-39959c246489
-- alterId: 0
-  cipher: auto
-  name: 🇨🇦 加拿大2-1G
-  port: 45065
-  server: xdd.dashuai.cyou
-  tls: false
-  type: vmess
-  udp: true
-  uuid: 6c5276d0-2e31-4852-ad5d-fed1ef720751
-- cipher: chacha20-ietf-poly1305
-  name: 🇹🇼 SS 台湾1-1W
-  password: e8d49d4c-a615-4700-aa0c-107bb70c208a
-  port: 18148
-  server: ldu.izenny.com
-  type: ss
-  udp: true
-- alterId: 0
-  cipher: auto
-  name: 🇯🇵 日本NO.1-1K
-  port: 45056
-  server: haa.dashuai.cyou
-  tls: false
-  type: vmess
-  udp: true
-  uuid: db618a94-ac3f-4388-85b8-5a052b39e4a4
-- alterId: 0
-  cipher: auto
-  name: 🇹🇼 台湾2-1M
-  port: 45077
-  server: xdd.dashuai.cyou
-  tls: false
-  type: vmess
-  udp: true
-  uuid: df6f2914-9ec3-40be-945c-d4b1f673e573
-- cipher: chacha20-ietf-poly1305
-  name: 爱尔兰_02
-  password: 1a7c2266-16ad-4cff-bcdd-f3430a2ace43
-  port: 22800
-  server: 107.175.187.181
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 香港_03
-  password: 8a14961c-6c5a-4501-865f-20c66fb80d5c
-  port: 22800
-  server: 156.224.77.215
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 🇭🇰 SS 香港1-1H
-  password: 8e47adf2-a8b6-450c-9c89-18eff77608e8
-  port: 34061
-  server: ldu.izenny.com
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 香港_04
-  password: 348b0557-9c6d-410f-8d4e-39e14e16f3fb
-  port: 22800
-  server: 156.224.77.215
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 🇺🇸 SS 美国2-1-1F
-  password: 3485fd91-a930-4a45-813a-32b74b6c0646
-  port: 12589
-  server: ldu.izenny.com
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 🇲🇾 SS 马来西亚1-1M
-  password: d4641d04-0e9b-4934-9b0a-a096b1ec24dd
+  name: 🇲🇾 SS 马来西亚1-1B
+  password: fbbc1f84-42af-4a3e-97bd-1b215b0e145c
   port: 13828
   server: ldu.izenny.com
   type: ss
   udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 爱尔兰_03
-  password: d9e0c455-bdfb-4f76-bbf1-77cb3efa9b96
-  port: 22800
-  server: 107.175.187.181
-  type: ss
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 台湾1-1O
+  port: 45078
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
   udp: true
+  uuid: a08b6ca3-3af4-491e-9aaa-c8e4eff269aa
 - cipher: chacha20-ietf-poly1305
-  name: 爱尔兰_04
-  password: 9333a63d-b6e8-49a3-b977-124cc0fbc39c
-  port: 22800
-  server: 107.175.187.181
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 中国_02
-  password: a10bc980-997a-45e3-9231-4f24ffd576fb
-  port: 39524
-  server: 120.233.44.206
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 香港_05
-  password: 5080252e-f677-41fe-98c5-0c9a8e9992b4
+  name: 香港_02
+  password: 6dc123d3-f045-4b26-b868-b18b8fc551b4
   port: 22800
   server: 156.224.77.215
   type: ss
   udp: true
 - cipher: chacha20-ietf-poly1305
-  name: 中国_03
-  password: dac2db63-7399-4926-8549-90f5044d3575
-  port: 39622
-  server: 120.233.44.206
-  type: ss
-  udp: true
-- name: 台湾
-  password: be86ea7a-eeb7-493f-9845-bf24b9002a1d
-  port: 443
-  server: 118.232.199.14
-  skip-cert-verify: true
-  sni: node3.yuntongclouds.com
-  type: trojan
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 🇯🇵 SS 日本1-1D
-  password: 1b3a0e9f-5a1c-45ed-bc45-a47e5e18b32b
-  port: 10589
-  server: ldu.izenny.com
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 爱尔兰_05
-  password: d05fd77b-5b75-4d89-8b2b-a5bc624990ed
-  port: 22800
-  server: 107.175.187.181
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 🇰🇷 SS 韩国1-1J
-  password: 0e3fb040-0881-4adc-bf15-fca604058a79
-  port: 41431
-  server: ldu.izenny.com
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 🇺🇸 SS 美国2-1-1E
-  password: 06e49028-ad03-4c70-9ffa-d3163672291f
-  port: 12589
-  server: ldu.izenny.com
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 爱尔兰_06
-  password: ee708dd7-2c21-4a35-a3c7-e1c905e52b04
-  port: 22800
-  server: 107.175.187.181
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 爱尔兰_07
-  password: 5da58364-7e7c-42b2-bbc3-f063921fc643
-  port: 22800
-  server: 107.175.187.181
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 爱尔兰_08
-  password: bdc7dd08-cb96-4924-9034-59465f61402d
-  port: 22800
-  server: 107.175.187.181
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 爱尔兰_09
-  password: d6292cee-8207-40aa-a874-be7158158037
-  port: 22800
-  server: 107.175.187.181
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 🇯🇵 SS 日本1-1A
-  password: 8189cb44-a822-4b36-9463-dd9bdabbe5f8
-  port: 10589
-  server: ldu.izenny.com
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 🇮🇸 SS 冰岛1-1O
-  password: 561747a2-a341-4265-95d4-7c9b67f030cf
-  port: 18244
-  server: ldu.izenny.com
-  type: ss
-  udp: true
-- alterId: 0
-  cipher: auto
-  name: 🇫🇷 法国2-1J
-  port: 45071
-  server: xdd.dashuai.cyou
-  tls: false
-  type: vmess
-  udp: true
-  uuid: 73b5384c-2877-4f05-a4b0-7768a576dab8
-- cipher: chacha20-ietf-poly1305
-  name: 🇺🇸 SS 美国2-1-1T
-  password: ae7d55a1-ca4a-46e6-b975-2e317305c7d7
-  port: 12589
-  server: ldu.izenny.com
-  type: ss
-  udp: true
-- name: 台湾_02
-  password: e7161252-ed2c-4078-91fa-f988f6bee696
-  port: 443
-  server: 103.137.63.77
-  skip-cert-verify: true
-  sni: node1.yuntongclouds.com
-  type: trojan
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 香港_06
+  name: 香港_03
   password: 832144bc-1520-4886-9f63-431f9de85d5f
   port: 22800
   server: 156.224.77.215
   type: ss
   udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇯🇵 日本-V6|02-1C
+  port: 22307
+  server: greenchais2.668918.xyz
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 12708cc5-7f31-4c6f-83b2-4c9071b6b447
 - cipher: chacha20-ietf-poly1305
-  name: 香港_07
+  name: 🇮🇳 SS 印度1-1I
+  password: bbbf8b72-36b2-42b5-b76a-62bd771c86b5
+  port: 34411
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 台湾2-1K
+  port: 45077
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: a7a9e289-91d5-4266-90bc-c470fbe23b04
+- cipher: chacha20-ietf-poly1305
+  name: 🇲🇽 SS 墨西哥1-1N
+  password: ad586b47-4254-48f2-bba7-563b8136e420
+  port: 20149
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇦🇺 澳大利亚原生1-1G
+  port: 45062
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 9388d622-78b6-4252-b217-cbd897e5a9be
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国1-1F
+  port: 45072
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: f33e1e97-2aca-40e3-9ebe-a5eefbc3d3f5
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_03
   password: fc95eae1-0eca-42a7-85c9-b46060f7f4a7
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- name: 🇺🇸 美国01-1A
+  password: c1b0a312-4566-4559-bf9d-f078700b556e
+  port: 10026
+  server: vir732.189.ovh
+  skip-cert-verify: true
+  sni: vir732.189.ovh
+  type: trojan
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_04
+  password: 2441e1a2-84dc-4da9-9832-dde0a4b3ec63
   port: 22800
   server: 156.224.77.215
   type: ss
   udp: true
 - cipher: chacha20-ietf-poly1305
-  name: 🇮🇸 SS 冰岛1-1L
-  password: bab70bae-ed38-4287-a96a-dc2c850a0ed9
-  port: 18244
-  server: ldu.izenny.com
+  name: 爱尔兰_04
+  password: 92f932ba-acfa-470a-8539-f7091197231f
+  port: 22800
+  server: 107.175.187.181
   type: ss
   udp: true
 - cipher: chacha20-ietf-poly1305
-  name: 🇯🇵 SS 日本3-1N
-  password: 8aa04e10-fd83-40b9-a22d-4800094a0fe4
-  port: 57927
+  name: 🇭🇰 VIP 香港01-1H
+  password: f9067570-3737-466f-a680-5acaf175f58b
+  port: 23764
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 3x备用专线台湾1-1I
+  port: 50050
+  server: xh.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 77f224d6-079b-482b-8181-c1192826ea7e
+- cipher: chacha20-ietf-poly1305
+  name: 🇺🇸 SS 美国2-1-1C
+  password: caffa496-7397-45f7-8869-6fab6dc1d97c
+  port: 12589
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇮🇳 印度2-1N
+  port: 45073
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 9d4d86c1-4fab-4714-b97b-12d45430feb0
+- alterId: 0
+  cipher: auto
+  name: 🇰🇷 韩国 专线NO1-1S
+  port: 45076
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: fb73770f-ee66-4cb3-8305-8325c5522629
+- cipher: chacha20-ietf-poly1305
+  name: 香港_05
+  password: 242d00ec-7534-46b9-9e1d-64060dbc8ae9
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_06
+  password: 1e0bab49-7449-4240-b60b-8abd0873b217
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇲🇽 SS 墨西哥1-1D
+  password: b6e7946c-3f04-464f-a039-b891f1b9258c
+  port: 20149
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇳🇱 荷兰-V6|02 0.5x-1A
+  port: 22306
+  server: naran2.616626.xyz
+  tls: false
+  type: vmess
+  udp: true
+  uuid: c1b0a312-4566-4559-bf9d-f078700b556e
+- alterId: 0
+  cipher: auto
+  name: 🇨🇦 加拿大1-1P
+  port: 45064
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 134a9724-0e12-4a86-9986-cbc4d825884b
+- alterId: 0
+  cipher: auto
+  name: 🇩🇪 德国-V6|01 0.5x-1B
+  port: 22305
+  server: netcp1.616626.xyz
+  tls: false
+  type: vmess
+  udp: true
+  uuid: f4f95330-b554-48f7-b6a0-be4c820c6fe3
+- cipher: chacha20-ietf-poly1305
+  name: 🇰🇷 VIP 韩国01-1G
+  password: f6adbfef-b6d1-4215-9017-de7af4ed89d6
+  port: 16087
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_07
+  password: d6292cee-8207-40aa-a874-be7158158037
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 中国
+  password: 16ac5322-8781-4c83-b549-b6a89f2eca21
+  port: 33922
+  server: 120.233.44.206
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国-1E
+  port: 19901
+  server: fg.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 0a825db3-ab36-47d0-a513-84ff1a81b110
+- name: 0.5x-1E
+  password: 12708cc5-7f31-4c6f-83b2-4c9071b6b447
+  port: 10027
+  server: nara.189.ovh
+  skip-cert-verify: true
+  sni: nara.189.ovh
+  type: trojan
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇮🇳 SS 印度1-1G
+  password: b8821320-e962-4830-a789-0e93d7ece8b1
+  port: 34411
   server: ldu.izenny.com
   type: ss
   udp: true
 - cipher: chacha20-ietf-poly1305
   name: 香港_08
-  password: 75270b00-e2c1-405c-9879-0ac2fa69dad7
+  password: 96c7ff0d-2b51-44ca-8294-59580dd09fd2
   port: 22800
   server: 156.224.77.215
   type: ss
   udp: true
 - cipher: chacha20-ietf-poly1305
   name: 香港_09
-  password: e7168677-8d72-46bb-b84e-f9e3bc8c782e
+  password: d3e98142-04e6-48f3-b904-fc329ab0315a
   port: 22800
   server: 156.224.77.215
   type: ss
   udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 香港_10
-  password: f19763ef-ef0e-4a50-8731-78dbe83829ca
-  port: 22800
-  server: 156.224.77.215
-  type: ss
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸 美国NO.1-1L
+  port: 45052
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
   udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 香港_11
-  password: 2441e1a2-84dc-4da9-9832-dde0a4b3ec63
-  port: 22800
-  server: 156.224.77.215
-  type: ss
-  udp: true
-- name: 🇭🇰 2号专线 香港HK 53-1C
-  password: a10bc980-997a-45e3-9231-4f24ffd576fb
-  port: 39765
-  server: cdntwa.xiaomispeed.com
+  uuid: 440e4f64-01ca-4ca5-880b-433cb36581f7
+- name: 台湾
+  password: 911bd5b8-0934-4513-952f-4e2a6e92c8f7
+  port: 443
+  server: 118.232.199.14
   skip-cert-verify: true
-  sni: cdntwa.xiaomispeed.com
+  sni: node3.yuntongclouds.com
   type: trojan
   udp: true
+- cipher: aes-256-gcm
+  name: 美国
+  password: 3760df1c-60d9-4b26-849a-f823e19d100b
+  port: 10009
+  server: 154.19.242.140
+  type: ss
+  udp: true
 - cipher: chacha20-ietf-poly1305
-  name: 爱尔兰_10
-  password: b88579f7-593e-40e3-a6ea-86d4958bc209
+  name: 🇸🇬 VIP 新加坡01-1D
+  password: 3aecce39-a743-41e2-b2f3-8d442844a87e
+  port: 27004
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇫🇷 法国1-1M
+  port: 45072
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: dd444a6e-2473-42d4-b8c6-dd662d5c15b7
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_05
+  password: 016884b8-4b9a-429b-8591-10545a849637
   port: 22800
   server: 107.175.187.181
   type: ss
   udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_06
+  password: c9d1739b-12f3-4fd9-a5fb-146c3ebdb9e0
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_07
+  password: 00f8be75-2b41-43fd-a3bd-6d3144411403
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇰🇷 VIP 韩国01-1P
+  password: 135416c7-97d4-4062-963b-3feaffa74579
+  port: 16087
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 台湾2-1C
+  port: 45077
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: d048a212-3a70-440a-ac3b-0beaa2015c31
+- cipher: chacha20-ietf-poly1305
+  name: 🇹🇭 SS 泰国1-1O
+  password: 99d67869-c162-483f-b2c3-d2cf4fe20a2d
+  port: 39037
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_08
+  password: f3bdaac5-2e63-4eae-9a5a-2eb1d9c31189
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_09
+  password: 0044bca0-17f8-4feb-bd6a-c9e0d7529db3
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_10
+  password: c76fb28c-73ed-4fa3-85ec-876aa1d6bd2d
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼 台湾1-1H
+  port: 45078
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 768b4e0e-84f6-4907-8104-d5b2a8876627
+- cipher: chacha20-ietf-poly1305
+  name: 香港_10
+  password: 48e924ac-9f6e-4021-a1f4-e0da0e1cef88
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇰🇷 SS 韩国1-1A
+  password: 47aff623-64db-4e6d-8305-25b6c19cbdd4
+  port: 41431
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_11
+  password: 3608d610-5632-45d8-a73b-c7b298ea4031
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_12
+  password: 19198d2a-659e-422e-af4e-06b68feb630c
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- name: 🇯🇵 日本03-1B
+  password: f4f95330-b554-48f7-b6a0-be4c820c6fe3
+  port: 10389
+  server: cloud.yueyun.de
+  skip-cert-verify: true
+  sni: cloud.yueyun.de
+  type: trojan
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_13
+  password: e055a04f-0b42-4676-9769-4f6ff0391924
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_14
+  password: bdc7dd08-cb96-4924-9034-59465f61402d
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- name: 台湾_02
+  password: 98be21fe-8032-4e26-969a-429976ba7da2
+  port: 443
+  server: 118.232.199.14
+  skip-cert-verify: true
+  sni: node3.yuntongclouds.com
+  type: trojan
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇨🇦 加拿大1-1R
+  port: 45064
+  server: haa.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: a4c225ba-de6e-40a3-8480-9d3d7d54ad11
 - cipher: chacha20-ietf-poly1305
   name: 爱尔兰_11
   password: a17353a3-b697-4280-b622-584501151089
@@ -539,70 +537,460 @@ proxies:
   type: ss
   udp: true
 - cipher: chacha20-ietf-poly1305
-  name: 香港_12
-  password: 06acee52-f744-430a-a6db-22cc35f9969d
+  name: 爱尔兰_12
+  password: 2f42b4b5-cba3-4f16-8ec6-13b78b0fab0d
   port: 22800
-  server: 156.224.77.215
+  server: 107.175.187.181
   type: ss
   udp: true
+- name: 🇭🇰 2号专线 香港HK 244-1A
+  password: 229b7e56-6fa3-469a-813a-abc131e24171
+  port: 38522
+  server: cdntwa.xiaomispeed.com
+  skip-cert-verify: true
+  sni: cdntwa.xiaomispeed.com
+  type: trojan
+  udp: true
 - cipher: chacha20-ietf-poly1305
-  name: 爱尔兰_12
-  password: 5020a27c-acf7-4a66-8377-711f38f07bc3
+  name: 爱尔兰_13
+  password: 1184f713-2357-45e7-80c5-0cf5976fd7db
   port: 22800
   server: 107.175.187.181
   type: ss
   udp: true
 - cipher: chacha20-ietf-poly1305
-  name: 爱尔兰_13
+  name: 香港_15
+  password: de47ff8d-9986-4de2-8519-2e6f04f52997
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- name: 🇭🇰 2号专线 香港HK 244-1B
+  password: 16ac5322-8781-4c83-b549-b6a89f2eca21
+  port: 38522
+  server: cdntwa.xiaomispeed.com
+  skip-cert-verify: true
+  sni: cdntwa.xiaomispeed.com
+  type: trojan
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_14
+  password: 9cc739d2-d4d7-4404-a7a8-19338a9855a0
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_16
+  password: 240bffee-6fc8-44bd-b34f-e3945e684693
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_17
+  password: aa26f7f8-e537-4182-a33b-9f7a9b92a68a
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇰🇷 VIP 韩国01-1B
+  password: c0e151f4-a899-4dd9-9923-48b1db383ba0
+  port: 16087
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇭🇰 VIP 香港01-1N
+  password: 871965b3-11fb-4d87-adae-ff8d3cad3971
+  port: 23764
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇸🇬 VIP 新加坡01-1J
+  password: 4eb12991-2eab-46eb-8870-e3232ea29d18
+  port: 27004
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_15
+  password: d6864708-1cb0-40ed-afda-85ab48e746c0
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 中国_02
+  password: 229b7e56-6fa3-469a-813a-abc131e24171
+  port: 33922
+  server: 120.233.44.206
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸 美国NO.2-1B
+  port: 45053
+  server: xdd.dashuai.cyou
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 1f98232a-de95-4855-8be8-ae37e9eaac32
+- cipher: chacha20-ietf-poly1305
+  name: 🇲🇽 SS 墨西哥1-1M
+  password: 7b7e35b2-d564-4b5b-b470-e2a97eaf5caa
+  port: 20149
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_16
+  password: f19763ef-ef0e-4a50-8731-78dbe83829ca
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_18
+  password: 8f6c0296-a8c8-4d0c-8dd8-943ad663581a
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_19
+  password: d05fd77b-5b75-4d89-8b2b-a5bc624990ed
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_17
+  password: 2c9e4a85-cb7c-4798-8c0f-4990b81c9762
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_20
+  password: e3f052fe-0812-414d-9bfe-5853b583701f
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇰🇷 VIP 韩国01-1I
+  password: 88758705-4f4a-4d5b-9fad-31757eed5609
+  port: 16087
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_18
+  password: 0e2ce6f4-4ed6-4a46-844e-92a329abb0b5
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_21
+  password: 6ba34edc-e17b-423c-93a7-5b837e08d56e
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_22
+  password: beed2cf4-30ce-46e2-b08f-b4a8e48a0d8b
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_19
+  password: e90e48bd-0784-4b1f-ae37-4ef39d1650b4
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇮🇱 SS 以色列1-1K
+  password: d6439b4a-ec91-448e-88e2-63199832e04c
+  port: 18140
+  server: ldu.izenny.com
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_23
+  password: 3f58d91d-db49-451d-9859-d095db44af44
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_20
+  password: ec29dff6-f4a3-442f-8a67-f1db51cffaa7
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇰🇷 VIP 韩国01-1L
+  password: 50c5f8fe-11ea-420a-9dcf-fdc54035bf54
+  port: 16087
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇯🇵 VIP 日本01-1F
+  password: 37fd4519-7057-4730-a592-75236cf72c1c
+  port: 47296
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_24
+  password: 1a7c2266-16ad-4cff-bcdd-f3430a2ace43
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇺🇸 VIP 美国01-1M
+  password: e65624c1-067d-4bd1-8ff9-c59fe30e9ed3
+  port: 14848
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_21
+  password: 24c8e692-41f4-42e2-bfba-06846d80c1ad
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_25
+  password: 0eeccfb4-df3b-4282-aed5-6a68e93644c5
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_26
+  password: a32c12ba-57a0-468f-a295-729be9656e04
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_27
+  password: 1fecb82a-c25e-4a63-96ce-06456b5ed035
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇺🇸 VIP 美国01-1C
+  password: e3868b41-5028-479a-b49a-3620b74a5d19
+  port: 14848
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_28
+  password: 9aeb46dc-84b7-4a07-b149-8549f4339acb
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- name: 台湾_03
+  password: 7e1dfa7c-bffc-4a2b-ae5d-acdd96853398
+  port: 443
+  server: 103.137.63.77
+  skip-cert-verify: true
+  sni: node1.yuntongclouds.com
+  type: trojan
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_29
+  password: 2255742d-7908-48b7-8bae-84941e1616c3
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_30
+  password: 5020a27c-acf7-4a66-8377-711f38f07bc3
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_31
+  password: ee708dd7-2c21-4a35-a3c7-e1c905e52b04
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_32
+  password: 54dc3279-a1b4-4fd0-a539-8aac2a031442
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_33
+  password: 5da58364-7e7c-42b2-bbc3-f063921fc643
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_22
+  password: bcca0d43-d2dc-45d1-8e4c-b339616c8b9b
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇰🇷 VIP 韩国01-1A
+  password: 2f53b714-bfbb-4b7e-88bf-7fc1cacedd0f
+  port: 16087
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_34
+  password: 933cf894-c7fb-49c8-b562-59a4c56aac3c
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_23
+  password: b88579f7-593e-40e3-a6ea-86d4958bc209
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_24
+  password: 54d3b9eb-8674-4645-8a28-6c9d46dd78e1
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇺🇸 VIP 美国01-1K
+  password: 3b00d0c5-6160-4a65-89d0-07695b748b00
+  port: 14848
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_35
+  password: 8a14961c-6c5a-4501-865f-20c66fb80d5c
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_36
+  password: 5d9a30de-44d6-4c7d-a9af-e59f02480a28
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_37
+  password: 1efccd98-8716-4a23-94c8-6fa351e5b4b7
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_38
+  password: 5080252e-f677-41fe-98c5-0c9a8e9992b4
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_25
+  password: f6978ae2-ac7a-471e-84da-e8bcd7d14066
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_39
+  password: ba87e4cc-d47a-4c89-b574-68e21aa63546
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_26
+  password: 1b49cd17-7398-47eb-a840-2363983959cb
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_40
+  password: 566bfd27-8380-4248-b3e2-459209577b26
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_41
+  password: 98d85ade-da6f-45fb-b4fe-a56fa5bcc086
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇰🇷 VIP 韩国01-1E
+  password: a995d0c2-af0c-46dd-b76b-5ddab5beeda9
+  port: 16087
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_27
+  password: 4c698ce9-8d46-44bf-a872-a95d5504aed5
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_28
+  password: 29e192c6-54da-4ab2-a9e4-040d305f987d
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_29
   password: fbe4a0f7-ba91-497e-bc7d-7d5df99e1cf2
   port: 22800
   server: 107.175.187.181
   type: ss
   udp: true
 - cipher: chacha20-ietf-poly1305
-  name: 香港_13
-  password: 2f42b4b5-cba3-4f16-8ec6-13b78b0fab0d
+  name: 香港_42
+  password: 8e189193-9702-428d-8e97-52a941d08278
   port: 22800
   server: 156.224.77.215
   type: ss
   udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 香港_14
-  password: f3bdaac5-2e63-4eae-9a5a-2eb1d9c31189
-  port: 22800
-  server: 156.224.77.215
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 香港_15
-  password: 7011c837-668c-4246-96e5-9021e70a06a9
-  port: 22800
-  server: 156.224.77.215
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 香港_16
-  password: 9aeb46dc-84b7-4a07-b149-8549f4339acb
-  port: 22800
-  server: 156.224.77.215
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 爱尔兰_14
-  password: 11af3a93-b3be-4ab1-8ec3-60e1a67c66d9
-  port: 22800
-  server: 107.175.187.181
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 香港_17
-  password: 0eeccfb4-df3b-4282-aed5-6a68e93644c5
-  port: 22800
-  server: 156.224.77.215
-  type: ss
-  udp: true
-- name: 中国_04
-  password: 1fa39cf6-0f76-4b62-a84b-c3cceff83df6
+- name: 中国_03
+  password: 6e7b0e8e-b8d5-43d1-b314-02f0d2a2d9a9
   port: 5443
   server: 115.231.220.33
   skip-cert-verify: true
@@ -610,261 +998,236 @@ proxies:
   type: trojan
   udp: true
 - cipher: chacha20-ietf-poly1305
-  name: 香港_18
-  password: 8ad9d9f2-a4ec-42b0-a18f-5436a42502aa
-  port: 22800
-  server: 156.224.77.215
-  type: ss
-  udp: true
-- name: 🇭🇰 2号专线 香港HK 74-1B
-  password: dac2db63-7399-4926-8549-90f5044d3575
-  port: 33838
-  server: cdntwa.xiaomispeed.com
-  skip-cert-verify: true
-  sni: cdntwa.xiaomispeed.com
-  type: trojan
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 爱尔兰_15
-  password: e055a04f-0b42-4676-9769-4f6ff0391924
-  port: 22800
-  server: 107.175.187.181
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 爱尔兰_16
-  password: 31d5001d-0df5-4053-92e8-8208295d0622
-  port: 22800
-  server: 107.175.187.181
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 爱尔兰_17
-  password: 5d9a30de-44d6-4c7d-a9af-e59f02480a28
-  port: 22800
-  server: 107.175.187.181
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 爱尔兰_18
-  password: e6574e47-14e1-4ea9-bdd4-724b012f1f75
-  port: 22800
-  server: 107.175.187.181
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 爱尔兰_19
-  password: bcca0d43-d2dc-45d1-8e4c-b339616c8b9b
-  port: 22800
-  server: 107.175.187.181
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 香港_19
-  password: 7fc2cc97-c1e5-46bc-ae23-331771a6ecaf
-  port: 22800
-  server: 156.224.77.215
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 爱尔兰_20
-  password: 1efccd98-8716-4a23-94c8-6fa351e5b4b7
-  port: 22800
-  server: 107.175.187.181
-  type: ss
-  udp: true
-- name: 🇺🇸 2号专线 美国US 110-1A
-  password: 1029cdb4-5c4e-4025-a5a9-930d6b7d4ec1
-  port: 33889
-  server: cdntwa.xiaomispeed.com
-  skip-cert-verify: true
-  sni: cdntwa.xiaomispeed.com
-  type: trojan
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 香港_20
-  password: 242d00ec-7534-46b9-9e1d-64060dbc8ae9
-  port: 22800
-  server: 156.224.77.215
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 香港_21
-  password: ba65485b-eda5-4b55-8d80-3e59934cd9f6
-  port: 22800
-  server: 156.224.77.215
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 爱尔兰_21
-  password: d4e8df49-5dab-474a-a907-3a7eaa960458
-  port: 22800
-  server: 107.175.187.181
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 爱尔兰_22
-  password: d2d53cec-ca25-4b55-bff8-c1531eab79e6
-  port: 22800
-  server: 107.175.187.181
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 爱尔兰_23
-  password: 54dc3279-a1b4-4fd0-a539-8aac2a031442
-  port: 22800
-  server: 107.175.187.181
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 香港_22
-  password: 1184f713-2357-45e7-80c5-0cf5976fd7db
-  port: 22800
-  server: 156.224.77.215
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 爱尔兰_24
-  password: ba87e4cc-d47a-4c89-b574-68e21aa63546
-  port: 22800
-  server: 107.175.187.181
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 香港_23
-  password: 1b49cd17-7398-47eb-a840-2363983959cb
-  port: 22800
-  server: 156.224.77.215
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 爱尔兰_25
-  password: 98d85ade-da6f-45fb-b4fe-a56fa5bcc086
-  port: 22800
-  server: 107.175.187.181
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 爱尔兰_26
-  password: 1fecb82a-c25e-4a63-96ce-06456b5ed035
-  port: 22800
-  server: 107.175.187.181
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 爱尔兰_27
-  password: 63fecd9e-c726-4962-9ec8-b84907574ecb
-  port: 22800
-  server: 107.175.187.181
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 香港_24
-  password: e3f052fe-0812-414d-9bfe-5853b583701f
-  port: 22800
-  server: 156.224.77.215
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 香港_25
-  password: 353b890e-0433-44b7-b684-527e992fc71f
-  port: 22800
-  server: 156.224.77.215
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 香港_26
-  password: 929464f6-fab4-488c-a570-96873cf27f08
-  port: 22800
-  server: 156.224.77.215
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 香港_27
-  password: 30b448e2-270f-49c8-8abd-e74f43d776d8
-  port: 22800
-  server: 156.224.77.215
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 香港_28
-  password: 92f932ba-acfa-470a-8539-f7091197231f
-  port: 22800
-  server: 156.224.77.215
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 爱尔兰_28
-  password: 8f6c0296-a8c8-4d0c-8dd8-943ad663581a
-  port: 22800
-  server: 107.175.187.181
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 爱尔兰_29
-  password: 240bffee-6fc8-44bd-b34f-e3945e684693
-  port: 22800
-  server: 107.175.187.181
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 香港_29
-  password: 933cf894-c7fb-49c8-b562-59a4c56aac3c
+  name: 香港_43
+  password: 2bc39aa3-87b4-4b34-92fa-798ebeb8c876
   port: 22800
   server: 156.224.77.215
   type: ss
   udp: true
 - cipher: chacha20-ietf-poly1305
   name: 爱尔兰_30
+  password: 348b0557-9c6d-410f-8d4e-39e14e16f3fb
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_31
+  password: 31d5001d-0df5-4053-92e8-8208295d0622
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_44
+  password: 7011c837-668c-4246-96e5-9021e70a06a9
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 🇭🇰 VIP 香港01-1O
+  password: 138f6897-51a5-4644-b949-233dd03872e3
+  port: 23764
+  server: tun.tuzivip.pw
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_32
   password: 2fef84c5-c333-47c1-a4df-f51e82bedbe2
   port: 22800
   server: 107.175.187.181
   type: ss
   udp: true
 - cipher: chacha20-ietf-poly1305
-  name: 香港_30
-  password: 00f8be75-2b41-43fd-a3bd-6d3144411403
+  name: 爱尔兰_33
+  password: 06acee52-f744-430a-a6db-22cc35f9969d
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_45
+  password: 353b890e-0433-44b7-b684-527e992fc71f
   port: 22800
   server: 156.224.77.215
   type: ss
   udp: true
 - cipher: chacha20-ietf-poly1305
-  name: 香港_31
-  password: 29e192c6-54da-4ab2-a9e4-040d305f987d
+  name: 香港_46
+  password: 91487c77-7d97-4da2-b0e1-a22f6b51b3f7
   port: 22800
   server: 156.224.77.215
   type: ss
   udp: true
 - cipher: chacha20-ietf-poly1305
-  name: 香港_32
-  password: de47ff8d-9986-4de2-8519-2e6f04f52997
+  name: 爱尔兰_34
+  password: e6574e47-14e1-4ea9-bdd4-724b012f1f75
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_35
+  password: 776e56db-6d66-4683-ad96-700d905695cf
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- cipher: aes-256-gcm
+  name: 美国_02
+  password: abefed8b-02c5-4d84-b326-f8d519907c16
+  port: 10001
+  server: 154.19.242.140
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_36
+  password: 4db22328-4e68-4320-b51d-1890d1445de8
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_47
+  password: 929464f6-fab4-488c-a570-96873cf27f08
   port: 22800
   server: 156.224.77.215
   type: ss
   udp: true
 - cipher: chacha20-ietf-poly1305
-  name: 香港_33
+  name: 爱尔兰_37
+  password: e7168677-8d72-46bb-b84e-f9e3bc8c782e
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_48
+  password: d4e8df49-5dab-474a-a907-3a7eaa960458
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_49
+  password: b8b16c91-2747-4283-84d3-a0f441f3e5c0
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_38
+  password: d9e0c455-bdfb-4f76-bbf1-77cb3efa9b96
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_39
+  password: d2d53cec-ca25-4b55-bff8-c1531eab79e6
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_40
+  password: 851fc0d9-3c28-4132-b3a7-e0062cc6ecdf
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_50
+  password: 7fc2cc97-c1e5-46bc-ae23-331771a6ecaf
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_41
+  password: 8ad9d9f2-a4ec-42b0-a18f-5436a42502aa
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_42
+  password: 75270b00-e2c1-405c-9879-0ac2fa69dad7
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_43
+  password: 0fa5a27a-659e-4459-9615-ddb6698bf87a
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_44
+  password: 4bb2e0f2-de73-4701-a541-78ad8999140e
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_51
+  password: e4bc7805-5ee6-4d5d-add7-043b97f23f62
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_45
+  password: 07c6c92c-cea7-4b69-9f58-36a75b907a60
+  port: 22800
+  server: 107.175.187.181
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_52
+  password: 9333a63d-b6e8-49a3-b977-124cc0fbc39c
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_53
+  password: e453556a-e5f3-4a56-8581-0801b744b02c
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_54
+  password: 2ec9c570-e199-4ec8-8549-5a2ef4af8c8a
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_55
+  password: 63fecd9e-c726-4962-9ec8-b84907574ecb
+  port: 22800
+  server: 156.224.77.215
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 香港_56
   password: f2a69df2-0b9f-4152-b9d3-3378bfd475b9
   port: 22800
   server: 156.224.77.215
   type: ss
   udp: true
-- alpn:
-  - h3
-  - h2
-  - http/1.1
-  alterId: 0
-  cipher: auto
-  client-fingerprint: chrome
-  name: clash-young
-  network: tcp
-  port: 17891
-  server: vps.my-youth.asia
-  servername: vps.my-youth.asia
-  tls: true
-  type: vmess
+- cipher: chacha20-ietf-poly1305
+  name: 爱尔兰_46
+  password: 30b448e2-270f-49c8-8abd-e74f43d776d8
+  port: 22800
+  server: 107.175.187.181
+  type: ss
   udp: true
-  uuid: 8f2d400c-0879-4076-9b87-2302f00a135b
 - client-fingerprint: chrome
   name: 最优节点
   network: ws
@@ -879,7 +1242,7 @@ proxies:
     headers:
       host: vvv.yzqiang.site
     path: /?ed=2560
-- name: 香港_34
+- name: 香港_57
   network: ws
   port: 8880
   server: 45.192.224.68
@@ -1243,7 +1606,7 @@ proxies:
   udp: true
 - alterId: 0
   cipher: auto
-  name: 中国_05
+  name: 中国_04
   port: 51052
   server: 120.232.153.123
   skip-cert-verify: true
@@ -1343,6 +1706,22 @@ proxies:
   server: 154.90.63.193
   type: ss
   udp: true
+- alpn:
+  - h3
+  - h2
+  - http/1.1
+  alterId: 0
+  cipher: auto
+  client-fingerprint: chrome
+  name: clash-young
+  network: tcp
+  port: 17891
+  server: vps.my-youth.asia
+  servername: vps.my-youth.asia
+  tls: true
+  type: vmess
+  udp: true
+  uuid: 8f2d400c-0879-4076-9b87-2302f00a135b
 - cipher: chacha20-ietf-poly1305
   name: ss1
   password: password
@@ -1418,7 +1797,7 @@ proxies:
       Host: baidu.com
     path: /oooo
 - cipher: aes-256-gcm
-  name: 香港_35
+  name: 香港_58
   password: 9bfdde71b4c0
   plugin: v2ray-plugin
   plugin-opts:
@@ -1434,7 +1813,7 @@ proxies:
   type: ss
 - alterId: 0
   cipher: auto
-  name: 香港_36
+  name: 香港_59
   port: 21186
   server: 43.247.134.190
   skip-cert-verify: false
@@ -1442,7 +1821,7 @@ proxies:
   tls: false
   type: vmess
   uuid: bc6f4625-0ce3-4dca-b441-22c34808e6f2
-- name: 中国_06
+- name: 中国_05
   network: tcp
   password: 253bc477d4e43c209f2d427272968280
   port: 447
@@ -1451,7 +1830,7 @@ proxies:
   sni: www.baidu.com
   type: trojan
 - cipher: rc4-md5
-  name: China_None_ss_109
+  name: China_Guangzhou_ss_109
   password: efanccyun
   plugin: obfs
   plugin-opts:
@@ -1485,7 +1864,7 @@ proxies:
   type: ss
 - alterId: 0
   cipher: auto
-  name: 香港_37
+  name: 香港_60
   network: tcp
   port: '21186'
   server: 43.247.134.190
@@ -1495,7 +1874,7 @@ proxies:
   uuid: bc6f4625-0ce3-4dca-b441-22c34808e6f2
 - alterId: 64
   cipher: auto
-  name: 中国_07
+  name: 中国_06
   network: tcp
   port: '42272'
   server: 183.240.245.239
@@ -1505,7 +1884,7 @@ proxies:
   uuid: 418048af-a293-4b99-9b0c-98ca3580dd24
 - alterId: 0
   cipher: auto
-  name: 香港_38
+  name: 香港_61
   network: kcp
   port: '3351'
   server: 47.83.181.154
@@ -1558,6 +1937,37 @@ proxies:
   tls: false
   type: vmess
   uuid: 88888888-8888-8888-8888-888888888888
+- alterId: 0
+  cipher: auto
+  name: 香港_62
+  port: 36600
+  server: 38.147.188.156
+  skip-cert-verify: false
+  tfo: false
+  tls: false
+  type: vmess
+  uuid: 33cc836e-d562-4f39-8369-23a1f06dcb73
+- cipher: chacha20-ietf-poly1305
+  name: 台湾_04
+  password: t0srmdxrm3xyjnvqz9ewlxb2myq7rjuv
+  plugin: obfs
+  plugin-opts:
+    host: d35c547:137545
+    mode: tls
+  port: 2377
+  server: 60.249.14.38
+  tfo: false
+  type: ss
+- alterId: 0
+  cipher: auto
+  name: 香港_63
+  network: tcp
+  port: '36600'
+  server: 38.147.188.156
+  servername: ''
+  tls: false
+  type: vmess
+  uuid: 33cc836e-d562-4f39-8369-23a1f06dcb73
 - fast-open: true
   name: 法国_02
   password: dongtaiwang.com
@@ -1568,7 +1978,7 @@ proxies:
   type: hysteria2
 - client-fingerprint: chrome
   flow: xtls-rprx-vision
-  name: 台湾_03
+  name: 台湾_05
   network: tcp
   port: 37898
   reality-opts:
@@ -1582,7 +1992,7 @@ proxies:
   uuid: ec302de4-6b3d-4f03-a228-3c6d303ed370
 - alterId: 0
   cipher: auto
-  name: 中国_08
+  name: 中国_07
   network: ws
   port: 8088
   server: 116.205.244.106
@@ -1590,7 +2000,7 @@ proxies:
   uuid: 12345678-1234-1234-1234-123456789abc
   ws-opts:
     path: /vmess
-- name: 中国_09
+- name: 中国_08
   password: your-trojan-password
   port: 9999
   server: 116.205.244.106
@@ -1607,7 +2017,7 @@ proxies:
   tls: true
   type: vless
   udp: true
-  uuid: d16da2c7-60fa-4d12-817b-c42592242724
+  uuid: 91686ac0-ea0e-4d9a-96ee-29402143306b
   ws-opts:
     headers:
       Host: xite.oyenpadu.shop
@@ -1636,699 +2046,11 @@ proxies:
     path: /vws
 - alterId: 0
   cipher: auto
-  name: 🇺🇸US-49.51.180.214-1208-mahdibland-worker-general
-  network: ws
-  path: /136.175.178.176mgmg.xhtk.cc/veghvws
-  port: 443
-  server: auth0.openai.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 23b3724b-3d90-2074-a5bf-09388a9806b7
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /veghvws
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-141.193.213.20-4650-mahdibland-worker-general
-  network: ws
-  path: /opfr1.v2rayfree1.xyz/IYKLD53M
-  port: 443
-  server: workers.dev
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 4612618c-24cd-4379-9924-cfdf3d61fa5a
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /IYKLD53M
-- alterId: 0
-  cipher: auto
-  name: 🇸🇬SG-202.79.160.243-6908-mahdibland-worker-general
-  network: ws
-  path: /www.32278117.xyz/path/191019072927
-  port: 443
-  server: codepen.io
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 418048af-a293-4b99-9b0c-98ca3580dd24
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /path/191019072927
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-203.24.108.8-4635-mahdibland-worker-general
-  network: ws
-  path: /lg1.trump2023.us/ECTCJ0DF
-  port: 443
-  server: workers.dev
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 40d496a6-ceeb-4096-baeb-4cc52b205621
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /ECTCJ0DF
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-172.67.180.227-6914-mahdibland-worker-general
-  network: ws
-  path: /wapkp01.5201314.cfd/
-  port: 443
-  server: auth0.openai.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 4993f14e-5f9b-4249-dc43-99f4fdea84be
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-172.67.131.27-5081-mahdibland-worker-general
-  network: ws
-  path: /rak1d3.988988.shop/
-  port: 2083
-  server: workers.dev
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 75d96365-1229-4fc4-dbda-855717f876cf
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /
-- alterId: 0
-  cipher: auto
-  name: 🇫🇷FR-51.77.20.132-6975-mahdibland-worker-general
-  network: ws
-  path: /a.baradiha.com/
-  port: 443
-  server: chat.openai.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 03fcc618-b93d-6796-6aed-8a38c975d581
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-172.67.75.172-5087-mahdibland-worker-general
-  network: ws
-  path: /fr.atlen.dpdns.org/28548ef7-983d-4ee8-8bd6-7d71d905b5a2-vmess
-  port: 443
-  server: chat.openai.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 28548ef7-983d-4ee8-8bd6-7d71d905b5a2
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /28548ef7-983d-4ee8-8bd6-7d71d905b5a2-vmess
-- alterId: 4
-  cipher: auto
-  name: 🇸🇨SC-154.94.214.2-4620-mahdibland-worker-general
-  network: ws
-  path: /lvuft.com/ws
-  port: 443
-  server: laravel.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: aba50dd4-5484-3b05-b14a-4661caf862d5
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /ws
-- alterId: 64
-  cipher: auto
-  name: 🏁RELAY-104.21.48.161-1099-mahdibland-worker-general
-  network: ws
-  path: /cdnde.irteyz.today/
-  port: 443
-  server: cdnjs.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 3b5e258e-8c5e-45d3-b7d2-02c8f5fc0bb2
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /
-- alterId: 0
-  cipher: auto
-  name: 🇺🇸US-172.234.199.15-6943-mahdibland-worker-general
-  network: ws
-  path: /az05.beyondy.cfd/
-  port: 443
-  server: chat.openai.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 3f638f34-8dba-4186-bc43-2716a7ddd4be
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /
-- alterId: 64
-  cipher: auto
-  name: 🏁RELAY-104.19.36.160-1098-mahdibland-worker-general
-  network: ws
-  path: //
-  port: 443
-  server: api.jquery.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: ad806487-2d26-4636-98b6-ab85cc8521f7
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-172.67.79.117-4201-mahdibland-worker-general
-  network: ws
-  path: /www.998808.xyz/vbje5ytgwfgdrhe
-  port: 443
-  server: cdnjs.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: bd014532-1f8b-4d33-b79d-50131d8d4633
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /vbje5ytgwfgdrhe
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-172.66.0.218-1241-mahdibland-worker-general
-  network: ws
-  path: /speed.cloudflare.com/vmess
-  port: 443
-  server: nginx.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: ffffffff-ffff-ffff-ffff-ffffffffffff
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /vmess
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-45.149.12.56-6962-mahdibland-worker-general
-  network: ws
-  path: /obdii.cfd/
-  port: 443
-  server: laravel.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 05641cf5-58d2-4ba4-a9f1-b3cda0b1fb1d
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-172.66.168.227-5082-mahdibland-worker-general
-  network: ws
-  path: /Fra-Vp-123.BLaZECLOUD.Site/linvkws
-  port: 443
-  server: nginx.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 37f464cb-b826-4278-9bf8-11bdf1ec892b
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /linvkws
-- alterId: 0
-  cipher: auto
-  name: 🇺🇸US-172.233.219.49-2620-mahdibland-worker-general
-  network: ws
-  path: /cf-us01-90.clashzone.xyz/v2us01
-  port: 8443
-  server: chat.openai.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 430b6895-2e0f-4716-9410-e1339d0f9af6
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /v2us01
-- alterId: 32
-  cipher: none
-  name: 🇩🇪DE-5.75.236.246-3639-mahdibland-worker-general
-  network: ws
-  path: /mt2.qowch.com/users?ed=2048
-  port: 443
-  server: workers.dev
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: a61eb3a2-1adb-48cb-ab46-ce225769de16
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: users?ed=2048
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-172.67.178.127-0939-mahdibland-worker-general
-  network: ws
-  path: /en1.wanwushenghua.me/123
-  port: 443
-  server: workers.dev
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 26b5fbcf-d199-407e-e8bf-96d7489d247d
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /123
-- alterId: 0
-  cipher: auto
-  name: 🇫🇷FR-144.24.200.164-6928-mahdibland-worker-general
-  network: ws
-  path: /beyonddsz.cfd/
-  port: 443
-  server: nginx.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 9b456c2a-f2c1-45e1-87a9-b7628b04bb24
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-172.67.197.47-0296-mahdibland-worker-general
-  network: ws
-  path: /sy3.620720.xyz/
-  port: 8443
-  server: laravel.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 516d8a7a-3f0b-41d3-bad0-246116381516
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-185.162.228.229-0823-mahdibland-worker-general
-  network: ws
-  path: /oplg1.cfcdn2.xyz/AUIKN8AU
-  port: 443
-  server: www.speedtest.net
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: c5a2d7b8-bf84-4f97-8577-b9b87f2baaf7
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /AUIKN8AU
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-104.21.6.213-1344-mahdibland-worker-general
-  network: ws
-  path: /foxpol2.fovi.tk/eisasqa
-  port: 2053
-  server: api.jquery.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: bf67437e-6c90-45ca-abc2-c7240a5ce2aa
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /eisasqa
-- alterId: 0
-  cipher: auto
-  name: 🇯🇵JP-140.83.35.62-1826-mahdibland-worker-general
-  network: ws
-  path: /jp-amd1.018999.xyz/65e619e7-0bf1-4f5b-a390-5735b01a3713
-  port: 443
-  server: codepen.io
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 65e619e7-0bf1-4f5b-a390-5735b01a3713
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /65e619e7-0bf1-4f5b-a390-5735b01a3713
-- alterId: 0
-  cipher: auto
-  name: 🇹🇼TW-104.29.64.5-4429-mahdibland-worker-general
-  network: ws
-  path: /us3.guolicheng.cyou/suti/us3?ed=2048
-  port: 443
-  server: auth0.openai.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: a1b16d10-4f43-4dd9-8c4f-52065b2b0910
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /suti/us3?ed=2048
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-173.245.49.10-1217-mahdibland-worker-general
-  network: ws
-  path: /us-171-78.shoptunnel.live/
-  port: 8443
-  server: discord.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: a6a37e04-5e81-44c9-be53-baa3ff46eb8b
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-104.16.89.44-4624-mahdibland-worker-general
-  network: ws
-  path: /zhuyong.hucloud-dns.xyz/huhublog
-  port: 443
-  server: discord.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 9a18cbb1-81d2-4720-9f09-46ea276b6ddb
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /huhublog
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-141.101.115.140-0789-mahdibland-worker-general
-  network: ws
-  path: /clash6.ssr-free.xyz/dongtaiwang.com
-  port: 443
-  server: www.speedtest.net
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 5f64fa65-7b14-49c5-954d-aa15c6bfcacd
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /dongtaiwang.com
-- alterId: 0
-  cipher: auto
-  name: 🇺🇸US-103.224.182.242-2775-mahdibland-worker-general
-  network: ws
-  path: /dosg.gmlovebaipiao.tech/GenshinMinecraft
-  port: 8443
-  server: codepen.io
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 706596c5-2315-41e9-c97b-5a4d32ffd5e6
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /GenshinMinecraft
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-172.67.141.31-6895-mahdibland-worker-general
-  network: ws
-  path: /new1.huvicloud.com/0f02e02f-418d-4434-b0cf-dbdd15892333
-  port: 443
-  server: workers.dev
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 0f02e02f-418d-4434-b0cf-dbdd15892333
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /0f02e02f-418d-4434-b0cf-dbdd15892333
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-172.64.144.100-0556-mahdibland-worker-general
-  network: ws
-  path: /lg3.zhujicn2.com/
-  port: 443
-  server: workers.dev
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 6e9217de-ad7e-4a67-bd17-a6dca951733b
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-141.193.213.20-1207-mahdibland-worker-general
-  network: ws
-  path: /news.microsoft.com/
-  port: 443
-  server: cdnjs.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 0764a598-82c4-4b41-ba10-551a625beed5
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-172.67.143.74-0553-mahdibland-worker-general
-  network: ws
-  path: /pure.daycat.space/
-  port: 443
-  server: discord.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: A9A56660-4554-4278-863A-D3CE30294B59
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-172.67.199.34-0860-mahdibland-worker-general
-  network: ws
-  path: /lu.sharecentre.online/shirker
-  port: 443
-  server: nginx.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 20e92881-5fb4-4b05-bc77-57929476dc69
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /shirker
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-172.64.147.71-4346-mahdibland-worker-general
-  network: ws
-  path: /testgroup2.091.se/xxX2
-  port: 443
-  server: chat.openai.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 3eadc957-f6d5-3a3b-9289-c985ef4c8322
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /xxX2
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-104.26.4.10-0768-mahdibland-worker-general
-  network: ws
-  path: /sg1-v2ray.sshkit.org/sshkit/401452697/635b464921141/
-  port: 443
-  server: www.speedtest.net
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: c6747da4-fb2e-4a2a-bdb7-8614bdd6b0b3
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /sshkit/401452697/635b464921141/
-- alterId: 0
-  cipher: auto
-  name: 🇺🇸US-172.96.187.57-1252-mahdibland-worker-general
-  network: ws
-  path: /hohm.microsoft.com/9JZFDTKE
-  port: 443
-  server: auth0.openai.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 2b214122-1906-428a-bbb7-a039cbb7cd5c
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /9JZFDTKE
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-141.101.114.32-4646-mahdibland-worker-general
-  network: ws
-  path: /lg10.cfcdn1.xyz/A2DJOPFT
-  port: 443
-  server: nginx.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 17b2a313-37a0-4945-a8e4-e63375506b4a
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /A2DJOPFT
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-198.41.212.30-0568-mahdibland-worker-general
-  network: ws
-  path: /lg2.zhujicn2.com/dongtaiwang.com
-  port: 443
-  server: codepen.io
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 105c635f-918d-4b2a-8c9d-d5426e94eb4b
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /dongtaiwang.com
-- alterId: 0
-  cipher: auto
-  name: 🇮🇳IN-139.59.75.181-1575-mahdibland-worker-general
-  network: ws
-  path: /in-full.privateip.net/racevpn
-  port: 443
-  server: nginx.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 07722fc6-a688-49fd-9896-fb9e1ca748d6
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /racevpn
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-104.21.6.201-6954-mahdibland-worker-general
-  network: ws
-  path: /hknbyivfffj.site/rbqqvws
-  port: 443
-  server: laravel.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: d13fc2f5-3e05-4795-81eb-44143a09e552
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /rbqqvws
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-141.101.114.121-0818-mahdibland-worker-general
-  network: ws
-  path: /fr2.cfcdn4.xyz/ray
-  port: 443
-  server: discord.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: f33957e8-372e-4fba-99ed-f4db32cce9e5
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /ray
-- alterId: 0
-  cipher: auto
-  name: 🇦🇺AU-103.224.212.215-1625-mahdibland-worker-general
-  network: ws
-  path: /vjp2.0bad.com/chat
-  port: 443
-  server: laravel.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 927094d3-d678-4763-8591-e240d0bcae87
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /chat
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-104.19.48.30-7655-mahdibland-worker-general
+  name: 🏁RELAY-104.19.48.7-7655-mahdibland-worker-general
   network: ws
   path: /hk01.linkitnow.net/
   port: 8443
-  server: auth0.openai.com
+  server: nginx.com
   servername: myclash.dailyoff.no
   skip-cert-verify: false
   tls: true
@@ -2340,43 +2062,59 @@ proxies:
     path: /
 - alterId: 0
   cipher: auto
-  name: 🇯🇵JP-124.156.225.184-4581-mahdibland-worker-general
+  name: 🇭🇰HK-47.238.123.151-7520-mahdibland-worker-general
   network: ws
-  path: /azjp.pengui.xyz/
+  path: /n1721118448.ryjml.cn/
   port: 443
-  server: api.jquery.com
+  server: chat.openai.com
   servername: myclash.dailyoff.no
   skip-cert-verify: false
   tls: true
   type: vmess
-  uuid: 7a010436-7b4a-4e65-ade4-844ba074ad58
+  uuid: 690f0d7a-4050-4b2b-9e44-a12d67905274
   ws-opts:
     headers:
       Host: myclash.dailyoff.no
     path: /
 - alterId: 0
   cipher: auto
-  name: 🏁RELAY-104.18.12.15-1200-mahdibland-worker-general
+  name: 🇯🇵JP-172.234.88.187-7508-mahdibland-worker-general
   network: ws
-  path: /workers.dev/111111.online
+  path: /172.234.88.187/
   port: 443
-  server: workers.dev
+  server: laravel.com
   servername: myclash.dailyoff.no
   skip-cert-verify: false
   tls: true
   type: vmess
-  uuid: 7a70e0f7-170d-4ab0-82a0-c40554bfb320
+  uuid: 7ad8da0c-fda5-416b-9e72-47cc68313ffe
   ws-opts:
     headers:
       Host: myclash.dailyoff.no
-    path: /111111.online
+    path: /
 - alterId: 0
   cipher: auto
-  name: 🏁RELAY-104.21.9.236-7034-mahdibland-worker-general
+  name: 🏁RELAY-172.67.192.57-7539-mahdibland-worker-general
   network: ws
-  path: /hms19.best-tizi.top/linkws
+  path: /max.mankadmu.com/
   port: 443
-  server: auth0.openai.com
+  server: cdnjs.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 03fcc618-b93d-6796-6aed-8a38c975d581
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-162.159.138.179-7018-mahdibland-worker-general
+  network: ws
+  path: /hms19.best-tizi.top/linkws?@AZARBAYJB1@AZARBAYJB1@AZARBAYJB1@AZARBAYJB1@AZARBAYJB1@AZARBAYJB1?ed=2560/linkws
+  port: 443
+  server: discord.com
   servername: myclash.dailyoff.no
   skip-cert-verify: false
   tls: true
@@ -2385,42 +2123,58 @@ proxies:
   ws-opts:
     headers:
       Host: myclash.dailyoff.no
-    path: /linkws
+    path: /linkws?@AZARBAYJB1@AZARBAYJB1@AZARBAYJB1@AZARBAYJB1@AZARBAYJB1@AZARBAYJB1?ed=2560/linkws
 - alterId: 0
   cipher: auto
-  name: 🇯🇵JP-172.105.223.136-4390-mahdibland-worker-general
+  name: 🇮🇳IN-141.148.203.6-7364-mahdibland-worker-general
   network: ws
-  path: /www.microsoft.com/
+  path: /e130917c-1b58-4136-b2d9-76dc920e0add.add97ee8-0f14-48a3-b2cd-979c56742e64.loseyourip.com/
   port: 443
-  server: workers.dev
+  server: auth0.openai.com
   servername: myclash.dailyoff.no
   skip-cert-verify: false
   tls: true
   type: vmess
-  uuid: 8964ea79-1422-460e-b6e2-a16e83a22aab
+  uuid: 05641cf5-58d2-4ba4-a9f1-b3cda0b1fb1d
   ws-opts:
     headers:
       Host: myclash.dailyoff.no
     path: /
 - alterId: 0
   cipher: auto
-  name: 🏁RELAY-185.146.173.129-7318-mahdibland-worker-general
+  name: 🇺🇸US-172.233.160.249-6978-mahdibland-worker-general
   network: ws
-  path: /afrhms16v.bestxray.buzz/linkws
+  path: /jahfkjha.cfd/
   port: 443
-  server: nginx.com
+  server: cdnjs.com
   servername: myclash.dailyoff.no
   skip-cert-verify: false
   tls: true
   type: vmess
-  uuid: f584de15-2034-4170-a723-f48c2bae5e0f
+  uuid: 950db6aa-4926-4616-816e-ec0312dcb87b
   ws-opts:
     headers:
       Host: myclash.dailyoff.no
-    path: /linkws
+    path: /
 - alterId: 0
   cipher: auto
-  name: 🏁RELAY-172.67.161.77-7017-mahdibland-worker-general
+  name: 🇭🇰HK-8.217.99.103-7518-mahdibland-worker-general
+  network: ws
+  path: /n1721189676.ryjml.cn/
+  port: 443
+  server: auth0.openai.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 8238c168-a9dc-4f63-8086-9109768a20ab
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-188.114.97.210-7015-mahdibland-worker-general
   network: ws
   path: /linde06.indiavideo.sbs/linkws
   port: 443
@@ -2436,247 +2190,23 @@ proxies:
     path: /linkws
 - alterId: 0
   cipher: auto
-  name: 🇺🇸US-172.233.221.214-6939-mahdibland-worker-general
+  name: 🇺🇸US-199.59.243.228-7397-mahdibland-worker-general
   network: ws
-  path: /irvideo.cfd/linkws
-  port: 443
-  server: cdnjs.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: e537f2f5-2a0c-4f59-92c9-832ca6433bf3
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /linkws
-- alterId: 0
-  cipher: auto
-  name: 🇺🇸US-64.112.42.73-0547-mahdibland-worker-general
-  network: ws
-  path: /www.shunxin.ml/P0S5U7NK
-  port: 443
-  server: auth0.openai.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 4946f776-0af3-49f3-acad-d157475d253e
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /P0S5U7NK
-- alterId: 0
-  cipher: auto
-  name: 🇺🇸US-66.212.20.3-0798-mahdibland-worker-general
-  network: ws
-  path: /v2ray2.ssr-free2.xyz/dongtaiwang.com
-  port: 443
-  server: codepen.io
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 0479eb9d-999d-4bff-ae3f-4f7cc440ce46
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /dongtaiwang.com
-- alterId: 0
-  cipher: auto
-  name: 🇺🇸US-3.219.96.23-1107-mahdibland-worker-general
-  network: ws
-  path: /ac2088.herokuapp.com/d1babe08-f8ac-490b-b66f-9be27467f3cc-vmess
-  port: 443
-  server: www.speedtest.net
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: d1babe08-f8ac-490b-b66f-9be27467f3cc
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /d1babe08-f8ac-490b-b66f-9be27467f3cc-vmess
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-104.26.9.179-1132-mahdibland-worker-general
-  network: ws
-  path: /by.6111.online/111111.online
-  port: 443
-  server: laravel.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 3a3e263d-223f-49cc-bbdb-f7e07a55e6fe
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /111111.online
-- alterId: 0
-  cipher: auto
-  name: 🇩🇪DE-64.190.63.222-0865-mahdibland-worker-general
-  network: ws
-  path: /cvywfavasdc.cymlr.xyz/ksebupo
+  path: /dkzbofzkop.com/rbqqvws
   port: 443
   server: nginx.com
   servername: myclash.dailyoff.no
   skip-cert-verify: false
   tls: true
   type: vmess
-  uuid: 23f4bc80-3b0a-4aa3-cbe5-b8be4e8c32fc
+  uuid: fa1897db-1925-4c86-a495-939a959af900
   ws-opts:
     headers:
       Host: myclash.dailyoff.no
-    path: /ksebupo
+    path: /rbqqvws
 - alterId: 0
   cipher: auto
-  name: 🏁RELAY-104.21.44.106-6994-mahdibland-worker-general
-  network: ws
-  path: /xmivideo.cfd/
-  port: 443
-  server: www.speedtest.net
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 93ea486a-bada-42a4-ac38-d088b320fa1e
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-172.64.103.211-7311-mahdibland-worker-general
-  network: ws
-  path: /glweidf.cfd/
-  port: 443
-  server: laravel.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 1052f24e-7b09-45eb-b0c5-d858eb124192
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-104.21.74.239-7313-mahdibland-worker-general
-  network: ws
-  path: /afrhms07.xfixedfloat.cfd/linkws
-  port: 443
-  server: www.speedtest.net
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: a1655f51-1e20-4a92-8a11-b7ca30a7a353
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /linkws
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-172.67.156.210-6924-mahdibland-worker-general
-  network: ws
-  path: /glweidf.sbs/
-  port: 443
-  server: nginx.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 76221bfb-e92f-4e80-81c5-6fe48f50ac0b
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-172.67.220.83-7022-mahdibland-worker-general
-  network: ws
-  path: /linja05.hwcar.sbs/linkws
-  port: 443
-  server: www.speedtest.net
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 39cec18f-a439-427c-9a4e-aeb6fcdf6f53
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /linkws
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-141.193.213.21-1325-mahdibland-worker-general
-  network: ws
-  path: /news.microsoft.com/5QNROSRV
-  port: 443
-  server: codepen.io
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 56a2188b-2ab7-402c-b9b8-34847fdf0958
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /5QNROSRV
-- alterId: 0
-  cipher: auto
-  name: 🇦🇺AU-103.224.212.211-0769-mahdibland-worker-general
-  network: ws
-  path: /25.72img.xyz/
-  port: 443
-  server: workers.dev
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 81d93f62-15a2-4994-adb9-0b5d906aac7e
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /
-- alterId: 0
-  cipher: auto
-  name: 🇩🇪DE-91.195.240.12-0559-mahdibland-worker-general
-  network: ws
-  path: /sgp.kapok.buzz/4befdd8a6/
-  port: 443
-  server: workers.dev
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: c1bac6b8-934a-44e2-9cf2-ee0db1fc1c85
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /4befdd8a6/
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-100.100.172.13-7310-mahdibland-worker-general
-  network: ws
-  path: /yelan.lastronin.cloudns.org/link/hms02.fxiaomi.sbs
-  port: 443
-  server: www.speedtest.net
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 6c168fcc-2231-4f3b-8c1e-f6391692df4a
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /link/hms02.fxiaomi.sbs
-- alterId: 0
-  cipher: auto
-  name: 🇯🇵JP-172.233.92.155-7515-mahdibland-worker-general
+  name: 🇯🇵JP-172.233.92.155-7512-mahdibland-worker-general
   network: ws
   path: /172.233.92.155/
   port: 443
@@ -2692,347 +2222,27 @@ proxies:
     path: /
 - alterId: 0
   cipher: auto
-  name: 🇺🇸US-173.230.153.192-7504-mahdibland-worker-general
+  name: 🇺🇸US-192.3.150.233-7488-mahdibland-worker-general
   network: ws
-  path: /173.230.153.192/
-  port: 443
-  server: api.jquery.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 7ad8da0c-fda5-416b-9e72-47cc68313ffe
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-172.64.155.200-0564-mahdibland-worker-general
-  network: ws
-  path: /lg4.zhujicn2.com/
-  port: 443
-  server: auth0.openai.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: a8030afd-812a-4afe-a766-9c76ff3eddd4
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-141.101.114.25-0766-mahdibland-worker-general
-  network: ws
-  path: /lg30.cfcdn3.xyz/ray
-  port: 443
-  server: www.speedtest.net
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 91646f9a-b4e9-4aca-bfe3-8892b3e58fe7
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /ray
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-141.101.114.133-0795-mahdibland-worker-general
-  network: ws
-  path: /lg1.cfcdn1.xyz/ray
-  port: 443
-  server: codepen.io
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: fcfaec91-6096-44d8-956c-7868d9e874b1
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /ray
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-104.21.21.192-1008-mahdibland-worker-general
-  network: ws
-  path: /b62a948c-faa2-4e8a-bf8a-3ff3121c875a.asoul-ava.top/azumase.ren
-  port: 443
-  server: nginx.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 5f726fe3-d82e-4da5-a711-8af0cbb2b682
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /azumase.ren
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-104.17.197.31-7268-mahdibland-worker-general
-  network: ws
-  path: /ivideos.sbs/linkws
-  port: 443
-  server: codepen.io
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 441da342-ce90-441e-bff9-d2ceb55e68ca
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /linkws
-- alterId: 0
-  cipher: auto
-  name: 🇸🇬SG-192.53.114.166-7508-mahdibland-worker-general
-  network: ws
-  path: /192.53.114.166/
-  port: 443
+  path: /US-150-233.shoptunnel.live/
+  port: 8443
   server: discord.com
   servername: myclash.dailyoff.no
   skip-cert-verify: false
   tls: true
   type: vmess
-  uuid: fa3c2911-613a-480e-9b2d-aa3762c3a311
+  uuid: a6a37e04-5e81-44c9-be53-baa3ff46eb8b
   ws-opts:
     headers:
       Host: myclash.dailyoff.no
     path: /
 - alterId: 0
   cipher: auto
-  name: 🏁RELAY-104.21.18.227-6983-mahdibland-worker-general
-  network: ws
-  path: /jahfkjha.cfd/linkws
-  port: 443
-  server: nginx.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 950db6aa-4926-4616-816e-ec0312dcb87b
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /linkws
-- alterId: 0
-  cipher: auto
-  name: 🇹🇼TW-211.72.35.110-4210-mahdibland-worker-general
-  network: ws
-  path: /haxeu7.jsworld.eu.org/nishikata3
-  port: 443
-  server: www.speedtest.net
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: dfd1d80f-caf0-4b11-e0bb-733a2710a07a
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /nishikata3
-- alterId: 32
-  cipher: auto
-  name: 🇺🇸US-77.83.141.171-0286-mahdibland-worker-general
-  network: ws
-  path: /vc.fly.dev/
-  port: 443
-  server: api.jquery.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 35379219-6535-4f2e-a4fe-3e44f61e0eee
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-141.101.114.100-0746-mahdibland-worker-general
-  network: ws
-  path: /lg1.cfcdn2.xyz/VHONOFZ3
-  port: 443
-  server: discord.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 267a9f38-40d8-4ed6-ab58-cafc67e9c933
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /VHONOFZ3
-- alterId: 64
-  cipher: auto
-  name: 🇺🇸US-23.224.101.102-1113-mahdibland-worker-general
-  network: ws
-  path: /www.76126449.xyz/footers
-  port: 443
-  server: nginx.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 946ba5df-5771-4873-a3cb-892378526147
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /footers
-- alterId: 0
-  cipher: auto
-  name: 🇺🇸US-18.208.60.216-4587-mahdibland-worker-general
-  network: ws
-  path: /xr-1.herokuapp.com/17af76e1-a5d7-41ab-ae87-b48f185075d1-vmess
-  port: 443
-  server: workers.dev
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 17af76e1-a5d7-41ab-ae87-b48f185075d1
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /17af76e1-a5d7-41ab-ae87-b48f185075d1-vmess
-- alterId: 0
-  cipher: auto
-  name: 🇭🇰HK-47.238.123.151-7523-mahdibland-worker-general
-  network: ws
-  path: /n1721118448.ryjml.cn/
-  port: 443
-  server: nginx.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 690f0d7a-4050-4b2b-9e44-a12d67905274
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-104.21.96.1-0767-mahdibland-worker-general
-  network: ws
-  path: /surongwei.eu.org/reffs7y26g0ua
-  port: 443
-  server: auth0.openai.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 6093eefb-7ab6-41df-aba0-d5fa58147e10
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /reffs7y26g0ua
-- alterId: 0
-  cipher: auto
-  name: 🇺🇸US-192.157.56.139-0065-mahdibland-worker-general
-  network: ws
-  path: /fr0810.moonfree.top/
-  port: 443
-  server: codepen.io
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: a8ce5e05-d5c9-48c0-a082-7b39453b29c0
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-172.64.150.170-0817-mahdibland-worker-general
-  network: ws
-  path: /001frg.pages.dev/65218fe8-d9c2-4e07-95bb-cb6e379a440b-vm
-  port: 443
-  server: api.jquery.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 65218fe8-d9c2-4e07-95bb-cb6e379a440b
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /65218fe8-d9c2-4e07-95bb-cb6e379a440b-vm
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-198.41.212.145-0776-mahdibland-worker-general
-  network: ws
-  path: /lg1.cfcdn3.xyz/dongtaiwang.com
-  port: 443
-  server: nginx.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 33aa57df-1c93-4318-9fce-e850437ee781
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /dongtaiwang.com
-- alterId: 0
-  cipher: auto
-  name: 🇫🇷FR-45.145.167.103-7117-mahdibland-worker-general
-  network: ws
-  path: /indiavideo.sbs/
-  port: 443
-  server: workers.dev
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 425c5e6e-30a0-4984-8a13-ee6f72053162
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-141.101.115.2-0560-mahdibland-worker-general
-  network: ws
-  path: /lg1.zhujicn2.com/dongtaiwang.com
-  port: 443
-  server: chat.openai.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: a5ba8b2b-8fc5-4521-a35e-9281be61c1c3
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /dongtaiwang.com
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-104.17.147.22-0732-mahdibland-worker-general
-  network: ws
-  path: /blaze-cana-126.blazeservers1.site/linkvkwsss
-  port: 443
-  server: codepen.io
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: e2fb28b8-a457-4bd2-801e-56fdcccbd88e
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /linkvkwsss
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-104.21.95.16-7065-mahdibland-worker-general
+  name: 🏁RELAY-172.67.169.40-7052-mahdibland-worker-general
   network: ws
   path: /hms03.dongfeng.cfd/
   port: 443
-  server: laravel.com
+  server: workers.dev
   servername: myclash.dailyoff.no
   skip-cert-verify: false
   tls: true
@@ -3044,27 +2254,27 @@ proxies:
     path: /
 - alterId: 0
   cipher: auto
-  name: 🇹🇼TW-211.72.35.110-4211-mahdibland-worker-general
+  name: 🇰🇷KR-52.231.200.179-1697-mahdibland-worker-general
   network: ws
-  path: /woidenca1.jsworld.eu.org/nishikata3
+  path: /fullaccesstokoreannetsubnode1.azurewebsites.net/ws
   port: 443
-  server: workers.dev
+  server: nginx.com
   servername: myclash.dailyoff.no
   skip-cert-verify: false
   tls: true
   type: vmess
-  uuid: e87f326f-55ac-487f-a3d1-57c592bb663a
+  uuid: 274f11c6-f69b-40b9-8966-f39e06e97be7
   ws-opts:
     headers:
       Host: myclash.dailyoff.no
-    path: /nishikata3
+    path: /ws
 - alterId: 1
   cipher: auto
-  name: 🏁RELAY-104.17.21.243-1156-mahdibland-worker-general
+  name: 🏁RELAY-104.25.52.187-1097-mahdibland-worker-general
   network: ws
   path: /free.frli.xyz/y475
   port: 443
-  server: laravel.com
+  server: discord.com
   servername: myclash.dailyoff.no
   skip-cert-verify: false
   tls: true
@@ -3076,11 +2286,379 @@ proxies:
     path: /y475
 - alterId: 0
   cipher: auto
-  name: 🇭🇰HK-104.208.117.86-4119-mahdibland-worker-general
+  name: 🏁RELAY-185.162.228.228-0819-mahdibland-worker-general
+  network: ws
+  path: /lg1.trump2023.us/ECTCJ0DF
+  port: 443
+  server: api.jquery.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 40d496a6-ceeb-4096-baeb-4cc52b205621
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /ECTCJ0DF
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-141.193.213.20-0826-mahdibland-worker-general
+  network: ws
+  path: /oplg1.zhujicn2.com/5QNROSRV
+  port: 443
+  server: api.jquery.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 56a2188b-2ab7-402c-b9b8-34847fdf0958
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /5QNROSRV
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-104.21.4.6-7063-mahdibland-worker-general
+  network: ws
+  path: /glweidf.cfd/linkws
+  port: 443
+  server: chat.openai.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 1052f24e-7b09-45eb-b0c5-d858eb124192
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /linkws
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-195.85.59.22-7290-mahdibland-worker-general
+  network: ws
+  path: /afrhms16v.bestxray.buzz/linkws
+  port: 443
+  server: workers.dev
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: f584de15-2034-4170-a723-f48c2bae5e0f
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /linkws
+- alterId: 64
+  cipher: auto
+  name: 🇳🇱NL-46.182.107.39-1122-mahdibland-worker-general
+  network: ws
+  path: /www.49696760.xyz/footers
+  port: 443
+  server: auth0.openai.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: d3133484-f2bf-4b0c-8d38-f8e645b67947
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /footers
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-203.30.191.20-0838-mahdibland-worker-general
+  network: ws
+  path: /clash6.ssr-free.xyz/dongtaiwang.com
+  port: 443
+  server: api.jquery.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 5f64fa65-7b14-49c5-954d-aa15c6bfcacd
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /dongtaiwang.com
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-100.100.172.13-7307-mahdibland-worker-general
+  network: ws
+  path: /yelan.lastronin.cloudns.org/link/hms02.fxiaomi.sbs
+  port: 443
+  server: chat.openai.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 6c168fcc-2231-4f3b-8c1e-f6391692df4a
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /link/hms02.fxiaomi.sbs
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-172.67.183.35-0772-mahdibland-worker-general
+  network: ws
+  path: /38.72img.xyz/
+  port: 443
+  server: nginx.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 81d93f62-15a2-4994-adb9-0b5d906aac7e
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸US-128.14.140.254-0763-mahdibland-worker-general
+  network: ws
+  path: /v2ray2.ssr-free2.xyz/dongtaiwang.com
+  port: 443
+  server: codepen.io
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 0479eb9d-999d-4bff-ae3f-4f7cc440ce46
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /dongtaiwang.com
+- alterId: 4
+  cipher: auto
+  name: 🇺🇸US-192.186.129.66-4536-mahdibland-worker-general
+  network: ws
+  path: /usa-buffalo.lvuft.com/ws
+  port: 443
+  server: cdnjs.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: aba50dd4-5484-3b05-b14a-4661caf862d5
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /ws
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-198.41.212.145-0767-mahdibland-worker-general
+  network: ws
+  path: /lg1.cfcdn3.xyz/dongtaiwang.com
+  port: 443
+  server: api.jquery.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 33aa57df-1c93-4318-9fce-e850437ee781
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /dongtaiwang.com
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-172.67.131.27-0288-mahdibland-worker-general
+  network: ws
+  path: /rak1d3.988988.shop/
+  port: 2083
+  server: codepen.io
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 75d96365-1229-4fc4-dbda-855717f876cf
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /
+- alterId: 0
+  cipher: auto
+  name: 🇯🇵JP-124.156.225.184-4576-mahdibland-worker-general
+  network: ws
+  path: /azjp.pengui.xyz/
+  port: 443
+  server: laravel.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 7a010436-7b4a-4e65-ade4-844ba074ad58
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /
+- alterId: 64
+  cipher: auto
+  name: 🏁RELAY-104.19.45.117-1101-mahdibland-worker-general
+  network: ws
+  path: /cdnde.irteyz.today/
+  port: 443
+  server: api.jquery.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 3b5e258e-8c5e-45d3-b7d2-02c8f5fc0bb2
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸US-166.117.68.124-1541-mahdibland-worker-general
+  network: ws
+  path: /one.r33.fun/racevpn
+  port: 443
+  server: nginx.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: c9459985-d2d6-4e01-a5a1-1ed0815ac841
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /racevpn
+- alterId: 0
+  cipher: auto
+  name: 🇦🇺AU-103.224.212.215-7761-mahdibland-worker-general
+  network: ws
+  path: /vuk2.0bad.com/chat
+  port: 443
+  server: nginx.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 927094d3-d678-4763-8591-e240d0bcae87
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /chat
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-104.18.13.15-7255-mahdibland-worker-general
+  network: ws
+  path: /glweidf.sbs/linkws
+  port: 443
+  server: chat.openai.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 76221bfb-e92f-4e80-81c5-6fe48f50ac0b
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /linkws
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸US-172.233.221.214-7155-mahdibland-worker-general
+  network: ws
+  path: /indiavideo.sbs/linkws
+  port: 443
+  server: workers.dev
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 425c5e6e-30a0-4984-8a13-ee6f72053162
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /linkws
+- alterId: 32
+  cipher: auto
+  name: 🇺🇸US-77.83.141.171-0255-mahdibland-worker-general
+  network: ws
+  path: /vc.fly.dev/
+  port: 443
+  server: codepen.io
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 35379219-6535-4f2e-a4fe-3e44f61e0eee
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /
+- alterId: 64
+  cipher: auto
+  name: 🇯🇵JP-107.148.1.118-7434-mahdibland-worker-general
+  network: ws
+  path: /www.44010396.xyz/path/351212081517
+  port: 443
+  server: auth0.openai.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 418048af-a293-4b99-9b0c-98ca3580dd24
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /path/351212081517
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-141.101.114.25-0757-mahdibland-worker-general
+  network: ws
+  path: /lg30.cfcdn3.xyz/ray
+  port: 443
+  server: chat.openai.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 91646f9a-b4e9-4aca-bfe3-8892b3e58fe7
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /ray
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-104.21.32.1-7256-mahdibland-worker-general
+  network: ws
+  path: /dktwonwydebplc.com/
+  port: 443
+  server: api.jquery.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: d13fc2f5-3e05-4795-81eb-44143a09e552
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-172.67.72.172-4194-mahdibland-worker-general
+  network: ws
+  path: /nat.998808.xyz/fthe4gsefgtdu
+  port: 443
+  server: codepen.io
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 1bff15f1-a71d-4f07-b8bf-9471708eff8b
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /fthe4gsefgtdu
+- alterId: 0
+  cipher: auto
+  name: 🇭🇰HK-104.208.117.86-4114-mahdibland-worker-general
   network: ws
   path: /univstar-104-208-117-86.nip.io/
   port: 443
-  server: cdnjs.com
+  server: www.speedtest.net
   servername: myclash.dailyoff.no
   skip-cert-verify: false
   tls: true
@@ -3092,247 +2670,23 @@ proxies:
     path: /
 - alterId: 0
   cipher: auto
-  name: 🏁RELAY-104.21.20.162-1027-mahdibland-worker-general
+  name: 🏁RELAY-172.67.75.172-1904-mahdibland-worker-general
   network: ws
-  path: /orvps2.horsenma.net/horsen
-  port: 8443
-  server: codepen.io
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 57e595e6-ef54-4e0d-b8df-e96db9612b99
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /horsen
-- alterId: 0
-  cipher: auto
-  name: 🇹🇼TW-211.72.35.110-4207-mahdibland-worker-general
-  network: ws
-  path: /woideneu7.jsworld.eu.org/nishikata
+  path: /ip.sb/
   port: 443
   server: chat.openai.com
   servername: myclash.dailyoff.no
   skip-cert-verify: false
   tls: true
   type: vmess
-  uuid: 2eb30779-2e8c-4b89-e6bd-a0ec760ca506
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /nishikata
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-172.67.170.169-0816-mahdibland-worker-general
-  network: ws
-  path: /buyvm.imkcp.eu.org/imkcpyyds
-  port: 443
-  server: workers.dev
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 6fb9a750-55b8-4e6e-857b-242b795399dc
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /imkcpyyds
-- alterId: 0
-  cipher: auto
-  name: 🇺🇸US-199.59.243.228-1504-mahdibland-worker-general
-  network: ws
-  path: /sg1-v.sshmax.xyz/vmess
-  port: 443
-  server: chat.openai.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: b655be0e-4b1a-4e3e-b63f-22a928a6e808
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /vmess
-- alterId: 0
-  cipher: auto
-  name: 🇯🇵JP-172.233.67.157-0288-mahdibland-worker-general
-  network: ws
-  path: /test13.huvicloud.com/
-  port: 443
-  server: api.jquery.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: b7087817-b967-474a-8e38-027e7c92a980
+  uuid: c9ddb489-7b5e-49ed-8b21-749f4a0ed56d
   ws-opts:
     headers:
       Host: myclash.dailyoff.no
     path: /
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-172.67.178.55-4191-mahdibland-worker-general
-  network: ws
-  path: /www.aoopmiss.cf/live
-  port: 443
-  server: api.jquery.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 0145bfef-aa53-416f-90d4-8634295dab57
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /live
-- alterId: 0
-  cipher: chacha20-poly1305
-  name: 🏁RELAY-172.67.131.245-7806-mahdibland-worker-general
-  network: ws
-  path: /series-v1.samanehha.co/dT9s3HqgZeD3eApzDAfhOHq
-  port: 443
-  server: www.speedtest.net
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 0b65bb06-6b28-487a-8e3c-820dda51e977
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /dT9s3HqgZeD3eApzDAfhOHq
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-104.21.64.1-7897-mahdibland-worker-general
-  network: ws
-  path: /Dusseldorf.kotick.site/speedtest
-  port: 443
-  server: api.jquery.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: DDC2A29D-1A41-4CEB-B520-197356099B83
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /speedtest
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-172.67.244.191-7058-mahdibland-worker-general
-  network: ws
-  path: /gwdef.sbs/linkws
-  port: 443
-  server: workers.dev
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: bc864078-dcf3-4bf4-8dbf-ca9f200b56be
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /linkws
-- alterId: 0
-  cipher: auto
-  name: 🇳🇱NL-185.107.56.192-4582-mahdibland-worker-general
-  network: ws
-  path: /oz.moonfree.top/
-  port: 443
-  server: laravel.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 9fbb6122-46e7-413b-b29d-749eef446c8d
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /
-- alterId: 0
-  cipher: auto
-  name: 🇯🇵JP-147.78.244.7-4552-mahdibland-worker-general
-  network: ws
-  path: /virmach.qweasdzxc.gq/
-  port: 443
-  server: workers.dev
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: c2907a9a-5024-41fd-be3c-30885585e3ef
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /
-- alterId: 0
-  cipher: auto
-  name: 🇺🇸US-104.131.68.55-1952-mahdibland-worker-general
-  network: ws
-  path: /us3.31vpn.com/fastssh/3102637493qqcom/626cf7d8bd49b/
-  port: 443
-  server: auth0.openai.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 2ef64dc8-ca3c-45b8-ad5f-20871452143b
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /fastssh/3102637493qqcom/626cf7d8bd49b/
-- alterId: 0
-  cipher: auto
-  name: 🇹🇷TR-202.78.162.5-1163-mahdibland-worker-general
-  network: ws
-  path: /sahand.serveminecraft.net/
-  port: 443
-  server: laravel.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 118287d2-e968-42e1-80d0-12fa2f5d38d6
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /
-- alterId: 0
-  cipher: auto
-  name: 🇰🇷KR-146.56.47.1-1825-mahdibland-worker-general
-  network: ws
-  path: /kr-arm2.018999.xyz/e98fc1a0-9c52-4091-91a5-c159b0aa274e
-  port: 443
-  server: discord.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: e98fc1a0-9c52-4091-91a5-c159b0aa274e
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /e98fc1a0-9c52-4091-91a5-c159b0aa274e
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-162.159.138.232-7895-mahdibland-worker-general
-  network: ws
-  path: /discord.com/wss13889
-  port: 443
-  server: discord.com
-  servername: myclash.dailyoff.no
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 824c58b1-65ba-4680-a609-663a000dbb92
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /wss13889
 - alterId: 64
   cipher: auto
-  name: 🇳🇱NL-46.182.107.45-1118-mahdibland-worker-general
+  name: 🇳🇱NL-46.182.107.46-1129-mahdibland-worker-general
   network: ws
   path: /www.27430248.xyz/footers
   port: 443
@@ -3348,41 +2702,825 @@ proxies:
     path: /footers
 - alterId: 0
   cipher: auto
-  name: 🏁RELAY-141.101.114.20-0785-mahdibland-worker-general
+  name: 🏁RELAY-198.41.212.92-4193-mahdibland-worker-general
   network: ws
-  path: /clash1.trump2023.net/dongtaiwang.com
+  path: /www.998808.xyz/vbje5ytgwfgdrhe
   port: 443
-  server: workers.dev
+  server: codepen.io
   servername: myclash.dailyoff.no
   skip-cert-verify: false
   tls: true
   type: vmess
-  uuid: 176b598f-445b-41ac-9d2a-430c5c4df26a
+  uuid: bd014532-1f8b-4d33-b79d-50131d8d4633
   ws-opts:
     headers:
       Host: myclash.dailyoff.no
-    path: /dongtaiwang.com
+    path: /vbje5ytgwfgdrhe
 - alterId: 0
   cipher: auto
-  name: 🏁RELAY-188.114.96.0-7834-mahdibland-worker-general
+  name: 🇹🇼TW-211.72.35.110-4202-mahdibland-worker-general
   network: ws
-  path: /mtn.bamarambash.monster/d84ee332-1284-11ee-a5c8-8213fd3be4b9
+  path: /woideneu7.jsworld.eu.org/nishikata
+  port: 443
+  server: codepen.io
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 2eb30779-2e8c-4b89-e6bd-a0ec760ca506
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /nishikata
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-104.19.174.68-1296-mahdibland-worker-general
+  network: ws
+  path: /www.digitalocean.com/111111.online
+  port: 443
+  server: discord.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 3a3e263d-223f-49cc-bbdb-f7e07a55e6fe
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /111111.online
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-172.64.155.200-0556-mahdibland-worker-general
+  network: ws
+  path: /lg4.zhujicn2.com/
+  port: 443
+  server: api.jquery.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: a8030afd-812a-4afe-a766-9c76ff3eddd4
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /
+- alterId: 32
+  cipher: none
+  name: 🇩🇪DE-5.75.236.246-3634-mahdibland-worker-general
+  network: ws
+  path: /mt2.qowch.com/users?ed=2048
+  port: 443
+  server: api.jquery.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: a61eb3a2-1adb-48cb-ab46-ce225769de16
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: users?ed=2048
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-162.159.192.200-7546-mahdibland-worker-general
+  network: ws
+  path: /vcp3.dehel15354.woRKErS.Dev/
+  port: 443
+  server: discord.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: bc864078-dcf3-4bf4-8dbf-ca9f200b56be
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-104.16.89.44-4619-mahdibland-worker-general
+  network: ws
+  path: /zhuyong.hucloud-dns.xyz/huhublog
+  port: 443
+  server: www.speedtest.net
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 9a18cbb1-81d2-4720-9f09-46ea276b6ddb
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /huhublog
+- alterId: 0
+  cipher: auto
+  name: 🇳🇱NL-185.107.56.52-4577-mahdibland-worker-general
+  network: ws
+  path: /oz.moonfree.top/
+  port: 443
+  server: discord.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 9fbb6122-46e7-413b-b29d-749eef446c8d
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-104.21.77.29-7109-mahdibland-worker-general
+  network: ws
+  path: /beyonddbc.sbs/linkws
   port: 443
   server: chat.openai.com
   servername: myclash.dailyoff.no
   skip-cert-verify: false
   tls: true
   type: vmess
-  uuid: 8f74ec8a-971c-11ed-a8fc-0242ac120002
+  uuid: 8d90c129-4156-4d6c-9115-24df25f26a02
   ws-opts:
     headers:
       Host: myclash.dailyoff.no
-    path: /d84ee332-1284-11ee-a5c8-8213fd3be4b9
+    path: /linkws
 - alterId: 0
   cipher: auto
-  name: '[VMess] 🇨🇦 加拿大 V2CROSS.COM-getnode-worker-general'
+  name: 🇰🇷KR-146.56.47.1-1818-mahdibland-worker-general
   network: ws
-  path: /farid.1.berozha.ir/us.kkp.me.eu.org/aa
+  path: /kr-arm2.018999.xyz/e98fc1a0-9c52-4091-91a5-c159b0aa274e
+  port: 443
+  server: codepen.io
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: e98fc1a0-9c52-4091-91a5-c159b0aa274e
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /e98fc1a0-9c52-4091-91a5-c159b0aa274e
+- alterId: 0
+  cipher: auto
+  name: 🇦🇺AU-103.224.212.210-0451-mahdibland-worker-general
+  network: ws
+  path: /v2.kdanmmgmasz.xyz/zksna
+  port: 443
+  server: workers.dev
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: ae0b2b4a-47ac-4d72-b03c-524f959d5a1a
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /zksna
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-185.162.228.229-0814-mahdibland-worker-general
+  network: ws
+  path: /oplg1.cfcdn2.xyz/AUIKN8AU
+  port: 443
+  server: nginx.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: c5a2d7b8-bf84-4f97-8577-b9b87f2baaf7
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /AUIKN8AU
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-172.67.199.34-0851-mahdibland-worker-general
+  network: ws
+  path: /lu.sharecentre.online/shirker
+  port: 443
+  server: chat.openai.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 20e92881-5fb4-4b05-bc77-57929476dc69
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /shirker
+- alterId: 0
+  cipher: auto
+  name: 🇩🇪DE-91.195.240.12-0551-mahdibland-worker-general
+  network: ws
+  path: /sgp.kapok.buzz/4befdd8a6/
+  port: 443
+  server: workers.dev
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: c1bac6b8-934a-44e2-9cf2-ee0db1fc1c85
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /4befdd8a6/
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-185.148.105.52-7839-mahdibland-worker-general
+  network: ws
+  path: /mbt.ircf.space/juYLyvNBpY0LBOAommy2aJE
+  port: 443
+  server: laravel.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 79770a32-9607-4919-9483-0f1794559390
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /juYLyvNBpY0LBOAommy2aJE
+- alterId: 0
+  cipher: auto
+  name: 🇩🇪DE-172.104.247.121-7208-mahdibland-worker-general
+  network: ws
+  path: /ivideos.sbs/linkws
+  port: 443
+  server: nginx.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 441da342-ce90-441e-bff9-d2ceb55e68ca
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /linkws
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-104.21.1.32-7224-mahdibland-worker-general
+  network: ws
+  path: /3.clarity168.com/
+  port: 443
+  server: auth0.openai.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 48f837fa-12d0-498d-b5f6-94f9979736a4
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-203.30.188.190-0883-mahdibland-worker-general
+  network: ws
+  path: /lg10.cfcdn1.xyz/A2DJOPFT
+  port: 443
+  server: api.jquery.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 17b2a313-37a0-4945-a8e4-e63375506b4a
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /A2DJOPFT
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸US-76.223.91.20-0862-mahdibland-worker-general
+  network: ws
+  path: /fr2-full.privateip.net/racevpn
+  port: 443
+  server: www.speedtest.net
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 9bb0e2e3-c5b9-4606-9cbb-a3c36f2d01d7
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /racevpn
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-141.101.114.100-0737-mahdibland-worker-general
+  network: ws
+  path: /lg1.cfcdn2.xyz/VHONOFZ3
+  port: 443
+  server: api.jquery.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 267a9f38-40d8-4ed6-ab58-cafc67e9c933
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /VHONOFZ3
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-172.67.178.55-4186-mahdibland-worker-general
+  network: ws
+  path: /www.aoopmiss.cf/live
+  port: 443
+  server: workers.dev
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 0145bfef-aa53-416f-90d4-8634295dab57
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /live
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-104.21.76.158-0257-mahdibland-worker-general
+  network: ws
+  path: /sj4.620720.xyz/
+  port: 8443
+  server: discord.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 516d8a7a-3f0b-41d3-bad0-246116381516
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-162.159.137.232-7893-mahdibland-worker-general
+  network: ws
+  path: /discord.com/wss13889
+  port: 443
+  server: api.jquery.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 824c58b1-65ba-4680-a609-663a000dbb92
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /wss13889
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-104.21.64.1-7895-mahdibland-worker-general
+  network: ws
+  path: /Dusseldorf.kotick.site/speedtest
+  port: 443
+  server: nginx.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: DDC2A29D-1A41-4CEB-B520-197356099B83
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /speedtest
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-104.21.49.65-4382-mahdibland-worker-general
+  network: ws
+  path: /xui.mycf.ml/
+  port: 2083
+  server: workers.dev
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 8a21b84d-183e-450d-ec82-8d45855d8180
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-104.26.5.10-0759-mahdibland-worker-general
+  network: ws
+  path: /sg1-v2ray.sshkit.org/sshkit/401452697/635b464921141/
+  port: 443
+  server: www.speedtest.net
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: c6747da4-fb2e-4a2a-bdb7-8614bdd6b0b3
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /sshkit/401452697/635b464921141/
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸US-49.51.180.214-1201-mahdibland-worker-general
+  network: ws
+  path: /136.175.178.176mgmg.xhtk.cc/veghvws
+  port: 443
+  server: workers.dev
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 23b3724b-3d90-2074-a5bf-09388a9806b7
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /veghvws
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-104.18.12.15-1193-mahdibland-worker-general
+  network: ws
+  path: /workers.dev/111111.online
+  port: 443
+  server: laravel.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 7a70e0f7-170d-4ab0-82a0-c40554bfb320
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /111111.online
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-141.101.114.133-0786-mahdibland-worker-general
+  network: ws
+  path: /lg1.cfcdn1.xyz/ray
+  port: 443
+  server: workers.dev
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: fcfaec91-6096-44d8-956c-7868d9e874b1
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /ray
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-172.67.170.169-0807-mahdibland-worker-general
+  network: ws
+  path: /buyvm.imkcp.eu.org/imkcpyyds
+  port: 443
+  server: laravel.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 6fb9a750-55b8-4e6e-857b-242b795399dc
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /imkcpyyds
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-141.101.114.121-0809-mahdibland-worker-general
+  network: ws
+  path: /fr2.cfcdn4.xyz/ray
+  port: 443
+  server: nginx.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: f33957e8-372e-4fba-99ed-f4db32cce9e5
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /ray
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸US-15.197.240.20-1231-mahdibland-worker-general
+  network: ws
+  path: /v2ray.online/speedtest
+  port: 443
+  server: codepen.io
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 2F094845-E2BD-EBF7-DEB7-995992436FAF
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /speedtest
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸US-184.31.68.248-1305-mahdibland-worker-general
+  network: ws
+  path: /cacerts.digicert.com/
+  port: 443
+  server: api.jquery.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 4612618c-24cd-4379-9924-cfdf3d61fa5a
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼TW-211.72.35.110-4205-mahdibland-worker-general
+  network: ws
+  path: /haxeu7.jsworld.eu.org/nishikata3
+  port: 443
+  server: cdnjs.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: dfd1d80f-caf0-4b11-e0bb-733a2710a07a
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /nishikata3
+- alterId: 4
+  cipher: auto
+  name: 🇮🇪IE-54.73.53.134-4782-mahdibland-worker-general
+  network: ws
+  path: /mycfwork.herokuapp.com/07a3a1e3-d52e-4acc-958e-c301681b5f09-vmess
+  port: 443
+  server: workers.dev
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 07a3a1e3-d52e-4acc-958e-c301681b5f09
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /07a3a1e3-d52e-4acc-958e-c301681b5f09-vmess
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸US-199.59.243.228-1497-mahdibland-worker-general
+  network: ws
+  path: /sg1-v.sshmax.xyz/vmess
+  port: 443
+  server: chat.openai.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: b655be0e-4b1a-4e3e-b63f-22a928a6e808
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /vmess
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸US-15.197.240.20-0833-mahdibland-worker-general
+  network: ws
+  path: /Kansas.v2ray.online/speedtest
+  port: 443
+  server: chat.openai.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 00BBF5B8-173E-6818-9927-5AD1AA073C7D
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /speedtest
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-172.67.198.187-6966-mahdibland-worker-general
+  network: ws
+  path: /xmivideo.cfd/
+  port: 443
+  server: auth0.openai.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 93ea486a-bada-42a4-ac38-d088b320fa1e
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-172.64.150.170-0808-mahdibland-worker-general
+  network: ws
+  path: /001frg.pages.dev/65218fe8-d9c2-4e07-95bb-cb6e379a440b-vm
+  port: 443
+  server: cdnjs.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 65218fe8-d9c2-4e07-95bb-cb6e379a440b
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /65218fe8-d9c2-4e07-95bb-cb6e379a440b-vm
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸US-152.67.251.232-6932-mahdibland-worker-general
+  network: ws
+  path: /irvideo.cfd/linkws
+  port: 443
+  server: cdnjs.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: e537f2f5-2a0c-4f59-92c9-832ca6433bf3
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /linkws
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-172.67.170.147-1034-mahdibland-worker-general
+  network: ws
+  path: /xcvfgt6.999854.xyz/4Bp70NdrJV3xr1D40NK
+  port: 443
+  server: laravel.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: ffcf7ec1-3e09-4821-b3d9-b426a107b73b
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /4Bp70NdrJV3xr1D40NK
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸US-45.89.104.203-7161-mahdibland-worker-general
+  network: ws
+  path: /gs09.guoshi1520.com/681e76bc
+  port: 443
+  server: api.jquery.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 681e76bc-c19e-4614-ca47-95ba2253a5a3
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /681e76bc
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-104.21.87.159-1611-mahdibland-worker-general
+  network: ws
+  path: /6ofj69.scvps.my.id/vmessws
+  port: 443
+  server: chat.openai.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: f664d429-84f6-47b9-aaa8-39bde191c897
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /vmessws
+- alterId: 0
+  cipher: auto
+  name: 🇹🇼TW-104.29.64.5-4424-mahdibland-worker-general
+  network: ws
+  path: /us3.guolicheng.cyou/suti/us3?ed=2048
+  port: 443
+  server: auth0.openai.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: a1b16d10-4f43-4dd9-8c4f-52065b2b0910
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /suti/us3?ed=2048
+- alterId: 0
+  cipher: auto
+  name: 🇩🇪DE-64.190.63.222-0856-mahdibland-worker-general
+  network: ws
+  path: /cvywfavasdc.cymlr.xyz/ksebupo
+  port: 443
+  server: auth0.openai.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 23f4bc80-3b0a-4aa3-cbe5-b8be4e8c32fc
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /ksebupo
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-104.21.94.64-7017-mahdibland-worker-general
+  network: ws
+  path: /linja05.hwcar.sbs/linkws
+  port: 443
+  server: api.jquery.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 39cec18f-a439-427c-9a4e-aeb6fcdf6f53
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /linkws
+- alterId: 0
+  cipher: auto
+  name: 🇸🇬SG-8.222.159.245-6999-mahdibland-worker-general
+  network: ws
+  path: /beyonddsz.cfd/linkws
+  port: 443
+  server: workers.dev
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 9b456c2a-f2c1-45e1-87a9-b7628b04bb24
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /linkws
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-172.66.0.218-4650-mahdibland-worker-general
+  network: ws
+  path: /v2.chigua.tk/vmess
+  port: 443
+  server: www.speedtest.net
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: ffffffff-ffff-ffff-ffff-ffffffffffff
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /vmess
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-104.21.7.50-7924-mahdibland-worker-general
+  network: ws
+  path: /b2n.ir/wss51068
+  port: 443
+  server: api.jquery.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: b3a21def-5fcc-47a8-a6a0-a34e29d5288a
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /wss51068
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-172.67.75.172-5086-mahdibland-worker-general
+  network: ws
+  path: /fr.atlen.dpdns.org/28548ef7-983d-4ee8-8bd6-7d71d905b5a2-vmess
+  port: 443
+  server: chat.openai.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 28548ef7-983d-4ee8-8bd6-7d71d905b5a2
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /28548ef7-983d-4ee8-8bd6-7d71d905b5a2-vmess
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-104.18.41.208-7920-mahdibland-worker-general
+  network: ws
+  path: /bluehost.com/16575
+  port: 443
+  server: laravel.com
+  servername: myclash.dailyoff.no
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: be74ca03-6a7c-4c88-edc2-c6434ead0cfa
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /16575
+- alterId: 0
+  cipher: auto
+  name: '[VMess] 🇺🇸 美国 CloudFlare节点 3-getnode-worker-general'
+  network: ws
+  path: /ssssssssssssfffffffgh.2032.pp.ua/6We3U9Df1WGxgFnoFPw1
   port: 443
   server: codepen.io
   servername: myclash.dailyoff.no
@@ -3391,16 +3529,28 @@ proxies:
   tls: true
   type: vmess
   udp: true
-  uuid: de94cc0a-0592-4969-b1fc-97ea8f0ea0b3
+  uuid: 4174b95d-115e-4d39-add6-1f8db95bb860
   ws-opts:
     headers:
       Host: myclash.dailyoff.no
-    path: /us.kkp.me.eu.org/aa
-- name: 约旦
+    path: /6We3U9Df1WGxgFnoFPw1
+- cipher: chacha20-ietf-poly1305
+  name: 立陶宛
+  password: oZIoA69Q8yhcQV8ka3Pa3A
+  port: 8080
+  server: 45.87.175.69
+  type: ss
+- cipher: aes-256-cfb
+  name: 荷兰
+  password: HSZuyJQcWe8dxNdF
+  port: 9043
+  server: 213.183.59.206
+  type: ss
+- name: 罗马尼亚
   network: ws
   password: ttfang
   port: 2096
-  server: 62.72.166.216
+  server: 45.85.118.216
   skip-cert-verify: false
   sni: ttfang.fange.me
   type: trojan
@@ -3410,35 +3560,710 @@ proxies:
     path: Telegram🇨🇳
 - alterId: 0
   cipher: auto
+  name: 俄罗斯联邦_02
+  network: ws
+  port: 443
+  server: 185.143.220.25
+  servername: dengxin.one
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: f28e354e-c2d1-4983-9b07-5acaf1b3b3e5
+  ws-opts:
+    path: /6e9EtZ2dL
+- cipher: chacha20-ietf-poly1305
+  name: 美国_06
+  password: o38yuvzSe3m5aDNpHtUPH1zGwbGEXXMDsGwVaub2SYEmHUa2WGZUjiezX3Vvva9CCzpjxYtuJLgKsSnsyKBf9ciPVba3y4o3
+  port: 54075
+  server: 94.131.21.174
+  type: ss
+- cipher: aes-256-cfb
+  name: 澳大利亚
+  password: KnJGad3FqTvjqbaX
+  port: 9014
+  server: 185.167.116.253
+  type: ss
+- name: 中国_09
+  password: 253bc477d4e43c209f2d427272968280
+  port: 461
+  server: 36.156.102.125
+  skip-cert-verify: false
+  sni: www.baidu.com
+  type: trojan
+- alterId: 64
+  cipher: auto
   name: 未知_07
   network: ws
-  port: 8080
-  server: 172.64.150.57
+  port: 443
+  server: 104.19.36.160
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: ad806487-2d26-4636-98b6-ab85cc8521f7
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /
+- cipher: aes-256-cfb
+  name: 🇫🇷FR-15.188.26.19-1325-mahdibland
+  obfs: http_simple
+  obfs-param: ''
+  password: YpX2opBbrfqJzzMs
+  port: 42833
+  protocol: origin
+  protocol-param: ''
+  server: z0111.security-cloudfront-cdn.com
+  type: ssr
+- name: 韩国_02
+  password: 9c822f05-cfdc-479a-9534-60f3d4127435
+  port: 443
+  server: 138.2.113.248
+  skip-cert-verify: false
+  type: trojan
+- name: 中国_10
+  password: 0b2d98a4-25bc-3d9f-9694-9d1e929de8dd
+  port: 19232
+  server: 120.226.39.25
+  skip-cert-verify: false
+  type: trojan
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-104.26.13.54-0997-mahdibland
+  network: ws
+  port: 80
+  server: time.is
   skip-cert-verify: false
   tls: false
   type: vmess
-  uuid: e3fa5050-67f5-4625-a778-5d9283f4334f
+  uuid: 66ddd790-10ed-4a16-b334-0b7e3577b5b7
   ws-opts:
-    path: /m1
+    headers:
+      Host: time.is
+    path: /
 - cipher: chacha20-ietf-poly1305
-  name: 香港_39
+  name: 日本_04
   password: G!yBwPWH3Vao
-  port: 809
-  server: 148.66.56.99
+  port: 812
+  server: 185.160.24.217
+  type: ss
+- alterId: 0
+  cipher: auto
+  name: 未知_08
+  network: ws
+  port: 443
+  server: 172.64.153.150
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: bf4619e4-01dc-48ca-be08-0976b54968ce
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /dongtaiwang.com
+- cipher: chacha20-ietf-poly1305
+  name: 越南
+  password: Nk9asglDzHzjktVzTkvhaA
+  port: 443
+  server: 160.19.78.75
+  type: ss
+- name: 新加坡
+  password: cd39f62aed7b90f6
+  port: 3389
+  server: 5.44.249.43
+  skip-cert-verify: false
+  type: trojan
+- alterId: 0
+  cipher: auto
+  name: 南非
+  network: ws
+  port: 55600
+  server: 129.151.164.152
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  uuid: e30f8588-2555-48b8-c354-c8e63f57232d
+  ws-opts:
+    path: /
+- alterId: 0
+  cipher: auto
+  name: 🇮🇪IE-46.137.15.86-1100-mahdibland
+  network: ws
+  port: 443
+  server: ac2088.herokuapp.com
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: d1babe08-f8ac-490b-b66f-9be27467f3cc
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /d1babe08-f8ac-490b-b66f-9be27467f3cc-vmess
+- cipher: aes-256-cfb
+  name: 美国_07
+  password: bwhskrskr05
+  port: 253
+  server: 97.64.122.63
+  type: ss
+- name: 🇨🇳CN-183.232.139.195-5394-mahdibland
+  password: ED177480-E516-11EA-8B44-BBC4E882BA0B
+  port: 20261
+  server: js04.balala2016.xyz
+  skip-cert-verify: false
+  type: trojan
+- cipher: aes-256-cfb
+  name: 荷兰_02
+  password: UWZQeLRWnkqgkseq
+  port: 9032
+  server: 213.183.59.211
+  type: ss
+- name: 🇰🇷KR-203.210.16.78-2447-mahdibland
+  password: 96983eb4-c8f1-316e-ab00-500014ed3d8b
+  port: 8443
+  server: official.seoulcitygovernment.com.ua
+  skip-cert-verify: false
+  type: trojan
+- cipher: aes-256-cfb
+  name: 越南_02
+  password: Xn8jKdmDM00IeO%#$#fJAMtsEAEUOpH/YWYtYqDFnT0SV
+  port: 38388
+  server: 103.186.155.18
+  type: ss
+- name: 🇬🇧GB-188.166.150.199-4908-mahdibland
+  password: 30761083-5dcd-49d6-85b5-33756ef1f7ed
+  port: 443
+  server: uk2-full.privateip.net
+  skip-cert-verify: false
+  type: trojan
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-141.193.213.20-0050-mahdibland
+  network: ws
+  port: 80
+  server: blogs.microsoft.com
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  uuid: 15df1f53-9101-404b-dd52-7774cdb3c218
+  ws-opts:
+    headers:
+      Host: net2.xtls.my.id
+    path: /
+- alterId: 0
+  cipher: auto
+  name: 香港_64
+  network: ws
+  port: 50045
+  server: 20.239.179.251
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  uuid: 1617e875-e377-4e4f-85ef-dcf9e5e10df7
+  ws-opts:
+    path: /
+- name: 德国
+  password: 665c944d-047d-4659-80d5-3eaac70241a9
+  port: 443
+  server: 139.162.158.172
+  skip-cert-verify: false
+  sni: de2-full.privateip.net
+  type: trojan
+- cipher: aes-128-cfb
+  name: 中国_11
+  password: QazEdcTgb159@$*
+  port: 25284
+  server: 14.29.124.168
   type: ss
 - cipher: aes-256-cfb
-  name: 保加利亚
-  password: U6qnYRhfyDmn8sgn
-  port: 9041
-  server: 213.183.63.221
+  name: 荷兰_03
+  password: GeregetR8cvQHzYr
+  port: 9030
+  server: 213.183.59.211
   type: ss
+- name: 🇺🇸US-13.248.169.48-1586-mahdibland
+  password: 64de1de7-e3bb-3dc4-ab04-d1e601e18ac5
+  port: 17112
+  server: hn.xiaohouzi.club
+  skip-cert-verify: false
+  sni: $$supaz012.xiaohouzi.club
+  type: trojan
+- alterId: 0
+  cipher: auto
+  name: 香港_65
+  network: ws
+  port: 80
+  server: 104.208.96.44
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  uuid: 80e94af6-e42a-4dbc-8f4b-c5f99bf97d3d
+  ws-opts:
+    path: /zh-cn/download
+- cipher: aes-256-cfb
+  name: 希腊
+  password: f8f7aCzcPKbsF8p3
+  port: 989
+  server: 192.71.166.102
+  type: ss
+- name: 法国_03
+  password: b8808043-6566-4923-9195-e66bfb553d57
+  port: 443
+  server: 51.38.99.96
+  skip-cert-verify: false
+  sni: ba24.ir
+  type: trojan
+- alterId: 0
+  cipher: auto
+  name: 德国_02
+  network: ws
+  port: 80
+  server: 162.55.62.193
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  uuid: 2aac77de-b3e4-4017-845c-ca1380f2e8d0
+  ws-opts:
+    path: /telegram-id-@privatevpns
+- alterId: 0
+  cipher: auto
+  name: 美国_08
+  network: ws
+  port: 20086
+  server: 82.29.132.9
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  uuid: b2c61f53-a359-429c-900e-255f02def6be
+  ws-opts:
+    path: /
+- name: 英国
+  password: d150c8c3-a667-4d3e-843c-739f8558c7d2
+  port: 443
+  server: 198.244.190.189
+  skip-cert-verify: false
+  type: trojan
+- name: 塞浦路斯
+  password: 750a29bf-0a40-437f-b120-38de74ae7eaf
+  port: 28443
+  server: 45.82.253.234
+  skip-cert-verify: false
+  type: trojan
+- alterId: 0
+  cipher: auto
+  name: 未知_09
+  network: ws
+  port: 443
+  server: 172.67.199.34
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 2b214122-1906-428a-bbb7-a039cbb7cd5c
+  ws-opts:
+    path: /9JZFDTKE
+- name: 美国_09
+  password: 6d64570c-81d4-30fa-b2e2-dce73e1a2702
+  port: 44301
+  server: 173.82.240.199
+  skip-cert-verify: false
+  sni: lav002.jd0001.top
+  type: trojan
+- alterId: 0
+  cipher: auto
+  name: 未知_10
+  network: ws
+  port: 2086
+  server: 104.19.47.45
+  servername: ip14.freegradely.xyz
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  uuid: e9e3cc13-db48-4cc1-8c24-7626439a5339
+  ws-opts:
+    headers:
+      Host: ip14.freegradely.xyz
+    path: github.com/Alvin9999
+- name: 香港_66
+  password: dda4f3bf-85fb-41bd-9d8e-77a8a02dbd59
+  port: 1066
+  server: 194.104.147.74
+  skip-cert-verify: false
+  type: trojan
+- name: 台湾_06
+  password: 7b06d22a8a7c764f
+  port: 3389
+  server: 211.72.35.158
+  skip-cert-verify: false
+  type: trojan
+- alterId: 0
+  cipher: auto
+  name: 台湾_07
+  network: ws
+  port: 80
+  server: 165.154.246.107
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  uuid: fa0702f4-8ec9-48e5-9b53-a0afb7c3717e
+  ws-opts:
+    headers:
+      Host: tms.dingtalk.com
+    path: /
+- alterId: 0
+  cipher: auto
+  name: 美国_10
+  network: ws
+  port: 80
+  server: 141.193.213.21
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  uuid: a55b7d77-d251-4e31-a76e-22d09ac69eb0
+  ws-opts:
+    headers:
+      Host: sanggoro6.nextvpn.cc
+    path: /vpnneo
+- alterId: 0
+  cipher: auto
+  name: 未知_11
+  network: ws
+  port: 2082
+  server: 104.18.100.193
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  uuid: 36fa45db-2d4a-4295-a1fe-223836989878
+  ws-opts:
+    path: /pineapple
+- name: 🇫🇷FR-51.178.42.187-5008-mahdibland
+  password: 0280b529-2747-4b7a-ab11-bad6453150b9
+  port: 443
+  server: fr2-full.privateip.net
+  skip-cert-verify: false
+  type: trojan
+- cipher: chacha20-ietf-poly1305
+  name: 德国_03
+  password: pryhyxya
+  port: 57824
+  server: 52.58.249.78
+  type: ss
+- name: 🇲🇾MY-85.211.178.40-5595-mahdibland
+  password: 192a5fc9-2baa-4043-8655-d840d370cb86
+  port: 443
+  server: jp.liangyuandian.top
+  skip-cert-verify: false
+  type: trojan
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-104.26.8.76-4646-mahdibland
+  network: ws
+  port: 443
+  server: powerservice.com
+  skip-cert-verify: false
+  tls: true
+  type: vmess
+  uuid: 0764a598-82c4-4b41-ba10-551a625beed5
+  ws-opts:
+    headers:
+      Host: myclash.dailyoff.no
+    path: /
+- cipher: chacha20-ietf-poly1305
+  name: 美国_11
+  password: Z3YS0KxB8u5jgp736e834y3DaXwSOYzxlFDFqpNCaalDA9CEIRceZOCAnR2yTS
+  port: 18333
+  server: 154.17.2.31
+  type: ss
+- name: 未知_12
+  password: dreDeMpIQpnv
+  port: 2053
+  server: 104.21.44.185
+  skip-cert-verify: false
+  sni: aryanews.onetwothree123.ir
+  type: trojan
+- alterId: 1
+  cipher: auto
+  name: 新加坡_02
+  network: ws
+  port: 21888
+  server: 104.248.148.147
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  uuid: ae7486f9-d7b7-4f26-97a0-dc5b093dfa89
+  ws-opts:
+    headers:
+      Host: 104.248.148.147
+    path: /
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-172.67.68.56-4417-mahdibland
+  network: ws
+  port: 443
+  server: tw02.nttkk.com
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  uuid: 3a9c0d0c-e0fd-3145-a414-ec265e7010b7
+  ws-opts:
+    headers:
+      Host: tw02.nttkk.com
+    path: /
+- name: 🇲🇾MY-85.211.178.40-2566-mahdibland
+  password: 51c44c4e-f8c2-4419-a52b-b4b7bd915078
+  port: 443
+  server: ap.liangyuandian.top
+  skip-cert-verify: false
+  type: trojan
+- name: 🇺🇸US-76.223.54.146-1682-mahdibland
+  password: 0f098bb2-9fad-3cc3-8acf-2a3268c1eb27
+  port: 17109
+  server: hnm.xiaohouzi.club
+  skip-cert-verify: false
+  sni: $$$$$hnm.xiaohouzi.club
+  type: trojan
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸US-209.126.84.189-5057-mahdibland
+  network: ws
+  port: 443
+  server: v2ray.codefyinc.com
+  servername: v2ray.codefyinc.com
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  uuid: 2c981164-9b93-4bca-94ff-b78d3f8498d7
+  ws-opts:
+    headers:
+      Host: v2ray.codefyinc.com
+    path: /vmessws
+- alterId: 0
+  cipher: auto
+  name: 美国_12
+  network: ws
+  port: 44428
+  server: 38.54.80.63
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  uuid: 388de77b-9709-4e75-b791-5702867a1202
+  ws-opts:
+    path: /arki?ed=2048
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-104.21.90.210-1575-mahdibland
+  network: ws
+  port: 80
+  server: icook.hk
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  uuid: 3eb05cb6-d2e1-4a31-9f82-514cfa98fe15
+  ws-opts:
+    headers:
+      Host: icook.hk
+    path: /ray?ed=2048
+- cipher: chacha20-ietf-poly1305
+  name: 美国_13
+  password: )1N1E6v0SU_rGTpg
+  port: 1036
+  server: 79.133.109.56
+  type: ss
+- name: 🇸🇬SG-68.183.234.52-4962-mahdibland
+  password: c3d6d2e4-05a5-4a48-b91a-070b5e9fcdfb
+  port: 443
+  server: sg2-full.privateip.net
+  skip-cert-verify: false
+  type: trojan
+- alterId: 0
+  cipher: auto
+  name: 未知_13
+  network: ws
+  port: 80
+  server: 172.67.190.208
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  uuid: 4bf074f4-7e9c-4e4b-a10d-156e26199729
+  ws-opts:
+    headers:
+      Host: us03s.5d8ecf82.cfd
+    path: /
+- alterId: 0
+  cipher: auto
+  name: 香港_67
+  network: ws
+  port: 80
+  server: 182.16.1.194
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  uuid: 00a1da14-d55f-5f75-e346-79b985e1a723
+  ws-opts:
+    path: /
+- name: 澳大利亚_02
+  password: e8c1ab3c-89b3-4933-92df-682e6dce7819
+  port: 443
+  server: 152.67.98.30
+  skip-cert-verify: false
+  type: trojan
+- alterId: 0
+  cipher: auto
+  name: 芬兰
+  network: ws
+  port: 443
+  server: 65.109.184.152
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  uuid: 5cf836c8-bb7d-4eac-f0ee-bc721fb7453b
+  ws-opts:
+    path: /
+- alterId: 0
+  cipher: auto
+  name: 🏁RELAY-104.16.10.137-4995-mahdibland
+  network: ws
+  port: 80
+  server: 3e0cb0.010239dc.cfd
+  servername: us04s.010239dc.cfd
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  uuid: 952797b6-21a0-4e66-9239-30ef5c0efcdf
+  ws-opts:
+    headers:
+      Host: 3e0cb0.010239dc.cfd
+    path: /
+- name: 新加坡_03
+  password: iyinglong
+  port: 443
+  server: 13.213.69.245
+  skip-cert-verify: false
+  type: trojan
+- alterId: 0
+  cipher: auto
+  name: 🇺🇸US-170.130.92.65-0480-mahdibland
+  network: ws
+  port: 80
+  server: mx1.v2rayserv.com
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  uuid: 01e1554e-aebf-49e5-ac33-c13155840a5d
+  ws-opts:
+    headers:
+      Host: mx1.v2rayserv.com
+    path: /
+- name: 韩国_03
+  password: f2117e99-9b6e-47fd-b0a9-634a0b15b998
+  port: 443
+  server: 146.56.189.146
+  skip-cert-verify: false
+  type: trojan
+- alterId: 0
+  cipher: auto
+  name: 美国_14
+  network: ws
+  port: 20086
+  server: 38.106.3.14
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  uuid: 766c0871-1359-4ae9-8921-0f468ec02722
+  ws-opts:
+    path: /
+- name: 🇺🇸US-76.223.54.146-1399-mahdibland
+  password: 21e10785-99c6-316e-a184-a03384ee06e5
+  port: 47651
+  server: hnm.xiaohouzi.club
+  skip-cert-verify: false
+  sni: $hnm.xiaohouzi.club
+  type: trojan
+- alterId: 0
+  cipher: auto
+  name: 荷兰_04
+  network: ws
+  port: 25808
+  server: 46.243.3.42
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  uuid: 8fd16171-8c78-475c-80fe-a6f66b310bf3
+  ws-opts:
+    path: /
+- name: 🇭🇰HK-5.83.221.31-1334-mahdibland
+  password: b46a2da5-79eb-47d1-ad1e-30b988c0f93b
+  port: 20224
+  server: v01.gutingting.com
+  skip-cert-verify: false
+  sni: v2usa01.fuqiangren.com
+  type: trojan
+- name: 中国_12
+  password: 7d223bae-e183-4bf6-89c3-e327b15df490
+  port: 10821
+  server: 183.236.51.7
+  skip-cert-verify: false
+  type: trojan
+- cipher: aes-256-cfb
+  name: 德国_04
+  password: cp8pRSUAyLhTfVWH
+  port: 9064
+  server: 80.92.204.106
+  type: ss
+- cipher: chacha20-ietf-poly1305
+  name: 俄罗斯联邦_03
+  password: 360e21d21977dc11
+  port: 57456
+  server: 45.139.24.24
+  type: ss
+- alterId: 0
+  cipher: auto
+  name: 荷兰_05
+  network: ws
+  port: 54458
+  server: 79.132.133.38
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  uuid: 31b022f2-5441-4e9a-ffe7-43fee7ab0688
+  ws-opts:
+    path: /
+- cipher: chacha20-ietf-poly1305
+  name: 英国_02
+  password: Ultr@r00t_2017
+  port: 811
+  server: 178.62.16.161
+  type: ss
+- alterId: 0
+  cipher: auto
+  name: 美国_15
+  network: ws
+  port: 80
+  server: 51.81.220.195
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  uuid: 6fea1649-425b-4092-bf53-29792152c925
+  ws-opts:
+    path: /sshkit/Variu88/634dab7abadf1/
+- alterId: 0
+  cipher: auto
+  name: 新加坡_04
+  network: ws
+  port: 36277
+  server: 129.150.46.8
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  uuid: f3d972b0-aa7f-499d-85cd-c0c26f9cc15f
+  ws-opts:
+    headers:
+      Host: YouTube-aweikeji
+    path: /
 - alterId: 0
   cipher: auto
   http-opts:
     method: GET
     path:
     - /
-  name: 香港_40
+  name: 香港_68
   network: http
   port: 31152
   server: 47.242.52.13
@@ -3446,225 +4271,90 @@ proxies:
   tls: false
   type: vmess
   uuid: 59cf21e6-d029-47d8-9c37-7ef34280b9d1
-- cipher: aes-128-cfb
-  name: 中国_10
-  password: QazEdcTgb159@$*
-  port: 25270
-  server: 14.29.124.168
-  type: ss
-- name: 🇨🇳CN-120.241.226.93-2883-mahdibland
-  password: 96983eb4-c8f1-316e-ab00-500014ed3d8b
-  port: 2053
-  server: official.tokyometropolis.kiev.ua
-  skip-cert-verify: false
-  type: trojan
-- name: 爱尔兰_31
-  password: telegram-id-privatevpns
-  port: 22222
-  server: 3.253.67.209
-  skip-cert-verify: false
-  sni: trj.rollingnext.co.uk
-  type: trojan
-- alterId: 0
-  cipher: auto
-  name: 美国_06
-  network: ws
-  port: 10089
-  server: 34.215.130.186
-  skip-cert-verify: false
-  tls: false
-  type: vmess
-  uuid: 3608c9dc-1eeb-48b0-b570-43074b4a0c9e
-  ws-opts:
-    path: /
-- alterId: 0
-  cipher: auto
-  http-opts:
-    method: GET
-    path:
-    - /
-  name: 芬兰
-  network: http
-  port: 443
-  server: 65.21.240.108
-  skip-cert-verify: false
-  tls: false
-  type: vmess
-  uuid: 6b7cbc41-fb80-41a8-8eb6-b5bdb0e86147
-- alterId: 0
-  cipher: auto
-  name: 波兰
-  network: ws
-  port: 8081
-  server: 70.34.252.176
-  skip-cert-verify: false
-  tls: false
-  type: vmess
-  uuid: 984ff24e-2bbb-4461-a761-bf8ccb77b80d
-  ws-opts:
-    path: /
-- alterId: 0
-  cipher: auto
-  http-opts:
-    method: GET
-    path:
-    - /
-  name: 美国_07
-  network: http
-  port: 5806
-  server: 192.210.207.213
-  skip-cert-verify: false
-  tls: false
-  type: vmess
-  uuid: 13b73114-f3a4-4a1a-f083-b4621cf73275
 - cipher: aes-256-cfb
-  name: 🇦🇺AU-13.54.100.211-1530-mahdibland
+  name: 荷兰_06
   obfs: http_simple
-  obfs-param: ''
-  password: YpX2opBbrfqJzzMs
-  port: 42833
+  obfs-param: WWW.YOUNEED.WIN
+  password: sEscPBiAD9K$&@79
+  port: 11708
   protocol: origin
-  protocol-param: ''
-  server: z0113.security-cloudfront-cdn.com
+  protocol-param: WWW.YOUNEED.WIN
+  server: 94.102.57.163
   type: ssr
-- name: 🇲🇾MY-85.211.178.40-3485-mahdibland
-  password: 18304160-03d4-4c55-95c1-586c0a5f3a0a
+- name: 🇸🇬SG-103.253.24.212-5515-mahdibland
+  password: 71086710-33eb-11ed-adce-1239d0255272
   port: 443
-  server: ap.liangyuandian.top
+  server: sg1-trojan.bonds.id
   skip-cert-verify: false
   type: trojan
-- cipher: aes-256-cfb
-  name: 荷兰
-  password: ueLXVkvh4hckhErQ
-  port: 9060
-  server: 213.183.59.206
-  type: ss
-- name: 🇺🇸US-13.248.169.48-1554-mahdibland
-  password: 64de1de7-e3bb-3dc4-ab04-d1e601e18ac5
-  port: 17108
-  server: hnm.xiaohouzi.club
+- name: 德国_05
+  password: origin
+  port: 443
+  server: 188.40.251.19
   skip-cert-verify: false
-  sni: hnm.xiaohouzi.club
   type: trojan
-- alterId: 0
+- alterId: 64
   cipher: auto
-  name: 未知_08
-  network: ws
-  port: 8880
-  server: 104.19.40.48
+  http-opts:
+    headers:
+      Host:
+      - apple.com
+    method: GET
+    path:
+    - /
+  name: 俄罗斯联邦_04
+  network: http
+  port: 37672
+  server: 176.119.159.245
   skip-cert-verify: false
   tls: false
   type: vmess
-  uuid: 57e0cb4d-eae5-48ec-8091-149dc2b309e0
-  ws-opts:
-    path: /d/65dd503.TG.WangCai2.WangCai_8:107690
+  uuid: 86b4e35c-1061-47b3-8c6c-811d1853a477
 - alterId: 0
   cipher: auto
-  name: 日本_04
+  name: 俄罗斯联邦_05
   network: ws
-  port: 443
-  server: 161.129.34.102
+  port: 8090
+  server: 91.193.181.192
   skip-cert-verify: false
-  tls: true
+  tls: false
   type: vmess
-  uuid: ec736482-173e-3eff-9114-b49df8056e7d
+  uuid: 08bc30e1-be39-4eb4-e887-e6579be15a45
   ws-opts:
     path: /
-- name: 🇦🇺AU-168.138.8.86-2530-mahdibland
-  password: 8a03bc28-2a33-42c4-be59-30464dbb9954
-  port: 18818
-  server: mel12.yukiss.eu.org
+- name: 印度
+  password: e05c749b-7c6b-41b8-9c71-9dcf685edf4a
+  port: 443
+  server: 152.67.162.166
   skip-cert-verify: false
   type: trojan
-- cipher: aes-256-cfb
-  name: 荷兰_02
-  password: wjTugX3ZtHMB9c3Z
-  port: 9057
-  server: 213.183.59.177
-  type: ss
 - alterId: 0
   cipher: auto
-  name: 新加坡
-  network: ws
-  port: 8880
-  server: 174.138.25.187
-  skip-cert-verify: false
-  tls: false
-  type: vmess
-  uuid: a5c804aa-8a4d-4fd2-97a1-4f0cc1384953
-  ws-opts:
-    path: /hkaa0
-- alterId: 0
-  cipher: auto
-  http-opts:
-    method: GET
-    path:
-    - /
-  name: 台湾_04
-  network: http
-  port: 20715
-  server: 45.121.51.103
-  skip-cert-verify: false
-  tls: false
-  type: vmess
-  uuid: f6406b6d-5487-46da-f793-46611269a306
-- alterId: 0
-  cipher: auto
-  name: 未知_09
+  name: 未知_14
   network: ws
   port: 443
-  server: 172.67.77.95
+  server: 172.67.203.85
   skip-cert-verify: false
   tls: true
   type: vmess
-  uuid: 1bff15f1-a71d-4f07-b8bf-9471708eff8b
+  uuid: aa586ced-9c6b-4882-aae5-f4fa3919c73c
   ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /fthe4gsefgtdu
+    path: /233blog
 - alterId: 0
-  cipher: none
-  name: 未知_10
+  cipher: auto
+  name: 美国_16
   network: ws
-  port: 80
-  server: 188.114.97.3
+  port: 16424
+  server: 38.95.115.176
   skip-cert-verify: false
   tls: false
   type: vmess
-  uuid: b25f8da6-54a2-49b3-bacf-8403b4c36556
+  uuid: 9eedb0d4-27fb-47e6-b3b5-301712337ecf
   ws-opts:
-    path: /vmess#DONT-FORGET-TO-SUPPORT-SSHMAX.NET-TO-KEEP-THIS-SERVER-ALIVE
+    path: /
 - alterId: 0
   cipher: auto
-  http-opts:
-    method: GET
-    path:
-    - /
-  name: 美国_08
-  network: http
-  port: 47783
-  server: 5.78.63.45
-  skip-cert-verify: false
-  tls: false
-  type: vmess
-  uuid: 5b4203d5-422f-4ce4-ca25-ecdbfee45a46
-- alterId: 0
-  cipher: auto
-  name: 🇺🇸US-103.224.182.210-4050-mahdibland
-  network: ws
-  port: 80
-  server: sg80-2.sanfen001.pics
-  skip-cert-verify: false
-  tls: false
-  type: vmess
-  uuid: 9f3f612a-2fb0-420d-830f-1a502a1db50c
-  ws-opts:
-    headers:
-      Host: sg80-2.sanfen001.pics
-    path: /zh-cn/download
-- alterId: 0
-  cipher: auto
-  name: 未知_11
+  name: 未知_15
   network: ws
   port: 443
   server: 162.159.153.13
@@ -3674,147 +4364,35 @@ proxies:
   uuid: d2727ecc-87bd-4bd0-b321-eb037b5d4cca
   ws-opts:
     path: /meizhiyuan/tr1?ed=2048
-- cipher: chacha20-ietf-poly1305
-  name: 美国_09
-  password: lWaGPVFjmnag
-  port: 443
-  server: 205.134.180.139
-  type: ss
-- alterId: 0
-  cipher: auto
-  name: 🇦🇺AU-103.224.212.213-1784-mahdibland
-  network: ws
-  port: 443
-  server: us-2.0rd.net
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 597888c0-a318-11ed-b536-205c6d5f5d78
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /tq98e0yk
-- cipher: aes-256-cfb
-  name: 波兰_02
-  password: p9z5BVADH2YFs3MN
-  port: 9040
-  server: 217.30.10.63
-  type: ss
-- name: 法国_03
-  password: 750a29bf-0a40-437f-b120-38de74ae7eaf
-  port: 28443
-  server: 62.210.254.72
-  skip-cert-verify: false
-  type: trojan
-- alterId: 0
-  cipher: auto
-  name: 未知_12
-  network: ws
-  port: 2086
-  server: 104.19.32.88
-  skip-cert-verify: false
-  tls: false
-  type: vmess
-  uuid: e9e3cc13-db48-4cc1-8c24-7626439a5339
-  ws-opts:
-    path: /
-- cipher: chacha20-ietf-poly1305
-  name: 德国
-  password: pryhyxya
-  port: 57824
-  server: 52.58.249.78
-  type: ss
-- name: 🇯🇵JP-153.127.215.49-2494-mahdibland
-  password: 40c89b10235c40321e7a3cef82b53a03
-  port: 22
-  server: trs16.bolab.net
-  skip-cert-verify: false
-  type: trojan
-- cipher: chacha20-ietf-poly1305
-  name: 美国_10
-  password: o38yuvzSe3m5aDNpHtUPH1zGwbGEXXMDsGwVaub2SYEmHUa2WGZUjiezX3Vvva9CCzpjxYtuJLgKsSnsyKBf9ciPVba3y4o3
-  port: 54075
-  server: 94.131.21.174
-  type: ss
 - alterId: 0
   cipher: auto
   http-opts:
     method: GET
     path:
     - /
-  name: 香港_41
+  name: 俄罗斯联邦_06
   network: http
-  port: 40988
-  server: 47.242.95.19
+  port: 26743
+  server: 194.87.248.27
   skip-cert-verify: false
   tls: false
   type: vmess
-  uuid: 1e60b35a-db17-4283-8b99-7358ee7d5fd5
-- cipher: chacha20-ietf-poly1305
-  name: 香港_42
-  password: ljqdalu13..
-  port: 8319
-  server: 18.162.146.85
-  type: ss
-- cipher: aes-256-cfb
-  name: 荷兰_03
-  password: Sn5B7jTqr76aCJT8
-  port: 9097
-  server: 213.183.59.190
-  type: ss
-- name: 韩国_02
-  password: f2117e99-9b6e-47fd-b0a9-634a0b15b998
-  port: 443
-  server: 146.56.189.146
-  skip-cert-verify: false
-  type: trojan
-- cipher: aes-256-cfb
-  name: 日本_05
-  password: eIW0Dnk69454e6nSwuspv9DmS201tQ0D
-  port: 8097
-  server: 172.104.123.158
-  type: ss
-- name: 🇸🇬SG-18.139.234.73-2825-mahdibland
-  password: cd41b9d7-df15-46ad-a778-257b0851525a
-  port: 443
-  server: in01.trojanyyds.xyz
-  skip-cert-verify: false
-  type: trojan
-- cipher: aes-256-cfb
-  name: 荷兰_04
-  password: 9XwYyZsK8SNzQDtY
-  port: 9059
-  server: 213.183.59.211
-  type: ss
-- name: 🇺🇸US-75.2.18.233-0419-mahdibland
-  password: dd04c158-1bac-47cd-99c1-5c4f64796dd5
-  port: 12004
-  server: supersouth.xn--mesv7f5toqlp.club
-  skip-cert-verify: false
-  type: trojan
+  uuid: 59952a8e-b712-4190-d85e-f9aadd65faa0
 - alterId: 0
   cipher: auto
-  name: 🇺🇸US-166.117.68.124-0871-mahdibland
+  name: 法国_04
   network: ws
-  port: 443
-  server: six.r33.fun
+  port: 58732
+  server: 5.135.43.119
   skip-cert-verify: false
-  tls: true
+  tls: false
   type: vmess
-  uuid: 9bb0e2e3-c5b9-4606-9cbb-a3c36f2d01d7
+  uuid: d159c5be-8291-45c4-bd21-51d024658a6d
   ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /racevpn
-- cipher: aes-256-cfb
-  name: 德国_02
-  password: M3t2ZEQcMGRWBjRa
-  port: 9011
-  server: 80.92.204.106
-  type: ss
+    path: /
 - alterId: 0
   cipher: auto
-  name: 未知_13
+  name: 未知_16
   network: ws
   port: 443
   server: 104.18.6.82
@@ -3827,996 +4405,16 @@ proxies:
     path: /
 - alterId: 0
   cipher: auto
-  name: 未知_14
-  network: ws
-  port: 443
-  server: 172.64.153.150
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: bf4619e4-01dc-48ca-be08-0976b54968ce
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /dongtaiwang.com
-- name: 🇺🇸US-76.223.54.146-1594-mahdibland
-  password: 0f098bb2-9fad-3cc3-8acf-2a3268c1eb27
-  port: 14705
-  server: gz01.xiaohouzi.club
-  skip-cert-verify: false
-  sni: $$$$$$$vusig01.xiaohouzi.club
-  type: trojan
-- alterId: 0
-  cipher: auto
-  http-opts:
-    method: GET
-    path:
-    - /
-  name: 美国_11
-  network: http
-  port: 443
-  server: 96.43.86.4
-  skip-cert-verify: false
-  tls: false
-  type: vmess
-  uuid: 6b8bacb5-75b2-4a17-9d32-3d75b100e61e
-- cipher: aes-256-cfb
-  name: 保加利亚_02
-  password: TPqX8edgbAURcAMb
-  port: 9079
-  server: 213.183.63.218
-  type: ss
-- alterId: 0
-  cipher: auto
-  name: 法国_04
-  network: ws
-  port: 2096
-  server: 51.77.158.169
-  skip-cert-verify: false
-  tls: false
-  type: vmess
-  uuid: c92fd902-b5d3-4208-bb48-630b1c7babea
-  ws-opts:
-    path: /
-- name: 🇺🇸US-75.2.18.233-4565-mahdibland
-  password: dfbf0d67-f03d-4184-a224-c2d64a571f99
-  port: 12340
-  server: s1.hazz.win
-  skip-cert-verify: false
-  sni: edge.apple.com
-  type: trojan
-- alterId: 0
-  cipher: auto
-  name: 中国_11
-  network: ws
-  port: 80
-  server: 124.222.189.225
-  skip-cert-verify: false
-  tls: false
-  type: vmess
-  uuid: a8c9ad5b-1f58-4234-b5fe-a895bee9a047
-  ws-opts:
-    path: /
-- name: 香港_43
-  password: xxoo
-  port: 443
-  server: 194.156.99.39
-  skip-cert-verify: false
-  type: trojan
-- name: 🇨🇦CA-159.203.9.207-1609-mahdibland
-  password: 286d5fae-eb42-4cd2-96c5-c7dfaaae67ac
-  port: 1258
-  server: t5.583181.xyz
-  skip-cert-verify: false
-  sni: www.baidu.com
-  type: trojan
-- alterId: 0
-  cipher: auto
-  name: 未知_15
-  network: ws
-  port: 443
-  server: 172.66.44.197
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: fa4cb529-3ac9-4268-bb04-ed4253813508
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /mR17oBKzZ7
-- alterId: 64
-  cipher: auto
-  name: 德国_03
-  network: ws
-  port: 443
-  server: 89.163.157.147
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: b8aedf50-c4f5-4255-b73d-3779db661d70
-  ws-opts:
-    path: /
-- alterId: 0
-  cipher: auto
-  name: 日本_06
-  network: ws
-  port: 80
-  server: 138.2.39.67
-  skip-cert-verify: false
-  tls: false
-  type: vmess
-  uuid: ab335c88-d14a-4e67-b52c-54ed8be80c49
-  ws-opts:
-    path: /
-- alterId: 0
-  cipher: auto
-  name: 🇰🇷KR-52.231.200.179-1704-mahdibland
-  network: ws
-  port: 443
-  server: fullaccesstokoreannetsubnode1.azurewebsites.net
-  servername: fullaccesstokoreannetsubnode1.azurewebsites.net
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 274f11c6-f69b-40b9-8966-f39e06e97be7
-  ws-opts:
-    headers:
-      Host: myclash.dailyoff.no
-    path: /ws
-- alterId: 64
-  cipher: auto
-  name: 爱尔兰_32
-  network: ws
-  port: 443
-  server: 185.108.128.60
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 5aab3936-16d7-4377-8c33-0d77f2d295ee
-  ws-opts:
-    path: /
-- alterId: 0
-  cipher: auto
-  name: 🇭🇰HK-203.198.28.145-0365-mahdibland
-  network: ws
-  port: 51515
-  server: aflzzul.meiquankongjian.com
-  servername: aflzzul.meiquankongjian.com
-  skip-cert-verify: false
-  tls: false
-  type: vmess
-  uuid: 342bacfd-2b8f-3f49-a16e-439db5b0b9d5
-  ws-opts:
-    headers:
-      Host: aflzzul.meiquankongjian.com
-    path: /
-- cipher: aes-256-cfb
-  name: 荷兰_05
-  password: BejrQvtu9sqUeNuZ
-  port: 9024
-  server: 213.183.59.190
-  type: ss
-- name: 美国_12
-  password: d1478689-439c-4590-b7ce-36e786a02dc3
-  port: 443
-  server: 107.181.161.163
-  skip-cert-verify: false
-  sni: 107.181.161.163
-  type: trojan
-- name: 印度尼西亚
-  password: vvip-periantara
-  port: 443
-  server: 38.9.140.66
-  skip-cert-verify: false
-  sni: id3tr.jagoan.vip
-  type: trojan
-- alterId: 0
-  cipher: auto
-  name: 荷兰_06
-  network: ws
-  port: 443
-  server: 45.95.241.251
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: d1ace408-1102-4919-9ee8-88f85c8a91e3
-  ws-opts:
-    path: /vmess
-- alterId: 0
-  cipher: auto
-  name: 🇨🇳CN-120.233.44.3-1539-mahdibland
-  network: ws
-  port: 20025
-  server: sh-cn-1.dnspro.icu
-  servername: sh-cn-1.dnspro.icu
-  skip-cert-verify: false
-  tls: false
-  type: vmess
-  uuid: 13ef5f2c-d002-36a2-9e96-a13d5e3ae03b
-  ws-opts:
-    headers:
-      Host: sh-cn-1.dnspro.icu
-    path: /iso
-- cipher: aes-256-cfb
-  name: 荷兰_07
-  password: GA9KzeEgvfxNrgmM
-  port: 9019
-  server: 213.183.59.190
-  type: ss
-- cipher: chacha20-ietf-poly1305
-  name: 美国_13
-  password: 5db34ad7-3f1e-4a79-b078-2e56321e4fde
-  port: 158
-  server: 216.107.21.231
-  type: ss
-- alterId: 0
-  cipher: auto
-  name: 未知_16
-  network: ws
-  port: 80
-  server: 172.67.222.46
-  servername: us-lb.sshkit.org
-  skip-cert-verify: false
-  tls: false
-  type: vmess
-  uuid: 6fea1649-425b-4092-bf53-29792152c925
-  ws-opts:
-    path: /sshkit/fdfadsfa/63848bfe228fd/
-- cipher: chacha20-ietf-poly1305
   name: 法国_05
-  password: oZIoA69Q8yhcQV8ka3Pa3A
-  port: 8080
-  server: 45.158.171.110
-  type: ss
-- cipher: chacha20-ietf-poly1305
-  name: 立陶宛
-  password: cvII85TrW6n0OGyfpHVS1u
-  port: 8080
-  server: 45.87.175.192
-  type: ss
-- alterId: 0
-  cipher: auto
-  name: 台湾_05
   network: ws
-  port: 80
-  server: 165.154.246.107
+  port: 8880
+  server: 51.159.2.152
   skip-cert-verify: false
   tls: false
   type: vmess
-  uuid: fa0702f4-8ec9-48e5-9b53-a0afb7c3717e
-  ws-opts:
-    headers:
-      Host: tms.dingtalk.com
-    path: /
-- cipher: chacha20-ietf-poly1305
-  name: 德国_04
-  password: a58fa62b4944ddbf
-  port: 57456
-  server: 147.45.178.200
-  type: ss
-- alterId: 0
-  cipher: auto
-  name: 🇺🇸US-199.59.243.228-4036-mahdibland
-  network: ws
-  port: 80
-  server: sg-v.sshmax.xyz
-  skip-cert-verify: false
-  tls: false
-  type: vmess
-  uuid: 0baaf014-af04-4028-be53-f5c75bb276ae
-  ws-opts:
-    headers:
-      Host: sg-v.sshmax.xyz
-    path: /vmess
-- alterId: 0
-  cipher: auto
-  http-opts:
-    method: GET
-    path:
-    - /
-  name: 美国_14
-  network: http
-  port: 40969
-  server: 5.161.106.72
-  skip-cert-verify: false
-  tls: false
-  type: vmess
-  uuid: 2fb9f60e-d4dc-458b-e3b2-d9b44f9bbd9e
-- cipher: rc4-md5
-  name: 🇨🇳CN-163.177.58.173-4383-mahdibland
-  password: RenzheCloudSS
-  plugin: obfs
-  plugin-opts:
-    host: c7ea4198729.microsoft.com
-    mode: http
-  port: 3046
-  server: bs3.jymzffbquawl.com
-  type: ss
-- cipher: chacha20-ietf
-  name: 🇨🇳CN-120.232.206.251-4457-mahdibland
-  obfs: plain
-  obfs-param: ''
-  password: mblank1port
-  port: 561
-  protocol: auth_aes128_md5
-  protocol-param: 55956:111111
-  server: eduall.buzzline.org
-  type: ssr
-- cipher: aes-256-cfb
-  name: 波兰_03
-  password: f63gg8EruDnUrmz4
-  port: 9010
-  server: 217.30.10.63
-  type: ss
-- cipher: aes-256-cfb
-  name: 俄罗斯联邦_02
-  password: KnJGad3FqTvjqbaX
-  port: 9014
-  server: 213.183.53.222
-  type: ss
-- alterId: 0
-  cipher: auto
-  name: 伊朗
-  network: ws
-  port: 443
-  server: 37.32.23.122
-  skip-cert-verify: false
-  tls: false
-  type: vmess
-  uuid: d12bc882-43c7-415e-87c5-2a7fdc8371c0
-  ws-opts:
-    path: /websocket/
-- name: 台湾_06
-  password: 7ac49a893e0bd10c
-  port: 3389
-  server: 60.249.3.227
-  skip-cert-verify: false
-  type: trojan
-- name: 中国_12
-  password: 253bc477d4e43c209f2d427272968280
-  port: 447
-  server: 36.156.102.125
-  skip-cert-verify: false
-  sni: www.baidu.com
-  type: trojan
-- alterId: 0
-  cipher: auto
-  http-opts:
-    method: GET
-    path:
-    - /
-  name: 俄罗斯联邦_03
-  network: http
-  port: 26743
-  server: 194.87.248.27
-  skip-cert-verify: false
-  tls: false
-  type: vmess
-  uuid: 59952a8e-b712-4190-d85e-f9aadd65faa0
-- alterId: 0
-  cipher: auto
-  name: 未知_17
-  network: ws
-  port: 2095
-  server: 162.159.244.111
-  skip-cert-verify: false
-  tls: false
-  type: vmess
-  uuid: 417d27fb-cb93-3bd8-9bf7-71cd91319821
-  ws-opts:
-    path: /hgcefomn
-- name: 新加坡_02
-  password: iyinglong
-  port: 443
-  server: 13.213.69.245
-  skip-cert-verify: false
-  type: trojan
-- alterId: 64
-  cipher: auto
-  name: 美国_15
-  network: ws
-  port: 443
-  server: 67.21.72.44
-  servername: www.48816626.xyz
-  skip-cert-verify: false
-  tls: true
-  type: vmess
-  uuid: 2566d00f-218c-48f7-9a36-13d3d6f1a724
-  ws-opts:
-    path: /path/120208301422
-- cipher: aes-256-cfb
-  name: 法国_06
-  password: f8f7aCzcPKbsF8p3
-  port: 989
-  server: 163.172.64.22
-  type: ss
-- alterId: 0
-  cipher: auto
-  name: 美国_16
-  network: ws
-  port: 2086
-  server: 172.64.166.33
-  skip-cert-verify: true
-  tls: false
-  type: vmess
-  uuid: e9e3cc13-db48-4cc1-8c24-7626439a5339
-  ws-headers:
-    Host: 172.64.166.33
-  ws-path: /
-- cipher: aes-256-cfb
-  name: 德国_05
-  password: BNmAXXxAHYpTRdzu
-  port: 9020
-  server: 80.92.204.106
-  type: ss
-- cipher: chacha20-ietf-poly1305
-  name: 美国_17
-  password: oXGp1+ihlfKg826H
-  port: 1866
-  server: 172.233.128.126
-  type: ss
-- alterId: 0
-  cipher: auto
-  name: 未知_18
-  network: ws
-  port: 2086
-  server: 104.19.46.233
-  skip-cert-verify: true
-  tls: false
-  type: vmess
-  uuid: 29eebb60-b27b-4a9d-bba5-947763d9205e
-  ws-headers:
-    Host: 104.19.46.233
-  ws-path: /
-- alterId: 0
-  cipher: auto
-  name: 日本_07
-  network: kcp
-  port: 37257
-  server: 47.74.57.10
-  skip-cert-verify: true
-  tls: false
-  type: vmess
-  uuid: cb774883-1c2f-4b8a-8637-828f356e0c76
-  ws-headers:
-    Host: 47.74.57.10
-  ws-path: /
-- cipher: rc4-md5
-  group: SSRProvider
-  name: 美国_18
-  obfs: plain
-  obfsparam: null
-  password: 14fFPrbezE3HDZzsMOr6
-  port: 8080
-  protocol: origin
-  protoparam: null
-  server: 107.151.182.253
-  type: ssr
-- alterId: 2
-  cipher: auto
-  name: 🇨🇳CN-36.151.194.29-079-mfuu
-  network: ws
-  port: 30833
-  server: v33.heduian.link
-  skip-cert-verify: true
-  tls: false
-  type: vmess
-  uuid: cbb3f877-d1fb-344c-87a9-d153bffd5484
-  ws-headers:
-    Host: v33.heduian.link
-  ws-path: /oooo
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-104.21.68.76-112-mfuu
-  network: ws
-  port: 80
-  server: bBbbbbbBb.222769.XYZ
-  skip-cert-verify: true
-  tls: false
-  type: vmess
-  uuid: 2e65577e-8fdb-4bb1-a495-96f3122099a7
-  ws-headers:
-    Host: bbbbbbbbb.222769.xyz
-  ws-path: /f6taOMcOSZb9TPR
-- name: 未知_19
-  password: f282b878-8711-45a1-8c69-5564172123c1
-  port: 443
-  server: 172.67.181.173
-  skip-cert-verify: true
-  sni: vpn.stupidworld.web.id
-  type: trojan
-  ws-path: h=%2Ftelegram--Channel--MTMVPN---telegram--Channel--MTMVPN---telegram--Channel--MTMVPN---telegram--Channel--MTMVPN
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-104.21.23.231-110-mfuu
-  network: ws
-  port: 80
-  server: test.flha.ru
-  skip-cert-verify: true
-  tls: false
-  type: vmess
-  uuid: 2bab6b8f-8d6e-463a-8331-b9de3d56921d
-  ws-headers:
-    Host: test.flha.ru
-  ws-path: /2bab6b8f-8d6e-463a-8331-b9de3d56921d-vmess
-- name: 未知_20
-  password: 4732adfa16c6450bbef87264e41332db
-  port: 443
-  server: 104.17.215.18
-  skip-cert-verify: true
-  sni: jobscareerforstudent.com
-  type: trojan
-- alterId: 0
-  cipher: auto
-  name: 未知_21
-  network: ws
-  port: 443
-  server: 172.67.170.147
-  skip-cert-verify: true
-  tls: true
-  type: vmess
-  uuid: ffcf7ec1-3e09-4821-b3d9-b426a107b73b
-  ws-headers:
-    Host: xcvfgt6.999854.xyz
-  ws-path: /4Bp70NdrJV3xr1D40NK
-- cipher: chacha20-ietf-poly1305
-  name: 英国
-  password: c40641c1f89e7acb
-  port: 57456
-  server: 46.226.163.225
-  type: ss
-- alterId: 0
-  cipher: auto
-  name: 香港_44
-  network: kcp
-  port: 3351
-  server: 47.83.181.154
-  skip-cert-verify: true
-  tls: false
-  type: vmess
-  uuid: 0bfc8acf-ac40-45c1-8dde-7f3417621286
-  ws-headers:
-    Host: 47.83.181.154
-  ws-path: /
-- cipher: chacha20-ietf-poly1305
-  name: 美国_19
-  password: 360e21d21977dc11
-  port: 57456
-  server: 104.167.197.25
-  type: ss
-- alterId: 0
-  cipher: auto
-  name: 未知_22
-  network: ws
-  port: 80
-  server: 188.114.99.18
-  skip-cert-verify: true
-  tls: false
-  type: vmess
-  uuid: d2866d01-d76d-4a08-8bae-04fb3c502588
-  ws-headers:
-    Host: 188.114.99.18
-  ws-path: /
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-104.21.20.162-074-mfuu
-  network: ws
-  port: 8443
-  server: orvps2.horsenma.net
-  skip-cert-verify: true
-  tls: true
-  type: vmess
-  uuid: 57e595e6-ef54-4e0d-b8df-e96db9612b99
-  ws-headers:
-    Host: orvps2.horsenma.net
-  ws-path: /horsen
-- alterId: 0
-  cipher: auto
-  name: 🇺🇸US-172.93.144.141-106-mfuu
-  network: tcp
-  port: 39043
-  server: aaaaaaaaaaaaaaaa.sangarvpn-bot.shop
-  skip-cert-verify: true
-  tls: false
-  type: vmess
-  uuid: 70ff69e2-89ce-4963-9fe7-b880360fd901
-  ws-headers:
-    Host: aaaaaaaaaaaaaaaa.sangarvpn-bot.shop
-  ws-path: /
-- cipher: aes-256-cfb
-  name: 德国_06
-  password: S7KwUu7yBy58S3Ga
-  port: 9042
-  server: 80.92.204.106
-  type: ss
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-104.21.21.192-052-mfuu
-  network: ws
-  port: 443
-  server: 1a2d514b-37cf-499f-8d08-d017a92ab5bb.asoul-ava.top
-  skip-cert-verify: true
-  tls: true
-  type: vmess
-  uuid: 5f726fe3-d82e-4da5-a711-8af0cbb2b682
-  ws-headers:
-    Host: 1a2d514b-37cf-499f-8d08-d017a92ab5bb.asoul-ava.top
-  ws-path: /azumase.ren
-- alterId: 64
-  cipher: auto
-  name: 中国_13
-  network: tcp
-  port: 42272
-  server: 183.240.245.239
-  skip-cert-verify: true
-  tls: false
-  type: vmess
-  uuid: 418048af-a293-4b99-9b0c-98ca3580dd24
-  ws-headers:
-    Host: 183.240.245.239
-  ws-path: /
-- alterId: 0
-  cipher: auto
-  name: 美国_20
-  network: ws
-  port: 443
-  server: 205.233.181.3
-  skip-cert-verify: true
-  tls: true
-  type: vmess
-  uuid: de94cc0a-0592-4969-b1fc-97ea8f0ea0b3
-  ws-headers:
-    Host: farid.1.berozha.ir
-  ws-path: /us.kkp.me.eu.org/aa
-- cipher: aes-256-cfb
-  name: 德国_07
-  password: EXN3S3eQpjE7EJu8
-  port: 9027
-  server: 80.92.204.106
-  type: ss
-- alterId: 0
-  cipher: auto
-  name: 未知_23
-  network: ws
-  port: 2082
-  server: 172.67.130.140
-  skip-cert-verify: true
-  tls: false
-  type: vmess
-  uuid: 112ac36f-3f53-4e26-8371-d25c028e1b9a
-  ws-headers:
-    Host: 172.67.130.140
-  ws-path: /
-- cipher: chacha20-ietf-poly1305
-  name: 美国_21
-  password: NZ1YmZqRbPsSPcZYxU4fgB
-  port: 32563
-  server: 193.17.183.40
-  type: ss
-- cipher: chacha20-ietf-poly1305
-  name: 法国_07
-  password: 44fe4b7d-cd48-45fc-a036-60ea40e4a96c
-  port: 30665
-  server: 107.191.63.241
-  type: ss
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-104.21.3.189-120-mfuu
-  network: ws
-  port: 2083
-  server: cc2dash.89060004.xyz
-  skip-cert-verify: true
-  tls: true
-  type: vmess
-  uuid: 2fc37713-3017-497e-ff2d-965f826a19a3
-  ws-headers:
-    Host: cc2dash.89060004.xyz
-  ws-path: /
-- alterId: 0
-  cipher: auto
-  name: 未知_24
-  network: ws
-  port: 2052
-  server: 104.18.202.250
-  skip-cert-verify: true
-  tls: false
-  type: vmess
-  uuid: 6c168fcc-2231-4f3b-8c1e-f6391692df4a
-  ws-headers:
-    Host: 104.18.202.250
-  ws-path: /
-- cipher: aes-256-cfb
-  name: 德国_08
-  password: aLpQtfEZe445QyHk
-  port: 9098
-  server: 80.92.204.106
-  type: ss
-- cipher: chacha20-ietf-poly1305
-  name: 德国_09
-  password: 9RviNa4tscjcmCB408vLSg
-  port: 44354
-  server: 46.101.245.131
-  type: ss
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-172.67.191.174-116-mfuu
-  network: ws
-  port: 80
-  server: OOoOOOooOp.222769.XYZ
-  skip-cert-verify: true
-  tls: false
-  type: vmess
-  uuid: ce921385-2b31-45fe-84c5-1843e8ae845b
-  ws-headers:
-    Host: ooooooooop.222769.xyz
-  ws-path: /VaaSEfNLHdW3I98dxLkez
-- cipher: chacha20-ietf-poly1305
-  name: 加拿大
-  password: Kuiqk2cP0BMWrgme9IfEvp
-  port: 443
-  server: 38.180.211.126
-  type: ss
-- alterId: 0
-  cipher: auto
-  name: 未知_25
-  network: ws
-  port: 8080
-  server: 104.17.176.171
-  skip-cert-verify: true
-  tls: false
-  type: vmess
-  uuid: 6cbc9c78-1cb1-57d4-a999-e2f4e34c1e03
-  ws-headers:
-    Host: 104.17.176.171
-  ws-path: /nasnet/cdn
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-104.26.13.54-075-mfuu
-  network: ws
-  port: 80
-  server: time.is
-  skip-cert-verify: true
-  tls: false
-  type: vmess
-  uuid: 66ddd790-10ed-4a16-b334-0b7e3577b5b7
-  ws-headers:
-    Host: time.is
-  ws-path: /
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-104.21.76.158-080-mfuu
-  network: ws
-  port: 8443
-  server: sy3.620720.xyz
-  skip-cert-verify: true
-  tls: true
-  type: vmess
-  uuid: 516d8a7a-3f0b-41d3-bad0-246116381516
-  ws-headers:
-    Host: sy3.620720.xyz
-  ws-path: /
-- alterId: 0
-  cipher: auto
-  name: 香港_45
-  network: tcp
-  port: 21186
-  server: 43.247.134.190
-  skip-cert-verify: true
-  tls: false
-  type: vmess
-  uuid: bc6f4625-0ce3-4dca-b441-22c34808e6f2
-  ws-headers:
-    Host: 43.247.134.190
-  ws-path: /
-- alterId: 0
-  cipher: auto
-  name: 南非
-  network: ws
-  port: 80
-  server: 102.132.188.3
-  skip-cert-verify: true
-  tls: false
-  type: vmess
-  uuid: e95e35ba-f874-4eb3-9600-4dbd6d099f4e
-  ws-headers:
-    Host: 102.132.188.3
-  ws-path: /
-- alterId: 0
-  cipher: auto
-  name: 香港_46
-  network: tcp
-  port: 21186
-  server: 43.247.134.190
-  skip-cert-verify: true
-  tls: false
-  type: vmess
-  uuid: bc6f4625-0ce3-4dca-b441-22c34808e6f2
-  ws-headers:
-    Host: baidu.com
-  ws-path: /cauejypbltqt
-- name: 美国_22
-  password: tg-fq521free
-  port: 443
-  server: 198.62.62.67
-  skip-cert-verify: true
-  sni: torjan.xn--xhq44j.eu.org
-  type: trojan
-  ws-path: h=%2F
-- cipher: chacha20-ietf-poly1305
-  name: 法国_08
-  password: WDavBimDmH2QLxljf5PSO1
-  port: 443
-  server: 62.210.88.22
-  type: ss
-- cipher: aes-256-cfb
-  name: 德国_10
-  password: XPtzA9sCug3SPR4c
-  port: 9025
-  server: 80.92.204.106
-  type: ss
-- cipher: chacha20-ietf-poly1305
-  name: 🇻🇳VN-160.19.78.75-122-mfuu
-  password: Nk9asglDzHzjktVzTkvhaA
-  port: 443
-  server: arxfw2b78fi2q9hzylhn.freesocks.work
-  type: ss
-- cipher: aes-256-cfb
-  name: 德国_11
-  password: TN2YqghxeFDKZfLU
-  port: 9037
-  server: 80.92.204.106
-  type: ss
-- cipher: chacha20-ietf-poly1305
-  name: 荷兰_08
-  password: zI7kiNZ0UfV9cXB73a4nRD
-  port: 24206
-  server: 164.92.156.41
-  type: ss
-- cipher: aes-256-cfb
-  group: SSRProvider
-  name: 加拿大_02
-  obfs: plain
-  obfsparam: null
-  password: f8f7aCzcPKbsF8p3
-  port: 989
-  protocol: origin
-  protoparam: null
-  server: 79.127.233.170
-  type: ssr
-- cipher: aes-256-cfb
-  name: 德国_12
-  password: ZpNDDKRu9MagNvaf
-  port: 9015
-  server: 80.92.204.106
-  type: ss
-- alterId: 0
-  cipher: auto
-  name: 🏁RELAY-104.21.23.231-117-mfuu
-  network: ws
-  port: 80
-  server: test3.flha.ru
-  skip-cert-verify: true
-  tls: false
-  type: vmess
-  uuid: 9a81340d-f81b-4c76-8abb-f4d305c535c0
-  ws-headers:
-    Host: test3.flha.ru
-  ws-path: /9a81340d-f81b-4c76-8abb-f4d305c535c0-vmess
-- cipher: chacha20-ietf-poly1305
-  name: 荷兰_09
-  password: VpKABcOpNNA0l5G2AVOmw8
-  port: 62685
-  server: 213.109.147.242
-  type: ss
-- cipher: chacha20-ietf-poly1305
-  name: 印度
-  password: p7EhC8MR7o7GuRn27YF8SQNAKJ2lUbBNIjcyqSmBHsy8wLbJ
-  port: 51348
-  server: 159.65.149.72
-  type: ss
-- cipher: chacha20-ietf-poly1305
-  name: 德国_13
-  password: LiHQX9cDbdooBHlIg0eiqQ
-  port: 34803
-  server: 45.144.54.33
-  type: ss
-- alterId: 0
-  cipher: auto
-  name: 未知_26
-  network: ws
-  port: 80
-  server: 104.17.223.18
-  skip-cert-verify: true
-  tls: false
-  type: vmess
-  uuid: ff2d17c6-0d96-4801-a270-9dba8334f8c6
-  ws-headers:
-    Host: 104.17.223.18
-  ws-path: /
-- cipher: chacha20-ietf-poly1305
-  name: 德国_14
-  password: DKyRdoqQIebdKZVYs5GzW8
-  port: 14628
-  server: 45.150.32.13
-  type: ss
-- alterId: 0
-  cipher: auto
-  name: 加拿大_03
-  network: ws
-  port: 80
-  server: 51.79.102.253
-  skip-cert-verify: true
-  tls: false
-  type: vmess
-  uuid: 58fe1542-5290-40ad-815a-77707a81afe5
-  ws-headers:
-    Host: 51.79.102.253
-  ws-path: /IOebhLMhl1CTbFHbL95myfRX2
-- alterId: 0
-  cipher: auto
-  name: 美国_23
-  network: ws
-  port: 80
-  server: 66.235.200.0
-  skip-cert-verify: true
-  tls: false
-  type: vmess
-  uuid: ec286f13-7e1a-42bc-9deb-76b91b4b9d2d
-  ws-headers:
-    Host: 66.235.200.0
-  ws-path: /
-- cipher: aes-256-cfb
-  name: 法国_09
-  password: asdKkaskJKfnsa
-  port: 443
-  server: 51.158.54.209
-  tfo: false
-  type: ss
-  udp: true
-- alterId: 0
-  cipher: auto
-  name: '[VMess] 🇩🇪 _US_美国->🇩🇪_DE_德国-getnode'
-  network: ws
-  port: 80
-  server: flkf2.shabijichang.com
-  skip-cert-verify: true
-  tfo: false
-  tls: false
-  type: vmess
-  udp: true
-  uuid: c458695d-6908-45c3-9512-e0c46418454c
-  ws-opts:
-    headers:
-      Host: flkf2.shabijichang.com
-    path: /
-- alterId: 0
-  cipher: auto
-  name: 未知_27
-  network: ws
-  port: 80
-  server: 104.17.18.26
-  skip-cert-verify: true
-  tfo: false
-  tls: false
-  type: vmess
-  udp: true
-  uuid: 5180444a-4756-43b4-960b-49eb9052e4e8
+  uuid: a2ecce43-c6fb-4978-8b1d-8018ddd9faf4
   ws-opts:
     path: /
-- alterId: 0
-  cipher: auto
-  name: 台湾_07
-  network: ws
-  port: 80
-  server: 107.167.182.230
-  skip-cert-verify: true
-  tfo: false
-  tls: false
-  type: vmess
-  udp: true
-  uuid: efcb7d7c-c582-46f5-eeff-0e553342528d
-  ws-opts:
-    path: /tg@hkaa0
 - alterId: 64
   cipher: auto
   name: 台湾_08
@@ -4833,7 +4431,70 @@ proxies:
     path: /path/1696682720138
 - alterId: 0
   cipher: auto
-  name: 美国_24
+  name: 伊朗
+  port: 59956
+  server: 46.29.34.205
+  skip-cert-verify: true
+  tfo: false
+  tls: false
+  type: vmess
+  udp: true
+  uuid: ca0c9937-58a6-44ea-9111-a6abac267d0f
+- alterId: 0
+  cipher: auto
+  name: 台湾_09
+  network: ws
+  port: 80
+  server: 107.167.182.230
+  skip-cert-verify: true
+  tfo: false
+  tls: false
+  type: vmess
+  udp: true
+  uuid: efcb7d7c-c582-46f5-eeff-0e553342528d
+  ws-opts:
+    path: /tg@hkaa0
+- alterId: 0
+  cipher: auto
+  name: '[VMess] 🇮🇳 _US_美国->🇮🇳_IN_印度_4-getnode'
+  network: ws
+  port: 80
+  server: mm3.shabijichang.com
+  skip-cert-verify: true
+  tfo: false
+  tls: false
+  type: vmess
+  udp: true
+  uuid: c458695d-6908-45c3-9512-e0c46418454c
+  ws-opts:
+    headers:
+      Host: mm3.shabijichang.com
+    path: /
+- cipher: aes-256-cfb
+  name: 瑞士
+  password: asdKkaskJKfnsa
+  port: 80
+  server: 84.17.53.163
+  tfo: false
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: 未知_17
+  network: ws
+  port: 80
+  server: 104.26.8.44
+  skip-cert-verify: true
+  tfo: false
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 5180444a-4756-43b4-960b-49eb9052e4e8
+  ws-opts:
+    path: /
+- alterId: 0
+  cipher: auto
+  name: 美国_17
   network: ws
   port: 2082
   server: 206.168.190.219
@@ -4847,7 +4508,7 @@ proxies:
     path: /vmws
 - alterId: 0
   cipher: auto
-  name: 美国_25
+  name: 美国_18
   network: ws
   port: 80
   server: 108.181.10.17
@@ -4868,7 +4529,7 @@ proxies:
   sni: alibaba-node.cn
   type: trojan
   udp: true
-- name: 法国_10
+- name: 法国_06
   network: tcp
   password: telegram-id-directvpn
   port: 22222
@@ -5046,7 +4707,7 @@ proxies:
   udp: true
 - client-fingerprint: chrome
   flow: xtls-rprx-vision
-  name: 香港_47
+  name: 香港_69
   port: 443
   reality-opts:
     public-key: LwD_OY7bAjGraacyIogZzLhhcaAt8crNFTD4WZe_NWc
@@ -5058,7 +4719,7 @@ proxies:
   uuid: ac7532c3-b870-4153-84ff-d6c7bf8552d3
 - client-fingerprint: chrome
   flow: xtls-rprx-vision
-  name: 香港_48
+  name: 香港_70
   port: 8443
   reality-opts:
     public-key: POAZKZyD98MlYa3A5bSOayTPHdofqXynPAT1_QWEwjo
@@ -5070,7 +4731,7 @@ proxies:
   uuid: 79091265-a298-4205-a559-d04ed045c38b
 - client-fingerprint: chrome
   flow: xtls-rprx-vision
-  name: 美国_26
+  name: 美国_19
   port: 5847
   reality-opts:
     public-key: NpqF483u4nXH0cztdyX7VbkpbDEW0sO07cGya0WvCHM
@@ -5083,7 +4744,7 @@ proxies:
   udp: true
   uuid: 67f0fefa-a922-428c-ac02-37e1d5aaed72
   xudp: true
-- name: 美国_27
+- name: 美国_20
   password: 20050105zhu
   port: 51541
   server: 204.44.110.129
@@ -5124,7 +4785,7 @@ proxies:
     path: /
 - alterId: 0
   cipher: auto
-  name: 未知_28
+  name: 未知_18
   port: 80
   server: 127.0.0.53
   skip-cert-verify: false
@@ -5133,7 +4794,7 @@ proxies:
   udp: true
   uuid: 88888888-8888-8888-8888-888888888888
 - cipher: ss
-  name: 法国_11
+  name: 法国_07
   password: //YWVzLTI1Ni1jZmI6YW1hem9uc2tyMDU
   port: 443
   server: 51.44.212.37
