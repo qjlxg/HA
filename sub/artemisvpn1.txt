@@ -1,4 +1,7 @@
-trojan://trojan://f282b878-8711-45a1-8c69-5564172123c1@aio.zipzap.biz.id:443?path=%2Faioproxybot%2F129.150.49.58-18650&security=tls&host=aio.zipzap.biz.id&type=ws&sni=aio.zipzap.biz.id#Artemisvpn1
+ss://ss://5371788b-7fc1-43a6-af51-4bbba68f9f29@ov-unitedkingdom2.09vpn.com:80?path=%2Fvless%2F&security=none&encryption=none&type=ws#Artemisvpn1
+@Artemisvpn1
+ss://ss://ef246c6f-6e7d-4286-af33-5485544b0ba8@45.88.183.164:49355?security=none&encryption=none&headerType=none&type=tcp#Artemisvpn1
+ss://ss://e4824193-4f54-453b-d037-88368e85ef0e@45.82.251.63:8880?mode=gun&security=none&encryption=none&type=grpc#Artemisvpn1
 @Artemisvpn1
 
 4
@@ -6,41 +9,12 @@ trojan://trojan://f282b878-8711-45a1-8c69-5564172123c1@aio.zipzap.biz.id:443?pat
 2
 
 1
-322
+
+1
+368
 views
-2103
-ss://ss://5371788b-7fc1-43a6-af51-4bbba68f9f29@ov-unitedkingdom2.09vpn.com:80?path=%2Fvless%2F&security=none&encryption=none&type=ws#Artemisvpn1
-@Artemisvpn1
+205
 ss://ss://7de06fba-8c43-4957-aab1-690c2d2499f7@ov-canada2.09vpn.com:8443?path=%2Fvless%2F&security=tls&encryption=none&type=ws#Artemisvpn1
-ss://ss://3b40219d-541c-4a8e-aa19-377bd68f1f62@cache.netflix.com.unlimited.spauu.web.id:443?path=%2Fvl%3D129.150.49.58%3D18650&security=tls&encryption=none&host=cache.netflix.com.unlimited.spauu.web.id&type=ws&sni=cache.netflix.com.unlimited.spauu.web.id#Artemisvpn1
-@Artemisvpn1
-
-5
-
-3
-371
-views
-2105
-   
-
-ss://ss://f0758892-f40c-412d-9fab-88103bad1fd8@ov-france2.09vpn.com:80?path=%2Fvless%2F&security=none&encryption=none&type=ws#Artemisvpn1
-@Artemisvpn1
-
-7
-
-2
-
-2
-
-2
-
-1
-
-1
-560
-vie
-ss://ss://6896fa3d-f3d3-43c7-a742-ebc45a2c9f26@ov-france2.09vpn.com:8443?path=%2Fvless%2F&security=tls&encryption=none&type=ws#Artemisvpn1
-ss://ss://2cf5523e-c4e2-4e97-be1f-b9b7d356c140@172.67.188.18:80?path=%2Faioproxybot%2F8.215.59.6-443&security=none&encryption=none&host=aio.loophole.Biz.iD&type=ws#Artemisvpn1
 ss://ss://41918f0b-d0c4-401c-841b-c78ea5e29898@ov-germany7.09vpn.com:80?path=%2Fvless%2F&security=none&encryption=none&type=ws#Artemisvpn1
 @Artemisvpn1
 
@@ -55,31 +29,122 @@ ss://ss://41918f0b-d0c4-401c-841b-c78ea5e29898@ov-germany7.09vpn.com:80?path=%2F
 1
 
 1
-664
+666
 vie
-ss://ss://edb4c373-ac92-4430-8f42-94439ca829b9@magical-fish.seotoolsforyou.co.uk:80?path=%2F&security=none&encryption=none&type=ws#Artemisvpn1
-ss://ss://7de06fba-8c43-4957-aab1-690c2d2499f7@ov-canada2.09vpn.com:80?path=%2Fvless%2F&security=none&encryption=none&type=ws#Artemisvpn1
+ss://ss://8df60790-c903-4661-b85d-64c0009378e5@188.114.96.6:443?path=%2F&security=tls&encryption=none&host=F1.paRsa.fiLegEar-Sg.Me&type=ws&sni=F1.paRsa.fiLegEar-Sg.Me#Artemisvpn1
+ss://ss://f0758892-f40c-412d-9fab-88103bad1fd8@ov-france2.09vpn.com:80?path=%2Fvless%2F&security=none&encryption=none&type=ws#Artemisvpn1
 @Artemisvpn1
 
-9
+7
 
-5
+2
+
+2
 
 2
 
 1
 
 1
+565
+vie
+ss://ss://e4824193-4f54-453b-d037-88368e85ef0e@45.82.251.93:8880?mode=gun&security=none&encryption=none&type=grpc#Artemisvpn1
+ss://ss://b5441b0d-2147-4898-8a6a-9b2c87f58382@190.93.246.246:8443?path=%2F&security=tls&encryption=none&host=bitget1.asdasd.click&type=ws&sni=bitget1.asdasd.click#Artemisvpn1
+ss://ss://583e3af8-a550-42a4-9301-5a689cfdbb1b@unlimited.spauu.web.id:443?path=%2Fvl%3D129.150.49.58%3D18650&security=tls&encryption=none&host=unlimited.spauu.web.id&type=ws&sni=unlimited.spauu.web.id#Artemisvpn1
+ss://ss://b5441b0d-2147-4898-8a6a-9b2c87f58382@190.93.245.232:8443?path=%2F&security=tls&encryption=none&host=bitget1.asdasd.click&type=ws&sni=bitget1.asdasd.click#Artemisvpn1
+ss://ss://3b40219d-541c-4a8e-aa19-377bd68f1f62@cache.netflix.com.unlimited.spauu.web.id:443?path=%2Fvl%3D129.150.49.58%3D18650&security=tls&encryption=none&host=cache.netflix.com.unlimited.spauu.web.id&type=ws&sni=cache.netflix.com.unlimited.spauu.web.id#Artemisvpn1
+@Artemisvpn1
+ss://ss://7de06fba-8c43-4957-aab1-690c2d2499f7@ov-canada2.09vpn.com:80?path=%2Fvless%2F&security=none&encryption=none&type=ws#%40Artemisvpn1%20%F0%9F%87%A8%F0%9F%87%A6
+@Artemisvpn1
+🏆
+9
+❤‍🔥
+5
+🕊
+2
+❤
+1
+👎
+1
+🐳
+1
+736
+views
+04:20
+بیا اینجا قطعأ وصلی
+https://t.me/takmesranab
+Telegram
+𝄠⁩⎆ ٺڪـ مصـࢪع ݩـاݕ ⎆𝄠⁩
+مصـرعے از #قلب_من
+با مصـرعے از #قلب_تـو
+شاه‌ بیتے میشود در دفترِ دیوانِ #عشق
+❣
+❤‍🔥
+5
+🏆
+2
+❤
+1
+712
+views
+05:57
+بیا اینجا قطعأ وصلی
+This media is not supported in your browser
+VIEW IN TELEGRAM
+612
+views
+08:58
+🏆
+1
+بیا اینجا قطعأ وصلی
+#DNS
+ابزار فوق‌العاده که فقط با یک کلیک، بهترین DNS سرور برای اینترنت و مکانی که هستی رو پیدا می‌کنی ؛ بدون نصب هیچ چیزی!
++ تمام تست‌ها در مرورگر انجام میشن ، این دقیقاً همون چیزیه که گیمرها، عاشقای استریم و هر کسی که میخواد بیشترین لذت رو از سرعت اینترنت ببره باید تست کنه!
+روی گزینه جستجوی سرور هم بزنید میتونید DNS خودتون رو وارد کنید و بعد اون DNS دلخواه خودتون رو وارد کنید
+https://webber.autos/Dns
+@Artemisvpn1
+❤‍🔥
+5
+🏆
+2
+❤
+1
+👍
+1
+686
+views
+09:00
+بیا اینجا قطعأ وصلی
+This media is not supported in your browser
+VIEW IN TELEGRAM
+604
+views
+10:04
+👍
+1
+🏆
+1
+بیا اینجا قطعأ وصلی
+#Hiddify
+لینک ساب
+https://hamedp-71.github.io/Arista_HP/#xsfilternet
+https://users.achaemenidempireofpersia.uk/links/fragEU2.json#
+https://pnlmrz.mashkestan.com:2096/sub/Y2hubiwxNzU1NTkzMDcy7iz9mxo2K9
+https://github.com/Epodonios/v2ray-configs/raw/main/Splitted-By-Protocol/ss.txt
+https://users.achaemenidempireofpersia.uk/links/fragEU2.json#httpsphonepanelirsubZnJlZS1AVm9sdF9OZXR3b3JrLDE3NT
+trojan://trojan://f282b878-8711-45a1-8c69-5564172123c1@aio.zipzap.biz.id:443?path=%2Faioproxybot%2F129.150.49.58-18650&security=tls&host=aio.zipzap.biz.id&type=ws&sni=aio.zipzap.biz.id#Artemisvpn1
+@Artemisvpn1
+
+4
+
+2
 
 1
-730
-vie
-ss://ss://583e3af8-a550-42a4-9301-5a689cfdbb1b@unlimited.spauu.web.id:443?path=%2Fvl%3D129.150.49.58%3D18650&security=tls&encryption=none&host=unlimited.spauu.web.id&type=ws&sni=unlimited.spauu.web.id#Artemisvpn1
-ss://ss://e4824193-4f54-453b-d037-88368e85ef0e@45.82.251.63:8880?mode=gun&security=none&encryption=none&type=grpc#Artemisvpn1
-ss://ss://ef246c6f-6e7d-4286-af33-5485544b0ba8@45.88.183.164:49355?security=none&encryption=none&headerType=none&type=tcp#Artemisvpn1
-ss://ss://8df60790-c903-4661-b85d-64c0009378e5@188.114.96.6:443?path=%2F&security=tls&encryption=none&host=F1.paRsa.fiLegEar-Sg.Me&type=ws&sni=F1.paRsa.fiLegEar-Sg.Me#Artemisvpn1
-ss://ss://b5441b0d-2147-4898-8a6a-9b2c87f58382@190.93.246.246:8443?path=%2F&security=tls&encryption=none&host=bitget1.asdasd.click&type=ws&sni=bitget1.asdasd.click#Artemisvpn1
+339
+views
+2103
+ss://ss://2cf5523e-c4e2-4e97-be1f-b9b7d356c140@172.67.188.18:80?path=%2Faioproxybot%2F8.215.59.6-443&security=none&encryption=none&host=aio.loophole.Biz.iD&type=ws#Artemisvpn1
+ss://ss://6896fa3d-f3d3-43c7-a742-ebc45a2c9f26@ov-france2.09vpn.com:8443?path=%2Fvless%2F&security=tls&encryption=none&type=ws#Artemisvpn1
+ss://ss://edb4c373-ac92-4430-8f42-94439ca829b9@magical-fish.seotoolsforyou.co.uk:80?path=%2F&security=none&encryption=none&type=ws#Artemisvpn1
 ss://ss://41918f0b-d0c4-401c-841b-c78ea5e29898@ov-germany7.09vpn.com:8443?path=%2Fvless%2F&security=tls&encryption=none&type=ws#Artemisvpn1
-ss://ss://b5441b0d-2147-4898-8a6a-9b2c87f58382@190.93.245.232:8443?path=%2F&security=tls&encryption=none&host=bitget1.asdasd.click&type=ws&sni=bitget1.asdasd.click#Artemisvpn1
 ss://ss://e4824193-4f54-453b-d037-88368e85ef0e@45.82.251.58:8880?mode=gun&security=none&encryption=none&type=grpc#Artemisvpn1
-ss://ss://e4824193-4f54-453b-d037-88368e85ef0e@45.82.251.93:8880?mode=gun&security=none&encryption=none&type=grpc#Artemisvpn1
