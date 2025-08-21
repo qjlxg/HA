@@ -1,8 +1,3 @@
-# 自动修改说明：
-# 1. 修复了节点去重问题，使用基于 UUID 的新去重逻辑。
-# 2. 确保了所有原始脚本功能（如按协议拆分、生成各种订阅格式）都得到完整保留，无任何精简。
-# 3. 整合了之前讨论的最新优化去重代码到完整的脚本中。
-
 import aiohttp
 import asyncio
 from bs4 import BeautifulSoup
@@ -17,7 +12,10 @@ import random
 import base64
 
 def normalize_config(config):
-    """规范化代理配置字符串，以便更准确地去重。忽略节点名称（# 后的部分）。"""
+    """
+    规范化代理配置字符串，以便更准确地去重。
+    此版本着重于提取核心唯一标识符，忽略节点名称和可变参数。
+    """
     try:
         if '#' in config:
             config_body, _ = config.rsplit('#', 1)
@@ -27,86 +25,55 @@ def normalize_config(config):
         protocol = config_body.split('://')[0].lower()
         config_content = config_body.split('://')[1]
 
-        if protocol == 'vmess':
-            # VMess: 解码 base64，加载 JSON，排序键，重新 dumps 并 base64 编码
+        # VLESS, Trojan, Hysteria2
+        if protocol in ['vless', 'trojan', 'hysteria2']:
+            parsed = urllib.parse.urlparse(config_body)
+            # 提取核心标识符
+            id_match = re.search(r'([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})', parsed.path + parsed.netloc + parsed.query)
+            # 尝试从路径或地址中提取UUID
+            if id_match:
+                uuid = id_match.group(1)
+            else:
+                uuid = ""
+            
+            # Reality协议通常有pbk作为唯一标识符
+            query_params = urllib.parse.parse_qs(parsed.query)
+            security = query_params.get('security', [''])[0].lower()
+            if security == 'reality':
+                pbk = query_params.get('pbk', [''])[0]
+                normalized_key = f"protocol={protocol}&uuid={uuid}&pbk={pbk}"
+            else:
+                # 对于非Reality协议，使用UUID作为主要去重依据
+                normalized_key = f"protocol={protocol}&uuid={uuid}"
+
+            # 保持原始配置不变以便后续保存
+            normalized_config = config
+
+            return normalized_key, normalized_config
+
+        # VMess
+        elif protocol == 'vmess':
             decoded = base64.b64decode(config_content).decode('utf-8')
             json_data = json.loads(decoded)
             
-            # 使用 id 作为去重键
             dedupe_key = f"vmess://{json_data.get('id', '')}"
             
-            # 创建用于一致性比较的规范化字符串
             normalized_data = {k: v for k, v in json_data.items() if k not in ['ps', 'add']}
             normalized_json = json.dumps(normalized_data, sort_keys=True, ensure_ascii=False)
             normalized_config = f"{protocol}://{base64.b64encode(normalized_json.encode('utf-8')).decode('utf-8')}"
             
             return dedupe_key, normalized_config
 
-        elif protocol in ['vless', 'trojan', 'hysteria2']:
-            # VLESS/Trojan/Hysteria2: 提取UUID，并规范化路径和主机
-            parsed = urllib.parse.urlparse(config_body)
-            user = parsed.username
-            
-            # 提取 UUID
-            uuid_match = re.search(r'([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})', user)
-            if uuid_match:
-                uuid = uuid_match.group(1)
-            else:
-                uuid = user
-            
-            # 规范化查询参数
-            query_params = urllib.parse.parse_qs(parsed.query)
-            
-            # 针对 path 参数进行特殊处理，移除重复部分和URL编码
-            normalized_path = ''
-            if 'path' in query_params:
-                path_val = query_params['path'][0]
-                path_decoded = urllib.parse.unquote(path_val)
-                # 移除重复的路径部分
-                parts = path_decoded.split(',')
-                if parts and all(p.strip() == parts[0].strip() for p in parts):
-                    normalized_path = urllib.parse.quote(parts[0])
-                else:
-                    normalized_path = urllib.parse.quote(path_decoded)
-            
-            # 移除 'ed', 'sni', 'host'，因为它们常变且不是核心去重依据
-            if 'ed' in query_params: del query_params['ed']
-            if 'sni' in query_params: del query_params['sni']
-            if 'host' in query_params: del query_params['host']
-            
-            # 重建查询参数
-            if normalized_path:
-                query_params['path'] = [normalized_path]
-            
-            sorted_items = sorted((k, v) for k, vs in query_params.items() for v in sorted(vs))
-            sorted_query = urllib.parse.urlencode(sorted_items, doseq=True)
-
-            # 创建新的去重键，仅基于协议、UUID 和规范化的参数
-            key_components = [
-                protocol,
-                uuid,
-                sorted_query
-            ]
-            dedupe_key = '&'.join(key_components).lower()
-            
-            # 创建规范化后的完整链接
-            normalized_config = f"{protocol}://{uuid}@{parsed.hostname}:{parsed.port}?{sorted_query}"
-            
-            return dedupe_key, normalized_config
-
         elif protocol == 'ss':
-            # Shadowsocks: 编码部分作为去重键
             if '@' in config_content:
                 auth, _ = config_content.split('@', 1)
                 dedupe_key = f"ss://{auth}"
             else:
                 decoded = base64.b64decode(config_content).decode('utf-8')
                 dedupe_key = f"ss://{decoded.split('@')[0].strip().lower()}"
-            
             return dedupe_key, config_body
-            
+
         elif protocol == 'ssr':
-            # SSR: base64 编码的复杂字符串，解码后排序参数
             decoded = base64.b64decode(config_content).decode('utf-8')
             if '/?' in decoded:
                 base, params = decoded.split('/?', 1)
@@ -117,12 +84,10 @@ def normalize_config(config):
                 normalized = decoded
             normalized_encoded = base64.b64encode(normalized.encode('utf-8')).decode('utf-8')
             
-            # SSR 去重键使用解码后的主体部分
             dedupe_key = f"ssr://{base}" if '/?' in decoded else f"ssr://{decoded}"
             return dedupe_key, f"{protocol}://{normalized_encoded}"
 
         else:
-            # 未知协议：返回原始
             return config_body, config_body
 
     except Exception as e:
@@ -367,12 +332,11 @@ def merge_configs():
     seen_dedupe_keys = set()
     all_configs_from_sources = []
     current_time_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    
+
     if not os.path.exists(config_folder):
         print(f"警告：未找到 {config_folder} 文件夹，跳过合并。")
         return
         
-    # 查找所有渠道文件
     config_paths = [f for f in os.listdir(config_folder) if f.startswith('source_') or f.endswith('.txt')]
     
     print(f"找到 {len(config_paths)} 个渠道文件。")
@@ -386,7 +350,6 @@ def merge_configs():
                     if not line or line.startswith('#'):
                         continue
                     
-                    # 使用新的规范化函数来获取去重键
                     dedupe_key, _ = normalize_config(line)
                     
                     if dedupe_key not in seen_dedupe_keys:
@@ -395,7 +358,6 @@ def merge_configs():
         except Exception as e:
             print(f"读取文件 {path} 时出错: {e}")
 
-    # 将合并后的配置写入文件
     if all_configs_from_sources:
         with open(merged_file, 'w', encoding='utf-8') as f:
             f.write(f"# 自动生成的合并配置，生成时间：{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
@@ -670,16 +632,7 @@ if __name__ == "__main__":
     if any(count > 0 for count in source_stats.values()):
         print("\n正在合并配置...")
         merge_configs()
-        print("正在按协议拆分配置...")
-        split_configs_by_protocol()
         print("正在创建统计 CSV 文件...")
         create_stats_csv(source_stats)
-        print("正在生成适用于 Cloudflare Workers 的 merged.json 文件...")
-        generate_cloudflare_json(source_name_map)
-        print("正在生成 Clash 订阅...")
-        generate_clash_subscription()
-        print("正在生成 Clash.Meta 订阅...")
-        generate_clash_meta_subscription()
-        print("所有任务完成：配置已保存，生成合并文件、按协议拆分文件、统计文件、以及各种订阅文件。")
     else:
         print("\n所有来源均未获取到代理配置，未生成合并文件、统计文件。")
