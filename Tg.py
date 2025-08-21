@@ -144,7 +144,7 @@ async def get_v2ray_links(session, url, max_pages=1, max_retries=1):
                         protocol_pattern = r'(hysteria2://|vmess://|trojan://|ss://|ssr://|vless://)[^\s#]*(#[^\s#]*)?'
                         for tag_list in tags_to_check:
                             for tag in tag_list:
-                                text = ' '.join(tag.stripped_strings).strip()
+                                text = '\n'.join(tag.stripped_strings)  # 使用换行连接以保留行结构
                                 if len(text) > 10:
                                     matches = re.findall(protocol_pattern, text, re.MULTILINE)
                                     for match in matches:
@@ -152,16 +152,18 @@ async def get_v2ray_links(session, url, max_pages=1, max_retries=1):
                                         if len(config) > len('vmess://') + 5:
                                             page_configs.append(config.strip())
                     
-                        # 原始节点提取逻辑（保留）
+                        # 改进节点提取逻辑：按协议前缀分割文本，确保每个配置独立
                         for tag_list in tags_to_check:
                             for tag in tag_list:
-                                text = ' '.join(tag.stripped_strings).strip()
-                                if len(text) > 10 and text.startswith(('hysteria2://', 'vmess://', 'trojan://', 'ss://', 'ssr://', 'vless://')):
-                                    for config_line in text.split('\n'):
+                                text = tag.get_text(separator='\n', strip=True)  # 使用get_text以换行分隔
+                                if len(text) > 10:
+                                    # 分割潜在的多配置行
+                                    potential_configs = re.split(r'(?=(hysteria2://|vmess://|trojan://|ss://|ssr://|vless://))', text)
+                                    for i in range(1, len(potential_configs), 2):
+                                        config_line = potential_configs[i] + potential_configs[i+1] if i+1 < len(potential_configs) else potential_configs[i]
                                         stripped_config = config_line.strip()
-                                        if stripped_config.startswith(('hysteria2://', 'vmess://', 'trojan://', 'ss://', 'ssr://', 'vless://')):
-                                            if len(config) > len('vmess://') + 5:
-                                                page_configs.append(stripped_config)
+                                        if stripped_config.startswith(('hysteria2://', 'vmess://', 'trojan://', 'ss://', 'ssr://', 'vless://')) and len(stripped_config) > len('vmess://') + 5:
+                                            page_configs.append(stripped_config)
                     
                         page_configs = list(set(page_configs))  # 移除本页重复配置
                         print(f"从 {current_url} (第 {page_count + 1} 页，状态码 {response.status}) 获取到 {len(page_configs)} 个配置")
