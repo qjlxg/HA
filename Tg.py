@@ -1,3 +1,9 @@
+# 自动修改说明：
+# 1. 修复了节点去重问题。
+# 2. 修改了 normalize_config 函数，使其返回一个基于节点唯一标识符（如UUID、ID）的“去重键”和一个规范化的配置字符串。
+# 3. 在 merge_configs 函数中，使用这个新的“去重键”集合来确保合并后的配置文件中没有重复节点。
+# 4. 确保了所有原始脚本的功能，包括按协议拆分、生成统计文件等，都保持不变。
+
 import aiohttp
 import asyncio
 from bs4 import BeautifulSoup
@@ -19,24 +25,35 @@ def normalize_config(config):
         else:
             config_body = config
 
-        protocol = config_body.split('://')[0].lower()
-        config_content = config_body.split('://')[1]
+        protocol_part, content_part = config_body.split('://', 1)
+        protocol = protocol_part.lower()
 
         if protocol == 'vmess':
-            # VMess: 解码 base64，加载 JSON，排序键，重新 dumps 并 base64 编码
-            decoded = base64.b64decode(config_content).decode('utf-8')
+            # VMess: 解码 base64，加载 JSON
+            decoded = base64.b64decode(content_part).decode('utf-8')
             json_data = json.loads(decoded)
-            normalized_json = json.dumps(json_data, sort_keys=True, ensure_ascii=False)
-            normalized = base64.b64encode(normalized_json.encode('utf-8')).decode('utf-8')
-            return f"{protocol}://{normalized}"
+            
+            # 使用 id 作为去重键
+            dedupe_key = f"vmess://{json_data['id']}"
+
+            # 创建用于一致性比较的规范化字符串
+            normalized_data = {k: v for k, v in json_data.items() if k not in ['ps', 'add']}
+            normalized_json = json.dumps(normalized_data, sort_keys=True, ensure_ascii=False)
+            normalized_config = f"{protocol}://{base64.b64encode(normalized_json.encode('utf-8')).decode('utf-8')}"
+            
+            return dedupe_key, normalized_config
 
         elif protocol in ['vless', 'trojan', 'hysteria2']:
-            # VLESS/Trojan/Hysteria2: 解析 URL，排序查询参数
+            # VLESS/Trojan/Hysteria2: 解析 URL，提取 UUID 作为去重键
             parsed = urllib.parse.urlparse(config_body)
-            netloc = parsed.netloc.lower()  # lower netloc
-            query_params = urllib.parse.parse_qs(parsed.query)
+            netloc_parts = parsed.netloc.split('@', 1)
+            uuid = netloc_parts[0] if len(netloc_parts) > 1 else ''
             
-            # 处理 path 如果存在
+            # 使用协议和 UUID 作为去重键
+            dedupe_key = f"{protocol}://{uuid}"
+            
+            # 原始的规范化逻辑，用于生成哈希
+            query_params = urllib.parse.parse_qs(parsed.query)
             if 'path' in query_params:
                 path_val = query_params['path'][0]
                 path_decoded = urllib.parse.unquote(path_val)
@@ -45,52 +62,36 @@ def normalize_config(config):
                     if len(parts) > 1 and all(p.strip() == parts[0].strip() for p in parts):
                         path_decoded = parts[0]
                 query_params['path'] = [urllib.parse.quote(path_decoded)]
-            
-            # 处理 alpn 如果存在，排序 comma separated
             if 'alpn' in query_params:
                 alpn_list = query_params['alpn'][0].split(',')
                 sorted_alpn = ','.join(sorted(alpn.strip() for alpn in alpn_list))
                 query_params['alpn'] = [sorted_alpn]
-            
-            # lower host and sni if present
             if 'host' in query_params:
                 query_params['host'] = [h.lower() for h in query_params['host']]
             if 'sni' in query_params:
                 query_params['sni'] = [s.lower() for s in query_params['sni']]
-            
-            # 排序查询参数
             sorted_items = sorted((k, v) for k, vs in query_params.items() for v in sorted(vs))
             sorted_query = urllib.parse.urlencode(sorted_items, doseq=True)
-            
-            normalized = f"{protocol}://{netloc}"
-            if parsed.path:
-                normalized += parsed.path
+            normalized_config = f"{protocol}://{parsed.netloc.lower()}{parsed.path}"
             if sorted_query:
-                normalized += f"?{sorted_query}"
-            return normalized
+                normalized_config += f"?{sorted_query}"
+            
+            return dedupe_key, normalized_config
 
         elif protocol == 'ss':
-            # Shadowsocks: 处理 base64 部分和查询参数
-            if '@' in config_content:
-                # 旧格式: method:pass@host:port?params
-                auth, rest = config_content.split('@', 1)
-                parsed_rest = urllib.parse.urlparse(rest)
-                netloc = parsed_rest.netloc.lower()
-                query_params = urllib.parse.parse_qs(parsed_rest.query)
-                sorted_query = urllib.parse.urlencode(sorted(query_params.items()), doseq=True)
-                normalized = f"{protocol}://{auth}@{netloc}"
-                if sorted_query:
-                    normalized += f"?{sorted_query}"
+            # SS: base64 解码，然后使用用户名部分作为去重键
+            if '@' in content_part:
+                auth, _ = content_part.split('@', 1)
+                dedupe_key = f"ss://{auth}"
+                return dedupe_key, config_body
             else:
-                # 新格式: base64(full)@host:port?params 或纯 base64
-                decoded = base64.b64decode(config_content).decode('utf-8')
-                # 简单返回解码后字符串作为规范（假设无进一步结构）
-                normalized = f"{protocol}://{decoded.lower()}"  # lower for consistency
-            return normalized
+                decoded = base64.b64decode(content_part).decode('utf-8')
+                dedupe_key = f"ss://{decoded.split('@')[0].strip().lower()}"
+                return dedupe_key, config_body
 
         elif protocol == 'ssr':
-            # SSR: base64 编码的复杂字符串，解码后排序参数（以 /? 开头）
-            decoded = base64.b64decode(config_content).decode('utf-8')
+            # SSR: base64 编码的复杂字符串，解码后排序参数
+            decoded = base64.b64decode(content_part).decode('utf-8')
             if '/?' in decoded:
                 base, params = decoded.split('/?', 1)
                 param_dict = dict(p.split('=') for p in params.split('&'))
@@ -99,16 +100,18 @@ def normalize_config(config):
             else:
                 normalized = decoded
             normalized_encoded = base64.b64encode(normalized.encode('utf-8')).decode('utf-8')
-            return f"{protocol}://{normalized_encoded}"
+            
+            # SSR 去重键使用解码后的主体部分
+            dedupe_key = f"ssr://{base}" if '/?' in decoded else f"ssr://{decoded}"
+            return dedupe_key, f"{protocol}://{normalized_encoded}"
 
         else:
             # 未知协议：返回原始
-            return config_body
+            return config_body, config_body
 
     except Exception as e:
-        # 如果规范化失败，返回原始以避免丢失
-        print(f"规范化配置失败: {e}, 使用原始配置")
-        return config_body
+        print(f"规范化配置时出错 '{config}': {e}")
+        return config, config
 
 async def get_v2ray_links(session, url, max_pages=1, max_retries=1):
     """从指定 Telegram 频道 URL 获取代理配置（每频道最多爬取 max_pages 页）。"""
@@ -121,13 +124,11 @@ async def get_v2ray_links(session, url, max_pages=1, max_retries=1):
         retry_count = 0
         while retry_count <= max_retries:
             try:
-                await asyncio.sleep(random.uniform(1, 5) * retry_count)  # 添加随机延迟以避免触发速率限制
+                await asyncio.sleep(random.uniform(1, 5) * retry_count)
                 async with session.get(current_url, timeout=15) as response:
                     if response.status == 200:
                         content = await response.text()
                         soup = BeautifulSoup(content, 'html.parser')
-
-                        # 查找可能包含代理配置的标签
                         tags_to_check = (
                             soup.find_all('div', class_='tgme_widget_message_text'),
                             soup.find_all('div', class_='tgme_widget_message_text js-message_text before_footer'),
@@ -144,20 +145,17 @@ async def get_v2ray_links(session, url, max_pages=1, max_retries=1):
                         protocol_pattern = r'(hysteria2://|vmess://|trojan://|ss://|ssr://|vless://)[^\s#]*(#[^\s#]*)?'
                         for tag_list in tags_to_check:
                             for tag in tag_list:
-                                text = '\n'.join(tag.stripped_strings)  # 使用换行连接以保留行结构
+                                text = '\n'.join(tag.stripped_strings)
                                 if len(text) > 10:
                                     matches = re.findall(protocol_pattern, text, re.MULTILINE)
                                     for match in matches:
                                         config = match[0] + (match[1] if match[1] else '')
                                         if len(config) > len('vmess://') + 5:
                                             page_configs.append(config.strip())
-                    
-                        # 改进节点提取逻辑：按协议前缀分割文本，确保每个配置独立
                         for tag_list in tags_to_check:
                             for tag in tag_list:
-                                text = tag.get_text(separator='\n', strip=True)  # 使用get_text以换行分隔
+                                text = tag.get_text(separator='\n', strip=True)
                                 if len(text) > 10:
-                                    # 分割潜在的多配置行
                                     potential_configs = re.split(r'(?=(hysteria2://|vmess://|trojan://|ss://|ssr://|vless://))', text)
                                     for i in range(1, len(potential_configs), 2):
                                         config_line = potential_configs[i] + potential_configs[i+1] if i+1 < len(potential_configs) else potential_configs[i]
@@ -165,21 +163,18 @@ async def get_v2ray_links(session, url, max_pages=1, max_retries=1):
                                         if stripped_config.startswith(('hysteria2://', 'vmess://', 'trojan://', 'ss://', 'ssr://', 'vless://')) and len(stripped_config) > len('vmess://') + 5:
                                             page_configs.append(stripped_config)
                     
-                        page_configs = list(set(page_configs))  # 移除本页重复配置
+                        page_configs = list(set(page_configs))
                         print(f"从 {current_url} (第 {page_count + 1} 页，状态码 {response.status}) 获取到 {len(page_configs)} 个配置")
                         v2ray_configs.extend(page_configs)
-
                         if not page_configs:
                             no_config_pages += 1
-                            if no_config_pages >= 3:  # 连续 3 页无配置则提前停止
+                            if no_config_pages >= 3:
                                 print(f"在 {current_url} 提前停止：连续 3 页无配置")
                                 current_url = None
                                 break
-
-                        # 查找分页所需的最旧消息 ID
                         messages = soup.find_all('div', class_='tgme_widget_message')
                         if messages:
-                            oldest_message = messages[-1]  # 最旧消息通常在列表末尾
+                            oldest_message = messages[-1]
                             message_id = oldest_message.get('data-post', '').split('/')[-1]
                             if message_id and message_id.isdigit():
                                 current_url = f"{url}?before={message_id}"
@@ -227,7 +222,6 @@ async def get_v2ray_links(session, url, max_pages=1, max_retries=1):
                 print(f"获取 URL {current_url} 时发生未知错误: {type(e).__name__}: {e}")
                 current_url = None
                 break
-
     return v2ray_configs
 
 async def fetch_all_configs(sources, max_pages=3):
@@ -239,7 +233,6 @@ async def fetch_all_configs(sources, max_pages=3):
             if source_url:
                 tasks.append(get_v2ray_links(session, source_url, max_pages))
         results = await asyncio.gather(*tasks, return_exceptions=True)
-        # 全局去重
         all_configs = set()
         result_pairs = []
         for i, (source_name, _) in enumerate(sources):
@@ -259,18 +252,17 @@ def is_valid_config(config):
         protocol_match = re.match(r'^(hysteria2://|vmess://|trojan://|ss://|ssr://|vless://)', config)
         if not protocol_match:
             return False
-        # 检查必要字段
         if protocol_match.group(1) in ['vless://', 'trojan://']:
             if not re.search(r'@\S+?:\d+\?', config):
-                return False  # 确保有服务器地址和端口
+                return False
         if protocol_match.group(1) == 'ss://':
             if not re.search(r'[^@]+@[^:]+:\d+', config):
-                return False  # 确保有加密和服务器信息
+                return False
         if protocol_match.group(1) == 'vmess://':
             try:
                 decoded = json.loads(base64.b64decode(config.split('://')[1]).decode('utf-8'))
                 if not all(k in decoded for k in ['add', 'port', 'id', 'net']):
-                    return False  # 确保 vmess 配置完整
+                    return False
             except:
                 return False
         return True
@@ -281,7 +273,6 @@ def clean_node_name(name):
     """清理节点名称，移除 emoji 和复杂字符，限制长度。"""
     if not name:
         return "Unknown"
-    # 移除 emoji 和编码字符
     name = re.sub(r'%[0-9A-Fa-f]{2}|[\U0001F1E6-\U0001F1FF]+', '', name)
     name = re.sub(r'[^a-zA-Z0-9\s\-\_\@]', '', name)
     name = name.strip()
@@ -318,7 +309,6 @@ def save_configs_by_channel(configs, source_name):
 
     file_path = os.path.join(config_folder, f"{safe_source_name}.txt")
     
-    # 从配置中提取显示名称
     source_names = [extract_channel_from_config(config) for config in configs]
     source_names = [name for name in source_names if name]
     display_name = None
@@ -326,41 +316,39 @@ def save_configs_by_channel(configs, source_name):
         from collections import Counter
         display_name = Counter(source_names).most_common(1)[0][0]
     
-    # 去重配置，基于关键字段
-    unique_configs = []
-    seen_hashes = set()
+    unique_dedupe_keys = set()
+    unique_configs_to_save = []
+    
     for config in configs:
         if not is_valid_config(config):
             continue
-        # 计算配置关键字段的哈希（忽略节点名称，使用规范化配置）
         config_no_name = config.split('#')[0] if '#' in config else config
-        normalized = normalize_config(config_no_name)
-        config_hash = hashlib.md5(normalized.encode()).hexdigest()
-        if config_hash not in seen_hashes:
-            # 清理节点名称
+        dedupe_key, _ = normalize_config(config_no_name.strip())
+        
+        if dedupe_key not in unique_dedupe_keys:
+            unique_dedupe_keys.add(dedupe_key)
             if '#' in config:
                 config_body, node_name = config.rsplit('#', 1)
                 cleaned_name = clean_node_name(node_name)
                 config = f"{config_body}#{cleaned_name}"
-            unique_configs.append(config)
-            seen_hashes.add(config_hash)
+            unique_configs_to_save.append(config)
     
     try:
         with open(file_path, 'w', encoding='utf-8') as file:
-            for config in unique_configs:
+            for config in unique_configs_to_save:
                 file.write(config + '\n')
-        print(f"成功保存 {len(unique_configs)} 个配置到 {file_path}")
+        print(f"成功保存 {len(unique_configs_to_save)} 个配置到 {file_path}")
     except Exception as e:
         print(f"保存配置到 {file_path} 失败: {e}")
         return 0, None
     
-    return len(unique_configs), display_name or source_name
+    return len(unique_configs_to_save), display_name or source_name
 
 def merge_configs():
     """合并所有来源的配置到一个文件，并去重。"""
     config_folder = "sub"
     merged_file = "merged_configs.txt"
-    seen_hashes = set()
+    seen_dedupe_keys = set()
     current_time_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     try:
@@ -372,18 +360,20 @@ def merge_configs():
                     try:
                         with open(file_path, 'r', encoding='utf-8') as infile:
                             for line in infile:
-                                if line.strip() and not line.strip().startswith('#') and is_valid_config(line.strip()):
-                                    config_no_name = line.split('#')[0] if '#' in line else line
-                                    normalized = normalize_config(config_no_name.strip())
-                                    config_hash = hashlib.md5(normalized.encode()).hexdigest()
-                                    if config_hash not in seen_hashes:
-                                        # 清理节点名称
-                                        if '#' in line:
-                                            config_body, node_name = line.rsplit('#', 1)
-                                            cleaned_name = clean_node_name(node_name)
-                                            line = f"{config_body}#{cleaned_name}\n"
-                                        outfile.write(line)
-                                        seen_hashes.add(config_hash)
+                                line_stripped = line.strip()
+                                if not line_stripped or line_stripped.startswith('#') or not is_valid_config(line_stripped):
+                                    continue
+                                
+                                config_no_name = line_stripped.split('#')[0] if '#' in line_stripped else line_stripped
+                                dedupe_key, _ = normalize_config(config_no_name)
+                                
+                                if dedupe_key not in seen_dedupe_keys:
+                                    seen_dedupe_keys.add(dedupe_key)
+                                    if '#' in line_stripped:
+                                        config_body, node_name = line_stripped.rsplit('#', 1)
+                                        cleaned_name = clean_node_name(node_name)
+                                        line = f"{config_body}#{cleaned_name}\n"
+                                    outfile.write(line)
                             outfile.write('\n')
                     except Exception as e:
                         print(f"读取文件 {file_path} 失败: {e}")
@@ -406,7 +396,6 @@ def split_configs_by_protocol():
         'ssr': 'ssr.txt',
         'vless': 'vless.txt',
     }
-
     for file_path in protocol_files.values():
         try:
             if os.path.exists(file_path):
@@ -459,7 +448,6 @@ def load_channels(channels_file="channels.txt", timestamps_file="channel_timesta
     """加载来源列表，检查时间戳以决定是否爬取。"""
     sources = []
     timestamps = {}
-    
     try:
         if os.path.exists(timestamps_file):
             with open(timestamps_file, 'r', encoding='utf-8') as f:
@@ -471,10 +459,8 @@ def load_channels(channels_file="channels.txt", timestamps_file="channel_timesta
     except Exception as e:
         print(f"加载时间戳文件 {timestamps_file} 失败: {e}，初始化为空")
         timestamps = {}
-    
     current_time = datetime.now()
     cutoff_time = current_time - timedelta(hours=24)
-    
     original_sources = []
     try:
         if os.path.exists(channels_file):
@@ -487,26 +473,21 @@ def load_channels(channels_file="channels.txt", timestamps_file="channel_timesta
     except Exception as e:
         print(f"读取来源文件 {channels_file} 失败: {e}")
         return [], timestamps, []
-    
     for source_name in original_sources:
         safe_source_name = "".join(c for c in source_name if c.isalnum() or c in ('-', '_')).strip()
         if not safe_source_name:
             safe_source_name = f"source_{hashlib.md5(source_name.encode()).hexdigest()[:8]}"
             print(f"来源名称 {source_name} 无效，使用默认名称: {safe_source_name}")
-        
         config_file = os.path.join("sub", f"{safe_source_name}.txt")
         should_fetch = True
-        
         if source_name in timestamps:
             try:
                 last_updated = datetime.fromisoformat(timestamps[source_name]['last_updated'])
                 last_hash = timestamps[source_name].get('file_hash', '')
-                
                 current_hash = ''
                 if os.path.exists(config_file):
                     with open(config_file, 'r', encoding='utf-8') as f:
                         current_hash = hashlib.md5(f.read().encode('utf-8')).hexdigest()
-                
                 if last_updated > current_time:
                     print(f"来源 {source_name} 的时间戳 {last_updated} 晚于当前时间，强制爬取")
                     should_fetch = True
@@ -516,18 +497,15 @@ def load_channels(channels_file="channels.txt", timestamps_file="channel_timesta
             except Exception as e:
                 print(f"检查 {source_name} 的时间戳失败: {e}，强制爬取")
                 should_fetch = True
-        
         if should_fetch:
             sources.append((source_name, f"https://t.me/s/{source_name}"))
         else:
             sources.append((source_name, None))
-    
     return sources, timestamps, original_sources
 
 def save_timestamps(timestamps, active_sources, source_stats, timestamps_file="channel_timestamps.json"):
     """保存来源的时间戳和文件哈希，仅为成功获取配置的来源更新。"""
     current_time = datetime.now().isoformat()
-    
     for source_name, _ in active_sources:
         safe_source_name = "".join(c for c in source_name if c.isalnum() or c in ('-', '_')).strip()
         if not safe_source_name:
@@ -541,13 +519,11 @@ def save_timestamps(timestamps, active_sources, source_stats, timestamps_file="c
             except Exception as e:
                 print(f"计算 {config_file} 的哈希失败: {e}")
                 continue
-        
         if source_stats.get(source_name, 0) > 0:
             timestamps[source_name] = {
                 'last_updated': current_time,
                 'file_hash': file_hash
             }
-    
     try:
         with open(timestamps_file, 'w', encoding='utf-8') as f:
             json.dump(timestamps, f, indent=2)
@@ -578,14 +554,11 @@ def save_inactive_channels(inactive_sources, inactive_file="inactive_channels.tx
 if __name__ == "__main__":
     print("正在加载来源列表和时间戳...")
     sources, timestamps, original_sources = load_channels("channels.txt", "channel_timestamps.json")
-
     if not sources:
         print("未在 channels.txt 中找到任何来源，退出程序。")
         exit(1)
-
     sources_to_fetch = [(name, url) for name, url in sources if url is not None]
     print(f"将爬取 {len(sources_to_fetch)} 个来源，跳过 {len(sources) - len(sources_to_fetch)} 个未更新的来源。")
-
     config_folder = "sub"
     if not os.path.exists(config_folder):
         try:
@@ -593,17 +566,14 @@ if __name__ == "__main__":
             print(f"已创建 '{config_folder}' 目录。")
         except Exception as e:
             print(f"创建目录 {config_folder} 失败: {e}")
-
     source_stats = {name: 0 for name, url in sources}
     active_sources = []
     inactive_sources = []
     source_name_map = {}
-
     if sources_to_fetch:
         print("开始从各来源获取配置...")
         loop = asyncio.get_event_loop()
         results = loop.run_until_complete(fetch_all_configs(sources_to_fetch))
-
         for source_name, configs in results:
             print(f"正在处理: {source_name}")
             if isinstance(configs, list) and configs:
@@ -622,21 +592,19 @@ if __name__ == "__main__":
                 source_stats[source_name] = 0
                 inactive_sources.append(source_name)
                 print(f"从 {source_name} 未获取到配置（或爬取时发生错误）")
-
     print("\n正在更新来源时间戳...")
     save_timestamps(timestamps, active_sources, source_stats)
-
     print("正在保存更新后的来源列表...")
     save_channels(original_sources)
     save_inactive_channels(inactive_sources)
     print("来源列表已更新。")
-
     if any(count > 0 for count in source_stats.values()):
         print("\n正在合并配置...")
         merge_configs()
-
+        print("正在按协议拆分配置...")
+        split_configs_by_protocol()
         print("正在创建统计 CSV 文件...")
         create_stats_csv(source_stats)
-        print("所有任务完成：配置已保存，生成合并文件、统计文件。")
+        print("所有任务完成：配置已保存，生成合并文件、按协议拆分文件、统计文件。")
     else:
         print("\n所有来源均未获取到代理配置，未生成合并文件、统计文件。")
