@@ -11,6 +11,105 @@ import hashlib
 import random
 import base64
 
+def normalize_config(config):
+    """规范化代理配置字符串，以便更准确地去重。忽略节点名称（# 后的部分）。"""
+    try:
+        if '#' in config:
+            config_body, _ = config.rsplit('#', 1)
+        else:
+            config_body = config
+
+        protocol = config_body.split('://')[0].lower()
+        config_content = config_body.split('://')[1]
+
+        if protocol == 'vmess':
+            # VMess: 解码 base64，加载 JSON，排序键，重新 dumps 并 base64 编码
+            decoded = base64.b64decode(config_content).decode('utf-8')
+            json_data = json.loads(decoded)
+            normalized_json = json.dumps(json_data, sort_keys=True, ensure_ascii=False)
+            normalized = base64.b64encode(normalized_json.encode('utf-8')).decode('utf-8')
+            return f"{protocol}://{normalized}"
+
+        elif protocol in ['vless', 'trojan', 'hysteria2']:
+            # VLESS/Trojan/Hysteria2: 解析 URL，排序查询参数
+            parsed = urllib.parse.urlparse(config_body)
+            netloc = parsed.netloc.lower()  # lower netloc
+            query_params = urllib.parse.parse_qs(parsed.query)
+            
+            # 处理 path 如果存在
+            if 'path' in query_params:
+                path_val = query_params['path'][0]
+                path_decoded = urllib.parse.unquote(path_val)
+                if ',' in path_decoded:
+                    parts = path_decoded.split(',')
+                    if len(parts) > 1 and all(p.strip() == parts[0].strip() for p in parts):
+                        path_decoded = parts[0]
+                query_params['path'] = [urllib.parse.quote(path_decoded)]
+            
+            # 处理 alpn 如果存在，排序 comma separated
+            if 'alpn' in query_params:
+                alpn_list = query_params['alpn'][0].split(',')
+                sorted_alpn = ','.join(sorted(alpn.strip() for alpn in alpn_list))
+                query_params['alpn'] = [sorted_alpn]
+            
+            # lower host and sni if present
+            if 'host' in query_params:
+                query_params['host'] = [h.lower() for h in query_params['host']]
+            if 'sni' in query_params:
+                query_params['sni'] = [s.lower() for s in query_params['sni']]
+            
+            # 排序查询参数
+            sorted_items = sorted((k, v) for k, vs in query_params.items() for v in sorted(vs))
+            sorted_query = urllib.parse.urlencode(sorted_items, doseq=True)
+            
+            normalized = f"{protocol}://{netloc}"
+            if parsed.path:
+                normalized += parsed.path
+            if sorted_query:
+                normalized += f"?{sorted_query}"
+            return normalized
+
+        elif protocol == 'ss':
+            # Shadowsocks: 处理 base64 部分和查询参数
+            if '@' in config_content:
+                # 旧格式: method:pass@host:port?params
+                auth, rest = config_content.split('@', 1)
+                parsed_rest = urllib.parse.urlparse(rest)
+                netloc = parsed_rest.netloc.lower()
+                query_params = urllib.parse.parse_qs(parsed_rest.query)
+                sorted_query = urllib.parse.urlencode(sorted(query_params.items()), doseq=True)
+                normalized = f"{protocol}://{auth}@{netloc}"
+                if sorted_query:
+                    normalized += f"?{sorted_query}"
+            else:
+                # 新格式: base64(full)@host:port?params 或纯 base64
+                decoded = base64.b64decode(config_content).decode('utf-8')
+                # 简单返回解码后字符串作为规范（假设无进一步结构）
+                normalized = f"{protocol}://{decoded.lower()}"  # lower for consistency
+            return normalized
+
+        elif protocol == 'ssr':
+            # SSR: base64 编码的复杂字符串，解码后排序参数（以 /? 开头）
+            decoded = base64.b64decode(config_content).decode('utf-8')
+            if '/?' in decoded:
+                base, params = decoded.split('/?', 1)
+                param_dict = dict(p.split('=') for p in params.split('&'))
+                sorted_params = '&'.join(f"{k}={v}" for k, v in sorted(param_dict.items()))
+                normalized = f"{base}/?{sorted_params}"
+            else:
+                normalized = decoded
+            normalized_encoded = base64.b64encode(normalized.encode('utf-8')).decode('utf-8')
+            return f"{protocol}://{normalized_encoded}"
+
+        else:
+            # 未知协议：返回原始
+            return config_body
+
+    except Exception as e:
+        # 如果规范化失败，返回原始以避免丢失
+        print(f"规范化配置失败: {e}, 使用原始配置")
+        return config_body
+
 async def get_v2ray_links(session, url, max_pages=1, max_retries=1):
     """从指定 Telegram 频道 URL 获取代理配置（每频道最多爬取 max_pages 页）。"""
     v2ray_configs = []
@@ -231,9 +330,10 @@ def save_configs_by_channel(configs, source_name):
     for config in configs:
         if not is_valid_config(config):
             continue
-        # 计算配置关键字段的哈希（忽略节点名称）
+        # 计算配置关键字段的哈希（忽略节点名称，使用规范化配置）
         config_no_name = config.split('#')[0] if '#' in config else config
-        config_hash = hashlib.md5(config_no_name.encode()).hexdigest()
+        normalized = normalize_config(config_no_name)
+        config_hash = hashlib.md5(normalized.encode()).hexdigest()
         if config_hash not in seen_hashes:
             # 清理节点名称
             if '#' in config:
@@ -272,7 +372,8 @@ def merge_configs():
                             for line in infile:
                                 if line.strip() and not line.strip().startswith('#') and is_valid_config(line.strip()):
                                     config_no_name = line.split('#')[0] if '#' in line else line
-                                    config_hash = hashlib.md5(config_no_name.encode()).hexdigest()
+                                    normalized = normalize_config(config_no_name.strip())
+                                    config_hash = hashlib.md5(normalized.encode()).hexdigest()
                                     if config_hash not in seen_hashes:
                                         # 清理节点名称
                                         if '#' in line:
