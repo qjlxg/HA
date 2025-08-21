@@ -64,8 +64,6 @@ def get_core_params(config):
     # 对于其他协议，保留原始去重逻辑（忽略 # 后内容）
     return config.split('#')[0]
 
-# --- 以下是您的原始代码，仅修改了去重部分 ---
-
 async def get_v2ray_links(session, url, max_pages=1, max_retries=3):
     """从指定 Telegram 频道 URL 获取代理配置（每频道最多爬取 max_pages 页）。"""
     v2ray_configs = []
@@ -83,7 +81,6 @@ async def get_v2ray_links(session, url, max_pages=1, max_retries=3):
                         content = await response.text()
                         soup = BeautifulSoup(content, 'html.parser')
 
-                        # 查找可能包含代理配置的标签
                         tags_to_check = (
                             soup.find_all('div', class_='tgme_widget_message_text'),
                             soup.find_all('div', class_='tgme_widget_message_text js-message_text before_footer'),
@@ -280,14 +277,12 @@ def save_configs_by_channel(configs, source_name):
         if not is_valid_config(config):
             continue
         
-        # --- 优化后的去重逻辑开始 ---
         core_params = get_core_params(config)
         if core_params:
             config_hash = hashlib.md5(core_params.encode('utf-8')).hexdigest()
         else:
             config_no_name = config.split('#')[0] if '#' in config else config
             config_hash = hashlib.md5(config_no_name.encode('utf-8')).hexdigest()
-        # --- 优化后的去重逻辑结束 ---
 
         if config_hash not in seen_hashes:
             if '#' in config:
@@ -315,7 +310,7 @@ def merge_configs():
     seen_hashes = set()
     current_time_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    # 新增的正则匹配模式，用于从一行中提取所有配置
+    # 改进的正则匹配模式，用于从任何文本中提取所有配置，包括跨行和多配置在一行的情况
     protocol_pattern = r'(hysteria2://|vmess://|trojan://|ss://|ssr://|vless://)[^\s#]*(#[^\s#]*)?'
 
     try:
@@ -326,9 +321,10 @@ def merge_configs():
                     file_path = os.path.join(config_folder, filename)
                     try:
                         with open(file_path, 'r', encoding='utf-8') as infile:
-                            # 更改：读取整个文件内容，然后用正则匹配所有配置
+                            # 更改：读取整个文件内容
                             content = infile.read()
-                            matches = re.findall(protocol_pattern, content, re.MULTILINE)
+                            # 更改：使用正则表达式查找所有匹配项
+                            matches = re.findall(protocol_pattern, content)
                             all_configs_from_file = [match[0] + match[1] for match in matches]
 
                             for config in all_configs_from_file:
