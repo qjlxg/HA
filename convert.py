@@ -597,9 +597,10 @@ def parse_hysteria2(uri):
         
         obfs_password = params.get('obfs-password', [''])[0]
         
+        # 修复：当 obfs 不是 none 时，obfs_password 不能为空
         if obfs != "none" and not obfs_password:
             skipped_links += 1
-            print(f"跳过 Hysteria2 节点: obfs={obfs} 但缺少 obfs-password, URI: {uri[:50]}...")
+            print(f"跳过 Hysteria2 节点: obfs={obfs} 但缺少或为空 obfs-password, URI: {uri[:50]}...")
             return None
         
         password = parsed.username
@@ -684,7 +685,7 @@ def download_and_parse_url(url):
         try:
             decoded_content = base64.b64decode(content_bytes).decode('utf-8')
             lines = decoded_content.strip().split('\n')
-        except (base64.binascii.Error, UnicodeDecodeError):
+        except (base64.binascii.Error, UnicodeDecode1Error):
             decoded_content = content_bytes.decode('utf-8', errors='ignore')
             lines = decoded_content.strip().split('\n')
 
