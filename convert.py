@@ -617,13 +617,14 @@ def parse_hysteria2(uri):
             "sni": sni
         }
         
-        obfs_password = params.get('obfs-password', [''])[0]
-        if obfs != "none" and obfs_password:
-            node["obfs-password"] = obfs_password
-        elif obfs != "none" and not obfs_password:
-            skipped_links += 1
-            print(f"跳过 Hysteria2 节点: obfs={obfs} 但缺少 obfs-password, URI: {uri[:50]}...")
-            return None
+        # 核心修复逻辑：只有当obfs不是none时，才严格检查obfs-password
+        if obfs != "none":
+            obfs_password_list = params.get('obfs-password')
+            if not obfs_password_list or not obfs_password_list[0]:
+                skipped_links += 1
+                print(f"跳过 Hysteria2 节点: obfs={obfs} 但缺少或为空 obfs-password, URI: {uri[:50]}...")
+                return None
+            node["obfs-password"] = obfs_password_list[0]
         
         fingerprint = get_hysteria2_fingerprint(node)
         if fingerprint in used_node_fingerprints:
