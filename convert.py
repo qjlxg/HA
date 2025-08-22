@@ -618,14 +618,13 @@ def parse_hysteria2(uri):
         }
         
         obfs_password = params.get('obfs-password', [''])[0]
-        # 修复逻辑：只有当obfs不是none时，才添加obfs-password字段
-        if obfs != "none":
-            if not obfs_password:
-                skipped_links += 1
-                print(f"跳过 Hysteria2 节点: obfs={obfs} 但缺少或为空 obfs-password, URI: {uri[:50]}...")
-                return None
+        if obfs != "none" and obfs_password:
             node["obfs-password"] = obfs_password
-
+        elif obfs != "none" and not obfs_password:
+            skipped_links += 1
+            print(f"跳过 Hysteria2 节点: obfs={obfs} 但缺少 obfs-password, URI: {uri[:50]}...")
+            return None
+        
         fingerprint = get_hysteria2_fingerprint(node)
         if fingerprint in used_node_fingerprints:
             duplicate_links += 1
@@ -685,7 +684,7 @@ def download_and_parse_url(url):
         try:
             decoded_content = base64.b64decode(content_bytes).decode('utf-8')
             lines = decoded_content.strip().split('\n')
-        except (base64.binascii.Error, UnicodeDecodeError): # 修复：将 UnicodeDecode1Error 更改为 UnicodeDecodeError
+        except (base64.binascii.Error, UnicodeDecodeError):
             decoded_content = content_bytes.decode('utf-8', errors='ignore')
             lines = decoded_content.strip().split('\n')
 
