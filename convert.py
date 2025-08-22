@@ -595,14 +595,6 @@ def parse_hysteria2(uri):
             print(f"跳过 Hysteria2 节点: 无效 obfs 类型 {obfs}")
             return None
         
-        obfs_password = params.get('obfs-password', [''])[0]
-        
-        # 修复：当 obfs 不是 none 时，obfs_password 不能为空
-        if obfs != "none" and not obfs_password:
-            skipped_links += 1
-            print(f"跳过 Hysteria2 节点: obfs={obfs} 但缺少或为空 obfs-password, URI: {uri[:50]}...")
-            return None
-        
         password = parsed.username
         if not password:
             skipped_links += 1
@@ -622,10 +614,18 @@ def parse_hysteria2(uri):
             "port": port,
             "password": password,
             "obfs": obfs,
-            "obfs-password": obfs_password if obfs != "none" else "",
             "sni": sni
         }
         
+        obfs_password = params.get('obfs-password', [''])[0]
+        # 修复逻辑：只有当obfs不是none时，才添加obfs-password字段
+        if obfs != "none":
+            if not obfs_password:
+                skipped_links += 1
+                print(f"跳过 Hysteria2 节点: obfs={obfs} 但缺少或为空 obfs-password, URI: {uri[:50]}...")
+                return None
+            node["obfs-password"] = obfs_password
+
         fingerprint = get_hysteria2_fingerprint(node)
         if fingerprint in used_node_fingerprints:
             duplicate_links += 1
@@ -685,7 +685,7 @@ def download_and_parse_url(url):
         try:
             decoded_content = base64.b64decode(content_bytes).decode('utf-8')
             lines = decoded_content.strip().split('\n')
-        except (base64.binascii.Error, UnicodeDecode1Error):
+        except (base64.binascii.Error, UnicodeDecodeError): # 修复：将 UnicodeDecode1Error 更改为 UnicodeDecodeError
             decoded_content = content_bytes.decode('utf-8', errors='ignore')
             lines = decoded_content.strip().split('\n')
 
