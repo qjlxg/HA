@@ -27,7 +27,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install requests pyyaml requests_cache tqdm
+          pip install requests pyyaml beautifulsoup4 tqdm retrying maxminddb geoip2 tenacity requests_cache
 
       - name: Update GeoLite2-Country database on 5th of each month
         if: github.event.schedule == '0 7 5 * *'
@@ -64,7 +64,7 @@ jobs:
         run: |
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@github.com'
-          git add link.yaml link.csv
+          git add link.yaml link.csv link_cache
           git commit -m "Auto update nodes and cache from script on $(date +%Y-%m-%d)" || echo "No changes to commit"
           
           # 添加一个重试循环，以应对竞态条件
