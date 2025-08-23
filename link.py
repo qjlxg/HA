@@ -14,6 +14,7 @@ from collections import OrderedDict, defaultdict
 from html.parser import HTMLParser
 from tqdm import tqdm
 from ip_geolocation import GeoLite2Country
+import requests_cache
 
 # 全局变量
 LOG_FILE = "link_processing.log"
@@ -73,16 +74,12 @@ def validate_host(host):
     host = unquote(host).strip()
     if not host:
         return False
-    # 验证 IPv4
-    if re.match(r'^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$', host):
+    try:
+        # 使用 getaddrinfo 验证 host 是否有效
+        socket.getaddrinfo(host, None)
         return True
-    # 验证域名
-    if re.match(r'^[a-zA-Z0-9](?:[a-zA-Z0-9.-]*[a-zA-Z0-9])?\.[a-zA-Z]{2,}$', host):
-        return True
-    # 验证 IPv6 (简化检查)
-    if re.match(r'^([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$', host) or re.match(r'^::', host) or re.match(r'.*::.*', host):
-        return True
-    return False
+    except socket.gaierror:
+        return False
 
 def validate_server_port(server, port):
     """验证服务器地址和端口"""
@@ -96,6 +93,12 @@ def parse_vmess(vmess_url):
     try:
         if not vmess_url.startswith('vmess://'): return None
         base64_content = vmess_url.replace('vmess://', '', 1)
+        
+        # 自动补全 Base64 填充
+        padding = len(base64_content) % 4
+        if padding > 0:
+            base64_content += '=' * (4 - padding)
+            
         decoded_json = base64.b64decode(base64_content.encode('utf-8')).decode('utf-8')
         config = json.loads(decoded_json)
         required_fields = ['v', 'ps', 'add', 'port', 'id']
@@ -139,6 +142,12 @@ def parse_ss(ss_url):
     try:
         if not ss_url.startswith('ss://'): return None
         base64_content = ss_url.replace('ss://', '', 1)
+        
+        # 自动补全 Base64 填充
+        padding = len(base64_content) % 4
+        if padding > 0:
+            base64_content += '=' * (4 - padding)
+            
         if '@' in base64_content:
             part1, part2 = base64_content.split('@', 1)
             decoded_part1 = base64.b64decode(part1.encode('utf-8')).decode('utf-8')
@@ -243,7 +252,13 @@ def parse_ssr(ssr_url):
     try:
         if not ssr_url.startswith('ssr://'): return None
         base64_content = ssr_url.replace('ssr://', '', 1)
-        decoded = base64.urlsafe_b64decode(base64_content + '==').decode('utf-8')
+        
+        # 自动补全 Base64 填充
+        padding = len(base64_content) % 4
+        if padding > 0:
+            base64_content += '=' * (4 - padding)
+            
+        decoded = base64.urlsafe_b64decode(base64_content).decode('utf-8')
         parts = decoded.split(':')
         if len(parts) < 6: return None
         server, port, protocol, method, obfs, password_base64 = parts[:6]
@@ -253,9 +268,14 @@ def parse_ssr(ssr_url):
         if not validate_server_port(server, int(port)):
             return None
 
+        # 自动补全 Base64 填充
+        padding = len(password_base64) % 4
+        if padding > 0:
+            password_base64 += '=' * (4 - padding)
+        
         return {
             'name': unquote(params.get('remarks', 'Unnamed SSR')), 'type': 'ssr', 'server': server,
-            'port': int(port), 'password': base64.urlsafe_b64decode(password_base64 + '==').decode('utf-8'),
+            'port': int(port), 'password': base64.urlsafe_b64decode(password_base64).decode('utf-8'),
             'cipher': method, 'protocol': protocol, 'obfs': obfs,
             'protocol-param': params.get('protoparam'), 'obfs-param': params.get('obfsparam')
         }
@@ -334,10 +354,16 @@ def get_nodes_from_url(url):
             full_url = f"{scheme}{url}"
         
         try:
+            # 使用 requests_cache.CachedSession 替代 requests.get
+            session = requests_cache.CachedSession(
+                'link_cache',
+                backend='sqlite',
+                expire_after=3600 # 缓存1小时
+            )
             headers = {
                 'User-Agent': random.choice(USER_AGENTS)
             }
-            response = requests.get(full_url, headers=headers, timeout=5)
+            response = session.get(full_url, headers=headers, timeout=5)
             response.raise_for_status()
             content = response.text
 
@@ -461,11 +487,12 @@ def process_node_with_geolocation(node, geo_locator):
     success = False
     if server:
         try:
-            # 尝试将服务器地址解析为 IP 地址
-            ip_address = socket.gethostbyname(server)
-            # 使用解析出的 IP 地址进行地理位置查询
-            _, country_name = geo_locator.get_location(ip_address)
-            success = True
+            # 尝试将服务器地址解析为 IP 地址，支持 IPv4 和 IPv6
+            addrs = socket.getaddrinfo(server, None)
+            if addrs:
+                ip_address = addrs[0][4][0] # 提取第一个地址的 IP
+                _, country_name = geo_locator.get_location(ip_address)
+                success = True
         except (socket.gaierror, Exception):
             pass
     node['name'] = country_name
@@ -550,7 +577,7 @@ if __name__ == "__main__":
         
         if node_key not in seen_nodes:
             seen_nodes.add(node_key)
-            base_name = node.get('name', "未知地区")
+            base_name = node.get('name', f"{node_type}-{node.get('server')}-{node.get('port')}")
             node['name'] = generate_unique_name(base_name, name_counts)
             unique_nodes.append(node)
         else:
