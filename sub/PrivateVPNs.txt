@@ -1,9 +1,7 @@
-trojan://trojan://telegram-id-privatevpns@13.37.28.154:22222?security=tls&alpn=http/1.1&headerType=none&type=tcp&sni=trojan.burgerip.co.uk#S103
+trojan://trojan://telegram-id-privatevpns@51.44.193.63:22222?security=tls&alpn=http/1.1&headerType=none&type=tcp&sni=trojan.burgerip.co.uk#S103
 
 tmePrivateVPNs
 
    
 
 @PrivateVPNs
-521K
-views
