@@ -1790,7 +1790,7 @@ proxies:
   server: 104.22.25.71
   port: 443
   type: vless
-  uuid: 1813cde4-a909-44d8-b19a-7f071363ec6a
+  uuid: 3355ad27-c83a-4a6e-9e3c-f284da32c49c
   cipher: auto
   tls: true
   skip-cert-verify: true
@@ -1805,7 +1805,7 @@ proxies:
   server: 162.159.134.61
   port: 80
   type: vless
-  uuid: 1813cde4-a909-44d8-b19a-7f071363ec6a
+  uuid: 3355ad27-c83a-4a6e-9e3c-f284da32c49c
   cipher: auto
   tls: false
   skip-cert-verify: true
@@ -1820,7 +1820,7 @@ proxies:
   server: 104.20.65.29
   port: 443
   type: vless
-  uuid: 1813cde4-a909-44d8-b19a-7f071363ec6a
+  uuid: 3355ad27-c83a-4a6e-9e3c-f284da32c49c
   cipher: auto
   tls: true
   skip-cert-verify: true
@@ -1835,7 +1835,7 @@ proxies:
   server: 104.22.25.71
   port: 443
   type: vless
-  uuid: d16da2c7-60fa-4d12-817b-c42592242724
+  uuid: 1813cde4-a909-44d8-b19a-7f071363ec6a
   cipher: auto
   tls: true
   skip-cert-verify: true
@@ -1850,7 +1850,7 @@ proxies:
   server: 162.159.134.61
   port: 80
   type: vless
-  uuid: d16da2c7-60fa-4d12-817b-c42592242724
+  uuid: 1813cde4-a909-44d8-b19a-7f071363ec6a
   cipher: auto
   tls: false
   skip-cert-verify: true
@@ -1865,7 +1865,7 @@ proxies:
   server: 104.20.65.29
   port: 443
   type: vless
-  uuid: d16da2c7-60fa-4d12-817b-c42592242724
+  uuid: 1813cde4-a909-44d8-b19a-7f071363ec6a
   cipher: auto
   tls: true
   skip-cert-verify: true
@@ -1925,7 +1925,7 @@ proxies:
   server: 104.22.25.71
   port: 443
   type: vless
-  uuid: 3355ad27-c83a-4a6e-9e3c-f284da32c49c
+  uuid: d16da2c7-60fa-4d12-817b-c42592242724
   cipher: auto
   tls: true
   skip-cert-verify: true
@@ -1940,7 +1940,7 @@ proxies:
   server: 162.159.134.61
   port: 80
   type: vless
-  uuid: 3355ad27-c83a-4a6e-9e3c-f284da32c49c
+  uuid: d16da2c7-60fa-4d12-817b-c42592242724
   cipher: auto
   tls: false
   skip-cert-verify: true
@@ -1955,7 +1955,7 @@ proxies:
   server: 104.20.65.29
   port: 443
   type: vless
-  uuid: 3355ad27-c83a-4a6e-9e3c-f284da32c49c
+  uuid: d16da2c7-60fa-4d12-817b-c42592242724
   cipher: auto
   tls: true
   skip-cert-verify: true
@@ -2066,38 +2066,6 @@ proxies:
     path: /?ed=2560
     headers:
       Host: spdf.qzz.io
-- name: 法国_1
-  type: vless
-  server: dist.pirped.com
-  port: 55945
-  uuid: 3482a0f4-56aa-4096-aad4-19c5970c239b
-  network: grpc
-  tls: false
-  flow: null
-- name: 法国_2
-  type: vless
-  server: res.pro-brain.com
-  port: 47600
-  uuid: 16726ef0-f3f4-428b-c8aa-e9ce99ac34e8
-  network: grpc
-  tls: false
-  flow: null
-- name: 法国_3
-  type: vless
-  server: admin.pirped.com
-  port: 57546
-  uuid: 4aae04fa-f390-44bb-9558-a344c8baed36
-  network: grpc
-  tls: false
-  flow: null
-- name: 法国_4
-  type: vless
-  server: res.pro-brain.com
-  port: 8668
-  uuid: 53c6db3f-6839-42b7-e696-e56306d1872b
-  network: tcp
-  tls: false
-  flow: null
 - name: None_24
   password: xnChC7dKZ8
   port: 443
@@ -11673,7 +11641,7 @@ proxies:
     headers:
       HOST: h4.grAsSoRy.shop
   region: 德国
-- name: 法国_5
+- name: 法国_1
   password: dongtaiwang.com
   port: 5355
   server: 51.159.111.32
@@ -15779,7 +15747,7 @@ proxies:
   tls: false
   type: hysteria2
   region: 比利时
-- name: 法国_6
+- name: 法国_2
   server: faguo.959555.xyz
   port: 10000
   type: hysteria2
@@ -15838,21 +15806,21 @@ proxies:
   cipher: chacha20-ietf-poly1305
   password: 635b94ab-8773-3189-9b56-aff79a9ae4af
   region: 法国
-- name: 法国_7
+- name: 法国_3
   type: ss
   server: 81.19.137.222
   port: 57456
   password: a58fa62b4944ddbf
   cipher: chacha20-ietf-poly1305
   region: 法国
-- name: 法国_8
+- name: 法国_4
   type: ss
   server: 62.210.88.22
   port: 443
   password: WDavBimDmH2QLxljf5PSO1
   cipher: chacha20-ietf-poly1305
   region: 法国
-- name: 法国_9
+- name: 法国_5
   type: ss
   server: 107.191.63.241
   port: 30665
@@ -16241,7 +16209,7 @@ proxies:
   cipher: aes-256-gcm
   password: NVYQMBHTTOQDYERF
   region: 爱尔兰
-- name: 法国_10
+- name: 法国_6
   server: 15.237.179.114
   port: 443
   client-fingerprint: chrome
@@ -20211,7 +20179,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
   region: 美国
-- name: 法国_11
+- name: 法国_7
   server: 141.11.203.29
   port: 8880
   type: vless
@@ -22694,7 +22662,7 @@ proxies:
   client-fingerprint: firefox
   network: tcp
   region: 美国
-- name: 法国_12
+- name: 法国_8
   server: 185.16.110.29
   port: 8880
   type: vless
@@ -23605,7 +23573,7 @@ proxies:
     headers:
       Host: hk.laoyoutiao.link
   region: 美国
-- name: 法国_13
+- name: 法国_9
   server: 141.11.202.29
   port: 8880
   type: vless
@@ -24927,7 +24895,7 @@ proxies:
     headers:
       Host: 0229.patterdeng.pp.ua
   region: 英国
-- name: 法国_14
+- name: 法国_10
   server: 57.128.178.253
   port: 443
   type: vless
@@ -25700,7 +25668,7 @@ proxies:
     headers:
       Host: steep.skyfigure.top
   region: 韩国
-- name: 法国_15
+- name: 法国_11
   server: 185.16.110.181
   port: 443
   type: vless
@@ -28000,6 +27968,38 @@ proxies:
   sni: cdn.alibaba.com
   skip-cert-verify: true
   region: 马来西亚
+- name: 法国_12
+  type: vless
+  server: dist.pirped.com
+  port: 55945
+  uuid: 3482a0f4-56aa-4096-aad4-19c5970c239b
+  network: grpc
+  tls: false
+  flow: null
+- name: 法国_13
+  type: vless
+  server: res.pro-brain.com
+  port: 47600
+  uuid: 16726ef0-f3f4-428b-c8aa-e9ce99ac34e8
+  network: grpc
+  tls: false
+  flow: null
+- name: 法国_14
+  type: vless
+  server: admin.pirped.com
+  port: 57546
+  uuid: 4aae04fa-f390-44bb-9558-a344c8baed36
+  network: grpc
+  tls: false
+  flow: null
+- name: 法国_15
+  type: vless
+  server: res.pro-brain.com
+  port: 8668
+  uuid: 53c6db3f-6839-42b7-e696-e56306d1872b
+  network: tcp
+  tls: false
+  flow: null
 - name: 波兰_3
   type: vless
   server: 37.252.11.8
