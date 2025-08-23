@@ -8,12 +8,15 @@ import json
 import re
 import random
 import concurrent.futures
-from urllib.parse import urlparse, unquote, urljoin
-from collections import OrderedDict
+import socket
+from urllib.parse import urlparse, unquote, urljoin, parse_qs
+from collections import OrderedDict, defaultdict
 from html.parser import HTMLParser
 from tqdm import tqdm
-import geoip2.database
-from itertools import count
+from ip_geolocation import GeoLite2Country
+
+# 全局变量
+LOG_FILE = "link_processing.log"
 
 # 多样化的User-Agent列表，涵盖多种设备和浏览器
 USER_AGENTS = [
@@ -22,7 +25,7 @@ USER_AGENTS = [
     # Windows 10 Firefox
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0',
     # macOS Big Sur Safari
-    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.1 Safari/605.1.15',
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.15 Safari/605.1.15',
     # iPad Pro Safari
     'Mozilla/5.0 (iPad; CPU OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/91.0.4472.77 Mobile/15E148 Safari/604.1',
     # iPhone Chrome
@@ -37,65 +40,13 @@ USER_AGENTS = [
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36 Edg/91.0.864.59'
 ]
 
-GEOIP_DB_PATH = 'GeoLite2-Country.mmdb'
-geoip_reader = None
-
-def get_country_name(ip):
-    """
-    通过 GeoLite2 数据库获取IP的地理位置（国家名）。
-    """
-    global geoip_reader
-    if not geoip_reader:
-        if os.path.exists(GEOIP_DB_PATH):
-            try:
-                geoip_reader = geoip2.database.Reader(GEOIP_DB_PATH)
-            except Exception as e:
-                print(f"无法加载 GeoLite2 数据库: {e}")
-                return None
-        else:
-            return None
-    
-    try:
-        response = geoip_reader.country(ip)
-        return response.country.name
-    except geoip2.errors.AddressNotFoundError:
-        return None
-    except Exception:
-        return None
-
-def rename_nodes_by_location(nodes):
-    """
-    根据地理位置重命名节点，有重复的加上序号。
-    """
-    renamed_nodes = []
-    seen_names = {}
-    
-    for node in nodes:
-        original_name = node.get('name', 'Unnamed')
-        server_address = node.get('server')
-        country = None
-        
-        # 尝试通过IP地址获取国家
-        if server_address:
-            try:
-                import socket
-                ip_address = socket.gethostbyname(server_address)
-                country = get_country_name(ip_address)
-            except (socket.gaierror, TypeError):
-                country = None
-        
-        new_name = country or f'Unidentified-Location'
-        
-        if new_name in seen_names:
-            seen_names[new_name] += 1
-            new_name = f"{new_name} #{seen_names[new_name]}"
-        else:
-            seen_names[new_name] = 1
-        
-        node['name'] = new_name
-        renamed_nodes.append(node)
-        
-    return renamed_nodes
+# 有效加密方式
+VALID_SS_CIPHERS = {
+    'aes-128-gcm', 'aes-256-gcm', 'chacha20-ietf-poly1305',
+    '2022-blake3-aes-128-gcm', '2022-blake3-aes-256-gcm', '2022-blake3-chacha20-poly1305'
+}
+VALID_VMESS_CIPHERS = {'auto', 'none', 'aes-128-gcm', 'chacha20-poly1305'}
+VALID_VLESS_NETWORKS = {'tcp', 'ws', 'grpc'}
 
 class DirectoryLinkParser(HTMLParser):
     def __init__(self):
@@ -115,6 +66,32 @@ class DirectoryLinkParser(HTMLParser):
         if tag == 'pre':
             self.in_pre = False
 
+def validate_host(host):
+    """验证 Host 字段（域名或 IP）"""
+    if not host or not isinstance(host, str):
+        return False
+    host = unquote(host).strip()
+    if not host:
+        return False
+    # 验证 IPv4
+    if re.match(r'^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$', host):
+        return True
+    # 验证域名
+    if re.match(r'^[a-zA-Z0-9](?:[a-zA-Z0-9.-]*[a-zA-Z0-9])?\.[a-zA-Z]{2,}$', host):
+        return True
+    # 验证 IPv6 (简化检查)
+    if re.match(r'^([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$', host) or re.match(r'^::', host) or re.match(r'.*::.*', host):
+        return True
+    return False
+
+def validate_server_port(server, port):
+    """验证服务器地址和端口"""
+    if not server or not isinstance(port, int) or port < 1 or port > 65535:
+        return False
+    if not validate_host(server):
+        return False
+    return True
+
 def parse_vmess(vmess_url):
     try:
         if not vmess_url.startswith('vmess://'): return None
@@ -123,13 +100,39 @@ def parse_vmess(vmess_url):
         config = json.loads(decoded_json)
         required_fields = ['v', 'ps', 'add', 'port', 'id']
         if not all(field in config for field in required_fields): return None
-        return {
+        
+        # 验证加密方式
+        cipher = config.get('scy', 'auto')
+        if cipher not in VALID_VMESS_CIPHERS:
+            return None
+
+        # 验证服务器和端口
+        if not validate_server_port(config.get('add'), int(config.get('port'))):
+            return None
+
+        node = {
             'name': config.get('ps', 'Unnamed VMess'), 'type': 'vmess', 'server': config.get('add'),
             'port': int(config.get('port')), 'uuid': config.get('id'), 'alterId': int(config.get('aid', 0)),
-            'cipher': config.get('scy', 'auto'), 'network': config.get('net', 'tcp'),
-            'ws-opts': {'path': config.get('path', '/'), 'headers': {'Host': config.get('host', config.get('add'))}}
+            'cipher': cipher, 'network': config.get('net', 'tcp')
         }
+        
+        # 严格验证 ws-opts.headers.Host 字段
+        if node.get('network') == 'ws':
+            host = config.get('host') or config.get('add')
+            if not validate_host(host):
+                with open(LOG_FILE, 'a', encoding='utf-8') as f:
+                    f.write(f"跳过 VMess 节点（无效或缺失 ws-opts.headers[Host]）: {vmess_url[:50]}...\n")
+                return None
+            
+            node['ws-opts'] = {
+                'path': config.get('path', '/'),
+                'headers': {'Host': host}
+            }
+        
+        return node
     except Exception as e:
+        with open(LOG_FILE, 'a', encoding='utf-8') as f:
+            f.write(f"解析 VMess 节点出错: {e}\n")
         return None
 
 def parse_ss(ss_url):
@@ -147,40 +150,93 @@ def parse_ss(ss_url):
             method, password = decoded_part1.split(':', 1)
         server_info, name = part2.split('#', 1) if '#' in part2 else (part2, None)
         server, port = server_info.split(':', 1)
+
+        # 验证加密方式
+        if method not in VALID_SS_CIPHERS:
+            with open(LOG_FILE, 'a', encoding='utf-8') as f:
+                f.write(f"跳过 Shadowsocks 节点（不支持的加密方式: {method}）: {ss_url[:50]}...\n")
+            return None
+        
+        # 验证服务器和端口
+        if not validate_server_port(server, int(port)):
+            with open(LOG_FILE, 'a', encoding='utf-8') as f:
+                f.write(f"跳过 Shadowsocks 节点（无效服务器/端口）: {ss_url[:50]}...\n")
+            return None
+
         return {
             'name': unquote(name) if name else 'Unnamed SS', 'type': 'ss', 'server': server,
             'port': int(port), 'cipher': method, 'password': password
         }
     except Exception as e:
+        with open(LOG_FILE, 'a', encoding='utf-8') as f:
+            f.write(f"解析 Shadowsocks 节点出错: {e}\n")
         return None
 
 def parse_vless(vless_url):
     try:
         if not vless_url.startswith('vless://'): return None
         parsed_url = urlparse(vless_url)
-        uuid, server, port, name = parsed_url.username, parsed_url.hostname, parsed_url.port, unquote(parsed_url.fragment) if parsed_url.fragment else 'Unnamed VLESS'
+        uuid, server, port = parsed_url.username, parsed_url.hostname, parsed_url.port
+        name = unquote(parsed_url.fragment) if parsed_url.fragment else 'Unnamed VLESS'
+        
         if not all([uuid, server, port]): return None
+        
+        # 验证服务器和端口
+        if not validate_server_port(server, port):
+            return None
+            
         params = dict(re.findall(r'([^=&]+)=([^=&]*)', parsed_url.query))
-        return {
+        
+        # 验证网络类型
+        network = params.get('type', 'tcp')
+        if network not in VALID_VLESS_NETWORKS:
+            with open(LOG_FILE, 'a', encoding='utf-8') as f:
+                f.write(f"跳过 VLESS 节点（不支持的网络类型: {network}）: {vless_url[:50]}...\n")
+            return None
+        
+        node = {
             'name': name, 'type': 'vless', 'server': server, 'port': port, 'uuid': uuid,
-            'network': params.get('type', 'tcp'), 'tls': params.get('security') == 'tls', 'flow': params.get('flow'),
-            'sni': params.get('sni'), 'ws-opts': {'path': params.get('path'), 'headers': {'Host': params.get('host')}}
+            'network': network, 'tls': params.get('security') == 'tls', 'flow': params.get('flow')
         }
+        
+        # 严格验证 ws-opts.headers.Host 字段
+        if network == 'ws':
+            host_header = params.get('host', '')
+            if not validate_host(host_header):
+                with open(LOG_FILE, 'a', encoding='utf-8') as f:
+                    f.write(f"跳过 VLESS 节点（无效或缺失 ws-opts.headers[Host]）: {vless_url[:50]}...\n")
+                return None
+            node['ws-opts'] = {
+                'path': params.get('path'),
+                'headers': {'Host': host_header}
+            }
+        
+        return node
     except Exception as e:
+        with open(LOG_FILE, 'a', encoding='utf-8') as f:
+            f.write(f"解析 VLESS 节点出错: {e}\n")
         return None
 
 def parse_trojan(trojan_url):
     try:
         if not trojan_url.startswith('trojan://'): return None
         parsed_url = urlparse(trojan_url)
-        password, server, port, name = parsed_url.username, parsed_url.hostname, parsed_url.port, unquote(parsed_url.fragment) if parsed_url.fragment else 'Unnamed Trojan'
+        password, server, port = parsed_url.username, parsed_url.hostname, parsed_url.port
+        name = unquote(parsed_url.fragment) if parsed_url.fragment else 'Unnamed Trojan'
         if not all([password, server, port]): return None
+
+        # 验证服务器和端口
+        if not validate_server_port(server, port):
+            return None
+
         params = dict(re.findall(r'([^=&]+)=([^=&]*)', parsed_url.query))
         return {
             'name': name, 'type': 'trojan', 'server': server, 'port': port, 'password': password,
             'sni': params.get('sni'), 'skip-cert-verify': False
         }
     except Exception as e:
+        with open(LOG_FILE, 'a', encoding='utf-8') as f:
+            f.write(f"解析 Trojan 节点出错: {e}\n")
         return None
 
 def parse_ssr(ssr_url):
@@ -192,6 +248,11 @@ def parse_ssr(ssr_url):
         if len(parts) < 6: return None
         server, port, protocol, method, obfs, password_base64 = parts[:6]
         params = dict(re.findall(r'([^=&]+)=([^=&]*)', decoded.split('#', 1)[1])) if '#' in decoded else {}
+        
+        # 验证服务器和端口
+        if not validate_server_port(server, int(port)):
+            return None
+
         return {
             'name': unquote(params.get('remarks', 'Unnamed SSR')), 'type': 'ssr', 'server': server,
             'port': int(port), 'password': base64.urlsafe_b64decode(password_base64 + '==').decode('utf-8'),
@@ -199,14 +260,22 @@ def parse_ssr(ssr_url):
             'protocol-param': params.get('protoparam'), 'obfs-param': params.get('obfsparam')
         }
     except Exception as e:
+        with open(LOG_FILE, 'a', encoding='utf-8') as f:
+            f.write(f"解析 SSR 节点出错: {e}\n")
         return None
 
 def parse_hy2(hy2_url):
     try:
         if not hy2_url.startswith('hy2://'): return None
         parsed_url = urlparse(hy2_url)
-        password, server, port, name = parsed_url.username, parsed_url.hostname, parsed_url.port, unquote(parsed_url.fragment) if parsed_url.fragment else 'Unnamed HY2'
+        password, server, port = parsed_url.username, parsed_url.hostname, parsed_url.port
+        name = unquote(parsed_url.fragment) if parsed_url.fragment else 'Unnamed HY2'
         if not all([password, server, port]): return None
+        
+        # 验证服务器和端口
+        if not validate_server_port(server, port):
+            return None
+
         params = dict(re.findall(r'([^=&]+)=([^=&]*)', parsed_url.query))
         return {
             'name': name, 'type': 'hysteria2', 'server': server, 'port': port, 'password': password,
@@ -214,6 +283,8 @@ def parse_hy2(hy2_url):
             'obfs-password': params.get('obfs-password'), 'fast-open': True
         }
     except Exception as e:
+        with open(LOG_FILE, 'a', encoding='utf-8') as f:
+            f.write(f"解析 Hysteria2 节点出错: {e}\n")
         return None
 
 def parse_node(link):
@@ -276,9 +347,7 @@ def get_nodes_from_url(url):
             try:
                 config = yaml.safe_load(content)
                 if isinstance(config, dict) and 'proxies' in config:
-                    for node in config['proxies']:
-                        if isinstance(node, dict) and 'name' in node and 'type' in node: nodes.append(node)
-                    if nodes: return nodes
+                    return config['proxies']
             except yaml.YAMLError: pass
 
             # 2. 尝试解析为纯文本或Base64编码的行
@@ -286,13 +355,18 @@ def get_nodes_from_url(url):
             for line in lines:
                 line = line.strip()
                 if not line or line.startswith('#'): continue
+                
+                parsed_node = parse_node(line)
+                if parsed_node:
+                    nodes.append(parsed_node)
+                    continue
+
                 try:
                     decoded_line = base64.b64decode(line.strip().encode('utf-8')).decode('utf-8')
                     parsed_node = parse_node(decoded_line)
                     if parsed_node: nodes.append(parsed_node)
                 except (base64.binascii.Error, UnicodeDecodeError, ValueError):
-                    parsed_node = parse_node(line)
-                    if parsed_node: nodes.append(parsed_node)
+                    pass
             
             if nodes: return nodes
             
@@ -317,7 +391,7 @@ def get_nodes_from_url(url):
                 
                 potential_links = [
                     link for link in parser.links 
-                    if link.endswith(('.yaml', '.txt', '.m3u')) or 'clash' in link.lower() or 'v2ray' in link.lower() or 'sub' in link.lower() or 'node' in link.lower()
+                    if link.endswith(('.yaml', '.txt', '.json')) or 'clash' in link.lower() or 'v2ray' in link.lower() or 'subscription' in link.lower()
                 ]
 
                 all_sub_nodes = []
@@ -376,11 +450,18 @@ def save_summary_to_csv(summary_data, filename='link.csv'):
         print(f"成功将节点数量汇总保存到 {filename}")
     except IOError as e:
         print(f"无法保存文件 {filename}: {e}")
+        
+def generate_unique_name(base_name, name_counts):
+    name_counts[base_name] = name_counts.get(base_name, 0) + 1
+    return f"{base_name}_{name_counts[base_name]}"
 
 if __name__ == "__main__":
     links = get_links_from_local_file()
     all_nodes = []
     nodes_summary = []
+    
+    with open(LOG_FILE, 'w', encoding='utf-8') as f:
+        f.write("跳过节点日志\n================\n")
     
     with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
         futures = {executor.submit(get_nodes_from_url, link): link for link in links}
@@ -395,22 +476,73 @@ if __name__ == "__main__":
                     print(f"\n[成功] 从 {link} 找到 {len(nodes)} 个节点。")
                 else:
                     nodes_summary.append({'link': link, 'node_count': 0})
-            except Exception:
+                    with open(LOG_FILE, 'a', encoding='utf-8') as f:
+                        f.write(f"从 {link} 未找到任何节点。\n")
+            except Exception as e:
                 nodes_summary.append({'link': link, 'node_count': 0})
+                with open(LOG_FILE, 'a', encoding='utf-8') as f:
+                    f.write(f"处理 {link} 时发生错误: {e}\n")
+
+    # 对节点进行地理位置识别和重命名
+    db_path = "GeoLite2-Country.mmdb"
+    if os.path.exists(db_path):
+        from ip_geolocation import GeoLite2Country
+        success_count = 0
+        failure_count = 0
+        with GeoLite2Country(db_path) as geo_locator:
+            for node in tqdm(all_nodes, desc="地理位置识别"):
+                server = node.get('server')
+                country_name = "未知地区" # 默认值
+                if server:
+                    try:
+                        # 尝试将服务器地址解析为 IP 地址
+                        ip_address = socket.gethostbyname(server)
+                        # 使用解析出的 IP 地址进行地理位置查询
+                        _, country_name = geo_locator.get_location(ip_address)
+                        success_count += 1
+                    except (socket.gaierror, Exception) as e:
+                        # 如果域名无法解析或发生其他错误，打印警告并使用默认值
+                        failure_count += 1
+                        pass
+                node['name'] = country_name
+        
+        print(f"\n地理位置识别完成：成功 {success_count} 个，失败 {failure_count} 个。")
+    else:
+        print(f"警告：未找到 {db_path}，无法进行地理位置重命名。")
 
     seen_nodes = set()
     unique_nodes = []
+    name_counts = defaultdict(int)
+    
     for node in all_nodes:
-        node_key = str(OrderedDict(sorted(node.items())))
+        node_type = node.get('type')
+        if node_type == 'ss':
+            node_key = ('ss', node.get('server'), node.get('port'), node.get('password'))
+        elif node_type == 'vmess':
+            node_key = ('vmess', node.get('server'), node.get('port'), node.get('uuid'))
+        elif node_type == 'vless':
+            node_key = ('vless', node.get('server'), node.get('port'), node.get('uuid'))
+        elif node_type == 'trojan':
+            node_key = ('trojan', node.get('server'), node.get('port'), node.get('password'))
+        elif node_type == 'ssr':
+            node_key = ('ssr', node.get('server'), node.get('port'), node.get('password'))
+        elif node_type == 'hysteria2':
+            node_key = ('hysteria2', node.get('server'), node.get('port'), node.get('password'))
+        else:
+            node_key = str(OrderedDict(sorted(node.items())))
+        
         if node_key not in seen_nodes:
             seen_nodes.add(node_key)
+            base_name = node.get('name', "未知地区")
+            node['name'] = generate_unique_name(base_name, name_counts)
             unique_nodes.append(node)
+        else:
+            with open(LOG_FILE, 'a', encoding='utf-8') as f:
+                f.write(f"跳过重复节点: {node.get('name', '未命名')} ({node_key})\n")
 
     if unique_nodes:
-        # 在保存之前进行节点重命名
-        renamed_nodes = rename_nodes_by_location(unique_nodes)
-        save_to_yaml({'proxies': renamed_nodes})
-        print(f"\n总共找到 {len(all_nodes)} 个节点，去重并重新命名后剩下 {len(renamed_nodes)} 个。")
+        save_to_yaml({'proxies': unique_nodes})
+        print(f"\n总共找到 {len(all_nodes)} 个节点，去重并验证后剩下 {len(unique_nodes)} 个。")
     else:
         print("\n未找到任何有效节点。")
 
