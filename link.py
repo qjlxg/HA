@@ -455,6 +455,22 @@ def generate_unique_name(base_name, name_counts):
     name_counts[base_name] = name_counts.get(base_name, 0) + 1
     return f"{base_name}_{name_counts[base_name]}"
 
+def process_node_with_geolocation(node, geo_locator):
+    server = node.get('server')
+    country_name = "未知地区" # 默认值
+    success = False
+    if server:
+        try:
+            # 尝试将服务器地址解析为 IP 地址
+            ip_address = socket.gethostbyname(server)
+            # 使用解析出的 IP 地址进行地理位置查询
+            _, country_name = geo_locator.get_location(ip_address)
+            success = True
+        except (socket.gaierror, Exception):
+            pass
+    node['name'] = country_name
+    return node, success
+
 if __name__ == "__main__":
     links = get_links_from_local_file()
     all_nodes = []
@@ -489,22 +505,23 @@ if __name__ == "__main__":
         from ip_geolocation import GeoLite2Country
         success_count = 0
         failure_count = 0
+        
         with GeoLite2Country(db_path) as geo_locator:
-            for node in tqdm(all_nodes, desc="地理位置识别"):
-                server = node.get('server')
-                country_name = "未知地区" # 默认值
-                if server:
-                    try:
-                        # 尝试将服务器地址解析为 IP 地址
-                        ip_address = socket.gethostbyname(server)
-                        # 使用解析出的 IP 地址进行地理位置查询
-                        _, country_name = geo_locator.get_location(ip_address)
-                        success_count += 1
-                    except (socket.gaierror, Exception) as e:
-                        # 如果域名无法解析或发生其他错误，打印警告并使用默认值
-                        failure_count += 1
-                        pass
-                node['name'] = country_name
+            with concurrent.futures.ThreadPoolExecutor(max_workers=32) as executor:
+                results = list(tqdm(
+                    executor.map(lambda node: process_node_with_geolocation(node, geo_locator), all_nodes),
+                    total=len(all_nodes),
+                    desc="地理位置识别"
+                ))
+            
+        all_nodes_geolocated = []
+        for node, success in results:
+            all_nodes_geolocated.append(node)
+            if success:
+                success_count += 1
+            else:
+                failure_count += 1
+        all_nodes = all_nodes_geolocated
         
         print(f"\n地理位置识别完成：成功 {success_count} 个，失败 {failure_count} 个。")
     else:
