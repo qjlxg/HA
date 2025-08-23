@@ -9,6 +9,7 @@ import re
 import random
 import concurrent.futures
 import socket
+import asyncio
 from urllib.parse import urlparse, unquote, urljoin, parse_qs
 from collections import OrderedDict, defaultdict
 from html.parser import HTMLParser
@@ -16,6 +17,7 @@ from tqdm import tqdm
 from ip_geolocation import GeoLite2Country
 import requests_cache
 from bs4 import BeautifulSoup
+from playwright.sync_api import sync_playwright
 
 # 全局变量
 LOG_FILE = "link_processing.log"
@@ -319,6 +321,17 @@ def parse_node(link):
 
 def extract_links_from_html(html_content):
     links = []
+    # 从 <meta> 标签中提取链接
+    soup = BeautifulSoup(html_content, 'html.parser')
+    meta_description = soup.find('meta', attrs={'name': 'description'})
+    og_description = soup.find('meta', attrs={'property': 'og:description'})
+    
+    if meta_description and meta_description.get('content'):
+        links.append(meta_description['content'])
+    if og_description and og_description.get('content'):
+        links.append(og_description['content'])
+        
+    # 从 <p> 或 <textarea> 标签中提取链接
     matches = re.findall(r'<p class="config".*?>(.*?)</p>', html_content, re.DOTALL)
     for match in matches:
         cleaned_link = re.sub(r'<[^>]+>', '', match).strip()
@@ -347,6 +360,53 @@ def extract_links_from_script(html_content):
                 links.append(url)
     return links
 
+def get_nodes_with_playwright(url):
+    """使用 Playwright 渲染页面并提取节点"""
+    nodes = []
+    try:
+        with sync_playwright() as p:
+            browser = p.chromium.launch()
+            page = browser.new_page()
+            page.goto(url)
+            # 等待所有网络请求都完成，以确保动态内容加载完毕
+            page.wait_for_load_state("networkidle")
+            content = page.content()
+            browser.close()
+
+            # 使用静态解析函数处理渲染后的内容
+            html_links = extract_links_from_html(content)
+            for link in html_links:
+                parsed_node = parse_node(link)
+                if parsed_node: nodes.append(parsed_node)
+
+            script_links = extract_links_from_script(content)
+            for link in script_links:
+                parsed_node = parse_node(link)
+                if parsed_node: nodes.append(parsed_node)
+
+            # 再次尝试从纯文本或Base64编码中提取
+            lines = content.splitlines()
+            for line in lines:
+                line = line.strip()
+                if not line or line.startswith('#'): continue
+                
+                parsed_node = parse_node(line)
+                if parsed_node:
+                    nodes.append(parsed_node)
+                    continue
+
+                try:
+                    decoded_line = base64.b64decode(line.strip().encode('utf-8')).decode('utf-8')
+                    parsed_node = parse_node(decoded_line)
+                    if parsed_node: nodes.append(parsed_node)
+                except (base64.binascii.Error, UnicodeDecodeError, ValueError):
+                    pass
+
+    except Exception as e:
+        with open(LOG_FILE, 'a', encoding='utf-8') as f:
+            f.write(f"使用 Playwright 处理 {url} 时发生错误: {e}\n")
+    return nodes
+
 def get_nodes_from_url(url):
     schemes = ['https://', 'http://']
     for scheme in schemes:
@@ -355,7 +415,6 @@ def get_nodes_from_url(url):
             full_url = f"{scheme}{url}"
         
         try:
-            # 使用 requests_cache.CachedSession 替代 requests.get
             session = requests_cache.CachedSession(
                 'link_cache',
                 backend='sqlite',
@@ -397,11 +456,13 @@ def get_nodes_from_url(url):
             
             if nodes: return nodes
             
-            # 3. 尝试从HTML中提取链接
+            # 3. 尝试从HTML中提取链接，包括 meta 标签
             html_links = extract_links_from_html(content)
             for link in html_links:
                 parsed_node = parse_node(link)
                 if parsed_node: nodes.append(parsed_node)
+            
+            if nodes: return nodes
             
             # 4. 尝试从JavaScript脚本中提取链接
             script_links = extract_links_from_script(content)
@@ -409,20 +470,6 @@ def get_nodes_from_url(url):
                 parsed_node = parse_node(link)
                 if parsed_node: nodes.append(parsed_node)
             
-            # 新增：从meta标签中提取链接
-            soup = BeautifulSoup(content, 'html.parser')
-            meta_description = soup.find('meta', attrs={'name': 'description'})
-            og_description = soup.find('meta', attrs={'property': 'og:description'})
-            
-            if meta_description and meta_description.get('content'):
-                parsed_node = parse_node(meta_description['content'])
-                if parsed_node:
-                    nodes.append(parsed_node)
-            if og_description and og_description.get('content'):
-                parsed_node = parse_node(og_description['content'])
-                if parsed_node:
-                    nodes.append(parsed_node)
-
             if nodes: return nodes
 
             # 5. 如果以上都失败，尝试解析为HTML目录页面
@@ -448,9 +495,19 @@ def get_nodes_from_url(url):
                 
                 if all_sub_nodes: return all_sub_nodes
             
+            # 新增：如果所有静态解析都失败，则使用 Playwright
+            if not nodes:
+                print(f"使用 Playwright 渲染 {full_url}...")
+                nodes = get_nodes_with_playwright(full_url)
+                if nodes:
+                    print(f"Playwright 成功从 {full_url} 找到 {len(nodes)} 个节点。")
+                    return nodes
+
             return []
 
-        except requests.exceptions.RequestException:
+        except requests.exceptions.RequestException as e:
+            with open(LOG_FILE, 'a', encoding='utf-8') as f:
+                f.write(f"处理 {full_url} 时发生网络错误: {e}\n")
             continue
     
     return []
