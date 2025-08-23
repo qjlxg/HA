@@ -1,17 +1,6 @@
 proxies:
 - name: Malaysia
   type: hysteria2
-  server: 23.27.240.217
-  port: 50001
-  password: LER1SPLqYBFp3UUv7JQBe+6b
-  sni: bing.com
-  skip-cert-verify: true
-  up: 100 Mbps
-  down: 200 Mbps
-  alpn:
-  - h3
-- name: 'Malaysia #2'
-  type: hysteria2
   server: 23.27.28.64
   port: 50002
   password: LER1SPLqYBFp3UUv7JQBe+6b
@@ -21,29 +10,18 @@ proxies:
   down: 200 Mbps
   alpn:
   - h3
+- name: 'Malaysia #2'
+  type: hysteria2
+  server: 23.27.240.217
+  port: 50004
+  password: LER1SPLqYBFp3UUv7JQBe+6b
+  sni: bing.com
+  skip-cert-verify: true
+  up: 100 Mbps
+  down: 200 Mbps
+  alpn:
+  - h3
 - name: 'Malaysia #3'
-  type: hysteria2
-  server: 50.114.5.31
-  port: 5004
-  password: LER1SPLqYBFp3UUv7JQBe+6b
-  sni: bing.com
-  skip-cert-verify: true
-  up: 100 Mbps
-  down: 200 Mbps
-  alpn:
-  - h3
-- name: 'Malaysia #4'
-  type: hysteria2
-  server: 50.114.5.31
-  port: 5005
-  password: LER1SPLqYBFp3UUv7JQBe+6b
-  sni: bing.com
-  skip-cert-verify: true
-  up: 100 Mbps
-  down: 200 Mbps
-  alpn:
-  - h3
-- name: 'Malaysia #5'
   type: hysteria2
   server: 23.27.240.217
   port: 50003
@@ -54,51 +32,7 @@ proxies:
   down: 200 Mbps
   alpn:
   - h3
-- name: 'Malaysia #6'
-  type: hysteria2
-  server: 50.114.5.31
-  port: 5006
-  password: LER1SPLqYBFp3UUv7JQBe+6b
-  sni: bing.com
-  skip-cert-verify: true
-  up: 100 Mbps
-  down: 200 Mbps
-  alpn:
-  - h3
-- name: 'Malaysia #7'
-  type: hysteria2
-  server: 23.27.28.64
-  port: 40171
-  password: LER1SPLqYBFp3UUv7JQBe+6b
-  sni: bing.com
-  skip-cert-verify: true
-  up: 100 Mbps
-  down: 200 Mbps
-  alpn:
-  - h3
-- name: 'Malaysia #8'
-  type: hysteria2
-  server: 23.27.240.217
-  port: 50002
-  password: LER1SPLqYBFp3UUv7JQBe+6b
-  sni: bing.com
-  skip-cert-verify: true
-  up: 100 Mbps
-  down: 200 Mbps
-  alpn:
-  - h3
-- name: 'Malaysia #9'
-  type: hysteria2
-  server: 23.27.28.64
-  port: 60003
-  password: LER1SPLqYBFp3UUv7JQBe+6b
-  sni: bing.com
-  skip-cert-verify: true
-  up: 100 Mbps
-  down: 200 Mbps
-  alpn:
-  - h3
-- name: 'Malaysia #10'
+- name: 'Malaysia #4'
   type: hysteria2
   server: 23.27.28.64
   port: 60002
@@ -109,10 +43,76 @@ proxies:
   down: 200 Mbps
   alpn:
   - h3
-- name: 'Malaysia #11'
+- name: 'Malaysia #5'
+  type: hysteria2
+  server: 50.114.5.31
+  port: 5004
+  password: LER1SPLqYBFp3UUv7JQBe+6b
+  sni: bing.com
+  skip-cert-verify: true
+  up: 100 Mbps
+  down: 200 Mbps
+  alpn:
+  - h3
+- name: 'Malaysia #6'
   type: hysteria2
   server: 23.27.240.217
-  port: 50004
+  port: 50001
+  password: LER1SPLqYBFp3UUv7JQBe+6b
+  sni: bing.com
+  skip-cert-verify: true
+  up: 100 Mbps
+  down: 200 Mbps
+  alpn:
+  - h3
+- name: 'Malaysia #7'
+  type: hysteria2
+  server: 50.114.5.31
+  port: 5006
+  password: LER1SPLqYBFp3UUv7JQBe+6b
+  sni: bing.com
+  skip-cert-verify: true
+  up: 100 Mbps
+  down: 200 Mbps
+  alpn:
+  - h3
+- name: 'Malaysia #8'
+  type: hysteria2
+  server: 50.114.5.31
+  port: 5005
+  password: LER1SPLqYBFp3UUv7JQBe+6b
+  sni: bing.com
+  skip-cert-verify: true
+  up: 100 Mbps
+  down: 200 Mbps
+  alpn:
+  - h3
+- name: 'Malaysia #9'
+  type: hysteria2
+  server: 23.27.28.64
+  port: 40171
+  password: LER1SPLqYBFp3UUv7JQBe+6b
+  sni: bing.com
+  skip-cert-verify: true
+  up: 100 Mbps
+  down: 200 Mbps
+  alpn:
+  - h3
+- name: 'Malaysia #10'
+  type: hysteria2
+  server: 23.27.240.217
+  port: 50002
+  password: LER1SPLqYBFp3UUv7JQBe+6b
+  sni: bing.com
+  skip-cert-verify: true
+  up: 100 Mbps
+  down: 200 Mbps
+  alpn:
+  - h3
+- name: 'Malaysia #11'
+  type: hysteria2
+  server: 23.27.28.64
+  port: 60003
   password: LER1SPLqYBFp3UUv7JQBe+6b
   sni: bing.com
   skip-cert-verify: true
