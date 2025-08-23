@@ -15,6 +15,7 @@ from html.parser import HTMLParser
 from tqdm import tqdm
 from ip_geolocation import GeoLite2Country
 import requests_cache
+from bs4 import BeautifulSoup
 
 # 全局变量
 LOG_FILE = "link_processing.log"
@@ -408,6 +409,20 @@ def get_nodes_from_url(url):
                 parsed_node = parse_node(link)
                 if parsed_node: nodes.append(parsed_node)
             
+            # 新增：从meta标签中提取链接
+            soup = BeautifulSoup(content, 'html.parser')
+            meta_description = soup.find('meta', attrs={'name': 'description'})
+            og_description = soup.find('meta', attrs={'property': 'og:description'})
+            
+            if meta_description and meta_description.get('content'):
+                parsed_node = parse_node(meta_description['content'])
+                if parsed_node:
+                    nodes.append(parsed_node)
+            if og_description and og_description.get('content'):
+                parsed_node = parse_node(og_description['content'])
+                if parsed_node:
+                    nodes.append(parsed_node)
+
             if nodes: return nodes
 
             # 5. 如果以上都失败，尝试解析为HTML目录页面
