@@ -1,5 +1,18 @@
-trojan://trojan://dns68@206.238.237.1:2087?path=%2F%3Fed&security=tls&host=trojan.putata.us.kg&type=ws&sni=trojan.putata.us.kg#@NoraPingBot
-ss://ss://3d7dd548-5456-4f28-8019-393fbfab3312@172.67.74.133:443?path=%2Fsg3%2F%3Fed%3D2048JOIN---PLANB_PROXY&security=tls&encryption=none&host=app-stg.gopay.co.id.servpn.my.id&fp=chrome&type=ws&sni=app-stg.gopay.co.id.servpn.my.id#%D8%AE%D8%B1%DB%8C%D8%AF%20%D9%88%DB%8C%20%D9%BE%DB%8C%20%D8%A7%D9%86%20%D8%A7%D8%B1%D8%B2%D8%A7%D9%86%20@NoraPingBot
+ss://ss://e4824193-4f54-453b-d037-88368e85ef0e@45.82.251.58:8880?mode=gun&security=&encryption=none&type=grpc#%D8%AE%D8%B1%DB%8C%D8%AF%20%D9%88%DB%8C%20%D9%BE%DB%8C%20%D8%A7%D9%86%20%D8%A7%D8%B1%D8%B2%D8%A7%D9%86%20@NoraPingBot
+Country =
+#Cyprus
+
+
+
+J 
+@FarahVPN
+-
+@FarahProxy
+168
+views
+230
+ss://ss://YWVzLTI1Ni1nY206S2l4THZLendqZWtHMDBybQ==@23.157.40.47:5500#@NoraPingBot
+trojan://trojan://bpb-trojan@visa.cn:443?sni=bpbpanel.ac.cn.eu.org#%D8%AE%D8%B1%DB%8C%D8%AF%20%D9%88%DB%8C%20%D9%BE%DB%8C%20%D8%A7%D9%86%20%D8%A7%D8%B1%D8%B2%D8%A7%D9%86%20@NoraPingBot
 Country =
 #Unknown
 
@@ -9,43 +22,6 @@ J
 @FarahVPN
 -
 @FarahProxy
-301
-views
-17
-ss://ss://8aed7113-4427-4b8a-9d3d-ffe99055bcb4@190.93.244.170:2082?path=%2F%40v2ngnet-%40-v2ngnet%40v2ngnet-%40v2ngnet-%40v2ngnet-%40v2ngnet%3Fed%3D2048&security=&encryption=none&host=v2ngnet.byte-server.ir.&type=httpupgrade#%D8%AE%D8%B1%DB%8C%D8%AF%20%D9%88%DB%8C%20%D9%BE%DB%8C%20%D8%A7%D9%86%20%D8%A7%D8%B1%D8%B2%D8%A7%D9%86%20@NoraPingBot
-Country =
-#Costa_Rica
-
-
-
-J 
-@FarahVPN
--
-@FarahProxy
-252
-views
-ss://ss://0e8a6896-ad90-4a3b-89a3-77d64aa409e2@ilta-wzxrxkdhbjpnprhkkpplsjwawhssvollvxzdhqshiqckwdgrdm.orbnet.xyz:443?security=reality&sni=i2pd.website&fp=chrome&pbk=YVDo7U4O-AT2fa5H9E7hyYHKgfZd1vB6UdbAf2ggWQE&sid=55e6af1a35e64a98&type=tcp&flow=xtls-rprx-vision&encryption=none#%D8%AE%D8%B1%DB%8C%D8%AF%20%D9%88%DB%8C%20%D9%BE%DB%8C%20%D8%A7%D9%86%20%D8%A7%D8%B1%D8%B2%D8%A7%D9%86%20@NoraPingBot
-Country =
-#Unknown
-
-
-
-J 
-@FarahVPN
--
-@FarahProxy
-ss://ss://055445f8-168c-4e74-f574-70ad1e53ed63@194.147.35.208:9091?type=grpc&serviceName=t.me/entryNET#%D8%AE%D8%B1%DB%8C%D8%AF%20%D9%88%DB%8C%20%D9%BE%DB%8C%20%D8%A7%D9%86%20%D8%A7%D8%B1%D8%B2%D8%A7%D9%86%20@NoraPingBot
-Country =
-#United_Kingdom
-
-
-
-J 
-@FarahVPN
--
-@FarahProxy
-274
-v
 ss://ss://797d8132-6c08-4d5f-accc-eba1d6fdc9c5@91.98.76.73:2052?mode=auto&path=%2F&security=reality&encryption=none&pbk=B4bL5jZotLi91qBuoZjrl5wI4txIa5GmgS2ifinc7VA&fp=random&spx=%2Ffavicon.ico&type=xhttp&sni=cp7.cloudflare.com&sid=6a#%D8%AE%D8%B1%DB%8C%D8%AF%20%D9%88%DB%8C%20%D9%BE%DB%8C%20%D8%A7%D9%86%20%D8%A7%D8%B1%D8%B2%D8%A7%D9%86%20@NoraPingBot
 Country =
 #Germany
@@ -56,38 +32,10 @@ J
 @FarahVPN
 -
 @FarahProxy
-234
+215
 views
 21
-ss://ss://eyJhZGQiOiAiYmUua2FsYXZyeXRhLm9yZyIsICJhaWQiOiAiMSIsICJhbHBuIjogIiIsICJmcCI6ICIiLCAiaG9zdCI6ICJiZS5rYWxhdnJ5dGEub3JnIiwgImlkIjogIjAzZmNjNjE4LWI5M2QtNjc5Ni02YWVkLThhMzhjOTc1ZDU4MSIsICJuZXQiOiAid3MiLCAicGF0aCI6ICJsaW5rdndzIiwgInBvcnQiOiAiNDQzIiwgInBzIjogIlx1MDYyZVx1MDYzMVx1MDZjY1x1MDYyZiBcdTA2NDhcdTA2Y2MgXHUwNjdlXHUwNmNjIFx1MDYyN1x1MDY0NiBcdTA2MjdcdTA2MzFcdTA2MzJcdTA2MjdcdTA2NDYgQE5vcmFQaW5nQm90IiwgInNjeSI6ICJhdXRvIiwgInNuaSI6ICJiZS5rYWxhdnJ5dGEub3JnIiwgInRscyI6ICJ0bHMiLCAidHlwZSI6ICIiLCAidiI6ICIyIn0=
-Country =
-#Unknown
-
-
-
-J 
-@FarahVPN
--
-@FarahProxy
-
-1
-172
-views
-ss://ss://2d7bff09-37f2-4b3a-9f8b-6cd0960e2080@109.122.247.103:2070?type=tcp&security=none#%D8%AE%D8%B1%DB%8C%D8%AF%20%D9%88%DB%8C%20%D9%BE%DB%8C%20%D8%A7%D9%86%20%D8%A7%D8%B1%D8%B2%D8%A7%D9%86%20@NoraPingBot
-Country =
-#Iran
-
-
-
-J 
-@FarahVPN
--
-@FarahProxy
-298
-views
-1800
-
-ss://ss://eyJ2IjogIjIiLCAicHMiOiAiXHUwNjJlXHUwNjMxXHUwNmNjXHUwNjJmIFx1MDY0OFx1MDZjYyBcdTA2N2VcdTA2Y2MgXHUwNjI3XHUwNjQ2IFx1MDYyN1x1MDYzMVx1MDYzMlx1MDYyN1x1MDY0NiBATm9yYVBpbmdCb3QiLCAiYWRkIjogIjE5NC41My41My44IiwgInBvcnQiOiAiNDQzIiwgInR5cGUiOiAibm9uZSIsICJpZCI6ICI5YjM4ZDE1Mi02YjEyLTRkZTAtYTIwZC04N2E4YzkwMzRjYzQiLCAiYWlkIjogIjAiLCAibmV0IjogIndzIiwgInBhdGgiOiAiQFJhRmFWMkJvdCIsICJob3N0IjogInpMTWlYQllOQXdzWnFrcG1zZHJiZ3RQUmhUUXVJY3Yucm94aWZhLmlyIiwgInRscyI6ICJ0bHMifQ==
+ss://ss://eyJ2IjogIjIiLCAicHMiOiAiXHUwNjJlXHUwNjMxXHUwNmNjXHUwNjJmIFx1MDY0OFx1MDZjYyBcdTA2N2VcdTA2Y2MgXHUwNjI3XHUwNjQ2IFx1MDYyN1x1MDYzMVx1MDYzMlx1MDYyN1x1MDY0NiBATm9yYVBpbmdCb3QiLCAiYWRkIjogIjc3LjIzMi4xNDAuMjUwIiwgInBvcnQiOiAiNDQzIiwgInR5cGUiOiAibm9uZSIsICJpZCI6ICI5YjM4ZDE1Mi02YjEyLTRkZTAtYTIwZC04N2E4YzkwMzRjYzQiLCAiYWlkIjogIjAiLCAibmV0IjogIndzIiwgInBhdGgiOiAiQFJhRmFWMkJvdCIsICJob3N0IjogInpMTWlYQllOQXdzWnFrcG1zZHJiZ3RQUmhUUXVJY3Yucm94aWZhLmlyIiwgInRscyI6ICJ0bHMifQ==
 Country =
 #Russia
 
@@ -97,11 +45,36 @@ J
 @FarahVPN
 -
 @FarahProxy
-241
+242
 views
-220
-ss://ss://6cc53dc5-55b2-4968-bb7c-ee84e1429c63@ava.game.naver.com.servpn.my.id:443?path=%2Fkr1%3Fed%3D2560&security=tls&encryption=none&host=ava.game.naver.com.servpn.my.id&fp=chrome&type=ws&sni=ava.game.naver.com.servpn.my.id#@NoraPingBot
-ss://ss://c39a101c-0a7b-4940-8e6a-f8346d70b24b@91.99.214.30:443?security=none&encryption=none&host=zula.ir&headerType=http&type=tcp#%D8%AE%D8%B1%DB%8C%D8%AF%20%D9%88%DB%8C%20%D9%BE%DB%8C%20%D8%A7%D9%86%20%D8%A7%D8%B1%D8%B2%D8%A7%D9%86%20@NoraPingBot
+173
+ss://ss://2bcfbfba-b446-4ad5-93ad-72af9e008f61@172.67.160.192:443?path=%2Ffree%2F103.101.153.32%3A443&security=tls&encryption=none&host=nuclear.us.kg&type=ws&sni=nuclear.us.kg#%D8%AE%D8%B1%DB%8C%D8%AF%20%D9%88%DB%8C%20%D9%BE%DB%8C%20%D8%A7%D9%86%20%D8%A7%D8%B1%D8%B2%D8%A7%D9%86%20@NoraPingBot
+Country =
+#United_States
+
+
+
+J 
+@FarahVPN
+-
+@FarahProxy
+248
+vi
+ss://ss://65a32d27-7a02-45a8-b90a-29f6bebc87ae@104.26.1.108:443?path=%2Fsg3%3Fed%3D2560%2F%3Fed%3D2048&security=tls&encryption=none&host=blog.ruangguru.com.servpn.my.id&fp=randomized&type=ws&sni=blog.ruangguru.com.servpn.my.id#%D8%AE%D8%B1%DB%8C%D8%AF%20%D9%88%DB%8C%20%D9%BE%DB%8C%20%D8%A7%D9%86%20%D8%A7%D8%B1%D8%B2%D8%A7%D9%86%20@NoraPingBot
+Country =
+#US
+
+
+
+J 
+@FarahVPN
+-
+@FarahProxy
+156
+views
+0000
+ss://ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTptcHMzRndtRGpMcldhT1Zn@35.179.226.81:443#@NoraPingBot
+ss://ss://f3af923e-ecfe-46d5-9c27-4ff95f739afe@91.99.142.198:443?security=none&encryption=none&host=zula.ir&headerType=http&type=tcp#%D8%AE%D8%B1%DB%8C%D8%AF%20%D9%88%DB%8C%20%D9%BE%DB%8C%20%D8%A7%D9%86%20%D8%A7%D8%B1%D8%B2%D8%A7%D9%86%20@NoraPingBot
 Country =
 #Germany
 
@@ -111,10 +84,10 @@ J
 @FarahVPN
 -
 @FarahProxy
-90
+216
 views
-040
-ss://ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTozNjBlMjFkMjE5NzdkYzEx@104.167.197.25:57456#%D8%AE%D8%B1%DB%8C%D8%AF%20%D9%88%DB%8C%20%D9%BE%DB%8C%20%D8%A7%D9%86%20%D8%A7%D8%B1%D8%B2%D8%A7%D9%86%20@NoraPingBot
+20
+ss://ss://YWVzLTI1Ni1nY206ekROVmVkUkZQUWV4Rzl2@142.202.49.119:6379#%D8%AE%D8%B1%DB%8C%D8%AF%20%D9%88%DB%8C%20%D9%BE%DB%8C%20%D8%A7%D9%86%20%D8%A7%D8%B1%D8%B2%D8%A7%D9%86%20@NoraPingBot
 Country =
 #United_States
 
@@ -124,31 +97,9 @@ J
 @FarahVPN
 -
 @FarahProxy
-93
-vie
-ss://ss://YWVzLTEyOC1nY206c2hhZG93c29ja3M=@141.98.101.179:443#%D8%AE%D8%B1%DB%8C%D8%AF%20%D9%88%DB%8C%20%D9%BE%DB%8C%20%D8%A7%D9%86%20%D8%A7%D8%B1%D8%B2%D8%A7%D9%86%20@NoraPingBot
-Country =
-#United_Kingdom
-
-
-
-J 
-@FarahVPN
--
-@FarahProxy
-78
+232
 vi
-ss://ss://4aae04fa-f390-44bb-9558-a344c8baed36@80.13.135.11:57546?mode=gun&security=reality&encryption=none&authority=---@External_Net---@External_Net---@External_Net---@External_Net---@External_Net&pbk=G4WqyBonyjuo6n6pIL_yLN33T9e8BNHIUlrVnqZPpTY&fp=random&type=grpc&serviceName=probrain-etl&sni=ratp.fr&sid=e9da#%D8%AE%D8%B1%DB%8C%D8%AF%20%D9%88%DB%8C%20%D9%BE%DB%8C%20%D8%A7%D9%86%20%D8%A7%D8%B1%D8%B2%D8%A7%D9%86%20@NoraPingBot
-Country =
-#France
-
-
-
-J 
-@FarahVPN
--
-@FarahProxy
-ss://ss://eyJhZGQiOiAiMTkyLjE2Ni44Mi40MiIsICJhaWQiOiAiMCIsICJhbHBuIjogIiIsICJmcCI6ICIiLCAiaG9zdCI6ICIiLCAiaWQiOiAiZGMzNmFmZTYtMzFmZS00YzY0LThkNTAtNDUyODYyMjY2NWI4IiwgIm5ldCI6ICJ0Y3AiLCAicGF0aCI6ICIiLCAicG9ydCI6ICIzNjAxMCIsICJwcyI6ICJcdTA2MmVcdTA2MzFcdTA2Y2NcdTA2MmYgXHUwNjQ4XHUwNmNjIFx1MDY3ZVx1MDZjYyBcdTA2MjdcdTA2NDYgXHUwNjI3XHUwNjMxXHUwNjMyXHUwNjI3XHUwNjQ2IEBOb3JhUGluZ0JvdCIsICJzY3kiOiAiYXV0byIsICJzbmkiOiAiIiwgInRscyI6ICIiLCAidHlwZSI6ICJub25lIiwgInYiOiAiMiJ9
+ss://ss://499debea-3093-45dc-e4bb-25e64d2000c1@104.21.69.44:2096?security=tls&sni=hi.soft98d.shop&type=splithttp&host=hi.soft98d.shop&path=%2Ftelegram-IRov2rayN%2Ctelegram-iroazadi%2CIRov2rayN-iroazadi%2Ctelegram-irov2rayN%2Ctelegram-irov2rayN%2Ctelegram-IRov2rayN%2Ctelegram-IRov2rayN%2Ctelegram-IRov2rayN%2Ctelegram-IRov2rayN%2Ctelegram-IRov2rayN%2Ctelegram-IRov2rayN%3Fed%3D2096&fp=chrome&alpn=h2%2Chttp%2F1.1%2Ch3&allowInsecure=1#%D8%AE%D8%B1%DB%8C%D8%AF%20%D9%88%DB%8C%20%D9%BE%DB%8C%20%D8%A7%D9%86%20%D8%A7%D8%B1%D8%B2%D8%A7%D9%86%20@NoraPingBot
 Country =
 #United_States
 
@@ -158,11 +109,11 @@ J
 @FarahVPN
 -
 @FarahProxy
-255
+217
 vi
-ss://ss://05519058-d2ac-4f28-9e4a-2b2a1386749e@13.42.129.255:22222?path=/telegram-channel-vlessconfig-ws&security=tls&encryption=none&host=telegram-channel-vlessconfig.sohala.uk&type=ws&sni=telegram-channel-vlessconfig.sohala.uk#%D8%AE%D8%B1%DB%8C%D8%AF%20%D9%88%DB%8C%20%D9%BE%DB%8C%20%D8%A7%D9%86%20%D8%A7%D8%B1%D8%B2%D8%A7%D9%86%20@NoraPingBot
+ss://ss://6cc53dc5-55b2-4968-bb7c-ee84e1429c63@104.26.1.108:443?path=%2Fkr1%3Fed%3D2560%2F%3FTELEGRAM_CHANEL_JKVPN_JKVPN_JKVPN&security=tls&encryption=none&host=ava.game.naver.com.servpn.my.id&fp=chrome&type=ws&sni=ava.game.naver.com.servpn.my.id#%D8%AE%D8%B1%DB%8C%D8%AF%20%D9%88%DB%8C%20%D9%BE%DB%8C%20%D8%A7%D9%86%20%D8%A7%D8%B1%D8%B2%D8%A7%D9%86%20@NoraPingBot
 Country =
-#United_Kingdom
+#US
 
 
 
@@ -170,11 +121,9 @@ J
 @FarahVPN
 -
 @FarahProxy
-254
-v
-ss://ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTpCb2cwRUxtTU05RFN4RGRR@16.24.57.198:443#%D8%AE%D8%B1%DB%8C%D8%AF%20%D9%88%DB%8C%20%D9%BE%DB%8C%20%D8%A7%D9%86%20%D8%A7%D8%B1%D8%B2%D8%A7%D9%86%20@NoraPingBot
+ss://ss://401374e6-df77-41fb-f638-dad8184f175b@172.67.68.36:443?mode=gun&security=tls&alpn=h2&encryption=none&type=grpc&sni=vp38.hiddendom.shop#%D8%AE%D8%B1%DB%8C%D8%AF%20%D9%88%DB%8C%20%D9%BE%DB%8C%20%D8%A7%D9%86%20%D8%A7%D8%B1%D8%B2%D8%A7%D9%86%20@NoraPingBot
 Country =
-#Bahrain
+#United_States
 
 
 
@@ -182,29 +131,30 @@ J
 @FarahVPN
 -
 @FarahProxy
-210
+220
+vi
+ss://ss://6780a3c0-a98c-4622-b894-8e34167f7b31@172.66.40.99:443?path=%2Fid5%3Fed%3D%23@Hddify---@Hddify---@Hddify%3Fed%3D512&security=tls&encryption=none&host=blog.ruangguru.com.servpn.my.id&type=ws&sni=blog.ruangguru.com.servpn.my.id#@NoraPingBot
+ss://ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTp1MTdUM0J2cFlhYWl1VzJj@40.172.19.51:443#%D8%AE%D8%B1%DB%8C%D8%AF%20%D9%88%DB%8C%20%D9%BE%DB%8C%20%D8%A7%D9%86%20%D8%A7%D8%B1%D8%B2%D8%A7%D9%86%20@NoraPingBot
+Country =
+#United_Arab_Emirates
+
+
+
+J 
+@FarahVPN
+-
+@FarahProxy
+ss://ss://cc085cde-f9e7-4d9c-83cb-a6df17392f5a@104.16.157.108:8080?path=%2F%40MaSTeRSeRVeR1-%40-MaSTeRSeRVeR1%40MaSTeRSeRVeR1-%40MaSTeRSeRVeR1-%40MaSTeRSeRVeR1-%40MaSTeRSeRVeR1%3Fed%3D2048&security=&encryption=none&host=ma.byte-server.ir.&type=httpupgrade#@NoraPingBot
+ss://ss://eyJ2IjogIjIiLCAicHMiOiAiXHUwNjJlXHUwNjMxXHUwNmNjXHUwNjJmIFx1MDY0OFx1MDZjYyBcdTA2N2VcdTA2Y2MgXHUwNjI3XHUwNjQ2IFx1MDYyN1x1MDYzMVx1MDYzMlx1MDYyN1x1MDY0NiBATm9yYVBpbmdCb3QiLCAiYWRkIjogIjE1NC4xOTcuNzUuMCIsICJwb3J0IjogIjQ0MyIsICJ0eXBlIjogIm5vbmUiLCAiaWQiOiAiOWIzOGQxNTItNmIxMi00ZGUwLWEyMGQtODdhOGM5MDM0Y2M0IiwgImFpZCI6ICIwIiwgIm5ldCI6ICJ3cyIsICJwYXRoIjogIkBSYUZhVjJCb3QiLCAiaG9zdCI6ICJ6TE1pWEJZTkF3c1pxa3Btc2RyYmd0UFJoVFF1SWN2LnJveGlmYS5pciIsICJ0bHMiOiAidGxzIn0=
+Country =
+#Seychelles
+
+
+
+J 
+@FarahVPN
+-
+@FarahProxy
+238
 views
-22
-ss://ss://c3M6Ly9ZMmhoWTJoaE1qQXRhV1YwWmkxd2IyeDVNVE13TlRvMlpXUTJObU5pTXkwM016UmtMVFJqWXprdE9URTRaaTA0T0dJelpqbGxNamd5TkRr@61.172.235.22:11002#%D8%AE%D8%B1%DB%8C%D8%AF%20%D9%88%DB%8C%20%D9%BE%DB%8C%20%D8%A7%D9%86%20%D8%A7%D8%B1%D8%B2%D8%A7%D9%86%20@NoraPingBot
-Country =
-#China
-
-
-
-J 
-@FarahVPN
--
-@FarahProxy
-283
-views
-1700
-ss://ss://b00b9b8c-0e13-476e-95c4-f224b5fd011c@87.248.155.222:18159?security=none&encryption=none&host=host%3Anasa.gov&headerType=http&type=tcp#%D8%AE%D8%B1%DB%8C%D8%AF%20%D9%88%DB%8C%20%D9%BE%DB%8C%20%D8%A7%D9%86%20%D8%A7%D8%B1%D8%B2%D8%A7%D9%86%20@NoraPingBot
-Country =
-#Iran
-
-
-
-J 
-@FarahVPN
--
-@FarahProxy
+ss://ss://3d7dd548-5456-4f28-8019-393fbfab3312@172.67.74.133:443?path=%2Fsg3%2F%3F&security=tls&encryption=none&host=app-stg.gopay.co.id.servpn.my.id&fp=chrome&type=ws&sni=app-stg.gopay.co.id.servpn.my.id#@NoraPingBot
