@@ -1,4 +1,12 @@
 proxies:
+- name: 德国_1
+  type: vless
+  server: 178.236.254.220
+  port: 443
+  uuid: b7f9c3e2-4a1d-4f8e-9c3a-2d1f8e9a7c3b
+  network: tcp
+  tls: false
+  flow: xtls-rprx-vision
 - name: 芬兰_1
   type: vmess
   server: suipnl.newmshop.ir
