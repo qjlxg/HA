@@ -38,6 +38,7 @@ jobs:
           pip install requests pyyaml beautifulsoup4 tqdm retrying maxminddb geoip2 tenacity requests_cache
           pip install playwright
           playwright install
+          pip install lxml
 
       - name: Update GeoLite2-Country database on 5th of each month
         if: github.event.schedule == '0 7 5 * *'
