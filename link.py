@@ -16,8 +16,9 @@ from html.parser import HTMLParser
 from tqdm import tqdm
 from ip_geolocation import GeoLite2Country
 import requests_cache
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, XMLParsedAsHTMLWarning
 from playwright.sync_api import sync_playwright
+import warnings
 
 # 全局变量
 LOG_FILE = "link_processing.log"
@@ -51,6 +52,9 @@ VALID_SS_CIPHERS = {
 }
 VALID_VMESS_CIPHERS = {'auto', 'none', 'aes-128-gcm', 'chacha20-poly1305'}
 VALID_VLESS_NETWORKS = {'tcp', 'ws', 'grpc'}
+
+# 忽略 XMLParsedAsHTMLWarning 警告
+warnings.filterwarnings("ignore", category=XMLParsedAsHTMLWarning)
 
 class DirectoryLinkParser(HTMLParser):
     def __init__(self):
@@ -322,7 +326,8 @@ def parse_node(link):
 def extract_links_from_html(html_content):
     links = []
     # 从 <meta> 标签中提取链接
-    soup = BeautifulSoup(html_content, 'html.parser')
+    # 使用 lxml 解析器以更好地处理潜在的 XML 文档
+    soup = BeautifulSoup(html_content, 'lxml')
     meta_description = soup.find('meta', attrs={'name': 'description'})
     og_description = soup.find('meta', attrs={'property': 'og:description'})
     
