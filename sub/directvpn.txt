@@ -1,7 +1,7 @@
-trojan://trojan://telegram-id-directvpn@15.236.155.98:22223?security=tls&alpn=http/1.1&headerType=none&type=tcp&sni=trojan.burgerip.co.uk#OurChannel  @DirectVPN
+trojan://trojan://telegram-id-directvpn@15.236.172.89:22223?security=tls&alpn=http/1.1&headerType=none&type=tcp&sni=trojan.burgerip.co.uk#OurChannel  @DirectVPN
 
 @DirectVPN
 
-161K
+189K
 views
-183
+193
